@@ -41,12 +41,13 @@
 			}
 			
 			.model_type>div>img {
-				width: 60%;
-			}
+				width: 50%;
+			} 
 			
 			.model_type>div>span {
 				display: block;
 				color: #2e2e2e;
+				margin-top: 5px;
 				font-size: 1.4rem;
 			}
 			/*设备影像*/
@@ -144,6 +145,7 @@
 			
 			.like_image>div {
 				float: left;
+				position: relative;
 				margin: 0 1%;
 				width: 48%;
 			}
@@ -151,7 +153,46 @@
 			.like_image>div>img {
 				width: 100%;
 			}
+			.like_image>div>span{
+				position: absolute;
+				bottom: 17%;
+				/*transform: translateX(-50%);*/
+				color: #FFFFFF;
+				font-size: 1.2rem;
+				width: 100%;
+				text-align: center;
+				
+			}
 			/*猜你喜欢====end====*/
+			/*附近的店====start====*/
+			
+			.near_shop {
+				background-color: white;
+				margin-top: 12px;
+				padding: 16px;
+			}
+			
+			.near_title {
+				font-size: 14px;
+				color: #646464;
+			}
+			.shop_image {
+				margin-top: 10px;
+			}
+			.shop_image>div {
+				display: inline-block;
+				border: 1px solid #ccc;
+				box-sizing: border-box;
+				height: 0;
+				margin: 0 1%;
+				width: 31.33%;
+				padding-bottom: 31.33%; 
+				background-size: 100%;
+				background-position: center;
+				background-repeat: no-repeat;
+			}
+			
+			/*附近的店====end====*/
 		</style>
 	</head>
 
@@ -208,7 +249,8 @@
 					</div>
 				</template>
 
-			</div>
+			</div> 
+			
 			<div class="device_show">
 				<img :src="dev.img" />
 				<div class="dev_status">{{dev.status}}</div>
@@ -226,21 +268,46 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="user_like">
 				<label class="like_title">猜你喜欢</label>
 				<div class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
 				<div class="like_image">
 
-					<div class="like_a"><img src="../../image/home/like_a.png" /></div>
-					<div class="like_b"><img src="../../image/home/like_b.png" /></div>
+					<div>
+						<img src="../../image/home/like_a.png" />
+						<span>舌尖上的诱惑</span>
+					</div>
+					<div>
+						<img src="../../image/home/like_b.png" />
+						<span>周末来嗨呀</span>
+					</div>
 
-					<div class="like_c"><img src="../../image/home/like_c.png" /></div>
-					<div class="like_d"><img src="../../image/home/like_d.png" /></div>
+					<div>
+						<img src="../../image/home/like_c.png" />
+						<span>限时特惠</span>
+					</div>
+					<div>
+						<span>一起来看红包雨</span>
+						<img src="../../image/home/like_d.png" />
+					</div>
 
+				</div>
+			</div>
+			<div class="near_shop">
+				<label class="near_title">附近的店</label>
+				<div class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
+				<div class="shop_image">
+					<template v-for="o,i in nearShops">
+						<div class="shop_a" :style="'background-image: url('+ o.img +');'"></div>	
+					</template>
+					
 				</div>
 			</div>
 
 			<!--</div>-->
+			
+					
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
@@ -300,6 +367,16 @@
 							status: "在线",
 							name: "AX-503-摄像机"
 						},
+						nearShops: [{
+								img: "https://www.baidu.com/img/bd_logo1.png"
+							},
+							{
+								img: "http://www.baidu.com/img/bd_logo1.png"
+							},
+							{
+								img: "http://www.baidu.com/img/bd_logo1.png"
+							}
+						],
 					};
 				},
 				computed: {
