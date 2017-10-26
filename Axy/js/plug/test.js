@@ -1,9 +1,9 @@
 document.addEventListener("plusready", function() {
 	var B = window.plus.bridge;
-	var PGPlugintest = {
+	var plugintest = {
 		"openCamListWindow": function() {
-			return B.exec("PGPlugintest", "OpenCamListWindow", Array.prototype.slice.call(arguments, 0));
+			return B.exec("plugintest", "OpenCamListWindow", Array.prototype.slice.call(arguments, 0));
 		}
 	};
-	window.plus.PGPlugintest = PGPlugintest;
+	window.plus.plugintest = plugintest;
 }, true);

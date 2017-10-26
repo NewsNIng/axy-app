@@ -96,7 +96,7 @@
 		"NativeObj": {
 			"description": "原生对象"
 		},
-		"PGPlugintest": {
+		"plugintest": {
 			"description": "监控测试"
 		}
 	},
