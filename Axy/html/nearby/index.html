@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+		    <h1 class="mui-title">附近</h1>
+		</header>
+		<div class="mui-content">
+			<!--图片本地下载缓存 示例-->
+		    <img class="img-lazy-load" width="100%" data-src="https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256"/>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
+		<script src="../../js/lib/mui.min.js"></script>
+		<!--图片缓存处理-->
+		<script type="text/javascript" src="../../js/lib/md5.min.js" ></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js" ></script>
+		
+		<script type="text/javascript">
+			mui.init();
+			
+			setTimeout(function(){
+				// 动态添加一个需要本地缓存判断的img
+				document.querySelector('.mui-content').innerHTML += '<img class="img-lazy-load" width="100%" data-src="https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256"/>';
+				// 重新检测
+				imgagelazyload();
+			},1000);
+		</script>
+	</body>
+
+</html>

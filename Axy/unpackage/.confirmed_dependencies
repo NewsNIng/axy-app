@@ -1,0 +1,98 @@
+{
+  "index.html": {
+    "resources": [
+      "js/mui.min.js",
+      "css/mui.min.css"
+    ],
+    "refer": []
+  },
+  "html/main.html": {
+    "resources": [
+      "js/mui.min.js",
+      "fonts/mui.ttf",
+      "css/mui.min.css",
+      "js/vue.min.js",
+      "js/vue-ni.min.js",
+      "html/home/index.html",
+      "js/vue-ni.js",
+      "js/lib/vue.min.js",
+      "js/lib/mui.min.js",
+      "css/lib/mui.min.css",
+      "js/lib/vue-ni.js",
+      "image/main/home_active.png",
+      "css/app/app.css",
+      "image/main/smart_active.png",
+      "image/main/nearby_active.png",
+      "image/main/person_active.png",
+      "image/main/person.png",
+      "image/main/smart.png",
+      "image/main/nearby.png",
+      "image/main/home.png"
+    ],
+    "refer": [
+      "html/smart/index.html",
+      "html/nearby/index.html",
+      "html/person/index.html",
+      "html/home/index.html"
+    ]
+  },
+  "html/person/index.html": {
+    "resources": [
+      "css/mui.min.css",
+      "css/lib/mui.min.css",
+      "css/app/app.css"
+    ],
+    "refer": []
+  },
+  "html/home/index.html": {
+    "resources": [
+      "css/mui.min.css",
+      "css/lib/mui.min.css",
+      "js/api/user.js",
+      "js/lib/axios.min.js",
+      "js/dal/user.js",
+      "js/dal/base.js",
+      "js/config.js",
+      "js/app/user_info.js",
+      "css/app/app.css",
+      "js/common/immersed.js",
+      "js/app/app.js",
+      "js/common/imagelazyload.js",
+      "js/lib/md5.min.js",
+      "image/home/goshop.png",
+      "image/home/gohome.png",
+      "image/home/outhome.png",
+      "image/home/outshop.png",
+      "image/home/message.png",
+      "image/home/plus.png",
+      "image/home/search.png",
+      "image/home/like_b.png",
+      "image/home/dev_camera.png",
+      "image/home/like_d.png",
+      "image/home/like_c.png",
+      "image/home/like_a.png",
+      "image/home/see_more.png",
+      "image/home/dev_share.png",
+      "image/home/dev_setting.png"
+    ],
+    "refer": []
+  },
+  "html/smart/index.html": {
+    "resources": [
+      "css/mui.min.css",
+      "css/lib/mui.min.css",
+      "css/app/app.css"
+    ],
+    "refer": []
+  },
+  "html/nearby/index.html": {
+    "resources": [
+      "css/mui.min.css",
+      "css/lib/mui.min.css",
+      "css/app/app.css",
+      "js/common/imagelazyload.js",
+      "js/lib/md5.min.js"
+    ],
+    "refer": []
+  }
+}

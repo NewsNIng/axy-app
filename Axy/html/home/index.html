@@ -1,0 +1,333 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			header {
+				padding-left: 2rem !important;
+				padding-right: 2rem !important;
+			}
+			
+			header a img {
+				width: 2rem;
+			}
+			
+			.mui-bar-nav~.mui-content {
+				padding-top: 0;
+			}
+			
+			.mui-slider-indicator .mui-indicator {
+				background: transparent;
+				margin: 0 1.5px;
+				border: .5px white solid;
+			}
+			
+			.model_type {
+				background-color: white;
+				padding: 1rem 0;
+			}
+			
+			.model_type>div {
+				padding: 1rem 0;
+				display: inline-block;
+				/*//修改20%-->25%*/
+				width: 25%;
+				text-align: center;
+			}
+			
+			.model_type>div>img {
+				width: 60%;
+			}
+			
+			.model_type>div>span {
+				display: block;
+				color: #2e2e2e;
+				font-size: 1.4rem;
+			}
+			/*设备影像*/
+			
+			.device_show {
+				margin-top: 12px;
+				padding: 20px 16px 0 16px;
+				background: white;
+				position: relative;
+			}
+			/*设备预览图*/
+			
+			.device_show>img {
+				width: 100%;
+			}
+			/*设备状态*/
+			
+			.device_show .dev_status {
+				position: absolute;
+				background-color: #2bb8aa;
+				width: 42px;
+				height: 22px;
+				color: #f5fbfa;
+				right: 30px;
+				font-size: 11px;
+				top: 34px;
+				text-align: center;
+				border-radius: 2px;
+			}
+			/*设备名称及菜单====start====*/
+			
+			.dev_info,
+			.dev_operating,
+			.dev_operating>div {
+				display: inline-block;
+				width: 49%;
+				font-size: 12px;
+			}
+			
+			.dev_info {
+				color: #2BB8AA;
+			}
+			
+			.dev_operating {
+				float: right;
+				color: #696969;
+			}
+			
+			.dev_setting {
+				text-align: right;
+			}
+			
+			.dev_info img,
+			.dev_operating img {
+				height: 20px;
+				width: 20px;
+				vertical-align: middle;
+			}
+			
+			.dev_info,
+			.dev_operating {
+				margin: 6px 0 16px 0;
+			}
+			/*设备名称及菜单====end====*/
+			/*猜你喜欢====start====*/
+			
+			.user_like {
+				background-color: white;
+				margin-top: 12px;
+				padding: 16px;
+			}
+			
+			.like_title {
+				font-size: 14px;
+				color: #646464;
+			}
+			
+			.see_more {
+				float: right;
+				font-size: 12px;
+				color: #a8a8a9;
+			}
+			
+			.see_more>img {
+				width: 6px;
+				margin-left: 2px;
+			}
+			
+			.like_image {
+				width: 100%;
+				margin-top: 10px;
+				/*height: 230px;*/
+			}
+			
+			.like_image>div {
+				float: left;
+				margin: 0 1%;
+				width: 48%;
+			}
+			
+			.like_image>div>img {
+				width: 100%;
+			}
+			/*猜你喜欢====end====*/
+		</style>
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
+			<a class="mui-icon mui-pull-left">
+				<img src="../../image/home/message.png" />
+			</a>
+			<h1 class="mui-title"></h1>
+			<a class="mui-icon mui-pull-right">
+				<img src="../../image/home/plus.png" />
+			</a>
+			<a class="mui-icon mui-pull-right" style="margin-right: .5rem;">
+				<img src="../../image/home/search.png" />
+			</a>
+		</header>
+
+		<div class="mui-content noImmersed">
+			<!--<div class="mui-scroll">-->
+
+			<div id="slider" class="mui-slider" v-if="imgList.length > 0">
+				<div class="mui-slider-group mui-slider-loop">
+					<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+					<div class="mui-slider-item mui-slider-item-duplicate">
+						<a href="#">
+							<img :src="imgLast.src">
+						</a>
+					</div>
+
+					<!-- 第四张 -->
+					<div class="mui-slider-item" v-for="o, index in imgList">
+						<a href="#">
+							<img :src="o.src">
+						</a>
+					</div>
+					<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+					<div class="mui-slider-item mui-slider-item-duplicate">
+						<a href="#">
+							<img :src="imgFrist.src">
+						</a>
+					</div>
+				</div>
+				<div class="mui-slider-indicator">
+					<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+				</div>
+			</div>
+
+			<div class="model_type">
+				<template v-for="o,i in modelTypes">
+					<div @tap="onModelTap(o, i)">
+						<img :src="o.src" />
+						<span>{{o.name}}</span>
+					</div>
+				</template>
+
+			</div>
+			<div class="device_show">
+				<img :src="dev.img" />
+				<div class="dev_status">{{dev.status}}</div>
+				<div>
+					<div class="dev_info">
+						<img src="../../image/home/dev_camera.png" /> {{dev.name}}
+					</div>
+					<div class="dev_operating">
+						<div class="dev_share">
+							<img src="../../image/home/dev_share.png" /> 分享
+						</div>
+						<div class="dev_setting">
+							<img src="../../image/home/dev_setting.png" /> 设置
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="user_like">
+				<label class="like_title">猜你喜欢</label>
+				<div class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
+				<div class="like_image">
+
+					<div class="like_a"><img src="../../image/home/like_a.png" /></div>
+					<div class="like_b"><img src="../../image/home/like_b.png" /></div>
+
+					<div class="like_c"><img src="../../image/home/like_c.png" /></div>
+					<div class="like_d"><img src="../../image/home/like_d.png" /></div>
+
+				</div>
+			</div>
+
+			<!--</div>-->
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/user.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+
+		<script type="text/javascript">
+			mui.init({
+				gestureConfig: {
+					longtap: true
+				}
+			});
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						text: "我是内容啊",
+						imgList: [{
+							id: 0,
+							src: "http://placehold.it/750x380"
+						}, {
+							id: 2,
+							src: "http://placehold.it/750x380"
+						}, {
+							id: 12,
+							src: "http://placehold.it/750x380"
+						}],
+						modelTypes: [{
+								name: "回家模式",
+								src: "../../image/home/gohome.png"
+							},
+							{
+								name: "离家模式",
+								src: "../../image/home/outhome.png"
+							},
+							{
+								name: "回店模式",
+								src: "../../image/home/goshop.png"
+							},
+							{
+								name: "离店模式",
+								src: "../../image/home/outshop.png"
+							}
+						],
+						dev: {
+							img: "http://placehold.it/760x350",
+							status: "在线",
+							name: "AX-503-摄像机"
+						},
+					};
+				},
+				computed: {
+					imgFrist: function() {
+						return this.imgList[0];
+					},
+					imgLast: function() {
+						return this.imgList[this.imgList.length - 1];
+					}
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {
+					// plus ready ! 现在可以使用plus相关api
+					// 设置本页面无滚动条显示
+					this.$view.setStyle({
+						scrollIndicator: "none"
+					});
+
+				},
+				methods: {
+					// 当点击模式时
+					onModelTap: function(o, index) {
+						console.log(JSON.stringify(o));
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

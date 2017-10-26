@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!--mui css-->
+		<link rel="stylesheet" href="../css/lib/mui.min.css" />
+		<link rel="stylesheet" href="../css/app/app.css" />
+		<style type="text/css">
+			nav {
+			    box-shadow: 0 -1px 5px #ccc !important;
+			    background: white !important;
+			    padding-top: 5px !important;
+			}
+			
+			.mui-tab-item img{
+				width: 2.2rem;
+			}
+			.mui-tab-item span.mui-tab-label{
+				font-size: 1.2rem !important;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="warp">
+			<nav class="mui-bar mui-bar-tab">
+				<template v-for="o,i in items">
+					<a class="mui-tab-item" :class="{'app-color-active': i === index}" @tap="onTap(o, i)">
+						<span class="mui-icon">
+							<img :src="'../image/main/'+ o.id + (i === index ? '_active' : '') +'.png'"/>
+						</span>
+						<span class="mui-tab-label">{{o.name}}</span>
+					</a>
+				</template>
+
+			</nav>
+		</div>
+
+		<!--mui-->
+		<script type="text/javascript" src="../js/lib/mui.min.js"></script>
+		<!--vue-->
+		<script type="text/javascript" src="../js/lib/vue.min.js"></script>
+		<!--vue 5+插件-->
+		<script type="text/javascript" src="../js/lib/vue-ni.js"></script>
+
+		<script>
+			
+			
+			// 4个子webview统一样式
+			var _styles = {
+				bottom: '56px',
+				top: '0px'
+			};
+			// 4个子webview参数
+			var _items = [{
+				url: './home/index.html',
+				id: 'home',
+				icon: 'mui-icon-home',
+				name: '主页',
+				styles: _styles,
+				extras: {},
+			}, {
+				url: './smart/index.html',
+				id: 'smart',
+				icon: 'mui-icon-phone',
+				name: '智慧生活',
+				styles: _styles,
+				extras: {},
+			}, {
+				url: './nearby/index.html',
+				id: 'nearby',
+				icon: 'mui-icon-map',
+				name: '附近',
+				styles: _styles,
+				extras: {},
+			}, {
+				url: './person/index.html',
+				id: 'person',
+				icon: 'mui-icon-person',
+				name: '我的',
+				styles: _styles,
+				extras: {},
+			}];
+
+			new Vue({
+				el: "#warp",
+				data: function() {
+					return {
+						items: _items, // 页面数据
+						index: 0, // 默认下标
+					}
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {
+					// plus ready !
+					// 这时候才能调用 plus 相关 API
+					this.group = new this.$WebviewGroupLow(plus.webview.getLaunchWebview().id, {
+						items: this.items,
+						onChange: this.onChange.bind(this)
+					});
+					//仅支持竖屏显示
+					plus.screen.lockOrientation("portrait-primary");
+					plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
+					
+				},
+				methods: {
+					// 点击 tab 图标时
+					onTap: function(o, index) {
+						if(this.index === index){return;}
+						// 更新index下标
+						this.index = index;
+						// 控制webview切换
+						this.group.switchTab(o.id);
+						// 吐司
+						//mui.toast(o.name);
+					},
+					// 页面切换时
+					onChange: function(o) {
+						if(this.index === o.index){return;}
+						this.index = o.index;
+						//console.log(o.index);
+					}
+				}
+
+			});
+		</script>
+	</body>
+
+</html>

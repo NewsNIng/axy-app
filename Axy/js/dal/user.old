@@ -1,0 +1,38 @@
+var UserDAL = function(){
+	this.callback = null
+	var ws = new WebService();
+	ws.setUrl(Config.getUrl());
+	// 默认为get
+	ws.setType('get');
+	ws.setErrorCall(function(e) {
+		console.log(JSON.stringify(e));
+	});
+	ws.setCallBack(function(data) {
+		if(data.ret_code != '0000') {
+			return that.callback({
+				message: data.message,
+				code: data.ret_code
+			}, data.result);
+		}
+		return that.callback(null, data.result);
+	});
+	this.ws = ws;
+}
+
+UserDAL.prototype = {
+	// 用户登录
+	login: function(username, password, callback) {
+		return callback("我是user login 接口返回的测试数据");
+		ws.setOpName("user/login");
+		ws.setParas({
+			username: username,
+			password: password
+		});
+		this.callback = callback;
+		ws.LoadData();
+	}
+}
+
+
+
+

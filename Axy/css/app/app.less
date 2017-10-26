@@ -1,0 +1,27 @@
+@import url('../var.less');
+
+html, body{
+    font-size: 10px;
+}
+
+.app {
+    // header
+    &-header {
+        background-color: @color-app;
+        h1 {
+            color: white;
+        }
+    }
+}
+
+.mui-bar-tab .mui-tab-item.app-color-active{
+    color: @color-app;
+}
+.mui-bar-tab .mui-tab-item.mui-active{
+    color: @color-app;
+}
+
+.mui-bar-transparent {
+    /*设置header渐变颜色 必须 rgba*/
+    background-color: @color-app-header-hide;
+}
