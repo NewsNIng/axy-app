@@ -95,6 +95,9 @@
 		},
 		"NativeObj": {
 			"description": "原生对象"
+		},
+		"PGPlugintest": {
+			"description": "监控测试"
 		}
 	},
 	"plus": {
@@ -292,7 +295,8 @@
 					"image/home/like_a.png",
 					"image/home/see_more.png",
 					"image/home/dev_share.png",
-					"image/home/dev_setting.png"
+					"image/home/dev_setting.png",
+					"js/plug/test.js"
 				],
 				"refer": [],
 				"priority": 0

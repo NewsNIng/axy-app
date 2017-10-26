@@ -73,7 +73,8 @@
       "image/home/like_a.png",
       "image/home/see_more.png",
       "image/home/dev_share.png",
-      "image/home/dev_setting.png"
+      "image/home/dev_setting.png",
+      "js/plug/test.js"
     ],
     "refer": []
   },

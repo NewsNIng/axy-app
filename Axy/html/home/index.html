@@ -251,11 +251,11 @@
 
 			</div> 
 			
-			<div class="device_show">
+			<div class="device_show" @tap="openCamListWindow()">
 				<img :src="dev.img" />
 				<div class="dev_status">{{dev.status}}</div>
 				<div>
-					<div class="dev_info">
+					<div class="dev_info" >
 						<img src="../../image/home/dev_camera.png" /> {{dev.name}}
 					</div>
 					<div class="dev_operating">
@@ -323,6 +323,8 @@
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
+		
+		<script type="text/javascript" src="../../js/plug/test.js" ></script>
 
 		<script type="text/javascript">
 			mui.init({
@@ -402,6 +404,11 @@
 					// 当点击模式时
 					onModelTap: function(o, index) {
 						console.log(JSON.stringify(o));
+					},
+					
+					openCamListWindow: function(){
+						var rs = plus.PGPlugintest.openCamListWindow(1,2,3);
+						console.log(rs);
 					}
 				}
 			});
