@@ -7,17 +7,45 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			
+		</style>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav app-header">
+		<header class="mui-bar mui-bar-nav">
 		    <h1 class="mui-title">个人中心</h1>
+		    <span class="mui-pull-right">新用户注册</span>
 		</header>
+		<div class="mui-content">
+		    <button type="button" class="mui-btn mui-btn-blue">打开登录</button>
+		    
+		    
+		    <div class="room">
+		    	<button>1</button>
+		    	<button>2</button>
+		    	<button>3</button>
+		    </div>
+		    
+		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
 		<script src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript">
-			mui.init()
+			mui.init();
+			mui.ready(function(){
+				document.querySelector(".mui-btn-blue").addEventListener('tap', function(){
+					mui.openWindow('_www/html/common/login.html','login', {
+						extras: {
+							qid: 123
+						}
+					});
+					
+				});
+				
+				
+				
+			});
 		</script>
 	</body>
 

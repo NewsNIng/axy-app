@@ -261,9 +261,13 @@
 				"resources": [
 					"css/mui.min.css",
 					"css/lib/mui.min.css",
-					"css/app/app.css"
+					"css/app/app.css",
+					"js/common/immersed.js",
+					"js/lib/mui.min.js"
 				],
-				"refer": [],
+				"refer": [
+					"html/common/login.html"
+				],
 				"priority": 0
 			},
 			"html/home/index.html": {
@@ -317,6 +321,17 @@
 					"css/app/app.css",
 					"js/common/imagelazyload.js",
 					"js/lib/md5.min.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/common/login.html": {
+				"resources": [
+					"js/common/flexible.js",
+					"css/lib/mui.min.css",
+					"js/common/immersed.js",
+					"css/app/app.css",
+					"js/lib/mui.min.js"
 				],
 				"refer": [],
 				"priority": 0
