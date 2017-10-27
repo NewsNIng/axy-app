@@ -106,7 +106,12 @@
 			"css/lib/mui.min.css",
 			"js/common/immersed.js",
 			"css/app/app.css",
-			"js/lib/mui.min.js"
+			"js/lib/mui.min.js",
+			"js/dal/user.js",
+			"js/lib/vue.min.js",
+			"fonts/mui.ttf",
+			"js/app/app.js",
+			"js/dal/base.js"
 		]
 	}
 }
