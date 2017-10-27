@@ -1,15 +1,12 @@
-@color Keys: (
-    "main",
-    "gray",
-);
-@color Vals: (
-    @color-main,
-    @color-gray,
-);
+html,
+body {
+  font-size: 10px;
+}
 .app-btn,
 .app-btn-main,
 .app-btn-main-ghost {
-  border: 0.013333rem solid #cccccc;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
   background-color: #ffffff;
   color: #cccccc;
 }
@@ -18,14 +15,122 @@
   border-color: #2bb8aa;
   color: #ffffff;
 }
+.app-btn-main:active {
+  background-color: #43d3c5 !important;
+  border-color: #43d3c5 !important;
+}
 .app-btn-main-ghost {
+  border-color: #2bb8aa !important;
   color: #2bb8aa;
+}
+.app-btn-main-ghost:active {
+  background-color: #ffffff !important;
+  color: #2bb8aa !important;
 }
 .app-header {
   background-color: #2bb8aa;
 }
 .app-header h1 {
   color: white;
+}
+.app-font-size-20 {
+  font-size: 10px;
+}
+[data-dpr="2"] .app-font-size-20 {
+  font-size: 20px;
+}
+[data-dpr="3"] .app-font-size-20 {
+  font-size: 30px;
+}
+.app-font-size-22 {
+  font-size: 11px;
+}
+[data-dpr="2"] .app-font-size-22 {
+  font-size: 22px;
+}
+[data-dpr="3"] .app-font-size-22 {
+  font-size: 33px;
+}
+.app-font-size-24 {
+  font-size: 12px;
+}
+[data-dpr="2"] .app-font-size-24 {
+  font-size: 24px;
+}
+[data-dpr="3"] .app-font-size-24 {
+  font-size: 36px;
+}
+.app-font-size-26 {
+  font-size: 13px;
+}
+[data-dpr="2"] .app-font-size-26 {
+  font-size: 26px;
+}
+[data-dpr="3"] .app-font-size-26 {
+  font-size: 39px;
+}
+.app-font-size-28 {
+  font-size: 14px;
+}
+[data-dpr="2"] .app-font-size-28 {
+  font-size: 28px;
+}
+[data-dpr="3"] .app-font-size-28 {
+  font-size: 42px;
+}
+.app-font-size-30 {
+  font-size: 15px;
+}
+[data-dpr="2"] .app-font-size-30 {
+  font-size: 30px;
+}
+[data-dpr="3"] .app-font-size-30 {
+  font-size: 45px;
+}
+.app-font-size-32 {
+  font-size: 16px;
+}
+[data-dpr="2"] .app-font-size-32 {
+  font-size: 32px;
+}
+[data-dpr="3"] .app-font-size-32 {
+  font-size: 48px;
+}
+.app-font-size-34 {
+  font-size: 17px;
+}
+[data-dpr="2"] .app-font-size-34 {
+  font-size: 34px;
+}
+[data-dpr="3"] .app-font-size-34 {
+  font-size: 51px;
+}
+.app-font-size-36 {
+  font-size: 18px;
+}
+[data-dpr="2"] .app-font-size-36 {
+  font-size: 36px;
+}
+[data-dpr="3"] .app-font-size-36 {
+  font-size: 54px;
+}
+.app-font-size-38 {
+  font-size: 19px;
+}
+[data-dpr="2"] .app-font-size-38 {
+  font-size: 38px;
+}
+[data-dpr="3"] .app-font-size-38 {
+  font-size: 57px;
+}
+.app-font-size-40 {
+  font-size: 20px;
+}
+[data-dpr="2"] .app-font-size-40 {
+  font-size: 40px;
+}
+[data-dpr="3"] .app-font-size-40 {
+  font-size: 60px;
 }
 .mui-bar-tab .mui-tab-item.app-color-active {
   color: #2bb8aa;

@@ -2,28 +2,30 @@
 @import url('../var.less');
 
 
-//.loopColor( @index )when( @index > 0 ){
-//  
-//  .app-@{extract(@colorKeys, @index)}{
-//      
-//  }
-//  .loopColor((@index - 1));
-//}
-//
-
 
 .app-btn{
-    border: 0.013333rem solid @color-gray;
+    border: 1px solid @color-gray;
+    border-radius: 4px;
     background-color: @color-white;
     color: @color-gray;
+    
     // 主色
     &-main:extend(.app-btn){ 
         background-color: @color-main;
-        border-color: @color-main;
+         border-color: @color-main;
         color: @color-white;
+        &:active{// 按下
+            background-color: lighten(@color-main, 10%) !important;
+            border-color: lighten(@color-main, 10%) !important;
+        }
         &-ghost:extend(.app-btn){
-            //background-color: @color-white;
+            
+            border-color: @color-main !important;
             color: @color-main;
+            &:active{// 按下
+                background-color: lighten(@color-main, 80%) !important;
+                color: @color-main !important;
+            }
             
         }     
     }

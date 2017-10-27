@@ -1,10 +1,11 @@
 @import url('./var.less');
-//html,
-//body {
-//  font-size: 10px;
-//}
-
+html,
+body {
+    font-size: 10px;
+}
 @import url('./module/button.less');
+
+
 .app {
     // header
     &-header { 
@@ -13,7 +14,51 @@
             color: white;
         }
     }
+    
 }
+
+
+.loop(@index, @k) when (@index <= @k){
+    .app-font-size-@{index}{
+        font-size: @index / 2 * 1px; 
+    }
+    [data-dpr="2"] .app-font-size-@{index}{
+        font-size:  @index * 1px;
+    }
+    [data-dpr="3"] .app-font-size-@{index}{
+        font-size: @index / 2 * 3 * 1px;
+    }
+    .loop((@index + 2), @k);
+} 
+
+.loop(20, 40);
+
+//
+//
+//.app-font-size-24{
+//  font-size: 12px;
+//}
+//.app-font-size-36{
+//  font-size: 18px;
+//}
+//
+//[data-dpr="2"] .app-font-size-24 {
+//  font-size: 24px;
+//}
+//
+//[data-dpr="2"] .app-font-size-36 {
+//  font-size: 36px;
+//}
+//
+//[data-dpr="3"] .app-font-size-24 {
+//  font-size: 36px;
+//}
+//
+//[data-dpr="3"] .app-font-size-36 {
+//  font-size: px;
+//}
+
+
 
 .mui-bar-tab .mui-tab-item.app-color-active {
     color: @color-app;
@@ -27,3 +72,4 @@
     /*设置header渐变颜色 必须 rgba*/
     background-color: @color-app-header-hide;
 }
+
