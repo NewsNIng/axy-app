@@ -1,9 +1,10 @@
-@import url('../var.less');
-html,
-body {
-    font-size: 10px;
-}
+@import url('./var.less');
+//html,
+//body {
+//  font-size: 10px;
+//}
 
+@import url('./module/button.less');
 .app {
     // header
     &-header { 
@@ -11,16 +12,6 @@ body {
         h1 {
             color: white;
         }
-    }
-}
-
-@mixin font-dpr($font-size) {
-    font-size: $font-size;
-    [data-dpr="2"] & {
-        font-size: $font-size * 2;
-    }
-    [data-dpr="3"] & {
-        font-size: $font-size * 3;
     }
 }
 

@@ -1,0 +1,31 @@
+// 按钮样式
+@import url('../var.less');
+
+
+//.loopColor( @index )when( @index > 0 ){
+//  
+//  .app-@{extract(@colorKeys, @index)}{
+//      
+//  }
+//  .loopColor((@index - 1));
+//}
+//
+
+
+.app-btn{
+    border: 0.013333rem solid @color-gray;
+    background-color: @color-white;
+    color: @color-gray;
+    // 主色
+    &-main:extend(.app-btn){ 
+        background-color: @color-main;
+        border-color: @color-main;
+        color: @color-white;
+        &-ghost:extend(.app-btn){
+            //background-color: @color-white;
+            color: @color-main;
+            
+        }     
+    }
+    
+}

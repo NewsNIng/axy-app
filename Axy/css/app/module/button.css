@@ -21,19 +21,3 @@
 .app-btn-main-ghost {
   color: #2bb8aa;
 }
-.app-header {
-  background-color: #2bb8aa;
-}
-.app-header h1 {
-  color: white;
-}
-.mui-bar-tab .mui-tab-item.app-color-active {
-  color: #2bb8aa;
-}
-.mui-bar-tab .mui-tab-item.mui-active {
-  color: #2bb8aa;
-}
-.mui-bar-transparent {
-  /*设置header渐变颜色 必须 rgba*/
-  background-color: rgba(43, 184, 170, 0);
-}
