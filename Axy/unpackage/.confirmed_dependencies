@@ -111,7 +111,21 @@
 			"js/lib/vue.min.js",
 			"fonts/mui.ttf",
 			"js/app/app.js",
-			"js/dal/base.js"
+			"js/dal/base.js",
+			"image/common/login_weibo.png",
+			"image/common/login_logo.png",
+			"image/common/login_wechat.png",
+			"image/common/login_account.png",
+			"image/common/login_pwd.png",
+			"image/common/login_qq.png"
+		],
+		"refer": [
+			"html/common/register.html"
+		]
+	},
+	"html/common/register.html": {
+		"resources": [
+			"css/lib/mui.min.css"
 		]
 	}
 }
