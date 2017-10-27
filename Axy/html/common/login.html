@@ -7,125 +7,228 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
-		<script type="text/javascript" src="../../js/common/flexible.js" ></script>
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<style type="text/css">
-			html,body,.mui-content{
+			html,
+			body,
+			.mui-content {
 				background-color: white;
 			}
-			.mui-bar-nav, .mui-bar{
+			
+			.mui-bar-nav,
+			.mui-bar {
 				background-color: #FFFFFF;
 				box-shadow: 0 0 0 white !important;
 			}
-			.mui-pull-right{
+			
+			.mui-pull-right {
 				line-height: 44px;
 			}
-		
-			.app-color-main{
+			
+			.app-color-main {
 				color: #2bb8aa;
 			}
-			.app-color-gray{
+			
+			.app-color-gray {
 				color: #666666;
 			}
 			
+			div.mui-input-row>img {
+				display: block;
+				width: 0.64rem;
+				height: 0.64rem;
+				position: absolute;
+				top: 0.48rem;
+				left: 0.106666rem;
+			}
 			
+			div.mui-input-row>input {
+				padding-left: 1.173333rem;
+				height: 100%;
+				border: none;
+				border-radius: 0;
+				border-bottom: 1px solid #CCCCCC;
+			}
+			div.mui-input-row>input::-webkit-input-placeholder {
+				color: #CCCCCC;
+			}
+				
 			
+			.mui-content div.mui-input-row {
+				display: block;
+				width: 8.4rem;
+				height: 1.6rem;
+				margin: 0 auto;
+				position: relative;
+			}
+			
+			.mui-content>img {
+				display: block;
+				width: 2.186666rem;
+				height: 2.186666rem;
+				margin: 0.373333rem auto 1.733333rem auto;
+			}
 			/*登录按钮*/
-			button.app-btn-main{
+			
+			button.app-btn-main {
 				width: 8.4rem;
 				height: 1.173333rem;
-				margin-left: 0.826666rem;
+				margin: 0.8rem 0.826666rem 0.56rem 0.826666rem;
 			}
+			.forget_pwd {
+				color: #999999;
+				text-align: right;
+				padding-right: 0.826666rem;
+			}
+			.third_party_login {
+				/*background-color: #CCCCCC;*/
+				margin-top: 1.8rem;
+				height: 0.8rem;
+			}
+			.third_party_login{
+				color: #999999;
+				position: relative;
+			}
+			
+			/*第三方登录横线*/
+			.third_party_login:before{
+				content: "";
+				width: 8.4rem;
+				position: absolute;
+				left: 0.826666rem;
+				top: 50%;
+				height: 1px;
+				
+				background-color: #999999;
+				display: block;
+				transform: translateY(-50%) scaleY(0.5);
+				-webkit-transform: translateY(-50%) scaleY(0.5);
+			}
+			/*第三方登录文字*/
+			.third_party_login > div{
+				display: inline-block;
+				text-align: center;
+				padding: 0 0.2rem;
+				position: absolute;
+				background-color: white;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				-webkit-transform: translate(-50%, -50%);
+			}
+			
+			.third_party_login > div.imgRoom{
+				width: 100%;
+				margin: 1.5rem 0.36rem;
+				padding: 0;
+			}
+			.third_party_login > div.imgRoom > img{
+				float: left;
+				width: 0.906666rem;
+				height: 0.906666rem;
+				margin-left: 1.64rem;
+			}
+			
 		</style>
 	</head>
 
 	<body>
-		
-		
-		
+
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back mui-icon mui-icon-closeempty mui-pull-left app-color-gray">
 			</a>
-		    <span class="mui-pull-right app-font-size-30 app-color-main">新用户注册</span>
+			<span class="mui-pull-right app-font-size-30 app-color-main" id="reg">新用户注册</span>
 		</header>
 		<div class="mui-content">
-			
-			
-			<div class="mui-input-row">
-			    <label class="app-font-size-30">账号</label>
-			    <input type="text" placeholder="普通输入框" v-model="username">
+
+			<img src="../../image/common/login_logo.png" />
+
+			<div class="mui-input-row app-font-size-30">
+				<img src="../../image/common/login_account.png" />
+				<input type="text" placeholder="请输入手机号码" v-model="username">
 			</div>
-			
-			<div class="mui-input-row">
-			    <label class="app-font-size-30">密码</label>
-			    <input type="password" placeholder="密码" v-model="password">
+
+			<div class="mui-input-row app-font-size-30">
+				<img src="../../image/common/login_pwd.png" />
+				<input type="password" placeholder="请设置登录密码" v-model="password">
 			</div>
-			
-			
-			
+
 			<!--登录按钮-->
-		    <button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在登录..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">登录</button>
-		    
-		    <!--第三方登录-->
-		    
-		    <div class="">
-		    	
-		    </div>
-		    
-		</div>
-		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
-		
-		<script src="../../js/lib/mui.min.js"></script>
-		<script type="text/javascript" src="../../js/lib/vue.min.js" ></script>
-		
-		
-		<script type="text/javascript" src="../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../js/dal/user.js" ></script>
-		
-		<script type="text/javascript" src="../../js/app/app.js" ></script>
-		
-		<script type="text/javascript">
+			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在登录..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">登录</button>
 			
+			<div class="forget_pwd app-font-size-24">忘记密码</div>
+			
+			
+			
+			<!--第三方登录-->
+
+			<div class="third_party_login">
+				<div class="app-font-size-30">
+					第三方账号登录
+				</div>
+				<div class="imgRoom">
+					<img src="../../image/common/login_qq.png"/>
+					<img src="../../image/common/login_weibo.png"/>
+					<img src="../../image/common/login_wechat.png"/>
+				</div>
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+
+		<script src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/user.js"></script>
+
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+
+		<script type="text/javascript">
 			mui.init();
 			
+			mui.ready(function(){
+				document.getElementById("reg").addEventListener('tap',function(){
+					mui.openWindow('register.html', 'reg');
+				});
+			});
+
 			new Vue({
 				el: ".mui-content",
-				data: function(){
+				data: function() {
 					return {
 						username: '',
 						password: '',
 						loading: false
 					};
 				},
-				
+
 				methods: {
-					onLoginTap: function(e){
-						if(this.loading){
+					onLoginTap: function(e) {
+						if(this.loading) {
 							return;
 						}
-						
+
 						var that = this;
-						
+
 						this.loading = true;
 						// 是否验证 规范
-						
-						
-						
-						
-						dal.user.login(this.username, this.password, function(data){
-							
+
+						dal.user.login(this.username, this.password, function(data) {
+
 							that.loading = false;
 							mui.toast("登录成功");
 							app.user.set(data);
 						});
-						
+
 					}
 				},
 				watch: {
-					loading: function(newVal, oldVal){
+					loading: function(newVal, oldVal) {
 						mui('#loginBtn').button(newVal ? "loading" : "reset");
 					}
 				}
-				
+
 			});
 		</script>
 	</body>
