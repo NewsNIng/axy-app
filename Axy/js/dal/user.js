@@ -8,9 +8,11 @@
 	 * @param {Function} callback 请求回调函数
 	 */
 	user.login = function(username, password, callback){
-		return ra("get", "/",{
-			name: "123"
-		}, callback);
+		setTimeout(function(){
+			callback({
+				tel: "110",
+			})
+		}, 2000);
 	}
 	// 测试
 	user.test = function(fn){
@@ -21,6 +23,19 @@
 			sign: "b59bc3ef6191eb9f747dd4e83c99f2a4",
 			format: "json"
 		},fn);
+	}
+	
+	/**
+	 * @param {String} username 用户名
+	 * @param {String} password 密码
+	 * @param {String} code 验证码
+	 * @param {Function} callback 请求回调函数
+	 */
+	user.reg = function(username, password, code, callback){
+		return ra("post", "/xx/reg.php", {
+			username: username,
+			// ...
+		}, callback);
 	}
 	
 	

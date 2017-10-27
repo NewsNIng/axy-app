@@ -28,6 +28,13 @@
 			}
 			
 			
+			
+			/*登录按钮*/
+			button.app-btn-main{
+				width: 8.4rem;
+				height: 1.173333rem;
+				margin-left: 0.826666rem;
+			}
 		</style>
 	</head>
 
@@ -41,13 +48,85 @@
 		    <span class="mui-pull-right app-font-size-30 app-color-main">新用户注册</span>
 		</header>
 		<div class="mui-content">
+			
+			
+			<div class="mui-input-row">
+			    <label class="app-font-size-30">账号</label>
+			    <input type="text" placeholder="普通输入框" v-model="username">
+			</div>
+			
+			<div class="mui-input-row">
+			    <label class="app-font-size-30">密码</label>
+			    <input type="password" placeholder="密码" v-model="password">
+			</div>
+			
+			
+			
+			<!--登录按钮-->
+		    <button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在登录..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">登录</button>
+		    
+		    <!--第三方登录-->
+		    
+		    <div class="">
+		    	
+		    </div>
 		    
 		</div>
 		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
+		
 		<script src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js" ></script>
+		
+		
+		<script type="text/javascript" src="../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../js/dal/user.js" ></script>
+		
+		<script type="text/javascript" src="../../js/app/app.js" ></script>
+		
 		<script type="text/javascript">
+			
 			mui.init();
 			
+			new Vue({
+				el: ".mui-content",
+				data: function(){
+					return {
+						username: '',
+						password: '',
+						loading: false
+					};
+				},
+				
+				methods: {
+					onLoginTap: function(e){
+						if(this.loading){
+							return;
+						}
+						
+						var that = this;
+						
+						this.loading = true;
+						// 是否验证 规范
+						
+						
+						
+						
+						dal.user.login(this.username, this.password, function(data){
+							
+							that.loading = false;
+							mui.toast("登录成功");
+							app.user.set(data);
+						});
+						
+					}
+				},
+				watch: {
+					loading: function(newVal, oldVal){
+						mui('#loginBtn').button(newVal ? "loading" : "reset");
+					}
+				}
+				
+			});
 		</script>
 	</body>
 
