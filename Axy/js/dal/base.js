@@ -9,7 +9,7 @@
 // 实例级配置 上线时混淆配置
 fly.config = {
 	headers: {}, //http请求头，
-//	baseURL: "http://api.k780.com", //请求基地址
+	baseURL: "http://api.k780.com", //请求基地址
 	timeout: 8000, //超时时间，为0时则无超时限制
 	withCredentials: false //跨域时是否发送cookie
 };
