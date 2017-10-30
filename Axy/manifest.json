@@ -98,7 +98,7 @@
 		},
 		"plugintest": {
 			"description": "监控测试"
-		}
+		},"OAuth":{}
 	},
 	"plus": {
 		"statusbar": {
@@ -300,7 +300,8 @@
 					"image/home/see_more.png",
 					"image/home/dev_share.png",
 					"image/home/dev_setting.png",
-					"js/plug/test.js"
+					"js/plug/test.js",
+					"fonts/mui.ttf"
 				],
 				"refer": [],
 				"priority": 0
@@ -309,7 +310,10 @@
 				"resources": [
 					"css/mui.min.css",
 					"css/lib/mui.min.css",
-					"css/app/app.css"
+					"css/app/app.css",
+					"js/dal/user.js",
+					"js/dal/base.js",
+					"js/common/flexible.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -320,7 +324,13 @@
 					"css/lib/mui.min.css",
 					"css/app/app.css",
 					"js/common/imagelazyload.js",
-					"js/lib/md5.min.js"
+					"js/lib/md5.min.js",
+					"js/common/immersed.js",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js",
+					"js/app/app.js",
+					"js/lib/vue-ni.js",
+					"js/extend/String.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -331,7 +341,29 @@
 					"css/lib/mui.min.css",
 					"js/common/immersed.js",
 					"css/app/app.css",
-					"js/lib/mui.min.js"
+					"js/lib/mui.min.js",
+					"js/dal/user.js",
+					"js/lib/vue.min.js",
+					"fonts/mui.ttf",
+					"js/app/app.js",
+					"js/dal/base.js",
+					"image/common/login_weibo.png",
+					"image/common/login_logo.png",
+					"image/common/login_wechat.png",
+					"image/common/login_account.png",
+					"image/common/login_pwd.png",
+					"image/common/login_qq.png",
+					"js/lib/vue-ni.js"
+				],
+				"refer": [
+					"html/common/register.html"
+				],
+				"priority": 0
+			},
+			"html/common/register.html": {
+				"resources": [
+					"css/lib/mui.min.css",
+					"css/app/app.css"
 				],
 				"refer": [],
 				"priority": 0
