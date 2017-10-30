@@ -7,6 +7,9 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			
+		</style>
 	</head>
 
 	<body>
@@ -15,7 +18,10 @@
 		</header>
 		<div class="mui-content">
 			<!--图片本地下载缓存 示例-->
-		    <img class="img-lazy-load" width="100%" data-src="https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256"/>
+			<template v-for='o,i in imgs'>
+				<img class="img-lazy-load" width="50%" :data-src="o.src"/>	
+			</template>
+		    
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
@@ -24,15 +30,57 @@
 		<script type="text/javascript" src="../../js/lib/md5.min.js" ></script>
 		<script type="text/javascript" src="../../js/common/imagelazyload.js" ></script>
 		
+		<script type="text/javascript" src="../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js" ></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
+		
+		<script type="text/javascript" src="../../js/extend/String.js" ></script>
+		
+		
 		<script type="text/javascript">
 			mui.init();
 			
-			setTimeout(function(){
-				// 动态添加一个需要本地缓存判断的img
-				document.querySelector('.mui-content').innerHTML += '<img class="img-lazy-load" width="100%" data-src="https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256"/>';
-				// 重新检测
-				imgagelazyload();
-			},1000);
+			
+			
+			
+			new Vue({
+				el: '.mui-content',
+				data: {
+					imgs: [{
+						src: "https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256",
+					}],
+				},
+				mounted: function(){
+					imgagelazyload();
+					this.test();
+				},
+				plusReady: function(){ 
+					app.device.getInfo_async(function(info){
+						console.log(JSON.stringify(info));
+					});
+					
+					// var rs = app.device.getVersion();
+					// console.log(app.device.getArguments())
+					
+					
+				},
+				methods: {
+					test: function(){
+						setTimeout(function(){
+							// 动态添加一个需要本地缓存判断的img
+							this.imgs.push({
+								src: "https://sfault-avatar.b0.upaiyun.com/396/329/3963293825-59ed6d668d0ef_huge256",
+							});
+							imgagelazyload();
+							Vue.nextTick(function(){
+								// 重新检测
+								imgagelazyload();
+							});
+						}.bind(this), 1e3 * 2);
+					}
+				}
+			});
+			
 		</script>
 	</body>
 

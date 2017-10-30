@@ -78,7 +78,8 @@
 			"image/home/see_more.png",
 			"image/home/dev_share.png",
 			"image/home/dev_setting.png",
-			"js/plug/test.js"
+			"js/plug/test.js",
+			"fonts/mui.ttf"
 		],
 		"refer": []
 	},
@@ -86,7 +87,10 @@
 		"resources": [
 			"css/mui.min.css",
 			"css/lib/mui.min.css",
-			"css/app/app.css"
+			"css/app/app.css",
+			"js/dal/user.js",
+			"js/dal/base.js",
+			"js/common/flexible.js"
 		],
 		"refer": []
 	},
@@ -96,7 +100,13 @@
 			"css/lib/mui.min.css",
 			"css/app/app.css",
 			"js/common/imagelazyload.js",
-			"js/lib/md5.min.js"
+			"js/lib/md5.min.js",
+			"js/common/immersed.js",
+			"js/lib/vue.min.js",
+			"js/lib/mui.min.js",
+			"js/app/app.js",
+			"js/lib/vue-ni.js",
+			"js/extend/String.js"
 		],
 		"refer": []
 	},
@@ -117,7 +127,8 @@
 			"image/common/login_wechat.png",
 			"image/common/login_account.png",
 			"image/common/login_pwd.png",
-			"image/common/login_qq.png"
+			"image/common/login_qq.png",
+			"js/lib/vue-ni.js"
 		],
 		"refer": [
 			"html/common/register.html"
@@ -125,7 +136,8 @@
 	},
 	"html/common/register.html": {
 		"resources": [
-			"css/lib/mui.min.css"
+			"css/lib/mui.min.css",
+			"css/app/app.css"
 		]
 	}
 }

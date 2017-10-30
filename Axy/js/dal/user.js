@@ -18,7 +18,7 @@
 	user.test = function(fn){
 		return ra("get","/",{
 			app: "ip.get",
-			ip: "8.8.8.8",
+			ip: "114.114.114.114",
 			appkey: "10003",
 			sign: "b59bc3ef6191eb9f747dd4e83c99f2a4",
 			format: "json"
