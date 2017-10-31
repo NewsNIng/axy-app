@@ -195,6 +195,8 @@
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		
+		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
+		
 
 		<script type="text/javascript">
 			mui.init();
@@ -222,30 +224,57 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						username: '',
-						password: '',
+						username: '13330056858',
+						password: 'abc123',
 						loading: false
 					};
 				},
 				plusReady: function(){
+					// 获取到创建者 (webview)
+					var opener = this.$view.opener();
 					
 				},
 				methods: {
 					onLoginTap: function(e) {
+						// 如果正在登录，就直接返回
 						if(this.loading) {
 							return;
 						}
 
 						var that = this;
-
+						
+						
+						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误") ||
+								 		   app.rules.test("pwd", this.password, "密码输入错误");
+						
+						if(errorMessage){
+							return mui.toast(errorMessage);
+						}
+						
+						// 更新登录状态
 						this.loading = true;
-						// 是否验证 规范
-
+						
+						
 						dal.user.login(this.username, this.password, function(data) {
-
 							that.loading = false;
 							mui.toast("登录成功");
-							app.user.set(data);
+							
+							// 保存用户信息
+							// app.user.set(data);
+							
+							// 发出一个通知
+							new that.$Broadcast().emit("login_success", {
+								say: 'Hello'
+							});
+							
+							// 跳转到首页
+							// TODO 页面变动 逻辑需要改动
+							var mainView = plus.webview.getLaunchWebview();
+							mainView.show('slide-in-bottom', 250);
+							
+							
+							
+							
 						});
 
 					},
