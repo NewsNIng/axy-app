@@ -236,10 +236,13 @@
 					onOtherLoginTap: function(type){
 						var w = plus.nativeUI.showWaiting();
 						setTimeout(w.close, 1e3);
+						
 						new this.$OAuth(type, function(err, info){
 							w && w.close();
 							mui.alert(JSON.stringify(err || info));
 						}, this);
+						
+						
 					}
 				},
 				watch: {
