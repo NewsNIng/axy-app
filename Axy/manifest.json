@@ -380,7 +380,9 @@
 					"js/lib/vue.min.js",
 					"js/app/app.js",
 					"js/dal/base.js",
-					"image/common/login_pwd.png"
+					"image/common/login_pwd.png",
+					"image/common/agree_noselect.png",
+					"image/common/agree_selected.png"
 				],
 				"refer": [
 					"html/common/login.html"
