@@ -133,7 +133,8 @@
 			"image/common/login_pwd.png",
 			"image/common/login_qq.png",
 			"js/lib/vue-ni.js",
-			"html/common/reset.html"
+			"html/common/reset.html",
+			"js/app/app-rules.js"
 		],
 		"refer": [
 			"html/common/register.html",

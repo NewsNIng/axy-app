@@ -108,6 +108,8 @@
 					plus.screen.lockOrientation("portrait-primary");
 					plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
 					
+					this._listenLogin();
+					
 				},
 				methods: {
 					// 点击 tab 图标时
@@ -125,6 +127,20 @@
 						if(this.index === o.index){return;}
 						this.index = o.index;
 						//console.log(o.index);
+					},
+					
+					// 监听登录成功事件
+					_listenLogin: function(){
+						new this.$Broadcast().on('login_success', function(data){
+							// TODO 登录注册重置密码等页面需要关闭
+							var w = null;
+							['login','reg'].forEach(function(id){
+								w = plus.webview.getWebviewById(id);
+								w && w.close();
+							});
+							
+							console.log(JSON.stringify(data));
+						});
 					}
 				}
 
