@@ -202,14 +202,19 @@
 			mui.ready(function(){
 				// 注册按钮
 				document.getElementById("reg").addEventListener('tap',function(){
-					var regView = plus.webview.getWebviewById('reg');
-					var type = 'pop-in';
-					
-					if(!regView){
-						regView = plus.webview.create('register.html', 'reg');
-						type = 'pop-in';
-					}
-					regView.show(type, 250); 
+//					var regView = plus.webview.getWebviewById('reg');
+//					var type = 'pop-in';
+//					
+//					if(!regView){
+//						regView = plus.webview.create('register.html', 'reg');
+//						type = 'pop-in';
+//					}
+//					regView.show(type, 250); 
+					mui.openWindow('register.html', 'reg', {
+						waiting: {
+							autoShow: false
+						}
+					});
 				});
 			});
 
