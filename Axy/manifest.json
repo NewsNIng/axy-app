@@ -266,7 +266,8 @@
 					"js/lib/mui.min.js"
 				],
 				"refer": [
-					"html/common/login.html"
+					"html/common/login.html",
+					"html/common/reset2.html"
 				],
 				"priority": 0
 			},
@@ -313,7 +314,10 @@
 					"css/app/app.css",
 					"js/dal/user.js",
 					"js/dal/base.js",
-					"js/common/flexible.js"
+					"js/common/flexible.js",
+					"js/common/immersed.js",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -353,7 +357,8 @@
 					"image/common/login_account.png",
 					"image/common/login_pwd.png",
 					"image/common/login_qq.png",
-					"js/lib/vue-ni.js"
+					"js/lib/vue-ni.js",
+					"html/common/reset.html"
 				],
 				"refer": [
 					"html/common/register.html"
@@ -363,7 +368,63 @@
 			"html/common/register.html": {
 				"resources": [
 					"css/lib/mui.min.css",
-					"css/app/app.css"
+					"css/app/app.css",
+					"image/common/login_msg.png",
+					"js/common/flexible.js",
+					"js/lib/mui.min.js",
+					"fonts/mui.ttf",
+					"image/common/login_account.png",
+					"js/common/immersed.js",
+					"image/common/login_logo.png",
+					"js/dal/user.js",
+					"js/lib/vue.min.js",
+					"js/app/app.js",
+					"js/dal/base.js",
+					"image/common/login_pwd.png"
+				],
+				"refer": [
+					"html/common/login.html"
+				],
+				"priority": 0
+			},
+			"html/common/reset.html": {
+				"resources": [
+					"css/lib/mui.min.css",
+					"html/common/login.html",
+					"js/lib/mui.min.js",
+					"css/app/app.css",
+					"js/common/flexible.js",
+					"image/common/login_logo.png",
+					"image/common/login_account.png",
+					"image/common/login_pwd.png",
+					"image/common/login_msg.png",
+					"js/common/immersed.js",
+					"js/dal/user.js",
+					"js/lib/vue.min.js",
+					"fonts/mui.ttf",
+					"js/app/app.js",
+					"js/dal/base.js"
+				],
+				"refer": [
+					"html/common/reset2.html"
+				],
+				"priority": 0
+			},
+			"html/common/reset2.html": {
+				"resources": [
+					"css/lib/mui.min.css",
+					"html/common/reset.html",
+					"js/common/immersed.js",
+					"js/dal/user.js",
+					"image/common/login_logo.png",
+					"css/app/app.css",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js",
+					"js/common/flexible.js",
+					"fonts/mui.ttf",
+					"image/common/login_account.png",
+					"js/app/app.js",
+					"js/dal/base.js"
 				],
 				"refer": [],
 				"priority": 0
