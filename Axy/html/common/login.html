@@ -46,7 +46,7 @@
 				width: 0.64rem;
 				height: 0.64rem;
 				position: absolute;
-				top: 0.48rem;
+				top: 0.44rem;
 				left: 0.106666rem;
 			}
 			
@@ -87,6 +87,9 @@
 				color: #999999;
 				text-align: right;
 				padding-right: 0.826666rem;
+			}
+			.forget_pwd>a{
+				color: #999999;
 			}
 			.third_party_login {
 				/*background-color: #CCCCCC;*/
@@ -164,7 +167,7 @@
 			<!--登录按钮-->
 			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在登录..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">登录</button>
 			
-			<div class="forget_pwd app-font-size-24">忘记密码</div>
+			<div class="forget_pwd app-font-size-24"><a href="reset.html">忘记密码</a></div>
 			
 			
 			
@@ -197,8 +200,16 @@
 			mui.init();
 			
 			mui.ready(function(){
+				// 注册按钮
 				document.getElementById("reg").addEventListener('tap',function(){
-					mui.openWindow('register.html', 'reg');
+					var regView = plus.webview.getWebviewById('reg');
+					var type = 'pop-in';
+					
+					if(!regView){
+						regView = plus.webview.create('register.html', 'reg');
+						type = 'pop-in';
+					}
+					regView.show(type, 220); 
 				});
 			});
 

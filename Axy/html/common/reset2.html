@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>注册</title>
+		<title>重置密码</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
@@ -197,35 +197,36 @@
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back mui-icon mui-icon-closeempty mui-pull-left app-color-gray">
 			</a>
-			<span class="mui-pull-right app-font-size-30 app-color-main" id="lgn">快速登录</span>
 		</header>
+		
 		<div class="mui-content">
 
 			<img src="../../image/common/login_logo.png" />
 
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_account.png" />
-				<input type="text" class="app-font-size-24" placeholder="请输入手机号码" v-model="username">
+				<input type="text" class="app-font-size-24" placeholder="请重新设置登录密码" v-model="username">
 			</div>
 
-			<div class="mui-input-row app-font-size-30">
+			<!--<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_msg.png" />
 				<input type="password" class="app-font-size-24" placeholder="请输入短信验证码" v-model="verifycode">
+				<div class="send_code app-font-size-22">发送验证码</div>
 				<button type="button" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined">发送验证码</button>
-			</div>
-			<div class="mui-input-row app-font-size-30">
+			</div>-->
+			<!--<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_pwd.png" />
 				<input type="password" class="app-font-size-24" placeholder="请设置登录密码" v-model="password">
-			</div>
+			</div>-->
 			<!--登录按钮-->
-			<button :disabled="!user_agree" type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在注册..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">立即注册</button>
-
+			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="设置中..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">确定</button>
+<!--
 			<div class="user_agree">
 				<div class="agree_select" :class="{'red': user_agree}" @tap="user_agree = !user_agree"></div>
 				<div class="agree_text app-font-size-26" @tap="user_agree = !user_agree">已阅读并同意《<span class="user_service">用户服务协议</span>》</div>
-			</div>
+			</div>-->
 		</div>
-
+		
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
 
 		<script src="../../js/lib/mui.min.js"></script>
@@ -238,29 +239,12 @@
 		<script type="text/javascript">
 			mui.init()
 
-			mui.ready(function() {
-				document.getElementById("lgn").addEventListener('tap', function() {
-					var loginView = plus.webview.getWebviewById('login');
-
-					if(loginView) {
-						plus.webview.currentWebview().close();
-					} else {
-						loginView = plus.webview.create('login.html', 'login');
-						loginView.show(type, 220, function() {
-							plus.webview.currentWebview().close();
-						});
-					}
-
-				});
-			});
-
 			new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
 						username: '',
 						verifycode: '',
-						password: '',
 						loading: false,
 						user_agree: false, // 用户协议
 					};
@@ -280,8 +264,7 @@
 						dal.user.login(this.username, this.password, function(data) {
 
 							that.loading = false;
-							mui.toast("注册成功");
-							//							app.user.set(data);
+							mui.toast("密码设置成功！");
 						});
 
 					}
