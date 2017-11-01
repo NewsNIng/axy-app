@@ -80,7 +80,10 @@
 			"image/home/dev_share.png",
 			"image/home/dev_setting.png",
 			"js/plug/test.js",
-			"fonts/mui.ttf"
+			"fonts/mui.ttf",
+			"js/lib/vue.min.js",
+			"js/lib/mui.min.js",
+			"js/lib/vue-ni.js"
 		],
 		"refer": []
 	},

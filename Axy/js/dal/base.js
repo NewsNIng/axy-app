@@ -9,7 +9,7 @@
 // 实例级配置 上线时混淆配置
 fly.config = {
 	headers: {}, //http请求头，
-	baseURL: "http://api.k780.com", //请求基地址
+	baseURL: "http://192.168.0.103:8360/api", //请求基地址
 	timeout: 8000, //超时时间，为0时则无超时限制
 	withCredentials: false //跨域时是否发送cookie
 };
@@ -17,7 +17,7 @@ fly.config = {
 //添加请求拦截器
 fly.interceptors.request.use(function(config, promise) {
 	//给所有请求添加自定义header
-	config.headers["X-Tag"] = "axy";
+	//config.headers["X-Tag"] = "axy";
 	//可以通过promise.reject／resolve直接中止请求
 	//promise.resolve("fake data")
 	return config;
@@ -25,12 +25,22 @@ fly.interceptors.request.use(function(config, promise) {
 
 //添加响应拦截器，响应拦截器会在then/catch处理之前执行
 fly.interceptors.response.use(function(response, promise) {
+		var data = response.data;
+		var o = {};
+		if(data.code !== 1000){
+			o.err = {
+				code: data.code,
+				message: data.message
+			}
+		}
+		o.data = data.data;
 		//只将请求结果的data字段返回
-		return response.data;
+		return o;
 	},
 	function(err, promise) {
+		
 		//发生网络错误后会走到这里
-		//promise.resolve("ssss")
+		promise.resolve(err)
 	}
 );
 
@@ -42,8 +52,8 @@ function requestAdapter(type, url, params, callback){
 	return fly.request(url, params, {
 		method: type
 	})
-	.then(function(response){
-		callback(response);
+	.then(function(o){
+		callback(o.err, o.data);
 	})
 	.catch(function(err){
 		console.log(err);

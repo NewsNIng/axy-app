@@ -8,11 +8,10 @@
 	 * @param {Function} callback 请求回调函数
 	 */
 	user.login = function(username, password, callback){
-		setTimeout(function(){
-			callback({
-				tel: "110",
-			})
-		}, 2000);
+		return ra("get", "/login", {
+			username: username,
+			password: password
+		},callback);
 	}
 	// 测试
 	user.test = function(fn){
@@ -32,10 +31,11 @@
 	 * @param {Function} callback 请求回调函数
 	 */
 	user.reg = function(username, password, code, callback){
-		return ra("post", "/xx/reg.php", {
+		return ra("get", "/reg", {
 			username: username,
-			// ...
-		}, callback);
+			password: password,
+			code: code
+		},callback);
 	}
 	
 	

@@ -224,7 +224,7 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						username: '13330056858',
+						username: '17098631995',
 						password: 'abc123',
 						loading: false
 					};
@@ -255,10 +255,16 @@
 						this.loading = true;
 						
 						
-						dal.user.login(this.username, this.password, function(data) {
+						dal.user.login(this.username, this.password, function(err, data) {
 							that.loading = false;
-							mui.toast("登录成功");
 							
+							if(err){
+								return mui.toast(err.code + ": " +err.message);
+							}
+							
+							
+							mui.toast("登录成功");
+							console.log(JSON.stringify(data));
 							// 保存用户信息
 							// app.user.set(data);
 							

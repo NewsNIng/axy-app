@@ -250,11 +250,13 @@
 
 		<script src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
 
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
 		<script type="text/javascript">
 			mui.init()
 
@@ -278,30 +280,56 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						username: '',
-						verifycode: '',
-						password: '',
+						username: '17098631995',
+						verifycode: '1234',
+						password: 'abc123',
 						loading: false,
-						user_agree: false, // 用户协议
+						user_agree: true, // 用户协议
 					};
 				},
 
 				methods: {
 					onLoginTap: function(e) {
+						// 如果正在注册，就直接返回
 						if(this.loading) {
 							return;
 						}
 
 						var that = this;
-
+						
+						
+						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误") ||
+								 		   app.rules.test("pwd", this.password, "密码输入错误") || 
+								 		   app.rules.test("code", this.verifycode, "验证码格式错误");
+						
+						if(errorMessage){
+							return mui.toast(errorMessage);
+						}
+						
+						// 更新注册状态
 						this.loading = true;
-						// 是否验证 规范
-
-						dal.user.login(this.username, this.password, function(data) {
-
+						
+						
+						dal.user.reg(this.username, this.password, this.verifycode, function(err, data) {
 							that.loading = false;
-							mui.toast("注册成功");
-							//							app.user.set(data);
+							
+							if(err){
+								return mui.toast(err.code + ": " +err.message);
+							}
+							
+							
+							mui.toast("注册成功，请登录");
+							console.log(JSON.stringify(data));
+							
+							// 发出一个通知
+							//new that.$Broadcast().emit("login_success", {
+							//	say: 'Hello'
+							//});
+							
+							that.$view.close();
+							
+							
+							
 						});
 
 					}
