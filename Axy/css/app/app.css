@@ -142,3 +142,15 @@ body {
   /*设置header渐变颜色 必须 rgba*/
   background-color: rgba(43, 184, 170, 0);
 }
+a.mui-icon {
+  color: #9f9fa0;
+}
+.app-color-main {
+  color: #2bb8aa !important;
+}
+.app-color-dark {
+  color: #9f9fa0 !important;
+}
+.app-color-white {
+  color: #ffffff !important;
+}

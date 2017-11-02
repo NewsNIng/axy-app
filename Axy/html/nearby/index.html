@@ -5,17 +5,52 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js" ></script>
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
 		<style type="text/css">
+			.mui-search{
+				margin: 0 auto;
+				width: 7.12rem;
+				pointer-events: none;
+			}
 			
+			/*搜索框图标*/
+			.mui-icon-search:before{
+				line-height: 45px;			
+			}
+			
+			.mui-search > input{
+				border-radius: 15px;
+				background-color: #FFFFFF;
+			}
+			
+			
+			
+			
+			.mui-placeholder>span{
+				color: #878787;
+				font-size: 0.35rem;
+			}
 		</style>
 	</head>
 
 	<body>
+		
+		
 		<header class="mui-bar mui-bar-nav app-header">
-		    <h1 class="mui-title">附近</h1>
+			<span class="app-color-white app-font-size-24 mui-pull-left" style="line-height: 45px;">
+				深圳
+			</span>
+			<a class="mui-icon mui-icon-arrowdown app-color-white" style="font-size: .4rem;margin-top: .1rem;"></a>
+			
+		    <h1 class="mui-title">
+		    	<div class="mui-input-row mui-search">
+		    	    <input type="search" class="mui-input-clear" placeholder="输入商品名或店铺名">
+		    	</div>
+		    </h1>
 		</header>
+		
 		<div class="mui-content">
 			<!--图片本地下载缓存 示例-->
 			<template v-for='o,i in imgs'>
@@ -38,8 +73,15 @@
 		
 		
 		<script type="text/javascript">
-			mui.init();
 			
+			(function($){
+				$.init();
+				$.ready(function(){
+					$('h1.mui-title')[0].addEventListener('tap', function(){
+						alert("跳转到另一页面");
+					});
+				});
+			}(mui));
 			
 			
 			
