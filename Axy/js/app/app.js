@@ -151,3 +151,19 @@ function addMethod(obj, name, fn) {
 
 	app.device = device;
 }(window.app));
+
+
+
+
+(function(_){
+	var page = {};
+	
+	/**
+	 * 选择地区
+	 */
+	page.position = function(){
+		
+	}
+	
+	_.page = page;
+}(window.app));
