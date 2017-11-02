@@ -32,32 +32,72 @@
 				color: #878787;
 				font-size: 0.35rem;
 			}
+			
+			/*tab*/
+			.tabroom{
+				background-color: #FFFFFF;
+				width: 100%;
+				height: 1.066666rem;
+				/*height: 1.386666rem;*/
+				text-align: center;
+			}
+			.tabroom > div{
+				padding: 0;
+				margin: 0 .38rem;
+				font-weight: bold;
+				display: inline-block;
+				/*line-height: 1.386666rem;*/
+				line-height: 1.066666rem;
+				color: #a8a8a8;
+				position: relative;
+			}
+			.tabroom > div.app-color-main:before{
+				content: "";
+				width: 90%;
+				height: 0.053333rem;
+				background-color: #2BB8AA;
+				display: block;
+				position: absolute;
+				left: 5%;
+				border-radius: 1px;
+				/*bottom: 0.293333rem;*/
+				bottom: 0.2rem;
+			}
 		</style>
 	</head>
 
 	<body>
 		
-		
-		<header class="mui-bar mui-bar-nav app-header">
-			<span class="app-color-white app-font-size-24 mui-pull-left" style="line-height: 45px;">
-				深圳
-			</span>
-			<a class="mui-icon mui-icon-arrowdown app-color-white" style="font-size: .4rem;margin-top: .1rem;"></a>
+		<div class="warp">
+			<header class="mui-bar mui-bar-nav app-header">
 			
-		    <h1 class="mui-title">
-		    	<div class="mui-input-row mui-search">
-		    	    <input type="search" class="mui-input-clear" placeholder="输入商品名或店铺名">
-		    	</div>
-		    </h1>
-		</header>
-		
-		<div class="mui-content">
-			<!--图片本地下载缓存 示例-->
-			<template v-for='o,i in imgs'>
-				<img class="img-lazy-load" width="50%" :data-src="o.src"/>	
-			</template>
-		    
+				<span class="app-color-white app-font-size-24 mui-pull-left"style="line-height: 45px;" @tap="onHeaderCityTap()">
+					<span v-text="city"></span>
+					<a class="mui-icon mui-icon-arrowdown app-color-white" style="font-size: .4rem;margin-top: .1rem;"></a>
+				</span>
+				
+				
+			    <h1 class="mui-title">
+			    	<div class="mui-input-row mui-search">
+			    	    <input type="search" class="mui-input-clear" placeholder="输入商品名或店铺名">
+			    	</div>
+			    </h1>
+			</header>
+			
+			<div class="mui-content">
+				<div class="tabroom">
+					<template v-for="o, i in tab.items">
+						<div class="app-font-size-30" :class="{'app-color-main': tab.active === i}" @tap="onTabTap(o, i)">
+							{{o.name}}
+						</div>	
+					</template>
+					
+				</div>
+			    
+			</div>
 		</div>
+		
+		
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
 		<script src="../../js/lib/mui.min.js"></script>
@@ -71,8 +111,16 @@
 		
 		<script type="text/javascript" src="../../js/extend/String.js" ></script>
 		
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		
 		
 		<script type="text/javascript">
+			
+			// 3个子webview统一样式
+			var _styles = {
+				bottom: '0px',
+				top: '0px'
+			};
 			
 			(function($){
 				$.init();
@@ -80,45 +128,76 @@
 					$('h1.mui-title')[0].addEventListener('tap', function(){
 						alert("跳转到另一页面");
 					});
+					
 				});
 			}(mui));
 			
-			
-			
 			new Vue({
-				el: '.mui-content',
+				el: '.warp',
 				data: {
-					imgs: [{
-						src: "https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256",
-					}],
+					city: "深圳",
+					tab: {
+						active: 0,
+						items: [
+							{
+								name: "附近",
+								id: 'nearby_pages_list',
+								url: './pages/list.html'
+							},
+							{
+								name: "主题",
+								id: 'baidu',
+								url: 'https://www.baidu.com'
+							},
+							{
+								name: "发现",
+								id: 'nearby_pages_list',
+								url: './pages/list.html'
+							}
+						]
+					}
 				},
 				mounted: function(){
-					imgagelazyload();
-					this.test();
+					
 				},
 				plusReady: function(){ 
-					app.device.getInfo_async(function(info){
-						console.log(JSON.stringify(info));
+					// plus ready !
+					// 这时候才能调用 plus 相关 API
+					_styles.top = document.body.offsetHeight + immersed + 'px';
+					
+					var items = this.tab.items.map(function(o){
+						o.styles = _styles;
+						o.extras = {};
+						return o;
 					});
 					
-					// var rs = app.device.getVersion();
-					// console.log(app.device.getArguments())
+					this.group = new this.$WebviewGroup(plus.webview.currentWebview().id, {
+						items: items,
+						onChange: this.onChange.bind(this)
+					});
 					
 					
 				},
 				methods: {
-					test: function(){
-						setTimeout(function(){
-							// 动态添加一个需要本地缓存判断的img
-							this.imgs.push({
-								src: "https://sfault-avatar.b0.upaiyun.com/396/329/3963293825-59ed6d668d0ef_huge256",
-							});
-							imgagelazyload();
-							Vue.nextTick(function(){
-								// 重新检测
-								imgagelazyload();
-							});
-						}.bind(this), 1e3 * 2);
+					// 页面切换时
+					onChange: function(o) {
+						if(this.tab.active === o.index){return;}
+						this.tab.active = o.index;
+					},
+					
+					onTabTap: function(o, i){
+						if(this.tab.active === i){
+							return;
+						}
+						this.tab.active = i;
+						// 控制webview切换
+						this.group.switchTab(o.id);
+					},
+					// 城市选择点击
+					onHeaderCityTap: function(){
+						app.page.openForResult('position', function(data){
+							this.city = data.city;
+						}.bind(this));
 					}
 				}
 			});

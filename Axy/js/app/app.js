@@ -145,25 +145,11 @@ function addMethod(obj, name, fn) {
 	});
 
 	// 自动保存最新的应用数据版本至本地储存
-	app.plusReady(function() {
-		device.getVersion(function() {});
-	});
+	//app.plusReady(function() {
+	//	device.getVersion(function() {});
+	//});
 
 	app.device = device;
 }(window.app));
 
 
-
-
-(function(_){
-	var page = {};
-	
-	/**
-	 * 选择地区
-	 */
-	page.position = function(){
-		
-	}
-	
-	_.page = page;
-}(window.app));
