@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js" ></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left app-color-white"></a>
+		    <h1 class="mui-title">定位</h1>
+		</header>
+		<div class="mui-content app-font-size-22">
+		    <ul class="mui-table-view">
+		            <li class="mui-table-view-cell">
+		                <a class="mui-navigate-right">
+		                    北京
+		                </a>
+		            </li>
+		            <li class="mui-table-view-cell">
+		                <a class="mui-navigate-right">
+		                     上海
+		                </a>
+		            </li>
+		            <li class="mui-table-view-cell">
+		                <a class="mui-navigate-right">
+		                     深圳
+		                </a>
+		            </li>
+		        </ul>
+		</div>
+		
+		<script src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			var opener = null;
+			
+			mui.ready(function(){
+				mui('ul').on('tap', 'li', function(){
+					var text = this.innerText;
+					console.log(text);
+					if(opener !== null){
+						// 触发 say 事件
+					    new ni.Broadcast().emit('positionResult', {
+					        city: text
+					    }, {
+					        views: [opener] // 为空数组时，通知全部，为string数组时，认为是id，为object时，认为是webview对象, 默认空数组通知全部页面
+					    });
+						mui.back();
+					}
+				});
+			});
+			
+			mui.plusReady(function(){
+				opener = plus.webview.currentWebview().opener();
+			});
+		</script>
+	</body>
+
+</html>
