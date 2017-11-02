@@ -56,6 +56,6 @@ function requestAdapter(type, url, params, callback){
 		callback(o.err, o.data);
 	})
 	.catch(function(err){
-		console.log(err);
+		console.log("[服务器错误]" + err);
 	});
 }

@@ -46,7 +46,11 @@
 		<script type="text/javascript" src="../js/lib/vue.min.js"></script>
 		<!--vue 5+插件-->
 		<script type="text/javascript" src="../js/lib/vue-ni.js"></script>
-
+		
+		<script type="text/javascript" src="../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../js/dal/system.js" ></script>
+		<script type="text/javascript" src="../js/common/rsmanager.js" ></script>
+		
 		<script>
 			
 			
@@ -100,7 +104,7 @@
 				plusReady: function() {
 					// plus ready !
 					// 这时候才能调用 plus 相关 API
-					this.group = new this.$WebviewGroupLow(plus.webview.getLaunchWebview().id, {
+					this.group = new this.$WebviewGroup(plus.webview.getLaunchWebview().id, {
 						items: this.items,
 						onChange: this.onChange.bind(this)
 					});
@@ -145,6 +149,53 @@
 				}
 
 			});
+			
+			
+			setTimeout(function(){
+				mui.plusReady(function() {
+					function version2number(version) {
+						return +(version.split('.').join(''));
+					}
+	
+					// 获取当前应用版本
+					plus.runtime.getProperty(plus.runtime.appid, function(info) {
+						var appVersion = version2number(info.version);
+						
+						mui.toast("version: " + appVersion);
+						
+						dal.system.update(appVersion, function(err, data){
+							if(err){
+								return mui.toast(err.message);
+							}
+							var newAppVersion = version2number(data.version);
+							if(newAppVersion > appVersion) {
+								var filePath = data.path;
+								// 判断是否是更新资源文件
+								if(!rsmanager.isHotRresource(filePath)) {
+									return mui.alert("非更新资源文件\n" + filePath);
+								}
+								rsmanager.install(filePath, function(succ) {
+									//alert(succ); 
+								}, {
+									hide: false, // 是否隐藏更新
+									show: true, // 是否弹出提示框
+									force: true, // 强制更新 不能关闭提示框
+									title: '新版本: ' + newAppVersion, // 更新提示框的标题内容 可以设置为app的版本号
+									message: "是否现在更新" // 提示框显示内容，可以设置为app新版内容功能讲解  \n换行
+								});
+							} else {
+								//console.log("无需更新");
+							}
+							
+							
+						});
+						
+						
+					});
+	
+				});
+			}, 3000);//3s 后检查更新
+			
 		</script>
 	</body>
 

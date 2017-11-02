@@ -7,7 +7,7 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.0.0",/*应用版本名称*/
+		"name": "1.6.0",/*应用版本名称*/
 		"code": "83"
 	},
 	"description": "",/*应用描述信息*/
@@ -96,9 +96,9 @@
 		"NativeObj": {
 			"description": "原生对象"
 		},
-		"plugintest": {
-			"description": "监控测试"
-		},"OAuth":{}
+		"OAuth":{
+			
+		}
 	},
 	"plus": {
 		"statusbar": {
