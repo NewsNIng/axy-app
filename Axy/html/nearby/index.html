@@ -68,31 +68,36 @@
 
 	<body>
 		
-		
-		<header class="mui-bar mui-bar-nav app-header">
-			<span class="app-color-white app-font-size-24 mui-pull-left" style="line-height: 45px;">
-				深圳
-			</span>
-			<a class="mui-icon mui-icon-arrowdown app-color-white" style="font-size: .4rem;margin-top: .1rem;"></a>
+		<div class="warp">
+			<header class="mui-bar mui-bar-nav app-header">
 			
-		    <h1 class="mui-title">
-		    	<div class="mui-input-row mui-search">
-		    	    <input type="search" class="mui-input-clear" placeholder="输入商品名或店铺名">
-		    	</div>
-		    </h1>
-		</header>
-		
-		<div class="mui-content">
-			<div class="tabroom">
-				<template v-for="o, i in tab.items">
-					<div class="app-font-size-30" :class="{'app-color-main': tab.active === i}" @tap="onTabTap(o, i)">
-						{{o.name}}
-					</div>	
-				</template>
+				<span class="app-color-white app-font-size-24 mui-pull-left"style="line-height: 45px;" @tap="onHeaderCityTap()">
+					<span v-text="city"></span>
+					<a class="mui-icon mui-icon-arrowdown app-color-white" style="font-size: .4rem;margin-top: .1rem;"></a>
+				</span>
 				
+				
+			    <h1 class="mui-title">
+			    	<div class="mui-input-row mui-search">
+			    	    <input type="search" class="mui-input-clear" placeholder="输入商品名或店铺名">
+			    	</div>
+			    </h1>
+			</header>
+			
+			<div class="mui-content">
+				<div class="tabroom">
+					<template v-for="o, i in tab.items">
+						<div class="app-font-size-30" :class="{'app-color-main': tab.active === i}" @tap="onTabTap(o, i)">
+							{{o.name}}
+						</div>	
+					</template>
+					
+				</div>
+			    
 			</div>
-		    
 		</div>
+		
+		
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
 		<script src="../../js/lib/mui.min.js"></script>
@@ -105,6 +110,8 @@
 		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
 		
 		<script type="text/javascript" src="../../js/extend/String.js" ></script>
+		
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 		
 		
 		<script type="text/javascript">
@@ -126,8 +133,9 @@
 			}(mui));
 			
 			new Vue({
-				el: '.mui-content',
+				el: '.warp',
 				data: {
+					city: "深圳",
 					tab: {
 						active: 0,
 						items: [
@@ -184,6 +192,12 @@
 						this.tab.active = i;
 						// 控制webview切换
 						this.group.switchTab(o.id);
+					},
+					// 城市选择点击
+					onHeaderCityTap: function(){
+						app.page.openForResult('position', function(data){
+							this.city = data.city;
+						}.bind(this));
 					}
 				}
 			});

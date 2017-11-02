@@ -46,7 +46,8 @@
 		],
 		"refer": [
 			"html/common/login.html",
-			"html/common/reset2.html"
+			"html/common/reset2.html",
+			"html/public/position.html"
 		]
 	},
 	"html/home/index.html": {
@@ -117,7 +118,8 @@
 			"html/nearby/pages/list.html"
 		],
 		"refer": [
-			"html/nearby/pages/list.html"
+			"html/nearby/pages/list.html",
+			"html/public/position.html"
 		]
 	},
 	"html/common/login.html": {
