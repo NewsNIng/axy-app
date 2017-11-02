@@ -145,9 +145,9 @@ function addMethod(obj, name, fn) {
 	});
 
 	// 自动保存最新的应用数据版本至本地储存
-	app.plusReady(function() {
-		device.getVersion(function() {});
-	});
+	//app.plusReady(function() {
+	//	device.getVersion(function() {});
+	//});
 
 	app.device = device;
 }(window.app));
@@ -155,15 +155,45 @@ function addMethod(obj, name, fn) {
 
 
 
-(function(_){
+(function(_, w){
 	var page = {};
 	
-	/**
-	 * 选择地区
-	 */
-	page.position = function(){
+	var _id = 0,
+		_tempSrc = '',
+		pg = null,
+		pageDir = {
+			test: '_www/html/public/test.html'
+		};
+	
+	
+	page.openForResult = function(name){
+		_tempSrc = '_APP_PAGE_RESULT_FUN_' + name + '_' + _id;
+		_id++;
+		w[_tempSrc] = function(data){
+			w[_tempSrc] = null;
+			callback(data);
+		};
 		
+		pg = plus.webview.create(pageDir[name], name, {}, {
+			callbackName: _tempSrc 
+		});
+		
+		pg.show('pop-in', 250);
+		
+		pg.addEventListener('close', function(){
+			w[_tempSrc] = null;
+		});
+	}
+	
+	page.setResult = function(data){
+		var indexV = plus.webview.currentWebview();
+		var jsstr = "";
+		if(indexV.callbackName){
+			jsstr = "window." + indexV.callbackName;
+			jsstr = jsstr + "&&" + jsstr + "(" + JSON.stringify(data) + ")";
+		}
+		indexV.opener().evalJS(jsstr);
 	}
 	
 	_.page = page;
-}(window.app));
+}(window.app, window));

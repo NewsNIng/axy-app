@@ -337,7 +337,8 @@
 					"js/lib/mui.min.js",
 					"js/app/app.js",
 					"js/lib/vue-ni.js",
-					"js/extend/String.js"
+					"js/extend/String.js",
+					"html/nearby/pages/list.html"
 				],
 				"refer": [],
 				"priority": 0
