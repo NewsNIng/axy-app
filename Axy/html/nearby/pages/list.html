@@ -8,29 +8,33 @@
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
-		
+
 		<style type="text/css">
-			.box{ 
+			.box {
 				display: flex;
-			    display: -webkit-flex;  /* 新版本语法: Chrome 21+ */
-			    display: -webkit-box;   /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+				display: -webkit-flex;
+				/* 新版本语法: Chrome 21+ */
+				display: -webkit-box;
+				/* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
 				align-content: center;
 				justify-content: center;
-			 }
+			}
 			
-			.flex1 {       
-				     
-			    -webkit-flex: 1;        /* Chrome */ 
-			    flex: 1;                /* NEW, Spec - Opera 12.1, Firefox 20+ */
-			    -webkit-box-flex: 1     /* OLD - iOS 6-, Safari 3.1-6 */
+			.flex1 {
+				-webkit-flex: 1;
+				/* Chrome */
+				flex: 1;
+				/* NEW, Spec - Opera 12.1, Firefox 20+ */
+				-webkit-box-flex: 1/* OLD - iOS 6-, Safari 3.1-6 */
 			}
 		</style>
-		
+
 		<style type="text/css">
 			.mui-content {
 				background-color: #f5f5f9;
 			}
 			/*位置显示start*/
+			
 			.position {
 				height: 1.04rem;
 				margin-bottom: 0.266666rem;
@@ -44,11 +48,12 @@
 				vertical-align: middle;
 			}
 			/*位置显示end*/
-			
 			/*店铺详情start*/
+			
 			.shop_imgtext {
 				height: 2.4rem;
 			}
+			
 			.shop_image>img {
 				width: 3.226666rem;
 				height: 2.4rem;
@@ -69,9 +74,13 @@
 				margin: 5px 0;
 			}
 			
-			.types {display: inline;}
+			.types {
+				display: inline;
+			}
 			
-			.distance {float: right;}
+			.distance {
+				float: right;
+			}
 			
 			.shop {
 				padding: 0.346666rem 0 0 0.346666rem;
@@ -83,87 +92,100 @@
 				font-weight: bold;
 				color: #2E2E2E;
 			}
+			
 			.time>img {
 				width: 0.4rem;
 				height: 0.4rem;
 				vertical-align: middle;
 				margin-right: 0.32rem;
 			}
-			.time,.distance {
+			
+			.time,
+			.distance {
 				color: #9F9FA0;
 			}
+			
 			.types {
 				color: #2BB8AA;
 			}
+			
 			.activity {
 				color: #F46276;
 			}
+			
 			.address {
 				padding: 0.4rem 0;
 			}
-			.address,.shop_info {
+			
+			.address,
+			.shop_info {
 				border-bottom: 1px solid #F0F0F0;
 			}
+			
 			.shop_menu {
 				color: #5D5C5C;
 				padding-right: 0.346666rem;
 				display: flex;
-			    display: -webkit-flex;  /* 新版本语法: Chrome 21+ */
-			    display: -webkit-box;   /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+				display: -webkit-flex;
+				/* 新版本语法: Chrome 21+ */
+				display: -webkit-box;
+				/* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
 				/*align-content: center;*/
 				/*justify-content:  center;*/
 				text-align: center;
 			}
+			
 			.shop_menu>div>img {
 				vertical-align: middle;
 				margin: 0.346666rem 0.346666rem 0.346666rem 0;
 				height: 0.373333rem;
 				width: 0.373333rem;
 			}
-			
 			/*店铺详情end*/
-			
 		</style>
 	</head>
 
 	<body>
 
-		<div class="mui-content">
-			<div class="position app-font-size-22 ">
-				<img src="../../../image/nearby/map.png" />
-				<span v-text="position"></span>
-				
-			</div>
-			<template v-for="o in shops">
-				<div class="shop">
-					<div class="shop_imgtext box">
-						<div class="shop_image">
-							<img :src="o.img" />
-						</div>
-						<div class="shop_info flex1" >
-							<div class="distance app-font-size-20">{{o.distance}} km</div>
-							<div class="name app-font-size-30">{{o.name}}</div>
-							<div class="time app-font-size-20"><img src="../../../image/nearby/time.png"/>{{o.time}}</div>
-							<div class="types app-font-size-24" v-for="(type,i) in o.types">
-								<span v-if="i!==0"> | </span>{{type}}
-							</div>
-							<div class="activity app-font-size-24">店铺活动：{{o.activity}}</div>
-						</div>	
-					</div>
-					<div class="address app-font-size-24">
-						地址:{{o.address}}
-					</div>
-					<div class="shop_menu app-font-size-24">
-						<div class="flex1"><img src="../../../image/nearby/phone.png"/>电话</div>
-						<div class="flex1"><img src="../../../image/nearby/navigation.png"/>导航</div>
-						<div class="flex1"><img src="../../../image/nearby/show.png"/>查看</div>
-					</div>
-				</div>
-			</template>
+		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
+			<div class="mui-scroll">
 
-			<!--<a class="mui-icon mui-icon-phone app-color-main app-font-size-30">
-				<span class="app-font-size-24">电话</span>
-			</a>-->
+				<div class="position app-font-size-22 ">
+					<img src="../../../image/nearby/map.png" />
+					<span v-text="position"></span>
+
+				</div>
+				<div>
+					<template v-for="o in shops">
+						<div class="shop">
+							<div class="shop_imgtext box">
+								<div class="shop_image">
+									<img :src="o.img" />
+								</div>
+								<div class="shop_info flex1">
+									<div class="distance app-font-size-20">{{o.distance}} km</div>
+									<div class="name app-font-size-30">{{o.name}}</div>
+									<div class="time app-font-size-20"><img src="../../../image/nearby/time.png" />{{o.time}}</div>
+									<div class="types app-font-size-24" v-for="(type,i) in o.types">
+										<span v-if="i!==0"> | </span>{{type}}
+									</div>
+									<div class="activity app-font-size-24">店铺活动：{{o.activity}}</div>
+								</div>
+							</div>
+							<div class="address app-font-size-24">
+								地址:{{o.address}}
+							</div>
+							<div class="shop_menu app-font-size-24">
+								<div class="flex1"><img src="../../../image/nearby/phone.png" />电话</div>
+								<div class="flex1"><img src="../../../image/nearby/navigation.png" />导航</div>
+								<div class="flex1"><img src="../../../image/nearby/show.png" />查看</div>
+							</div>
+						</div>
+					</template>
+				</div>
+
+			</div>
+
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 
@@ -171,7 +193,6 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript">
-			mui.init();
 			new Vue({
 				el: ".mui-content",
 				data: function() {
@@ -206,14 +227,84 @@
 								activity: "满一百送30优惠券",
 								address: "南山区西丽官龙第一工业区xx栋",
 								phone: "13912345678",
+							},
+							{
+								img: "http://placehold.it/242x180",
+								name: "一点点甜品店",
+								time: "9:00-22:00",
+								distance: "1.8",
+								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
+								activity: "满一百送30优惠券",
+								address: "南山区西丽官龙第一工业区xx栋",
+								phone: "13912345678",
+							},
+							{
+								img: "http://placehold.it/242x180",
+								name: "一点点甜品店",
+								time: "9:00-22:00",
+								distance: "1.8",
+								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
+								activity: "满一百送30优惠券",
+								address: "南山区西丽官龙第一工业区xx栋",
+								phone: "13912345678",
 							}
 						],
 					};
 				},
-				mothed: {
+				mounted: function() {
+					this.$nextTick(function() {
+
+						this.$pullRefresh = mui(".mui-scroll-wrapper");
+						mui.init({
+							pullRefresh: {
+								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+								down: {
+
+									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+								},
+								up: {
+									callback: this._up
+								}
+							}
+						})
+					}.bind(this));
+				},
+				methods: {
 					onClickTap: function(e) {
 
 					},
+					_down: function() {
+						console.log("down")
+						setTimeout(function() {
+							this.shops.unshift({
+								img: "http://placehold.it/242x180",
+								name: "靓点点甜品店",
+								time: "9:00-22:00",
+								distance: "1.8",
+								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
+								activity: "满一百送30优惠券",
+								address: "南山区西丽官龙第一工业区xx栋",
+								phone: "13912345678",
+							});
+							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
+						}.bind(this), 2000);
+					},
+					_up: function() {
+						console.log("up")
+						setTimeout(function() {
+							this.shops.push({
+								img: "http://placehold.it/242x180",
+								name: "私点点甜品店",
+								time: "9:00-22:00",
+								distance: "1.8",
+								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
+								activity: "满一百送30优惠券",
+								address: "南山区西丽官龙第一工业区xx栋",
+								phone: "13912345678",
+							});
+							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+						}.bind(this), 2000);
+					}
 				}
 
 			});
