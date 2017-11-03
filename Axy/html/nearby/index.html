@@ -151,8 +151,8 @@
 							},
 							{
 								name: "发现",
-								id: 'nearby_pages_list',
-								url: './pages/list.html'
+								id: 'sg',
+								url: 'https://segmentfault.com/'
 							}
 						]
 					}
@@ -165,16 +165,22 @@
 					// 这时候才能调用 plus 相关 API
 					_styles.top = document.body.offsetHeight + immersed + 'px';
 					
+					
 					var items = this.tab.items.map(function(o){
 						o.styles = _styles;
 						o.extras = {};
 						return o;
 					});
 					
-					this.group = new this.$WebviewGroup(plus.webview.currentWebview().id, {
+					this.group = new this.$WebviewGroupLow(plus.webview.currentWebview().id, {
 						items: items,
 						onChange: this.onChange.bind(this)
 					});
+					
+					var css = document.createElement('style');
+					css.innerText = ".mui-pull-top-pocket{top: "+  _styles.top +" !important;}"
+					
+					document.body.appendChild(css);
 					
 					
 				},
