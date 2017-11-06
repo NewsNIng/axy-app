@@ -8,6 +8,8 @@
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
 		<style type="text/css">
+			
+			
 			header {
 				padding-left: 2rem !important;
 				padding-right: 2rem !important;
@@ -26,6 +28,14 @@
 				margin: 0 1.5px;
 				border: .5px white solid;
 			}
+			.mui-slider-item{
+				width: 100%;
+				height: 0 !important;
+				padding-top: 50.6666%;
+				background-size: cover;
+				background-position: center;
+			}
+			
 			
 			.model_type {
 				background-color: white;
@@ -44,6 +54,23 @@
 				width: 50%;
 			} 
 			
+			/*3轮播head阴影*/
+			/*.mui-slider{
+				position: relative;
+			}
+			.mui-slider:before{
+				z-index: 10;
+				content: "";
+				height: 0;
+				width: 100%;
+				position: absolute;
+				left: 0;top: 0;
+				filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=red,endcolorstr=blue,gradientType=0);
+			    background: transparent;
+			    background:-webkit-gradient(linear, 0 0, 0 bottom, from(rgba(0, 0, 0, 1)), to(rgba(255, 255, 255, 0.2))); 
+			}*/
+			
+			/*3end*/			
 			.model_type>div>span {
 				display: block;
 				color: #2e2e2e;
@@ -187,7 +214,7 @@
 				margin: 0 1%;
 				width: 31.33%;
 				padding-bottom: 31.33%; 
-				background-size: 100%;
+				background-size: cover;
 				background-position: center;
 				background-repeat: no-repeat;
 			}
@@ -217,23 +244,23 @@
 			<div id="slider" class="mui-slider" v-if="imgList.length > 0">
 				<div class="mui-slider-group mui-slider-loop">
 					<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-					<div class="mui-slider-item mui-slider-item-duplicate">
-						<a href="#">
+					<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.src" >
+						<!--<a href="#">
 							<img :src="imgLast.src">
-						</a>
+						</a>-->
 					</div>
 
 					<!-- 第四张 -->
-					<div class="mui-slider-item" v-for="o, index in imgList">
-						<a href="#">
+					<div class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o.src" >
+						<!--<a href="#">
 							<img :src="o.src">
-						</a>
+						</a>-->
 					</div>
 					<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-					<div class="mui-slider-item mui-slider-item-duplicate">
-						<a href="#">
+					<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.src" >
+						<!--<a href="#">
 							<img :src="imgFrist.src">
-						</a>
+						</a>-->
 					</div>
 				</div>
 				<div class="mui-slider-indicator">
@@ -325,6 +352,8 @@
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
+		<script type="text/javascript" src="../../js/lib/md5.min.js" ></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js" ></script>
 
 		<script type="text/javascript">
 			mui.init({
@@ -339,13 +368,13 @@
 						text: "我是内容啊",
 						imgList: [{
 							id: 0,
-							src: "http://placehold.it/750x380"
+							src: "http://photo.ssyer.com/user//20171103/order/090b2c6ae399ee4142e80cbe55524caa1765IMG_20171002_093830jpg.jpg"
 						}, {
 							id: 2,
-							src: "http://placehold.it/750x380"
+							src: "http://photo.ssyer.com/user//20171030/order/542c0f3ce2242e43b0e8633ef37f232c9ac9_MG_8834jpg.jpg"
 						}, {
 							id: 12,
-							src: "http://placehold.it/750x380"
+							src: "http://photo.ssyer.com/user//20171031/order/847745c0a7f4ea40fea8361a52a895b2475bdevadarshan424846jpg.jpg"
 						}],
 						modelTypes: [{
 								name: "回家模式",
@@ -370,13 +399,13 @@
 							name: "AX-503-摄像机"
 						},
 						nearShops: [{
-								img: "https://www.baidu.com/img/bd_logo1.png"
+								img: "http://photo.ssyer.com/user//20171101/order/767e13e2b5b2ab4384b8202b228891605020sweeticecreamphotography89501jpg.jpg"
 							},
 							{
-								img: "http://www.baidu.com/img/bd_logo1.png"
+								img: "http://photo.ssyer.com/user//20171101/order/977ff1a185372843838beb089122674bfdefIMG_20170710_210729jpg.jpg"
 							},
 							{
-								img: "http://www.baidu.com/img/bd_logo1.png"
+								img: "http://photo.ssyer.com/user//20171101/order/ab00c1286bdae644296ac0461acb76604e47benrosett10609jpg.jpg"
 							}
 						],
 					};
@@ -390,13 +419,23 @@
 					}
 				},
 				mounted: function() {
-
+					// 动态沉浸式处理
+//					var css = document.createElement('style');
+//					css.innerText = ".mui-slider:before{height:"+ (immersed) +"px;}";
+//					document.body.appendChild(css);
+					// 缓存机制加载图片
+					imgagelazyload();
+					// 图片轮播
+					mui('#slider').slider({
+					  interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
+					});
 				},
 				plusReady: function() {
 					// plus ready ! 现在可以使用plus相关api
 					// 设置本页面无滚动条显示
 					this.$view.setStyle({
-						scrollIndicator: "none"
+						scrollIndicator: "none", // 隐藏滚动条
+//						render: "always", // 始终进行渲染
 					});
 
 				},

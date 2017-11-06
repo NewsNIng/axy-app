@@ -66,10 +66,17 @@ var imgagelazyload = (function(doc) {
 		// 标记成功
 		domAttr(dom, "data-loaded", true);
 		//去掉灰色边,只有背景图才可居中铺满图片
-		//domAttr(dom, "src", img_translate); 
-		domAttr(dom, "src", src);
-		//背景
-		//dom.style.backgroundImage = "url(" + src + ")"; 
+		//domAttr(dom, "src", img_translate);
+		
+		if(dom.tagName.toUpperCase() === "IMG"){
+			domAttr(dom, "src", src);	
+		}else{
+			//背景
+			dom.style.backgroundImage = "url(" + src + ")";	
+		}
+		
+		
+		 
 	}
 
 	function startTask() {
@@ -135,7 +142,7 @@ var imgagelazyload = (function(doc) {
 			isStartTask = false;
 		}
 		// 获取页面中img
-		var imgs = doc.querySelectorAll("img.img-lazy-load:not([data-loaded])");
+		var imgs = doc.querySelectorAll(".img-lazy-load:not([data-loaded])");
 		
 		var i = 0,
 			l = imgs.length,

@@ -27,15 +27,16 @@ body {
   background-color: #ffffff !important;
   color: #2bb8aa !important;
 }
+.mui-bar-nav,
+.app-header.mui-bar-nav {
+  -webkit-box-shadow: 0px 0px 0px #fff !important;
+  box-shadow: 0px 0px 0px #fff !important;
+}
 .app-header {
   background-color: #2bb8aa;
 }
 .app-header h1 {
   color: white;
-}
-.app-header.mui-bar-nav {
-  -webkit-box-shadow: 0px 0px 0px #fff !important;
-  box-shadow: 0px 0px 0px #fff !important;
 }
 .app-font-size-20 {
   font-size: 10px;

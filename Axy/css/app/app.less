@@ -10,6 +10,10 @@ body {
 
 @import url('./module/button.less');
 
+.mui-bar-nav{
+    -webkit-box-shadow: 0px 0px 0px #fff !important;
+    box-shadow: 0px 0px 0px #fff !important;
+}
 
 .app {
     // header
@@ -18,9 +22,8 @@ body {
         h1 {
             color: white;
         }
-        &.mui-bar-nav{
-            -webkit-box-shadow: 0px 0px 0px #fff !important;
-            box-shadow: 0px 0px 0px #fff !important;
+        &.mui-bar-nav:extend(.mui-bar-nav){ 
+            
         }
     }
     
