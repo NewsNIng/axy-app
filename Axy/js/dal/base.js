@@ -9,7 +9,7 @@
 // 实例级配置 上线时混淆配置
 fly.config = {
 	headers: {}, //http请求头，
-	baseURL: "http://192.168.0.103:8360/api", //请求基地址
+	baseURL: "http://192.168.0.102:8360/api", //请求基地址
 	timeout: 8000, //超时时间，为0时则无超时限制
 	withCredentials: false //跨域时是否发送cookie
 };
@@ -40,7 +40,7 @@ fly.interceptors.response.use(function(response, promise) {
 	function(err, promise) {
 		
 		//发生网络错误后会走到这里
-		promise.resolve(err)
+		return promise.resolve(err)
 	}
 );
 
@@ -53,7 +53,8 @@ function requestAdapter(type, url, params, callback){
 		method: type
 	})
 	.then(function(o){
-		callback(o.err, o.data);
+		console.log(JSON.stringify(o));
+		return callback(o.err, o.data);
 	})
 	.catch(function(err){
 		console.log("[服务器错误]" + err);
