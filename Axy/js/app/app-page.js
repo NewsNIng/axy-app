@@ -14,6 +14,10 @@
 			position: '_www/html/public/position.html'
 		};
 	
+	page.getPosition = function(callback){
+		this.openForResult('position', callback);
+	}
+	
 	
 	page.openForResult = function(name, callback){
 		_tempSrc = '_APP_PAGE_RESULT_FUN_' + name + '_' + _id;
