@@ -28,7 +28,7 @@
 			"image/main/smart.png",
 			"image/main/nearby.png",
 			"image/main/home.png",
-			"html/person/index.html"
+			"html/smart/index.html"
 		],
 		"refer": [
 			"html/smart/index.html",
