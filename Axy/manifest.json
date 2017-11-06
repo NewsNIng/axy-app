@@ -249,11 +249,19 @@
 					"image/main/smart.png",
 					"image/main/nearby.png",
 					"image/main/home.png",
+<<<<<<< HEAD
 					"html/smart/index.html"
 				],
 				"refer": [
 					"html/nearby/index.html",
 					"html/person/index.html"
+=======
+					"html/person/index.html"
+				],
+				"refer": [
+					"html/smart/index.html",
+					"html/nearby/index.html"
+>>>>>>> a0017b186c4e4425f0d231209485e6ef9aaae142
 				],
 				"priority": 0
 			},
