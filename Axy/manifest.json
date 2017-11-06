@@ -248,10 +248,10 @@
 					"image/main/person.png",
 					"image/main/smart.png",
 					"image/main/nearby.png",
-					"image/main/home.png"
+					"image/main/home.png",
+					"html/smart/index.html"
 				],
 				"refer": [
-					"html/smart/index.html",
 					"html/nearby/index.html",
 					"html/person/index.html"
 				],
