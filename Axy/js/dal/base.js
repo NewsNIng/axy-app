@@ -38,9 +38,16 @@ fly.interceptors.response.use(function(response, promise) {
 		return o;
 	},
 	function(err, promise) {
-		
 		//发生网络错误后会走到这里
-		return promise.resolve(err)
+		//promise.resolve(err);
+		if(err.status === undefined){
+			err.status = 3;	
+		}
+		var ts = ["网络错误","请求超时","下载失败","请求失败"][err.status];
+		return {
+			code: err.status,
+			message: ts + "-" + err.message
+		};
 	}
 );
 
@@ -53,10 +60,9 @@ function requestAdapter(type, url, params, callback){
 		method: type
 	})
 	.then(function(o){
-		console.log(JSON.stringify(o));
-		return callback(o.err, o.data);
+		callback(o.err, o.data);
 	})
 	.catch(function(err){
-		console.log("[服务器错误]" + err);
+		callback(err, null);
 	});
 }
