@@ -51,6 +51,7 @@
 				height: 1.066666rem;
 				/*height: 1.386666rem;*/
 				text-align: center;
+				border-bottom: 1px solid #EFEFF4;
 			}
 			
 			.tabroom>div {
@@ -94,6 +95,7 @@
 			    	    <input type="search" placeholder="输入商品名或店铺名">
 			    	</div>
 			    </h1>
+			    <a class="mui-pull-right app-icon-plus" @tap="onHeaderAddTap()"></a>
 			</header>
 
 			<div class="mui-content">
@@ -212,6 +214,10 @@
 						app.page.getPosition(function(data) {
 							this.city = data.city;
 						}.bind(this));
+					},
+					// 添加按钮点击
+					onHeaderAddTap: function(){
+						mui.openWindow('business/signup.html');
 					}
 				}
 			});

@@ -1,6 +1,6 @@
 
 /**
- * 资源管理
+ * 资源管理 (含热更新)
  */
 (function(w){
 	var debug = true;

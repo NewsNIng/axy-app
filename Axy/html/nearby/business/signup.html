@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>商家入驻</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			
+			body,
+			html,
+			.mui-content {
+				background-color: #f4f8fb;
+			}
+			
+			ul.group {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.mui-navigate-right:after,
+			.mui-push-right:after {
+				font-size: .6rem;
+			}
+			/*去除ul上下横线*/
+			
+			ul.group:before,
+			ul.group:after {
+				height: 0;
+			}
+			
+			ul.group>li.mui-table-view-cell{
+				padding: 0;
+				margin: 0;
+			}
+			
+			/*重写li边线*/
+			ul.group>li.mui-table-view-cell:after {
+				left: 0;
+				background-color: #f2f2f3;
+			}
+			/*重写li a高度*/
+			
+			ul.group>li.mui-table-view-cell>a {
+				height: 1.186666rem;
+				padding: 0 0 0 0.346666rem;
+				margin: 0;
+				position: relative;
+			}
+			
+			/*左侧文字添加颜色*/
+			ul.group>li.mui-table-view-cell .leftname {
+				color: #333333;
+				position: absolute;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+			}
+			/*右侧文字*/
+			ul.group span.mui-badge {
+				right: 0.666666rem;
+				color: #808080;
+				background-color: transparent;
+			}
+			
+			
+			
+			.app-btn-main{
+				
+				width: 92%;
+				margin: 1.52rem 4% 1.44rem 4%;
+				padding: .2rem 0;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back mui-pull-left app-icon-back"></a>
+			<h1 class="mui-title">商家入驻</h1>
+		</header>
+
+		<div class="mui-content">
+			<ul class="mui-table-view group">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-font-size-26 mui-badge">深圳</span>
+						<span class="app-font-size-26 leftname">城市</span>
+					</a>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-font-size-26 mui-badge">输入商户名称</span>
+						<span class="app-font-size-26 leftname">名称</span>
+					</a>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-font-size-26 mui-badge">输入商户地址</span>
+						<span class="app-font-size-26 leftname">地址</span>
+					</a>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-font-size-26 mui-badge">输入商户类型</span>
+						<span class="app-font-size-26 leftname">类型</span>
+					</a>
+				</li>
+
+			</ul>
+			
+			<ul class="mui-table-view group">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-font-size-26 mui-badge">输入商户电话</span>
+						<span class="app-font-size-26 leftname">商户电话</span>
+					</a>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-font-size-26 mui-badge">08:00-20:00</span>
+						<span class="app-font-size-26 leftname">营业时间</span>
+					</a>
+				</li>
+				
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-font-size-26 mui-badge">正在营业</span>
+						<span class="app-font-size-26 leftname">营业状态</span>
+					</a>
+				</li>
+				
+
+			</ul>
+			
+				
+			<ul class="mui-table-view group">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-font-size-26 mui-badge"></span>
+						<span class="app-font-size-26 leftname">店铺照片</span>
+					</a>
+				</li>
+			</ul>
+			
+			<ul class="mui-table-view group">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-font-size-26 mui-badge"></span>
+						<span class="app-font-size-26 leftname">商家介绍</span>
+					</a>
+				</li>
+			</ul>
+			
+			<button type="button" class="mui-btn app-btn-main app-font-size-36">下一步</button>
+		</div>
+
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+		</script>
+	</body>
+
+</html>
