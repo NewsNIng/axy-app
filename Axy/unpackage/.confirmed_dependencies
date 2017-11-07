@@ -121,7 +121,10 @@
 		"refer": [
 			"html/nearby/pages/list.html",
 			"html/public/position.html",
+<<<<<<< HEAD
 			"html/nearby/business/signup.html",
+=======
+>>>>>>> a85e8b60d7bb0eeb5d94370e7d8285923510b539
 			"html/nearby/pages/theme.html"
 		]
 	},
