@@ -120,7 +120,8 @@
 		],
 		"refer": [
 			"html/nearby/pages/list.html",
-			"html/public/position.html"
+			"html/public/position.html",
+			"html/nearby/pages/theme.html"
 		]
 	},
 	"html/common/login.html": {
