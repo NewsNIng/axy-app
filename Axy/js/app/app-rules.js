@@ -22,7 +22,23 @@
 			return null;
 		}
 		return message;
-	}
+	};
+	
+	/**
+	 * 对数据进行验证 （多个）
+	 * @param {Array} arr 数据数组，格式按照test
+	 */
+	rules.testList = function(arr){
+		var i = 0, l = arr.length, message = "";
+		while(i < l){
+			message = rules.test(arr[i].type, arr[i].value, arr[i].message);
+			if(message !== null){
+				return message;
+			}
+			i++;
+		}
+		return null;
+	};
 	
 	app.rules = rules;
 }(window.app || (window.app = {})));

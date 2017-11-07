@@ -13,16 +13,6 @@
 			password: password
 		},callback);
 	}
-	// 测试
-	user.test = function(fn){
-		return ra("get","/",{
-			app: "ip.get",
-			ip: "114.114.114.114",
-			appkey: "10003",
-			sign: "b59bc3ef6191eb9f747dd4e83c99f2a4",
-			format: "json"
-		},fn);
-	}
 	
 	/**
 	 * @param {String} username 用户名
@@ -36,6 +26,17 @@
 			password: password,
 			code: code
 		},callback);
+	}
+	
+	/**
+	 * 获取验证码
+	 * @param {String} telphone 手机号
+	 * @param {Function} callback 回调函数
+	 */
+	user.getCode = function(telphone, callback){
+		return ra("get", "/getCode", {
+			telphone: telphone
+		}, callback);
 	}
 	
 	

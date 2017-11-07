@@ -249,10 +249,10 @@
 					"image/main/smart.png",
 					"image/main/nearby.png",
 					"image/main/home.png",
-					"html/person/index.html"
+					"html/person/index.html",
+					"html/smart/index.html"
 				],
 				"refer": [
-					"html/smart/index.html",
 					"html/nearby/index.html"
 				],
 				"priority": 0
@@ -342,7 +342,8 @@
 					"html/nearby/pages/list.html"
 				],
 				"refer": [
-					"html/public/position.html"
+					"html/public/position.html",
+					"html/nearby/business/signup.html"
 				],
 				"priority": 0
 			},
