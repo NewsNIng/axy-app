@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>主题</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			.mui-content {
+				background-color: #f5f5f9;
+			}
+			
+			.theme_item {
+				padding: 0.346666rem;
+				background-color: white;
+				overflow: hidden;
+				line-height: 0;
+				margin-bottom: 0.266666rem;
+				color: #808080;
+			}
+			
+			.theme_item>img {
+				width: 100%;
+				height: 4.533333rem;
+				margin-bottom: 0.346666rem;
+			}
+			
+			.theme_item>div>img {
+				width: 0.586666rem;
+				vertical-align: middle;
+			}
+			
+			.share {
+				float: left;
+			}
+			
+			.share>img {
+				margin-right: 0.346666rem;
+			}
+			
+			.see {
+				float: right;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
+			<div class="mui-scroll">
+				<template v-for="o in items">
+					<div class="theme_item app-font-size-24">
+						<img :src="o.img" />
+						<div class="share">
+							<img src="../../../image/nearby/share_icon.png" />分享给好友
+						</div>
+						<div class="see">
+							共{{o.views}}人看过<img src="../../../image/nearby/right_icon.png" />
+						</div>
+					</div>
+				</template>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript">
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						items: [{
+							img: "http://placehold.it/680x340",
+							views: 25,
+						}, {
+							img: "http://placehold.it/680x340",
+							views: 64,
+						}, {
+							img: "http://placehold.it/680x340",
+							views: 28,
+						}, {
+							img: "http://placehold.it/680x340",
+							views: 36,
+						}, ]
+					};
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+
+						this.$pullRefresh = mui(".mui-scroll-wrapper");
+						mui.init({
+							pullRefresh: {
+								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+								down: {
+
+									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+								},
+								up: {
+									callback: this._up
+								}
+							}
+						})
+					}.bind(this));
+				},
+				methods: {
+					onClickTap: function(e) {
+
+					},
+					_down: function() {
+						console.log("down")
+						setTimeout(function() {
+							this.items.unshift({
+								img: "http://placehold.it/680x340",
+								views: 100,
+							});
+							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
+						}.bind(this), 2000);
+					},
+					_up: function() {
+						console.log("up")
+						setTimeout(function() {
+							this.items.push({
+								img: "http://placehold.it/680x340",
+								views: 200,
+							});
+							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+						}.bind(this), 2000);
+					}
+				}
+
+			});
+		</script>
+	</body>
+
+</html>
