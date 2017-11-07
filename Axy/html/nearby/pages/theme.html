@@ -116,6 +116,7 @@
 					_down: function() {
 						console.log("down")
 						setTimeout(function() {
+
 							this.items.unshift({
 								img: "http://placehold.it/680x340",
 								views: 100,
@@ -126,10 +127,24 @@
 					_up: function() {
 						console.log("up")
 						setTimeout(function() {
-							this.items.push({
+							var data = [{
 								img: "http://placehold.it/680x340",
-								views: 200,
-							});
+								views: 212,
+							}, {
+								img: "http://placehold.it/680x340",
+								views: 22,
+							}, {
+								img: "http://placehold.it/680x340",
+								views: 32,
+							}, {
+								img: "http://placehold.it/680x340",
+								views: 123,
+							}, {
+								img: "http://placehold.it/680x340",
+								views: 123,
+							}];
+							this.items.push.apply(this.items, data);
+							
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
 						}.bind(this), 2000);
 					}
