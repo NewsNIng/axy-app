@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>智慧生活</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
@@ -12,6 +12,7 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav app-header">
+		    <!--<a class="mui-action-back mui-pull-left app-icon-back"></a>-->
 		    <h1 class="mui-title">智慧生活</h1>
 		</header>
 		<div class="mui-content">
@@ -37,9 +38,7 @@
 					};
 				},
 				mounted: function(){
-					dal.user.test(function(rs){
-						this.text = JSON.stringify(rs);
-					}.bind(this));
+					
 				}
 			});
 		</script>
