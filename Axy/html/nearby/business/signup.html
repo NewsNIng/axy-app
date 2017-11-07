@@ -9,7 +9,6 @@
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<style type="text/css">
-			
 			body,
 			html,
 			.mui-content {
@@ -22,7 +21,7 @@
 			
 			.mui-navigate-right:after,
 			.mui-push-right:after {
-				font-size: .6rem;
+				font-size: 15px;
 			}
 			/*去除ul上下横线*/
 			
@@ -31,12 +30,12 @@
 				height: 0;
 			}
 			
-			ul.group>li.mui-table-view-cell{
+			ul.group>li.mui-table-view-cell {
 				padding: 0;
 				margin: 0;
 			}
-			
 			/*重写li边线*/
+			
 			ul.group>li.mui-table-view-cell:after {
 				left: 0;
 				background-color: #f2f2f3;
@@ -49,8 +48,8 @@
 				margin: 0;
 				position: relative;
 			}
-			
 			/*左侧文字添加颜色*/
+			
 			ul.group>li.mui-table-view-cell .leftname {
 				color: #333333;
 				position: absolute;
@@ -59,21 +58,18 @@
 				transform: translateY(-50%);
 			}
 			/*右侧文字*/
+			
 			ul.group span.mui-badge {
 				right: 0.666666rem;
 				color: #808080;
 				background-color: transparent;
 			}
 			
-			
-			
-			.app-btn-main{
-				
+			.app-btn-main {
 				width: 92%;
 				margin: 1.52rem 4% 1.44rem 4%;
 				padding: .2rem 0;
 			}
-			
 		</style>
 	</head>
 
@@ -84,88 +80,142 @@
 		</header>
 
 		<div class="mui-content">
-			<ul class="mui-table-view group">
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span class="app-font-size-26 mui-badge">深圳</span>
-						<span class="app-font-size-26 leftname">城市</span>
-					</a>
-				</li>
-				
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span class="app-font-size-26 mui-badge">输入商户名称</span>
-						<span class="app-font-size-26 leftname">名称</span>
-					</a>
-				</li>
-				
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span class="app-font-size-26 mui-badge">输入商户地址</span>
-						<span class="app-font-size-26 leftname">地址</span>
-					</a>
-				</li>
-				
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span class="app-font-size-26 mui-badge">输入商户类型</span>
-						<span class="app-font-size-26 leftname">类型</span>
-					</a>
-				</li>
 
-			</ul>
-			
-			<ul class="mui-table-view group">
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span class="app-font-size-26 mui-badge">输入商户电话</span>
-						<span class="app-font-size-26 leftname">商户电话</span>
-					</a>
-				</li>
-				
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span class="app-font-size-26 mui-badge">08:00-20:00</span>
-						<span class="app-font-size-26 leftname">营业时间</span>
-					</a>
-				</li>
-				
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span class="app-font-size-26 mui-badge">正在营业</span>
-						<span class="app-font-size-26 leftname">营业状态</span>
-					</a>
-				</li>
-				
+			<template v-for="g,gi in infoList">
+				<ul class="mui-table-view group">
+					<li class="mui-table-view-cell" v-for="o,i in g" @tap="onItemTap(gi, i, o)">
+						<a class="mui-navigate-right">
+							<span class="app-font-size-26 mui-badge">{{o.value}}</span>
+							<span class="app-font-size-26 leftname">{{o.name}}</span>
+						</a>
+					</li>
 
-			</ul>
-			
-				
-			<ul class="mui-table-view group">
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span class="app-font-size-26 mui-badge"></span>
-						<span class="app-font-size-26 leftname">店铺照片</span>
-					</a>
-				</li>
-			</ul>
-			
-			<ul class="mui-table-view group">
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span class="app-font-size-26 mui-badge"></span>
-						<span class="app-font-size-26 leftname">商家介绍</span>
-					</a>
-				</li>
-			</ul>
-			
+				</ul>
+			</template>
+
 			<button type="button" class="mui-btn app-btn-main app-font-size-36">下一步</button>
 		</div>
 
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript">
 			mui.init();
+			var getInputPage = function(g, i, ex){
+				app.page.getInput(function(data){
+					data.content && (this.infoList[g][i].value = data.content);
+				}.bind(this), ex);
+			}
+			
+			var fnArr = [
+							[
+								// 城市选择
+								function(g, i) {
+									app.page.getPosition(function(data) {
+										this.infoList[g][i].value = data.city;
+									}.bind(this));
+								},
+								// 商户名称
+								getInputPage,
+								// 商户地址
+								getInputPage,
+								// 商户类型
+								function(g, i){
+									app.page.getMailType(function(data) {
+										this.infoList[g][i].value = data.value;
+									}.bind(this));
+								},
+							],[
+								// 商户电话
+								getInputPage,
+								// 营业时间
+								function(){},
+								// 营业状态
+								function(){
+									
+								},
+							],[
+								// 店铺照片
+								function(){
+									
+								}
+							],[
+								// 商家介绍
+								function(){
+									
+								}
+							]
+						];
+			
+			
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						tapT: null,
+						infoList: [
+							[{
+								name: "城市",
+								value: "深圳",
+							},{
+								name: "名称",
+								value: "输入商户名称",
+							},
+							{
+								name: "地址",
+								value: "输入商户地址",
+								
+							},{
+								name: "类型",
+								value: "输入商户类型",
+							}],
+
+							[{
+								name: "商户电话",
+								value: "输入商户电话",
+								r: 'tel'
+							},{
+								name: "营业时间",
+								value: "08:00-20:00",
+							},{
+								name: "营业状态",
+								value: "正在营业",
+							}],
+							[{
+								name: "店铺照片",
+								value: ""
+							}],
+							[{
+								name: "商家介绍",
+								value: ""
+							}]
+						]
+					};
+				},
+
+				methods: {
+					onItemTap: function(gindex, index, o) {
+						// 防抖
+						if(this.tapT){
+							return;
+						}
+						this.tapT = setTimeout(function(){
+							this.tapT = null;
+						}.bind(this), 200);
+						// 防抖end
+						
+						var fn = fnArr[gindex][index];
+						fn && fn.call(this, gindex, index, {
+							title: o.name,
+							tips: o.value,
+							r: o.r
+						});
+					}
+				}
+
+			});
 		</script>
 	</body>
 

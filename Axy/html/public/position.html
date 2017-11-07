@@ -3,53 +3,262 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>选择城市</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<script type="text/javascript" src="../../js/common/flexible.js" ></script>
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content,
+			input[type=search],
+			.cityRoom {
+				background-color: #F4F8FB;
+			}
+			
+			.color808080 {
+				color: #808080;
+			}
+			/*1搜索框*/
+			
+			.mui-content {
+				background-color: #FFFFFF !important;
+			}
+			
+			.mui-search {
+				width: 9.28rem;
+				margin: .18rem .36rem;
+			}
+			
+			.positionInfo {
+				position: relative;
+			}
+			
+			.positionInfo:before {
+				content: "";
+				background-color: #f2f2f3;
+				height: 1px;
+				width: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+				transform: scaleY(0.5);
+				-webkit-transform: scaleY(0.5);
+			}
+			
+			.mui-search .mui-placeholder {
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			input[type=search] {
+				height: 0.746666rem;
+				margin: 0 !important;
+				border-radius: 3px;
+			}
+			
+			.mui-search .mui-placeholder .mui-icon {
+				color: #808080;
+			}
+			
+			.mui-search:before {
+				color: #808080;
+				margin-top: 0 !important;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			/*1搜索框end*/
+			/*2显示当前位置*/
+			
+			.positionInfo {
+				padding: 0 .4rem;
+				height: 1.1rem;
+				line-height: 1.1rem;
+			}
+			
+			.positionInfo * {
+				vertical-align: middle;
+			}
+			
+			.positionInfo img {
+				width: 15px;
+				margin: 0 3px;
+			}
+			/*2显示当前位置end*/
+			/*3城市列表*/
+			
+			.cityRoom {
+				padding: .4rem 0 0 .4rem;
+			}
+			
+			.tips {
+				margin: 0 0 0.16rem 0;
+			}
+			
+			.cardRoom {
+				display: flex;
+				display: -webkit-flex;
+				align-content: center;
+				justify-content: flex-start;
+				flex-flow: wrap row;
+			}
+			
+			.cardRoom>div:active {
+				background-color: #ffffff;
+			}
+			
+			.cardRoom>div {
+				text-align: center;
+				width: 1.733333rem;
+				height: 0.666666rem;
+				margin: 0 .16rem .16rem 0;
+				border-radius: 5px;
+				background-color: #e5e6e7;
+				line-height: 0.666666rem;
+			}
+			
+			.cardRoom>div>* {
+				vertical-align: middle;
+			}
+			/*3城市列表end*/
+		</style>
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav app-header">
-		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left app-color-white"></a>
-		    <h1 class="mui-title">定位</h1>
+			<a class="mui-action-back app-icon-back mui-pull-left app-color-white"></a>
+			<h1 class="mui-title">选择所在的城市</h1>
 		</header>
 		<div class="mui-content app-font-size-22">
-		    <ul class="mui-table-view">
-		            <li class="mui-table-view-cell">
-		                <a class="mui-navigate-right">
-		                      北京
-		                </a>
-		            </li>
-		            <li class="mui-table-view-cell">
-		                <a class="mui-navigate-right">
-		                     上海
-		                </a>
-		            </li>
-		            <li class="mui-table-view-cell">
-		                <a class="mui-navigate-right">
-		                     深圳
-		                </a>
-		            </li>
-		        </ul>
+
+			<div class="mui-input-row mui-search app-font-size-24">
+				<input type="search" class="mui-input-clear" placeholder="输入城市名或拼音查询">
+			</div>
+			<div class="positionInfo app-font-size-26">
+				<span class="color808080" v-text="positionState"></span>
+				<span class="mui-pull-right">
+		    		<img src="../../image/main/nearby_active.png"/>
+		    		<span class="color808080" v-text="indexCityName"></span>
+				</span>
+			</div>
+			<div class="cityRoom">
+				<h5 class="app-font-size-26 color808080 tips">定位/最近访问</h5>
+				<div class="cardRoom color808080">
+
+					<div v-show="indexCityName !=='未知' " @tap="onCityTap(indexCityName)">
+						<img src="../../image/main/nearby.png" width="12px" />
+						<span v-text="indexCityName"></span>
+					</div>
+
+					<template v-for="o,i in preList">
+						<div v-text="o" @tap="onCityTap(o)"></div>
+					</template>
+
+				</div>
+
+				<h5 class="app-font-size-26 color808080 tips" style="margin: 0.346666rem 0 0.213333rem 0;">热门城市</h5>
+				<div class="cardRoom color808080">
+
+					<template v-for="o,i in hotList">
+						<div v-text="o" @tap="onCityTap(o)"></div>
+					</template>
+
+				</div>
+			</div>
 		</div>
-		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
 		<script src="../../js/lib/mui.min.js"></script>
-		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
+
+			var preCache = new ni.Cache("position_pre_list", ["广州",
+				"东莞",
+				"长沙",
+			]);
 			
-			mui.plusReady(function(){
-				mui('ul').on('tap', 'li', function(){
-					var city = this.innerText;
-					app.page.setResult({
-						city: city
-					}).close();
+			
+			
+			console.log(JSON.stringify(preCache.data));
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						positionState: "正在定位..",
+						positionCityName: "未知",
+						hotList: [
+							"广州",
+							"东莞",
+							"长沙",
+							"惠州",
+							"佛山",
+							"武汉",
+							"北京",
+							"上海",
+							"汕尾",
+							"南宁",
+						],
+						preList: preCache.data
+					};
+				},
+				computed: {
+					indexCityName: function() {
+						return this.positionCityName.replace(/市$/, '');
+					}
+				},
+				mounted: function() {
+				},
+				plusReady: function() {
+					// 获取定位
+					this._getPosition();
+				},
+				methods: {
+					// 获取当前定位城市
+					_getPosition: function() {
+						this.positionState = "正在定位....";
+
+						plus.geolocation.getCurrentPosition(function(p) {
+							var city = p && p.address && p.address.city;
+							if(!city) {
+								return this.positionState = "获取失败";
+							}
+							this.positionState = "当前";
+							this.positionCityName = city;
+						}.bind(this), function() {
+							this.positionState = "定位失败";
+						}.bind(this));
+					},
+					_hotCitySort: function(newCityName){
+						var cityIndex = this.preList.indexOf(newCityName);
+						if(cityIndex >= 0){
+							this.preList.splice(cityIndex, 1);
+						}
+						this.preList.unshift(newCityName);
+						this.preList.length >= 5 && (this.preList.splice(4));
+					},
 					
-				});
+					// 城市点击事件
+					onCityTap: function(cityName) {
+						this._hotCitySort(cityName);
+						console.log(JSON.stringify(this.preList));
+						// 保存到本地缓存
+						preCache.data = this.preList;
+						// 返回结果到调用者
+						this.$nextTick(function(){
+							app.page.setResult({
+								city: cityName
+							}).close();
+						});
+						
+					}
+				}
 			});
-			
 		</script>
 	</body>
 

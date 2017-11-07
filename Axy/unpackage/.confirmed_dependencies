@@ -121,7 +121,8 @@
 		"refer": [
 			"html/nearby/pages/list.html",
 			"html/public/position.html",
-			"html/nearby/business/signup.html"
+			"html/nearby/business/signup.html",
+			"html/nearby/pages/theme.html"
 		]
 	},
 	"html/common/login.html": {
@@ -215,6 +216,13 @@
 		],
 		"refer": [
 			"html/common/reset.html"
+		]
+	},
+	"html/nearby/business/signup.html": {
+		"refer": [
+			"html/public/position.html",
+			"html/public/input.html",
+			"html/public/mailltype.html"
 		]
 	}
 }
