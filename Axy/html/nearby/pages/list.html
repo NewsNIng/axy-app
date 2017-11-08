@@ -177,7 +177,7 @@
 							<div class="shop_menu app-font-size-24">
 								<div class="flex1"><img src="../../../image/nearby/phone.png" />电话</div>
 								<div class="flex1"><img src="../../../image/nearby/navigation.png" />导航</div>
-								<div class="flex1"><img src="../../../image/nearby/show.png" />查看</div>
+								<div @tap="onLookTap(o)" class="flex1"><img src="../../../image/nearby/show.png" />查看</div>
 							</div>
 						</div>
 					</template>
@@ -269,6 +269,14 @@
 					}.bind(this));
 				},
 				methods: {
+					// 点击查看
+					onLookTap: function(o){
+						mui.openWindow('../business/store_details.html','store_details',{
+							extras: {
+								oname: o.name	
+							}
+						});
+					},
 					onClickTap: function(e) {
 
 					},
