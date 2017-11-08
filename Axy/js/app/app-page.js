@@ -11,15 +11,29 @@
 		_tempSrc = '',
 		pg = null,
 		pageDir = {
-			position: '_www/html/public/position.html'
+			position: '_www/html/public/position.html',
+			input: '_www/html/public/input.html',
+			mailltype: '_www/html/public/mailltype.html',
 		};
 	
+	// 打开城市选择
 	page.getPosition = function(callback){
-		this.openForResult('position', callback);
+		this.openForResult('position', callback, {});
+	}
+	
+	// 打开内容编辑
+	page.getInput = function(callback, ex){
+		this.openForResult('input', callback, ex);
+	}
+	
+	// 打开商户类型
+	page.getMailType = function(callback){
+		this.openForResult('mailltype', callback, {});
 	}
 	
 	
-	page.openForResult = function(name, callback){
+	page.openForResult = function(name, callback, ex){
+		ex = ex || {};
 		_tempSrc = '_APP_PAGE_RESULT_FUN_' + name + '_' + _id;
 		_id++;
 		w[_tempSrc] = function(data){
@@ -27,11 +41,11 @@
 			callback(data);
 		};
 		
+		ex.callbackName = _tempSrc;
+		
 		pg = plus.webview.create(pageDir[name], name, {
 			render: "always"
-		}, {
-			callbackName: _tempSrc 
-		});
+		}, ex);
 		
 		pg.addEventListener('titleUpdate', function(){
 			pg.show('pop-in');
