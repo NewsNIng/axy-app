@@ -343,7 +343,8 @@
 				],
 				"refer": [
 					"html/public/position.html",
-					"html/nearby/pages/theme.html"
+					"html/nearby/pages/theme.html",
+					"html/nearby/business/signup.html"
 				],
 				"priority": 0
 			},
@@ -438,6 +439,13 @@
 					"js/dal/base.js"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"html/nearby/pages/list.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/store_details.html"
+				],
 				"priority": 0
 			}
 		},
