@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>营业时间</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.tips {
+				padding: 0.346666rem;
+				background-color: #F4F8FB;
+				color: #b4b4b7;
+			}
+			
+			ul.group {
+				margin-top: 0!important;
+			}
+			
+			.mui-navigate-right:after,
+			.mui-push-right:after {
+				font-size: 15px;
+			}
+			/*去除ul上下横线*/
+			
+			ul.group:before,
+			ul.group:after {
+				height: 0;
+			}
+			
+			ul.group>li.mui-table-view-cell {
+				padding: 0;
+				margin: 0;
+			}
+			/*重写li边线*/
+			
+			ul.group>li.mui-table-view-cell:after {
+				left: 0;
+				background-color: #f2f2f3;
+			}
+			/*重写li a高度*/
+			
+			ul.group>li.mui-table-view-cell>a {
+				height: 1.186666rem;
+				padding: 0 0 0 0.346666rem;
+				margin: 0;
+				position: relative;
+				line-height: 1.186666rem;
+			}
+			/*左侧文字添加颜色*/
+			
+			ul.group>li.mui-table-view-cell .leftname {
+				color: #333333;
+				position: absolute;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+			}
+			/*右侧文字*/
+			
+			ul.group span.mui-badge {
+				right: 0.666666rem;
+				color: #808080;
+				background-color: transparent;
+			}
+			
+			
+			.app-switch-main{
+				height: 22px;
+				width: 39px;
+			}
+			
+			.mui-switch-handle{
+				height: 20px !important;
+				width: 20px !important;
+			}
+			
+			
+			.leftname{
+				transition-duration: 250ms;
+				transition-property: color;
+			}
+			.allDay .sd{
+				pointer-events: none;
+			}
+			.allDay .sd .leftname{
+				color: #808080 !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+			
+		
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back mui-pull-left app-icon-back"></a>
+			<h1 class="mui-title">营业时间</h1>
+			<span @tap="onSaveTap()" class="app-color-white mui-pull-right app-font-size-30" style="line-height: 44px;">保存</span>
+		</header>
+		<div class="mui-content">
+			<div class="tips app-font-size-26">
+				添加每周营业日
+			</div>
+			<div>
+				<ul class="mui-table-view group">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span class="app-font-size-26 mui-badge"></span>
+							<span class="app-font-size-26 leftname">每周营业日</span>
+						</a>
+					</li>
+
+				</ul>
+			</div>
+
+			<div class="tips app-font-size-26">
+				添加营业时间
+			</div>
+			<div>
+				<ul class="mui-table-view group" :class="allDay?'allDay':''">
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span class="app-font-size-26 mui-badge" style="right: 15px;">
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': allDay}" ref="switch">
+								  <div class="mui-switch-handle"></div>
+								</div>
+							</span>
+							<span class="app-font-size-26 leftname">全天24小时</span>
+						</a>
+					</li>
+					<li style="height: 0.266666rem;background-color: #F4F8FB;"></li>
+					<li class="mui-table-view-cell sd" @tap="window.alert(123)">
+						<a class="mui-navigate-right">
+							<span class="app-font-size-26 mui-badge"></span>
+							<span class="app-font-size-26 leftname">营业时段</span>
+						</a>
+					</li>
+					
+
+				</ul>
+			</div>
+
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				//处理窗口关闭前的业务
+				beforeback: function() {
+					mui.confirm("操作将清除您已输入的信息，确认退出么？", "温馨提示", ['确认退出', '取消'], function(e) {
+						!e.index && plus.webview.currentWebview().close();
+					});
+					return false;
+				},
+			});
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						allDay: true, // 默认全天
+					};
+				},
+				computed: {
+					
+				},
+				mounted: function(){
+					this.$refs.switch.addEventListener("toggle",function(event){
+					  this.allDay = event.detail.isActive;
+					}.bind(this));
+				},
+				plusReady: function() {
+					
+				},
+				methods: {
+					onSaveTap: function(){
+						app.page.setResult({
+							
+						}).close();
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

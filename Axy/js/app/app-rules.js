@@ -10,6 +10,16 @@
 		code: /^\d{4}$/
 	};
 	
+	
+	rules.testBy = function(rex, value, message){
+		if(Object.prototype.toString.call(rex) === "[object RegExp]" || (rex.test && typeof rex.test === 'function')){
+			if(rex.test(value)){
+				return null;
+			}
+		}
+		return message;
+	}
+	
 	/**
 	 * 对数据进行验证
 	 * @param {String} type 需要验证的规则名称
@@ -17,11 +27,7 @@
 	 * @param {String} message 验证失败提示的错误 无错误返回null
 	 */
 	rules.test = function(type, value, message){
-		var rex = _rslesObj[type];
-		if(rex.test(value)){
-			return null;
-		}
-		return message;
+		return rules.testBy(_rslesObj[type]);
 	};
 	
 	/**

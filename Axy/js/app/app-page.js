@@ -37,10 +37,14 @@
 		this.openForResult('mailltype', callback, {});
 	}
 	
-	
 	page.openForResult = function(name, callback, ex){
+		this.openForResultBy(pageDir[name], name, callback, ex);
+	}
+	
+	page.openForResultBy = function(url, id, callback, ex){
+		id = id || url;
 		ex = ex || {};
-		_tempSrc = '_APP_PAGE_RESULT_FUN_' + name + '_' + _id;
+		_tempSrc = '_APP_PAGE_RESULT_FUN_' + id + '_' + _id;
 		_id++;
 		w[_tempSrc] = function(data){
 			w[_tempSrc] = null;
@@ -51,7 +55,7 @@
 		
 		cw = plus.nativeUI.showWaiting();
 		
-		pg = plus.webview.create(pageDir[name], name, {
+		pg = plus.webview.create(url, id, {
 			render: "always"
 		}, ex);
 		
@@ -64,6 +68,7 @@
 			w[_tempSrc] = null;
 			//callback(null);
 		});
+		
 	}
 	
 	page.setResult = function(data){
