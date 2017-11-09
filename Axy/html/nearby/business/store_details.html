@@ -17,6 +17,7 @@
 			header a img {
 				width: 0.48rem;
 			}
+			
 			.mui-bar-nav~.mui-content {
 				padding-top: 0;
 			}
@@ -106,13 +107,14 @@
 		</header>
 
 		<div class="mui-content noImmersed">
-			<img src="http://placehold.it/750x560" />
+			<img :src="img" />
 			<div class="shop_tittle">
 				<img src="../../../image/nearby/business/phone_icon.png" />
 				<div class="shop_name app-font-size-26" v-text="name">
 				</div>
 				<div class="shop_position app-font-size-26">
-					<img src="../../../image/nearby/map.png" /><div style="display: inline;" v-text="position"></div>
+					<img src="../../../image/nearby/map.png" />
+					<div style="display: inline;" v-text="position"></div>
 				</div>
 			</div>
 			<div class="business_signs app-font-size-26">
@@ -126,7 +128,7 @@
 			<div class="business_desc app-font-size-26">
 				商家介绍
 			</div>
-			<div class="business_description app-font-size-26" >{{description}}{{description}}{{description}}{{description}}{{description}}</div>
+			<div class="business_description app-font-size-26">{{description}}{{description}}{{description}}{{description}}{{description}}</div>
 
 		</div>
 		<!--沉浸式动态处理-->
@@ -154,9 +156,9 @@
 				data: function() {
 					return {
 						name: "一点点甜品店(西丽店)",
+						img: "http://placehold.it/750x560",
 						position: "南山区西丽官龙第一工业区",
 						description: "美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥",
-						//暂时只支持四个，待根据需求进一步优化
 						signs: [{
 								img: "http://placehold.it/152x152"
 							},
@@ -168,7 +170,8 @@
 							},
 							{
 								img: "http://placehold.it/152x152"
-							},{
+							},
+							{
 								img: "http://placehold.it/152x152"
 							},
 							{
@@ -183,10 +186,9 @@
 						],
 					};
 				},
-				plusReady: function(){
-				},
+				plusReady: function() {},
 				methods: {
-					
+
 				}
 			});
 		</script>
