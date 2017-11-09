@@ -127,7 +127,7 @@
 				<waterfall :grow="grow" :watch="items" @reflowed="reflowed" ref="waterfall">
 					<!-- each component is wrapped by a waterfall slot -->
 					<waterfall-slot v-for="(item, index) in items" :width="item.width" :height="item.height" :order="index" :key="item.index" move-class="item-move">
-						<div class="item">
+						<div class="item" @tap="onItemTap(item, index)">
 							<div class="imgBg" :style="item.style" :index="item.index" :height="item.height"></div>
 							<div class="info">
 								<div class="title app-font-size-26">#唯有美食不可辜负</div>
@@ -251,8 +251,12 @@
 					reflowed: function() {
 						this.isBusy = false
 					},
-					onClickTap: function(e) {
-
+					onItemTap: function(o, index) {
+						mui.openWindow('../discover/discover_details.html', 'discover_details', {
+							extras: {
+								oid: index
+							}
+						});
 					},
 					_down: function() {
 						console.log("down")

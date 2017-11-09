@@ -250,7 +250,7 @@
 				display: none;
 			}
 			
-			.footer.isFocus>input {
+			.footer.isFocus input {
 				width: 100%;
 			}
 		</style>
@@ -274,7 +274,9 @@
 			</header>
 
 			<div class="footer" :class="{'isFocus': inputFoucs}">
-				<input @focus="inputFoucs=true" @blur="inputFoucs=false" type="" name="" id="" value="" placeholder="123" />
+				<input @focus="inputFoucs=true" @blur="inputFoucs=false" type="" name="" id="" value="" placeholder="123" />	
+				
+				
 				<span class="data-count" data-count=99>
 				<img src="../../../image/common/agree_selected.png"/>	
 			</span>
