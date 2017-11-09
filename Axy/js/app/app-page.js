@@ -14,11 +14,17 @@
 			position: '_www/html/public/position.html',
 			input: '_www/html/public/input.html',
 			mailltype: '_www/html/public/mailltype.html',
-		};
+			city: '_www/html/public/city.html',
+		},cw = null;
 	
 	// 打开城市选择
 	page.getPosition = function(callback){
 		this.openForResult('position', callback, {});
+	}
+	
+	// 打开城市索引选择
+	page.getCity = function(callback){
+		this.openForResult('city', callback, {});
 	}
 	
 	// 打开内容编辑
@@ -43,11 +49,14 @@
 		
 		ex.callbackName = _tempSrc;
 		
+		cw = plus.nativeUI.showWaiting();
+		
 		pg = plus.webview.create(pageDir[name], name, {
 			render: "always"
 		}, ex);
 		
 		pg.addEventListener('titleUpdate', function(){
+			cw && (cw.close(),cw = null);
 			pg.show('pop-in');
 		});
 		
