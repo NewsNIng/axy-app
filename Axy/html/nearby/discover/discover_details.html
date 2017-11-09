@@ -31,6 +31,10 @@
 				height: 7.866666rem;
 			}
 			
+			.mui-icon>img {
+				width: 0.8rem;
+			}
+			
 			.user_tittle,
 			.label,
 			.description {
@@ -41,7 +45,6 @@
 			.user_tittle {
 				height: 1.413333rem;
 				line-height: 1.413333rem;
-				font-weight: bold;
 				color: #333333;
 				border-bottom: 0.013333rem solid #E5E6E7;
 			}
@@ -64,12 +67,13 @@
 				height: 0.746666rem;
 				line-height: 0.426666rem;
 				position: relative;
+				font-weight: bold;
 				top: 50%;
 				transform: translateY(-50%);
 				-webkit-transform: translateY(-50%);
 			}
 			
-			.attention:active{
+			.attention:active {
 				color: #FFFFFF;
 				background-color: rgba(255, 0, 0, .6);
 			}
@@ -169,19 +173,16 @@
 			.footer>span {
 				width: 0;
 				position: relative;
-				
-				animation:show .25s forwards;
-				-webkit-animation:show .25s forwards;
+				animation: show .25s forwards;
+				-webkit-animation: show .25s forwards;
 			}
 			
 			.footer>span.data-count:after {
 				content: attr(data-count);
-				
 				font-size: 10px;
 				color: #FFFFFF;
 				text-align: center;
 				line-height: 0.213333rem;
-				
 				position: absolute;
 				width: 0.25rem;
 				height: 0.213333rem;
@@ -202,56 +203,73 @@
 				transition-delay: 50ms;
 				transition-property: width;
 				transition-duration: 250ms;
-				
 			}
 			
-			@keyframes show{
-				from{opacity: 0;
-					width: 0;}
-				to{opacity: 1;
-					width: .5rem;}
-			}
-			
-			@-webkit-keyframes show{
-				from{opacity: 0;
-					width: 0;}
-				to{opacity: 1;
-					width: .5rem;}
-			}
-			
-			@keyframes hide{
-				from{
+			@keyframes show {
+				from {
+					opacity: 0;
+					width: 0;
+				}
+				to {
 					opacity: 1;
 					width: .5rem;
 				}
-				to{
+			}
+			
+			@-webkit-keyframes show {
+				from {
+					opacity: 0;
+					width: 0;
+				}
+				to {
+					opacity: 1;
+					width: .5rem;
+				}
+			}
+			
+			@keyframes hide {
+				from {
+					opacity: 1;
+					width: .5rem;
+				}
+				to {
 					opacity: 0;
 					width: 0;
 				}
 			}
-			@-webkit-keyframes hide{
-				from{
+			
+			@-webkit-keyframes hide {
+				from {
 					opacity: 1;
 					width: .5rem;
 				}
-				to{
+				to {
 					opacity: 0;
 					width: 0;
 				}
 			}
-			
 			
 			.footer.isFocus>span {
 				/*display: none;*/
-				animation:hide .25s forwards;
-				-webkit-animation:hide .25s forwards;
+				animation: hide .25s forwards;
+				-webkit-animation: hide .25s forwards;
 			}
-			.footer.isFocus>span:after{
+			
+			.footer.isFocus>span:after {
 				display: none;
 			}
 			
 			.footer.isFocus input {
 				width: 100%;
+			}
+			/*背景图片*/
+			
+			.bgimage {
+				width: 100%;
+				height: 0;
+				padding-bottom: 78.666666%;
+				background-size: cover;
+				background-position: center;
 			}
 		</style>
 	</head>
@@ -262,21 +280,20 @@
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-icon mui-pull-left">
-					<img src="../../../image/home/message.png" />
+					<img src="../../../image/nearby/business/back.png" />
 				</a>
 				<h1 class="mui-title"></h1>
 				<a class="mui-icon mui-pull-right">
-					<img src="../../../image/home/plus.png" />
+					<img src="../../../image/nearby/business/share.png" />
 				</a>
-				<a class="mui-icon mui-pull-right" style="margin-right: .5rem;">
-					<img src="../../../image/home/search.png" />
+				<a class="mui-icon mui-pull-right" style="margin-right: -4px;">
+					<img src="../../../image/nearby/business/collect.png" />
 				</a>
 			</header>
 
 			<div class="footer" :class="{'isFocus': inputFoucs}">
-				<input @focus="inputFoucs=true" @blur="inputFoucs=false" type="" name="" id="" value="" placeholder="123" />	
-				
-				
+				<input @focus="inputFoucs=true" @blur="inputFoucs=false" type="" name="" id="" value="" placeholder="123" />
+
 				<span class="data-count" data-count=99>
 				<img src="../../../image/common/agree_selected.png"/>	
 			</span>
@@ -288,32 +305,35 @@
 			</span>
 			</div>
 
-			<div class="mui-content noImmersed">
-				<img :src="img" />
-				<div class="user_tittle app-font-size-26">
-					<img :src="userIcon" />
-					<div style="display: inline;" v-text="userName"></div>
-					<div class="attention">+ 关注</div>
-				</div>
-				<div class="label app-font-size-26" v-text="label"></div>
-				<div class="description app-font-size-26" v-text="description"></div>
-				<div class="reply_tittle app-font-size-26">
-					评论 &nbsp;(
-					<div style="display: inline;" v-text="comments.length"></div>)
-				</div>
-				<div class="comments" v-for="o in comments">
-					<img :src="o.userImg" />
-					<div class="comment_info">
-						<div class="user_name app-font-size-26" v-text="o.userName"></div>
-						<div class="comment_value app-font-size-32" v-text="o.text"></div>
-						<div class="time_replynum app-font-size-20">
-							<div class="app-font-size-20" style="display: inline;" v-text="o.time"></div>
-							·
-							<div class="replynum" v-text="o.replys.length+'回复'"></div>
-						</div>
-						<div class="reply app-font-size-26" v-for="p in o.replys">
-							<div class="user_name app-font-size-26" style="display: inline;" v-text="p.respondent"></div>:
-							<div class="app-font-size-26" style="display: inline;" v-text="p.text"></div>
+			<div class="mui-content noImmersed  mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<div class="bgimage" :style="'background-image: url('+ img +');'">
+
+					</div>
+					<div class="user_tittle app-font-size-26">
+						<img :src="userIcon" />
+						<div style="display: inline;" v-text="userName"></div>
+						<div class="attention">+ 关注</div>
+					</div>
+					<div class="label app-font-size-26" v-text="label"></div>
+					<div class="description app-font-size-26" v-text="description"></div>
+					<div class="reply_tittle app-font-size-26">
+						评论 &nbsp;(<div style="display: inline;" v-text="comments.length"></div>)
+					</div>
+					<div class="comments" v-for="o in comments">
+						<img :src="o.userImg" />
+						<div class="comment_info">
+							<div class="user_name app-font-size-26" v-text="o.userName"></div>
+							<div class="comment_value app-font-size-32" v-text="o.text"></div>
+							<div class="time_replynum app-font-size-20">
+								<div class="app-font-size-20" style="display: inline;" v-text="o.time"></div>
+								·
+								<div class="replynum" v-text="o.replys.length+'回复'"></div>
+							</div>
+							<div class="reply app-font-size-26" v-for="p in o.replys">
+								<div class="user_name app-font-size-26" style="display: inline;" v-text="p.respondent"></div>:
+								<div class="app-font-size-26" style="display: inline;" v-text="p.text"></div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -345,7 +365,6 @@
 				data: function() {
 					return {
 						inputFoucs: false,
-
 						img: "http://placehold.it/750x590",
 						userName: "小鳄鱼",
 						userIcon: "http://placehold.it/74x74",
@@ -390,11 +409,34 @@
 
 					};
 				},
+				mounted: function() {
+					this.$nextTick(function() {
+
+						this.$pullRefresh = mui(".mui-scroll-wrapper");
+						mui.init({
+							pullRefresh: {
+								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+								down: {
+
+								},
+								up: {
+									callback: this._up
+								}
+							}
+						})
+					}.bind(this));
+				},
 				plusReady: function() {
 
 				},
 				methods: {
+					_up: function() {
+						console.log("up")
+						setTimeout(function() {
 
+							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+						}.bind(this), 2000);
+					}
 				}
 			});
 		</script>
