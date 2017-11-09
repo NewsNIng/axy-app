@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>发现</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #f5f5f9;
+			}
+			
+			body {
+				margin: 0.093333rem 0.173333rem;
+				font-family: Helvetica, sans-serif;
+			}
+			
+			.item {
+				position: absolute;
+				top: 0.173333rem;
+				left: 0.173333rem;
+				right: 0.173333rem;
+				bottom: 0.173333rem;
+				color: #2BB8AA;
+			}
+			
+			.wf-transition {
+				transition: opacity .3s ease;
+				-webkit-transition: opacity .3s ease;
+			}
+			
+			.wf-enter {
+				opacity: 0;
+			}
+			
+			.item-move {
+				transition: all .5s cubic-bezier(.55, 0, .1, 1);
+				-webkit-transition: all .5s cubic-bezier(.55, 0, .1, 1);
+			}
+			
+			.item {
+				display: flex;
+				display: -webkit-flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			
+			.item>div.imgBg {
+				width: 100%;
+				flex-grow: 1;
+				-webkit-flex-grow: 1;
+				/*background-image: url(../../../image/common/login_logo.png);*/
+				background-size: cover;
+				background-position: center;
+				position: relative;
+			}
+			
+			.item>div.imgBg:after {
+				content: attr(height);
+				font-size: .33rem;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				-webkit-transform: translate(-50%, -50%);
+			}
+			
+			.item>div.info {
+				width: 100%;
+				color: #343434;
+				background-color: #FFFFFF;
+				padding: 0.24rem 0.293333rem 0.293333rem 0.24rem;
+			}
+			
+			.item>div.info>.title {}
+			
+			p.mui-ellipsis-2 {
+				line-height: 16px;
+				margin-bottom: 0.15rem;
+			}
+			
+			.menu {
+				display: flex;
+				display: -webkit-flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+			
+			.menu>div>* {
+				vertical-align: middle;
+			}
+			
+			img.avastr {
+				width: 0.6rem;
+				height: 0.6rem;
+				border-radius: 50%;
+				margin-right: 0.1rem;
+			}
+			
+			img.icon {
+				width: .4rem;
+				height: .4rem;
+				/*margin-right: 0.1rem;*/
+			}
+			
+			.app-font-size-24 {
+				color: #777777;
+			}
+			
+			.nickname {
+				color: #333333;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<div class="mui-content wrapper mui-scroll-wrapper app-font-size-26" ref='wrapper'>
+			<div class="mui-scroll">
+				<waterfall :grow="grow" :watch="items" @reflowed="reflowed" ref="waterfall">
+					<!-- each component is wrapped by a waterfall slot -->
+					<waterfall-slot v-for="(item, index) in items" :width="item.width" :height="item.height" :order="index" :key="item.index" move-class="item-move">
+						<div class="item">
+							<div class="imgBg" :style="item.style" :index="item.index" :height="item.height"></div>
+							<div class="info">
+								<div class="title app-font-size-26">#唯有美食不可辜负</div>
+								<p class="mui-ellipsis-2 app-font-size-24">好吃大酒店撒娇的卡三季度快接啊圣诞节as阿德萨打扫打扫打扫打扫的</p>
+								<div class="menu">
+									<div>
+										<img class="avastr" src="../../../image/common/login_weibo.png" />
+										<span class="nickname app-font-size-24">小鳄鱼诶</span>
+									</div>
+									<div @tap="item.likeCount += (1 * (item.like = !item.like) ? 1: -1);">
+										<template v-if='item.like'>
+											<img class="icon" src="../../../image/nearby/discover/like.png" />
+										</template>
+										<template v-else>
+											<img class="icon" src="../../../image/nearby/discover/nolike.png" />
+										</template>
+										<span class="app-font-size-24" v-text="item.likeCount"></span>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+					</waterfall-slot>
+				</waterfall>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-waterfall.js"></script>
+		<script type="text/javascript">
+			var ItemFactory = (function() {
+
+				var lastIndex = 0
+
+				function generateRandomItems(count) {
+					var items = [],
+						i
+					for(i = 0; i < count; i++) {
+						items[i] = {
+							index: lastIndex++,
+							style: {
+								background: getRandomColor()
+							},
+							width: 1,
+							height: 1.3 + Math.random() / 2
+						}
+					}
+					return items
+				}
+
+				function getRandomColor() {
+					var colors = [
+						'rgba(21,126,103,.5)',
+						'rgba(245,163,59,.5)',
+						'rgba(135,230,135,.5)',
+						'rgba(194,217,78,.5)',
+						'rgba(195,123,177,.5)',
+						'rgba(125,205,244,.5)'
+					]
+					return colors[~~(Math.random() * colors.length)]
+				}
+
+				return {
+					get: generateRandomItems
+				}
+
+			})();
+		</script>
+		<script type="text/javascript">
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						grow: [1, 1],
+						items: ItemFactory.get(30).map(function(o, index) {
+							o.like = false;
+							o.likeCount = index;
+							return o;
+						}),
+						isBusy: false
+					};
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+
+						this.$pullRefresh = mui(".mui-scroll-wrapper");
+						mui.init({
+							pullRefresh: {
+								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+								down: {
+
+									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+								},
+								up: {
+									callback: this._up
+								}
+							}
+						})
+					}.bind(this));
+				},
+				methods: {
+
+					addItems: function() {
+						if(!this.isBusy && this.items.length < 500) {
+							this.isBusy = true
+							this.items.push.apply(this.items, ItemFactory.get(10).map(function(o, index) {
+								o.like = false;
+								o.likeCount = index;
+								return o;
+							}));
+						}
+					},
+					shuffle: function() {
+						this.items.sort(function() {
+							return Math.random() - 0.5
+						})
+					},
+					reflowed: function() {
+						this.isBusy = false
+					},
+					onClickTap: function(e) {
+
+					},
+					_down: function() {
+						console.log("down")
+						setTimeout(function() {
+							this.shuffle();
+							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
+						}.bind(this), 666);
+					},
+					_up: function() {
+						console.log("up")
+						setTimeout(function() {
+							this.addItems();
+							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+						}.bind(this), 111);
+					}
+				},
+				components: {
+					'waterfall': Waterfall.waterfall,
+					'waterfall-slot': Waterfall.waterfallSlot
+				},
+
+			});
+		</script>
+	</body>
+
+</html>

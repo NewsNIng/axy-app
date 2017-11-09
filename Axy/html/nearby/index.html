@@ -156,13 +156,13 @@
 							},
 							{
 								name: "主题",
-								id: 'baidu',
+								id: 'theme',
 								url: './pages/theme.html'
 							},
 							{
 								name: "发现",
-								id: 'sg',
-								url: 'https://segmentfault.com/'
+								id: 'discover',
+								url: './pages/discover.html'
 							}
 						]
 					}
@@ -181,7 +181,7 @@
 						return o;
 					});
 
-					this.group = new this.$WebviewGroupLow(plus.webview.currentWebview().id, {
+					this.group = new this.$WebviewGroup(plus.webview.currentWebview().id, {
 						items: items,
 						onChange: this.onChange.bind(this)
 					});
