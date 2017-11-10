@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加完成</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+			}
+			
+			
+			.mui-content{
+				text-align: center;
+				background-image: url(../../../image/nearby/business/gift.png);
+				background-size: 4.2rem;
+				background-position: center;
+				background-repeat: no-repeat;
+			}
+			
+			
+			button{
+				margin-top: 8.44rem;
+				width: 3.333333rem;
+				height: 1.04rem;
+				
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back mui-pull-left app-icon-back"></a>
+			<h1 class="mui-title">添加完成</h1>
+		</header>
+		<div class="mui-content">
+			<button type="button" class=" app-font-size-30 mui-btn app-btn-main">预览</button>
+			<button type="button" class=" app-font-size-30 mui-btn app-btn-main-ghost">继续添加</button>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		
+		<script type="text/javascript">
+			mui.init({
+				// 处理窗口关闭前的业务
+			    beforeback: function() {
+			    	fnArr[0](true);
+			    	return false;
+			    },
+			});
+			var v = null;
+			var fnArr = [
+				// 预览
+				function(isClose){
+					// 打开店铺详情
+					// TODO
+					isClose || ();
+					// 关闭next
+					v = plus.webview.getWebviewById('signup_next');
+					v && (v.close('none'), v = null);
+					// 关闭signup
+					v = plus.webview.getWebviewById('signup');
+					v && (v.close('none'), v = null);
+					// 关闭本页
+					plus.webview.currentWebview().close();
+				},
+				// 继续添加
+				function(){
+					// 重新刷新signup
+					v = plus.webview.getWebviewById('signup');
+					if(!v){
+						v = plus.webview.create('business/signup.html', 'signup');
+					}
+					
+					v.addEventListener('loaded', function(){
+						// 关闭next
+						v = plus.webview.getWebviewById('signup_next');
+						v && (v.close('none'), v = null);
+						// 关闭本页
+						plus.webview.currentWebview().close();
+					});
+					
+					
+				}
+			
+			];
+			
+			
+			mui.ready(function(){
+				mui(document.body).on('tap','button', function(){
+					fnArr(+!this.classList.contains('app-btn-main')).call(this);
+				});
+			});
+			
+			
+			
+			
+		</script>
+	</body>
+
+</html>
