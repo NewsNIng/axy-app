@@ -59,24 +59,35 @@
 			var fnArr = [
 				// 预览
 				function(isClose){
+					var _ = function(){
+						// 关闭next
+						v = plus.webview.getWebviewById('signup_next');
+						v && (v.close('none'), v = null);
+						// 关闭signup
+						v = plus.webview.getWebviewById('signup');
+						v && (v.close('none'), v = null);
+						plus.webview.currentWebview().close();
+					}
 					// 打开店铺详情
-					// TODO
-					isClose || ();
-					// 关闭next
-					v = plus.webview.getWebviewById('signup_next');
-					v && (v.close('none'), v = null);
-					// 关闭signup
-					v = plus.webview.getWebviewById('signup');
-					v && (v.close('none'), v = null);
-					// 关闭本页
-					plus.webview.currentWebview().close();
+					if(!isClose){
+						v = mui.preload({id: "store_details", url:"store_details.html"});
+						v.addEventListener('show', function(){
+							_();
+						});
+						v.show("pop-in", 200);
+						
+					}else{
+						_();
+					}
 				},
 				// 继续添加
 				function(){
+					var methodName = 'reload';
 					// 重新刷新signup
 					v = plus.webview.getWebviewById('signup');
 					if(!v){
 						v = plus.webview.create('business/signup.html', 'signup');
+						methodName = 'show';
 					}
 					
 					v.addEventListener('loaded', function(){
@@ -86,16 +97,16 @@
 						// 关闭本页
 						plus.webview.currentWebview().close();
 					});
-					
+					v[methodName]();
 					
 				}
 			
 			];
 			
-			
+			 
 			mui.ready(function(){
 				mui(document.body).on('tap','button', function(){
-					fnArr(+!this.classList.contains('app-btn-main')).call(this);
+					fnArr[+!this.classList.contains('app-btn-main')].call(this);
 				});
 			});
 			

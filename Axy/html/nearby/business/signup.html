@@ -130,11 +130,15 @@
 					// 商户名称
 					getInputPage,
 					// 商户地址
-					getInputPage,
+					function(g, i){
+						app.page.getMaps(function(data) {
+							//this.infoList[g][i].value = data.city;
+						}.bind(this));
+					},
 					// 商户类型
 					function(g, i) {
 						app.page.getMailType(function(data) {
-							this.infoList[g][i].value = data.value;
+							this.infoList[g][i].value = data.address;
 						}.bind(this));
 					},
 				],
