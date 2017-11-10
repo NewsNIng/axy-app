@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能场景</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html,body,.mui-content{
+				background-color: #F4F8FB;
+			}
+			
+			
+			.mui-content{
+				padding-left: 0.173333rem;
+			}
+			
+			.mui-content>div{
+				float: left;
+				width: 4.48rem;
+				height: 5.386666rem;
+				background-color: #FFFFFF;
+				border-radius: 5px;
+				margin: 0.453333rem 0.173333rem 0 0.173333rem;
+				
+				transition-property: background-color;
+				transition-delay: 25ms;
+				transition-duration: 100ms;
+				
+				box-shadow: 0px 0px 5px #EFEFEF;
+			}
+			
+			.mui-content>div:active{
+				background-color: #EFEFEF;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+		    <a class="mui-action-back app-icon-back mui-pull-left"></a>
+		    <h1 class="mui-title">智能场景</h1>
+		</header>
+		<div class="mui-content">
+		    <div></div>
+		    <div></div>
+		    <div></div>
+		    <div></div>
+		</div>
+		
+		
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						name: "一点点甜品店(西丽店)",
+						img: "http://placehold.it/750x560",
+						position: "南山区西丽官龙第一工业区",
+						description: "美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥",
+						signs: [{
+								img: "http://placehold.it/152x152"
+							},
+							{
+								img: "http://placehold.it/152x152"
+							},
+							{
+								img: "http://placehold.it/152x152"
+							},
+							{
+								img: "http://placehold.it/152x152"
+							},
+							{
+								img: "http://placehold.it/152x152"
+							},
+							{
+								img: "http://placehold.it/152x152"
+							},
+							{
+								img: "http://placehold.it/152x152"
+							},
+							{
+								img: "http://placehold.it/152x152"
+							},
+						],
+					};
+				},
+				plusReady: function() {},
+				methods: {
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

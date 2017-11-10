@@ -59,6 +59,7 @@
 			
 			.attention {
 				float: right;
+				color: #FF3B30;
 				border: 1px solid #ff3b30;
 				border-radius: 3px;
 				padding: 0.16rem;
@@ -170,26 +171,29 @@
 				height: .5rem;
 			}
 			
-			.footer>span {
-				width: 0;
+			.footer>div {
+				/*width: 0;*/
 				position: relative;
-				animation: show .25s forwards;
-				-webkit-animation: show .25s forwards;
+				/*animation: show .25s forwards;
+				-webkit-animation: show .25s forwards;*/
 			}
 			
-			.footer>span.data-count:after {
+			.footer>div.data-count:after {
 				content: attr(data-count);
 				font-size: 10px;
 				color: #FFFFFF;
 				text-align: center;
-				line-height: 0.213333rem;
+				line-height: 0.24rem;
 				position: absolute;
 				width: 0.25rem;
 				height: 0.213333rem;
 				background-color: red;
 				padding: 2px;
-				right: -0.08rem;
-				top: -0.07rem;
+				/*padding-top: 4px;
+				padding-bottom: 4px;*/
+				right: 0.1rem;
+				top: 0;
+				/*line-height: 2px;*/
 				border-radius: 50%;
 			}
 			
@@ -249,19 +253,26 @@
 				}
 			}
 			
-			.footer.isFocus>span {
+			.footer.isFocus>div {
 				/*display: none;*/
 				animation: hide .25s forwards;
 				-webkit-animation: hide .25s forwards;
 			}
 			
-			.footer.isFocus>span:after {
+			.footer.isFocus>div:after {
 				display: none;
 			}
 			
 			.footer.isFocus input {
 				width: 100%;
 			}
+			
+			.footer img {
+				width: 0.853333rem;
+				height: 0.853333rem;
+			}
+			
+			.footer>div {}
 			/*背景图片*/
 			
 			.bgimage {
@@ -279,7 +290,7 @@
 		<div class="wrapper">
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
-				<a class="mui-icon mui-pull-left">
+				<a class="mui-action-back mui-icon mui-pull-left">
 					<img src="../../../image/nearby/business/back.png" />
 				</a>
 				<h1 class="mui-title"></h1>
@@ -292,17 +303,17 @@
 			</header>
 
 			<div class="footer" :class="{'isFocus': inputFoucs}">
-				<input @focus="inputFoucs=true" @blur="inputFoucs=false" type="" name="" id="" value="" placeholder="123" />
+				<input @focus="inputFoucs=true" @blur="inputFoucs=false" type="" name="" id="" value="" placeholder="写评论" />
 
-				<span class="data-count" data-count=99>
-				<img src="../../../image/common/agree_selected.png"/>	
-			</span>
-				<span>
-				<img src="../../../image/common/agree_selected.png"/>	
-			</span>
-				<span>
-				<img src="../../../image/common/agree_selected.png"/>	
-			</span>
+				<div class="data-count" data-count=1>
+					<img src="../../../image/nearby/discover/comment.png" />
+				</div>
+				<div>
+					<img src="../../../image/nearby/discover/collection.png" />
+				</div>
+				<div>
+					<img src="../../../image/nearby/discover/send.png" />
+				</div>
 			</div>
 
 			<div class="mui-content noImmersed  mui-scroll-wrapper">
@@ -318,7 +329,8 @@
 					<div class="label app-font-size-26" v-text="label"></div>
 					<div class="description app-font-size-26" v-text="description"></div>
 					<div class="reply_tittle app-font-size-26">
-						评论 &nbsp;(<div style="display: inline;" v-text="comments.length"></div>)
+						评论&nbsp;
+						<div style="display: inline;" v-text="'('+comments.length+')'"></div>
 					</div>
 					<div class="comments" v-for="o in comments">
 						<img :src="o.userImg" />
