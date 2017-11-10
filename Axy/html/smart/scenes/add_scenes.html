@@ -12,55 +12,58 @@
 			html,
 			body,
 			.mui-content {
-				background-color: #F4F8FB;
+				background-color: white;
 			}
 			
-			.mui-content {
-				overflow: hidden;
-				padding-left: 0.173333rem;
-				margin-bottom: 1.626666rem; 
+			.scenes_item {
+				height: 1.546666rem;
+				border-bottom: 1px solid #e4e5e6;
 			}
 			
-			.mui-content>div {
+			.customize_scenes {
+				height: 1.546666rem;
+			}
+			
+			.scenes_icon,
+			.more {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.scenes_icon {
 				float: left;
-				width: 4.48rem;
-				height: 5.386666rem;
-				background-color: #FFFFFF;
-				border-radius: 5px;
-				margin: 0.453333rem 0.173333rem 0 0.173333rem;
-				transition-property: background-color;
-				transition-delay: 25ms;
-				transition-duration: 100ms;
-				box-shadow: 0px 0px 5px #EFEFEF;
-				text-align: center;
+				width: 0.48rem;
+				left: 0.346666rem;
+			}
+			
+			.title,
+			.desc {
+				padding-left: 1.173333rem;
 				line-height: 1;
+			}
+			
+			.title {
 				color: #333333;
-				
-				/*font-weight: bold;*/
+				padding-top: 0.373333rem;
 			}
 			
-			.mui-content>div:active {
+			.desc {
+				color: #9F9FA0;
+				margin-top: 0.16rem;
+			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
+			}
+			
+			.scenes_item:active,
+			.customize_scenes:active {
 				background-color: #EFEFEF;
-				
 			}
-			
-			.mui-content>div>img {
-				width: 1.866666rem;
-				height: 1.866666rem;
-				margin: 1.12rem 1.306666rem 0.8rem 1.306666rem;
-			}
-			
-			.foot {
-				position: fixed;
-				width: 100%;
-				height: 1.173333rem;
-				line-height: 1.173333rem;
-				color: white;
-				text-align: center;
-				bottom: 0;
-				background-color: #06c1ae;
-			}
-			
 		</style>
 	</head>
 
@@ -70,12 +73,23 @@
 			<h1 class="mui-title">智能场景</h1>
 		</header>
 		<div class="mui-content">
+			<div class="customize_scenes app-font-size-24">
+				<img class="scenes_icon" src="../../../image/smart/scenes/icon_custom@3x.png" />
+				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				<div class="title">自定义场景</div>
+				<div class="desc">可根据自己需求设置个性化场景</div>
+			</div>
+			<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
 			<template v-for="o in scenes">
-				<div class="app-font-size-30"><img :src="o.img"/>{{o.title}}</div>
-				
+				<div class="scenes_item app-font-size-24">
+					<img class="scenes_icon" :src="o.img" />
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					<div class="title">{{o.title}}</div>
+					<div class="desc">{{o.description}}</div>
+				</div>
+
 			</template>
 		</div>
-		<div class="foot app-font-size-34">添加新场景</div>
 
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -103,17 +117,21 @@
 					return {
 						scenes: [{
 							title: "回家模式",
-							img: "../../../image/smart/scenes/btn_get home1@3x.png",
+							img: "../../../image/smart/scenes/icon_Back to the shop@3x.png",
+							description: "可开启灯，空调，开关等设备",
 						}, {
 							title: "离家模式",
-							img: "../../../image/smart/scenes/btn_Be away from home1@3x.png",
+							img: "../../../image/smart/scenes/icon_Departure@3x.png",
+							description: "可关闭灯，空调等设备并进入警戒模式",
 						}, {
 							title: "回店模式",
-							img: "../../../image/smart/scenes/icon_Back to the shop1@3x.png",
+							img: "../../../image/smart/scenes/icon_get home@3x.png",
+							description: "可设置起床灯光，拉开窗帘等",
 						}, {
 							title: "离店模式",
-							img: "../../../image/smart/scenes/btn_Departure1@3x.png",
-						}]
+							img: "../../../image/smart/scenes/icon_Be away from home@3x.png",
+							description: "可关闭灯，并使设备进入睡眠模式",
+						}],
 					};
 				},
 				plusReady: function() {},

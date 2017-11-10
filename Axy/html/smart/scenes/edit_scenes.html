@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能场景</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: white;
+			}
+			
+			.mui-input-row>label {
+				padding: 0.426666rem 0.346666rem;
+			}
+			
+			.mui-input-row {
+				height: 1.2rem;
+			}
+			
+			.mui-switch {
+				margin: 0 !important;
+				right: 0.346666rem;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.prompt {
+				color: #9F9FA0;
+				padding-left: 0.346666rem;
+				height: 0.906666rem;
+				line-height: 0.906666rem;
+				background-color: #F4F8FB;
+			}
+			
+			.add_conditions {
+				height: 1.626666rem;
+			}
+			
+			.add_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.add_icon {
+				float: left;
+				width: 0.613333rem;
+				left: 1.04rem;
+			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
+			}
+			
+			.title {
+				padding-left: 2.24rem;
+				color: #9F9FA0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">编辑场景</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-input-row app-font-size-28">
+				<label>回店模式</label>
+				<div class="mui-switch mui-active">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</div>
+			<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
+			<div class="mui-input-row app-font-size-28">
+				<label>发送消息</label>
+				<div class="mui-switch mui-active">
+					<div class="mui-switch-handle"></div>
+				</div>
+			</div>
+			<div class="prompt app-font-size-24">如果触发条件</div>
+			<div class="add_conditions app-font-size-24">
+				<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
+				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				<div class="title app-font-size-28">添加条件</div>
+			</div>
+			<div class="prompt app-font-size-24">就执行动作</div>
+			<div class="add_conditions app-font-size-24">
+				<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
+				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				<div class="title app-font-size-28">添加执行动作</div>
+			</div>
+			<div style="height: 1px; background-color: #E5E6E7;"></div>
+		</div>
+
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+
+					};
+				},
+				plusReady: function() {},
+				methods: {
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

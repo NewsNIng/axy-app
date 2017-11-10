@@ -15,51 +15,40 @@
 				background-color: #F4F8FB;
 			}
 			
-			.mui-content {
-				overflow: hidden;
-				padding-left: 0.173333rem;
-				margin-bottom: 1.626666rem; 
+			.conditions_item {
+				height: 1.386666rem;
+				padding-left: 0.346666rem;
+				/*border-bottom: 1px solid #E5E6E7;*/
 			}
-			
-			.mui-content>div {
-				float: left;
-				width: 4.48rem;
-				height: 5.386666rem;
-				background-color: #FFFFFF;
-				border-radius: 5px;
-				margin: 0.453333rem 0.173333rem 0 0.173333rem;
-				transition-property: background-color;
-				transition-delay: 25ms;
-				transition-duration: 100ms;
-				box-shadow: 0px 0px 5px #EFEFEF;
-				text-align: center;
-				line-height: 1;
-				color: #333333;
-				
-				/*font-weight: bold;*/
-			}
-			
-			.mui-content>div:active {
+			.conditions_item:active {
 				background-color: #EFEFEF;
-				
 			}
 			
-			.mui-content>div>img {
-				width: 1.866666rem;
-				height: 1.866666rem;
-				margin: 1.12rem 1.306666rem 0.8rem 1.306666rem;
+			.conditions_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
 			}
 			
-			.foot {
-				position: fixed;
-				width: 100%;
-				height: 1.173333rem;
-				line-height: 1.173333rem;
-				color: white;
-				text-align: center;
-				bottom: 0;
-				background-color: #06c1ae;
+			.conditions_icon {
+				float: left;
+				width: 0.48rem;
 			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
+			}
+			
+			.title {
+				padding-left: 0.826666rem;
+				color: #9F9FA0;
+			}
+			
 			
 		</style>
 	</head>
@@ -67,15 +56,23 @@
 	<body>
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">智能场景</h1>
+			<h1 class="mui-title">编辑场景</h1>
 		</header>
 		<div class="mui-content">
-			<template v-for="o in scenes">
-				<div class="app-font-size-30"><img :src="o.img"/>{{o.title}}</div>
-				
-			</template>
+			<div class="conditions_item app-font-size-28">
+				<img class="conditions_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
+				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				<div class="title app-font-size-28">添加条件</div>
+			</div>
+			<div style="margin-left: 0.346666rem; height: 1px; background-color: #E5E6E7;"></div>
+			<div class="conditions_item app-font-size-28">
+				<img class="conditions_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
+				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				<div class="title app-font-size-28">添加执行动作</div>
+			</div>
+			<div style="margin-left: 0.346666rem; height: 1px; background-color: #E5E6E7;"></div>
+			
 		</div>
-		<div class="foot app-font-size-34">添加新场景</div>
 
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -101,19 +98,7 @@
 				el: '.mui-content',
 				data: function() {
 					return {
-						scenes: [{
-							title: "回家模式",
-							img: "../../../image/smart/scenes/btn_get home1@3x.png",
-						}, {
-							title: "离家模式",
-							img: "../../../image/smart/scenes/btn_Be away from home1@3x.png",
-						}, {
-							title: "回店模式",
-							img: "../../../image/smart/scenes/icon_Back to the shop1@3x.png",
-						}, {
-							title: "离店模式",
-							img: "../../../image/smart/scenes/btn_Departure1@3x.png",
-						}]
+
 					};
 				},
 				plusReady: function() {},
