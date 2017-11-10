@@ -1,231 +1,30 @@
 {
-	"index.html": {
-		"resources": [
-			"js/mui.min.js",
-			"css/mui.min.css"
-		],
-		"refer": []
-	},
-	"html/main.html": {
-		"resources": [
-			"js/mui.min.js",
-			"fonts/mui.ttf",
-			"css/mui.min.css",
-			"js/vue.min.js",
-			"js/vue-ni.min.js",
-			"html/home/index.html",
-			"js/vue-ni.js",
-			"js/lib/vue.min.js",
-			"js/lib/mui.min.js",
-			"css/lib/mui.min.css",
-			"js/lib/vue-ni.js",
-			"image/main/home_active.png",
-			"css/app/app.css",
-			"image/main/smart_active.png",
-			"image/main/nearby_active.png",
-			"image/main/person_active.png",
-			"image/main/person.png",
-			"image/main/smart.png",
-			"image/main/nearby.png",
-			"image/main/home.png",
-			"html/smart/index.html"
-		],
-		"refer": [
-			"html/smart/index.html",
-			"html/nearby/index.html",
-			"html/person/index.html",
-			"html/home/index.html"
-		]
-	},
-	"html/person/index.html": {
-		"resources": [
-			"css/mui.min.css",
-			"css/lib/mui.min.css",
-			"css/app/app.css",
-			"js/common/immersed.js",
-			"js/lib/mui.min.js"
-		],
-		"refer": [
-			"html/common/login.html",
-			"html/common/reset2.html",
-			"html/public/position.html"
-		]
-	},
-	"html/home/index.html": {
-		"resources": [
-			"css/mui.min.css",
-			"css/lib/mui.min.css",
-			"js/api/user.js",
-			"js/lib/axios.min.js",
-			"js/dal/user.js",
-			"js/dal/base.js",
-			"js/config.js",
-			"js/app/user_info.js",
-			"css/app/app.css",
-			"js/common/immersed.js",
-			"js/app/app.js",
-			"js/common/imagelazyload.js",
-			"js/lib/md5.min.js",
-			"image/home/goshop.png",
-			"image/home/gohome.png",
-			"image/home/outhome.png",
-			"image/home/outshop.png",
-			"image/home/message.png",
-			"image/home/plus.png",
-			"image/home/search.png",
-			"image/home/like_b.png",
-			"image/home/dev_camera.png",
-			"image/home/like_d.png",
-			"image/home/like_c.png",
-			"image/home/like_a.png",
-			"image/home/see_more.png",
-			"image/home/dev_share.png",
-			"image/home/dev_setting.png",
-			"js/plug/test.js",
-			"fonts/mui.ttf",
-			"js/lib/vue.min.js",
-			"js/lib/mui.min.js",
-			"js/lib/vue-ni.js"
-		],
-		"refer": []
-	},
-	"html/smart/index.html": {
-		"resources": [
-			"css/mui.min.css",
-			"css/lib/mui.min.css",
-			"css/app/app.css",
-			"js/dal/user.js",
-			"js/dal/base.js",
-			"js/common/flexible.js",
-			"js/common/immersed.js",
-			"js/lib/vue.min.js",
-			"js/lib/mui.min.js"
-		],
-		"refer": []
-	},
 	"html/nearby/index.html": {
 		"resources": [
-			"css/mui.min.css",
-			"css/lib/mui.min.css",
-			"css/app/app.css",
-			"js/common/imagelazyload.js",
-			"js/lib/md5.min.js",
-			"js/common/immersed.js",
-			"js/lib/vue.min.js",
-			"js/lib/mui.min.js",
-			"js/app/app.js",
-			"js/lib/vue-ni.js",
-			"js/extend/String.js",
 			"html/nearby/pages/list.html"
 		],
 		"refer": [
+			"html/nearby/pages/discover.html",
+			"html/nearby/pages/theme.html",
 			"html/nearby/pages/list.html",
-			"html/public/position.html",
-<<<<<<< HEAD
-			"html/nearby/business/signup.html",
-=======
->>>>>>> a85e8b60d7bb0eeb5d94370e7d8285923510b539
-			"html/nearby/pages/theme.html"
+			"html/nearby/business/signup.html"
 		]
 	},
-	"html/common/login.html": {
+	"html/main.html": {
 		"resources": [
-			"js/common/flexible.js",
-			"css/lib/mui.min.css",
-			"js/common/immersed.js",
-			"css/app/app.css",
-			"js/lib/mui.min.js",
-			"js/dal/user.js",
-			"js/lib/vue.min.js",
-			"fonts/mui.ttf",
-			"js/app/app.js",
-			"js/dal/base.js",
-			"image/common/login_weibo.png",
-			"image/common/login_logo.png",
-			"image/common/login_wechat.png",
-			"image/common/login_account.png",
-			"image/common/login_pwd.png",
-			"image/common/login_qq.png",
-			"js/lib/vue-ni.js",
-			"html/common/reset.html",
-			"js/app/app-rules.js"
+			"html/home/index.html"
 		],
 		"refer": [
-			"html/common/register.html",
-			"html/common/reset.html"
-		]
-	},
-	"html/common/register.html": {
-		"resources": [
-			"css/lib/mui.min.css",
-			"css/app/app.css",
-			"image/common/login_msg.png",
-			"js/common/flexible.js",
-			"js/lib/mui.min.js",
-			"fonts/mui.ttf",
-			"image/common/login_account.png",
-			"js/common/immersed.js",
-			"image/common/login_logo.png",
-			"js/dal/user.js",
-			"js/lib/vue.min.js",
-			"js/app/app.js",
-			"js/dal/base.js",
-			"image/common/login_pwd.png",
-			"image/common/agree_noselect.png",
-			"image/common/agree_selected.png"
-		],
-		"refer": [
-			"html/common/login.html"
-		]
-	},
-	"html/common/reset.html": {
-		"resources": [
-			"css/lib/mui.min.css",
-			"html/common/login.html",
-			"js/lib/mui.min.js",
-			"css/app/app.css",
-			"js/common/flexible.js",
-			"image/common/login_logo.png",
-			"image/common/login_account.png",
-			"image/common/login_pwd.png",
-			"image/common/login_msg.png",
-			"js/common/immersed.js",
-			"js/dal/user.js",
-			"js/lib/vue.min.js",
-			"fonts/mui.ttf",
-			"js/app/app.js",
-			"js/dal/base.js"
-		],
-		"refer": [
-			"html/common/login.html",
-			"html/common/reset2.html"
-		]
-	},
-	"html/common/reset2.html": {
-		"resources": [
-			"css/lib/mui.min.css",
-			"html/common/reset.html",
-			"js/common/immersed.js",
-			"js/dal/user.js",
-			"image/common/login_logo.png",
-			"css/app/app.css",
-			"js/lib/vue.min.js",
-			"js/lib/mui.min.js",
-			"js/common/flexible.js",
-			"fonts/mui.ttf",
-			"image/common/login_account.png",
-			"js/app/app.js",
-			"js/dal/base.js"
-		],
-		"refer": [
-			"html/common/reset.html"
+			"html/home/index.html",
+			"html/nearby/index.html"
 		]
 	},
 	"html/nearby/business/signup.html": {
 		"refer": [
 			"html/public/position.html",
-			"html/public/input.html",
-			"html/public/mailltype.html"
+			"html/public/maps.html",
+			"html/public/mailltype.html",
+			"html/public/input.html"
 		]
 	}
 }

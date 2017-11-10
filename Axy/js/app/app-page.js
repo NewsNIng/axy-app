@@ -15,6 +15,7 @@
 			input: '_www/html/public/input.html',
 			mailltype: '_www/html/public/mailltype.html',
 			city: '_www/html/public/city.html',
+			maps: '_www/html/public/maps.html',
 		},cw = null;
 	
 	// 打开城市选择
@@ -35,6 +36,10 @@
 	// 打开商户类型
 	page.getMailType = function(callback){
 		this.openForResult('mailltype', callback, {});
+	}
+	// 打开地图
+	page.getMaps = function(callback){
+		this.openForResult('maps', callback, {});
 	}
 	
 	page.openForResult = function(name, callback, ex){
