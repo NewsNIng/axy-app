@@ -101,8 +101,13 @@
 				},
 				mounted: function() {
 					document.getElementById("map").style.top = 44 + immersed + "px";
+					
+					
 				},
 				plusReady: function() {
+					
+					document.getElementById("map").style.height = plus.screen.resolutionHeight - 44 - immersed + "px";
+					
 					var ex = {
 						position: 'absolute',
 						zoom: 19
@@ -142,9 +147,13 @@
 				},
 				methods: {
 					initMapEvent: function(){
-						this.map.onclick = function(point){ 
-							this.point = point;
-							this.marker && this.marker.setPoint(point);
+//						this.map.onclick = function(point){ 
+//							this.point = point;
+//							this.marker && this.marker.setPoint(point);
+//						}.bind(this);
+						this.map.onstatuschanged = function(event){
+							console.log(JSON.stringify(event));
+							this.point = event.center;
 						}.bind(this);
 					},
 					initMenu: function() {
@@ -188,6 +197,21 @@
 							size: "18px",
 							color: '#FFFFFF'
 						});
+						
+						
+						var view2 = new plus.nativeObj.View("qiqiuv", {
+							width: "10%",
+							height: "6%",
+							top: "47%",
+							left: "45%",
+							backgroundColor: "rgba(0,0,0,0)"
+							
+						});
+						view2.drawBitmap('qiqiu.png',{
+							
+						}, {
+							
+						}, "qiqiu");
 
 						// 设置view点击事件拦截，指定到按钮
 						view.setTouchEventRect({
@@ -205,21 +229,29 @@
 						}.bind(this));
 
 						this.$view.append(view);
+						this.$view.append(view2);
+						
 						view.show();
+						view2.show();
 						
 						this.view = view;
+						this.view2 = view2;
+						
 
 					},
 					initMap: function(point) {
-						point && this.map.setCenter(point);
+						if(point){
+							this.point = point;
+							this.map.setCenter(point);	
+						}
 						// 新建我的位置
-						var marker = new plus.maps.Marker(point);
+						//var marker = new plus.maps.Marker(point);
 						
-						marker.setIcon("qiqiu.png");
+						//marker.setIcon("qiqiu.png");
 //						var bubble = new plus.maps.Bubble("我的位置");
 //						marker.setBubble(bubble);
-						this.map.addOverlay(marker);
-						this.marker = marker;
+						//this.map.addOverlay(marker);
+						//this.marker = marker;
 						// 新建中心图标位置
 //						var circle = new plus.maps.Circle(point, 25);
 //

@@ -132,7 +132,7 @@
 					// 商户地址
 					function(g, i){
 						app.page.getMaps(function(data) {
-							//this.infoList[g][i].value = data.city;
+							this.infoList[g][i].value = data.address;
 						}.bind(this));
 					},
 					// 商户类型
