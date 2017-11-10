@@ -93,7 +93,7 @@
 				</ul>
 			</template>
 
-			<button type="button" class="mui-btn app-btn-main app-font-size-36">下一步</button>
+			<button type="button" @tap="onNextTap()" class="mui-btn app-btn-main app-font-size-36">下一步</button>
 		</div>
 
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -102,53 +102,86 @@
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript">
 			mui.init();
-			var getInputPage = function(g, i, ex){
-				app.page.getInput(function(data){
-					data.content && (this.infoList[g][i].value = data.content);
-				}.bind(this), ex);
-			}
-			
+			var getInputPage = function(g, i, ex) {
+					app.page.getInput(function(data) {
+						data.content && (this.infoList[g][i].value = data.content);
+					}.bind(this), ex);
+				},
+				getStoreTimePage = function(g, i, ex) {
+					var that = this;
+					var upload_store_time = plus.webview.getWebviewById('upload_store_time');
+					if(!upload_store_time) {
+						app.page.openForResultBy('upload_store_time.html', 'upload_store_time', function(data) {
+							
+						}, ex);
+					} else {
+						upload_store_time.show('pop-in');
+					}
+				};
+
 			var fnArr = [
-							[
-								// 城市选择
-								function(g, i) {
-									app.page.getPosition(function(data) {
-										this.infoList[g][i].value = data.city;
-									}.bind(this));
-								},
-								// 商户名称
-								getInputPage,
-								// 商户地址
-								getInputPage,
-								// 商户类型
-								function(g, i){
-									app.page.getMailType(function(data) {
-										this.infoList[g][i].value = data.value;
-									}.bind(this));
-								},
-							],[
-								// 商户电话
-								getInputPage,
-								// 营业时间
-								function(){},
-								// 营业状态
-								function(){
-									
-								},
-							],[
-								// 店铺照片
-								function(){
-									
-								}
-							],[
-								// 商家介绍
-								function(){
-									
-								}
-							]
-						];
-			
-			
+				[
+					// 城市选择
+					function(g, i) {
+						app.page.getPosition(function(data) {
+							this.infoList[g][i].value = data.city;
+						}.bind(this));
+					},
+					// 商户名称
+					getInputPage,
+					// 商户地址
+					getInputPage,
+					// 商户类型
+					function(g, i) {
+						app.page.getMailType(function(data) {
+							this.infoList[g][i].value = data.value;
+						}.bind(this));
+					},
+				],
+				[
+					// 商户电话
+					getInputPage,
+					// 营业时间
+					getStoreTimePage,
+					// 营业状态
+					getStoreTimePage,
+				],
+				[
+					// 店铺照片
+					function(g, i, ex) {
+						var that = this;
+						var upload_store_pic = plus.webview.getWebviewById('upload_store_pic');
+						if(!upload_store_pic) {
+							app.page.openForResultBy('upload_store_pic.html', 'upload_store_pic', function(data) {
+								that.infoList[g][i].imgList = data.imgList;
+								that.infoList[g][i].value = "已选择" + data.imgList.filter(function(item) {
+									return item !== "";
+								}).length + "张";
+							}, ex);
+						} else {
+							upload_store_pic.show('pop-in');
+						}
+
+					}
+				],
+				[
+					// 商家介绍
+					function(g, i, ex) {
+						var that = this;
+						var upload_store_info = plus.webview.getWebviewById('upload_store_info');
+						if(!upload_store_info) {
+							app.page.openForResultBy('upload_store_info.html', 'upload_store_info', function(data) {
+								that.infoList[g][i].imgList = data.imgList;
+								that.infoList[g][i].t1 = data.t1;
+								that.infoList[g][i].t2 = data.t2;
+								that.infoList[g][i].value = "已填写信息";
+							}, ex);
+						} else {
+							upload_store_info.show('pop-in');
+						}
+					}
+				]
+			];
 
 			new Vue({
 				el: ".mui-content",
@@ -157,39 +190,44 @@
 						tapT: null,
 						infoList: [
 							[{
-								name: "城市",
-								value: "深圳",
-							},{
-								name: "名称",
-								value: "输入商户名称",
-							},
-							{
-								name: "地址",
-								value: "输入商户地址",
-								
-							},{
-								name: "类型",
-								value: "输入商户类型",
-							}],
+									name: "城市",
+									value: "深圳",
+								}, {
+									name: "名称",
+									value: "输入商户名称",
+								},
+								{
+									name: "地址",
+									value: "输入商户地址",
+
+								}, {
+									name: "类型",
+									value: "输入商户类型",
+								}
+							],
 
 							[{
 								name: "商户电话",
 								value: "输入商户电话",
 								r: 'tel'
-							},{
+							}, {
 								name: "营业时间",
 								value: "08:00-20:00",
-							},{
+							}, {
 								name: "营业状态",
 								value: "正在营业",
 							}],
 							[{
 								name: "店铺照片",
-								value: ""
+								imgList: ["", "", ""],
+								value: "请选择"
 							}],
 							[{
 								name: "商家介绍",
-								value: ""
+								imgList: ["", "", ""],
+								t1: "",
+								t2: "",
+								value: "请填写"
 							}]
 						]
 					};
@@ -198,19 +236,31 @@
 				methods: {
 					onItemTap: function(gindex, index, o) {
 						// 防抖
-						if(this.tapT){
+						if(this.tapT) {
 							return;
 						}
-						this.tapT = setTimeout(function(){
+						this.tapT = setTimeout(function() {
 							this.tapT = null;
 						}.bind(this), 200);
 						// 防抖end
-						
+
 						var fn = fnArr[gindex][index];
 						fn && fn.call(this, gindex, index, {
 							title: o.name,
 							tips: o.value,
-							r: o.r
+							r: o.r,
+							t1: o.t1,
+							t2: o.t2,
+							imgList: o.imgList
+						});
+					},
+					onNextTap: function() {
+						mui.openWindow('signup_next.html', 'signup_next', {
+							extras: {
+								info: {
+									city: this.infoList[0][0].value
+								}
+							}
 						});
 					}
 				}
