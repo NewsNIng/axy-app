@@ -428,7 +428,40 @@
 					"html/public/position.html",
 					"html/public/input.html",
 					"html/public/mailltype.html",
-					"html/public/maps.html"
+					"html/public/maps.html",
+					"html/nearby/business/upload_store_info.html",
+					"html/nearby/business/signup_next.html",
+					"html/nearby/business/upload_store_pic.html",
+					"html/nearby/business/upload_store_time.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/business/signup_success.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/store_details.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/business/signup_next.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/signup_success.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/pages/discover.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html",
+					"html/nearby/pages/discover_release.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/pages/list.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/store_details.html"
 				],
 				"priority": 0
 			}
