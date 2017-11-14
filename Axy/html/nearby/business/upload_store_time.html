@@ -8,6 +8,10 @@
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+
 		<style type="text/css">
 			html,
 			body,
@@ -72,26 +76,26 @@
 				background-color: transparent;
 			}
 			
-			
-			.app-switch-main{
+			.app-switch-main {
 				height: 22px;
 				width: 39px;
 			}
 			
-			.mui-switch-handle{
+			.mui-switch-handle {
 				height: 20px !important;
 				width: 20px !important;
 			}
 			
-			
-			.leftname{
+			.leftname {
 				transition-duration: 250ms;
 				transition-property: color;
 			}
-			.allDay .sd{
+			
+			.allDay .sd {
 				pointer-events: none;
 			}
-			.allDay .sd .leftname{
+			
+			.allDay .sd .leftname {
 				color: #808080 !important;
 			}
 		</style>
@@ -99,55 +103,53 @@
 
 	<body>
 		<div id="warpper">
-			
-		
-		<header class="mui-bar mui-bar-nav app-header">
-			<a class="mui-action-back mui-pull-left app-icon-back"></a>
-			<h1 class="mui-title">营业时间</h1>
-			<span @tap="onSaveTap()" class="app-color-white mui-pull-right app-font-size-30" style="line-height: 44px;">保存</span>
-		</header>
-		<div class="mui-content">
-			<div class="tips app-font-size-26">
-				添加每周营业日
-			</div>
-			<div>
-				<ul class="mui-table-view group">
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span class="app-font-size-26 mui-badge"></span>
-							<span class="app-font-size-26 leftname">每周营业日</span>
-						</a>
-					</li>
 
-				</ul>
-			</div>
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back mui-pull-left app-icon-back"></a>
+				<h1 class="mui-title">营业时间</h1>
+				<span @tap="onSaveTap()" class="app-color-white mui-pull-right app-font-size-30" style="line-height: 44px;">保存</span>
+			</header>
+			<div class="mui-content">
+				<div class="tips app-font-size-26">
+					添加每周营业日
+				</div>
+				<div>
+					<ul class="mui-table-view group">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<span class="app-font-size-26 mui-badge"></span>
+								<span class="app-font-size-26 leftname">每周营业日</span>
+							</a>
+						</li>
 
-			<div class="tips app-font-size-26">
-				添加营业时间
-			</div>
-			<div>
-				<ul class="mui-table-view group" :class="allDay?'allDay':''">
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span class="app-font-size-26 mui-badge" style="right: 15px;">
+					</ul>
+				</div>
+
+				<div class="tips app-font-size-26">
+					添加营业时间
+				</div>
+				<div>
+					<ul class="mui-table-view group" :class="allDay?'allDay':''">
+						<li class="mui-table-view-cell">
+							<a class="">
+								<span class="app-font-size-26 mui-badge" style="right: 15px;">
 								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': allDay}" ref="switch">
 								  <div class="mui-switch-handle"></div>
 								</div>
 							</span>
-							<span class="app-font-size-26 leftname">全天24小时</span>
-						</a>
-					</li>
-					<li style="height: 0.266666rem;background-color: #F4F8FB;"></li>
-					<li class="mui-table-view-cell sd" @tap="window.alert(123)">
-						<a class="mui-navigate-right">
-							<span class="app-font-size-26 mui-badge"></span>
-							<span class="app-font-size-26 leftname">营业时段</span>
-						</a>
-					</li>
-					
+								<span class="app-font-size-26 leftname">全天24小时</span>
+							</a>
+						</li>
+						<li style="height: 0.266666rem;background-color: #F4F8FB;"></li>
+						<li class="mui-table-view-cell sd" @tap="onTimeTap()">
+							<a class="mui-navigate-right">
+								<span class="app-font-size-26 mui-badge"></span>
+								<span class="app-font-size-26 leftname">营业时段</span>
+							</a>
+						</li>
 
-				</ul>
-			</div>
+					</ul>
+				</div>
 
 			</div>
 
@@ -157,6 +159,13 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_slot.js" ></script>
+		
+		</script>
+
 		<script type="text/javascript">
 			mui.init({
 				//处理窗口关闭前的业务
@@ -172,25 +181,39 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						allDay: true, // 默认全天
+						allDay: false, // 是否全天
 					};
 				},
 				computed: {
-					
+
 				},
-				mounted: function(){
-					this.$refs.switch.addEventListener("toggle",function(event){
-					  this.allDay = event.detail.isActive;
+				mounted: function() {
+					this.$refs.switch.addEventListener("toggle", function(event) {
+						this.allDay = event.detail.isActive;
 					}.bind(this));
+
+				
+					this.pick = new mui.PopPicker({
+						layer: 2,
+						more: true
+					});
+					this.pick.setData([pick_data, pick_data]);
 				},
 				plusReady: function() {
-					
+
 				},
 				methods: {
-					onSaveTap: function(){
+					onSaveTap: function() {
 						app.page.setResult({
-							
+
 						}).close();
+					},
+					// 营业时段点击
+					onTimeTap: function(){
+						this.pick.show(function(items) {
+							console.log(items[0].text);//
+	   						console.log(items[1].text);// 
+						});
 					}
 				}
 			})

@@ -303,7 +303,9 @@
 					"js/lib/vue.min.js",
 					"js/lib/mui.min.js"
 				],
-				"refer": [],
+				"refer": [
+					"html/smart/scenes/index.html"
+				],
 				"priority": 0
 			},
 			"html/nearby/index.html": {
