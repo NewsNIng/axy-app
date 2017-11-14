@@ -27,7 +27,7 @@
 	 * @param {String} message 验证失败提示的错误 无错误返回null
 	 */
 	rules.test = function(type, value, message){
-		return rules.testBy(_rslesObj[type]);
+		return rules.testBy(_rslesObj[type], value, message);
 	};
 	
 	/**

@@ -454,7 +454,9 @@
 				"resources": [],
 				"refer": [
 					"html/nearby/discover/discover_details.html",
-					"html/nearby/pages/discover_release.html"
+					"html/nearby/pages/discover_release.html",
+					"html/nearby/discover/discover_release.html",
+					"html/person/other.html"
 				],
 				"priority": 0
 			},
@@ -462,6 +464,13 @@
 				"resources": [],
 				"refer": [
 					"html/nearby/business/store_details.html"
+				],
+				"priority": 0
+			},
+			"html/public/position.html": {
+				"resources": [],
+				"refer": [
+					"html/public/city.html"
 				],
 				"priority": 0
 			}
