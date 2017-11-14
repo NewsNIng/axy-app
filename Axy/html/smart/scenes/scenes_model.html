@@ -12,7 +12,7 @@
 			html,
 			body,
 			.mui-content {
-				background-color: white;
+				background-color: #F4F8FB;
 			}
 			
 			.mui-input-row>label {
@@ -39,11 +39,11 @@
 				background-color: #F4F8FB;
 			}
 			
-			.add_conditions {
-				height: 1.626666rem;
+			.trigger_comply {
+				height: 1.386666rem;
 			}
 			
-			.add_icon,
+			.item_icon,
 			.more,
 			.title {
 				position: relative;
@@ -52,10 +52,10 @@
 				-webkit-transform: translateY(-50%);
 			}
 			
-			.add_icon {
+			.item_icon {
 				float: left;
-				width: 0.613333rem;
-				left: 1.04rem;
+				width: 0.48rem;
+				left: 0.346666rem;
 			}
 			
 			.more {
@@ -65,18 +65,42 @@
 			}
 			
 			.title {
-				padding-left: 2.24rem;
-				color: #9F9FA0;
+				padding-left: 1.173333rem;
+				color: #333333;
 			}
 			
-			.app-switch-main{
+			.app-switch-main {
 				height: 22px;
 				width: 39px;
 			}
 			
-			.mui-switch-handle{
+			.mui-switch-handle {
 				height: 20px !important;
 				width: 20px !important;
+			}
+			
+			.mui-input-row,
+			.trigger_comply {
+				background-color: white;
+			}
+			
+			.mui-slider-handle {
+				height: 100%;
+			}
+			
+			.mui-table-view-cell {
+				padding-left: 0;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
 			}
 			
 		</style>
@@ -85,7 +109,7 @@
 	<body>
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">编辑场景</h1>
+			<h1 class="mui-title">回店模式</h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-input-row app-font-size-28">
@@ -96,25 +120,31 @@
 			</div>
 			<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
 			<div class="mui-input-row app-font-size-28">
-				<label>发送消息</label>
+				<label>消息推送</label>
 				<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isSendMsgs}" ref="switch2">
 					<div class="mui-switch-handle"></div>
 				</div>
 			</div>
 			<div class="prompt app-font-size-24">如果触发条件</div>
-			<div class="add_conditions app-font-size-24">
-				<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
+			<div class="trigger_comply app-font-size-24">
+				<img class="item_icon" :src="trigger.img" />
 				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-				<div class="title app-font-size-28">添加条件</div>
+				<div class="title app-font-size-28" v-text="trigger.title"></div>
 			</div>
 			<div class="prompt app-font-size-24">就执行动作</div>
-			<div class="add_conditions app-font-size-24">
-				<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
-				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-				<div class="title app-font-size-28">添加执行动作</div>
+			<template v-for="o,i in complys">
+			<div class="trigger_comply app-font-size-24 mui-table-view-cell">
+				<div class="mui-slider-right mui-disabled">
+					<a class="mui-btn mui-btn-red">删除</a>
+				</div>
+				<div class="mui-slider-handle">
+					<img class="item_icon" :src="o.img" />
+					<div class="title app-font-size-28" v-text="o.title"></div>
+				</div>
 			</div>
-			<div style="height: 1px; background-color: #E5E6E7;"></div>
+			</template>
 		</div>
+		<div class="foot app-font-size-34">添加动作</div>
 
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -142,6 +172,20 @@
 					return {
 						isBackStore: true,
 						isSendMsgs: false,
+						trigger: {
+							title: "智能门锁开启",
+							img: "../../../image/smart/scenes/icon_Lock@3x.png",
+						},
+						complys:[{
+							title: "撤防 | 智能摄像机AX-360",
+							img: "../../../image/smart/scenes/icon_Video camera@3x.png",
+						},{
+							title: "开启 | 智能开关",
+							img: "../../../image/smart/scenes/inon_Intelligent switch@3x.png",
+						},{
+							title: "开启 | 窗帘控制器",
+							img: "../../../image/smart/scenes/icon_Window curtains@3x.png",
+						},],
 					};
 				},
 				mounted: function() {

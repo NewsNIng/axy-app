@@ -210,6 +210,10 @@
 			.mui-content>button.mui-btn {
 				margin-bottom: 0;
 			}
+			
+			.mui-disabled{
+				background-color: red;
+			}
 		</style>
 	</head>
 
@@ -231,7 +235,7 @@
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_msg.png" />
 				<input type="password" class="app-font-size-24" placeholder="请输入短信验证码" v-model="verifycode">
-				<button type="button" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined">发送验证码</button>
+				<button type="button" @tap="getCodeTap()" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined" :class="{'mui-disabled': codeState}" v-text="codeState ? codeTimer: '发送验证码'"></button>
 			</div>
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_pwd.png" />
@@ -285,10 +289,29 @@
 						password: 'abc123',
 						loading: false,
 						user_agree: true, // 用户协议
+						codeState: false,
+						codeTimer: 60,
+						codeT: null,
 					};
 				},
 
 				methods: {
+					getCodeTap: function(){
+						if(this.codeT){return}
+						(function t(c){
+							c.codeT = setTimeout(function(){
+								if(c.codeTimer <= 0){
+									c.codeT = null;
+									c.codeState = false;
+									c.codeTimer = 60;
+									return;
+								}
+								c.codeTimer--;
+								t(c);
+							}, 1000);
+						}(this)); 
+						this.codeState = true;
+					},
 					onLoginTap: function(e) {
 						// 如果正在注册，就直接返回
 						if(this.loading) {
