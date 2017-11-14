@@ -79,5 +79,10 @@
 		"refer": [
 			"html/public/city.html"
 		]
+	},
+	"html/smart/index.html": {
+		"refer": [
+			"html/smart/scenes/index.html"
+		]
 	}
 }

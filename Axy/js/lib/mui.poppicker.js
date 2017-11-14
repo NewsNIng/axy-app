@@ -52,6 +52,7 @@
 			self.options.buttons = self.options.buttons || ['取消', '确定'];
 			self.panel = $.dom(panelBuffer)[0];
 			document.body.appendChild(self.panel);
+			self.more = options.more;
 			self.ok = self.panel.querySelector('.mui-poppicker-btn-ok');
 			self.cancel = self.panel.querySelector('.mui-poppicker-btn-cancel');
 			self.body = self.panel.querySelector('.mui-poppicker-body');
@@ -86,17 +87,20 @@
 			var layer = self.options.layer || 1;
 			var width = (100 / layer) + '%';
 			self.pickers = [];
+			
+			
 			for (var i = 1; i <= layer; i++) {
 				var pickerElement = $.dom(pickerBuffer)[0];
 				pickerElement.style.width = width;
 				self.body.appendChild(pickerElement);
 				var picker = $(pickerElement).picker();
 				self.pickers.push(picker);
-				pickerElement.addEventListener('change', function(event) {
+				self.more || pickerElement.addEventListener('change', function(event) {
 					var nextPickerElement = this.nextSibling;
 					if (nextPickerElement && nextPickerElement.picker) {
 						var eventData = event.detail || {};
 						var preItem = eventData.item || {};
+						
 						nextPickerElement.picker.setItems(preItem.children);
 					}
 				}, false);
@@ -106,7 +110,15 @@
 		setData: function(data) {
 			var self = this;
 			data = data || [];
-			self.pickers[0].setItems(data);
+			if(!self.more){
+				self.pickers[0].setItems(data);
+			}else{
+				data.forEach(function(item, index){
+					self.pickers[index].setItems(item);
+				})
+				//self.dataList = data;
+			}
+			
 		},
 		//获取选中的项（数组）
 		getSelectedItems: function() {
