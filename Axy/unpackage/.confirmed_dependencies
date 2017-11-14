@@ -7,7 +7,8 @@
 			"html/nearby/pages/discover.html",
 			"html/nearby/pages/theme.html",
 			"html/nearby/pages/list.html",
-			"html/nearby/business/signup.html"
+			"html/nearby/business/signup.html",
+			"html/public/position.html"
 		]
 	},
 	"html/main.html": {
@@ -36,7 +37,8 @@
 	},
 	"html/person/index.html": {
 		"refer": [
-			"html/common/login.html"
+			"html/common/login.html",
+			"html/public/position.html"
 		]
 	},
 	"html/common/reset.html": {
@@ -63,12 +65,19 @@
 	"html/nearby/pages/discover.html": {
 		"refer": [
 			"html/nearby/discover/discover_details.html",
-			"html/nearby/pages/discover_release.html"
+			"html/nearby/pages/discover_release.html",
+			"html/nearby/discover/discover_release.html",
+			"html/person/other.html"
 		]
 	},
 	"html/nearby/pages/list.html": {
 		"refer": [
 			"html/nearby/business/store_details.html"
+		]
+	},
+	"html/public/position.html": {
+		"refer": [
+			"html/public/city.html"
 		]
 	}
 }
