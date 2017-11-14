@@ -133,9 +133,10 @@
 			return items;
 		},
 		//显示
-		show: function(callback) {
+		show: function(callback, hideCallBack) {
 			var self = this;
 			self.callback = callback;
+			hideCallBack && (self.hideCallBack = hideCallBack);
 			self.mask.show();
 			document.body.classList.add($.className('poppicker-active-for-page'));
 			self.panel.classList.add($.className('active'));
@@ -149,6 +150,7 @@
 		hide: function() {
 			var self = this;
 			if (self.disposed) return;
+			self.hideCallBack && typeof self.hideCallBack === 'function' && self.hideCallBack(self.getSelectedItems());
 			self.panel.classList.remove($.className('active'));
 			self.mask.close();
 			document.body.classList.remove($.className('poppicker-active-for-page'));
