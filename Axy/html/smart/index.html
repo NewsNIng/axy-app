@@ -16,9 +16,10 @@
 		    <h1 class="mui-title">智慧生活</h1>
 		</header>
 		<div class="mui-content">
-		    <h4 style="width: 10rem; word-break: break-word;line-height: 30px;padding: 20px;">
-		    	{{text}}
-		    </h4>
+			<template v-for='o,i in list'>
+				<button type="button" class="mui-btn app-btn-main" @tap="onButtonTap(o)">{{o.name}}</button>				
+			</template>
+
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
@@ -34,11 +35,22 @@
 				el: ".mui-content",
 				data: function(){
 					return {
-						text: "",
+						list: [
+							{
+								name: '智能场景',
+								href: 'scenes/index.html'
+							},
+							
+						]
 					};
 				},
 				mounted: function(){
 					
+				},
+				methods: {
+					onButtonTap: function(o){
+						mui.openWindow(o.href);
+					}
 				}
 			});
 		</script>

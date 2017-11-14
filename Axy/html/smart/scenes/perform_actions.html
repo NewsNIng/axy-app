@@ -7,7 +7,13 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />
+		
 		<link rel="stylesheet" href="../../../css/app/app.css" />
+		
+		
 		<style type="text/css">
 			html,
 			body,
@@ -15,18 +21,17 @@
 				background-color: #F4F8FB;
 			}
 			
-			.conditions_item {
+			.actions_item {
 				height: 1.386666rem;
 				padding-left: 0.346666rem;
 				background-color: white;
 				/*border-bottom: 1px solid #E5E6E7;*/
 			}
-			
-			.conditions_item:active {
+			.actions_item:active {
 				background-color: #EFEFEF;
 			}
 			
-			.conditions_icon,
+			.actions_icon,
 			.more,
 			.title {
 				position: relative;
@@ -35,7 +40,7 @@
 				-webkit-transform: translateY(-50%);
 			}
 			
-			.conditions_icon {
+			.actions_icon {
 				float: left;
 				width: 0.48rem;
 			}
@@ -50,43 +55,30 @@
 				padding-left: 0.826666rem;
 				color: #333333;
 			}
+			
+			.gray {
+				color: #9F9FA0;
+			}
+			
 		</style>
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">添加触发条件</h1>
+			<h1 class="mui-title">执行动作</h1>
 		</header>
 		<div class="mui-content">
-			<div class="conditions_item app-font-size-28">
-				<img class="conditions_icon" src="../../../image/smart/scenes/icon_Lock@3x.png" />
+			<div class="actions_item app-font-size-28">
+				<img class="actions_icon" src="../../../image/smart/scenes/btn_Selection device@3x.png" />
 				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-				<div class="title app-font-size-28">智能门锁</div>
+				<div class="title app-font-size-28">选择设备</div>
 			</div>
 			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
-			<div class="conditions_item app-font-size-28">
-				<img class="conditions_icon" src="../../../image/smart/scenes/icon_Timing start@3x.png" />
-				<!--<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />-->
-				<div class="title app-font-size-28">定时启动</div>
-			</div>
-			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
-			<div class="conditions_item app-font-size-28">
-				<img class="conditions_icon" src="../../../image/smart/scenes/icon_Environmental induction@3x.png" />
-				<!--<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />-->
-				<div class="title app-font-size-28">环境感应</div>
-			</div>
-			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
-			<div class="conditions_item app-font-size-28">
-				<img class="conditions_icon" src="../../../image/smart/scenes/icon_Human body induction@3x.png" />
-				<!--<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />-->
-				<div class="title app-font-size-28">人体感应</div>
-			</div>
-			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
-			<div class="conditions_item app-font-size-28">
-				<img class="conditions_icon" src="../../../image/smart/scenes/incon_Carbon monoxide@3x.png" />
-				<!--<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />-->
-				<div class="title app-font-size-28">一氧化碳感应</div>
+			<div class="actions_item app-font-size-28">
+				<img class="actions_icon" src="../../../image/smart/scenes/icon_Timing start@3x.png" />
+				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				<div @tap="onPickTap()" class="title app-font-size-28">延迟设置</div>
 			</div>
 			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
 		</div>
@@ -107,10 +99,22 @@
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
-
+		
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js" ></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js" ></script>
+		<script type="text/javascript" src="arr.js" ></script>
 		<script type="text/javascript">
 			mui.init();
-
+			
+			(function($, w){
+				$.ready(function(){
+					w.userPicker = new $.PopPicker({
+						layer: 2
+					});
+					userPicker.setData(pickdata);
+				});
+			}(mui, window));
+			
 			new Vue({
 				el: '.mui-content',
 				data: function() {
@@ -120,7 +124,16 @@
 				},
 				plusReady: function() {},
 				methods: {
-
+					onPickTap: function(){
+						
+						window.userPicker.show(function(items) {
+							var m = items[0].value;
+							var s = items[1].value;
+							console.log(m * 60 + s);
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+					}
 				}
 			});
 		</script>
