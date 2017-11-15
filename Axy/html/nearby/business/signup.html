@@ -112,7 +112,8 @@
 					var upload_store_time = plus.webview.getWebviewById('upload_store_time');
 					if(!upload_store_time) {
 						app.page.openForResultBy('upload_store_time.html', 'upload_store_time', function(data) {
-							
+							that.infoList[1][1].value = data.week + " " + data.time;
+							that.infoList[1][2].value = data.onLine ? "正在营业": "暂停营业";
 						}, ex);
 					} else {
 						upload_store_time.show('pop-in');

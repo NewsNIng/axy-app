@@ -1,0 +1,27 @@
+.mui-poppicker-header {
+  background-color: #FFFFFF;
+}
+.mui-poppicker-header .mui-btn {
+  background-color: #FFFFFF;
+  border: none;
+  color: #333333;
+  padding: 5px 20px;
+}
+.mui-poppicker-header .mui-btn.mui-poppicker-btn-ok {
+  color: #2BB8AA;
+}
+.mui-poppicker {
+  border: none;
+}
+.mui-poppicker-body {
+  border: none;
+}
+.mui-picker {
+  background-color: #FAFAFA;
+}
+.mui-picker-rule-ft {
+  border: none;
+}
+.mui-pciker-list li.highlight {
+  color: #2BB8AA;
+}
