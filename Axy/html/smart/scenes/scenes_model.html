@@ -102,7 +102,6 @@
 				bottom: 0;
 				background-color: #06c1ae;
 			}
-			
 		</style>
 	</head>
 
@@ -133,15 +132,15 @@
 			</div>
 			<div class="prompt app-font-size-24">就执行动作</div>
 			<template v-for="o,i in complys">
-			<div class="trigger_comply app-font-size-24 mui-table-view-cell">
-				<div class="mui-slider-right mui-disabled">
-					<a class="mui-btn mui-btn-red">删除</a>
+				<div class="trigger_comply app-font-size-24 mui-table-view-cell">
+					<div class="mui-slider-right mui-disabled">
+						<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
+					</div>
+					<div class="mui-slider-handle">
+						<img class="item_icon" :src="o.img" />
+						<div class="title app-font-size-28" v-text="o.title"></div>
+					</div>
 				</div>
-				<div class="mui-slider-handle">
-					<img class="item_icon" :src="o.img" />
-					<div class="title app-font-size-28" v-text="o.title"></div>
-				</div>
-			</div>
 			</template>
 		</div>
 		<div class="foot app-font-size-34">添加动作</div>
@@ -176,16 +175,16 @@
 							title: "智能门锁开启",
 							img: "../../../image/smart/scenes/icon_Lock@3x.png",
 						},
-						complys:[{
+						complys: [{
 							title: "撤防 | 智能摄像机AX-360",
 							img: "../../../image/smart/scenes/icon_Video camera@3x.png",
-						},{
+						}, {
 							title: "开启 | 智能开关",
 							img: "../../../image/smart/scenes/inon_Intelligent switch@3x.png",
-						},{
+						}, {
 							title: "开启 | 窗帘控制器",
 							img: "../../../image/smart/scenes/icon_Window curtains@3x.png",
-						},],
+						}, ],
 					};
 				},
 				mounted: function() {
@@ -198,7 +197,12 @@
 				},
 				plusReady: function() {},
 				methods: {
-
+					onDelete: function(i, e) {
+						console.log(e);
+						mui.swipeoutClose(e.target.parentNode.parentNode);
+						this.complys.splice(i, 1);
+						//						this.complys.$remove
+					}
 				}
 			});
 		</script>

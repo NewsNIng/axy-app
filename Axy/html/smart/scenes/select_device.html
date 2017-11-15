@@ -14,9 +14,11 @@
 			.mui-content {
 				background-color: #F4F8FB;
 			}
+			
 			.mui-icon>img {
 				width: 0.613333rem;
 			}
+			
 			.app-switch-main {
 				height: 22px;
 				width: 39px;
@@ -28,19 +30,22 @@
 				height: 20px !important;
 				width: 20px !important;
 			}
+			
 			.device_item {
-				height: 2.386666rem;
+				height: 1.2rem;
 				padding-left: 0.346666rem;
 				background-color: white;
-				margin-bottom: 0.266666rem;
-				/*border-bottom: 1px solid #E5E6E7;*/
+			}
+			
+			.device_item:active {
+				background-color: #EFEFEF;
 			}
 			
 			/*.device_item:active {
 				background-color: #EFEFEF;
 			}*/
+			/*.device_icon,*/
 			
-			.device_icon,
 			.more,
 			.title {
 				position: relative;
@@ -48,11 +53,10 @@
 				transform: translateY(-50%);
 				-webkit-transform: translateY(-50%);
 			}
-			
-			.device_icon {
+			/*.device_icon {
 				float: left;
 				width: 0.48rem;
-			}
+			}*/
 			
 			.more {
 				float: right;
@@ -61,39 +65,82 @@
 			}
 			
 			.title {
-				padding-left: 0.826666rem;
+				padding-left: 0.88rem;
 				color: #333333;
 			}
 			
+			.device {
+				height: 1.626666rem;
+				background-color: white;
+			}
 			
+			.main_bg {
+				margin-bottom: 0.266666rem;
+			}
 			
+			.main {
+				padding: 0.373333rem 0.346666rem 0.373333rem 0;
+				margin-left: 0.346666rem;
+				height: 100%;
+				border-bottom: 1px solid #E5E6E7;
+				position: relative;
+			}
 			
+			.main>label {
+				padding: 0 0 0 0.373333rem;
+				color: #333333;
+			}
 			
+			.main>img {
+				float: left;
+				width: 0.506666rem;
+			}
+			
+			.status {
+				/*display: block;*/
+				/*clear: both;*/
+				position: absolute;
+				margin-left: 0.88rem;
+				color: #9F9FA0;
+				bottom: 0.373333rem;
+				line-height: 1;
+			}
 		</style>
 	</head>
 
 	<body>
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">设置触发条件</h1>
+			<h1 class="mui-title">智能安全</h1><h1 class="mui-title">智能安全</h1><h1 class="mui-title">智能安全</h1>
 			<a class="mui-icon mui-pull-right">
 				<img src="../../../image/smart/scenes/complete_icon.png" />
 			</a>
 		</header>
 		<div class="mui-content">
-			<div class="device_item mui-input-row app-font-size-28">
-				<img class="device_icon" src="../../../image/smart/scenes/icon_Timing start@3x.png"/>
-				<label class="title">回店模式</label>
-				<div class="title mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isTimingSetting}" ref="switch1">
-					<div class="mui-switch-handle"></div>
+			<template v-for="o in mainDevices">
+				<div class="main_bg">
+					<div class="device mui-input-row app-font-size-28">
+						<div class="main">
+							<img class="" :src="o.img" />
+							<label class="app-font-size-28">{{o.name}}</label>
+							<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': o.isOpen}" ref="switch1">
+								<div class="mui-switch-handle"></div>
+							</div>
+							<div class="status app-font-size-24">
+								{{o.status}}
+							</div>
+						</div>
+					</div>
+					<template v-for="p,i in o.fittings">
+						<div class="device_item app-font-size-28">
+							<!--<img class="device_icon" src="../../../image/smart/scenes/icon_Lock@3x.png" />-->
+							<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+							<div class="title">{{p.name}}</div>
+						</div>
+						<div style="height: 1px; background-color: #E5E6E7; margin-left: 0.346666rem;" v-if="!(i === o.fittings.length - 1)"></div>
+					</template>
 				</div>
-			</div>
-			<div class="device_item app-font-size-28">
-				<img class="device_icon" src="../../../image/smart/scenes/icon_Lock@3x.png" />
-				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-				<div class="title app-font-size-28">智能门锁</div>
-			</div>
-			<div style="background-color: white;height: 2rem;"></div>
+			</template>
 		</div>
 
 		<!--沉浸式动态处理-->
@@ -120,7 +167,37 @@
 				el: '.mui-content',
 				data: function() {
 					return {
-						isTimingSetting: true,
+						mainDevices: [{
+							name: "智能主机1",
+							status: "设备工作中",
+							img: "../../../image/smart/scenes/btn_Air conditioner@3x.png",
+							isOpen: true,
+							fittings: [{
+								name: "智能配件a",
+							}],
+						}, {
+							name: "智能主机2",
+							status: "设备工作中",
+							img: "../../../image/smart/scenes/btn_Air conditioner@3x.png",
+							isOpen: false,
+							fittings: [{
+								name: "智能配件a",
+							}, {
+								name: "智能配件b",
+							}, {
+								name: "智能配件c",
+							}],
+						}, {
+							name: "智能主机3",
+							status: "设备工作中",
+							img: "../../../image/smart/scenes/btn_Air conditioner@3x.png",
+							isOpen: true,
+							fittings: [{
+								name: "智能配件a",
+							}, {
+								name: "智能配件b",
+							}],
+						}]
 					};
 				},
 				plusReady: function() {},
