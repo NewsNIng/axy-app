@@ -11,6 +11,8 @@
 
 		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
 		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 
 		<style type="text/css">
 			html,
@@ -98,6 +100,12 @@
 			.allDay .sd .leftname {
 				color: #808080 !important;
 			}
+			
+			
+			
+			
+			
+			
 		</style>
 	</head>
 
@@ -115,9 +123,9 @@
 				</div>
 				<div>
 					<ul class="mui-table-view group">
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell" @tap="onWeekTap()">
 							<a class="mui-navigate-right">
-								<span class="app-font-size-26 mui-badge"></span>
+								<span class="app-font-size-26 mui-badge" v-text="week_str"></span>
 								<span class="app-font-size-26 leftname">每周营业日</span>
 							</a>
 						</li>
@@ -143,7 +151,7 @@
 						<li style="height: 0.266666rem;background-color: #F4F8FB;"></li>
 						<li class="mui-table-view-cell sd" @tap="onTimeTap()">
 							<a class="mui-navigate-right">
-								<span class="app-font-size-26 mui-badge"></span>
+								<span class="app-font-size-26 mui-badge" v-text="time_str"></span>
 								<span class="app-font-size-26 leftname">营业时段</span>
 							</a>
 						</li>
@@ -163,7 +171,7 @@
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_slot.js" ></script>
-		
+		<script type="text/javascript" src="../../../js/data/time_week.js" ></script>
 		</script>
 
 		<script type="text/javascript">
@@ -182,10 +190,16 @@
 				data: function() {
 					return {
 						allDay: false, // 是否全天
+						week_str: '',
+						week_index: 0,
+						time_str: '',
+						time_index: 0,
 					};
 				},
 				computed: {
-
+					onLine: function(){
+						return false;
+					}
 				},
 				mounted: function() {
 					this.$refs.switch.addEventListener("toggle", function(event) {
@@ -198,22 +212,38 @@
 						more: true
 					});
 					this.pick.setData([pick_data, pick_data]);
+					
+					
+					this.pick_week = new mui.PopPicker({
+						layer: 2,
+						more: true
+					});
+					this.pick_week.setData([pick_data_week, pick_data_week]);
+					
+					this.onTimeTap();
 				},
 				plusReady: function() {
-
+					
 				},
 				methods: {
 					onSaveTap: function() {
 						app.page.setResult({
-
+							week: this.week_str,
+							time: this.time_str,
+							onLine: this.onLine
 						}).close();
+					},
+					// 营业周点击
+					onWeekTap: function(){
+						this.pick_week.show(function(items) {
+	   						this.week_str = items[0].text + ' - ' + items[1].text;
+						}.bind(this));
 					},
 					// 营业时段点击
 					onTimeTap: function(){
 						this.pick.show(function(items) {
-							console.log(items[0].text);//
-	   						console.log(items[1].text);// 
-						});
+							this.time_str = items[0].text + ' - ' + items[1].text;
+						}.bind(this));
 					}
 				}
 			})
