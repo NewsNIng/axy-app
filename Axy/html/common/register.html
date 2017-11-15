@@ -211,9 +211,6 @@
 				margin-bottom: 0;
 			}
 			
-			.mui-disabled{
-				background-color: red;
-			}
 		</style>
 	</head>
 
@@ -234,7 +231,7 @@
 
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_msg.png" />
-				<input type="password" class="app-font-size-24" placeholder="请输入短信验证码" v-model="verifycode">
+				<input type="tel" class="app-font-size-24" placeholder="请输入短信验证码" v-model="verifycode">
 				<button type="button" @tap="getCodeTap()" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined" :class="{'mui-disabled': codeState}" v-text="codeState ? codeTimer: '发送验证码'"></button>
 			</div>
 			<div class="mui-input-row app-font-size-30">
@@ -292,12 +289,26 @@
 						codeState: false,
 						codeTimer: 60,
 						codeT: null,
+						codeNumber: "", // 验证码
 					};
 				},
 
 				methods: {
 					getCodeTap: function(){
 						if(this.codeT){return}
+						
+						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误");
+						if(errorMessage){
+							return mui.toast(errorMessage);
+						}
+						// 发送获取验证码的请求
+						dal.user.getCode(this.username, function(err, data){
+							if(err){
+								return mui.toast(JSON.stringify(err));
+							}
+							this.codeNumber = data.validcode;
+						}.bind(this));
+						
 						(function t(c){
 							c.codeT = setTimeout(function(){
 								if(c.codeTimer <= 0){
@@ -321,14 +332,19 @@
 						var that = this;
 						
 						
-//						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误") ||
-//								 		   app.rules.test("pwd", this.password, "密码输入错误") || 
-//								 		   app.rules.test("code", this.verifycode, "验证码格式错误");
+						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误") ||
+								 		   app.rules.test("pwd", this.password, "密码输入错误") || 
+								 		   app.rules.test("code", this.verifycode, "验证码格式错误");
 						
-//						if(errorMessage){
-//							return mui.toast(errorMessage);
-//						}
-//						
+						if(errorMessage){
+							return mui.toast(errorMessage);
+						}
+						
+						// 验证验证码
+						if(this.verifycode !== this.codeNumber){
+							return mui.toast('验证码错误');
+						}
+						
 						// 更新注册状态
 						this.loading = true;
 						
@@ -360,6 +376,9 @@
 				watch: {
 					loading: function(newVal, oldVal) {
 						mui('#loginBtn').button(newVal ? "loading" : "reset");
+					},
+					username: function(){
+						this.codeNumber = "";
 					}
 				}
 

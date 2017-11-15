@@ -33,9 +33,22 @@
 	 * @param {String} telphone 手机号
 	 * @param {Function} callback 回调函数
 	 */
-	user.getCode = function(telphone, callback){
-		return ra("get", "/getCode", {
-			telphone: telphone
+	user.getCode = function(account, callback){
+		return ra("get", "/user/validcode/" + account , {
+		}, callback);
+	}
+	
+	
+	/**
+	 * 重置密码
+	 * @param {String} account 手机号
+	 * @param {String} passwd 新密码
+	 * @param {Function} callback 回调函数
+	 */
+	user.resetpwd = function(account, passwd, callback){
+		return ra("post", "/user/resetpwd/", {
+			account: account,
+			passwd: passwd
 		}, callback);
 	}
 	

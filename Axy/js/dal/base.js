@@ -56,7 +56,14 @@ var dal = {};
 
 // 统一请求 适配器
 function requestAdapter(type, url, params, callback){
-	return mui.ajax("http://192.168.1.213:8080/dswweb/vihiapi" + url,{
+	url = "http://192.168.1.213:8080/dswweb/vihiapi" + url;
+	params.datatime = +(new Date());
+	
+	
+	console.log("["+type+"]" +url);
+	console.log(JSON.stringify(params));
+	
+	return mui.ajax(url ,{
 		data: params,
 		type: type,
 		success: function(data){

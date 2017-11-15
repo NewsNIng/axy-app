@@ -43,7 +43,8 @@
 	},
 	"html/common/reset.html": {
 		"refer": [
-			"html/common/login.html"
+			"html/common/login.html",
+			"html/common/reset2.html"
 		]
 	},
 	"html/common/login.html": {

@@ -210,8 +210,8 @@
 
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_msg.png" />
-				<input type="password" class="app-font-size-24" placeholder="请输入短信验证码" v-model="verifycode">
-				<button type="button" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined">发送验证码</button>
+				<input type="tel" class="app-font-size-24" placeholder="请输入短信验证码" v-model="verifycode">
+				<button type="button" @tap="getCodeTap()" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined" :class="{'mui-disabled': codeState}" v-text="codeState ? codeTimer: '发送验证码'"></button>
 			</div>
 			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="请稍后..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">下一步</button>
 		</div>
@@ -225,6 +225,8 @@
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init()
 
@@ -232,14 +234,47 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						username: '',
-						verifycode: '',
+						username: '17620391022',
+						verifycode: '499447',
 						loading: false,
 						user_agree: false, // 用户协议
+						codeState: false,
+						codeTimer: 60,
+						codeT: null,
+						codeNumber: "", // 验证码
 					};
 				},
 
 				methods: {
+					getCodeTap: function(){
+						if(this.codeT){return}
+						
+						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误");
+						if(errorMessage){
+							return mui.toast(errorMessage);
+						}
+						// 发送获取验证码的请求
+						dal.user.getCode(this.username, function(err, data){
+							if(err){
+								return mui.toast(JSON.stringify(err));
+							}
+							this.codeNumber = data.validcode;
+						}.bind(this));
+						
+						(function t(c){
+							c.codeT = setTimeout(function(){
+								if(c.codeTimer <= 0){
+									c.codeT = null;
+									c.codeState = false;
+									c.codeTimer = 60;
+									return;
+								}
+								c.codeTimer--;
+								t(c);
+							}, 1000);
+						}(this)); 
+						this.codeState = true;
+					},
 					onLoginTap: function(e) {
 						if(this.loading) {
 							return;
@@ -247,14 +282,19 @@
 
 						var that = this;
 
-						this.loading = true;
-						// 是否验证 规范
-
-						dal.user.login(this.username, this.password, function(data) {
-
-//							mui.openWindow("reset2.html");
-							plus.webview.currentWebview().loadURL("reset2.html");
-							that.loading = false;
+						//this.loading = true;
+						
+						// 验证验证码
+						if(this.verifycode !== this.codeNumber){
+							//this.loading = false;
+							return mui.toast('验证码错误');
+						}
+						
+						mui.openWindow('reset2.html','reset2', {
+							extras: {
+								account: this.username	
+							}
+							
 						});
 
 					}
@@ -262,6 +302,9 @@
 				watch: {
 					loading: function(newVal, oldVal) {
 						mui('#loginBtn').button(newVal ? "loading" : "reset");
+					},
+					username: function(){
+						this.codeNumber = "";
 					}
 				}
 

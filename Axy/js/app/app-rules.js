@@ -7,7 +7,7 @@
 	var _rslesObj = {
 		tel: /^1\d{10}$/,
 		pwd: /^[a-zA-Z]\w{5,17}$/,
-		code: /^\d{4}$/
+		code: /^\d{6}$/
 	};
 	
 	

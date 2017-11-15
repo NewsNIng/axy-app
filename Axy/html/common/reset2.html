@@ -205,7 +205,7 @@
 
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_account.png" />
-				<input type="password" class="app-font-size-24" placeholder="请重新设置登录密码" v-model="username">
+				<input type="password" class="app-font-size-24" placeholder="请重新设置登录密码" v-model="pwd">
 			</div>
 
 			<!--<div class="mui-input-row app-font-size-30">
@@ -236,6 +236,8 @@
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init()
 
@@ -243,11 +245,15 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						username: '',
-						verifycode: '',
+						uname: '',
+						pwd: '',
 						loading: false,
-						user_agree: false, // 用户协议
 					};
+				},
+				
+				plusReady: function(){
+					this.uname = this.$view.account;
+					console.log(this.uname);
 				},
 
 				methods: {
@@ -258,12 +264,19 @@
 
 						var that = this;
 
+						
+						// 验证 规范
+						var errorMessage = app.rules.test("pwd", this.pwd, "密码输入错误");
+						if(errorMessage){
+							return mui.toast(errorMessage);
+						}
 						this.loading = true;
-						// 是否验证 规范
-
-						dal.user.login(this.username, this.password, function(data) {
-
+						
+						dal.user.resetpwd(this.uname, this.pwd, function(err, data) {
 							that.loading = false;
+							if(err){
+								return mui.toast(JSON.stringify(err));
+							}
 							mui.toast("密码设置成功！");
 						});
 

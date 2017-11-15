@@ -266,11 +266,11 @@
 							mui.toast("登录成功");
 							console.log(JSON.stringify(data));
 							// 保存用户信息
-							// app.user.set(data);
+							 app.user.set(data);
 							
 							// 发出一个通知
 							new that.$Broadcast().emit("login_success", {
-								say: 'Hello'
+								userInfo: data
 							});
 							
 							// 跳转到首页
