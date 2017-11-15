@@ -7,10 +7,10 @@
 	 * @param {String} password 密码
 	 * @param {Function} callback 请求回调函数
 	 */
-	user.login = function(username, password, callback){
-		return ra("get", "/login", {
-			username: username,
-			password: password
+	user.login = function(account, passwd, callback){
+		return ra("post", "/user/login", {
+			account: account,
+			passwd: passwd
 		},callback);
 	}
 	
@@ -20,10 +20,10 @@
 	 * @param {String} code 验证码
 	 * @param {Function} callback 请求回调函数
 	 */
-	user.reg = function(username, password, code, callback){
-		return ra("get", "/reg", {
-			username: username,
-			password: password,
+	user.reg = function(account, passwd, code, callback){
+		return ra("post", "/user/register", {
+			account: account,
+			passwd: passwd,
 			code: code
 		},callback);
 	}

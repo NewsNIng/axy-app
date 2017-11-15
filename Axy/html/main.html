@@ -169,7 +169,7 @@
 						
 						mui.toast("version: " + appVersion);
 						
-						dal.system.update(appVersion, function(err, data){
+						false && dal.system.update(appVersion, function(err, data){
 							if(err){
 								return mui.toast(err.message);
 							}
