@@ -321,14 +321,14 @@
 						var that = this;
 						
 						
-						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误") ||
-								 		   app.rules.test("pwd", this.password, "密码输入错误") || 
-								 		   app.rules.test("code", this.verifycode, "验证码格式错误");
+//						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误") ||
+//								 		   app.rules.test("pwd", this.password, "密码输入错误") || 
+//								 		   app.rules.test("code", this.verifycode, "验证码格式错误");
 						
-						if(errorMessage){
-							return mui.toast(errorMessage);
-						}
-						
+//						if(errorMessage){
+//							return mui.toast(errorMessage);
+//						}
+//						
 						// 更新注册状态
 						this.loading = true;
 						
