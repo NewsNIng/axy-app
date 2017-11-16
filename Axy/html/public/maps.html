@@ -52,11 +52,13 @@
 					return {
 						address: "",
 						where: "",
-						point: {}
+						point: {},
+						longitud: "",
+						latitude: ""
 					};
 				},
 				watch: {
-					where: function(value){
+					where: function(value) {
 						this.view && this.view.drawText(value, {
 
 							height: "30%",
@@ -71,7 +73,7 @@
 							size: "18px",
 						}, "where");
 					},
-					address: function(value){
+					address: function(value) {
 						this.view && this.view.drawText(value, {
 							height: "30%",
 							width: "80%",
@@ -87,11 +89,13 @@
 							color: "#808080"
 						}, "address");
 					},
-					point: function(value){
-						plus.maps.Map.reverseGeocode(value, {}, function(p){
+					point: function(value) {
+						plus.maps.Map.reverseGeocode(value, {}, function(p) {
 							console.log(JSON.stringify(p));
 							this.address = p.address;
-						}.bind(this), function(err){
+							this.longitude = p.coord.longitude;
+							this.latitude = p.coord.latitude;
+						}.bind(this), function(err) {
 							mui.toast(JSON.stringify(err));
 						});
 					},
@@ -101,28 +105,27 @@
 				},
 				mounted: function() {
 					document.getElementById("map").style.top = 44 + immersed + "px";
-					
-					
+
 				},
 				plusReady: function() {
-					
+
 					document.getElementById("map").style.height = plus.screen.resolutionHeight - 44 - immersed + "px";
-					
+
 					var ex = {
 						position: 'absolute',
 						zoom: 19
 					};
-					if(this.$view.point){
+					if(this.$view.point) {
 						ex.center = this.$view.point
 					}
-					
+
 					// 新建地图对象
 					this.map = new plus.maps.Map("map", ex);
-					
+
 					this.map.showUserLocation(true);
-					
+
 					var _getLocation = function(n, callback) {
-						if(this.$view.point){
+						if(this.$view.point) {
 							return callback(this.$view.point);
 						}
 						if(n <= 0) {
@@ -139,19 +142,19 @@
 
 					_getLocation(ex.center ? 0 : 3, function(point) {
 						this.initMap(point);
-//						this.initSearch(point);
+						//						this.initSearch(point);
 						this.initMenu();
 						this.initMapEvent();
 					}.bind(this));
 
 				},
 				methods: {
-					initMapEvent: function(){
-//						this.map.onclick = function(point){ 
-//							this.point = point;
-//							this.marker && this.marker.setPoint(point);
-//						}.bind(this);
-						this.map.onstatuschanged = function(event){
+					initMapEvent: function() {
+						//						this.map.onclick = function(point){ 
+						//							this.point = point;
+						//							this.marker && this.marker.setPoint(point);
+						//						}.bind(this);
+						this.map.onstatuschanged = function(event) {
 							console.log(JSON.stringify(event));
 							this.point = event.center;
 						}.bind(this);
@@ -197,20 +200,19 @@
 							size: "18px",
 							color: '#FFFFFF'
 						});
-						
-						
+
 						var view2 = new plus.nativeObj.View("qiqiuv", {
 							width: "10%",
 							height: "6%",
 							top: "47%",
 							left: "45%",
 							backgroundColor: "rgba(0,0,0,0)"
-							
+
 						});
-						view2.drawBitmap('../../image/qiqiu.png',{
-							
+						view2.drawBitmap('../../image/qiqiu.png', {
+
 						}, {
-							
+
 						}, "qiqiu");
 
 						// 设置view点击事件拦截，指定到按钮
@@ -224,48 +226,46 @@
 						// 添加点击事件
 						view.addEventListener('click', function() {
 							app.page.setResult({
-								address: this.address
+								address: this.address,
+								longitude: this.longitude,
+								latitude: this.latitude
 							}).close();
 						}.bind(this));
 
 						this.$view.append(view);
 						this.$view.append(view2);
-						
+
 						view.show();
 						view2.show();
-						
+
 						this.view = view;
 						this.view2 = view2;
-						
 
 					},
 					initMap: function(point) {
-						if(point){
+						if(point) {
 							this.point = point;
-							this.map.setCenter(point);	
+							this.map.setCenter(point);
 						}
 						// 新建我的位置
 						//var marker = new plus.maps.Marker(point);
-						
+
 						//marker.setIcon("qiqiu.png");
-//						var bubble = new plus.maps.Bubble("我的位置");
-//						marker.setBubble(bubble);
+						//						var bubble = new plus.maps.Bubble("我的位置");
+						//						marker.setBubble(bubble);
 						//this.map.addOverlay(marker);
 						//this.marker = marker;
 						// 新建中心图标位置
-//						var circle = new plus.maps.Circle(point, 25);
-//
-//						circle.setFillColor('#2BB8AA');
-//						circle.setFillOpacity(0.15);
-//
-//						circle.setLineWidth(1);
-//						circle.setStrokeColor('#2BB8AA')
-//						circle.setStrokeOpacity(0.25);
-//
-//						this.map.addOverlay(circle);
-						
-						
-						
+						//						var circle = new plus.maps.Circle(point, 25);
+						//
+						//						circle.setFillColor('#2BB8AA');
+						//						circle.setFillOpacity(0.15);
+						//
+						//						circle.setLineWidth(1);
+						//						circle.setStrokeColor('#2BB8AA')
+						//						circle.setStrokeOpacity(0.25);
+						//
+						//						this.map.addOverlay(circle);
 
 					},
 					initSearch: function(point) {

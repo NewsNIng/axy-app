@@ -1,1 +1,1 @@
-var pick_data_week = [{"text":"周一","value":0},{"text":"周二","value":1},{"text":"周三","value":2},{"text":"周四","value":3},{"text":"周五","value":4},{"text":"周六","value":5},{"text":"周日","value":6}]
+var pick_data_week = [{"text":"周一","value":1},{"text":"周二","value":2},{"text":"周三","value":3},{"text":"周四","value":4},{"text":"周五","value":5},{"text":"周六","value":6},{"text":"周日","value":7}]

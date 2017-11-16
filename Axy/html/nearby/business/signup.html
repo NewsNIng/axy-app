@@ -85,7 +85,7 @@
 				<ul class="mui-table-view group">
 					<li class="mui-table-view-cell" v-for="o,i in g" @tap="onItemTap(gi, i, o)">
 						<a class="mui-navigate-right">
-							<span class="app-font-size-26 mui-badge">{{o.value}}</span>
+							<span class="app-font-size-26 mui-badge">{{o.value || o.tips}}</span>
 							<span class="app-font-size-26 leftname">{{o.name}}</span>
 						</a>
 					</li>
@@ -100,6 +100,8 @@
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/store.js"></script>
 		<script type="text/javascript">
 			mui.init();
 			var getInputPage = function(g, i, ex) {
@@ -113,7 +115,13 @@
 					if(!upload_store_time) {
 						app.page.openForResultBy('upload_store_time.html', 'upload_store_time', function(data) {
 							that.infoList[1][1].value = data.week + " " + data.time;
-							that.infoList[1][2].value = data.onLine ? "正在营业": "暂停营业";
+							that.infoList[1][1].startweek = data.startweek;
+							that.infoList[1][1].endtweek = data.endtweek;
+							that.infoList[1][1].starttime = data.starttime;
+							that.infoList[1][1].endtime = data.endtime;
+
+							that.infoList[1][2].onlinestate = data.onLine;
+							that.infoList[1][2].tips = data.onLine ? "正在营业" : "暂停营业";
 						}, ex);
 					} else {
 						upload_store_time.show('pop-in');
@@ -131,9 +139,11 @@
 					// 商户名称
 					getInputPage,
 					// 商户地址
-					function(g, i){
+					function(g, i) {
 						app.page.getMaps(function(data) {
 							this.infoList[g][i].value = data.address;
+							this.infoList[g][i].longitude = data.longitude;
+							this.infoList[g][i].latitude = data.latitude;
 						}.bind(this));
 					},
 					// 商户类型
@@ -197,42 +207,59 @@
 							[{
 									name: "城市",
 									value: "深圳",
+									tips: '请选择城市',
 								}, {
+
 									name: "名称",
-									value: "输入商户名称",
+									value: "",
+									tips: '输入商户名称',
 								},
 								{
 									name: "地址",
-									value: "输入商户地址",
+									tips: '输入商户地址',
+									value: "",
+									longitude: "",
+									latitude: "",
 
 								}, {
 									name: "类型",
-									value: "输入商户类型",
+									value: "",
+									tips: '输入商户类型',
 								}
 							],
 
 							[{
 								name: "商户电话",
-								value: "输入商户电话",
+								tips: '输入商户电话',
+								value: "",
 								r: 'tel'
 							}, {
 								name: "营业时间",
-								value: "08:00-20:00",
+								value: "00:00-24:00",
+								tips: '',
+								startweek: 1,
+								endtweek: 7,
+								starttime: 0,
+								endtime: 24,
 							}, {
 								name: "营业状态",
-								value: "正在营业",
+								value: "",
+								tips: '正在营业',
+								onlinestate: true,
 							}],
 							[{
 								name: "店铺照片",
-								imgList: ["", "", ""],
-								value: "请选择"
+								imgList: ['', '', ''],
+								tips: '请选择',
+								value: '',
 							}],
 							[{
 								name: "商家介绍",
 								imgList: ["", "", ""],
 								t1: "",
 								t2: "",
-								value: "请填写"
+								tips: '请填写',
+								value: ""
 							}]
 						]
 					};
@@ -260,13 +287,77 @@
 						});
 					},
 					onNextTap: function() {
-						mui.openWindow('signup_next.html', 'signup_next', {
-							extras: {
-								info: {
-									city: this.infoList[0][0].value
+
+						// 收集信息
+//						var o = this._generateInfo();
+						var w = plus.nativeUI.showWaiting('正在提交信息...');
+												
+												var o = {
+						"account":"zttest",
+						"city": "深圳",
+						"name": "爱情海",
+						"address": "广东省深圳市南山区新高路131-12",
+						"type": "1",
+						"telphone": "17098631995",
+						"startweek": 1,
+						"endtweek": 5,
+						"starttime": 0,
+						"endtime": 24,
+						"onlinestate": 1,
+						"introduction": "哈哈哈哈",
+						"image1": "http://192.168.1.213:8080/dswweb/vihiupload/2017/11/16/1510814812928.jpg",
+						"image2": "http://192.168.1.213:8080/dswweb/vihiupload/2017/11/16/1510814812928.jpg",
+						"image3": "http://192.168.1.213:8080/dswweb/vihiupload/2017/11/16/1510814812928.jpg",
+						"longitude": 113.955035,
+						"latitude": 22.593354
+						};
+
+						new Promise(function(re, rj) {
+							// 提交入驻
+							dal.store.add(o, function(err, data) {
+								err ? rj(err) : re(data);
+							});
+
+						}).then(function() {
+							w.close();
+							mui.toast("申请成功");
+							mui.openWindow('signup_next.html', 'signup_next', {
+								extras: {
+									
 								}
-							}
+							});
+						}).catch(function(err) {
+							w.close();
+							mui.toast(err.message);
 						});
+
+					},
+					_generateInfo: function() {
+						var arr = this.infoList;
+						return {
+							account: "zttest",
+							city: arr[0][0].value,
+							name: arr[0][1].value,
+							address: arr[0][2].value,
+							type: arr[0][3].value,
+
+							telphone: arr[1][0].value,
+							startweek: arr[1][1].startweek,
+							endtweek: arr[1][1].endtweek,
+							starttime: arr[1][1].starttime,
+							endtime: arr[1][1].endtime,
+							onlinestate: +(arr[1][2].onlinestate),
+
+							introduction: arr[3][0].t1,
+
+							image1: arr[2][0]['imgList'][0],
+							image2: arr[2][0]['imgList'][1],
+							image3: arr[2][0]['imgList'][2],
+
+							longitude: arr[0][2].longitude, // 经度
+							latitude: arr[0][2].latitude, // 纬度
+						};
+
 					}
 				}
 
