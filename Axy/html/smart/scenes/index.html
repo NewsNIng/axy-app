@@ -65,18 +65,19 @@
 	</head>
 
 	<body>
+		<div id="warpper">
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
 			<h1 class="mui-title">智能场景</h1>
 		</header>
 		<div class="mui-content">
 			<template v-for="o in scenes">
-				<div class="app-font-size-30"><img :src="o.img"/>{{o.title}}</div>
+				<div class="app-font-size-30" @tap="mui.openWindow('edit_scenes.html','edit_scenes')"><img :src="o.img"/>{{o.title}}</div>
 				
 			</template>
 		</div>
-		<div class="foot app-font-size-34">添加新场景</div>
-
+		<div class="foot app-font-size-34" @tap="mui.openWindow('create_scenes.html','create_scenes')">添加新场景</div>
+</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 
@@ -98,7 +99,7 @@
 			mui.init();
 
 			new Vue({
-				el: '.mui-content',
+				el: '#warpper',
 				data: function() {
 					return {
 						scenes: [{
@@ -119,7 +120,7 @@
 				},
 				plusReady: function() {},
 				methods: {
-
+					
 				}
 			});
 		</script>
