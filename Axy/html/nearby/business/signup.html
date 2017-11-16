@@ -289,28 +289,10 @@
 					onNextTap: function() {
 
 						// 收集信息
-//						var o = this._generateInfo();
+						var o = this._generateInfo();
 						var w = plus.nativeUI.showWaiting('正在提交信息...');
 												
-												var o = {
-						"account":"zttest",
-						"city": "深圳",
-						"name": "爱情海",
-						"address": "广东省深圳市南山区新高路131-12",
-						"type": "1",
-						"telphone": "17098631995",
-						"startweek": 1,
-						"endtweek": 5,
-						"starttime": 0,
-						"endtime": 24,
-						"onlinestate": 1,
-						"introduction": "哈哈哈哈",
-						"image1": "http://192.168.1.213:8080/dswweb/vihiupload/2017/11/16/1510814812928.jpg",
-						"image2": "http://192.168.1.213:8080/dswweb/vihiupload/2017/11/16/1510814812928.jpg",
-						"image3": "http://192.168.1.213:8080/dswweb/vihiupload/2017/11/16/1510814812928.jpg",
-						"longitude": 113.955035,
-						"latitude": 22.593354
-						};
+						
 
 						new Promise(function(re, rj) {
 							// 提交入驻
