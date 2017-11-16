@@ -73,7 +73,7 @@
 			<h1 class="mui-title">智能场景</h1>
 		</header>
 		<div class="mui-content">
-			<div class="customize_scenes app-font-size-24">
+			<div class="customize_scenes app-font-size-24" @tap="mui.openWindow('add_scenes.html','add_scenes')">
 				<img class="scenes_icon" src="../../../image/smart/scenes/icon_custom@3x.png" />
 				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
 				<div class="title">自定义场景</div>
@@ -81,7 +81,7 @@
 			</div>
 			<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
 			<template v-for="o in scenes">
-				<div class="scenes_item app-font-size-24">
+				<div class="scenes_item app-font-size-24" @tap="mui.openWindow('edit_scenes.html','edit_scenes')">
 					<img class="scenes_icon" :src="o.img" />
 					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
 					<div class="title">{{o.title}}</div>
