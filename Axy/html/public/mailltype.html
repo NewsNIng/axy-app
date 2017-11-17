@@ -110,13 +110,13 @@
 			</header>
 			<div class="mui-content app-font-size-28">
 				<div class="left">
-					<template v-for="o,i in classs">
+					<template v-for="o,i in category">
 						<div :class="{'active': i === leftIndex}" @tap="onLeftTap(o, i)">{{o.name}}</div>
 					</template>
 				</div>
 				<div class="right">
 					<template v-for="o,i in indexList">
-						<div @tap="onRightTap(o, i)">{{o}}</div>
+						<div @tap="onRightTap(o, i)">{{o.name}}</div>
 					</template>
 				</div>
 			</div>
@@ -127,65 +127,32 @@
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js" ></script>
 		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript" src="../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../js/dal/store.js" ></script>
 		<script type="text/javascript">
 			new Vue({
 				el: '#warpper',
 				data: function(){
 					return {
 						leftIndex: 0,
-						classs: [
-							{
-								name: "餐饮",
-								list: [
-									"火锅",
-									"自助餐",
-									"将择菜",
-									"火锅",
-									"自助餐",
-									"将择菜",
-									"火锅",
-									"自助餐",
-									"将择菜",
-									"火锅",
-									"自助餐",
-									"将择菜",
-									"火锅",
-									"自助餐",
-									"将择菜",
-									"火锅",
-									"自助餐",
-									"将择菜",
-									"火锅",
-									"自助餐",
-									"将择菜",
-									"火锅",
-									"自助餐",
-									"将择菜",
-									"火锅",
-									"自助餐",
-									"将择菜",
-									
-								]
-							},
-							{
-								name: "餐饮2",
-								list: [
-									"火锅",
-									"自助餐",
-									"将择菜",
-									"火锅",
-									"自助餐",
-									"将择菜"
-									
-								]
-							}
+						category: [
+							
 						]
 					};
 				},
 				computed: {
 					indexList: function(){
-						return this.classs[this.leftIndex].list;
+						return this.category[this.leftIndex].children;
 					}
+				},
+				mounted: function(){
+					dal.store.category(function(err, data){
+						if(err){
+							return mui.toast(err.message);
+						}
+						this.category = data.category;
+						console.log(JSON.stringify(data));
+					}.bind(this));
 				},
 				plusReady: function(){
 					
@@ -197,7 +164,8 @@
 					},
 					onRightTap: function(o, i){
 						app.page.setResult({
-							value: o
+							value: o.name,
+							oid: o.id
 						}).close();
 					}
 				}

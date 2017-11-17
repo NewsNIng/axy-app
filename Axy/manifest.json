@@ -434,7 +434,8 @@
 					"html/nearby/business/upload_store_info.html",
 					"html/nearby/business/signup_next.html",
 					"html/nearby/business/upload_store_pic.html",
-					"html/nearby/business/upload_store_time.html"
+					"html/nearby/business/upload_store_time.html",
+					"html/common/login.html"
 				],
 				"priority": 0
 			},

@@ -194,7 +194,7 @@
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
-		
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
 		
 
@@ -266,9 +266,10 @@
 							mui.toast("登录成功");
 							console.log(JSON.stringify(data));
 							// 保存用户信息
-							 app.user.set(data);
-							
-							// 发出一个通知
+							app.user.set(data);
+							// 通知上层
+							app.page.setResult(data);
+							// 通知全部
 							new that.$Broadcast().emit("login_success", {
 								userInfo: data
 							});
@@ -291,6 +292,7 @@
 						new this.$OAuth(type, function(err, info){
 							w && w.close();
 							console.log(JSON.stringify(err || info));
+							mui.alert(JSON.stringify(authInfoAdapter(info)));
 						}, this);
 						
 						
@@ -303,6 +305,46 @@
 				}
 
 			});
+			
+			
+			function authInfoAdapter(info){
+				var _qq = function(_o){
+					return {
+						type: 'qq',
+						openid: _o.authResult.openid,
+						nickname: _o.userInfo.nickname,
+						gender: _o.userInfo.gender,
+						province: _o.userInfo.province,
+						city: _o.userInfo.city,
+						headimgurl: _o.userInfo.figureurl_qq_2
+					};
+				},
+				_sinaweibo = function(_o){
+					return {
+						type: 'sinaweibo',
+						openid: _o.authResult.openid,
+						nickname: _o.userInfo.nickname,
+						gender: _o.userInfo.gender === 'm' ? '男': '女',
+						province: _o.userInfo.location.split(' ')[0],
+						city: _o.userInfo.location.split(' ')[1],
+						headimgurl: _o.userInfo.avatar_large
+					};
+				},
+				_weixin = function(_o){
+					return {
+						type: 'weixin',
+						openid: _o.userInfo.unionid,
+						nickname: _o.userInfo.nickname,
+						gender: _o.userInfo.sex === 1 ? '男': '女',
+						province: _o.userInfo.province,
+						city: _o.userInfo.city,
+						headimgurl: _o.userInfo.headimgurl
+					};
+				}
+				
+				return ({qq: _qq, sinaweibo: _sinaweibo, weixin: _weixin})[info.id](info);
+				
+			}
 		</script>
 	</body>
 

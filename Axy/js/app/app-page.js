@@ -16,6 +16,7 @@
 			mailltype: '_www/html/public/mailltype.html',
 			city: '_www/html/public/city.html',
 			maps: '_www/html/public/maps.html',
+			login: '_www/html/common/login.html',
 		},cw = null;
 	
 	// 打开城市选择
@@ -44,6 +45,10 @@
 	
 	page.openForResult = function(name, callback, ex){
 		this.openForResultBy(pageDir[name], name, callback, ex);
+	}
+	
+	page.getLogin = function(callback){
+		this.openForResult('login', callback, {});
 	}
 	
 	page.openForResultBy = function(url, id, callback, ex){
