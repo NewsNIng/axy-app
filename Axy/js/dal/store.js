@@ -14,6 +14,10 @@
 		return ra("post", "/store/add", info, callback);
 	}
 	
+	store.category = function(callback){
+		return ra("get", "/store/category", {}, callback);
+	}
+	
 	
 	
 	

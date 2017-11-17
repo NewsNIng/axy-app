@@ -65,7 +65,7 @@ function addMethod(obj, name, fn) {
 		// 清除本地用户信息
 		// app.user.clear();
 
-		// 重定向登录页面
+		// 重定向登录页面 or 重启App 
 		// app.user.login();
 	};
 
@@ -81,6 +81,16 @@ function addMethod(obj, name, fn) {
 			// app.user.login();
 		}
 	};
+	
+	// 重载 user.get 如果传入function 则跳转登录并且登录成功会通知这个回调函数
+	addMethod(app.user,'get', function(fn){
+		var u = null;
+		if(app.user.has()){
+			u = app.user.get();
+			return typeof fn === 'function' ? fn(u): u;
+		}
+		return app.page && app.page.getLogin(fn);
+	});
 }(window.app));
 
 /**

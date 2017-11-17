@@ -99,6 +99,8 @@
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app.js" ></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
@@ -150,6 +152,7 @@
 					function(g, i) {
 						app.page.getMailType(function(data) {
 							this.infoList[g][i].value = data.value;
+							this.infoList[g][i].oid = data.oid;
 						}.bind(this));
 					},
 				],
@@ -225,6 +228,7 @@
 									name: "类型",
 									value: "",
 									tips: '输入商户类型',
+									oid: null,
 								}
 							],
 
@@ -264,6 +268,11 @@
 						]
 					};
 				},
+				plusReady: function(){
+					app.user.get(function(u){
+						alert(JSON.stringify(u));
+					});
+				},
 
 				methods: {
 					onItemTap: function(gindex, index, o) {
@@ -287,6 +296,7 @@
 						});
 					},
 					onNextTap: function() {
+						
 
 						// 收集信息
 						var o = this._generateInfo();
@@ -321,7 +331,7 @@
 							city: arr[0][0].value,
 							name: arr[0][1].value,
 							address: arr[0][2].value,
-							type: arr[0][3].value,
+							type: arr[0][3].oid,
 
 							telphone: arr[1][0].value,
 							startweek: arr[1][1].startweek,
