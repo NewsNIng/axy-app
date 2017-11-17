@@ -190,15 +190,44 @@
 				data: function() {
 					return {
 						allDay: false, // 是否全天
+						startweek: 1,
+						endtweek: 7,
+						
+						starttime: 0,
+						endtime: 24,
+						
 						week_str: '',
 						week_index: 0,
 						time_str: '',
 						time_index: 0,
 					};
 				},
+				watch: {
+					allDay: function(nv){
+						if(nv){
+							this.starttime = 0;
+							this.endtime = 24;
+						}
+					}
+				},
 				computed: {
 					onLine: function(){
-						return false;
+						var d = new Date();
+						// 判断当天
+						var week = (d.getDay() + 6) % 7 + 1;
+						if(week < this.startweek || week > this.endtweek){
+							return false;
+						}
+						// 是否全天
+						if(this.allDay){
+							return true;
+						}
+						// 判断时间点
+						var h = d.getHours();
+						if(h < this.starttime || h > this.endtime){
+							return false;
+						}
+						return true;
 					}
 				},
 				mounted: function() {
@@ -220,7 +249,6 @@
 					});
 					this.pick_week.setData([pick_data_week, pick_data_week]);
 					
-					this.onTimeTap();
 				},
 				plusReady: function() {
 					
@@ -228,6 +256,10 @@
 				methods: {
 					onSaveTap: function() {
 						app.page.setResult({
+							startweek: this.startweek,
+							endtweek: this.endtweek,
+							starttime: this.starttime,
+							endtime: this.endtime,
 							week: this.week_str,
 							time: this.time_str,
 							onLine: this.onLine
@@ -237,12 +269,16 @@
 					onWeekTap: function(){
 						this.pick_week.show(function(items) {
 	   						this.week_str = items[0].text + ' - ' + items[1].text;
+	   						this.startweek = items[0].value;
+	   						this.endtweek = items[1].value;
 						}.bind(this));
 					},
 					// 营业时段点击
 					onTimeTap: function(){
 						this.pick.show(function(items) {
 							this.time_str = items[0].text + ' - ' + items[1].text;
+							this.starttime = items[0].value;
+	   						this.endtime = items[1].value;
 						}.bind(this));
 					}
 				}

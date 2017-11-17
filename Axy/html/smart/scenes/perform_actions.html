@@ -22,6 +22,10 @@
 				overflow: hidden;
 			}
 			
+			.mui-icon>img {
+				width: 0.613333rem;
+			}
+			
 			.actions_item {
 				height: 1.386666rem;
 				padding-left: 0.346666rem;
@@ -68,6 +72,9 @@
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
 			<h1 class="mui-title">执行动作</h1>
+			<a class="mui-icon mui-pull-right">
+				<img src="../../../image/smart/scenes/complete_icon.png" />
+			</a>
 		</header>
 		<div class="mui-content">
 			<div class="actions_item app-font-size-28" @tap="mui.openWindow('select_device.html','select_device')">

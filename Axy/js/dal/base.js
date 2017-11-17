@@ -52,12 +52,16 @@
 //	}
 //);
 
-var dal = {};
+var dal = {
+	BASE_URL: "http://192.168.1.213:8080/dswweb/vihiapi",
+};
+
+
 
 // 统一请求 适配器
 function requestAdapter(type, url, params, callback){
-	url = "http://192.168.1.213:8080/dswweb/vihiapi" + url;
-	params.datatime = +(new Date());
+	url = dal.BASE_URL + url;
+	//params.datatime = +(new Date());
 	
 	
 	console.log("["+type+"]" +url);
@@ -65,7 +69,9 @@ function requestAdapter(type, url, params, callback){
 	
 	return mui.ajax(url ,{
 		data: params,
+		contentType: 'application/json;charset=UTF-8',
 		type: type,
+		timeout: 8000,
 		success: function(data){
 			var o = {};
 			if(data.code !== "0000"){
