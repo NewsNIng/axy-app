@@ -17,7 +17,8 @@
 		</header>
 		<div class="mui-content">
 			<template v-for='o,i in list'>
-				<button type="button" class="mui-btn app-btn-main" @tap="onButtonTap(o)">{{o.name}}</button>				
+				<button type="button" class="mui-btn app-btn-main" @tap="onButtonTap(o)">{{o.name}}</button>
+				<br />
 			</template>
 
 		</div>
@@ -40,7 +41,18 @@
 								name: '智能场景',
 								href: 'scenes/index.html'
 							},
-							
+							{
+								name: '窗帘控制器',
+								href: 'devices/dev_curtain_controller.html'
+							},
+							{
+								name: '电管家',
+								href: 'devices/dev_electric_controller.html'
+							},
+							{
+								name: '红外探测',
+								href: 'devices/dev_Infrared_controller.html'
+							},
 						]
 					};
 				},
