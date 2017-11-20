@@ -1,112 +1,111 @@
 {
-	"html/nearby/index.html": {
-		"resources": [
-			"html/nearby/pages/list.html"
-		],
-		"refer": [
-			"html/nearby/pages/discover.html",
-			"html/nearby/pages/theme.html",
-			"html/nearby/pages/list.html",
-			"html/nearby/business/signup.html",
-			"html/public/position.html"
-		]
-	},
-	"html/main.html": {
-		"resources": [
-			"html/home/index.html",
-			"html/smart/index.html"
-		],
-		"refer": [
-			"html/home/index.html",
-			"html/nearby/index.html",
-			"html/person/index.html",
-			"html/smart/index.html"
-		]
-	},
-	"html/nearby/business/signup.html": {
-		"refer": [
-			"html/public/position.html",
-			"html/public/maps.html",
-			"html/public/mailltype.html",
-			"html/public/input.html",
-			"html/nearby/business/upload_store_info.html",
-			"html/nearby/business/signup_next.html",
-			"html/nearby/business/upload_store_pic.html",
-			"html/nearby/business/upload_store_time.html",
-			"html/common/login.html"
-		]
-	},
-	"html/person/index.html": {
-		"refer": [
-			"html/common/login.html",
-			"html/public/position.html"
-		]
-	},
-	"html/common/reset.html": {
-		"refer": [
-			"html/common/login.html",
-			"html/common/reset2.html"
-		]
-	},
-	"html/common/login.html": {
-		"refer": [
-			"html/common/register.html",
-			"html/common/reset.html"
-		]
-	},
-	"html/nearby/business/signup_success.html": {
-		"refer": [
-			"html/nearby/business/store_details.html"
-		]
-	},
-	"html/nearby/business/signup_next.html": {
-		"refer": [
-			"html/nearby/business/signup_success.html"
-		]
-	},
-	"html/nearby/pages/discover.html": {
-		"refer": [
-			"html/nearby/discover/discover_details.html",
-			"html/nearby/pages/discover_release.html",
-			"html/nearby/discover/discover_release.html",
-			"html/person/other.html"
-		]
-	},
-	"html/nearby/pages/list.html": {
-		"refer": [
-			"html/nearby/business/store_details.html"
-		]
-	},
-	"html/public/position.html": {
-		"refer": [
-			"html/public/city.html"
-		]
-	},
-	"html/smart/index.html": {
-		"refer": [
-			"html/smart/scenes/index.html"
-		]
-	},
-	"html/smart/scenes/index.html": {
-		"refer": [
-			"html/smart/scenes/edit_scenes.html",
-			"html/smart/scenes/create_scenes.html"
-		]
-	},
-	"html/smart/scenes/create_scenes.html": {
-		"refer": [
-			"html/smart/scenes/edit_scenes.html",
-			"html/smart/scenes/add_scenes.html"
-		]
-	},
-	"html/smart/scenes/trigger_conditions.html": {
-		"refer": [
-			"html/smart/scenes/setting_trigger.html"
-		]
-	},
-	"html/smart/scenes/edit_scenes.html": {
-		"refer": [
-			"html/smart/scenes/trigger_conditions.html"
-		]
-	}
+  "html/nearby/index.html": {
+    "resources": [
+      "html/nearby/pages/list.html"
+    ],
+    "refer": [
+      "html/nearby/pages/discover.html",
+      "html/nearby/pages/theme.html",
+      "html/nearby/pages/list.html",
+      "html/nearby/business/signup.html",
+      "html/public/position.html"
+    ]
+  },
+  "html/main.html": {
+    "resources": [
+      "html/home/index.html",
+      "html/smart/index.html"
+    ],
+    "refer": [
+      "html/home/index.html",
+      "html/nearby/index.html",
+      "html/person/index.html",
+      "html/smart/index.html"
+    ]
+  },
+  "html/nearby/business/signup.html": {
+    "refer": [
+      "html/public/position.html",
+      "html/public/maps.html",
+      "html/public/mailltype.html",
+      "html/public/input.html",
+      "html/nearby/business/upload_store_info.html",
+      "html/nearby/business/signup_next.html",
+      "html/nearby/business/upload_store_pic.html",
+      "html/nearby/business/upload_store_time.html",
+      "html/common/login.html"
+    ]
+  },
+  "html/person/index.html": {
+    "refer": [
+      "html/common/login.html",
+      "html/public/position.html"
+    ]
+  },
+  "html/common/reset.html": {
+    "refer": [
+      "html/common/login.html",
+      "html/common/reset2.html"
+    ]
+  },
+  "html/common/login.html": {
+    "refer": [
+      "html/common/register.html",
+      "html/common/reset.html"
+    ]
+  },
+  "html/nearby/business/signup_success.html": {
+    "refer": [
+      "html/nearby/business/store_details.html"
+    ]
+  },
+  "html/nearby/business/signup_next.html": {
+    "refer": [
+      "html/nearby/business/signup_success.html"
+    ]
+  },
+  "html/nearby/pages/discover.html": {
+    "refer": [
+      "html/nearby/discover/discover_details.html",
+      "html/nearby/pages/discover_release.html",
+      "html/nearby/discover/discover_release.html",
+      "html/person/other.html"
+    ]
+  },
+  "html/nearby/pages/list.html": {
+    "refer": [
+      "html/nearby/business/store_details.html"
+    ]
+  },
+  "html/public/position.html": {
+    "refer": [
+      "html/public/city.html"
+    ]
+  },
+  "html/smart/index.html": {
+    "refer": [
+      "html/smart/scenes/index.html"
+    ]
+  },
+  "html/smart/scenes/create_scenes.html": {
+    "refer": [
+      "html/smart/scenes/edit_scenes.html",
+      "html/smart/scenes/add_scenes.html"
+    ]
+  },
+  "html/smart/scenes/index.html": {
+    "refer": [
+      "html/smart/scenes/create_scenes.html"
+    ]
+  },
+  "html/smart/scenes/trigger_conditions.html": {
+    "refer": [
+      "html/smart/scenes/setting_trigger.html"
+    ]
+  },
+  "html/smart/scenes/edit_scenes.html": {
+    "refer": [
+      "html/smart/scenes/trigger_conditions.html"
+    ]
+  }
 }

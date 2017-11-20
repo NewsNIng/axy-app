@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>添加完成</title>
+		<title>操作成功</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -38,11 +38,11 @@
 	<body>
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back mui-pull-left app-icon-back"></a>
-			<h1 class="mui-title">添加完成</h1>
+			<h1 class="mui-title">操作成功</h1>
 		</header>
 		<div class="mui-content">
 			<button type="button" class=" app-font-size-30 mui-btn app-btn-main">预览</button>
-			<button type="button" class=" app-font-size-30 mui-btn app-btn-main-ghost">继续添加</button>
+			<button type="button" class=" app-font-size-30 mui-btn app-btn-main-ghost">继续添加商品</button>
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
@@ -80,19 +80,19 @@
 						_();
 					}
 				},
-				// 继续添加
+				// 添加商品
 				function(){
 					var methodName = 'reload';
-					// 重新刷新signup
-					v = plus.webview.getWebviewById('signup');
+					// 重新刷新signup next
+					v = plus.webview.getWebviewById('signup_next');
 					if(!v){
-						v = plus.webview.create('business/signup.html', 'signup');
+						v = plus.webview.create('business/signup_next.html', 'signup_next');
 						methodName = 'show';
 					}
 					
 					v.addEventListener('loaded', function(){
-						// 关闭next
-						v = plus.webview.getWebviewById('signup_next');
+						// 关闭signup
+						v = plus.webview.getWebviewById('signup');
 						v && (v.close('none'), v = null);
 						// 关闭本页
 						plus.webview.currentWebview().close();

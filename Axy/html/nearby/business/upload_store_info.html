@@ -123,7 +123,7 @@
 				<textarea  maxlength="500"  v-model="t1" placeholder="请详细介绍商铺情况"></textarea>
 			</div>
 			
-			<div class="tips2 app-font-size-26">
+			<!--<div class="tips2 app-font-size-26">
 				活动介绍
 			</div>
 			<div class="app-font-size-26 room" :data-ts="t2.length + '/200'" >
@@ -140,7 +140,7 @@
 					<div :class="{'last': i === firstNullIndex, 'over': o !== ''}" :style="'background-image: url('+ o +')'" @tap="onImgTap(i)"></div>	
 				</template>
 			</div>
-			
+			-->
 			<button type="button" @tap="onSuccessTap()" class="mui-btn app-btn-main" style="width: 9.293333rem; margin:0.506666rem 0.346666rem;height: 1.173333rem;font-size: 17px;">完成</button>
 			
 		</div>
@@ -214,9 +214,9 @@
 						
 						
 						app.page.setResult({
-				           imgList: this.imgs,
+//				           imgList: this.imgs,
 				           t1: this.t1,
-				           t2: this.t2,
+//				           t2: this.t2,
 				       }).close();
 					}
 				}

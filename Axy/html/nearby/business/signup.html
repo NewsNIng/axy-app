@@ -93,7 +93,7 @@
 				</ul>
 			</template>
 
-			<button type="button" @tap="onNextTap()" class="mui-btn app-btn-main app-font-size-36">下一步</button>
+			<button type="button" @tap="onNextTap()" class="mui-btn app-btn-main app-font-size-36">申请</button>
 		</div>
 
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -189,9 +189,9 @@
 						var upload_store_info = plus.webview.getWebviewById('upload_store_info');
 						if(!upload_store_info) {
 							app.page.openForResultBy('upload_store_info.html', 'upload_store_info', function(data) {
-								that.infoList[g][i].imgList = data.imgList;
+//								that.infoList[g][i].imgList = data.imgList;
 								that.infoList[g][i].t1 = data.t1;
-								that.infoList[g][i].t2 = data.t2;
+//								that.infoList[g][i].t2 = data.t2;
 								that.infoList[g][i].value = "已填写信息";
 							}, ex);
 						} else {
@@ -269,10 +269,9 @@
 					};
 				},
 				plusReady: function(){
-					var that = this;
-					app.user.get(function(u){						
-						alert(JSON.stringify(u));
-					});
+//					app.user.get(function(u){
+//						alert(JSON.stringify(u));
+//					});
 				},
 
 				methods: {
@@ -301,6 +300,14 @@
 
 						// 收集信息
 						var o = this._generateInfo();
+						
+						// 简单验证空
+						for(var i in o){
+							if(o[i] === '' || o[i] === undefined){
+								return mui.toast("请填写完整信息");
+							}
+						}
+						
 						var w = plus.nativeUI.showWaiting('正在提交信息...');
 												
 						
@@ -314,7 +321,7 @@
 						}).then(function() {
 							w.close();
 							mui.toast("申请成功");
-							mui.openWindow('signup_next.html', 'signup_next', {
+							mui.openWindow('signup_success.html', 'signup_success', {
 								extras: {
 									
 								}

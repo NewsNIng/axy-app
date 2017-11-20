@@ -1,0 +1,255 @@
+(function(w, pg) {
+	var B;
+	_plusFn = function() {
+		B = w.plus.bridge;
+	};
+
+	pg.fun2ok = function(fn) {
+		return typeof fn === 'function' ? fn : null;
+	}
+
+	pg.getCallBackId = function(s, f) {
+		return B.callbackId(pg.fun2ok(s), pg.fun2ok(f));
+	}
+
+	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
+		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
+		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
+	}
+
+	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
+		
+		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
+	}
+	
+	/**
+	 * JSON 转 XML
+	 * @param {Object} o
+	 */
+	pg.jo2xml = function(_o){
+		function _jo2xml(o){
+			var str = "";
+			if(!o.tagName){return str;};
+			str += '<' +  o.tagName;
+			for(var i in o.attr){
+				str += ' ' + i + '=' + '"' + o.attr[i] + '"';
+			}
+			str += '>';
+			for(var j in o.children){
+				str += _jo2xml(o.children[j]);
+			}
+			str += '</' + o.tagName + '>';
+			return str;
+		};
+		return '<?xml version="1.0" encoding="utf-8"?>' + _jo2xml(_o);
+	} 
+
+	if(w.plus) {
+		setTimeout(_plusFn);
+	} else {
+		document.addEventListener("plusready", _plusFn, true);
+	}
+}(window, window.plug || (window.plug = {})));
+
+(function(w) {
+	var pg = w.plug,
+		N = 'H5NativeBridge',
+		pgn = pg[N] || (pg[N] = {});
+		
+	var splice = Array.prototype.splice;
+	
+	/**
+	 * 初始化原生系统（需在用户登录成功后初始化原生系统）
+	 * @param {String} username 用户名
+	 * @param {String} password 密码
+	 * @param {String} serverurl 顶级服务器地址
+	 * @param {Function} sfn 正确回调函数
+	 * @param {Function} ffn 失败回调函数
+	 */
+	pgn.InitNativeSysteam = function(username, password, serverurl, sfn, ffn){
+		return pg.asyncExec(N, 'InitNativeSysteam', [username, password, serverurl], sfn, ffn);
+	};
+	
+	/**
+	 * 初始化及更新原生设备列表
+	 * @param {Array} datas 设备列表组成的json字符串，具体参考前端 接口名称: 获取主机摄像机列表(分页） 详细说明。
+	 */
+	pgn.InitNativeDevList = function(datas){
+		return pg.syncExec(N, 'InitNativeDevList', [datas]);
+	};
+	
+	/**
+	 * 播放设备音视频
+	 * @param {Number} deviceid 设备ID
+	 * @param {Number} way 播放通道，如果是单通道默认为0
+	 */
+	pgn.StartDevicePlay = function(deviceid, way){
+		typeof way === 'undefined' && (way = 0);
+		return pg.syncExec(N, 'StartDevicePlay', [deviceid, way]);
+	};
+	
+	/**
+	 * 获取所有设备的运行状态
+	 */
+	pgn.GetAllDeviceRunStateSync = function(){
+		return pg.syncExec(N, 'GetAllDeviceRunStateSync', []);
+	}
+	
+	/**
+	 * 获取所有设备的信息
+	 */
+	pgn.GetAllDeviceInfoASync = function(){
+		return pg.syncExec(N, 'GetAllDeviceInfoASync', []);
+	}
+	
+	
+	
+	/**
+	 * 给指定设备添加配件
+	 * @param {Number} deviceid 设备ID
+	 * @param {Number} iqid 智能配件ID
+	 * @param {Number} step 延时 单位秒
+	 * @param {Function} sf 正确回调函数
+	 * @param {Function} ff 失败回调函数
+	 */
+	pgn.AddSmartDeviceAsyn = function(deviceid, iqid, step, sf, ff){
+		return pg.asyncExec(N, 'AddSmartDeviceAsyn', [deviceid, iqid, step], sf, ff);
+	};
+	
+	/**
+	 * 删除单个配件
+	 * @param {Number} deviceid 设备ID
+	 * @param {Number} iqid 智能配件ID
+	 * @param {Function} sf 正确回调函数
+	 * @param {Function} ff 失败回调函数
+	 */
+	pgn.DelSmartDeviceAsyn = function(deviceid, iqid, sf, ff){
+		return pg.asyncExec(N, 'DelSmartDeviceAsyn', [deviceid, iqid], sf, ff);
+	};
+	
+	
+	
+	/**
+	 * 修改配件的信息
+	 * @param {Number} deviceid 设备ID
+	 * @param {Number} iqid 智能配件ID
+	 * @param {String} name 智能配件名称
+	 * @param {Boolean} _switch 关闭或者开启配件功能
+	 * @param {Number} step 延时 单位秒
+	 * @param {Function} sf 正确回调函数
+	 * @param {Function} ff 失败回调函数
+	 */
+	pgn.UpdateSmartDeviceAsyn = function(deviceid, iqid, name, _switch, step, sf, ff){
+		return pg.asyncExec(N, 'UpdateSmartDeviceAsyn', [deviceid, iqid, name, _switch, step], sf, ff);
+	};
+	
+	/**
+	 * 获取本地录像&拍照的记录
+	 */
+	pgn.GetLocalRecordInfoSync = function(){
+		return pg.syncExec(N, 'GetLocalRecordInfoSync', []);
+	};
+	
+	/**
+	 * 获取已经下载的告警图片和告警录像
+	 */
+	// TODO
+	
+	
+	// 动作
+	pgn.ACTION = {
+		KEY_OPEN: 'KEY_OPEN',
+		KG_OPT: ' KG_OPT',
+		SOS: 1,
+		JY: 2,
+		CF: 4,
+		SF: 8,
+	};
+	// 指令
+	pgn.COMD = {
+		QUERY: '<OPT VAL="QUERY"></OPT>',
+		OPEN: '<OPT VAL="OPEN" ></OPT>',
+	};
+	
+	
+	/**
+	 * 智能配件查询通道
+	 * @param {Number} deviceid 设备ID
+	 * @param {Number} iqid 配件ID
+	 * @param {ACTION} action 动作 示例： KEY_OPEN
+	 * @param {COMD} comd 指令 示例：<OPT VAL="QUERY">
+	 * @param {Function} sf
+	 * @param {Function} ff
+	 */
+	pgn.SmartDeviceQueryChannelAsyn = function(deviceid, iqid, action, comd, sf, ff){
+		return pg.asyncExec(N, 'SmartDeviceQueryChannelAsyn', [deviceid, iqid, action, comd], sf, ff);
+	};
+	
+	/**
+	 * 智能配件控制通道
+	 * @param {Number} deviceid 设备ID
+	 * @param {Number} iqid 配件ID
+	 * @param {ACTION} action 动作 示例： KEY_OPEN
+	 * @param {COMD} comd 指令 示例：<OPT VAL="QUERY">
+	 * @param {Function} sf
+	 * @param {Function} ff
+	 */
+	pgn.SmartDeviceControlChannelAsyn = function(deviceid, iqid, action, comd, sf, ff){
+		return pg.asyncExec(N, 'SmartDeviceControlChannelAsyn', [deviceid, iqid, action, comd], sf, ff);
+	};
+	
+	/**
+	 * 查询通道返回数据
+	 */
+	// TODO
+	
+	
+	
+	
+	//===================================设备操作=====================================
+	
+	
+	/**
+	 * 设置设备参数通道
+	 * @param {Number} deviceid 设备id
+	 * @param {Object} xmljson 特殊格式JOSO参数  
+	 * @param {Function} sf
+	 * @param {Function} ff
+	 */
+	pgn.SetDeviceParamAsyn = function(deviceid, xmljson, sf, ff){
+		xmljson = pg.jo2xml(xmljson);
+		return pg.asyncExec(N, 'SetDeviceParamAsyn', [deviceid, xmljson], sf, ff);
+	};
+	
+	/**
+	 * 手机遥控器SOS/布撤防/静音
+	 * @param {Number} deviceid 设备id
+	 * @param {ACTION} action 动作类型
+	 * @param {Function} sf
+	 * @param {Function} ff
+	 */
+	pgn.VirtualityRemoteControlAsyn = function(deviceid, action, sf, ff){
+		return pg.asyncExec(N, 'VirtualityRemoteControlAsyn', [deviceid, action], sf, ff);
+	};
+	
+	
+	/**
+	 * 重启主机
+	 * @param {Number} deviceid 设备id
+	 * @param {Function} sf
+	 * @param {Function} ff
+	 */
+	pgn.RebootDeviceAsyn = function(deviceid, sf, ff){
+		return pg.asyncExec(N, 'RebootDeviceAsyn', [deviceid], sf, ff);
+	};
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+}(window));
