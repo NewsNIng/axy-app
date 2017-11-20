@@ -304,7 +304,9 @@
 					"js/lib/mui.min.js"
 				],
 				"refer": [
-					"html/smart/scenes/index.html"
+					"html/smart/scenes/index.html",
+					"html/smart/devices/dev_curtain_controller.html",
+					"html/smart/devices/dev_electric_controller.html"
 				],
 				"priority": 0
 			},

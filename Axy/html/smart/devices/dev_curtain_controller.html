@@ -105,7 +105,7 @@
 			</div>
 
 			<footer class="app-font-size-28">
-				<div class="app-color-main">删除设备</div>
+				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
 			</footer>
 		</div>
@@ -127,17 +127,35 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
+		<img src=""/>
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				beforeback:function(){
+					plus.navigator.setStatusBarStyle('light');
+				}
+			});
+			
+			var _stateImgs = [];
 
 			new Vue({
 				el: '#warpper',
 				data: function() {
 					return {
 						state: true, // 当前状态
+						stateCode: 1, // 状态码 0 关闭 1 打开 2暂停
+						
 					};
 				},
-				plusReady: function() {},
+				
+				computed: {
+					stateImg: function(){
+						return 
+					}
+				},
+				
+				plusReady: function() {
+					plus.navigator.setStatusBarStyle('dark');
+				},
 				methods: {
 					// 切换开关
 					toggleSwitch: function(){
