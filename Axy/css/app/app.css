@@ -24,8 +24,8 @@ body {
   color: #2bb8aa;
 }
 .app-btn-main-ghost:active {
-  background-color: #ffffff !important;
-  color: #2bb8aa !important;
+  background-color: #F4F8FB !important;
+  color: #43d3c5 !important;
 }
 .mui-bar-nav,
 .app-header.mui-bar-nav {

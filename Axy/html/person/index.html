@@ -16,34 +16,74 @@
 		<header class="mui-bar mui-bar-nav app-header">
 		    <h1 class="mui-title">个人中心</h1>
 		</header>
-		<div class="mui-content">
-		    <button type="button" class="mui-btn mui-btn-blue">打开登录</button>
-		    <button type="button" id="testopen" class="mui-btn mui-btn-blue">测试打开position</button>
-	
+		<div class="mui-content" style="padding-left: 25px;">
+			<br />
+		    <button type="button" id='openlogin' class="mui-btn app-btn-main">打开登录</button>
+		    <br />
+		    <br />
+		    <button type="button" id="testopen" class="mui-btn app-btn-main">测试打开position</button>
+			<br />			
+			<template v-for="o,i in testList">
+				<br />
+				<input type="" name="" id="" value="" v-model="inputList[i]" placeholder="参数列表，逗号隔开" />
+				<br />
+				<button type="button" @tap='onTestTap(o, i)' class="mui-btn app-btn-main-ghost">{{o}}</button>
+				<br />
+			</template>
+			
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
 		<script src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js" ></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
 		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../js/plug/PlugH5NativeBridge.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init();
-			mui.ready(function(){
-				document.querySelector(".mui-btn-blue").addEventListener('tap', function(){
-					mui.openWindow('_www/html/common/login.html','login', {
-						extras: {
-							qid: 123
+			
+			
+			new Vue({
+				el: '.mui-content',
+				data: function(){
+					return {
+						testList: [],
+						inputList:[],
+					};
+				},
+				mounted: function(){
+					document.querySelector("#openlogin").addEventListener('tap', function(){
+						mui.openWindow('_www/html/common/login.html','login', {
+							extras: {
+								qid: 123
+							} 
+						});
+					});
+					document.getElementById("testopen").addEventListener('tap', function(){
+						app.page.openForResult('position', function(data){
+							data && alert(data.city);
+						});
+					});
+				},
+				plusReady: function(){
+					for(var i in plug.H5NativeBridge){
+						if(typeof plug.H5NativeBridge[i] === 'function'){
+							this.testList.push(i);
+							this.inputList.push('');
 						}
-					});
-				});
-				document.getElementById("testopen").addEventListener('tap', function(){
-					app.page.openForResult('position', function(data){
-						data && alert(data.city);
-					});
-				});
-				
-				
-				
+					}
+				},
+				methods: {
+					onTestTap: function(name, index){
+						var arg = this.inputList[index].split(',');
+						var rs = plug.H5NativeBridge[name].apply(plug.H5NativeBridge[name], arg);
+						rs && mui.alert(JSON.stringify(rs));
+						
+					}
+				}
 			});
+			
 		</script>
 	</body>
 

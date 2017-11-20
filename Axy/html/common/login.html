@@ -199,7 +199,13 @@
 		
 
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				//处理窗口关闭前的业务
+				beforeback: function() {
+					app.page.setResult(null).close();
+					return false;
+				},
+			});
 			
 			mui.ready(function(){
 				// 注册按钮
