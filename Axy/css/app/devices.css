@@ -1,11 +1,12 @@
-.app-header {
+.app-header.mui-bar-transparent {
   background-color: rgba(43, 184, 170, 0);
 }
-.mui-bar-nav ~ .mui-content {
+.mui-bar-nav ~ .mui-content.noImmersed {
   padding-top: 0;
 }
 ul {
   margin: 0 !important;
+  margin-bottom: 0.266666rem !important;
 }
 ul:before {
   height: 0 !important;
