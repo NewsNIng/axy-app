@@ -206,3 +206,11 @@ a.mui-icon {
   border: 2px solid #2bb8aa !important;
   background-color: #2bb8aa !important;
 }
+.app-switch-main {
+  height: 22px;
+  width: 39px;
+}
+.mui-switch-handle {
+  height: 20px !important;
+  width: 20px !important;
+}
