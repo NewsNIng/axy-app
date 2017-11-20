@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能场景</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.conditions_item {
+				height: 1.386666rem;
+				padding-left: 0.346666rem;
+				background-color: white;
+				/*border-bottom: 1px solid #E5E6E7;*/
+			}
+			
+			.conditions_item:active {
+				background-color: #EFEFEF;
+			}
+			
+			.more,
+			.title,
+			.info {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
+			}
+			
+			.title {
+				color: #333333;
+			}
+			
+			.info {
+				float: right;
+				height: 0.4rem;
+				right: 0.56rem;
+				line-height: 0.4rem;
+				color: #9F9FA0;
+			}
+			
+			.no_more {
+				
+			}
+			
+			.no_more>.info {
+				right: 0.346666rem;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">设置</h1>
+		</header>
+		<div class="mui-content">
+			<div class="conditions_item no_more app-font-size-28" @tap="mui.openWindow('setting_trigger.html','setting_trigger')">
+				<div class="info">12345678</div>
+				<div class="title app-font-size-28">设备ID</div>
+			</div>
+			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
+			<div class="conditions_item app-font-size-28" @tap="mui.openWindow('setting_trigger.html','setting_trigger')">
+				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				<div class="info">设备</div>
+				<div class="title app-font-size-28">设备ID</div>
+			</div>
+			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
+			<div class="conditions_item app-font-size-28" @tap="mui.openWindow('setting_trigger.html','setting_trigger')">
+				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				<div class="info">设备</div>
+				<div class="title app-font-size-28">设备ID</div>
+			</div>
+			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
+			<div class="conditions_item app-font-size-28" @tap="mui.openWindow('setting_trigger.html','setting_trigger')">
+				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				<div class="info">设备</div>
+				<div class="title app-font-size-28">设备ID</div>
+			</div>
+		</div>
+
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+
+					};
+				},
+				plusReady: function() {},
+				methods: {
+
+				}
+			});
+		</script>
+	</body>
+
+</html>
