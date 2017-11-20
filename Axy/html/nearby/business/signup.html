@@ -269,7 +269,8 @@
 					};
 				},
 				plusReady: function(){
-					app.user.get(function(u){
+					var that = this;
+					app.user.get(function(u){						
 						alert(JSON.stringify(u));
 					});
 				},
