@@ -21,9 +21,36 @@
 				background-color: #F4F8FB;
 			}
 			
-			ul {
-				margin-bottom: 0.266666rem !important;
+			.img-wrap{
+				height: 0;
+				padding-bottom: 6.666666rem;
+				/*background-image: url(../../../image/smart/devices/curtain/btn_Acoustoopticalarm@3x.png);*/
+				background-repeat: no-repeat;
+				background-size: 50%;
+				background-position: bottom;
+				
 			}
+			
+			.menu-warp{
+				display: flex;
+				display: -webkit-flex;
+				padding: 1.5rem 1.433333rem 0.7rem 1.433333rem;
+				justify-content: space-between;
+			}
+			
+			.menu-warp>div{
+				/*border: 1px solid #ccc;*/
+				flex: 1;
+				height: 100px;
+				/*width: rem;*/
+				text-align: center;
+			}
+			
+			.menu-warp>div>img{
+				
+				width: 50%;
+			}
+			
 		</style>
 	</head>
 
@@ -36,8 +63,22 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div class="img-wrap">
-					<img src="../../../image/home/like_d.png" width="100%" />
+				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/curtain/btn_Acoustoopticalarm@3x.png' : '../../../image/smart/devices/curtain/btn_Acoustoopticalarm1@3x.png') + ')'">
+				</div>
+				<div class="menu-warp app-font-size-24 app-color-dark">
+					<div>
+						<img src="../../../image/smart/devices/curtain/btn_Openthecurtains@3x.png"/>
+						<div>打开窗帘</div>
+					</div>
+					
+					<div>
+						<img src="../../../image/smart/devices/curtain/btn_suspend@3x.png"/>
+						<div>暂停.开始.关闭</div>
+					</div>
+					<div>
+						<img src="../../../image/smart/devices/curtain/btn_Closecurtain@3x.png"/>
+						<div>关闭窗帘</div>
+					</div>
 				</div>
 
 				<ul class="mui-table-view app-font-size-28">
@@ -61,87 +102,6 @@
 					</li>
 				</ul>
 
-				<ul class="mui-table-view app-font-size-28">
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>设备ID</span>
-							<span class="mui-badge">123456789</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>设备名称</span>
-							<span class="mui-badge">xx房间的智能插座</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>绑定主机</span>
-							<span class="mui-badge">AX-360主机</span>
-						</a>
-					</li>
-				</ul>
-				<ul class="mui-table-view app-font-size-28">
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>设备ID</span>
-							<span class="mui-badge">123456789</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>设备名称</span>
-							<span class="mui-badge">xx房间的智能插座</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>绑定主机</span>
-							<span class="mui-badge">AX-360主机</span>
-						</a>
-					</li>
-				</ul>
-				<ul class="mui-table-view app-font-size-28">
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>设备ID</span>
-							<span class="mui-badge">123456789</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>设备名称</span>
-							<span class="mui-badge">xx房间的智能插座</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>绑定主机</span>
-							<span class="mui-badge">AX-360主机</span>
-						</a>
-					</li>
-				</ul>
-				<ul class="mui-table-view app-font-size-28">
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>设备ID</span>
-							<span class="mui-badge">123456789</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>设备名称</span>
-							<span class="mui-badge">xx房间的智能插座</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>绑定主机</span>
-							<span class="mui-badge">AX-360主机</span>
-						</a>
-					</li>
-				</ul>
-				
 			</div>
 
 			<footer class="app-font-size-28">
@@ -174,12 +134,15 @@
 				el: '#warpper',
 				data: function() {
 					return {
-
+						state: true, // 当前状态
 					};
 				},
 				plusReady: function() {},
 				methods: {
-
+					// 切换开关
+					toggleSwitch: function(){
+						this.state = !this.state;
+					}
 				}
 			});
 		</script>
