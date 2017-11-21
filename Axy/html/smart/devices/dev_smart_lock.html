@@ -21,24 +21,23 @@
 				background-color: #F4F8FB;
 			}
 			
-			.img-wrap{
+			.img-wrap {
 				height: 0;
 				padding-bottom: 7.333333rem;
 				/*background-image: url(../../../image/smart/devices/curtain/btn_Acoustoopticalarm@3x.png);*/
 				background-repeat: no-repeat;
 				background-size: 50%;
 				background-position: bottom;
-				
 			}
 			
-			.menu-warp{
+			.menu-warp {
 				display: flex;
 				display: -webkit-flex;
-				padding: 1.5rem 1.433333rem 0.7rem 1.433333rem;
+				padding: 1.5rem 1.4rem 0.7rem 1.4rem;
 				justify-content: space-between;
 			}
 			
-			.menu-warp>div{
+			.menu-warp>div {
 				/*border: 1px solid #ccc;*/
 				flex: 1;
 				height: 100px;
@@ -46,10 +45,29 @@
 				text-align: center;
 			}
 			
-			.menu-warp>div>img{
-				
-				width: 50%;
+			.menu-warp>div>img {
+				width: 1.4rem;
 			}
+			
+			.battery_status {
+				color: #333333 !important;
+			}
+			
+			.point {
+				color: #9F9FA0;
+				padding-left: 0.266666rem;
+			}
+			
+			.app-switch-main{
+				height: 22px;
+				width: 39px;
+			}
+			
+			.mui-switch-handle{
+				height: 20px !important;
+				width: 20px !important;
+			}
+			
 			
 		</style>
 	</head>
@@ -63,21 +81,21 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/curtain/btn_Acoustoopticalarm@3x.png' : '../../../image/smart/devices/curtain/btn_Acoustoopticalarm1@3x.png') + ')'">
+				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/lock/btn_Intelligentdoorlock@3x.png' : '../../../image/smart/devices/lock/btn_Intelligentdoorlock1@3x.png') + ')'">
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_Openthecurtains@3x.png"/>
-						<div>打开窗帘</div>
+						<img src="../../../image/smart/devices/lock/btn_Settingpassword@3x.png" />
+						<div>设置密码</div>
 					</div>
-					
+
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_suspend@3x.png"/>
-						<div>暂停.开始.关闭</div>
+						<img src="../../../image/smart/devices/lock/btn_Onetimeunlocking@3x.png" />
+						<div>一次性开锁密码</div>
 					</div>
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_Closecurtain@3x.png"/>
-						<div>关闭窗帘</div>
+						<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />
+						<div>闭锁状态</div>
 					</div>
 				</div>
 
@@ -91,24 +109,46 @@
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">xx房间的智能插座</span>
+							<span class="mui-badge">xx店铺的智能门锁</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
 							<span>绑定主机</span>
-							<span class="mui-badge">AX-360主机</span>
+							<span class="mui-badge">xx店铺的AX-360智能主机</span>
+						</a>
+					</li>
+				</ul>
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>开锁记录</span>
+							<span class="mui-badge">123456789</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="battery_status">
+							<span>电池状态</span>
+							<span class="mui-badge battery_status">正常</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>密码保护</span>
+							<span class="point">远程开锁时需要密码验证</span>
+							<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isPwdProtection}" ref="pwd_protection">
+					<div class="mui-switch-handle"></div>
+				</div></span>
 						</a>
 					</li>
 				</ul>
 
 			</div>
 
-			<!--<footer class="app-font-size-28">
+			<footer class="app-font-size-28">
 				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
-			</footer>-->
-			<dev-footer :deviceid = "5" :comid="6" @unbind="onUnBind" @deldevive="onDelDevice"></dev-footer>
+			</footer>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -128,47 +168,27 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
-		
-		<script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
-		
 		<script type="text/javascript">
-			mui.init({
-				beforeback:function(){
-					plus.navigator.setStatusBarStyle('light');
-				}
-			});
-			
-			var _stateImgs = [];
+			mui.init();
 
 			new Vue({
 				el: '#warpper',
 				data: function() {
 					return {
 						state: true, // 当前状态
-						stateCode: 1, // 状态码 0 关闭 1 打开 2暂停
-						
+						isPwdProtection: true, // 是否开启密码保护
 					};
 				},
-				
-				computed: {
-					stateImg: function(){
-						return 
-					}
+				mounted: function() {
+					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
+						this.isPwdProtection = event.detail.isActive;
+					}.bind(this));
 				},
-				
-				plusReady: function() {
-					plus.navigator.setStatusBarStyle('dark');
-				},
+				plusReady: function() {},
 				methods: {
 					// 切换开关
-					toggleSwitch: function(){
+					toggleSwitch: function() {
 						this.state = !this.state;
-					},
-					onUnBind: function(){
-						console.log("unbind");
-					},
-					onDelDevice: function(){
-						console.log("deldevice");
 					}
 				}
 			});
