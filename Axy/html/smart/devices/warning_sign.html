@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>智能门锁</title>
+		<title>警示牌</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -23,42 +23,16 @@
 			
 			.img-wrap {
 				height: 0;
-				padding-bottom: 7.333333rem;
-				/*background-image: url(../../../image/smart/devices/curtain/btn_Acoustoopticalarm@3x.png);*/
+				padding-bottom: 7rem;
+				/*background-image: url(../../../image/smart/devices/gas/btn_Formaldehydedetector@3x.png);*/
 				background-repeat: no-repeat;
 				background-size: 50%;
 				background-position: bottom;
 			}
 			
 			.menu-warp {
-				display: flex;
-				display: -webkit-flex;
-				padding: 1.5rem 1.4rem 0.7rem 1.4rem;
-				justify-content: space-between;
+				height: 3.066666rem;
 			}
-			
-			.menu-warp>div {
-				/*border: 1px solid #ccc;*/
-				flex: 1;
-				height: 100px;
-				/*width: rem;*/
-				text-align: center;
-			}
-			
-			.menu-warp>div>img {
-				width: 1.4rem;
-			}
-			
-			.battery_status {
-				color: #333333 !important;
-			}
-			
-			.point {
-				color: #9F9FA0;
-				padding-left: 0.266666rem;
-			}
-		
-			
 		</style>
 	</head>
 
@@ -67,27 +41,13 @@
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">智能门锁</h1>
+				<h1 class="mui-title">警示牌</h1>
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/lock/btn_Intelligentdoorlock@3x.png' : '../../../image/smart/devices/lock/btn_Intelligentdoorlock1@3x.png') + ')'">
+				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/icon/btn_Warningsign@3x.png' : '../../../image/smart/devices/icon/btn_Warningsign1@3x.png') + ')'">
 				</div>
-				<div class="menu-warp app-font-size-24 app-color-dark">
-					<div>
-						<img src="../../../image/smart/devices/lock/btn_Settingpassword@3x.png" />
-						<div>设置密码</div>
-					</div>
-
-					<div>
-						<img src="../../../image/smart/devices/lock/btn_Onetimeunlocking@3x.png" />
-						<div>一次性开锁密码</div>
-					</div>
-					<div>
-						<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />
-						<div>闭锁状态</div>
-					</div>
-				</div>
+				<div class="menu-warp app-font-size-24 app-color-dark"></div>
 
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell">
@@ -99,40 +59,28 @@
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">xx店铺的智能门锁</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>绑定主机</span>
-							<span class="mui-badge">xx店铺的AX-360智能主机</span>
-						</a>
-					</li>
-				</ul>
-				<ul class="mui-table-view app-font-size-28">
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>开锁记录</span>
-							<span class="mui-badge">123456789</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="battery_status">
-							<span>电池状态</span>
-							<span class="mui-badge battery_status">正常</span>
+							<span class="mui-badge">xx家里的门磁探测器</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
-							<span>密码保护</span>
-							<span class="point">远程开锁时需要密码验证</span>
-							<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isPwdProtection}" ref="pwd_protection">
-					<div class="mui-switch-handle"></div>
-				</div></span>
+							<span>绑定主机</span>
+							<span class="mui-badge">AX-360主机</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>防区类型</span>
+							<span class="mui-badge">出入防区</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>告警延迟时间</span>
+							<span class="mui-badge">30S</span>
 						</a>
 					</li>
 				</ul>
-
 			</div>
 
 			<footer class="app-font-size-28">
@@ -166,13 +114,10 @@
 				data: function() {
 					return {
 						state: true, // 当前状态
-						isPwdProtection: true, // 是否开启密码保护
 					};
 				},
 				mounted: function() {
-					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
-						this.isPwdProtection = event.detail.isActive;
-					}.bind(this));
+					
 				},
 				plusReady: function() {},
 				methods: {

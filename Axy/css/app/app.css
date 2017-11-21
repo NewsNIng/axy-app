@@ -153,6 +153,24 @@ body {
 [data-dpr="3"] .app-font-size-40 {
   font-size: 60px;
 }
+.app-font-size-42 {
+  font-size: 21px;
+}
+[data-dpr="2"] .app-font-size-42 {
+  font-size: 42px;
+}
+[data-dpr="3"] .app-font-size-42 {
+  font-size: 63px;
+}
+.app-font-size-44 {
+  font-size: 22px;
+}
+[data-dpr="2"] .app-font-size-44 {
+  font-size: 44px;
+}
+[data-dpr="3"] .app-font-size-44 {
+  font-size: 66px;
+}
 .app-font-size-50 {
   font-size: 25px;
 }
