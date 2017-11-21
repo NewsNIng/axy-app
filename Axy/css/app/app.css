@@ -171,6 +171,33 @@ body {
 [data-dpr="3"] .app-font-size-52 {
   font-size: 78px;
 }
+.app-font-size-54 {
+  font-size: 27px;
+}
+[data-dpr="2"] .app-font-size-54 {
+  font-size: 54px;
+}
+[data-dpr="3"] .app-font-size-54 {
+  font-size: 81px;
+}
+.app-font-size-56 {
+  font-size: 28px;
+}
+[data-dpr="2"] .app-font-size-56 {
+  font-size: 56px;
+}
+[data-dpr="3"] .app-font-size-56 {
+  font-size: 84px;
+}
+.app-font-size-58 {
+  font-size: 29px;
+}
+[data-dpr="2"] .app-font-size-58 {
+  font-size: 58px;
+}
+[data-dpr="3"] .app-font-size-58 {
+  font-size: 87px;
+}
 .mui-bar-tab .mui-tab-item.app-color-active {
   color: #2bb8aa;
 }
@@ -201,6 +228,9 @@ a.mui-icon {
 }
 .app-color-9f9fa0 {
   color: #9F9FA0 !important;
+}
+.app-color-ff3b30 {
+  color: #ff3b30 !important;
 }
 .app-switch-main.mui-active {
   border: 2px solid #2bb8aa !important;

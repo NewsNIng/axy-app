@@ -104,10 +104,11 @@
 
 			</div>
 
-			<footer class="app-font-size-28">
+			<!--<footer class="app-font-size-28">
 				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
-			</footer>
+			</footer>-->
+			<dev-footer :deviceid = "5" :comid="6" @unbind="onUnBind" @deldevive="onDelDevice"></dev-footer>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -127,7 +128,9 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
-		<img src=""/>
+		
+		<script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init({
 				beforeback:function(){
@@ -160,6 +163,12 @@
 					// 切换开关
 					toggleSwitch: function(){
 						this.state = !this.state;
+					},
+					onUnBind: function(){
+						console.log("unbind");
+					},
+					onDelDevice: function(){
+						console.log("deldevice");
 					}
 				}
 			});
