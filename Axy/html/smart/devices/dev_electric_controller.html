@@ -17,11 +17,11 @@
 				background-color: #F4F8FB;
 			}
 			
-			.mui-content{
+			.mui-content {
 				padding-bottom: 0;
 			}
 			
-			.cardRoom{
+			.cardRoom {
 				padding: 0.346666rem;
 				padding-bottom: 0;
 				display: flex;
@@ -29,9 +29,9 @@
 				justify-content: space-between;
 				flex-wrap: wrap;
 				text-align: center;
-				
 			}
-			.cardRoom > div{
+			
+			.cardRoom>div {
 				display: inline-block;
 				min-width: 4.48rem;
 				margin-bottom: 0.346666rem;
@@ -40,42 +40,145 @@
 				/*border: #F3F3F3 solid 1px;*/
 				background-color: #FFFFFF;
 				border-radius: 3px;
-				
 				padding: 0.373333rem 0 0.506666rem 0;
 			}
 			
-			.cardRoom > div>.app-font-size-52{
+			.cardRoom>div>.app-font-size-52 {
 				line-height: 1rem;
 			}
 			
-			
-			
-			.menuRoom{
+			.menuRoom {
 				background-color: #FFFFFF;
 				padding: 1.266666rem 0.8rem;
-				
 				display: flex;
 				display: -webkit-flex;
-				
 				justify-content: space-between;
 			}
 			
-			.menuRoom>div{
+			.menuRoom>div {
 				text-align: center;
 				width: 1.466666rem;
 				/*background-color: #CCCCCC;*/
 			}
 			
-			header img{
+			header img {
 				width: 0.426666rem;
 				margin-left: 0.333rem;
 			}
 			
+			#popover.mui-popover {
+				width: 100%;
+				border-radius: 0;
+				bottom: 0;
+				left: 0;
+				margin: 0;
+				position: fixed;
+				height: auto;
+			}
+			.mui-popover .mui-table-view {
+			   max-height: none;
+			   margin-bottom: 0 !important;
+			}
+			#popover.mui-popover .mui-table-view-cell{
+				display: flex;
+				display: -webkit-flex;
+			}
+			#popover.mui-popover .mui-table-view-cell>*{
+				flex: 1;
+				
+				/*float: left;
+				display: inline-block;
+				width: 25%;*/
+				
+				text-align: center;
+			}
+			
+			#popover.mui-popover .mui-table-view-cell>*:nth-child(2){
+				flex: 2;
+				/*width: 50%;*/
+			}
+			
+			/*#popover.mui-popover .mui-table-view-cell:last-child{
+				position: relative;
+				height: 1.6rem;
+			}
+			#popover.mui-popover .mui-table-view-cell:last-child:before{
+				content: '';
+				width: 100%;
+				height: 0.266666rem;
+				background-color: rgba(0,0,0,0.05);
+				position: absolute;
+				left: 0;
+				top: 0;
+				
+			}*/
+			
+			
+			
+			#popover.mui-popover .mui-table-view-cell:after {
+			    left: 0;
+			    background-color: #c8c7cc;
+			}
 			
 		</style>
 	</head>
 
 	<body>
+ 
+		<div id="popover" class="mui-popover app-font-size-28 app-color-333333">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell app-color-9f9fa0">
+					<span>参数</span>
+					<span>预警值</span>
+					<span>报警值</span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>剩余电流</span>
+					<span>1000mA</span>
+					<span class="app-color-ff3b30">2000mA</span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>剩余电流</span>
+					<span>1000mA</span>
+					<span class="app-color-ff3b30">2000mA</span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>剩余电流</span>
+					<span>1000mA</span>
+					<span class="app-color-ff3b30">2000mA</span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>剩余电流</span>
+					<span>1000mA</span>
+					<span class="app-color-ff3b30">2000mA</span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>剩余电流</span>
+					<span>1000mA</span>
+					<span class="app-color-ff3b30">2000mA</span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>剩余电流</span>
+					<span>1000mA</span>
+					<span class="app-color-ff3b30">2000mA</span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>剩余电流</span>
+					<span>1000mA</span>
+					<span class="app-color-ff3b30">2000mA</span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>剩余电流</span>
+					<span>1000mA</span>
+					<span class="app-color-ff3b30">2000mA</span>
+				</li>
+				<li class="mui-table-view-cell" style="text-align: center;">
+					<a href="#popover">取消</a>
+				</li>
+				
+			</ul>
+		</div>
+
 		<div id="warpper">
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
@@ -84,7 +187,7 @@
 				<span class="mui-icon mui-pull-right">
 					<img src="../../../image/smart/devices/electric/btn_share@3x.png" />
 				</span>
-				<span class="mui-icon mui-pull-right">
+				<span class="mui-icon mui-pull-right" @tap="mui('#popover').popover('show');">
 					<img src="../../../image/smart/devices/electric/btn_threshold@3x.png" />
 				</span>
 			</header>
@@ -99,22 +202,22 @@
 							<div class="app-font-size-52">
 								{{o.value + o.company}}
 							</div>
-						</div>	
+						</div>
 					</template>
 				</div>
-				
+
 				<div class="menuRoom">
 					<template v-for="o,i in menuList">
 						<div class="app-font-size-24 app-color-9f9fa0">
-							<img :src="'../../../image/smart/devices/electric/'+ o.img +'@3x.png'" width="100%"/>
+							<img :src="'../../../image/smart/devices/electric/'+ o.img +'@3x.png'" width="100%" />
 							<div>{{o.name}}</div>
 						</div>
 					</template>
-					
+
 				</div>
 
 			</div>
-			
+
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -126,19 +229,20 @@
 		<!--请求相关-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		
-		<img src=""/>
+
+		<img src="" />
 		<script type="text/javascript">
 			mui.init();
+
 			
+
 			var _stateImgs = [];
 
 			new Vue({
 				el: '#warpper',
 				data: function() {
 					return {
-						stateList: [
-							{
+						stateList: [{
 								name: '剩余电流',
 								value: '0',
 								company: 'mA',
@@ -169,7 +273,7 @@
 								name: '环境温度',
 								value: '26.0',
 								company: '℃'
-							},{
+							}, {
 								name: '剩余电流',
 								value: '0',
 								company: 'mA'
@@ -180,8 +284,7 @@
 								company: '℃'
 							}
 						],
-						menuList:[
-							{
+						menuList: [{
 								name: '实时视频',
 								img: 'btn_video'
 							},
@@ -198,14 +301,13 @@
 								img: 'btn_Setup'
 							},
 						]
-						
+
 					};
 				},
-				
-				plusReady: function() {
-				},
+
+				plusReady: function() {},
 				methods: {
-					
+
 				}
 			});
 		</script>
