@@ -19,7 +19,36 @@
 	}
 	
 	
+	/**
+	 *  获取附近的店铺（分页）
+	 * @param {String} longitude 经度
+	 * @param {String} latitude 纬度
+	 * @param {String} city 城市
+	 * @param {Function} callback 回调
+	 * @param {Number} pageNumber
+	 * @param {Number} pageSize
+	 */
+	store.list = function(longitude, latitude, city, callback, pageNumber, pageSize){
+		pageNumber = pageNumber || 1;
+		pageSize = pageSize || 10;
+		
+		return ra("get", '/store/list', {
+			longitude: longitude,
+			latitude: latitude,
+			city: city,			
+			pageNumber: pageNumber,
+			pageSize: pageSize
+		}, callback);
+	}
 	
+	/**
+	 * 店铺详情
+	 * @param {Number} info 店铺id
+	 * @param {Function} callback 回调
+	 */
+	store.get = function(id, callback){
+		return ra("get", "/store/" + id, {}, callback);
+	}
 	
 	_.store = store;
 	

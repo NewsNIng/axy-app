@@ -124,15 +124,15 @@
 					<div class="mui-switch-handle"></div>
 				</div>
 			</div>
-			<div class="prompt app-font-size-24">如果触发条件</div>
-			<div class="trigger_comply app-font-size-24">
+			<div class="prompt app-font-size-28">如果触发条件</div>
+			<div class="trigger_comply app-font-size-28">
 				<img class="item_icon" :src="trigger.img" />
 				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
 				<div class="title app-font-size-28" v-text="trigger.title"></div>
 			</div>
-			<div class="prompt app-font-size-24">就执行动作</div>
+			<div class="prompt app-font-size-28">就执行动作</div>
 			<template v-for="o,i in complys">
-				<div class="trigger_comply app-font-size-24 mui-table-view-cell">
+				<div class="trigger_comply app-font-size-28 mui-table-view-cell">
 					<div class="mui-slider-right mui-disabled">
 						<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
 					</div>
