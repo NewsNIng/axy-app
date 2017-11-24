@@ -86,7 +86,9 @@
 					// 重新刷新signup next
 					v = plus.webview.getWebviewById('signup_next');
 					if(!v){
-						v = plus.webview.create('business/signup_next.html', 'signup_next');
+						v = plus.webview.create('business/signup_next.html', 'signup_next', {}, {
+							storeId:　storeId
+						});
 						methodName = 'show';
 					}
 					
@@ -108,6 +110,12 @@
 				mui(document.body).on('tap','button', function(){
 					fnArr[+!this.classList.contains('app-btn-main')].call(this);
 				});
+			});
+			
+			var storeId = -1;
+			
+			mui.plusReady(function(){
+				storeId = plus.webview.currentWebview().storeId;
 			});
 			
 			

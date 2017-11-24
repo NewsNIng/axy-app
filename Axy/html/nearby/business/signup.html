@@ -318,12 +318,12 @@
 								err ? rj(err) : re(data);
 							});
 
-						}).then(function() {
+						}).then(function(data) {
 							w.close();
 							mui.toast("申请成功");
 							mui.openWindow('signup_success.html', 'signup_success', {
 								extras: {
-									
+									storeId: 1,// TODO 入驻后有一个商品ID
 								}
 							});
 						}).catch(function(err) {

@@ -82,8 +82,8 @@
 	 * @param {String} account 用户帐号
 	 * @param {Function} callback 回调函数
 	 */
-	user.get = function(account, callback){
-		return ra('get', '/user/' + account, {}, callback);
+	user.get = function(loginaccount, focusaccount, callback){
+		return ra('get', '/user/' + loginaccount +'/' + focusaccount, {}, callback);
 	}
 	
 	

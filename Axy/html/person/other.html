@@ -169,8 +169,9 @@
 						isAttention: false,
 
 						dynamic: [],
-						focus: false,
+//						focus: false,
 						focuscount: 0,
+						isfocus: 0,
 						userInfo: {
 							"id": 2,
 							"account": "",
@@ -187,17 +188,25 @@
 						n: 1
 					};
 				},
+				computed: {
+					focus: function(){
+						return this.isfocus !== 0;
+					}
+				},
 				plusReady: function() {
 					this.uid = this.$view.uid;
+					this.from = app.user.get().account || "null";
 					this.getInfo();
 					this.getList();
+					
 				},
 				methods: {
 					getInfo: function() {
-						dal.user.get(this.uid, function(err, data) {
+						dal.user.get(this.from, this.uid, function(err, data) {
 							if(err) {
 								return mui.toast(err.message);
 							}
+							this.isfocus = data.isfocus;
 							this.focuscount = data.focuscount;
 							this.userInfo = data.user;
 						}.bind(this));
@@ -211,7 +220,10 @@
 						}.bind(this), 6);
 					},
 					onFocusTap: function() {
-						this.focus = !this.focus;
+						if(this.from === this.uid){
+							return mui.toast("您不能关注自己！");
+						}
+						this.isfocus = +!this.isfocus;
 						this.changeFocus();
 					},
 					changeFocus: function() {
