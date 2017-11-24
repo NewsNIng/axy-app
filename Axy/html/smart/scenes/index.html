@@ -18,7 +18,7 @@
 			.mui-content {
 				overflow: hidden;
 				padding-left: 0.173333rem;
-				margin-bottom: 1.626666rem; 
+				margin-bottom: 1.626666rem;
 			}
 			
 			.mui-content>div {
@@ -35,13 +35,12 @@
 				text-align: center;
 				line-height: 1;
 				color: #333333;
-				
+				position: relative;
 				/*font-weight: bold;*/
 			}
 			
 			.mui-content>div:active {
 				background-color: #EFEFEF;
-				
 			}
 			
 			.mui-content>div>img {
@@ -61,23 +60,41 @@
 				background-color: #06c1ae;
 			}
 			
+			.header_right {
+				line-height: 45px;
+				color: white;
+			}
+			
+			.del_icon {
+				position: absolute;
+				right: 0;
+				transform: translate(50%, -50%);
+				-webkit-transform: translate(50%, -50%);
+			}
+			
+			.del_icon>img {
+				width: 0.6rem;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div id="warpper">
-		<header class="mui-bar mui-bar-nav app-header">
-			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">智能场景</h1>
-		</header>
-		<div class="mui-content">
-			<template v-for="o in scenes">
-				<div class="app-font-size-30" @tap="mui.openWindow('edit_scenes.html','edit_scenes')"><img :src="o.img"/>{{o.title}}</div>
-				
-			</template>
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">智能场景</h1>
+				<span class="header_right mui-pull-right app-font-size-28" @tap="isEdit=!isEdit" v-text="isEdit?'完成':'编辑'"></span>
+			</header>
+			<div class="mui-content">
+				<template v-for="o,i in scenes">
+
+					<div class="app-font-size-30" @tap="onClickTap(i)">
+						<span v-if="isEdit" class="del_icon" @tap.stop="onDelTap(i)"><img src="../../../image/smart/scenes/delete_icon.png"/></span>
+						<img :src="o.state?o.img_on:o.img_off" />{{o.title}}</div>
+				</template>
+			</div>
+			<div class="foot app-font-size-34" @tap="mui.openWindow('create_scenes.html','create_scenes')">添加新场景</div>
 		</div>
-		<div class="foot app-font-size-34" @tap="mui.openWindow('create_scenes.html','create_scenes')">添加新场景</div>
-</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 
@@ -102,25 +119,43 @@
 				el: '#warpper',
 				data: function() {
 					return {
+						isEdit: false, // 是否正在编辑
+
 						scenes: [{
 							title: "回家模式",
-							img: "../../../image/smart/scenes/btn_get home1@3x.png",
-							
+							state: false,
+							img_on: "../../../image/smart/scenes/btn_get home1@3x.png",
+							img_off: "../../../image/smart/scenes/btn_get home@3x.png",
 						}, {
 							title: "离家模式",
-							img: "../../../image/smart/scenes/btn_Be away from home1@3x.png",
+							state: false,
+							img_on: "../../../image/smart/scenes/btn_Be away from home1@3x.png",
+							img_off: "../../../image/smart/scenes/btn_Be away from home@3x.png",
 						}, {
 							title: "回店模式",
-							img: "../../../image/smart/scenes/icon_Back to the shop1@3x.png",
+							state: false,
+							img_on: "../../../image/smart/scenes/icon_Back to the shop1@3x.png",
+							img_off: "../../../image/smart/scenes/icon_Back to the shop@3x.png",
 						}, {
 							title: "离店模式",
-							img: "../../../image/smart/scenes/btn_Departure1@3x.png",
+							state: false,
+							img_on: "../../../image/smart/scenes/btn_Departure1@3x.png",
+							img_off: "../../../image/smart/scenes/btn_Departure@3x.png",
 						}]
 					};
 				},
 				plusReady: function() {},
 				methods: {
-					
+					onClickTap: function(i) {
+						if(this.isEdit) {
+							mui.openWindow('edit_scenes.html', 'edit_scenes');
+						} else {
+							this.scenes[i].state = !this.scenes[i].state;
+						}
+					},
+					onDelTap: function(i) {
+						this.scenes.splice(i, 1);
+					}
 				}
 			});
 		</script>
