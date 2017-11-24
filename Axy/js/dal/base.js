@@ -93,6 +93,7 @@ function requestAdapter(type, url, params, callback){
 				err.status = 3;	
 			}
 			var ts = ["网络错误","请求超时","下载失败","请求失败"][err.status];
+			ts = ts || "其它错误";
 			callback({
 				code: err.status,
 				message: ts + "-" + err.message

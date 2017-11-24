@@ -462,7 +462,8 @@
 					"html/nearby/discover/discover_details.html",
 					"html/nearby/pages/discover_release.html",
 					"html/nearby/discover/discover_release.html",
-					"html/person/other.html"
+					"html/person/other.html",
+					"html/common/login.html"
 				],
 				"priority": 0
 			},
@@ -507,6 +508,13 @@
 				"resources": [],
 				"refer": [
 					"html/smart/scenes/trigger_conditions.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/discover/discover_details.html": {
+				"resources": [],
+				"refer": [
+					"html/person/other.html"
 				],
 				"priority": 0
 			}

@@ -87,6 +87,20 @@
 		return ra('post', '/article/like/' + aid, {}, callback);
 	}
 	
+	
+	/**
+	 * 用户相关说说
+	 */
+	article.user = {
+		list: function(account, pageNumber, callback, pageSize){
+			return ra('get', '/article/user/list', {
+				account: account,
+				pageNumber: pageNumber,
+				pageSize: pageSize || 10,
+			},callback);
+		}
+	}
+	
 	_.article = article; 
 	
 }(window.dal, window.requestAdapter));

@@ -284,7 +284,7 @@
 								mui.toast('没有更多了~');
 								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
 							}
-							this.items.push.call(this.items, data);
+							this.items.push.apply(this.items, data);
 
 						}.bind(this),8);
 					},

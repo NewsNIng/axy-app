@@ -53,6 +53,9 @@
 	}
 	
 	
+	/**
+	 * 关注相关
+	 */
 	user.focus = {
 		/**
 		 * 关注其它用户
@@ -73,6 +76,16 @@
 			},callback);
 		},
 	}
+	
+	/**
+	 * 查询资料
+	 * @param {String} account 用户帐号
+	 * @param {Function} callback 回调函数
+	 */
+	user.get = function(account, callback){
+		return ra('get', '/user/' + account, {}, callback);
+	}
+	
 	
 	
 	_.user = user;
