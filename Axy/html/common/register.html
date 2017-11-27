@@ -226,17 +226,17 @@
 
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_account.png" />
-				<input type="text" class="app-font-size-24" placeholder="请输入手机号码" v-model="username">
+				<input type="text" class="app-font-size-28" placeholder="请输入手机号码" v-model="username">
 			</div>
 
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_msg.png" />
-				<input type="tel" class="app-font-size-24" placeholder="请输入短信验证码" v-model="verifycode">
+				<input type="tel" class="app-font-size-28" placeholder="请输入短信验证码" v-model="verifycode">
 				<button type="button" @tap="getCodeTap()" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined" :class="{'mui-disabled': codeState}" v-text="codeState ? codeTimer: '发送验证码'"></button>
 			</div>
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_pwd.png" />
-				<input type="password" class="app-font-size-24" placeholder="请设置登录密码" v-model="password">
+				<input type="password" class="app-font-size-28" placeholder="请设置登录密码" v-model="password">
 			</div>
 			<!--登录按钮-->
 			<button :disabled="!user_agree" type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在注册..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">立即注册</button>

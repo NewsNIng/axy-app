@@ -61,15 +61,19 @@ var dal = {
 // 统一请求 适配器
 function requestAdapter(type, url, params, callback){
 	url = dal.BASE_URL + url;
+	
+	// 获取用户account
+	
+	params.account = params.account || window.localStorage.getItem('_account_'); 
+	
 	//params.datatime = +(new Date());
 	
 	
 	console.log("["+type+"]" +url);
 	console.log(JSON.stringify(params));
 	
-	return mui.ajax(url ,{
+	var options = {
 		data: params,
-		contentType: 'application/json;charset=UTF-8',
 		type: type,
 		timeout: 8000,
 		success: function(data){
@@ -89,13 +93,17 @@ function requestAdapter(type, url, params, callback){
 				err.status = 3;	
 			}
 			var ts = ["网络错误","请求超时","下载失败","请求失败"][err.status];
+			ts = ts || "其它错误";
 			callback({
 				code: err.status,
 				message: ts + "-" + err.message
 			},null);
-		},
-		
-	});
+		}
+	};
+	if(type.toUpperCase() === 'POST'){
+		options.contentType = 'application/json;charset=UTF-8';
+	}
+	return mui.ajax(url ,options);
 	
 	return fly.request(url, params, {
 		method: type

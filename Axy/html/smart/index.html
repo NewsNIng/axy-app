@@ -26,6 +26,7 @@
 		<script type="text/javascript" src="../../js/common/immersed.js" ></script>
 		<script src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js" ></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
 		
 		<script type="text/javascript" src="../../js/dal/base.js" ></script>
 		<script type="text/javascript" src="../../js/dal/user.js" ></script>
@@ -53,10 +54,17 @@
 								name: '红外探测',
 								href: 'devices/dev_Infrared_controller.html'
 							},
+							{
+								name: '扫码测试',
+								href: 'add/scan.html'
+							}
 						]
 					};
 				},
 				mounted: function(){
+					
+				},
+				plusReady: function(){
 					
 				},
 				methods: {

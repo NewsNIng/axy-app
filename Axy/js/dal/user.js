@@ -53,6 +53,41 @@
 	}
 	
 	
+	/**
+	 * 关注相关
+	 */
+	user.focus = {
+		/**
+		 * 关注其它用户
+		 * @param {Number} focusaccount 被关注人
+		 */
+		add: function(focusaccount, callback){
+			return ra('post', '/user/focus/add', {
+				focusaccount: focusaccount,
+			},callback);
+		},
+		/**
+		 * 取消关注用户
+		 * @param {Number} focusaccount 被取消关注人
+		 */
+		delete: function(focusaccount, callback){
+			return ra('post', '/user/focus/delete', {
+				focusaccount: focusaccount,
+			},callback);
+		},
+	}
+	
+	/**
+	 * 查询资料
+	 * @param {String} account 用户帐号
+	 * @param {Function} callback 回调函数
+	 */
+	user.get = function(loginaccount, focusaccount, callback){
+		return ra('get', '/user/' + loginaccount +'/' + focusaccount, {}, callback);
+	}
+	
+	
+	
 	_.user = user;
 	
 }(window.dal, window.requestAdapter));

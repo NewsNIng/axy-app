@@ -15,13 +15,15 @@
 			.mui-content {
 				background-color: #f5f5f9;
 			}
-			.tips2{
+			
+			.tips2 {
 				padding: 0.346666rem;
 				background-color: #FFFFFF;
 				color: #333333;
 				position: relative;
 			}
-			.tips2:after{
+			
+			.tips2:after {
 				content: "";
 				position: absolute;
 				height: 1px;
@@ -32,18 +34,17 @@
 				transform: scaleY(0.5);
 				-webkit-transform: scaleY(0.5);
 			}
-			.imgRoom{
+			
+			.imgRoom {
 				background-color: #FFFFFF;
 				padding: 0.346666rem;
 				display: flex;
 				display: -webkit-flex;
 				justify-content: space-between;
 				flex-wrap: wrap;
-				
-				
 			}
 			
-			.imgRoom>div{
+			.imgRoom>div {
 				width: 2.88rem;
 				height: 2.88rem;
 				background-color: #F4F8FB;
@@ -52,18 +53,17 @@
 				background-position: center;
 			}
 			
-			
-			
-			.imgRoom>div{
+			.imgRoom>div {
 				pointer-events: none;
 			}
-			.imgRoom>div.last,.imgRoom>div.over{
+			
+			.imgRoom>div.last,
+			.imgRoom>div.over {
 				pointer-events: all;
 				position: relative;
 			}
 			
-			
-			.imgRoom>div.last:after{
+			.imgRoom>div.last:after {
 				content: '';
 				z-index: 20;
 				position: absolute;
@@ -77,36 +77,36 @@
 				transform: translate(-50%, -50%);
 				-webkit-transform: translate(-50%, -50%);
 			}
-			textarea{
+			
+			textarea {
 				border: none;
 				padding: 0;
 				margin-bottom: 0.346666rem;
 				font-size: 13px;
 				height: 2.5rem;
-				
 			}
 			
-			textarea::-webkit-input-placeholder,input::-webkit-input-placeholder{
+			textarea::-webkit-input-placeholder,
+			input::-webkit-input-placeholder {
 				font-size: 13px;
 				color: #A2A6B1;
 			}
 			
-			input{
+			input {
 				border: 0px;
 				width: 7rem;
 				padding: 0;
 				height: 0.453333rem;
 			}
 			
-			.room{
+			.room {
 				padding: 0.346666rem;
-				
 				background-color: #FFFFFF;
 				position: relative;
 				margin-bottom: 0.266666rem;
 			}
 			
-			.room:after{
+			.room:after {
 				position: absolute;
 				content: attr(data-ts);
 				color: #a2a6b1;
@@ -114,8 +114,7 @@
 				bottom: 0.346666rem;
 			}
 			
-			
-			.room.ps:after{
+			.room.ps:after {
 				content: '';
 				left: 0.413333rem;
 				top: 0;
@@ -123,11 +122,9 @@
 				background-color: #ccc;
 				transform: scaleY(0.5);
 				-webkit-transform: scaleY(0.5);
-				
 			}
 			
-			
-			.ps{
+			.ps {
 				display: flex;
 				display: -webkit-flex;
 				align-items: center;
@@ -135,18 +132,17 @@
 				margin-bottom: 0;
 			}
 			
-			.ps>img{
+			.ps>img {
 				margin-right: 0.15rem;
 			}
 			
-				.tips {
+			.tips {
 				margin: 0 0 0.16rem 0;
 			}
 			
 			.color808080 {
 				color: #808080;
 			}
-			
 			
 			.cardRoom {
 				display: flex;
@@ -179,7 +175,7 @@
 				background-color: #FFFFFF;
 			}
 			
-			button{
+			button {
 				margin: 2.293333rem 0.346666rem 0.693333rem 0.346666rem;
 				width: 9.306666rem;
 				height: 1.186666rem;
@@ -191,33 +187,31 @@
 	<body>
 
 		<header class="mui-bar mui-bar-nav app-header">
-		    <a class="mui-action-back app-icon-back mui-pull-left"></a>
-		    <h1 class="mui-title">发布说说</h1>
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">发布说说</h1>
 		</header>
 		<div class="mui-content">
-		    <div class="tips2 app-font-size-26">
+			<div class="tips2 app-font-size-26">
 				添加标题
 				<!--<span style="color: #9F9FA0;">(30字以内)</span>-->
 				<input v-model="t0" maxlength="30" placeholder="30字以内" />
 			</div>
-			<div class="app-font-size-26 room" :data-ts="t1.length + '/300'" >
-				<textarea  maxlength="300" rows="4" style="height: auto !important;"   v-model="t1" placeholder="说说你的心得"></textarea>
+			<div class="app-font-size-26 room" :data-ts="t1.length + '/300'">
+				<textarea maxlength="300" rows="4" style="height: auto !important;" v-model="t1" placeholder="说说你的心得"></textarea>
 			</div>
-			
-			
+
 			<div class="tips2 app-font-size-26">
-				添加商品图片
-				<span style="color: #a2a6b1;">(无限制)</span>
+				添加说说图片
+				<!--<span style="color: #a2a6b1;">(无限制)</span>-->
 			</div>
-		
-				
+
 			<div class="imgRoom app-font-size-26">
 				<template v-for="o,i in imgs">
-					<div :class="{'last': i === firstNullIndex, 'over': o !== ''}" :style="'background-image: url('+ o +')'" @tap="onImgTap(i)"></div>	
+					<div :class="{'last': i === firstNullIndex, 'over': o !== ''}" :style="'background-image: url('+ o +')'" @tap="onImgTap(i)"></div>
 				</template>
 			</div>
-			
-			<div class="app-font-size-26 room ps">
+
+			<!--<div class="app-font-size-26 room ps">
 				<img src="../../../image/main/nearby.png" width="15px"/>
 				<span>
 					南山市西丽官龙第一工业区
@@ -232,17 +226,21 @@
 
 				</div>
 				
-			</div>
-			
-			<button type="button" class="mui-btn app-btn-main app-font-size-34">发布</button>
-			
-			
-			
+			</div>-->
+
+			<button @tap="onSuccessTap()" type="button" class="mui-btn app-btn-main app-font-size-34">发布</button>
+
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/system.js"></script>
+		<script type="text/javascript" src="../../../js/dal/article.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
+
 		<script type="text/javascript">
 			new Vue({
 				el: ".mui-content",
@@ -257,42 +255,142 @@
 							"长沙",
 							"惠州",
 						],
+						adress: "深圳",
+						longitude: 0,
+						latitude: 0,
 					};
 				},
 				computed: {
-					firstNullIndex: function(){
+					firstNullIndex: function() {
 						var i;
-						for(i = 0; i < this.len; i++){
-							if(this.imgs[i] === ""){
+						for(i = 0; i < this.len; i++) {
+							if(this.imgs[i] === "") {
 								return i;
 							}
 						}
 						return -1;
 					},
-					len: function(){
+					len: function() {
 						return this.imgs.length;
 					}
 				},
+				plusReady: function() {
+					//					plus.geolocation.getCurrentPosition(function(){
+					//						
+					//					});
+				},
 				mounted: function() {
-					
+
 				},
 				methods: {
-					onImgTap: function(index){
+					onImgTap: function(index) {
 						var that = this;
-						this.$gallery(function(err, imgArr){
-							if(err){
+						this.$gallery(function(err, imgArr) {
+							if(err) {
 								return mui.toast("图片选取失败");
 							}
-							if(imgArr.length > that.len){
-								mui.toast("您最多只能选择"+ that.len + "张");
-								imgArr = imgArr.splice(0, that.len);	
+							if(imgArr.length > that.len) {
+								mui.toast("您最多只能选择" + that.len + "张");
+								imgArr = imgArr.splice(0, that.len);
 							}
-							
+
 							// 先bind固定参数，再apply不定数量参数
 							that.imgs.splice.bind(that.imgs, index, imgArr.length).apply(that.imgs, imgArr);
-							
-						},this.len - index);
+
+						}, this.len - index);
 					},
+					onSuccessTap: function() {
+						var w = plus.nativeUI.showWaiting("正在处理图片...");
+						var that = this;
+
+						new Promise(function(re, rj) {
+
+								var errMessage = app.rules.testListBy([{
+										type: function(v) {
+											v = v.trim();
+											if(v.length === 0) {
+												return '标题不能为空';
+											}
+											if(v.length > 30) {
+												return '标题不能超过30个字'
+											}
+										},
+										value: that.t0
+									},
+									{
+										type: function(v) {
+											if(v.length === 0) {
+												return '心得不能为空';
+											}
+											if(v.length > 300) {
+												return '心得不能超过30个字'
+											}
+										},
+										value: that.t1
+									},
+									{
+										type: function(arr) {
+											for(var i in arr){
+												if(arr[i] !== ''){return};
+											}
+											return '您至少上传一张图片';
+										},
+										value: that.imgs
+									},
+								]);
+
+								if(errMessage) {
+									rj(new Error(errMessage));
+								}
+
+								// 压缩图片
+								new that.$Zip().processImage(that.imgs, 500, function(err, data) {
+									if(err) {
+										return rj(err);
+									}
+									re(data);
+								});
+							})
+							.then(function(imgs) {
+								that.imgs = [];
+								that.imgs.push.apply(that.imgs, imgs);
+								// 提交服务器
+								return new Promise(function(re, rj) {
+									dal.system.uploadImg(that.imgs, function(err, imgList) {
+										if(err) {
+											return rj(err);
+										}
+										re(imgList);
+									});
+								});
+							})
+							.then(function(imgList) {
+								// 提交发布说说
+								w.setTitle("正在发布...");
+
+								return new Promise(function(resolve, reject) {
+
+									dal.article.add(that.t0.trim(), that.t1, imgList, function(err, data) {
+										if(err) {
+											return reject(err);
+										}
+										resolve(data);
+									});
+								});
+							})
+							.then(function() {
+								w.close();
+								mui.toast("发布成功");
+								mui.back();
+
+							})
+							.catch(function(err) {
+								w.close();
+								//err.message
+								mui.toast(err.message || "发布说说失败，请重试");
+							});
+
+					}
 				},
 
 			});

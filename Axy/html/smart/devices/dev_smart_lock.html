@@ -151,13 +151,7 @@
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-
-		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
-		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
-
-		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
-		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
-		<script type="text/javascript" src="arr.js"></script>-->
+		
 		<script type="text/javascript">
 			mui.init();
 
@@ -168,7 +162,7 @@
 						state: true, // 当前状态
 						isPwdProtection: true, // 是否开启密码保护
 					};
-				},
+				}, 
 				mounted: function() {
 					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
 						this.isPwdProtection = event.detail.isActive;

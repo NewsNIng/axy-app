@@ -42,6 +42,7 @@
 			
 			.mui-table-view-cell>a>img {
 				width: 100%;
+				max-height: 2.5rem;
 			}
 			
 			.mui-table-view-cell>a>div {
@@ -77,7 +78,7 @@
 				
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
 					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" v-for="o,i in hostDevs.devs">
-						<a href="#">
+						<a>
 							<img :src="o.img"/>
 							<div class="mui-media-body">{{o.name}}</div>
 						</a>
@@ -87,7 +88,7 @@
 				
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
 					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" v-for="o,i in ctrl_fit.devs">
-						<a href="#">
+						<a>
 							<img :src="o.img"/>
 							<div class="mui-media-body">{{o.name}}</div>
 						</a>
@@ -97,7 +98,7 @@
 				
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
 					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" v-for="o,i in safe_fit.devs">
-						<a href="#">
+						<a>
 							<img :src="o.img"/>
 							<div class="mui-media-body">{{o.name}}</div>
 						</a>

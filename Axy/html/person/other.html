@@ -72,7 +72,7 @@
 				font-weight: bold;
 			}
 			
-			.attention:active {
+			.attention.active {
 				color: #FFFFFF;
 				background-color: #F82746;
 			}
@@ -94,13 +94,12 @@
 				padding: 0 0 0.346666rem 0.346666rem;
 				overflow: hidden;
 				background-color: white;
-				
 			}
 			
 			.dynamic_item {
 				float: left;
 				width: 2.88rem;
-				margin: 0.346666rem 0.333333rem 0.08rem 0; 
+				margin: 0.346666rem 0.333333rem 0.08rem 0;
 				font-weight: 400;
 				text-align: center;
 				line-height: 12px;
@@ -122,17 +121,16 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<img :src="img" />
-				<div class="user_icon app-font-size-26"><img :src="userIcon" /></div>
-				<div class="user_name app-font-size-38" style="display: inline;" v-text="userName"></div>
-				<div class="attention app-font-size-26">+ 关注</div>
-				<div class="fans app-font-size-26" v-text="fans+'人已关注'"></div>
+				<img :src="userInfo.headimgurl" />
+				<div class="user_icon app-font-size-26"><img :src="userInfo.headimgurl" /></div>
+				<div class="user_name app-font-size-38" style="display: inline;" v-text="userInfo.nickname"></div>
+				<div class="attention app-font-size-26" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
+				<div class="fans app-font-size-26" v-text="focuscount+'人已关注'"></div>
 				<div class="TA app-font-size-26">TA的动态</div>
 				<div class="dynamic">
 					<template v-for="o in dynamic">
-						<div class="dynamic_item app-font-size-24">
-							<img :src="o.img" />
-							{{o.tittle}}
+						<div class="dynamic_item app-font-size-28">
+							<img :src="_getImg(o.image1,o.image2,o.image3)" /> {{o.title}}
 						</div>
 					</template>
 				</div>
@@ -150,6 +148,8 @@
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../js/dal/article.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 
@@ -163,38 +163,81 @@
 				el: '.wrapper',
 				data: function() {
 					return {
-						inputFoucs: false,
 						img: "http://placehold.it/750x517",
 						userName: "小鱼",
 						userIcon: "http://placehold.it/160x160",
 						isAttention: false,
-						fans: 1212,
-						dynamic: [{
-							tittle: "标题标题",
-							img: "http://placehold.it/216x216",
-						}, {
-							tittle: "标题标题",
-							img: "http://placehold.it/216x216",
-						}, {
-							tittle: "标题标题",
-							img: "http://placehold.it/216x216",
-						}, {
-							tittle: "标题标题",
-							img: "http://placehold.it/216x216",
-						}, {
-							tittle: "标题标题",
-							img: "http://placehold.it/216x216",
-						}, {
-							tittle: "标题标题",
-							img: "http://placehold.it/216x216",
-						}]
+
+						dynamic: [],
+//						focus: false,
+						focuscount: 0,
+						isfocus: 0,
+						userInfo: {
+							"id": 2,
+							"account": "",
+							"gender": "",
+							"nickname": "",
+							"birthday": "",
+							"province": "",
+							"city": "",
+							"headimgurl": "",
+							"qqopenid": null,
+							"wxopenid": null,
+							"wbopenid": null
+						},
+						n: 1
 					};
 				},
+				computed: {
+					focus: function(){
+						return this.isfocus !== 0;
+					}
+				},
 				plusReady: function() {
-
+					this.uid = this.$view.uid;
+					this.from = app.user.get().account || "null";
+					this.getInfo();
+					this.getList();
+					
 				},
 				methods: {
-
+					getInfo: function() {
+						dal.user.get(this.from, this.uid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.isfocus = data.isfocus;
+							this.focuscount = data.focuscount;
+							this.userInfo = data.user;
+						}.bind(this));
+					},
+					getList: function(){
+						dal.article.user.list(this.uid, this.n, function(err, data){
+							if(err) {
+								return mui.toast(JSON.stringify(err));
+							}
+							this.dynamic = data;
+						}.bind(this), 6);
+					},
+					onFocusTap: function() {
+						if(this.from === this.uid){
+							return mui.toast("您不能关注自己！");
+						}
+						this.isfocus = +!this.isfocus;
+						this.changeFocus();
+					},
+					changeFocus: function() {
+						var methodName = 'add';
+						if(!this.focus) {
+							methodName = 'delete';
+						}
+						dal.user.focus[methodName](this.uid, function(err, data) {
+							
+						});
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
 				}
 			});
 		</script>

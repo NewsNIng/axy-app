@@ -123,6 +123,8 @@
 			
 			.comment_value {
 				color: #333333;
+				width: 100%;
+				word-break:break-all; 
 			}
 			
 			.replynum {
@@ -303,8 +305,10 @@
 			</header>
 
 			<div class="footer" :class="{'isFocus': inputFoucs}">
-				<input @focus="inputFoucs=true" @blur="inputFoucs=false" type="" name="" id="" value="" placeholder="写评论" />
-
+				<input ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="" name="" id="" v-model="content" placeholder="写评论" />
+				<button v-if="inputFoucs" :disabled="c.length === 0" @tap="onSendTap()" type="button" class="mui-btn app-btn-main" style="margin-left: 10px;">发送</button>
+				
+				
 				<div class="data-count" data-count=1>
 					<img src="../../../image/nearby/discover/comment.png" />
 				</div>
@@ -318,34 +322,34 @@
 
 			<div class="mui-content noImmersed  mui-scroll-wrapper">
 				<div class="mui-scroll">
-					<div class="bgimage" :style="'background-image: url('+ img +');'">
+					<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'">
 
 					</div>
 					<div class="user_tittle app-font-size-26">
-						<img :src="userIcon" />
-						<div style="display: inline;" v-text="userName"></div>
-						<div class="attention">+ 关注</div>
+						<img  @tap="onHeadTap(info.account)" :src="info.headimgurl" />
+						<div style="display: inline;" v-text="info.nickname"></div>
+						<!--<div class="attention">+ 关注</div>-->
 					</div>
-					<div class="label app-font-size-26" v-text="label"></div>
-					<div class="description app-font-size-26" v-text="description"></div>
+					<div class="label app-font-size-26" v-text="'#' + info.title"></div>
+					<div class="description app-font-size-26" v-text="info.content"></div>
 					<div class="reply_tittle app-font-size-26">
 						评论&nbsp;
-						<div style="display: inline;" v-text="'('+comments.length+')'"></div>
+						<div style="display: inline;" v-text="'('+(total || 0)+')'"></div>
 					</div>
-					<div class="comments" v-for="o in comments">
-						<img :src="o.userImg" />
+					<div class="comments" v-for="o in clist">
+						<img @tap="onHeadTap(o.account)" :src="o.headimgurl" />
 						<div class="comment_info">
-							<div class="user_name app-font-size-26" v-text="o.userName"></div>
-							<div class="comment_value app-font-size-32" v-text="o.text"></div>
+							<div class="user_name app-font-size-26" v-text="o.nickname"></div>
+							<div class="comment_value app-font-size-32" v-text="o.content"></div>
 							<div class="time_replynum app-font-size-20">
-								<div class="app-font-size-20" style="display: inline;" v-text="o.time"></div>
-								·
-								<div class="replynum" v-text="o.replys.length+'回复'"></div>
+								<div class="app-font-size-20" style="display: inline;" v-text="o.senddate"></div>
+								<!--·-->
+								<!--<div class="replynum" v-text="o.replys.length+'回复'"></div>-->
 							</div>
-							<div class="reply app-font-size-26" v-for="p in o.replys">
+							<!--<div class="reply app-font-size-26" v-for="p in o.replys">
 								<div class="user_name app-font-size-26" style="display: inline;" v-text="p.respondent"></div>:
 								<div class="app-font-size-26" style="display: inline;" v-text="p.text"></div>
-							</div>
+							</div>-->
 						</div>
 					</div>
 				</div>
@@ -363,8 +367,10 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/article.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -376,50 +382,34 @@
 				el: '.wrapper',
 				data: function() {
 					return {
+						info: {
+							"id": -1,
+							"account": "",
+							"title": "",
+							"content": "",
+							"image1": "",
+							"image2": "",
+							"image3": "",
+							"senddate": "",
+							"likecount": 0,
+							"nickname": null,
+							"headimgurl": null
+						},
+						
+						clist: [],
+						n: 1,
+						content: "",
+						
 						inputFoucs: false,
-						img: "http://placehold.it/750x590",
-						userName: "小鳄鱼",
-						userIcon: "http://placehold.it/74x74",
 						isAttention: false,
-						label: "#唯有美食不可辜负",
-						description: "美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥",
-						//						commentNum: "1",
-						comments: [{
-							userName: "大鳄鱼",
-							userImg: "http://placehold.it/74x74",
-							text: "地址？我也去买。",
-							//将 · 提取出来做文本
-							time: "11-02 02:06",
-							replys: [{
-								respondent: "小鳄鱼",
-								text: "官龙村街口",
-							}, {
-								respondent: "小鳄鱼",
-								text: "官龙村街口",
-							}],
-						}, {
-							userName: "大鳄鱼",
-							userImg: "http://placehold.it/74x74",
-							text: "地址？我也去买。",
-							//将 · 提取出来做文本
-							time: "11-02 02:06",
-							replys: [{
-								respondent: "小鳄鱼",
-								text: "不是说了嘛！",
-							}],
-						}, {
-							userName: "大鳄鱼",
-							userImg: "http://placehold.it/74x74",
-							text: "地址？我也去买。",
-							//将 · 提取出来做文本
-							time: "11-02 02:06",
-							replys: [{
-								respondent: "小鳄鱼",
-								text: "不是说了嘛！",
-							}],
-						}],
+						total: 0,
 
 					};
+				},
+				computed: {
+					c: function(){
+						return this.content.trim();
+					}
 				},
 				mounted: function() {
 					this.$nextTick(function() {
@@ -439,16 +429,62 @@
 					}.bind(this));
 				},
 				plusReady: function() {
-
+					// 获取传过来的id值
+					this.aid = this.$view.oid;
+					this.getInfo();
+					this.getComments();
 				},
 				methods: {
+					onHeadTap: function(account){
+						mui.openWindow('../../person/other.html', 'other', {
+							extras: {
+								uid: account
+							}
+						});
+					},
+					onSendTap: function(){
+						var that = this;
+						app.user.get(function(u){
+							dal.article.comments.add(that.info.id, that.c, function(err, data){
+								if(err){
+									return mui.toast('发送评论失败，请重试');
+								}
+								mui.toast("评论成功");
+								that.$refs.cinput.blur();
+								that.content = "";
+								//that.total++;
+								that.clist = [];
+								that.n = 1;
+								that.getComments();
+							});
+						});
+					},
 					_up: function() {
-						console.log("up")
-						setTimeout(function() {
-
+						this.n++;
+						this.getComments();
+					},
+					getInfo: function(){
+						dal.article.get(this.aid, function(err, data){
+							if(err){return mui.toast(err.message)}
+							this.info = data;
+						}.bind(this));
+					},
+					getComments: function(){
+						dal.article.comments.list(this.aid, this.n, function(err, data){
+							if(err){return mui.toast(err.message)}
+							this.total = data.total;
+							data = data.list;
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
-						}.bind(this), 2000);
-					}
+							if(!data || data.length === 0){
+								this.n > 1 && mui.toast('没有更多了~');
+								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
+							}
+							this.clist.push.apply(this.clist, data);
+						}.bind(this), 5); 
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
 				}
 			});
 		</script>

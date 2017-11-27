@@ -55,13 +55,14 @@
 				width: 100%;
 				flex-grow: 1;
 				-webkit-flex-grow: 1;
+				background-color: rgba(125, 205, 244, .5);
 				/*background-image: url(../../../image/common/login_logo.png);*/
 				background-size: cover;
 				background-position: center;
 				position: relative;
 			}
 			
-			.item>div.imgBg:after {
+			/*.item>div.imgBg:after {
 				content: attr(height);
 				font-size: .33rem;
 				position: absolute;
@@ -69,7 +70,7 @@
 				left: 50%;
 				transform: translate(-50%, -50%);
 				-webkit-transform: translate(-50%, -50%);
-			}
+			}*/
 			
 			.item>div.info {
 				width: 100%;
@@ -109,18 +110,16 @@
 				/*margin-right: 0.1rem;*/
 			}
 			
-			.app-font-size-24 {
+			.app-font-size-28 {
 				color: #777777;
 			}
 			
 			.nickname {
 				color: #333333;
 			}
-			
-			
-			
 			/*发布按钮*/
-			#releaseBtn{
+			
+			#releaseBtn {
 				position: fixed;
 				z-index: 99;
 				right: 0.5rem;
@@ -133,8 +132,6 @@
 				background-image: url(../../../image/nearby/release.png);
 				background-repeat: no-repeat;
 				background-size: cover;
-				
-				
 			}
 			/*发布按钮end*/
 		</style>
@@ -142,35 +139,29 @@
 	</head>
 
 	<body>
-		
+
 		<div class="mui-content wrapper mui-scroll-wrapper app-font-size-26" ref='wrapper'>
 			<div id="releaseBtn" @tap="onReleaseTap()">
-				
+
 			</div>
-			
-			
+
 			<div class="mui-scroll">
 				<waterfall :grow="grow" :watch="items" @reflowed="reflowed" ref="waterfall">
 					<!-- each component is wrapped by a waterfall slot -->
-					<waterfall-slot v-for="(item, index) in items" :width="item.width" :height="item.height" :order="index" :key="item.index" move-class="item-move">
+					<waterfall-slot v-for="(item, index) in items" :width="1" :height="_getH()" :order="index" :key="item.id" move-class="item-move">
 						<div class="item" @tap="onItemTap(item, index)">
-							<div class="imgBg" :style="item.style" :index="item.index" :height="item.height"></div>
+							<div class="imgBg" :style="{'background-image': 'url(' + _getImg(item.image1,item.image2,item.image3) + ')'}" :index="item.id" :height="_getH()"></div>
 							<div class="info">
-								<div class="title app-font-size-26">#唯有美食不可辜负</div>
-								<p class="mui-ellipsis-2 app-font-size-24">好吃大酒店撒娇的卡三季度快接啊圣诞节as阿德萨打扫打扫打扫打扫的</p>
+								<div class="title app-font-size-26">#{{item.title}}</div>
+								<p class="mui-ellipsis-2 app-font-size-28">{{item.content}}</p>
 								<div class="menu">
-									<div @tap.stop="onAvastrTap('1001')">
-										<img class="avastr" src="../../../image/common/login_weibo.png" />
-										<span class="nickname app-font-size-24">小鳄鱼诶</span>
+									<div @tap.stop="onAvastrTap(item.account)">
+										<img class="avastr" :src="item.headimgurl" />
+										<span class="nickname app-font-size-28">{{item.nickname}}</span>
 									</div>
-									<div @tap.stop="item.likeCount += (1 * (item.like = !item.like) ? 1: -1);">
-									 	<template v-if='item.like'>
-											<img class="icon" src="../../../image/nearby/discover/like.png" />
-										</template>
-										<template v-else>
-											<img class="icon" src="../../../image/nearby/discover/nolike.png" />
-										</template>
-										<span class="app-font-size-24" v-text="item.likeCount"></span>
+									<div @tap.stop="onLikeTap(item)"> 
+										<img class="icon" :src='"../../../image/nearby/discover/" + (item.like?"":"no") + "like.png"' />
+										<span class="app-font-size-28" v-text="item.likecount || 0"></span> 
 									</div>
 
 								</div>
@@ -178,6 +169,7 @@
 						</div>
 
 					</waterfall-slot>
+					
 				</waterfall>
 			</div>
 		</div>
@@ -186,57 +178,23 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-waterfall.js"></script>
-		<script type="text/javascript">
-			var ItemFactory = (function() {
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
-				var lastIndex = 0
-
-				function generateRandomItems(count) {
-					var items = [],
-						i
-					for(i = 0; i < count; i++) {
-						items[i] = {
-							index: lastIndex++,
-							style: {
-								background: getRandomColor()
-							},
-							width: 1,
-							height: 1.3 + Math.random() / 2
-						}
-					}
-					return items
-				}
-
-				function getRandomColor() {
-					var colors = [
-						'rgba(21,126,103,.5)',
-						'rgba(245,163,59,.5)',
-						'rgba(135,230,135,.5)',
-						'rgba(194,217,78,.5)',
-						'rgba(195,123,177,.5)',
-						'rgba(125,205,244,.5)'
-					]
-					return colors[~~(Math.random() * colors.length)]
-				}
-
-				return {
-					get: generateRandomItems
-				}
-
-			})();
-		</script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/article.js"></script>
+		
 		<script type="text/javascript">
 			new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
-						grow: [1, 1],
-						items: ItemFactory.get(30).map(function(o, index) {
-							o.like = false;
-							o.likeCount = index;
-							return o;
-						}),
-						isBusy: false
+						grow: [1, 1], 
+						items:[],
+						isBusy: false,
+
+						n: 1,
+
 					};
 				},
 				mounted: function() {
@@ -247,36 +205,44 @@
 							pullRefresh: {
 								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
 								down: {
-
+									auto: true,
 									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 								},
 								up: {
 									callback: this._up
-								}
+								} 
 							}
 						})
 					}.bind(this));
 				},
 				methods: {
-					onAvastrTap: function(id){
+					onLikeTap: function(item){
+						app.user.get(function(u){
+							if(item.like){
+								//已经点过赞了
+								return;
+							}
+							item.likecount++;
+							dal.article.like(item.id, function(err, data){
+								err && mui.toast(err.message);
+							});
+							item.like = true;
+						});
+						
+						
+					},
+					onAvastrTap: function(id) {
 						mui.openWindow('../../person/other.html', 'other', {
 							extras: {
 								uid: id
 							}
 						});
 					},
-					onReleaseTap: function(){
-						mui.openWindow('../discover/discover_release.html','discover_release');
-					},
-					addItems: function() {
-						if(!this.isBusy && this.items.length < 500) {
-							this.isBusy = true
-							this.items.push.apply(this.items, ItemFactory.get(10).map(function(o, index) {
-								o.like = false;
-								o.likeCount = index;
-								return o;
-							}));
-						}
+					onReleaseTap: function() {
+						app.user.get(function(u) {
+							u && mui.openWindow('../discover/discover_release.html', 'discover_release');
+						});
+
 					},
 					shuffle: function() {
 						this.items.sort(function() {
@@ -284,29 +250,50 @@
 						})
 					},
 					reflowed: function() {
-						this.isBusy = false
+						//this.isBusy = false
 					},
 					onItemTap: function(o, index) {
 						mui.openWindow('../discover/discover_details.html', 'discover_details', {
 							extras: {
-								oid: index
+								oid: o.id
 							}
 						});
 					},
 					_down: function() {
-						console.log("down")
-						setTimeout(function() {
-							this.shuffle();
+						this.n = 1;
+						this.$pullRefresh.pullRefresh().enablePullupToRefresh();
+						dal.article.list(this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.items = data; 
+							this.$nextTick(this.shuffle);
+							
+							//this.shuffle(); 
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
-						}.bind(this), 666);
+						}.bind(this), 8);
 					},
 					_up: function() {
-						console.log("up")
-						setTimeout(function() {
-							this.addItems();
+						this.n++;
+						dal.article.list(this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
-						}.bind(this), 111);
-					}
+							if(!data || data.length === 0) {
+								mui.toast('没有更多了~');
+								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
+							}
+							this.items.push.apply(this.items, data);
+
+						}.bind(this),8);
+					},
+					_getH: function() {
+						return 1.3 + Math.random() / 2;
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
 				},
 				components: {
 					'waterfall': Waterfall.waterfall,

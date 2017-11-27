@@ -96,10 +96,9 @@
 			}
 			
 			.mui-bar-transparent {
-			  /*设置header渐变颜色 必须 rgba*/
-			  background-color: rgba(255,255,255, 0) !important;
+				/*设置header渐变颜色 必须 rgba*/
+				background-color: rgba(255, 255, 255, 0) !important;
 			}
-			
 		</style>
 	</head>
 
@@ -118,28 +117,28 @@
 		</header>
 
 		<div class="mui-content noImmersed">
-			<img :src="img" />
+			<img :src="data.image1" />
 			<div class="shop_tittle">
 				<img src="../../../image/nearby/business/phone_icon.png" />
-				<div class="shop_name app-font-size-26" v-text="name">
+				<div class="shop_name app-font-size-26" v-text="data.name">
 				</div>
 				<div class="shop_position app-font-size-26">
 					<img src="../../../image/nearby/map.png" />
-					<div style="display: inline;" v-text="position"></div>
+					<div style="display: inline;" v-text="data.address"></div>
 				</div>
 			</div>
 			<div class="business_signs app-font-size-26">
 				商家招牌
 			</div>
 			<div class="signs_icon">
-				<template v-for="o in signs">
-					<img :src="o.img" />
+				<template v-for="o,i in 3">
+					<img :src="data['image' + (i+1)]" />
 				</template>
 			</div>
 			<div class="business_desc app-font-size-26">
 				商家介绍
 			</div>
-			<div class="business_description app-font-size-26">{{description}}{{description}}{{description}}{{description}}{{description}}</div>
+			<div class="business_description app-font-size-26">{{data.introduction}}</div>
 
 		</div>
 		<!--沉浸式动态处理-->
@@ -153,6 +152,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/store.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 
@@ -166,40 +166,43 @@
 				el: '.mui-content',
 				data: function() {
 					return {
-						name: "一点点甜品店(西丽店)",
-						img: "http://placehold.it/750x560",
-						position: "南山区西丽官龙第一工业区",
-						description: "美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥美味的蛋黄酥",
-						signs: [{
-								img: "http://placehold.it/152x152"
-							},
-							{
-								img: "http://placehold.it/152x152"
-							},
-							{
-								img: "http://placehold.it/152x152"
-							},
-							{
-								img: "http://placehold.it/152x152"
-							},
-							{
-								img: "http://placehold.it/152x152"
-							},
-							{
-								img: "http://placehold.it/152x152"
-							},
-							{
-								img: "http://placehold.it/152x152"
-							},
-							{
-								img: "http://placehold.it/152x152"
-							},
-						],
+						id: -1,
+						data: {
+							"id": -1,
+							"city": "",
+							"name": "",
+							"address": "",
+							"type": 1,
+							"onlinestate": 1,
+							"introduction": "",
+							"image1": "",
+							"image2": "",
+							"image3": "",
+							"longitude": 113.947885,
+							"latitude": 22.587857,
+							"distance": null
+						}
 					};
-				},
-				plusReady: function() {},
-				methods: {
 
+				},
+				watch: {
+					id: function() {
+						this.getInfo();
+					},
+				},
+				plusReady: function() {
+					this.id = this.$view.oid;
+				},
+				methods: {
+					getInfo: function() {
+						dal.store.get(this.id, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							console.log(JSON.stringify(data));
+							this.data = data;
+						}.bind(this));
+					}
 				}
 			});
 		</script>

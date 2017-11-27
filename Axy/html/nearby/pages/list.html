@@ -159,22 +159,22 @@
 						<div class="shop">
 							<div class="shop_imgtext box">
 								<div class="shop_image">
-									<img :src="o.img" />
+									<img :src="o.image1" />
 								</div>
 								<div class="shop_info flex1">
-									<div class="distance app-font-size-20">{{o.distance}} km</div>
+									<div class="distance app-font-size-20">{{_m2km(o.distance)}} km</div>
 									<div class="name app-font-size-30">{{o.name}}</div>
-									<div class="time app-font-size-20"><img src="../../../image/nearby/time.png" />{{o.time}}</div>
-									<div class="types app-font-size-24" v-for="(type,i) in o.types">
+									<div class="time app-font-size-20"><img src="../../../image/nearby/time.png" />{{_min2time(o.starttime)+ '-' + _min2time(o.endtime)}}</div>
+									<div class="types app-font-size-28" v-for="(type,i) in o.types">
 										<span v-if="i!==0"> | </span>{{type}}
 									</div>
-									<div class="activity app-font-size-24">店铺活动：{{o.activity}}</div>
-								</div>
+									<div class="activity app-font-size-28">店铺活动：{{o.introduction}}</div>
+								</div> 
 							</div>
-							<div class="address app-font-size-24">
+							<div class="address app-font-size-28">
 								地址:{{o.address}}
 							</div>
-							<div class="shop_menu app-font-size-24">
+							<div class="shop_menu app-font-size-28">
 								<div class="flex1"><img src="../../../image/nearby/phone.png" />电话</div>
 								<div class="flex1"><img src="../../../image/nearby/navigation.png" />导航</div>
 								<div @tap="onLookTap(o)" class="flex1"><img src="../../../image/nearby/show.png" />查看</div>
@@ -190,67 +190,27 @@
 
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+
 		<script src="../../../js/lib/mui.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/store.js"></script>
+
 		<script type="text/javascript">
 			new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
+						n: 1,
 						position: "南山区西丽官龙村第一工业区",
-						shops: [{
-								img: "http://placehold.it/242x180",
-								name: "一点点甜品店",
-								time: "9:00-22:00",
-								distance: "1.8",
-								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
-								activity: "满一百送30优惠券",
-								address: "南山区西丽官龙第一工业区xx栋",
-								phone: "13912345678",
-							},
-							{
-								img: "http://placehold.it/242x180",
-								name: "一点点甜品店",
-								time: "9:00-22:00",
-								distance: "1.8",
-								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
-								activity: "满一百送30优惠券",
-								address: "南山区西丽官龙第一工业区xx栋",
-								phone: "13912345678",
-							},
-							{
-								img: "http://placehold.it/242x180",
-								name: "一点点甜品店",
-								time: "9:00-22:00",
-								distance: "1.8",
-								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
-								activity: "满一百送30优惠券",
-								address: "南山区西丽官龙第一工业区xx栋",
-								phone: "13912345678",
-							},
-							{
-								img: "http://placehold.it/242x180",
-								name: "一点点甜品店",
-								time: "9:00-22:00",
-								distance: "1.8",
-								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
-								activity: "满一百送30优惠券",
-								address: "南山区西丽官龙第一工业区xx栋",
-								phone: "13912345678",
-							},
-							{
-								img: "http://placehold.it/242x180",
-								name: "一点点甜品店",
-								time: "9:00-22:00",
-								distance: "1.8",
-								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
-								activity: "满一百送30优惠券",
-								address: "南山区西丽官龙第一工业区xx栋",
-								phone: "13912345678",
-							}
-						],
+						longitude: 0,
+						latitude: 0,
+						city: '深圳',
+						shops: [],
 					};
 				},
 				mounted: function() {
+
 					this.$nextTick(function() {
 
 						this.$pullRefresh = mui(".mui-scroll-wrapper");
@@ -268,49 +228,72 @@
 						})
 					}.bind(this));
 				},
+				plusReady: function() {
+					this.getCurrentPosition().then(function(){
+						this._down();
+					}.bind(this));
+				},
 				methods: {
+					getCurrentPosition: function(){
+						return new Promise(function(re, rj){
+							plus.geolocation.getCurrentPosition(function(p) {
+								this.longitude = p.coords.longitude;
+								this.latitude = p.coords.latitude;
+								this.city = p.address.city.replace('市', '');
+								this.position = p.address.poiName;
+								re();
+							}.bind(this), rj);
+						}.bind(this));
+						
+					},
+					_getList: function(f){
+						dal.store.list(this.longitude, this.latitude, this.city, function(err, data){
+							if(err){
+								return mui.toast(err.message);
+							}
+							
+							f(data);
+						}, this.n);
+					},
+					
+					
 					// 点击查看
-					onLookTap: function(o){
-						mui.openWindow('../business/store_details.html','store_details',{
+					onLookTap: function(o) {
+						mui.openWindow('../business/store_details.html', 'store_details', {
 							extras: {
-								oname: o.name	
+								oid: o.id
 							}
 						});
 					},
-					onClickTap: function(e) {
 
-					},
 					_down: function() {
-						console.log("down")
-						setTimeout(function() {
-							this.shops.unshift({
-								img: "http://placehold.it/242x180",
-								name: "靓点点甜品店",
-								time: "9:00-22:00",
-								distance: "1.8",
-								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
-								activity: "满一百送30优惠券",
-								address: "南山区西丽官龙第一工业区xx栋",
-								phone: "13912345678",
-							});
+						console.log("down");
+						this.n = 1;
+						this.shops = [];
+						this._getList(function(data) {
+							console.log(JSON.stringify(data));
+							this.shops.unshift.apply(this.shops, data);
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
-						}.bind(this), 2000);
+						}.bind(this));
 					},
 					_up: function() {
-						console.log("up")
-						setTimeout(function() {
-							this.shops.push({
-								img: "http://placehold.it/242x180",
-								name: "私点点甜品店",
-								time: "9:00-22:00",
-								distance: "1.8",
-								types: ["自助烧烤", "海鲜砂锅", "日韩料理"],
-								activity: "满一百送30优惠券",
-								address: "南山区西丽官龙第一工业区xx栋",
-								phone: "13912345678",
-							});
+						console.log("up");
+						this.n++;
+						this._getList(function(data) {
+							console.log(JSON.stringify(data));
+							if(!data || !data.length){
+								return mui.toast('没有更多啦~');
+							}else{
+								this.shops.push.apply(this.shops, data);	
+							}
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
-						}.bind(this), 2000);
+						}.bind(this));
+					},
+					_min2time: function(n){
+						return (n < 10? '0': '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00': '30');
+					},
+					_m2km: function(m){
+						return (m / 1000).toFixed(1);
 					}
 				}
 
