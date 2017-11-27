@@ -43,13 +43,13 @@ body {
 
 .loop(@index,@k) when (@index <=@k) {
     .app-font-size-@{index} {
-        font-size: @index / 2 * 1px;
+        font-size: @index / 2 * 1px !important;
     }
     [data-dpr="2"] .app-font-size-@{index} {
-        font-size: @index * 1px;
+        font-size: @index * 1px !important;
     }
     [data-dpr="3"] .app-font-size-@{index} {
-        font-size: @index / 2 * 3 * 1px; 
+        font-size: @index / 2 * 3 * 1px !important; 
     }
     .loop(@index + 2, @k);
 }

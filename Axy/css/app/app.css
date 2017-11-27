@@ -55,166 +55,166 @@ body {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAAAqCAYAAADFw8lbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkQwQjc0QjYzQkY1MDExRTc5NUQ4RDhFRUVEODM4QTZEIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkQwQjc0QjY0QkY1MDExRTc5NUQ4RDhFRUVEODM4QTZEIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RDBCNzRCNjFCRjUwMTFFNzk1RDhEOEVFRUQ4MzhBNkQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RDBCNzRCNjJCRjUwMTFFNzk1RDhEOEVFRUQ4MzhBNkQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4/VZvvAAAAe0lEQVR42uzXMQrAIAyFYS3eWbxBPZZbbxVDoYt06PCkiP+DDC7hQxGSaGZBlLHR6VVUzY+wSIACBQoUKFCgQIEC/TPRhCP+pNybAk+/LTR5VVGvPJwvrybo257PxLrMZwIKFChQoECBAgX6YcJXpb5N5sp1eYkb7QIMAAgoFt2Fj/rfAAAAAElFTkSuQmCC);
 }
 .app-font-size-20 {
-  font-size: 10px;
+  font-size: 10px !important;
 }
 [data-dpr="2"] .app-font-size-20 {
-  font-size: 20px;
+  font-size: 20px !important;
 }
 [data-dpr="3"] .app-font-size-20 {
-  font-size: 30px;
+  font-size: 30px !important;
 }
 .app-font-size-22 {
-  font-size: 11px;
+  font-size: 11px !important;
 }
 [data-dpr="2"] .app-font-size-22 {
-  font-size: 22px;
+  font-size: 22px !important;
 }
 [data-dpr="3"] .app-font-size-22 {
-  font-size: 33px;
+  font-size: 33px !important;
 }
 .app-font-size-24 {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 [data-dpr="2"] .app-font-size-24 {
-  font-size: 24px;
+  font-size: 24px !important;
 }
 [data-dpr="3"] .app-font-size-24 {
-  font-size: 36px;
+  font-size: 36px !important;
 }
 .app-font-size-26 {
-  font-size: 13px;
+  font-size: 13px !important;
 }
 [data-dpr="2"] .app-font-size-26 {
-  font-size: 26px;
+  font-size: 26px !important;
 }
 [data-dpr="3"] .app-font-size-26 {
-  font-size: 39px;
+  font-size: 39px !important;
 }
 .app-font-size-28 {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 [data-dpr="2"] .app-font-size-28 {
-  font-size: 28px;
+  font-size: 28px !important;
 }
 [data-dpr="3"] .app-font-size-28 {
-  font-size: 42px;
+  font-size: 42px !important;
 }
 .app-font-size-30 {
-  font-size: 15px;
+  font-size: 15px !important;
 }
 [data-dpr="2"] .app-font-size-30 {
-  font-size: 30px;
+  font-size: 30px !important;
 }
 [data-dpr="3"] .app-font-size-30 {
-  font-size: 45px;
+  font-size: 45px !important;
 }
 .app-font-size-32 {
-  font-size: 16px;
+  font-size: 16px !important;
 }
 [data-dpr="2"] .app-font-size-32 {
-  font-size: 32px;
+  font-size: 32px !important;
 }
 [data-dpr="3"] .app-font-size-32 {
-  font-size: 48px;
+  font-size: 48px !important;
 }
 .app-font-size-34 {
-  font-size: 17px;
+  font-size: 17px !important;
 }
 [data-dpr="2"] .app-font-size-34 {
-  font-size: 34px;
+  font-size: 34px !important;
 }
 [data-dpr="3"] .app-font-size-34 {
-  font-size: 51px;
+  font-size: 51px !important;
 }
 .app-font-size-36 {
-  font-size: 18px;
+  font-size: 18px !important;
 }
 [data-dpr="2"] .app-font-size-36 {
-  font-size: 36px;
+  font-size: 36px !important;
 }
 [data-dpr="3"] .app-font-size-36 {
-  font-size: 54px;
+  font-size: 54px !important;
 }
 .app-font-size-38 {
-  font-size: 19px;
+  font-size: 19px !important;
 }
 [data-dpr="2"] .app-font-size-38 {
-  font-size: 38px;
+  font-size: 38px !important;
 }
 [data-dpr="3"] .app-font-size-38 {
-  font-size: 57px;
+  font-size: 57px !important;
 }
 .app-font-size-40 {
-  font-size: 20px;
+  font-size: 20px !important;
 }
 [data-dpr="2"] .app-font-size-40 {
-  font-size: 40px;
+  font-size: 40px !important;
 }
 [data-dpr="3"] .app-font-size-40 {
-  font-size: 60px;
+  font-size: 60px !important;
 }
 .app-font-size-42 {
-  font-size: 21px;
+  font-size: 21px !important;
 }
 [data-dpr="2"] .app-font-size-42 {
-  font-size: 42px;
+  font-size: 42px !important;
 }
 [data-dpr="3"] .app-font-size-42 {
-  font-size: 63px;
+  font-size: 63px !important;
 }
 .app-font-size-44 {
-  font-size: 22px;
+  font-size: 22px !important;
 }
 [data-dpr="2"] .app-font-size-44 {
-  font-size: 44px;
+  font-size: 44px !important;
 }
 [data-dpr="3"] .app-font-size-44 {
-  font-size: 66px;
+  font-size: 66px !important;
 }
 .app-font-size-50 {
-  font-size: 25px;
+  font-size: 25px !important;
 }
 [data-dpr="2"] .app-font-size-50 {
-  font-size: 50px;
+  font-size: 50px !important;
 }
 [data-dpr="3"] .app-font-size-50 {
-  font-size: 75px;
+  font-size: 75px !important;
 }
 .app-font-size-52 {
-  font-size: 26px;
+  font-size: 26px !important;
 }
 [data-dpr="2"] .app-font-size-52 {
-  font-size: 52px;
+  font-size: 52px !important;
 }
 [data-dpr="3"] .app-font-size-52 {
-  font-size: 78px;
+  font-size: 78px !important;
 }
 .app-font-size-54 {
-  font-size: 27px;
+  font-size: 27px !important;
 }
 [data-dpr="2"] .app-font-size-54 {
-  font-size: 54px;
+  font-size: 54px !important;
 }
 [data-dpr="3"] .app-font-size-54 {
-  font-size: 81px;
+  font-size: 81px !important;
 }
 .app-font-size-56 {
-  font-size: 28px;
+  font-size: 28px !important;
 }
 [data-dpr="2"] .app-font-size-56 {
-  font-size: 56px;
+  font-size: 56px !important;
 }
 [data-dpr="3"] .app-font-size-56 {
-  font-size: 84px;
+  font-size: 84px !important;
 }
 .app-font-size-58 {
-  font-size: 29px;
+  font-size: 29px !important;
 }
 [data-dpr="2"] .app-font-size-58 {
-  font-size: 58px;
+  font-size: 58px !important;
 }
 [data-dpr="3"] .app-font-size-58 {
-  font-size: 87px;
+  font-size: 87px !important;
 }
 .mui-bar-tab .mui-tab-item.app-color-active {
   color: #2bb8aa;
