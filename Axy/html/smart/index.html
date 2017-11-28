@@ -16,6 +16,8 @@
 		    <h1 class="mui-title">智慧生活</h1>
 		</header>
 		<div class="mui-content">
+			<button type="button" class="mui-btn app-btn-main" @tap="onWIFiTap()">打开wifi</button>
+				<br />
 			<template v-for='o,i in list'>
 				<button type="button" class="mui-btn app-btn-main" @tap="onButtonTap(o)">{{o.name}}</button>
 				<br />
@@ -30,6 +32,7 @@
 		
 		<script type="text/javascript" src="../../js/dal/base.js" ></script>
 		<script type="text/javascript" src="../../js/dal/user.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 			
 		<script type="text/javascript">
 			mui.init();
@@ -70,6 +73,12 @@
 				methods: {
 					onButtonTap: function(o){
 						mui.openWindow(o.href);
+					},
+					// 打开wifi页面测试
+					onWIFiTap: function(){
+						app.page.openForResultBy('add/connect_wifi.html', 'wifiset', function(data){
+							console.log(JSON.stringify(data));
+						});
 					}
 				}
 			});

@@ -73,34 +73,34 @@
 				<h1 class="mui-title">添加设备</h1>
 			</header>
 
-			<div class="mui-content">
-				<div class="title app-font-size-30" v-text="hostDevs.title"></div>
+			<div class="mui-content app-font-size-26">
+				<div class="title" v-text="hostDevs.title"></div>
 				
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
 					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" v-for="o,i in hostDevs.devs">
 						<a>
 							<img :src="o.img"/>
-							<div class="mui-media-body app-font-size-20">{{o.name}}</div>
+							<div class="mui-media-body app-font-size-26">{{o.name}}</div>
 						</a>
 					</li>
 				</ul>
-				<div class="title app-font-size-30" v-text="ctrl_fit.title"></div>
+				<div class="title" v-text="ctrl_fit.title"></div>
 				
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
 					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" v-for="o,i in ctrl_fit.devs">
 						<a>
 							<img :src="o.img"/>
-							<div class="mui-media-body app-font-size-20">{{o.name}}</div>
+							<div class="mui-media-body app-font-size-26">{{o.name}}</div>
 						</a>
 					</li>
 				</ul>
-				<div class="title app-font-size-30" v-text="safe_fit.title"></div>
+				<div class="title" v-text="safe_fit.title"></div>
 				
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
 					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" v-for="o,i in safe_fit.devs">
 						<a>
 							<img :src="o.img"/>
-							<div class="mui-media-body app-font-size-20">{{o.name}}</div>
+							<div class="mui-media-body app-font-size-26">{{o.name}}</div>
 						</a>
 					</li>
 				</ul>
