@@ -250,12 +250,12 @@
 						var that = this;
 						
 						
-						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误") ||
-								 		   app.rules.test("pwd", this.password, "密码输入错误");
-						
-//						if(errorMessage){
-//							return mui.toast(errorMessage);
-//						}
+						var errorMessage = app.rules.testBy(/^\w{6,20}$/, this.username, "帐号输入错误") ||
+								 		   app.rules.testBy("pwd", this.password, "密码输入错误");
+						 
+						if(errorMessage){
+							return mui.toast(errorMessage);
+						}
 						
 						// 更新登录状态
 						this.loading = true;
@@ -294,13 +294,46 @@
 					},
 					onOtherLoginTap: function(type){
 						var w = plus.nativeUI.showWaiting();
+						var that = this;
 						setTimeout(w.close, 1e3);
 						
-						new this.$OAuth(type, function(err, info){
-							w && w.close();
-							console.log(JSON.stringify(err || info));
-							mui.alert(JSON.stringify(authInfoAdapter(info)));
-						}, this);
+						new Promise(function(resolve, reject){
+							new that.$OAuth(type, function(err, info){
+								if(err){
+									return reject(err);
+								}
+								return resolve(info);
+								
+								w && w.close();
+								if(err){
+									return mui.toast(JSON.stringify(err));
+								}
+								info = authInfoAdapter(info);
+								
+							}, that);
+						})
+						.then(authInfoAdapter)
+						.then(function(info){
+							return new Promise(function(resolve, reject){
+								dal.user.ologin(info, function(err, data){
+									if(err){
+										return reject(err);
+									}
+									return resolve(data);
+								});
+							});
+						})
+						.then(function(data){
+							console.log(JSON.stringify(data));
+							// 保存
+							mui.toast('登录成功');
+						})
+						.catch(function(err){ 
+							w&&w.close();
+							mui.toast(JSON.stringify(err));
+						});
+						
+						
 						
 						
 					}

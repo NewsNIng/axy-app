@@ -5,7 +5,9 @@
 	};
 
 	pg.fun2ok = function(fn) {
-		return typeof fn === 'function' ? fn : null;
+		return typeof fn === 'function' ? function(args){
+			fn(args);
+		} : null;
 	}
 
 	pg.getCallBackId = function(s, f) {
@@ -19,7 +21,7 @@
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
 		
-		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
+		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 	
 	/**
@@ -61,13 +63,12 @@
 	/**
 	 * 初始化原生系统（需在用户登录成功后初始化原生系统）
 	 * @param {String} username 用户名
-	 * @param {String} password 密码
 	 * @param {String} serverurl 顶级服务器地址
 	 * @param {Function} sfn 正确回调函数
 	 * @param {Function} ffn 失败回调函数
 	 */
-	pgn.InitNativeSysteam = function(username, password, serverurl, sfn, ffn){
-		return pg.asyncExec(N, 'InitNativeSysteam', [username, password, serverurl], sfn, ffn);
+	pgn.InitNativeSysteam = function(username, serverurl, sfn, ffn){
+		return pg.asyncExec(N, 'InitNativeSysteam', [username, serverurl], sfn, ffn);
 	};
 	
 	/**

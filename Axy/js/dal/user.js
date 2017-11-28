@@ -11,7 +11,15 @@
 		return ra("post", "/user/login", {
 			account: account,
 			passwd: passwd
-		},callback);
+		}, callback);
+	}
+	
+	user.ologin = function(info, callback){
+		return ra('post', '/user/ologin', {
+			openid: info.openid,
+			type: info.type,
+			info: info
+		}, callback)
 	}
 	
 	/**

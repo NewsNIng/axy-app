@@ -61,14 +61,14 @@
 				plusReady: function(){
 					var v = this.$view;
 					this.title = v.title;
-					this.tips = v.tips;
+					this.tips = v.tips || "请输入内容...";
 					this.regexpType = v.r;
 				},
 				methods: {
 					onOkTap: function(){
 						var errmsg = "";
 						if(this.regexpType){
-							errmsg = app.rules.test(this.regexpType, this.content, "请输入正确格式的内容");
+							errmsg = app.rules.testBy(this.regexpType, this.content, "请输入正确格式的内容");
 						}
 						if(errmsg){
 							return mui.alert(errmsg);

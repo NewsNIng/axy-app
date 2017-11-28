@@ -107,7 +107,7 @@
 					</template>
 
 				</div>
-
+				
 			</div>
 		</div>
 
@@ -164,7 +164,8 @@
 								id: 'discover',
 								url: './pages/discover.html'
 							}
-						]
+						],
+						menuState: false,
 					}
 				},
 				mounted: function() {
@@ -190,7 +191,8 @@
 					css.innerText = ".mui-pull-top-pocket{top: " + _styles.top + " !important;}"
 
 					document.body.appendChild(css);
-
+						
+					this._preload();
 				},
 				methods: {
 					// 页面切换时
@@ -217,7 +219,25 @@
 					},
 					// 添加按钮点击
 					onHeaderAddTap: function(){
-						mui.openWindow('business/signup.html', 'signup');
+						this._menuShow();
+						this.menuState = true;
+					},
+					// 预加载菜单
+					_preload: function(){
+						this.menu = mui.preload({
+							url: 'menu.html',
+							id: 'nearby_menu',
+							styles: {
+								background: 'transparent'
+							}
+						});
+						//this.$view.append(this.menu);
+					},
+					_menuShow: function(){
+						this.menu && this.menu.show('none');
+					},
+					_menuHide: function(){
+						this.menu && this.menu.hide('none');
 					}
 				}
 			});

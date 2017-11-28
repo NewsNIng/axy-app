@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript" src="../js/lib/mui.min.js" ></script>
+		<script type="text/javascript" src="../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript" src="../js/plug/PlugH5NativeBridge.js"></script>
+
+		<script type="text/javascript" src="../js/app/app.js"></script>
+
+		<script type="text/javascript" src="../js/dal/base.js"></script>
+		<script type="text/javascript" src="../js/dal/device.js"></script>
+
+		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript">
+			/**
+			 * H5Native 控制中心
+			 */
+
+			var P = plug.H5NativeBridge;
+
+			var domain = "";
+			
+			var T = -1;
+			var TD = 60e3;
+
+			Rx.Observable
+				// 原始事件
+				.create(function(observer) {
+					
+					new ni.Broadcast().on('login_success', function(data) {
+						observer.next(data.userInfo);
+					});
+					app.user.has() && observer.next(app.user.get());
+				})
+				// 获取顶级域名
+				.mergeMap(function(user) {
+					return Rx.Observable
+						.create(function(o2) {
+							
+							if(domain) {
+								o2.next(user, domain);
+							} else {
+								setTimeout(function() {
+									domain = 'www.isee110.com';
+									o2.next(user, domain);
+								}, 1000);
+							}
+						});
+				})
+				// 初始化原生插件
+				.mergeMap(function(user, domain){
+					// 判断定时器
+					if(T < 0){
+						(function _(){
+							dal.device.list(1, function(err, data){
+								if(err){return;}
+								console.log(JSON.stringify(data));
+								data && data.length > 0 && P.InitNativeDevList(JSON.stringify(data));
+							});
+							T = setTimeout(_, TD);
+						}());
+					}
+					
+					return Rx.Observable
+						.create(function(o3){
+							P.InitNativeSysteam(user, domain, function(arg){
+								o3.next(arg);
+							});
+						});
+				})
+				// 消息中心事件
+				.subscribe(function(data) {
+					console.log(JSON.stringify(data)); 
+				});
+
+		</script>
+	</body>
+
+</html>

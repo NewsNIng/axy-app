@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>输入邀请码</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			header img {
+				width: 0.48rem;
+			}
+			
+			input {
+				width: 100%;
+				border: none !important;
+				height: 1.333333rem !important;
+				padding-left: 0.3rem;
+			}
+			
+			.input::-webkit-input-placeholder {
+				
+				font-size: 14px !important;
+			}
+			
+			[data-dpr="2"] input::-webkit-input-placeholder {
+				font-size: 28px !important;
+			}
+			
+			[data-dpr="3"] input::-webkit-input-placeholder {
+				font-size: 42px !important;
+			}
+			
+			.tips{
+				padding: 0.15rem 0.3rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">输入邀请码</h1>
+				<span class="mui-icon mui-pull-right" @tap="onSaveTap()">
+					<img src="../../../image/smart/add/btn_Preservation@3x.png"/>
+				</span>
+			</header>
+
+			<div class="mui-content app-font-size-28">
+				<div class="tips app-font-size-24 app-color-dark">与家人一起share生活中的点滴吧</div>
+				<input type="number" v-model='code' placeholder="请输入家人邀请码" />
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>-->
+		<!--请求相关-->
+		<!--App相关业务逻辑-->
+		<!--<script type="text/javascript" src="../../../js/app/app.js"></script>-->
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-rules.js" ></script>
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						code: '',
+					};
+				},
+				watch: {
+
+				},
+				mounted: function() {
+					
+				},
+				methods: {
+					onSaveTap: function() {
+						var code = this.code.trim();
+						var emsg = app.rules.testBy(/^\d{4}$/, code, "邀请码格式错误");
+						if(emsg){
+							return mui.toast(emsg);
+						}
+						app.page.setResult({
+							code: code
+						}).close();
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>
