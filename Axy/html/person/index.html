@@ -78,18 +78,20 @@
 
 					//this.inputList[0] = "zt20171116,123456,www.isee110.com";
 
-//					try {
-//						plug.H5NativeBridge.InitNativeSysteam("zt20171116", "123456", "www.isee110.com", function(data) {
-//							alert("ok:" + JSON.stringify(data));
-//						}, function(data) {
-//							alert("fail:" + JSON.stringify(data));
-//						});
-//
-//						
-//
-//					} catch(err) {
-//						alert("err:" + JSON.stringify(err));
-//					}
+					try {
+						plug.H5NativeBridge.InitNativeSysteam("zt20171116", "123456", "www.isee110.com", function(data) {
+							alert("ok:" + JSON.stringify(data));
+						}, function(data) {
+							alert("fail:" + JSON.stringify(data));
+						});
+				
+						
+						
+						
+
+					} catch(err) {
+						alert("err:" + JSON.stringify(err));
+					}
 				},
 				methods: {
 					onTestTap: function(name, index) {

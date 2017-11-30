@@ -205,6 +205,8 @@
 			}
 			.shop_image {
 				margin-top: 10px;
+				overflow-x: scroll;
+				white-space: nowrap;
 			}
 			.shop_image>div {
 				display: inline-block;
@@ -325,9 +327,9 @@
 				<label class="near_title">附近的店</label>
 				<div class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
 				<div class="shop_image">
-					<!--<template v-for="o,i in nearShops">
+					<template v-for="o,i in nearShops">
 						<div class="shop_a" :style="'background-image: url('+ o.img +');'"></div>	
-					</template>-->
+					</template>
 					
 				</div>
 			</div>
@@ -354,6 +356,8 @@
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
 		<script type="text/javascript" src="../../js/lib/md5.min.js" ></script>
 		<script type="text/javascript" src="../../js/common/imagelazyload.js" ></script>
+		
+		<script type="text/javascript" src="../../js/plug/PlugH5NativeBridge.js" ></script>
 
 		<script type="text/javascript">
 			mui.init({
@@ -399,13 +403,25 @@
 							name: "AX-503-摄像机"
 						},
 						nearShops: [{
-								img: "http://photo.ssyer.com/user//20171101/order/767e13e2b5b2ab4384b8202b228891605020sweeticecreamphotography89501jpg.jpg"
+								img: "http://placehold.it/120x120"
 							},
 							{
-								img: "http://photo.ssyer.com/user//20171101/order/977ff1a185372843838beb089122674bfdefIMG_20170710_210729jpg.jpg"
+								img: "http://placehold.it/120x120"
 							},
 							{
-								img: "http://photo.ssyer.com/user//20171101/order/ab00c1286bdae644296ac0461acb76604e47benrosett10609jpg.jpg"
+								img: "http://placehold.it/120x120"
+							},
+							{
+								img: "http://placehold.it/120x120"
+							},
+							{
+								img: "http://placehold.it/120x120"
+							},
+							{
+								img: "http://placehold.it/120x120"
+							},
+							{
+								img: "http://placehold.it/120x120"
 							}
 						],
 					};
@@ -448,6 +464,8 @@
 					openCamListWindow: function(){
 						//var rs = plus.plugintest.openCamListWindow(1,2,3);
 						//console.log(rs);
+						var id = "AX-DSW-2012102400059";
+						plug.H5NativeBridge.StartDevicePlay(id);
 					}
 				}
 			});
