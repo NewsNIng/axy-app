@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>扫码</title>
+		<title>扫一扫</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -11,24 +11,37 @@
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 
 		<style type="text/css">
+			
+			
+			
 			html,
 			body,
 			.mui-content {
-				background-color: white;
+				height: 100%;
+				background-color: transparent;
 			}
+			
+			body{
+				background-color: rgba(0,0,0,0.3);
+			}
+			
+			
 			
 			.scanRoom {
 				width: 7.2rem;
 				height: 7.2rem;
 				margin: 1.3rem auto;
-				background-color: #FFFFFF;
+				/*background-color: #FFFFFF;*/
 				text-align: center;
 				line-height: 7.2rem;
 			}
 			
 			.tips {
 				padding-top: 2rem;
-				text-align: center;
+				text-align: left;
+				width: 7.2rem;
+				margin: 0 auto;
+				color: #FFFFFF;
 			}
 			
 			.add_btn {
@@ -50,8 +63,8 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">扫码</h1>
-				<a @tap="flash=!flash" class="mui-icon mui-icon-flag mui-pull-right" style="color:white"></a>
+				<h1 class="mui-title">扫一扫</h1>
+				<span @tap="onPicTap()" class="app-font-size-28 mui-pull-right" style="height: 44px; line-height: 44px;color: white;">相册</span>
 			</header>
 
 			<div class="mui-content">
@@ -60,8 +73,9 @@
 				</div>
 
 				<div class="tips app-font-size-28">
-					<div class="add_btn" @tap="onAddTap()">扫码没反应？试试序列号添加</div>
-					<div class="app-color-dark">请扫描机身或者说明书的二维码进行添加</div>
+					此二维码仅可以使用一次，有效期30分钟。
+					<br />
+					如二维码失效，请让家人重新生成。
 				</div>
 			</div>
 
@@ -87,21 +101,18 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
-
+			var _arr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
 			new Vue({
 				el: '#warpper',
 				data: function() {
 					return {
-						flash: false, // 闪光灯状态
 						frist: true, // 是否首次
 						scan: null,
 						t: -1,
 					};
 				},
 				watch: {
-					flash: function(v){
-						this.scan && this.scan.setFlash(v);
-					}
+					
 				},
 				mounted: function() {
 					
@@ -114,16 +125,15 @@
 				},
 				methods: {
 					// 手动添加设备号
-					onAddTap: function(){
-						this.flash = false;
+					onPicTap: function(){
+						// this.flash = false;
 						this.closeScan();
-						// 手动输入序列号 
-						app.page.getInput(function(data){
-							console.log(data.content);
-						}, {
-							tips: '请输入设备序列号',
-							title: '手动输入'
-						});
+						// 选择图片二维码
+						this.$gallery(function(err, imgs){
+							plus.barcode.scan(imgs[0], this.onMarked.bind(this), function(err){
+								return mui.toast('无法识别');
+							}, _arr);
+						}.bind(this), 1);
 						
 					},
 					resetScan: function(){
@@ -140,7 +150,7 @@
 						
 					},
 					initScan: function(){
-						var _arr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+						
 						var scan = new plus.barcode.Barcode('axy', _arr, {
 							frameColor: '#06C1AE',  
 							scanbarColor: '#06C1AE',

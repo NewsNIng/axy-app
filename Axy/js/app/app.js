@@ -39,11 +39,12 @@ function addMethod(obj, name, fn) {
 		},
 		// 清除本地用户信息
 		clear: function() {
+			window.localStorage.setItem('_account_', '');
 			return s("{}");
 		},
 		// 是否存有本地用户信息
 		has: function() {
-			var u = s();
+			var u = app.user.get();
 			for(var k in u) {
 				return true;
 			}
@@ -56,14 +57,14 @@ function addMethod(obj, name, fn) {
 (function(app) {
 	// 用户进行登录
 	app.user.login = function() {
-
+		
 	};
 	// 用户进行注销
 	app.user.logout = function() {
 		// 提示用户
-
+		
 		// 清除本地用户信息
-		// app.user.clear();
+		app.user.clear();
 
 		// 重定向登录页面 or 重启App 
 		// app.user.login();
@@ -85,8 +86,10 @@ function addMethod(obj, name, fn) {
 	// 重载 user.get 如果传入function 则跳转登录并且登录成功会通知这个回调函数
 	addMethod(app.user,'get', function(fn){
 		var u = null;
+		console.log(app.user.has())
 		if(app.user.has()){
 			u = app.user.get();
+			
 			return typeof fn === 'function' ? fn(u): u;
 		}
 		return app.page && app.page.getLogin(fn);

@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF !important;
+			}
+			/*搜索框头部*/
+			
+			.app-input-room .input::-webkit-input-placeholder {
+				font-size: 12px !important;
+				color: #9F9FA0 !important;
+			}
+			
+			[data-dpr="2"] .app-input-room .input::-webkit-input-placeholder {
+				font-size: 24px !important;
+			}
+			
+			[data-dpr="3"] .app-input-room .input::-webkit-input-placeholder {
+				font-size: 36px !important;
+			}
+			
+			.app-input-room {
+				width: 8.3rem;
+				position: relative !important;
+			}
+			
+			.app-input-room>span.mui-icon {
+				position: absolute;
+				left: 10px;
+				top: 0;
+			}
+			
+			.app-input-room>span.mui-icon.close {
+				display: none;
+				left: initial;
+				right: 10px;
+			}
+			
+			.app-input-room.active>span.mui-icon.close {
+				display: block;
+			}
+			
+			.app-input-room img {
+				width: 16px;
+			}
+			
+			.app-input-room input {
+				width: 100%;
+				padding-left: .8rem !important;
+				text-align: left !important;
+				border-radius: 50px !important;
+				background-color: #FFFFFF !important;
+			}
+			/*end搜索框头部*/
+			
+			.mui-content>div {
+				padding: 10px;
+				position: relative;
+				height: auto;
+			}
+			
+			.mui-content>div:after {
+				/*TODO 颜色 高度 修改*/
+				content: '';
+				height: 10px;
+				background-color: #F4F8FB;
+				display: block;
+				position: absolute;
+				bottom: -10px;
+				left: 0;
+				width: 100%;
+				margin-bottom: 10px;
+			}
+			
+			.mui-content>div>div.tips {
+				margin-bottom: 8px;
+			}
+			/*=-============*/
+			
+			.cardRoom {
+				display: flex;
+				display: -webkit-flex;
+				align-content: center;
+				justify-content: flex-start;
+				flex-flow: wrap row;
+				color: #888888;
+			}
+			
+			.cardRoom>div:active {
+				background-color: #F4F8FB;
+			}
+			
+			.cardRoom>div {
+				text-align: center;
+				display: inline-block;
+				padding: 3px 8px;
+				margin: 0 .16rem .16rem 0;
+				border-radius: 2px;
+				background-color: #e5e6e7;
+				line-height: 0.666666rem;
+			}
+			
+			.cardRoom>div>* {
+				vertical-align: middle;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<div class="app-input-room mui-pull-left" :class="active&&'active'">
+					<span class="mui-icon">
+						<img src="../../image/home/dev_setting.png"/>
+					</span>
+					<input v-model="content" @blur="active=false" @focus="active=true" class="app-font-size-24" type="search" placeholder="你想要的吃喝玩乐">
+					<span class="mui-icon close" @touchstart="onClearTap()">
+						<img src="../../image/nearby/time.png"/>
+					</span>
+				</div>
+				<span @tap="onCancelTap()" style="color: #FFFFFF; line-height: 44px;" class="mui-pull-right app-font-size-28">取消</span>
+			</header>
+
+			<div class="mui-content app-font-size-28">
+
+				<div class="wrapper">
+					
+					<ul class="mui-table-view">
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                幸福
+					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                木屋
+					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                CBD
+					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+					            </div>
+					        </a>
+					    </li> <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                幸福
+					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                木屋
+					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                CBD
+					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+					            </div>
+					        </a>
+					    </li> <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                幸福
+					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                木屋
+					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                CBD
+					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+					            </div>
+					        </a>
+					    </li> <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                幸福
+					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                木屋
+					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                CBD
+					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+					            </div>
+					        </a>
+					    </li> <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                幸福
+					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                木屋
+					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+					            </div>
+					        </a>
+					    </li>
+					    <li class="mui-table-view-cell mui-media">
+					        <a href="javascript:;">
+					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
+					            <div class="mui-media-body">
+					                CBD
+					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+					            </div>
+					        </a>
+					    </li>
+					</ul>
+				</div>
+
+			</div>
+
+		</div>
+
+		<script src="../../js/common/immersed.js"></script>
+		<script src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script src="https://unpkg.com/better-scroll@1.0.1/dist/bscroll.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						active: false,
+						content: '',
+					};
+				},
+				mounted: function() {
+					var options = {
+						scrollY: true,
+						snap: {
+							loop: false
+						}
+					}
+					this.slide = BScroll('wrapper', options)
+				},
+				methods: {
+					// 点击取消文字时
+					onCancelTap: function() {
+						// 页面返回
+					},
+					// 点击清除图标时
+					onClearTap: function() {
+						// 清空输入值
+						this.content = '';
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

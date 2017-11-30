@@ -261,7 +261,8 @@
 					"html/smart/index.html"
 				],
 				"refer": [
-					"html/nearby/index.html"
+					"html/nearby/index.html",
+					"html/zeus.html"
 				],
 				"priority": 0
 			},
@@ -337,7 +338,8 @@
 					"html/smart/devices/dev_electric_controller.html",
 					"html/smart/devices/dev_Infrared_controller.html",
 					"html/smart/add/scan.html",
-					"html/smart/add/connect_wifi.html"
+					"html/smart/add/add_device.html",
+					"html/smart/add/family_menu.html"
 				],
 				"priority": 0
 			},
@@ -360,7 +362,8 @@
 					"html/public/position.html",
 					"html/nearby/business/signup.html",
 					"html/nearby/pages/theme.html",
-					"html/nearby/pages/discover.html"
+					"html/nearby/pages/discover.html",
+					"html/nearby/menu.html"
 				],
 				"priority": 0
 			},
@@ -545,6 +548,53 @@
 				"resources": [],
 				"refer": [
 					"html/person/other.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/scan.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/add_device.html": {
+				"resources": [
+					"image/smart/devices/dev_icon/门禁主机@3x.png",
+					"image/smart/devices/dev_icon/紧急按钮@3x.png",
+					"image/smart/devices/dev_icon/隐形防盗探测器@3x.png",
+					"image/smart/devices/dev_icon/窗帘控制器@3x.png",
+					"image/smart/devices/dev_icon/智能门锁@3x.png",
+					"image/smart/devices/dev_icon/智能灯控@3x.png",
+					"image/smart/devices/dev_icon/遥控器@3x.png",
+					"image/smart/devices/dev_icon/烟雾探测器@3x.png",
+					"image/smart/devices/dev_icon/智能插座@3x.png",
+					"image/smart/devices/dev_icon/迎宾器@3x.png",
+					"image/smart/devices/dev_icon/窗帘升降器@3x.png",
+					"image/smart/devices/dev_icon/红外遥控模块@3x.png",
+					"image/smart/devices/dev_icon/声光报警器@3x.png",
+					"image/smart/devices/dev_icon/一氧化碳探测器@3x.png",
+					"image/smart/devices/dev_icon/燃气探测器@3x.png",
+					"image/smart/devices/dev_icon/电力安全主机@3x.png",
+					"image/smart/devices/dev_icon/红外幕帘@3x.png",
+					"image/smart/devices/dev_icon/门磁探测器@3x.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/smart/add/family_menu.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/family_code.html",
+					"html/smart/add/family_scan.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/menu.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/signup.html",
+					"html/nearby/discover/discover_release.html"
 				],
 				"priority": 0
 			}
