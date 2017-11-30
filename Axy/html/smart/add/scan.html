@@ -78,7 +78,8 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-
+		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -119,12 +120,22 @@
 						this.closeScan();
 						// 手动输入序列号 
 						app.page.getInput(function(data){
-							console.log(data.content);
-						}, {
+							this._addDevice(data.content);
+						}.bind(this), {
 							tips: '请输入设备序列号',
-							title: '手动输入'
+							title: '手动输入',
+							content: 'AX-NXW-2017112900008'
 						});
 						
+					},
+					// 发送添加设备请求
+					_addDevice: function(id){
+						var w = plus.nativeUI.showWaiting();
+						dal.device.add(id,function(err, data){
+							w && (w.close(), w = null);
+							if(err){return mui.toast(err.message || '添加失败')}
+							mui.alert('添加成功');
+						});
 					},
 					resetScan: function(){
 						if(this.t && this.t >= 0){

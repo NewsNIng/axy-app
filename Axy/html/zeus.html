@@ -26,32 +26,40 @@
 
 			var P = plug.H5NativeBridge;
 
-			var domain = "";
+			var domain = "www.isee110.com";
 			
 			var T = -1;
 			var TD = 60e3;
-
+			
 			Rx.Observable
 				// 原始事件
 				.create(function(observer) {
-					
+					// 监听登录成功事件
 					new ni.Broadcast().on('login_success', function(data) {
+						// next
 						observer.next(data.userInfo);
 					});
-					app.user.has() && observer.next(app.user.get());
+					ni.plusReady(function(){
+						// 如果已经登录就 next
+						app.user.has() && observer.next(app.user.get());	
+					});
+					
 				})
 				// 获取顶级域名
 				.mergeMap(function(user) {
 					return Rx.Observable
 						.create(function(o2) {
-							
+							// 有缓存就直接取用
 							if(domain) {
+								// next
 								o2.next(user, domain);
 							} else {
+								// 暂时模拟延迟获取
 								setTimeout(function() {
-									domain = 'www.isee110.com';
+									domain = '';
+									// next
 									o2.next(user, domain);
-								}, 1000);
+								}, 300);
 							}
 						});
 				})
@@ -60,18 +68,23 @@
 					// 判断定时器
 					if(T < 0){
 						(function _(){
+							// 请求服务端数据 TODO 取消分页
 							dal.device.list(1, function(err, data){
 								if(err){return;}
 								console.log(JSON.stringify(data));
+								// 数据不为空时 向原生发送数据
 								data && data.length > 0 && P.InitNativeDevList(JSON.stringify(data));
-							});
+							}, 1000);
+							// 递归调用 模拟定时器 60s频率
 							T = setTimeout(_, TD);
 						}());
 					}
 					
 					return Rx.Observable
 						.create(function(o3){
+							// 向原生注册 控制中心 处理函数回调
 							P.InitNativeSysteam(user, domain, function(arg){
+								// next
 								o3.next(arg);
 							});
 						});

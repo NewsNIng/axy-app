@@ -7,6 +7,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+
 		<link rel="stylesheet" href="../../css/app/app.css" />
 		<style type="text/css">
 			html,
@@ -15,6 +16,10 @@
 				background-color: #FFFFFF !important;
 			}
 			/*搜索框头部*/
+			
+			.mui-bar {
+				padding: 0 0.346666rem;
+			}
 			
 			.app-input-room .input::-webkit-input-placeholder {
 				font-size: 12px !important;
@@ -30,7 +35,7 @@
 			}
 			
 			.app-input-room {
-				width: 8.3rem;
+				width: 8.5rem;
 				position: relative !important;
 			}
 			
@@ -41,14 +46,13 @@
 			}
 			
 			.app-input-room>span.mui-icon.close {
-				display: none;
+				/*display: none;*/
 				left: initial;
 				right: 10px;
 			}
-			
-			.app-input-room.active>span.mui-icon.close {
+			/*.app-input-room.active>span.mui-icon.close {
 				display: block;
-			}
+			}*/
 			
 			.app-input-room img {
 				width: 16px;
@@ -62,15 +66,17 @@
 				background-color: #FFFFFF !important;
 			}
 			/*end搜索框头部*/
+			/*搜索历史*/
 			
-			.mui-content>div {
-				padding: 10px;
+			div.history,
+			div.hot {
+				padding: 0.32rem 0.246666rem 0.5rem 0.246666rem;
 				position: relative;
 				height: auto;
 			}
 			
-			.mui-content>div:after {
-				/*TODO 颜色 高度 修改*/
+			div.history:after,
+			div.hot:after {
 				content: '';
 				height: 10px;
 				background-color: #F4F8FB;
@@ -82,10 +88,9 @@
 				margin-bottom: 10px;
 			}
 			
-			.mui-content>div>div.tips {
-				margin-bottom: 8px;
+			.tips {
+				margin: 0 0 8px .1rem;
 			}
-			/*=-============*/
 			
 			.cardRoom {
 				display: flex;
@@ -103,16 +108,152 @@
 			.cardRoom>div {
 				text-align: center;
 				display: inline-block;
-				padding: 3px 8px;
-				margin: 0 .16rem .16rem 0;
-				border-radius: 2px;
+				height: 0.773333rem;
+				line-height: 0.773333rem !important;
+				padding: 0 0.25rem;
+				margin: 0.1rem;
+				border-radius: 3px;
 				background-color: #e5e6e7;
-				line-height: 0.666666rem;
+			}
+			/*end搜索历史*/
+			/*think*/
+			
+			.think ul:before {
+				height: 0 !important;
 			}
 			
-			.cardRoom>div>* {
-				vertical-align: middle;
+			.think ul:after {
+				height: 0 !important;
 			}
+			
+			.think ul .mui-badge {
+				font-size: inherit;
+				color: #9F9FA0;
+				background-color: transparent !important;
+				padding: 0 !important;
+			}
+			
+			.mui-table-view-cell:after {
+				left: 0.36rem;
+				right: 0.36rem;
+				background-color: #E5E6E7;
+			}
+			/*搜索结果*/
+			
+			.mui-progressbar {
+				height: 3px;
+				background-color: #FFFFFF;
+			}
+			
+			.mui-progressbar.mui-progressbar-infinite:before {
+				background: #1ABC9C !important;
+			}
+			/*tab*/
+			
+			.tabroom {
+				background-color: #FFFFFF;
+				width: 100%;
+				height: 1.066666rem;
+				/*height: 1.386666rem;*/
+				text-align: center;
+				border-bottom: 1px solid #EFEFF4;
+			}
+			
+			.tabroom>div {
+				text-align: center;
+				padding: 0;
+				margin: 0 .38rem;
+				font-weight: bold;
+				display: inline-block;
+				/*line-height: 1.386666rem;*/
+				letter-spacing: .01rem;
+				line-height: 1.066666rem;
+				color: #a8a8a8;
+				position: relative;
+			}
+			
+			.tabroom>div.app-color-main:before {
+				content: "";
+				width: 90%;
+				height: 0.053333rem;
+				background-color: #2BB8AA;
+				display: block;
+				position: absolute;
+				left: 5%;
+				border-radius: .1rem;
+				/*bottom: 0.293333rem;*/
+				bottom: 0.2rem;
+			}
+			
+			.wrapper {
+				overflow: hidden;
+				height: 100%;
+			}
+			
+			.wrapper ul {
+				padding: 0;
+				margin: 0;
+			}
+			
+			.wrapper li {
+				list-style: none;
+				padding: 0.546666rem 0.346666rem;
+				position: relative;
+			}
+			
+			.wrapper li:after {
+				content: '';
+				position: absolute;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				height: 1px;
+				background-color: #F4F8FB;
+				transform: scaleY(0.5);
+				-webkit-transform: scaleY(0.5);
+			}
+			
+			.wrapper li .imgdiv,
+			.wrapper li .textdiv {
+				width: 2.453333rem;
+				height: 2.453333rem;
+				display: inline-block;
+			}
+			
+			.wrapper li .imgdiv {
+				background-image: url(bg@2x.png);
+				background-repeat: no-repeat;
+				background-size: cover;
+			}
+			
+			.wrapper li .textdiv {
+				margin-left: 0.346666rem;
+				width: 6.4rem;
+				overflow: hidden;
+				position: relative;
+			}
+			
+			.wrapper li .textdiv .tips {
+				text-align: right;
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				width: 100%;
+				margin: 0;
+			}
+			
+			.mui-ellipsis-2 {
+				margin-top: 0.133333rem;
+			}
+			.null{
+				text-align: center;
+			}
+			.null img{
+				width: 4rem;
+				height: 4rem;
+				margin-top: 2rem;
+			}
+			/*end搜索结果*/
 		</style>
 	</head>
 
@@ -123,165 +264,122 @@
 			<header class="mui-bar mui-bar-nav app-header">
 				<div class="app-input-room mui-pull-left" :class="active&&'active'">
 					<span class="mui-icon">
-						<img src="../../image/home/dev_setting.png"/>
+						<img src="../../image/search/search@3x.png"/>
 					</span>
-					<input v-model="content" @blur="active=false" @focus="active=true" class="app-font-size-24" type="search" placeholder="你想要的吃喝玩乐">
-					<span class="mui-icon close" @touchstart="onClearTap()">
-						<img src="../../image/nearby/time.png"/>
+					<input ref="input" v-model="content" @blur="active=false" @focus="active=true" class="app-font-size-24" type="search" placeholder="你想要的吃喝玩乐">
+					<span class="mui-icon close" v-show="content.length" @touchstart="onClearTap()">
+						<img src="../../image/search/clear@3x.png"/>
 					</span>
 				</div>
-				<span @tap="onCancelTap()" style="color: #FFFFFF; line-height: 44px;" class="mui-pull-right app-font-size-28">取消</span>
+				<div @tap="onCancelTap()" style="color: #FFFFFF; line-height: 44px; text-align: center;width: .8rem; " class="mui-pull-left app-font-size-24 mui-action-back">取消</div>
 			</header>
 
 			<div class="mui-content app-font-size-28">
+				<!--搜索历史-->
+				<div class="history" v-show="searchState === 0">
+					<div class="tips app-font-size-24 app-color-dark">搜索历史</div>
+					<div class="cardRoom app-font-size-26">
+						<template v-for="o,i in historyList">
+							<div @tap="searchResult(o)">{{o}}</div>
+						</template>
+					</div>
+				</div>
+				<!--热门搜索-->
+				<div class="hot" v-show="searchState === 0">
+					<div class="tips app-font-size-24 app-color-dark">热门搜索</div>
+					<div class="cardRoom app-font-size-26">
+						<div>智能主机</div>
+						<div>智能智能主机主机</div>
+						<div>阿大使s</div>
+						<div>阿大使s</div>
+					</div>
+				</div>
 
-				<div class="wrapper">
-					
+				<!--联想搜索词-->
+				<div class="think app-font-size-2d8" v-show="searchState === 1">
+
 					<ul class="mui-table-view">
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                幸福
-					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                木屋
-					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                CBD
-					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
-					            </div>
-					        </a>
-					    </li> <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                幸福
-					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                木屋
-					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                CBD
-					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
-					            </div>
-					        </a>
-					    </li> <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                幸福
-					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                木屋
-					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                CBD
-					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
-					            </div>
-					        </a>
-					    </li> <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                幸福
-					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                木屋
-					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                CBD
-					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
-					            </div>
-					        </a>
-					    </li> <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                幸福
-					                <p class="mui-ellipsis">能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                木屋
-					                <p class="mui-ellipsis">想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
-					            </div>
-					        </a>
-					    </li>
-					    <li class="mui-table-view-cell mui-media">
-					        <a href="javascript:;">
-					            <img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-					            <div class="mui-media-body">
-					                CBD
-					                <p class="mui-ellipsis">烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
-					            </div>
-					        </a>
-					    </li>
+						<template v-show="content.trim().length">
+							<li class="mui-table-view-cell" @tap="searchResult()">
+								<a class="">
+									<span>搜索 “{{content}}”</span>
+								</a>
+							</li>
+						</template>
+						<template v-for="o,i in thinkList">
+							<li class="mui-table-view-cell" @tap="onRsTap(o)">
+								<a class="">
+									<span>{{o.name}}</span>
+									<span class="mui-badge">{{o.count}}{{_2Type(o.type)}}</span>
+								</a>
+							</li>
+						</template>
 					</ul>
+				</div>
+
+				<!--搜索结果页面-->
+				<div v-show="searchState === 2" class="result">
+					<!--进度条-->
+					<div ref="progressbar" v-if="searchIng" class="mui-progressbar mui-progressbar-infinite">
+						<span></span>
+					</div>
+					<!--结果页面-->
+					<div class="tabroom" ref='tabroom'>
+						<template v-for="o, i in tab.items">
+							<div class="app-font-size-30" :class="{'app-color-main': tab.active === i}" @tap="onTabTap(o, i)">
+								{{o.name}}
+							</div>
+						</template>
+					</div>
+					<!--列表-->
+					<div class="rsroom">
+
+						<div class="wrapper" ref="wrapper">
+							<!--如果有数据则显示-->
+							<ul v-show="resultList.length">
+								<li v-for="o,i in resultList">
+									<div class="imgdiv">
+
+									</div>
+									<div class="textdiv app-font-size-28">
+										<div class="app-color-333333 mui-ellipsis">
+											{{o.name}}
+										</div>
+										<div class="app-color-9f9fa0 mui-ellipsis-2">
+											{{o.x}}
+										</div>
+										<div class="app-color-9f9fa0 tips mui-ellipsis">
+											距离您的位置 {{o.y}}m
+										</div>
+									</div>
+								</li>
+							</ul>
+							<!--无数据且搜索完毕-->
+							<div class="null" v-show="!searchIng && resultList.length === 0">
+								<img src="../../image/search/background@3x.png"/>
+							</div>
+						</div>
+
+					</div>
 				</div>
 
 			</div>
 
 		</div>
-
 		<script src="../../js/common/immersed.js"></script>
 		<script src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
-		<script src="https://unpkg.com/better-scroll@1.0.1/dist/bscroll.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<script src="../../js/lib/better-scroll.min.js"></script>
+		<!--<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
+			// 搜索历史缓存
+			var historyList = new ni.Cache("search_history_list", ['智能主机'], {
+				max: 10
+			});
+			
+			
 
 			new Vue({
 				el: '#warpper',
@@ -289,16 +387,99 @@
 					return {
 						active: false,
 						content: '',
+						thinkList: [], 
+						resultList: [],
+						searchIng: false,
+						resultOver: false,
+						historyList: historyList.data,
+						
+						
+						tab: {
+							active: 0,
+							items: [{
+									name: "全部",
+									id: 'nearby_pages_list',
+									url: './pages/list.html'
+								},
+								{
+									name: "商家",
+									id: 'theme',
+									url: './pages/theme.html'
+								},
+								{
+									name: "内容",
+									id: 'discover',
+									url: './pages/discover.html'
+								}
+							]
+						}
 					};
 				},
-				mounted: function() {
-					var options = {
-						scrollY: true,
-						snap: {
-							loop: false
+				computed: {
+					// 当前页面状态
+					searchState: function() {
+						// 是否焦点
+						if(this.active){
+							if(this.content.trim().length){
+								return 1;
+							}else{
+								return 0;
+							}
+						}else{
+							if(this.resultOver || this.searchIng){
+								return 2;
+							}else{
+								return 0;
+							}
 						}
+						
 					}
-					this.slide = BScroll('wrapper', options)
+				},
+				watch: {
+					// 监听 搜索 值
+					content: function(nv) {
+						this.resultOver = false;
+						var c = function() {
+							window.clearTimeout(this._thinkT);
+							this._thinkT = null;
+						}
+						// 节流处理
+						this._thinkT && c();
+						this._thinkT = setTimeout(function() {
+							// 提交搜索请求
+							this.thinkResult();
+							c();
+						}.bind(this), 300);
+					},
+				},
+				mounted: function() {
+					var wrapper = this.$refs.wrapper;
+					wrapper.style.height = (document.documentElement.clientHeight || document.body.clientHeigth) -
+						this.$refs.tabroom.offsetHeight -
+						immersed -
+						44 +
+						'px';
+
+					this.$nextTick(function() {
+						if(!this.scroll) {
+							this.scroll = new BScroll(wrapper, {})
+							this.scroll.on('scrollEnd', () => {
+								if(this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+									// 获取更多 TODO
+								}
+							});
+
+						} else {
+							this.scroll.refresh()
+						}
+
+					}.bind(this));
+				},
+				plusReady: function() {
+					// 自动打开软键盘
+//					var device = this.$os.ios ? this.$ios.SoftInput : this.$android.SoftInput;
+//					device = new device();
+//					device.show(this.$refs.input);
 				},
 				methods: {
 					// 点击取消文字时
@@ -309,6 +490,77 @@
 					onClearTap: function() {
 						// 清空输入值
 						this.content = '';
+						this.thinkList = [];
+						this.resultList = [];
+					},
+					// 获取联想内容
+					thinkResult: function() {
+						// TODO
+						setTimeout(function() {
+							this.thinkList = [{
+								name: this.content + '水果茶',
+								count: '450',
+								type: 's',
+							}, {
+								name: this.content + '真好',
+								count: '666',
+								type: 'a',
+							}];
+						}.bind(this), 111);
+					},
+					// 搜索内容条目被点击时
+					onRsTap: function(o) {
+						this.searchResult(o.name);
+					},
+					// 获取搜索内容
+					searchResult: function(s) {
+						// 搜索中
+						this.searchIng = true;
+						this.content = this.content || s;
+						// 保存搜索历史
+						this.saveHistory();
+						// 发送请求 TODO
+
+						setTimeout(function() {
+							// 搜索完毕
+							this.searchIng = false;
+							this.resultOver = true;
+
+							var arr = Array.from({
+								length: 30
+							});
+							arr.fill({
+								name: '御蝶坊',
+								x: '香脆的椰子，色彩绚烂的鲜美水果，在某个温暖的午后时光。',
+								y: '698'
+							});
+							this.resultList = arr;
+							this.$nextTick(function() {
+								this.scroll && this.scroll.refresh();
+							}.bind(this));
+						}.bind(this), 1000);
+					},
+					saveHistory: function(){
+						if(this.historyList.indexOf(this.content) < 0){
+							historyList.unshift(this.content);
+							this.historyList = historyList.data;
+						}
+						
+					},
+					onTabTap: function(o, i){
+						if(this.tab.active === i) {
+							return;
+						}
+						this.tab.active = i;
+						// 控制切换 tab
+						// TODO
+					},
+					_2Type: function(type) {
+						// TODO
+						return {
+							s: '件商品',
+							a: '篇美文'
+						}[type]
 					}
 				}
 			});
