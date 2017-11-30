@@ -70,7 +70,9 @@
 					}
 					// 打开店铺详情
 					if(!isClose){
-						v = mui.preload({id: "store_details", url:"store_details.html"});
+						v = mui.preload({id: "store_details", url:"store_details.html", extras: {
+							oid: storeId
+						}});
 						v.addEventListener('show', function(){
 							_();
 						});
@@ -86,7 +88,7 @@
 					// 重新刷新signup next
 					v = plus.webview.getWebviewById('signup_next');
 					if(!v){
-						v = plus.webview.create('business/signup_next.html', 'signup_next', {}, {
+						v = plus.webview.create('signup_next.html', 'signup_next', {}, {
 							storeId:　storeId
 						});
 						methodName = 'show';
