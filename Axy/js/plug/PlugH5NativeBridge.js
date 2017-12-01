@@ -28,7 +28,7 @@
 	 * JSON 转 XML
 	 * @param {Object} o
 	 */
-	pg.jo2xml = function(_o){
+	pg.json2xml = function(_o){
 		function _jo2xml(o){
 			var str = "";
 			if(!o.tagName){return str;};
@@ -104,23 +104,25 @@
 	}
 	
 	
-	
 	/**
-	 * 给指定设备添加配件
-	 * @param {Number} deviceid 设备ID
-	 * @param {Number} iqid 智能配件ID
-	 * @param {Number} step 延时 单位秒
-	 * @param {Function} sf 正确回调函数
-	 * @param {Function} ff 失败回调函数
+	 * 
+	 * @param {Object} deviceid 设备ID
+	 * @param {Object} iqid 智能配件ID
+	 * @param {Object} name 配件名称
+	 * @param {Object} delay 延时 单位秒
+	 * @param {Object} ptz ptz巡航轨迹集（若无默认为0）
+	 * @param {Object} bindV 绑定视频通道号
+	 * @param {Object} sf
+	 * @param {Object} ff
 	 */
-	pgn.AddSmartDeviceAsyn = function(deviceid, iqid, step, sf, ff){
-		return pg.asyncExec(N, 'AddSmartDeviceAsyn', [deviceid, iqid, step], sf, ff);
+	pgn.AddSmartDeviceAsyn = function(deviceid, iqid, name, delay, ptz, bindV, sf, ff){
+		return pg.asyncExec(N, 'AddSmartDeviceAsyn', [deviceid, iqid, name, delay, ptz, bindV], sf, ff);
 	};
 	
 	/**
 	 * 删除单个配件
 	 * @param {Number} deviceid 设备ID
-	 * @param {Number} iqid 智能配件ID
+	 * @param {String} iqid 智能配件ID （十六进制）
 	 * @param {Function} sf 正确回调函数
 	 * @param {Function} ff 失败回调函数
 	 */
@@ -218,7 +220,8 @@
 	 * @param {Function} ff
 	 */
 	pgn.SetDeviceParamAsyn = function(deviceid, xmljson, sf, ff){
-		xmljson = pg.jo2xml(xmljson);
+		//xmljson = pg.json2xml(xmljson);
+		//console.log(xmljson);
 		return pg.asyncExec(N, 'SetDeviceParamAsyn', [deviceid, xmljson], sf, ff);
 	};
 	
@@ -245,7 +248,18 @@
 	};
 	
 	
-	
+	/**
+	 * 内网主机列表
+	 */
+	pgn.GetLanDevHostList = function(){
+		return pg.syncExec(N, 'GetLanDevHostList', []);
+	}
+	/**
+	 * 获取原生推送id
+	 */
+	pgn.GetPushInfoSyn = function(){
+		return pg.syncExec(N, 'GetPushInfoSyn',[]);
+	}
 	
 	
 	
