@@ -59,6 +59,15 @@
 							{
 								name: '添加家人设备',
 								href: 'add/family_menu.html'
+							},
+							{
+								name: '添加设备',
+								href: 'add/scan.html'
+							},
+							{
+								name: '搜索页面',
+								href: '../search/index.html',
+//								plusrequire: 'ahead' 
 							}
 						]
 					};
@@ -71,7 +80,11 @@
 				},
 				methods: {
 					onButtonTap: function(o) {
-						mui.openWindow(o.href);
+						mui.openWindow(o.href, o.id||o.href, {
+							plusrequire: o.plusrequire || 'normal'
+						}, {
+							
+						});
 					},
 					onScanTap: function() {
 						return ;

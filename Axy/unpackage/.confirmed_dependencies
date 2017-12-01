@@ -93,7 +93,8 @@
 			"html/smart/devices/dev_Infrared_controller.html",
 			"html/smart/add/scan.html",
 			"html/smart/add/add_device.html",
-			"html/smart/add/family_menu.html"
+			"html/smart/add/family_menu.html",
+			"html/search/index.html"
 		]
 	},
 	"html/smart/scenes/create_scenes.html": {
