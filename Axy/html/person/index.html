@@ -25,12 +25,15 @@
 			<br />
 			<button type="button" id="testopen" class="mui-btn app-btn-main">测试打开position</button>
 			<br />
+			<button type="button" @tap='openBrowser()' class="mui-btn app-btn-main-ghost">测试打开浏览器</button>
+				<br />
 			<template v-for="o,i in testList">
 				<br />
 				<input type="" name="" id="" value="" v-model="inputList[i]" placeholder="参数列表，逗号隔开" />
 				<br />
 				<button type="button" @tap='onTestTap(o, i)' class="mui-btn app-btn-main-ghost">{{o}}</button>
 				<br />
+				
 			</template>
 
 		</div>
@@ -106,6 +109,11 @@
 							console.log(JSON.stringify(u));
 						});
 					},
+					openBrowser: function(){
+						app.page.openBrowser({
+							url: 'https://segmentfault.com/u/newsning/articles'
+						});
+					}
 				}
 			});
 		</script>

@@ -2,7 +2,17 @@
 // 依赖 5+ 平台 和  md5.min.js
 
 
+
 var imgagelazyload = (function(doc) {
+	var debug = false;
+	var log = function(msg, toStr){
+		if(debug){
+			msg = toStr? JSON.stringify(msg): msg;
+			console.log("[图片缓存]" + msg);
+		}
+	}
+	
+	
 	//	var img_translate = "../../img/translate.png"; // loading图
 	//  var amcsname = ""; // 动画
 
@@ -24,11 +34,11 @@ var imgagelazyload = (function(doc) {
 		var temp = new Image();
 		temp.src = sd_path;
 		temp.onload = function(){
-			console.log('已存在,直接显示==' + hb_path);
+			log('已存在,直接显示==' + hb_path);
 			setLoaded.call(imgDom, imgDom, sd_path);
 		}; 
 		temp.onerror = function(){
-			console.log('不存在,等待下载==' + hb_path);
+			log('不存在,等待下载==' + hb_path);
 			getNetSrc.call(imgDom, imgDom, imgSrc, hb_path, sd_path);
 		};
 

@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>浏览器</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!--<script type="text/javascript" src="../../js/common/flexible.js"></script>-->
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			body>.mui-progressbar {
+				top: 0;
+				/*background-color: rgba(255,255,255,0.4);*/
+				background-color: #FFFFFF !important;
+			}
+			
+			body>.mui-progressbar:before,body>.mui-progressbar>span {
+				/*background-color: rgba(255,255,255,0.22) !important;*/
+				background-color: #06C1AE !important;
+			}
+			
+			
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="app-icon-back mui-pull-left app-color-white" @tap="onBack()"></a>
+			<a class="mui-icon mui-pull-left mui-icon-close app-color-white"  @tap="onClose()" style="margin-left: 5px;"></a>
+			<h1 class="mui-title" style="padding-left: 18px;" v-text="title"></h1>
+
+		</header>
+
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript">
+			mui.init();
+			new Vue({
+				el: 'header',
+				data: function() {
+					return {
+						sub: null,
+						title: "",
+						url: "",
+						curl: "",
+						progressbar: null,
+					};
+				},
+				computed: {
+					eq: function(){
+						return this.url === this.curl;
+					}
+				},
+				mounted: function(){
+					this.progressbar = mui('body').progressbar({progress: 0});
+					this.progressbar.show();
+				},
+				plusReady: function() {
+					this.init();
+					this.listen();
+				},
+				methods: {
+					init: function() {
+						this.url = this.$view.url;
+						this.sub = plus.webview.create(this.url, 'browser_sub', {
+							top: 44 + immersed + 'px',
+							bottom: '0px',
+							hardwareAccelerated: true,
+							plusrequire: 'none', // 去除 plus 事件
+						}, {});
+						this.$view.append(this.sub);
+					},
+					listen: function() {progress
+						// 监听控制 显示/隐藏 进度条
+//						this.sub.onloading = function(){
+//							this.progressbar.show();
+//						}.bind(this);
+//						this.sub.onloaded = function(){
+//							this.progressbar.hide();
+//							this.sub.evalJS('alert(window.vvv);')
+//						}.bind(this); 
+						
+						this.sub.addEventListener('progressChanged', function(e){
+							this.progressbar.setProgress(e.progress);
+						}.bind(this));
+						
+						// 监听title变化 单页面路由切换将会不断触发此事件
+						this.sub.addEventListener('titleUpdate', function _tup(e) {
+							e.title && (this.title = e.title);
+							this.curl = this.sub.url;
+						}.bind(this));
+						// 注入安全规则
+						this.sub.setJsFile('_www/js/plug/PlugLocalStroageSafe.js');
+						
+						
+						this.sub.show();
+						
+					},
+					onBack: function(){
+						if(!this.eq){
+							return this.sub.back();
+						}
+						return this.sub.canBack(function(e){
+							if(e.canBack){
+								return this.sub.back();
+							}
+							this.$view.close();
+						}.bind(this));
+					},
+					onClose: function(){
+						this.$view.close();
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

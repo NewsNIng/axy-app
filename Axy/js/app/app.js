@@ -86,10 +86,8 @@ function addMethod(obj, name, fn) {
 	// 重载 user.get 如果传入function 则跳转登录并且登录成功会通知这个回调函数
 	addMethod(app.user,'get', function(fn){
 		var u = null;
-		console.log(app.user.has())
 		if(app.user.has()){
 			u = app.user.get();
-			
 			return typeof fn === 'function' ? fn(u): u;
 		}
 		return app.page && app.page.getLogin(fn);

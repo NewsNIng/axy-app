@@ -95,6 +95,9 @@
 				styles: _styles,
 				extras: {},
 			}];
+			
+			
+			var B = new ni.Broadcast();
 
 			new Vue({
 				el: "#warp",
@@ -119,6 +122,7 @@
 					plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
 
 					this._listenLogin();
+					this._listenTabar();
 
 				},
 				methods: {
@@ -154,6 +158,12 @@
 							});
 
 							console.log(JSON.stringify(data));
+						});
+					},
+					// 监听tabar事件
+					_listenTabar: function(){
+						B.on("tabar", function(data){
+							console.log(data.action)
 						});
 					}
 				}

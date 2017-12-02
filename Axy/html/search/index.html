@@ -15,22 +15,25 @@
 			.mui-content {
 				background-color: #FFFFFF !important;
 			}
+			
+			
+			
 			/*搜索框头部*/
 			
 			.mui-bar {
-				padding: 0 0.346666rem;
+				padding: 0 0 0 0.346666rem;
 			}
 			
-			.app-input-room .input::-webkit-input-placeholder {
+			.app-input-room input::-webkit-input-placeholder {
 				font-size: 12px !important;
 				color: #9F9FA0 !important;
 			}
 			
-			[data-dpr="2"] .app-input-room .input::-webkit-input-placeholder {
+			[data-dpr="2"] .app-input-room input::-webkit-input-placeholder {
 				font-size: 24px !important;
 			}
 			
-			[data-dpr="3"] .app-input-room .input::-webkit-input-placeholder {
+			[data-dpr="3"] .app-input-room input::-webkit-input-placeholder {
 				font-size: 36px !important;
 			}
 			
@@ -91,6 +94,12 @@
 			.tips {
 				margin: 0 0 8px .1rem;
 			}
+			.tips .mui-pull-right{
+				padding-left: 5px;
+			}
+			.tips  img{
+				width: 0.4rem;
+			}
 			
 			.cardRoom {
 				display: flex;
@@ -140,13 +149,15 @@
 			}
 			/*搜索结果*/
 			
-			.mui-progressbar {
-				height: 3px;
-				background-color: #FFFFFF;
+			body>.mui-progressbar {
+				top: 0;
+				/*background-color: rgba(255,255,255,0.4);*/
+				background-color: #FFFFFF !important;
 			}
 			
-			.mui-progressbar.mui-progressbar-infinite:before {
-				background: #1ABC9C !important;
+			body>.mui-progressbar:before,body>.mui-progressbar>span {
+				/*background-color: rgba(255,255,255,0.22) !important;*/
+				background-color: #06C1AE !important;
 			}
 			/*tab*/
 			
@@ -241,14 +252,19 @@
 				width: 100%;
 				margin: 0;
 			}
+			.wrapper ul{
+				padding-bottom: 1rem;
+			}
 			
 			.mui-ellipsis-2 {
 				margin-top: 0.133333rem;
 			}
-			.null{
+			
+			.null {
 				text-align: center;
 			}
-			.null img{
+			
+			.null img {
 				width: 4rem;
 				height: 4rem;
 				margin-top: 2rem;
@@ -271,13 +287,19 @@
 						<img src="../../image/search/clear@3x.png"/>
 					</span>
 				</div>
-				<div @tap="onCancelTap()" style="color: #FFFFFF; line-height: 44px; text-align: center;width: .8rem; " class="mui-pull-left app-font-size-24 mui-action-back">取消</div>
+				<div @tap="onCancelTap()" style="color: #FFFFFF; line-height: 44px; text-align: center;width: 1rem; " class="mui-pull-left app-font-size-24 mui-action-back">取消</div>
 			</header>
 
 			<div class="mui-content app-font-size-28">
 				<!--搜索历史-->
 				<div class="history" v-show="searchState === 0">
-					<div class="tips app-font-size-24 app-color-dark">搜索历史</div>
+					<div class="tips app-font-size-24 app-color-dark">
+						<span>搜索历史</span>
+						<span class="mui-icon mui-pull-right" @tap="onClearHis()">
+							<img src="../../image/search/del@3x.png"/>
+						</span>
+					</div>
+					
 					<div class="cardRoom app-font-size-26">
 						<template v-for="o,i in historyList">
 							<div @tap="searchResult(o)">{{o}}</div>
@@ -320,9 +342,9 @@
 				<!--搜索结果页面-->
 				<div v-show="searchState === 2" class="result">
 					<!--进度条-->
-					<div ref="progressbar" v-if="searchIng" class="mui-progressbar mui-progressbar-infinite">
+					<!--<div ref="progressbar" v-if="searchIng" class="mui-progressbar mui-progressbar-infinite">
 						<span></span>
-					</div>
+					</div>-->
 					<!--结果页面-->
 					<div class="tabroom" ref='tabroom'>
 						<template v-for="o, i in tab.items">
@@ -337,27 +359,33 @@
 						<div class="wrapper" ref="wrapper">
 							<!--如果有数据则显示-->
 							<ul v-show="resultList.length">
-								<li v-for="o,i in resultList">
-									<div class="imgdiv">
+								<template v-for="o,i in resultList">
+									<li>
+										<div class="imgdiv">
 
-									</div>
-									<div class="textdiv app-font-size-28">
-										<div class="app-color-333333 mui-ellipsis">
-											{{o.name}}
 										</div>
-										<div class="app-color-9f9fa0 mui-ellipsis-2">
-											{{o.x}}
+										<div class="textdiv app-font-size-28">
+											<div class="app-color-333333 mui-ellipsis">
+												{{o.name}}
+											</div>
+											<div class="app-color-9f9fa0 mui-ellipsis-2">
+												{{o.x}}
+											</div>
+											<div class="app-color-9f9fa0 tips mui-ellipsis">
+												距离您的位置 {{o.y}}m
+											</div>
 										</div>
-										<div class="app-color-9f9fa0 tips mui-ellipsis">
-											距离您的位置 {{o.y}}m
-										</div>
-									</div>
-								</li>
+									</li>
+								</template>
+
 							</ul>
 							<!--无数据且搜索完毕-->
-							<div class="null" v-show="!searchIng && resultList.length === 0">
-								<img src="../../image/search/background@3x.png"/>
-							</div>
+							<template v-show="!searchIng && resultList.length === 0">
+								<div class="null">
+									<img src="../../image/search/background@3x.png" />
+								</div>
+							</template>
+
 						</div>
 
 					</div>
@@ -378,8 +406,6 @@
 			var historyList = new ni.Cache("search_history_list", ['智能主机'], {
 				max: 10
 			});
-			
-			
 
 			new Vue({
 				el: '#warpper',
@@ -387,13 +413,12 @@
 					return {
 						active: false,
 						content: '',
-						thinkList: [], 
+						thinkList: [],
 						resultList: [],
 						searchIng: false,
 						resultOver: false,
 						historyList: historyList.data,
-						
-						
+						progressbar: null,
 						tab: {
 							active: 0,
 							items: [{
@@ -419,20 +444,20 @@
 					// 当前页面状态
 					searchState: function() {
 						// 是否焦点
-						if(this.active){
-							if(this.content.trim().length){
+						if(this.active) {
+							if(this.content.trim().length) {
 								return 1;
-							}else{
+							} else {
 								return 0;
 							}
-						}else{
-							if(this.resultOver || this.searchIng){
+						} else {
+							if(this.resultOver || this.searchIng) {
 								return 2;
-							}else{
+							} else {
 								return 0;
 							}
 						}
-						
+
 					}
 				},
 				watch: {
@@ -451,23 +476,28 @@
 							c();
 						}.bind(this), 300);
 					},
+					searchIng: function(nv){
+						this.progressbar && this.progressbar[nv? 'show':'hide']();
+					}
 				},
 				mounted: function() {
+					this.progressbar = mui('body').progressbar();
+					
 					var wrapper = this.$refs.wrapper;
-					wrapper.style.height = (document.documentElement.clientHeight || document.body.clientHeigth) -
-						this.$refs.tabroom.offsetHeight -
-						immersed -
-						44 +
-						'px';
+					wrapper.style.height = (document.documentElement.clientHeight || document.body.clientHeigth)
+						- this.$refs.tabroom.offsetHeight
+						- immersed
+						- 44
+						+ 'px';
 
 					this.$nextTick(function() {
 						if(!this.scroll) {
 							this.scroll = new BScroll(wrapper, {})
-							this.scroll.on('scrollEnd', () => {
+							this.scroll.on('scrollEnd', function() {
 								if(this.scroll.y <= (this.scroll.maxScrollY + 50)) {
 									// 获取更多 TODO
 								}
-							});
+							}.bind(this));
 
 						} else {
 							this.scroll.refresh()
@@ -477,11 +507,18 @@
 				},
 				plusReady: function() {
 					// 自动打开软键盘
-//					var device = this.$os.ios ? this.$ios.SoftInput : this.$android.SoftInput;
-//					device = new device();
-//					device.show(this.$refs.input);
+					//					var device = this.$os.ios ? this.$ios.SoftInput : this.$android.SoftInput;
+					//					device = new device();
+					//					device.show(this.$refs.input);
 				},
 				methods: {
+					// 点击删除历史记录
+					onClearHis: function(){
+						// 清除页面历史记录数据
+						this.historyList = [];
+						// 清楚本地缓存数据
+						historyList.data = [];
+					},
 					// 点击取消文字时
 					onCancelTap: function() {
 						// 页面返回
@@ -525,9 +562,9 @@
 							// 搜索完毕
 							this.searchIng = false;
 							this.resultOver = true;
-
+							// es6 数组api 
 							var arr = Array.from({
-								length: 30
+								length: 10
 							});
 							arr.fill({
 								name: '御蝶坊',
@@ -540,25 +577,26 @@
 							}.bind(this));
 						}.bind(this), 1000);
 					},
-					saveHistory: function(){
-						if(this.historyList.indexOf(this.content) < 0){
+					saveHistory: function() {
+						if(this.historyList.indexOf(this.content) < 0) {
 							historyList.unshift(this.content);
 							this.historyList = historyList.data;
 						}
-						
+
 					},
-					onTabTap: function(o, i){
+					onTabTap: function(o, i) {
 						if(this.tab.active === i) {
 							return;
 						}
 						this.tab.active = i;
 						// 控制切换 tab
 						// TODO
+						this.resultList = [];
 					},
 					_2Type: function(type) {
 						// TODO
 						return {
-							s: '件商品',
+							s: '个店铺',
 							a: '篇美文'
 						}[type]
 					}

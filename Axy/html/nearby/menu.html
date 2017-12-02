@@ -11,7 +11,7 @@
 		
 		<style type="text/css">
 			body {
-				background-color: rgba(0,0,0,0) !important;
+				background-color: rgba(0,0,0,0.1) !important;
 			}
 			
 			* {
@@ -41,18 +41,26 @@
 				height: 0 !important;
 				border-left: 10px solid transparent;
 				border-right: 10px solid transparent;
-				border-bottom: 12px solid #FFFFFF;
+				border-bottom: 12px solid rgba(255,255,255,0.8);
 				transform: translate(-10px, -100%);
 				-webkit-transform: translate(-10px, -100%); 
 			}
 			
+			li{
+				width: 3.333333rem !important;
+				height: 1.2rem;
+			}
+			
 			li:after {
 				left: 0 !important;
+				/*background-color: #ccc !important;*/
 			}
 			img{
-				width: 0.4rem;
+				width: 0.773333rem;
+				vertical-align: middle;
 			}
 			span{
+				color: #A2ABB1;
 				vertical-align: middle;
 			}
 		</style>
@@ -61,11 +69,11 @@
 	<body>
 		<ul class="mui-table-view room app-font-size-28 app-color-dark">
 			<li class="mui-table-view-cell" data-href="business/signup.html">
-				<span class="mui-icon"><img src="../../image/smart/scenes/incon_Carbon monoxide@3x.png"/></span>
+				<span class="mui-icon"><img src="../../image/nearby/discover/store@3x.png"/></span>
 				<span>商家入驻</span>
 			</li>
 			<li class="mui-table-view-cell" data-href="discover/discover_release.html">
-				<span class="mui-icon"><img src="../../image/smart/scenes/incon_Carbon monoxide@3x.png"/></span>
+				<span class="mui-icon"><img src="../../image/nearby/discover/release@3x.png"/></span>
 				<span>发布说说</span>
 			</li>
 		</ul>
