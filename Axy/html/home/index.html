@@ -8,8 +8,6 @@
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
 		<style type="text/css">
-			
-			
 			header {
 				padding-left: 2rem !important;
 				padding-right: 2rem !important;
@@ -28,14 +26,14 @@
 				margin: 0 1.5px;
 				border: .5px white solid;
 			}
-			.mui-slider-item{
+			
+			.mui-slider-item {
 				width: 100%;
 				height: 0 !important;
 				padding-top: 50.6666%;
 				background-size: cover;
 				background-position: center;
 			}
-			
 			
 			.model_type {
 				background-color: white;
@@ -52,8 +50,7 @@
 			
 			.model_type>div>img {
 				width: 50%;
-			} 
-			
+			}
 			/*3轮播head阴影*/
 			/*.mui-slider{
 				position: relative;
@@ -69,8 +66,8 @@
 			    background: transparent;
 			    background:-webkit-gradient(linear, 0 0, 0 bottom, from(rgba(0, 0, 0, 1)), to(rgba(255, 255, 255, 0.2))); 
 			}*/
+			/*3end*/
 			
-			/*3end*/			
 			.model_type>div>span {
 				display: block;
 				color: #2e2e2e;
@@ -175,12 +172,18 @@
 				position: relative;
 				margin: 0 1%;
 				width: 48%;
+				height: 0 !important;
+				padding-bottom: 30%;
+				margin-bottom: 2%;
+				background-size: cover;
+				background-position: center;
 			}
 			
 			.like_image>div>img {
 				width: 100%;
 			}
-			.like_image>div>span{
+			
+			.like_image>div>span {
 				position: absolute;
 				bottom: 17%;
 				/*transform: translateX(-50%);*/
@@ -188,7 +191,6 @@
 				font-size: 1.2rem;
 				width: 100%;
 				text-align: center;
-				
 			}
 			/*猜你喜欢====end====*/
 			/*附近的店====start====*/
@@ -203,11 +205,13 @@
 				font-size: 14px;
 				color: #646464;
 			}
+			
 			.shop_image {
 				margin-top: 10px;
 				overflow-x: scroll;
 				white-space: nowrap;
 			}
+			
 			.shop_image>div {
 				display: inline-block;
 				border: 1px solid #ccc;
@@ -215,128 +219,135 @@
 				height: 0;
 				margin: 0 1%;
 				width: 31.33%;
-				padding-bottom: 31.33%; 
+				padding-bottom: 31.33%;
 				background-size: cover;
 				background-position: center;
 				background-repeat: no-repeat;
 			}
-			
 			/*附近的店====end====*/
 		</style>
 	</head>
 
 	<body>
+		<div id="approom">
 
-		<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
-			<a class="mui-icon mui-pull-left">
-				<img src="../../image/home/message.png" />
-			</a>
-			<h1 class="mui-title"></h1>
-			<a class="mui-icon mui-pull-right">
-				<img src="../../image/home/plus.png" />
-			</a>
-			<a class="mui-icon mui-pull-right" style="margin-right: .5rem;">
-				<img src="../../image/home/search.png" />
-			</a>
-		</header>
+			<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-icon mui-pull-left">
+					<img src="../../image/home/message.png" />
+				</a>
+				<h1 class="mui-title"></h1>
+				<a class="mui-icon mui-pull-right">
+					<img src="../../image/home/plus.png" />
+				</a>
+				<a class="mui-icon mui-pull-right" style="margin-right: .5rem;" @tap="onSearchTap()">
+					<img src="../../image/home/search.png" />
+				</a>
+			</header>
 
-		<div class="mui-content noImmersed">
-			<!--<div class="mui-scroll">-->
+			<div class="mui-content noImmersed">
+				<!--<div class="mui-scroll">-->
 
-			<div id="slider" class="mui-slider" v-if="imgList.length > 0">
-				<div class="mui-slider-group mui-slider-loop">
-					<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-					<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.src" >
-						<!--<a href="#">
+				<div id="slider" class="mui-slider" v-if="imgList.length > 0">
+					<div class="mui-slider-group mui-slider-loop">
+						<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+						<div @tap="onAdvertTap(imgLast)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.adimg">
+							<!--<a href="#">
 							<img :src="imgLast.src">
 						</a>-->
-					</div>
+						</div>
 
-					<!-- 第四张 -->
-					<div class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o.src" >
-						<!--<a href="#">
-							<img :src="o.src">
-						</a>-->
-					</div>
-					<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-					<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.src" >
-						<!--<a href="#">
+						<!-- 第四张 -->
+						<div @tap="onAdvertTap(o)" class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o.adimg">
+							<a href="#">
+								<img :src="o.src">
+							</a>
+						</div>
+						<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+						<div @tap="onAdvertTap(imgFrist)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.adimg">
+							<!--<a href="#">
 							<img :src="imgFrist.src">
 						</a>-->
-					</div>
-				</div>
-				<div class="mui-slider-indicator">
-					<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
-				</div>
-			</div>
-
-			<div class="model_type">
-				<template v-for="o,i in modelTypes">
-					<div @tap="onModelTap(o, i)">
-						<img :src="o.src" />
-						<span>{{o.name}}</span>
-					</div>
-				</template>
-
-			</div> 
-			
-			<div class="device_show" @tap="openCamListWindow()">
-				<img :src="dev.img" />
-				<div class="dev_status">{{dev.status}}</div>
-				<div>
-					<div class="dev_info" >
-						<img src="../../image/home/dev_camera.png" /> {{dev.name}}
-					</div>
-					<div class="dev_operating">
-						<div class="dev_share">
-							<img src="../../image/home/dev_share.png" /> 分享
-						</div>
-						<div class="dev_setting">
-							<img src="../../image/home/dev_setting.png" /> 设置
 						</div>
 					</div>
+					<div class="mui-slider-indicator">
+						<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+					</div>
 				</div>
-			</div>
-			
-			<div class="user_like">
-				<label class="like_title">猜你喜欢</label>
-				<div class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
-				<div class="like_image">
 
-					<div>
-						<img src="../../image/home/like_a.png" />
-						<span>舌尖上的诱惑</span>
-					</div>
-					<div>
-						<img src="../../image/home/like_b.png" />
-						<span>周末来嗨呀</span>
-					</div>
-
-					<div>
-						<img src="../../image/home/like_c.png" />
-						<span>限时特惠</span>
-					</div>
-					<div>
-						<span>一起来看红包雨</span>
-						<img src="../../image/home/like_d.png" />
-					</div>
-
-				</div>
-			</div>
-			<div class="near_shop">
-				<label class="near_title">附近的店</label>
-				<div class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
-				<div class="shop_image">
-					<template v-for="o,i in nearShops">
-						<div class="shop_a" :style="'background-image: url('+ o.img +');'"></div>	
+				<div class="model_type">
+					<template v-for="o,i in modelTypes">
+						<div @tap="onModelTap(o, i)">
+							<img :src="o.src" />
+							<span>{{o.name}}</span>
+						</div>
 					</template>
-					
-				</div>
-			</div>
 
-			<!--</div>-->
-			
-					
+				</div>
+
+				<div class="device_show" @tap="openCamListWindow()">
+					<img src="http://placehold.it/760x350" />
+					<div class="dev_status">{{dev.online === 1 ? '在线': '离线'}}</div>
+					<div>
+						<div class="dev_info">
+							<img src="../../image/home/dev_camera.png" /> {{dev.devid}}
+						</div>
+						<div class="dev_operating">
+							<div class="dev_share">
+								<img src="../../image/home/dev_share.png" /> 分享
+							</div>
+							<div class="dev_setting">
+								<img src="../../image/home/dev_setting.png" /> 设置
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="user_like" v-if="like.length">
+					<label class="like_title">猜你喜欢</label>
+					<div @tap="onStoreMore()" class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
+					<div class="like_image">
+						
+						<template v-for="o,i in like"> 
+							<div :style="{backgroundImage: 'url('+o.img+')'}">
+								
+								<span>{{o.title}}</span>
+							</div>
+						</template>
+						
+						<!--<div>
+							<img src="../../image/home/like_a.png" />
+							<span>舌尖上的诱惑</span>
+						</div>
+						<div>
+							<img src="../../image/home/like_b.png" />
+							<span>周末来嗨呀</span>
+						</div>
+
+						<div>
+							<img src="../../image/home/like_c.png" />
+							<span>限时特惠</span>
+						</div>
+						<div>
+							<span>一起来看红包雨</span>
+							<img src="../../image/home/like_d.png" />
+						</div>-->
+
+					</div>
+				</div>
+				<div class="near_shop">
+					<label class="near_title">附近的店</label>
+					<div @tap="onNearbyMore()"  class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
+					<div class="shop_image">
+						<template v-for="o,i in nearShops">
+							<div class="shop_a" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
+						</template>
+
+					</div>
+				</div>
+
+				<!--</div>-->
+
+			</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
@@ -350,36 +361,35 @@
 		<!--请求相关-->
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../js/dal/home.js"></script>
+		<script type="text/javascript" src="../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../js/dal/store.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
-		
+
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
-		<script type="text/javascript" src="../../js/lib/md5.min.js" ></script>
-		<script type="text/javascript" src="../../js/common/imagelazyload.js" ></script>
-		
-		<script type="text/javascript" src="../../js/plug/PlugH5NativeBridge.js" ></script>
+		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
+
+		<script type="text/javascript" src="../../js/plug/PlugH5NativeBridge.js"></script>
 
 		<script type="text/javascript">
+			var advert_cache = new ni.Cache('advert_cache', []);
+			
+			
+			var B = new ni.Broadcast();
+
 			mui.init({
 				gestureConfig: {
 					longtap: true
 				}
 			});
 			new Vue({
-				el: '.mui-content',
+				el: '#approom',
 				data: function() {
 					return {
-						text: "我是内容啊",
-						imgList: [{
-							id: 0,
-							src: "http://photo.ssyer.com/user//20171103/order/090b2c6ae399ee4142e80cbe55524caa1765IMG_20171002_093830jpg.jpg"
-						}, {
-							id: 2,
-							src: "http://photo.ssyer.com/user//20171030/order/542c0f3ce2242e43b0e8633ef37f232c9ac9_MG_8834jpg.jpg"
-						}, {
-							id: 12,
-							src: "http://photo.ssyer.com/user//20171031/order/847745c0a7f4ea40fea8361a52a895b2475bdevadarshan424846jpg.jpg"
-						}],
+						
+						imgList: advert_cache.data,
 						modelTypes: [{
 								name: "回家模式",
 								src: "../../image/home/gohome.png"
@@ -398,32 +408,25 @@
 							}
 						],
 						dev: {
-							img: "http://placehold.it/760x350",
-							status: "在线",
-							name: "AX-503-摄像机"
+							"streamfwdport": 17600,
+							"location": " 工农兵小吃城2",
+							"devid": "AX-DSW-2012102400059",
+							"relation": 0,
+							"streamfwd": "127.0.0.1",
+							"type": 1,
+							"signalfwd": "127.0.0.1",
+							"signalfwdport": 17700,
+							"online": 1
 						},
-						nearShops: [{
-								img: "http://placehold.it/120x120"
-							},
-							{
-								img: "http://placehold.it/120x120"
-							},
-							{
-								img: "http://placehold.it/120x120"
-							},
-							{
-								img: "http://placehold.it/120x120"
-							},
-							{
-								img: "http://placehold.it/120x120"
-							},
-							{
-								img: "http://placehold.it/120x120"
-							},
-							{
-								img: "http://placehold.it/120x120"
-							}
+						like: [
+							
 						],
+						
+						nearShops: [],
+						
+						longitude: 0,
+						latitude: 0,
+						city: '深圳',
 					};
 				},
 				computed: {
@@ -435,15 +438,31 @@
 					}
 				},
 				mounted: function() {
+					// 获取轮播广告图
+					this.getAdvert();
+					//如果用户登录了 则  获取第一个设备
+					if(app.user.has()) { 
+						this.getDeviceOne();
+					}
+					// 同时监听登录成功事件
+					new this.$Broadcast().on('login_success', function() {
+						// 更新获取设备
+						this.getDeviceOne();
+					}.bind(this));
+					
+					// 获取喜欢列表
+					this.getThemeList();
+					
+					
 					// 动态沉浸式处理
-//					var css = document.createElement('style');
-//					css.innerText = ".mui-slider:before{height:"+ (immersed) +"px;}";
-//					document.body.appendChild(css);
+					//					var css = document.createElement('style');
+					//					css.innerText = ".mui-slider:before{height:"+ (immersed) +"px;}";
+					//					document.body.appendChild(css);
 					// 缓存机制加载图片
 					imgagelazyload();
 					// 图片轮播
 					mui('#slider').slider({
-					  interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
+						interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
 					});
 				},
 				plusReady: function() {
@@ -453,20 +472,118 @@
 						scrollIndicator: "none", // 隐藏滚动条
 						render: "always", // 始终进行渲染
 					});
+					
+					// 获取定位信息
+					this.getCurrentPosition().then(function(){
+						// 附近的店
+						this.getNearShops();
+					}.bind(this));
+					
+					
+
 
 				},
 				methods: {
+					getCurrentPosition: function(){
+						return new Promise(function(re, rj){
+							plus.geolocation.getCurrentPosition(function(p) {
+								this.longitude = p.coords.longitude;
+								this.latitude = p.coords.latitude;
+								this.city = p.address.city.replace('市', '');
+								this.position = p.address.poiName;
+								re();
+							}.bind(this), rj);
+						}.bind(this));
+					},
+					onSearchTap: function(){
+						mui.openWindow('../search/index.html', 'search',{
+							show: {
+								aniShow: 'slide-in-bottom'
+							}
+						});
+					},
+
 					// 当点击模式时
 					onModelTap: function(o, index) {
 						console.log(JSON.stringify(o));
 					},
-					
-					openCamListWindow: function(){
+
+					openCamListWindow: function() {
 						//var rs = plus.plugintest.openCamListWindow(1,2,3);
 						//console.log(rs);
-						var id = "AX-DSW-2012102400059";
+						var id = this.dev.id || "AX-DSW-2012102400059";
 						plug.H5NativeBridge.StartDevicePlay(id);
-					}
+					},
+
+					// 获取轮播广告图
+					getAdvert: function() {
+						dal.home.advert(function(err, data) {
+							if(err) {
+								return
+							}
+							this.imgList = data;
+							advert_cache.data = data;
+							this.$nextTick(function() {
+								imgagelazyload();
+							});
+						}.bind(this));
+					},
+					// 轮播点击
+					onAdvertTap: function(o) {
+						// 打开内部浏览器
+						mui.alert(JSON.stringify(o));
+					},
+					// 获取一个设备
+					getDeviceOne: function() {
+						dal.device.list(1, function(err, data) {
+							if(err) {
+								return
+							}
+							this.dev = data[0];
+
+						}.bind(this), 1);
+					},
+					// 获取喜欢列表
+					getThemeList: function() {
+						dal.home.theme.get(function(err, data){
+							if(err) {
+								return 
+							}
+							this.like = data;
+						}.bind(this));
+					},
+					// 附近的店
+					getNearShops: function(){
+						dal.store.list(this.longitude, this.latitude, this.city, function(err, data){
+							if(err){
+								return;
+							}
+							this.nearShops = data;
+						}.bind(this), 1);
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
+					
+					// 查看附近的店更多
+					onNearbyMore: function(){
+						
+						// TODO 主页名称
+						B.emit('tabar', {
+							action: '1'
+						}, {
+							views: [this.$view.parent],
+						});
+					},
+					// 查看猜你喜欢更多
+					onStoreMore: function(){
+						
+						B.emit('tabar', {
+							action: '2'
+						}, {
+							views: [this.$view.parent],
+						});
+					},
 				}
 			});
 		</script>

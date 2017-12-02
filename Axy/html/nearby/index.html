@@ -9,7 +9,7 @@
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
 		<style type="text/css">
-			.mui-search {
+			/*.mui-search {
 				margin: 0 auto;
 				width: 7.12rem;
 				pointer-events: none;
@@ -20,11 +20,11 @@
 			    .mui-search {
 					width: 6.12rem;
 				}
-			}
+			}*/
 		
 			/*搜索框图标*/
 			
-			.mui-icon-search:before {
+			/*.mui-icon-search:before {
 				line-height: 45px;
 			}
 			
@@ -41,7 +41,7 @@
 			.mui-search .mui-placeholder .mui-icon {
 			    font-size: 15px;
 			    color: #333;
-			}
+			}*/
 			
 			/*tab*/
 			
@@ -79,6 +79,65 @@
 				/*bottom: 0.293333rem;*/
 				bottom: 0.2rem;
 			}
+			
+			
+			
+			
+			/*搜索框头部*/
+			
+			/*.mui-bar {
+				padding: 0 0 0 0.346666rem;
+			}
+			*/
+			.app-input-room input::-webkit-input-placeholder {
+				font-size: 12px !important;
+				color: #9F9FA0 !important;
+			}
+			
+			[data-dpr="2"] .app-input-room input::-webkit-input-placeholder {
+				font-size: 24px !important;
+			}
+			
+			[data-dpr="3"] .app-input-room input::-webkit-input-placeholder {
+				font-size: 36px !important;
+			}
+			
+			.app-input-room {
+				width: 8.5rem;
+				position: relative !important;
+			}
+			
+			.app-input-room>span.mui-icon {
+				position: absolute;
+				left: 10px;
+				top: 0;
+			}
+			
+			.app-input-room>span.mui-icon.close {
+				/*display: none;*/
+				left: initial;
+				right: 10px;
+			}
+			/*.app-input-room.active>span.mui-icon.close {
+				display: block;
+			}*/
+			
+			.app-input-room img {
+				width: 16px;
+			}
+			
+			.app-input-room input {
+				width: 100%;
+				padding-left: .8rem !important;
+				text-align: left !important;
+				border-radius: 50px !important;
+				background-color: #FFFFFF !important;
+			}
+			/*end搜索框头部*/
+			header{
+				display: flex;
+				display: -webkit-flex;
+			}
 		</style>
 	</head>
 
@@ -86,17 +145,33 @@
 
 		<div class="warp">
 			<header class="mui-bar mui-bar-nav app-header">
+				<div>
+					<span class="app-color-white app-font-size-28 mui-pull-left" v-text="city" style="line-height: 45px;" @tap="onHeaderCityTap()"></span>
+					<a class="mui-icon mui-icon-arrowdown app-color-white" @tap="onHeaderCityTap()" style="font-size: 20px; padding-top: 12px;"></a>	
+				</div>
+				
+				<div class="app-input-room" style="flex: 1;">
+					<span class="mui-icon">
+						<img src="../../image/search/search@3x.png"/>
+					</span>
+					<input readonly class="app-font-size-24" type="search" placeholder="你想要的吃喝玩乐">
+				</div>
+				<a class="app-icon-plus" style="margin-left: 10px;" @tap="onHeaderAddTap()"></a>
+			</header>
+			<!--<header class="mui-bar mui-bar-nav app-header">
 
 				<span class="app-color-white app-font-size-24 mui-pull-left" v-text="city" style="line-height: 45px;" @tap="onHeaderCityTap()"></span>
 				<a class="mui-icon mui-icon-arrowdown app-color-white" @tap="onHeaderCityTap()" style="font-size: 20px; padding-top: 12px;"></a> 
 
-				<h1 class="mui-title">
+				<h1 class="mui-title" style="left: initial;">
 			    	<div class="mui-input-row mui-search">
 			    	    <input type="search" placeholder="输入商品名或店铺名">
 			    	</div>
 			    </h1>
 			    <a class="mui-pull-right app-icon-plus" @tap="onHeaderAddTap()"></a>
-			</header>
+			</header>-->
+			
+			 
 
 			<div class="mui-content">
 				<div class="tabroom">
@@ -136,8 +211,12 @@
 			(function($) {
 				$.init();
 				$.ready(function() {
-					$('h1.mui-title')[0].addEventListener('tap', function() {
-						alert("跳转到另一页面");
+					$('.app-input-room')[0].addEventListener('tap', function() {
+						mui.openWindow('../search/index.html', 'search',{
+							show: {
+								aniShow: 'slide-in-bottom'
+							}
+						});
 					});
 
 				});

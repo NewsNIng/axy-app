@@ -17,6 +17,7 @@
 			city: '_www/html/public/city.html',
 			maps: '_www/html/public/maps.html',
 			login: '_www/html/common/login.html',
+			browser: '_www/html/public/browser.html'
 		},cw = null;
 	
 	// 打开城市选择
@@ -51,11 +52,16 @@
 		this.openForResult('login', callback, {});
 	}
 	
+	page.openBrowser = function(options){
+		this.openForResult('browser', function(){}, options);
+	}
+	
 	page.openForResultBy = function(url, id, callback, ex){
 		id = id || url;
 		ex = ex || {};
 		_tempSrc = '_APP_PAGE_RESULT_FUN_' + id + '_' + _id;
 		_id++;
+		
 		w[_tempSrc] = function(data){
 			w[_tempSrc] = null;
 			callback(data);

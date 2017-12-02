@@ -33,6 +33,9 @@
 				width: 0.586666rem;
 				vertical-align: middle;
 			}
+			.theme_item>div>span {
+				vertical-align: middle;
+			}
 			
 			.share {
 				float: left;
@@ -52,43 +55,35 @@
 	<body>
 
 		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
-			<div class="mui-scroll">
+			<div class="mui-scroll  app-font-size-28">
 				<template v-for="o in items">
-					<div class="theme_item app-font-size-28">
+					<div class="theme_item">
 						<img :src="o.img" />
 						<div class="share">
-							<img src="../../../image/nearby/share_icon.png" />分享给好友
+							<img src="../../../image/nearby/share_icon.png" />
+							<span>分享给好友</span>
+							
 						</div>
 						<div class="see">
-							共{{o.views}}人看过<img src="../../../image/nearby/right_icon.png" />
+							共{{o.clickcount}}人看过<img src="../../../image/nearby/right_icon.png" />
 						</div>
 					</div>
 				</template>
 			</div>
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
-
+		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/home.js" ></script>
 		<script type="text/javascript">
 			new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
-						items: [{
-							img: "http://placehold.it/680x340",
-							views: 25,
-						}, {
-							img: "http://placehold.it/680x340",
-							views: 64,
-						}, {
-							img: "http://placehold.it/680x340",
-							views: 28,
-						}, {
-							img: "http://placehold.it/680x340",
-							views: 36,
-						}, ]
+						n: 1,
+						items: []
 					};
 				},
 				mounted: function() {
@@ -99,7 +94,7 @@
 							pullRefresh: {
 								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
 								down: {
-
+									auto: true,
 									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 								},
 								up: {
@@ -114,39 +109,32 @@
 
 					},
 					_down: function() {
-						console.log("down")
-						setTimeout(function() {
-
-							this.items.unshift({
-								img: "http://placehold.it/680x340",
-								views: 100,
-							});
+						this.n = 1;
+						dal.home.theme.list(this.n, function(err, data){
+							if(err){
+								return mui.toast(err.message);
+							}
+							this.items = data;
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
-						}.bind(this), 2000);
+						}.bind(this));
+						
 					},
 					_up: function() {
-						console.log("up")
-						setTimeout(function() {
-							var data = [{
-								img: "http://placehold.it/680x340",
-								views: 212,
-							}, {
-								img: "http://placehold.it/680x340",
-								views: 22,
-							}, {
-								img: "http://placehold.it/680x340",
-								views: 32,
-							}, {
-								img: "http://placehold.it/680x340",
-								views: 123,
-							}, {
-								img: "http://placehold.it/680x340",
-								views: 123,
-							}];
-							this.items.push.apply(this.items, data);
+						this.n++;
+						dal.home.theme.list(this.n, function(err, data){
+							if(err){
+								return mui.toast(err.message);
+							}
 							
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
-						}.bind(this), 2000);
+							if(!data || data.length === 0) {
+								mui.toast('没有更多了~');
+								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
+							}
+							this.items.push.apply(this.items, data);
+							
+							
+						}.bind(this));
 					}
 				}
 

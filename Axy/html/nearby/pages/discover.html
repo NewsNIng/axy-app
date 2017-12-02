@@ -150,7 +150,7 @@
 					<!-- each component is wrapped by a waterfall slot -->
 					<waterfall-slot v-for="(item, index) in items" :width="1" :height="_getH()" :order="index" :key="item.id" move-class="item-move">
 						<div class="item" @tap="onItemTap(item, index)">
-							<div class="imgBg" :style="{'background-image': 'url(' + _getImg(item.image1,item.image2,item.image3) + ')'}" :index="item.id" :height="_getH()"></div>
+							<div class="imgBg img-lazy-load" :data-src="_getImg(item.image1,item.image2,item.image3)" :index="item.id" :height="_getH()"></div>
 							<div class="info">
 								<div class="title app-font-size-26">#{{item.title}}</div>
 								<p class="mui-ellipsis-2 app-font-size-28">{{item.content}}</p>
@@ -183,6 +183,9 @@
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/article.js"></script>
+		
+		<script type="text/javascript" src="../../../js/lib/md5.min.js" ></script>
+		<script type="text/javascript" src="../../../js/common/imagelazyload.js" ></script>
 		
 		<script type="text/javascript">
 			new Vue({
@@ -267,9 +270,10 @@
 								return mui.toast(err.message);
 							}
 							this.items = data; 
-							this.$nextTick(this.shuffle);
-							
-							//this.shuffle(); 
+							this.$nextTick(function(){
+								imgagelazyload();
+								this.shuffle(); 
+							});
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
 						}.bind(this), 8);
 					},
@@ -285,6 +289,9 @@
 								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
 							}
 							this.items.push.apply(this.items, data);
+							this.$nextTick(function(){
+								imgagelazyload();
+							});
 
 						}.bind(this),8);
 					},
