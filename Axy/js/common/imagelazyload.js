@@ -3,7 +3,7 @@
 
 
 
-var imgagelazyload = (function(doc) {
+var imagelazyload = (function(doc) {
 	var debug = false;
 	var log = function(msg, toStr){
 		if(debug){

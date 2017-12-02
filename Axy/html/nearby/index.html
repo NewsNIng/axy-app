@@ -272,6 +272,8 @@
 					document.body.appendChild(css);
 						
 					this._preload();
+					
+					this._listenMore();
 				},
 				methods: {
 					// 页面切换时
@@ -317,6 +319,12 @@
 					},
 					_menuHide: function(){
 						this.menu && this.menu.hide('none');
+					},
+					
+					_listenMore: function(){
+						new ni.Broadcast().on('tabar', function(data){
+							this.onTabTap(this.tab.items[data.nindex], data.nindex);
+						}.bind(this));
 					}
 				}
 			});

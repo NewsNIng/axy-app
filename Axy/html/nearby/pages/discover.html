@@ -271,7 +271,7 @@
 							}
 							this.items = data; 
 							this.$nextTick(function(){
-								imgagelazyload();
+								imagelazyload();
 								this.shuffle(); 
 							});
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
@@ -290,7 +290,7 @@
 							}
 							this.items.push.apply(this.items, data);
 							this.$nextTick(function(){
-								imgagelazyload();
+								imagelazyload();
 							});
 
 						}.bind(this),8);

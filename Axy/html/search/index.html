@@ -15,9 +15,6 @@
 			.mui-content {
 				background-color: #FFFFFF !important;
 			}
-			
-			
-			
 			/*搜索框头部*/
 			
 			.mui-bar {
@@ -94,10 +91,12 @@
 			.tips {
 				margin: 0 0 8px .1rem;
 			}
-			.tips .mui-pull-right{
+			
+			.tips .mui-pull-right {
 				padding-left: 5px;
 			}
-			.tips  img{
+			
+			.tips img {
 				width: 0.4rem;
 			}
 			
@@ -155,7 +154,8 @@
 				background-color: #FFFFFF !important;
 			}
 			
-			body>.mui-progressbar:before,body>.mui-progressbar>span {
+			body>.mui-progressbar:before,
+			body>.mui-progressbar>span {
 				/*background-color: rgba(255,255,255,0.22) !important;*/
 				background-color: #06C1AE !important;
 			}
@@ -235,6 +235,7 @@
 				background-image: url(bg@2x.png);
 				background-repeat: no-repeat;
 				background-size: cover;
+				background-position: center;
 			}
 			
 			.wrapper li .textdiv {
@@ -252,7 +253,8 @@
 				width: 100%;
 				margin: 0;
 			}
-			.wrapper ul{
+			
+			.wrapper ul {
 				padding-bottom: 1rem;
 			}
 			
@@ -299,7 +301,7 @@
 							<img src="../../image/search/del@3x.png"/>
 						</span>
 					</div>
-					
+
 					<div class="cardRoom app-font-size-26">
 						<template v-for="o,i in historyList">
 							<div @tap="searchResult(o)">{{o}}</div>
@@ -310,10 +312,9 @@
 				<div class="hot" v-show="searchState === 0">
 					<div class="tips app-font-size-24 app-color-dark">热门搜索</div>
 					<div class="cardRoom app-font-size-26">
-						<div>智能主机</div>
-						<div>智能智能主机主机</div>
-						<div>阿大使s</div>
-						<div>阿大使s</div>
+						<template v-for="o,i in hotList">
+							<div @tap="searchResult(o.keyword)">{{o.keyword}}</div>
+						</template>
 					</div>
 				</div>
 
@@ -331,8 +332,8 @@
 						<template v-for="o,i in thinkList">
 							<li class="mui-table-view-cell" @tap="onRsTap(o)">
 								<a class="">
-									<span>{{o.name}}</span>
-									<span class="mui-badge">{{o.count}}{{_2Type(o.type)}}</span>
+									<span>{{o.keyword}}</span>
+									<!--<span class="mui-badge">{{o.count}}{{_2Type(o.type)}}</span>-->
 								</a>
 							</li>
 						</template>
@@ -361,18 +362,23 @@
 							<ul v-show="resultList.length">
 								<template v-for="o,i in resultList">
 									<li>
-										<div class="imgdiv">
+										<div class="imgdiv img-lazy-load" :data-src="_getImg(o.image1,o.image2,o.image3)">
 
 										</div>
 										<div class="textdiv app-font-size-28">
 											<div class="app-color-333333 mui-ellipsis">
-												{{o.name}}
+												{{o.name || o.title}}
 											</div>
 											<div class="app-color-9f9fa0 mui-ellipsis-2">
-												{{o.x}}
+												{{o.introduction || o.content}}
 											</div>
 											<div class="app-color-9f9fa0 tips mui-ellipsis">
-												距离您的位置 {{o.y}}m
+												<span v-if="o.distance">
+													距离您的位置 {{o.distance}}m
+												</span>
+												<span v-else>
+													{{o.likecount}}人表示很喜欢
+												</span>
 											</div>
 										</div>
 									</li>
@@ -399,7 +405,12 @@
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
 		<script src="../../js/lib/better-scroll.min.js"></script>
-		<!--<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>-->
+
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/search.js"></script>
+		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 			// 搜索历史缓存
@@ -411,13 +422,19 @@
 				el: '#warpper',
 				data: function() {
 					return {
+						n: 1,
+						longitude: 0,
+						latitude: 0,
+						city: '深圳',
+
 						active: false,
 						content: '',
 						thinkList: [],
-						resultList: [],
+						//						resultList: [],
 						searchIng: false,
 						resultOver: false,
 						historyList: historyList.data,
+						hotList: [],
 						progressbar: null,
 						tab: {
 							active: 0,
@@ -437,7 +454,10 @@
 									url: './pages/discover.html'
 								}
 							]
-						}
+						},
+
+						articleList: [],
+						storeList: [],
 					};
 				},
 				computed: {
@@ -458,6 +478,18 @@
 							}
 						}
 
+					},
+					resultList: function() {
+						return [this.allList, this.storeList, this.articleList][this.tab.active];
+					},
+					allList: function() {
+						var arr = this.articleList.concat(this.storeList).sort(function() {
+							var _ = 1;
+							return function() {
+								return _ * -1;
+							}
+						}());
+						return arr;
 					}
 				},
 				watch: {
@@ -472,23 +504,24 @@
 						this._thinkT && c();
 						this._thinkT = setTimeout(function() {
 							// 提交搜索请求
+							this.n = 1;
 							this.thinkResult();
 							c();
-						}.bind(this), 300);
+						}.bind(this), 500);
 					},
-					searchIng: function(nv){
-						this.progressbar && this.progressbar[nv? 'show':'hide']();
+					searchIng: function(nv) {
+						this.progressbar && this.progressbar[nv ? 'show' : 'hide']();
 					}
 				},
 				mounted: function() {
 					this.progressbar = mui('body').progressbar();
-					
+
 					var wrapper = this.$refs.wrapper;
-					wrapper.style.height = (document.documentElement.clientHeight || document.body.clientHeigth)
-						- this.$refs.tabroom.offsetHeight
-						- immersed
-						- 44
-						+ 'px';
+					wrapper.style.height = (document.documentElement.clientHeight || document.body.clientHeigth) -
+						this.$refs.tabroom.offsetHeight -
+						immersed -
+						44 +
+						'px';
 
 					this.$nextTick(function() {
 						if(!this.scroll) {
@@ -496,6 +529,8 @@
 							this.scroll.on('scrollEnd', function() {
 								if(this.scroll.y <= (this.scroll.maxScrollY + 50)) {
 									// 获取更多 TODO
+									this.n++;
+									this.searchResult();
 								}
 							}.bind(this));
 
@@ -504,16 +539,27 @@
 						}
 
 					}.bind(this));
+
+					// 获取热门搜索词
+					this.hotResult();
 				},
 				plusReady: function() {
 					// 自动打开软键盘
 					//					var device = this.$os.ios ? this.$ios.SoftInput : this.$android.SoftInput;
 					//					device = new device();
 					//					device.show(this.$refs.input);
+
+					// 获取定位信息
+					plus.geolocation.getCurrentPosition(function(p) {
+						this.longitude = p.coords.longitude;
+						this.latitude = p.coords.latitude;
+						this.city = p.address.city.replace('市', '');
+						// this.position = p.address.poiName;
+					}.bind(this));
 				},
 				methods: {
 					// 点击删除历史记录
-					onClearHis: function(){
+					onClearHis: function() {
 						// 清除页面历史记录数据
 						this.historyList = [];
 						// 清楚本地缓存数据
@@ -528,54 +574,58 @@
 						// 清空输入值
 						this.content = '';
 						this.thinkList = [];
-						this.resultList = [];
+						this.articleList = [];
+						this.storeList = [];
+						this.tab.active = 0;
+					},
+					// 获取热门搜索词
+					hotResult: function() {
+						dal.search.hotkeyword(function(err, data) {
+							if(err) {
+								return
+							}
+							this.hotList = data;
+						}.bind(this));
 					},
 					// 获取联想内容
 					thinkResult: function() {
-						// TODO
-						setTimeout(function() {
-							this.thinkList = [{
-								name: this.content + '水果茶',
-								count: '450',
-								type: 's',
-							}, {
-								name: this.content + '真好',
-								count: '666',
-								type: 'a',
-							}];
-						}.bind(this), 111);
+						dal.search.tipkeyword(this.content, function(err, data) {
+							if(err) {
+								return
+							}
+							this.thinkList = data;
+						}.bind(this));
 					},
 					// 搜索内容条目被点击时
 					onRsTap: function(o) {
-						this.searchResult(o.name);
+						this.searchResult(o.keyword);
 					},
 					// 获取搜索内容
 					searchResult: function(s) {
 						// 搜索中
 						this.searchIng = true;
-						this.content = this.content || s;
+						this.content = s || this.content;
 						// 保存搜索历史
 						this.saveHistory();
-						// 发送请求 TODO
+						// 发送请求
 
-						setTimeout(function() {
+						dal.search.list(this.longitude, this.latitude, this.city, this.content, this.n, function(err, data) {
 							// 搜索完毕
 							this.searchIng = false;
 							this.resultOver = true;
-							// es6 数组api 
-							var arr = Array.from({
-								length: 10
-							});
-							arr.fill({
-								name: '御蝶坊',
-								x: '香脆的椰子，色彩绚烂的鲜美水果，在某个温暖的午后时光。',
-								y: '698'
-							});
-							this.resultList = arr;
+
+							if(err) {
+								return console.log(JSON.stringify(err))
+							}
+							this.articleList = data.article;
+							this.storeList = data.store;
+
 							this.$nextTick(function() {
 								this.scroll && this.scroll.refresh();
+								imagelazyload();
 							}.bind(this));
-						}.bind(this), 1000);
+						}.bind(this));
+
 					},
 					saveHistory: function() {
 						if(this.historyList.indexOf(this.content) < 0) {
@@ -589,17 +639,10 @@
 							return;
 						}
 						this.tab.active = i;
-						// 控制切换 tab
-						// TODO
-						this.resultList = [];
 					},
-					_2Type: function(type) {
-						// TODO
-						return {
-							s: '个店铺',
-							a: '篇美文'
-						}[type]
-					}
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
 				}
 			});
 		</script>
