@@ -47,6 +47,7 @@
 				})
 				// 获取顶级域名
 				.mergeMap(function(user) {
+					user = user.account;
 					return Rx.Observable
 						.create(function(o2) {
 							// 有缓存就直接取用
@@ -91,7 +92,7 @@
 				})
 				// 消息中心事件
 				.subscribe(function(data) {
-					console.log(JSON.stringify(data)); 
+					console.log("zeus.html : " + JSON.stringify(data)); 
 				});
 
 		</script>

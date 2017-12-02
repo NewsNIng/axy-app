@@ -5,7 +5,7 @@
 	};
 
 	pg.fun2ok = function(fn) {
-		return typeof fn === 'function' ? function(args){
+		return typeof fn === 'function' ? function(args) {
 			fn(args);
 		} : null;
 	}
@@ -20,31 +20,33 @@
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		
+
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
-	
+
 	/**
 	 * JSON 转 XML
 	 * @param {Object} o
 	 */
-	pg.jo2xml = function(_o){
-		function _jo2xml(o){
+	pg.json2xml = function(_o) {
+		function _jo2xml(o) {
 			var str = "";
-			if(!o.tagName){return str;};
-			str += '<' +  o.tagName;
-			for(var i in o.attr){
+			if(!o.tagName) {
+				return str;
+			};
+			str += '<' + o.tagName;
+			for(var i in o.attr) {
 				str += ' ' + i + '=' + '"' + o.attr[i] + '"';
 			}
 			str += '>';
-			for(var j in o.children){
+			for(var j in o.children) {
 				str += _jo2xml(o.children[j]);
 			}
 			str += '</' + o.tagName + '>';
 			return str;
 		};
 		return '<?xml version="1.0" encoding="utf-8"?>' + _jo2xml(_o);
-	} 
+	}
 
 	if(w.plus) {
 		setTimeout(_plusFn);
@@ -57,9 +59,9 @@
 	var pg = w.plug,
 		N = 'H5NativeBridge',
 		pgn = pg[N] || (pg[N] = {});
-		
+
 	var splice = Array.prototype.splice;
-	
+
 	/**
 	 * 初始化原生系统（需在用户登录成功后初始化原生系统）
 	 * @param {String} username 用户名
@@ -67,69 +69,68 @@
 	 * @param {Function} sfn 正确回调函数
 	 * @param {Function} ffn 失败回调函数
 	 */
-	pgn.InitNativeSysteam = function(username, serverurl, sfn, ffn){
+	pgn.InitNativeSysteam = function(username, serverurl, sfn, ffn) {
 		return pg.asyncExec(N, 'InitNativeSysteam', [username, serverurl], sfn, ffn);
 	};
-	
+
 	/**
 	 * 初始化及更新原生设备列表
 	 * @param {Array} datas 设备列表组成的json字符串，具体参考前端 接口名称: 获取主机摄像机列表(分页） 详细说明。
 	 */
-	pgn.InitNativeDevList = function(datas){
+	pgn.InitNativeDevList = function(datas) {
 		return pg.syncExec(N, 'InitNativeDevList', [datas]);
 	};
-	
+
 	/**
 	 * 播放设备音视频
 	 * @param {Number} deviceid 设备ID
 	 * @param {Number} way 播放通道，如果是单通道默认为0
 	 */
-	pgn.StartDevicePlay = function(deviceid, way){
+	pgn.StartDevicePlay = function(deviceid, way) {
 		typeof way === 'undefined' && (way = 0);
 		return pg.syncExec(N, 'StartDevicePlay', [deviceid, way]);
 	};
-	
+
 	/**
 	 * 获取所有设备的运行状态
 	 */
-	pgn.GetAllDeviceRunStateSync = function(){
+	pgn.GetAllDeviceRunStateSync = function() {
 		return pg.syncExec(N, 'GetAllDeviceRunStateSync', []);
 	}
-	
+
 	/**
 	 * 获取所有设备的信息
 	 */
-	pgn.GetAllDeviceInfoASync = function(){
+	pgn.GetAllDeviceInfoASync = function() {
 		return pg.syncExec(N, 'GetAllDeviceInfoASync', []);
 	}
-	
-	
-	
+
 	/**
-	 * 给指定设备添加配件
-	 * @param {Number} deviceid 设备ID
-	 * @param {Number} iqid 智能配件ID
-	 * @param {Number} step 延时 单位秒
-	 * @param {Function} sf 正确回调函数
-	 * @param {Function} ff 失败回调函数
+	 * 
+	 * @param {Object} deviceid 设备ID
+	 * @param {Object} iqid 智能配件ID
+	 * @param {Object} name 配件名称
+	 * @param {Object} delay 延时 单位秒
+	 * @param {Object} ptz ptz巡航轨迹集（若无默认为0）
+	 * @param {Object} bindV 绑定视频通道号
+	 * @param {Object} sf
+	 * @param {Object} ff
 	 */
-	pgn.AddSmartDeviceAsyn = function(deviceid, iqid, step, sf, ff){
-		return pg.asyncExec(N, 'AddSmartDeviceAsyn', [deviceid, iqid, step], sf, ff);
+	pgn.AddSmartDeviceAsyn = function(deviceid, iqid, name, delay, ptz, bindV, sf, ff) {
+		return pg.asyncExec(N, 'AddSmartDeviceAsyn', [deviceid, iqid, name, delay, ptz, bindV], sf, ff);
 	};
-	
+
 	/**
 	 * 删除单个配件
 	 * @param {Number} deviceid 设备ID
-	 * @param {Number} iqid 智能配件ID
+	 * @param {String} iqid 智能配件ID （十六进制）
 	 * @param {Function} sf 正确回调函数
 	 * @param {Function} ff 失败回调函数
 	 */
-	pgn.DelSmartDeviceAsyn = function(deviceid, iqid, sf, ff){
+	pgn.DelSmartDeviceAsyn = function(deviceid, iqid, sf, ff) {
 		return pg.asyncExec(N, 'DelSmartDeviceAsyn', [deviceid, iqid], sf, ff);
 	};
-	
-	
-	
+
 	/**
 	 * 修改配件的信息
 	 * @param {Number} deviceid 设备ID
@@ -140,23 +141,22 @@
 	 * @param {Function} sf 正确回调函数
 	 * @param {Function} ff 失败回调函数
 	 */
-	pgn.UpdateSmartDeviceAsyn = function(deviceid, iqid, name, _switch, step, sf, ff){
+	pgn.UpdateSmartDeviceAsyn = function(deviceid, iqid, name, _switch, step, sf, ff) {
 		return pg.asyncExec(N, 'UpdateSmartDeviceAsyn', [deviceid, iqid, name, _switch, step], sf, ff);
 	};
-	
+
 	/**
 	 * 获取本地录像&拍照的记录
 	 */
-	pgn.GetLocalRecordInfoSync = function(){
+	pgn.GetLocalRecordInfoSync = function() {
 		return pg.syncExec(N, 'GetLocalRecordInfoSync', []);
 	};
-	
+
 	/**
 	 * 获取已经下载的告警图片和告警录像
 	 */
 	// TODO
-	
-	
+
 	// 动作
 	pgn.ACTION = {
 		KEY_OPEN: 'KEY_OPEN',
@@ -171,8 +171,7 @@
 		QUERY: '<OPT VAL="QUERY"></OPT>',
 		OPEN: '<OPT VAL="OPEN" ></OPT>',
 	};
-	
-	
+
 	/**
 	 * 智能配件查询通道
 	 * @param {Number} deviceid 设备ID
@@ -182,10 +181,10 @@
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.SmartDeviceQueryChannelAsyn = function(deviceid, iqid, action, comd, sf, ff){
+	pgn.SmartDeviceQueryChannelAsyn = function(deviceid, iqid, action, comd, sf, ff) {
 		return pg.asyncExec(N, 'SmartDeviceQueryChannelAsyn', [deviceid, iqid, action, comd], sf, ff);
 	};
-	
+
 	/**
 	 * 智能配件控制通道
 	 * @param {Number} deviceid 设备ID
@@ -195,21 +194,17 @@
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.SmartDeviceControlChannelAsyn = function(deviceid, iqid, action, comd, sf, ff){
+	pgn.SmartDeviceControlChannelAsyn = function(deviceid, iqid, action, comd, sf, ff) {
 		return pg.asyncExec(N, 'SmartDeviceControlChannelAsyn', [deviceid, iqid, action, comd], sf, ff);
 	};
-	
+
 	/**
 	 * 查询通道返回数据
 	 */
 	// TODO
-	
-	
-	
-	
+
 	//===================================设备操作=====================================
-	
-	
+
 	/**
 	 * 设置设备参数通道
 	 * @param {Number} deviceid 设备id
@@ -217,11 +212,12 @@
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.SetDeviceParamAsyn = function(deviceid, xmljson, sf, ff){
-		xmljson = pg.jo2xml(xmljson);
+	pgn.SetDeviceParamAsyn = function(deviceid, xmljson, sf, ff) {
+		//xmljson = pg.json2xml(xmljson);
+		//console.log(xmljson);
 		return pg.asyncExec(N, 'SetDeviceParamAsyn', [deviceid, xmljson], sf, ff);
 	};
-	
+
 	/**
 	 * 手机遥控器SOS/布撤防/静音
 	 * @param {Number} deviceid 设备id
@@ -229,28 +225,43 @@
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.VirtualityRemoteControlAsyn = function(deviceid, action, sf, ff){
+	pgn.VirtualityRemoteControlAsyn = function(deviceid, action, sf, ff) {
 		return pg.asyncExec(N, 'VirtualityRemoteControlAsyn', [deviceid, action], sf, ff);
 	};
-	
-	
+
 	/**
 	 * 重启主机
 	 * @param {Number} deviceid 设备id
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.RebootDeviceAsyn = function(deviceid, sf, ff){
+	pgn.RebootDeviceAsyn = function(deviceid, sf, ff) {
 		return pg.asyncExec(N, 'RebootDeviceAsyn', [deviceid], sf, ff);
 	};
+
+	/**
+	 * 内网主机列表
+	 */
+	pgn.GetLanDevHostList = function() {
+		return pg.syncExec(N, 'GetLanDevHostList', []);
+	}
+	/**
+	 * 获取原生推送id
+	 */
+	pgn.GetPushInfoSyn = function() {
+		return pg.syncExec(N, 'GetPushInfoSyn', []);
+	}
+
+	pgn.StartVoiceSetWifi = function(ssid, pwd, random) {
+		return pg.syncExec(N, 'StartVoiceSetWifi', [ssid, pwd, random]);
+	}
 	
+	pgn.StopVoiceSetWifi = function(){
+		return pg.syncExec(N, 'StopVoiceSetWifi', []);
+	}
 	
-	
-	
-	
-	
-	
-	
-	
+	pgn.CheckDevWifiConnect = function(random){
+		return pg.syncExec(N, 'CheckDevWifiConnect', [random]);
+	}
 
 }(window));
