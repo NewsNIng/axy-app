@@ -6,9 +6,9 @@ Vue.component('dev-mask', {
 
 		}
 	},
-	mounted: function() {
-
-	},
+//	mounted: function() {
+//
+//	},
 	props: {
 		show: {
 			default: false
@@ -23,7 +23,7 @@ Vue.component('dev-mask', {
 
 // 操作菜单容器组件
 Vue.component('dev-btns', {
-	template: '<div class="com-dev-btns"><div><slot></slot></div><button @tap.stop="save()">保存</button><button @tap="cancel()">取消</button></div>',
+	template: '<div class="com-dev-btns"><div></div><button @tap.stop="save()">保存</button><button @tap="cancel()">取消</button></div>',
 
 	methods: {
 		save: function() {
@@ -35,20 +35,37 @@ Vue.component('dev-btns', {
 	}
 });
 
-// 摄像头设置组件
+// AX-360摄像机弹框设置
 Vue.component('dev-360', {
-	template: '<div class="com-dev" v-if="show">我是360摄像机<dev-btns @action="onAction"></dev-btns></div>',
+	template: '<div class="com-dev com-dev-360 app-font-size-30"><ul class="mui-table-view app-font-size-28"><li class="mui-table-view-cell pop_title">请选择摄像机状态</li><li class="mui-table-view-cell">布防</li><li class="mui-table-view-cell">撤防</li></ul><ul class="mui-table-view ul_bottom app-font-size-28"><li class="mui-table-view-cell">取消</li></ul></div>',
 	data: function() {
 		return {
-
+			arr: [
+				{
+				 	name: 'x1',
+					state: false
+				},
+				{
+					name: 'x2',
+					state: false
+				}
+			]
 		}
 	},
-	mounted: function() {
-
+	
+	computed: {
+		all: function(){
+			for(var i in arr){
+				if(arr[i].state === false){
+					return false;
+				}
+			}
+			return true;
+		}
 	},
 	props: {
 		show: {
-			default: false
+			default: false,
 		}
 	},
 	methods: {
@@ -64,9 +81,9 @@ Vue.component('dev-men', {
 			content: "默认值"
 		}
 	},
-	mounted: function() {
-
-	},
+//	mounted: function() {
+//
+//	},
 	props: {
 		show: {
 			default: false
