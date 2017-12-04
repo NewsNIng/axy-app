@@ -78,13 +78,30 @@
 				text-align: center;
 			}
 			
+			.com-dev-360 .ul_bottom {
+				margin-bottom: 0 !important;
+			}
+			
 			.pop_title {
 				color: #9F9FA0 !important;
 				text-align: center;
 			}
 			
-			.com-dev-360 .ul_bottom {
+			.com-dev-light .mui-table-view-cell:after {
+				left: 0;
+			}
+			
+			.com-dev-light .mui-table-view-cell {
+				text-align: center;
+			}
+			
+			.com-dev-light .ul_bottom {
+				margin-top: 0.266666rem !important;
 				margin-bottom: 0 !important;
+			}
+			
+			.com-dev-light>.allNo>ul {
+				margin: 0 !important;
 			}
 			
 			.com-dev-light {
@@ -99,20 +116,18 @@
 			
 			.com-dev-light>div {
 				background-color: white;
-				
 			}
-			.com-dev-light .light_list {
-				height: 3.133333rem;
-			}
+			
 			.com-dev-light .light_list {
 				/*margin-top: 10px;*/
 				overflow-x: scroll;
 				white-space: nowrap;
+				height: auto;
+				border-bottom: 1px solid #E5E6E7;
 			}
+			
 			.light_list>div {
 				display: inline-block;
-				/*border: 1px solid #ccc;*/
-				background-color: gray;
 				box-sizing: border-box;
 				background-image: url(../../../image/smart/scenes/btn_Lampcontrol@3x.png);
 				background-position: 50% 30% !important;
@@ -120,30 +135,39 @@
 				height: 0;
 				margin: 0 1%;
 				width: 31.33%;
-				padding-top: 31.33%; 
+				padding-top: 31.33%;
 				background-size: cover;
 				background-position: center;
 				background-repeat: no-repeat;
 				position: relative;
 			}
 			
-			.light_list>div:after{
+			.light_list>div:after {
 				position: absolute;
 				content: attr(data-text);
 				width: 100%;
-				color: #F4F8FB;
+				color: #06C1AE;
 				left: 0;
 				bottom: 20%;
 				text-align: center;
 			}
 			
-			.light_list>div.active{
+			.light_list>div.active {
 				background-image: url(../../../image/smart/devices/add/sound_add/selected.png);
 			}
-			.light_list>div.active:after{
+			
+			.light_list>div.active:after {
 				color: #06C1AE;
 			}
 			
+			.com-dev-light .all_text {
+				float: left;
+			}
+			/*.com-dev-light .allNo {
+				height: 1.466666rem;
+				line-height: 1.466666rem;
+				
+			}*/
 		</style>
 	</head>
 
@@ -157,19 +181,11 @@
 				</a>
 			</header>
 
-			<div class="com-dev com-dev-light">
-				<div class="pop_title app-font-size-30">请选择智能灯控状态</div>
-				<div class="light_list app-font-size-30">
-					<div data-text="K1" class="active"></div>
-					<div></div>
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-			</div>
+			
 			<dev-mask :show="mask" @hide="mask = false">
 				<dev-360 :show="devActive === 0" @save="onDevSave0" @cancel="mask = false"></dev-360>
 				<dev-men :show="devActive === 1" @save="onDevSave1" @cancel="mask = false"></dev-men>
+				<dev-light :show="devActive === 12" @save="onDevSave12" @cancel="mask = false"></dev-light>
 			</dev-mask>
 
 			<div class="mui-content">
@@ -197,6 +213,7 @@
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -213,7 +230,7 @@
 						// 遮罩控制
 						mask: false,
 
-						menus: [false, ],
+						//menus: [false, ],
 
 						devActive: 　-1,
 
@@ -290,6 +307,8 @@
 							name: "红外探测器",
 							state: "关闭",
 						}],
+						
+
 					};
 				},
 				plusReady: function() {},
@@ -306,6 +325,17 @@
 						this.mask = false;
 						this.devList[this.devActive].state = data.content;
 					},
+					// 选择保存灯控
+					onDevSave12: function(data){
+						this.mask = false;
+						app.page.setResult({
+							//lightList: data.lightList,
+							//all: data.all,
+							dev: this.devList[12],
+							text: data.all? "全部开启" : "部分开启"
+						}).close();
+						
+					}
 				}
 			});
 		</script>

@@ -141,8 +141,8 @@
 	 * @param {Function} sf 正确回调函数
 	 * @param {Function} ff 失败回调函数
 	 */
-	pgn.UpdateSmartDeviceAsyn = function(deviceid, iqid, name, _switch, step, sf, ff) {
-		return pg.asyncExec(N, 'UpdateSmartDeviceAsyn', [deviceid, iqid, name, _switch, step], sf, ff);
+	pgn.UpdateSmartDeviceAsyn = function(deviceid, iqid, name, _switch, step, ptzSet, bindV, sf, ff) {
+		return pg.asyncExec(N, 'UpdateSmartDeviceAsyn', [deviceid, iqid, name, _switch, step, ptzSet, bindV], sf, ff);
 	};
 
 	/**
