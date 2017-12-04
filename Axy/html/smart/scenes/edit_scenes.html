@@ -79,6 +79,11 @@
 				width: 20px !important;
 			}
 			
+			
+			.mui-icon>img{
+				width: 0.426666rem;
+			}
+			
 		</style>
 	</head>
 
@@ -86,10 +91,13 @@
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
 			<h1 class="mui-title">编辑场景</h1>
+			<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
+				<img src="../../../image/smart/scenes/save_icon.png" />
+			</a> 
 		</header>
 		<div class="mui-content">
 			<div class="mui-input-row app-font-size-28">
-				<label>回店模式</label>
+				<label v-text="name"></label>
 				<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isBackStore}" ref="switch1">
 					<div class="mui-switch-handle"></div>
 				</div>
@@ -140,7 +148,9 @@
 				el: '.mui-content',
 				data: function() {
 					return {
-						isBackStore: true,
+						name: "场景开关", // 场景名称
+						
+						isBackStore: false,
 						isSendMsgs: false,
 					};
 				},
@@ -152,9 +162,21 @@
 						this.isSendMsgs = event.detail.isActive;
 					}.bind(this));
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					this.name = this.$view.name || '场景开关';
+				},
 				methods: {
-
+					// 保存按钮
+					onSaveTap: function(){
+						// 发送请求保存新场景
+						
+						// 如果开关并未打开，提示用户是否立即打开
+						if(!this.isBackStore){
+							mui.confirm('是否立即打开该场景模式？','',['立即打开', '取消'],function(e){
+								console.log(e.index);
+							});
+						}
+					},
 				}
 			});
 		</script>

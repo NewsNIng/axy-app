@@ -361,16 +361,16 @@
 							<!--如果有数据则显示-->
 							<ul v-show="resultList.length">
 								<template v-for="o,i in resultList">
-									<li>
+									<li @tap="onItemTap(o)">
 										<div class="imgdiv img-lazy-load" :data-src="_getImg(o.image1,o.image2,o.image3)">
 
 										</div>
 										<div class="textdiv app-font-size-28">
 											<div class="app-color-333333 mui-ellipsis">
-												{{o.name || o.title}}
+												{{o.name || o.title || ""}}
 											</div>
 											<div class="app-color-9f9fa0 mui-ellipsis-2">
-												{{o.introduction || o.content}}
+												{{o.introduction || o.content || ""}}
 											</div>
 											<div class="app-color-9f9fa0 tips mui-ellipsis">
 												<span v-if="o.distance">
@@ -423,6 +423,8 @@
 				data: function() {
 					return {
 						n: 1,
+						maxScrollY: 200,
+
 						longitude: 0,
 						latitude: 0,
 						city: '深圳',
@@ -517,25 +519,31 @@
 					this.progressbar = mui('body').progressbar();
 
 					var wrapper = this.$refs.wrapper;
-					wrapper.style.height = (document.documentElement.clientHeight || document.body.clientHeigth) -
+					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
 						this.$refs.tabroom.offsetHeight -
 						immersed -
-						44 +
-						'px';
+						44;
+
+					wrapper.style.height = wrapperHight + 'px';
 
 					this.$nextTick(function() {
 						if(!this.scroll) {
-							this.scroll = new BScroll(wrapper, {})
-							this.scroll.on('scrollEnd', function() {
-								if(this.scroll.y <= (this.scroll.maxScrollY + 50)) {
-									// 获取更多 TODO
-									this.n++;
-									this.searchResult();
+							this.scroll = new BScroll(wrapper, {
+								click: true,
+								scrollY: true,
+								pullUpLoad: {
+									threshold: -70, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
 								}
+							});
+							this.scroll.on('pullingUp', function() {
+								// 获取更多 TODO
+								this.n++;
+								this.searchResult();
+
 							}.bind(this));
 
 						} else {
-							this.scroll.refresh()
+							this.scroll.refresh();
 						}
 
 					}.bind(this));
@@ -600,6 +608,24 @@
 					onRsTap: function(o) {
 						this.searchResult(o.keyword);
 					},
+					// 搜索结果列表被点击时
+					onItemTap: function(o){
+						if(o.senddate){
+							// 说说
+							mui.openWindow('../nearby/discover/discover_details.html', 'discover_details', {
+								extras: {
+									oid: o.id
+								}
+							});
+						}else{
+							// 店铺
+							mui.openWindow('../nearby/business/store_details.html', 'store_details', {
+								extras: {
+									oid: o.id
+								}
+							});
+						}
+					},
 					// 获取搜索内容
 					searchResult: function(s) {
 						// 搜索中
@@ -617,11 +643,10 @@
 							if(err) {
 								return console.log(JSON.stringify(err))
 							}
-							this.articleList = data.article;
-							this.storeList = data.store;
-
+							data.article && (this.articleList = data.article);
+							data.store && (this.storeList = data.store);
 							this.$nextTick(function() {
-								this.scroll && this.scroll.refresh();
+								this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
 								imagelazyload();
 							}.bind(this));
 						}.bind(this));

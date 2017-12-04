@@ -284,8 +284,8 @@
 
 				</div>
 
-				<div class="device_show" @tap="openCamListWindow()">
-					<img src="http://placehold.it/760x350" />
+				<div class="device_show">
+					<img @tap="openCamListWindow()" src="http://placehold.it/760x350" />
 					<div class="dev_status">{{dev.online === 1 ? '在线': '离线'}}</div>
 					<div>
 						<div class="dev_info">
@@ -308,7 +308,7 @@
 					<div class="like_image">
 						
 						<template v-for="o,i in like"> 
-							<div :style="{backgroundImage: 'url('+o.img+')'}">
+							<div :style="{backgroundImage: 'url('+o.img+')'}" @tap="onLikeItemTap(o)">
 								
 								<span>{{o.title}}</span>
 							</div>
@@ -339,7 +339,7 @@
 					<div @tap="onNearbyMore()"  class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
 					<div class="shop_image">
 						<template v-for="o,i in nearShops">
-							<div class="shop_a" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
+							<div  @tap="onNearItemTap(o)" class="shop_a" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
 						</template>
 
 					</div>
@@ -555,6 +555,13 @@
 							this.like = data;
 						}.bind(this));
 					},
+					// 猜你喜欢点击
+					onLikeItemTap: function(o){
+						// 打开内部浏览器
+						app.page.openBrowser({
+							url: o.link 
+						});
+					},
 					// 附近的店
 					getNearShops: function(){
 						dal.store.list(this.longitude, this.latitude, this.city, function(err, data){
@@ -563,6 +570,15 @@
 							}
 							this.nearShops = data;
 						}.bind(this), 1);
+					},
+					// 附近的店点击
+					onNearItemTap: function(o){
+						// 店铺
+						mui.openWindow('../nearby/business/store_details.html', 'store_details', {
+							extras: {
+								oid: o.id
+							}
+						});
 					},
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;

@@ -269,12 +269,17 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							this.items = data; 
+							console.log('1' + JSON.stringify(data));
+							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
+							if(!data || data.length === 0){
+								return; 
+							}
+							this.items = data;
 							this.$nextTick(function(){
 								imagelazyload();
 								this.shuffle(); 
-							});
-							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
+							}.bind(this)); 
+							
 						}.bind(this), 8);
 					},
 					_up: function() {

@@ -60,7 +60,7 @@
 				},
 				plusReady: function(){
 					var v = this.$view;
-					this.title = v.title;
+					this.title = v.title || "编辑";
 					this.tips = v.tips || "请输入内容...";
 					this.content = v.content || ''; 
 					this.regexpType = v.r;
