@@ -77,15 +77,31 @@
 			</a>
 		</header>
 		<div class="mui-content">
-			<div class="actions_item app-font-size-28" @tap="mui.openWindow('select_device.html','select_device')">
-				<img class="actions_icon" src="../../../image/smart/scenes/btn_Selection device@3x.png" />
-				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-				<div class="title app-font-size-28">选择设备</div>
+			<div class="actions_item app-font-size-28" @tap="onSelectDev()">
+				<img class="actions_icon" :src="icon" />
+				
+				<template v-if="devText">
+					<span class="mui-pull-right app-color-9f9fa0" style="line-height: 1.3896666rem;margin-right:0.346666rem;">{{devText}}</span>
+				</template>
+				<template v-else>
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />	
+				</template>
+				
+				
+				<div class="title app-font-size-28" v-text="name"></div>
+				
 			</div>
 			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
 			<div class="actions_item app-font-size-28">
 				<img class="actions_icon" src="../../../image/smart/scenes/icon_Timing start@3x.png" />
-				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+				
+				<template v-if="devDelay">
+					<span class="mui-pull-right app-color-9f9fa0" style="line-height: 1.3896666rem;margin-right:0.346666rem;">{{devDelayText}}</span>
+				</template>
+				<template v-else>
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />	
+				</template>
+				
 				<div @tap="onPickTap()" class="title app-font-size-28">延迟设置</div>
 			</div>
 			<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
@@ -104,7 +120,7 @@
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 		
@@ -122,8 +138,15 @@
 				data: function() {
 					return {
 						pick: null,
+						name: '选择设备',
+						icon:　'../../../image/smart/scenes/btn_Selection device@3x.png',
+						devText: '',
+						devDelay: 0,
+						devDelayText: '',
 					};
 				},
+				
+				
 				mounted: function(){
 					
 					this.pick = new mui.PopPicker({
@@ -135,18 +158,27 @@
 				plusReady: function() {},
 				methods: {
 					onPickTap: function(){
-						this.pick.show(function(items) {
-							var m = items[0].value;
-							var s = items[1].value;
-							console.log(m * 60 + s);
-							//返回 false 可以阻止选择框的关闭
-							//return false;
+						
+						var that = this;
+						
+						var fn = function(m, s){
+							that.devDelay = m * 60 + s; // 单位 秒
+							that.devDelayText = m + '分' + s + '秒';
+						};
+						
+						
+						this.pick.show(function(items){
+							fn( items[0].value,  items[1].value);
 						}, function(items){
-							console.log('hide');
-							var m = items[0].value;
-							var s = items[1].value;
-							console.log(m * 60 + s);
+							fn( items[0].value,  items[1].value);
 						});
+					},
+					onSelectDev: function(){
+						app.page.openForResultBy('select_device.html', 'select_device', function(data){
+							this.devText = data.text;
+							this.icon = data.dev.img;
+							this.name = data.dev.name;
+						}.bind(this));
 					}
 				}
 			});
