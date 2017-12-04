@@ -7,7 +7,7 @@
 	</head>
 
 	<body>
-		<script type="text/javascript" src="../js/lib/mui.min.js" ></script>
+		<script type="text/javascript" src="../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../js/lib/vue-ni.js"></script>
 
 		<script type="text/javascript" src="../js/plug/PlugH5NativeBridge.js"></script>
@@ -24,13 +24,27 @@
 			 * H5Native 控制中心
 			 */
 
-			var P = plug.H5NativeBridge;
+			var D, P = plug.H5NativeBridge;
 
 			var domain = "www.isee110.com";
-			
+
 			var T = -1;
 			var TD = 60e3;
 			
+			Rx.Observable.create(function(ob) {
+				if(window.plus) {
+					ob.next();
+				} else {
+					document.addEventListener('plusready', function() {
+						ob.next();
+					});
+				}
+			}).subscribe(function() {
+				D = new ni.Cache('dev_list', [], {
+					plus: true
+				});
+			});
+
 			Rx.Observable
 				// 原始事件
 				.create(function(observer) {
@@ -39,11 +53,11 @@
 						// next
 						observer.next(data.userInfo);
 					});
-					ni.plusReady(function(){
+					ni.plusReady(function() {
 						// 如果已经登录就 next
-						app.user.has() && observer.next(app.user.get());	
+						app.user.has() && observer.next(app.user.get());
 					});
-					
+
 				})
 				// 获取顶级域名
 				.mergeMap(function(user) {
@@ -65,26 +79,31 @@
 						});
 				})
 				// 初始化原生插件
-				.mergeMap(function(user, domain){
+				.mergeMap(function(user, domain) {
 					// 判断定时器
-					if(T < 0){
-						(function _(){
+					if(T < 0) {
+						(function _() {
 							// 请求服务端数据 TODO 取消分页
-							dal.device.list(1, function(err, data){
-								if(err){return;}
+							dal.device.list(1, function(err, data) {
+								if(err) {
+									return;
+								}
 								console.log(JSON.stringify(data));
 								// 数据不为空时 向原生发送数据
-								data && data.length > 0 && P.InitNativeDevList(JSON.stringify(data));
+								if(data && data.length > 0) {
+									D.data = data;
+									P.InitNativeDevList(JSON.stringify(data));
+								}
 							}, 1000);
 							// 递归调用 模拟定时器 60s频率
 							T = setTimeout(_, TD);
 						}());
 					}
-					
+
 					return Rx.Observable
-						.create(function(o3){
+						.create(function(o3) {
 							// 向原生注册 控制中心 处理函数回调
-							P.InitNativeSysteam(user, domain, function(arg){
+							P.InitNativeSysteam(user, domain, function(arg) {
 								// next
 								o3.next(arg);
 							});
@@ -92,9 +111,8 @@
 				})
 				// 消息中心事件
 				.subscribe(function(data) {
-					console.log("zeus.html : " + JSON.stringify(data)); 
+					console.log("zeus.html : " + JSON.stringify(data));
 				});
-
 		</script>
 	</body>
 

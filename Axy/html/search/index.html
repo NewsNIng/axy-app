@@ -386,9 +386,12 @@
 
 							</ul>
 							<!--无数据且搜索完毕-->
-							<template v-show="!searchIng && resultList.length === 0">
+							<template v-if="!searchIng && resultList.length === 0">
 								<div class="null">
 									<img src="../../image/search/background@3x.png" />
+									<div class="app-color-9f9fa0">
+										搜索内容结果为空
+									</div>
 								</div>
 							</template>
 

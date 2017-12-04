@@ -82,17 +82,17 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">连接WIFI</h1>
+				<h1 class="mui-title">配置设备WIFI</h1>
 			</header>
 
 			<div class="mui-content">
 				<img class="wifi_icon" src="../../../image/smart/devices/add/sound_add/wifi_icon.png"/>
 				<div class="wifi_connect">
 				    <input type="text" v-model="wifiname" placeholder="WiFi名称" />
-				    <input type="text" v-model="wifipwd" placeholder="输入WiFi密码" />
-				    <div class="remember_pwd app-font-size-24">
-				    	<img v-show="isRemember" @tap="isRemember = !isRemember" src="../../../image/common/agree_selected.png"/>
-				    	<img v-show="!isRemember" @tap="isRemember = !isRemember" src="../../../image/common/agree_noselect.png"/> 记住密码
+				    <input type="password" v-model="wifipwd" placeholder="输入WiFi密码" /> 
+				    <div class="remember_pwd app-font-size-24" @tap="isRemember = !isRemember">
+				    	<img v-show="isRemember"  src="../../../image/common/agree_selected.png"/>
+				    	<img v-show="!isRemember" src="../../../image/common/agree_noselect.png"/> 记住密码
 				    </div>
 				</div>
 				<div class="next app-font-size-36" @tap='onNextTap()'>下一步</div>
@@ -144,7 +144,10 @@
 					this.wifipwd = this.wifipwdCache.data;
 				},
 				plusReady: function() {
-					
+					// 如果本地没有保存数据则
+					if(!this.wifinameCache.data){
+						// TODO 原生端 获取 当前 WIFI 名称
+					}
 				},
 				methods: {
 					onSelectTap:function(i){
@@ -157,7 +160,7 @@
 						}
 						
 						// 是否记住密码
-						if(isRemember){
+						if(this.isRemember){
 							// 保存
 							this.wifinameCache.data = this.wifiname;
 							this.wifipwdCache.data = this.wifipwd;

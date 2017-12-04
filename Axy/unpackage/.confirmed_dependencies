@@ -9,20 +9,23 @@
 			"html/nearby/pages/list.html",
 			"html/nearby/business/signup.html",
 			"html/public/position.html",
-			"html/nearby/menu.html"
+			"html/nearby/menu.html",
+			"html/search/index.html"
 		]
 	},
 	"html/main.html": {
 		"resources": [
 			"html/home/index.html",
-			"html/smart/index.html"
+			"html/smart/index.html",
+			"html/nearby/index.html"
 		],
 		"refer": [
 			"html/home/index.html",
 			"html/nearby/index.html",
 			"html/person/index.html",
 			"html/smart/index.html",
-			"html/zeus.html"
+			"html/zeus.html",
+			"html/smart/index2.html"
 		]
 	},
 	"html/nearby/business/signup.html": {
@@ -41,7 +44,8 @@
 	"html/person/index.html": {
 		"refer": [
 			"html/common/login.html",
-			"html/public/position.html"
+			"html/public/position.html",
+			"html/public/browser.html"
 		]
 	},
 	"html/common/reset.html": {
@@ -106,7 +110,8 @@
 	"html/smart/scenes/index.html": {
 		"refer": [
 			"html/smart/scenes/create_scenes.html",
-			"html/smart/scenes/edit_scenes.html"
+			"html/smart/scenes/edit_scenes.html",
+			"html/public/input.html"
 		]
 	},
 	"html/smart/scenes/trigger_conditions.html": {
@@ -116,7 +121,8 @@
 	},
 	"html/smart/scenes/edit_scenes.html": {
 		"refer": [
-			"html/smart/scenes/trigger_conditions.html"
+			"html/smart/scenes/trigger_conditions.html",
+			"html/smart/scenes/perform_actions.html"
 		]
 	},
 	"html/nearby/discover/discover_details.html": {
@@ -149,6 +155,14 @@
 			"image/smart/devices/dev_icon/电力安全主机@3x.png",
 			"image/smart/devices/dev_icon/红外幕帘@3x.png",
 			"image/smart/devices/dev_icon/门磁探测器@3x.png"
+		],
+		"refer": [
+			"html/smart/add/family_menu.html",
+			"html/smart/add/scan.html",
+			"html/smart/add/Lan_add_camera.html",
+			"html/smart/add/Lan_connect_dev.html",
+			"html/smart/add/Lan_select_dev_id.html",
+			"html/smart/add/Lan_connect_camera.html"
 		]
 	},
 	"html/smart/add/family_menu.html": {
@@ -161,6 +175,48 @@
 		"refer": [
 			"html/nearby/business/signup.html",
 			"html/nearby/discover/discover_release.html"
+		]
+	},
+	"html/home/index.html": {
+		"refer": [
+			"html/search/index.html",
+			"html/public/browser.html",
+			"html/nearby/business/store_details.html"
+		]
+	},
+	"html/search/index.html": {
+		"refer": [
+			"html/nearby/discover/discover_details.html",
+			"html/nearby/business/store_details.html"
+		]
+	},
+	"html/smart/index2.html": {
+		"refer": [
+			"html/smart/scenes/index.html",
+			"html/common/login.html",
+			"html/smart/add/scan.html",
+			"html/smart/add/add_device.html"
+		]
+	},
+	"html/smart/scenes/perform_actions.html": {
+		"refer": [
+			"html/smart/scenes/select_device.html"
+		]
+	},
+	"html/smart/add/Lan_select_dev_id.html": {
+		"refer": [
+			"html/smart/add/Lan_connect_dev.html",
+			"html/smart/add/connect_wifi.html"
+		]
+	},
+	"html/smart/add/Lan_connect_camera.html": {
+		"refer": [
+			"html/smart/add/Lan_select_dev_id.html"
+		]
+	},
+	"html/smart/add/Lan_connect_dev.html": {
+		"refer": [
+			"html/smart/add/Lan_add_camera.html"
 		]
 	}
 }

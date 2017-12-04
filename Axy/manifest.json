@@ -258,11 +258,12 @@
 					"image/main/nearby.png",
 					"image/main/home.png",
 					"html/person/index.html",
-					"html/smart/index.html"
+					"html/smart/index.html",
+					"html/nearby/index.html"
 				],
 				"refer": [
-					"html/nearby/index.html",
-					"html/zeus.html"
+					"html/zeus.html",
+					"html/smart/index2.html"
 				],
 				"priority": 0
 			},
@@ -277,7 +278,8 @@
 				"refer": [
 					"html/common/login.html",
 					"html/common/reset2.html",
-					"html/public/position.html"
+					"html/public/position.html",
+					"html/public/browser.html"
 				],
 				"priority": 0
 			},
@@ -317,7 +319,11 @@
 					"js/lib/mui.min.js",
 					"js/lib/vue-ni.js"
 				],
-				"refer": [],
+				"refer": [
+					"html/search/index.html",
+					"html/public/browser.html",
+					"html/nearby/business/store_details.html"
+				],
 				"priority": 0
 			},
 			"html/smart/index.html": {
@@ -364,7 +370,8 @@
 					"html/nearby/business/signup.html",
 					"html/nearby/pages/theme.html",
 					"html/nearby/pages/discover.html",
-					"html/nearby/menu.html"
+					"html/nearby/menu.html",
+					"html/search/index.html"
 				],
 				"priority": 0
 			},
@@ -519,7 +526,8 @@
 				"resources": [],
 				"refer": [
 					"html/smart/scenes/edit_scenes.html",
-					"html/smart/scenes/create_scenes.html"
+					"html/smart/scenes/create_scenes.html",
+					"html/public/input.html"
 				],
 				"priority": 0
 			},
@@ -541,7 +549,8 @@
 			"html/smart/scenes/edit_scenes.html": {
 				"resources": [],
 				"refer": [
-					"html/smart/scenes/trigger_conditions.html"
+					"html/smart/scenes/trigger_conditions.html",
+					"html/smart/scenes/perform_actions.html"
 				],
 				"priority": 0
 			},
@@ -580,7 +589,14 @@
 					"image/smart/devices/dev_icon/红外幕帘@3x.png",
 					"image/smart/devices/dev_icon/门磁探测器@3x.png"
 				],
-				"refer": [],
+				"refer": [
+					"html/smart/add/family_menu.html",
+					"html/smart/add/scan.html",
+					"html/smart/add/Lan_add_camera.html",
+					"html/smart/add/Lan_connect_dev.html",
+					"html/smart/add/Lan_select_dev_id.html",
+					"html/smart/add/Lan_connect_camera.html"
+				],
 				"priority": 0
 			},
 			"html/smart/add/family_menu.html": {
@@ -596,6 +612,53 @@
 				"refer": [
 					"html/nearby/business/signup.html",
 					"html/nearby/discover/discover_release.html"
+				],
+				"priority": 0
+			},
+			"html/search/index.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html",
+					"html/nearby/business/store_details.html"
+				],
+				"priority": 0
+			},
+			"html/smart/index2.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/index.html",
+					"html/common/login.html",
+					"html/smart/add/scan.html",
+					"html/smart/add/add_device.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/perform_actions.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/select_device.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/Lan_select_dev_id.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/Lan_connect_dev.html",
+					"html/smart/add/connect_wifi.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/Lan_connect_camera.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/Lan_select_dev_id.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/Lan_connect_dev.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/Lan_add_camera.html"
 				],
 				"priority": 0
 			}

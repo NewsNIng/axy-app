@@ -84,7 +84,7 @@
 			</div>
 			
 			<div class="help app-font-size-24">戳这里查看如何连接网络~</div>
-			<div class="foot app-font-size-34" @tap="mui.openWindow('','')">下一步</div>
+			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -119,7 +119,9 @@
 				},
 				plusReady: function() {},
 				methods: {
-					
+					onNext: function(){
+						this.$view.loadURL('Lan_select_dev_id.html');
+					}
 				}
 			});
 		</script>

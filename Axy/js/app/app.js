@@ -164,3 +164,72 @@ function addMethod(obj, name, fn) {
 }(window.app));
 
 
+(function(app){
+	app.getNetwork = function() {
+		var networkTypes = {};
+		networkTypes[plus.networkinfo.CONNECTION_UNKNOW] = "unknow"; //未知
+		networkTypes[plus.networkinfo.CONNECTION_NONE] = "none"; //未连接
+		networkTypes[plus.networkinfo.CONNECTION_ETHERNET] = "line"; //有线网络
+		networkTypes[plus.networkinfo.CONNECTION_WIFI] = "wifi"; //wifi
+		networkTypes[plus.networkinfo.CONNECTION_CELL2G] = "2g"; //2g
+		networkTypes[plus.networkinfo.CONNECTION_CELL3G] = "3g"; //3g
+		networkTypes[plus.networkinfo.CONNECTION_CELL4G] = "4g"; //4g
+		return networkTypes[plus.networkinfo.getCurrentType()];
+	}
+
+	
+	
+	
+	
+	var net = {};
+	
+	net.TYPE = {};
+	
+	app.plusReady(function(){
+		var pn = plus.networkinfo;
+		net.TYPE[pn.CONNECTION_UNKNOW] = "unknow"; //未知
+		net.TYPE[pn.CONNECTION_NONE] = "none"; //未连接
+		net.TYPE[pn.CONNECTION_ETHERNET] = "line"; //有线网络
+		net.TYPE[pn.CONNECTION_WIFI] = "wifi"; //wifi
+		net.TYPE[pn.CONNECTION_CELL2G] = "2g"; //2g
+		net.TYPE[pn.CONNECTION_CELL3G] = "3g"; //3g
+		net.TYPE[pn.CONNECTION_CELL4G] = "4g"; //4g
+		net.info = pn;
+	});
+	
+	/**
+	 * 获取当前的网络类型
+	 */
+	net.getType = function(){
+		var type = "";
+		try{
+			return net.TYPE[net.info.getCurrentType()];
+		}catch(e){
+			return "";
+		}
+	};
+	
+	/**
+	 * 增加网络变化监听
+	 * @param {net.TYPE} name 需要监听的名称 可选
+	 * @param {Function} fn 函数
+	 */
+	net.listen = function(name, fn){
+		if(typeof name === 'function'){
+			fn = name;
+			name = "";
+		}
+		document.addEventListener('netchange', function(){
+			if(name && name !== net.getType()){
+				return false;
+			}
+			fn(net.getType());
+		});
+	};
+	
+	app.net = net;
+	
+	
+}(window.app));
+
+

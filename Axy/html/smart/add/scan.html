@@ -160,7 +160,9 @@
 						this.scan = scan;
 					},
 					onMarked: function(type, result, file){
-						mui.alert(result);
+						app.page.setResult({
+							result: result
+						}).close();
 					},
 					startScan: function(){
 						this.scan && (this.scan.start(), this.frist = false);

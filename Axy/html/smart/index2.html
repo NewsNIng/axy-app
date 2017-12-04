@@ -117,12 +117,19 @@
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
 		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
 		
+		<script type="text/javascript" src="../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init();
+			
+			
+			
 			new Vue({
 				el: '.mui-content',
 				data: function() {
 					return {
+						hasDev: false,
 						imgList: [{
 								adimg: "https://user-gold-cdn.xitu.io/2017/12/1/16011e0577b180c5?imageView2/1/w/960/h/200/q/85/format/jpg/interlace/1"
 							},
@@ -135,6 +142,11 @@
 								text: "我的设备",
 								img: '../../image/smart/btn_Myequipment@3x.png',
 								href: '',
+							},
+							{
+								text: "添加设备",
+								img: '../../image/smart/btn_Myequipment@3x.png',
+								href: 'add/add_device.html',
 							},
 							{
 								text: "智能场景",
@@ -185,6 +197,13 @@
 				},
 				plusReady: function() {
 					imagelazyload();
+					var D = new ni.Cache('dev_list', [], {
+						plus: true
+					});
+					if(D.data.length > 0){
+						this.hasDev = true;
+					}
+					this.menuList.splice(+this.hasDev, 1);
 				},
 				methods: {
 					onAdvertTap: function() {
@@ -192,7 +211,10 @@
 					},
 					
 					onItemTap: function(o) {
-						mui.openWindow(o.href, o.id || o.href);
+						// 验证登录
+						app.user.get(function(u){
+							u && mui.openWindow(o.href, o.id || o.href);	
+						});
 					},
 				}
 
