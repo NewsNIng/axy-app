@@ -366,6 +366,7 @@
 		<script type="text/javascript" src="../../js/dal/store.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
@@ -459,7 +460,7 @@
 					//					css.innerText = ".mui-slider:before{height:"+ (immersed) +"px;}";
 					//					document.body.appendChild(css);
 					// 缓存机制加载图片
-					imgagelazyload();
+					imagelazyload();
 					// 图片轮播
 					mui('#slider').slider({
 						interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
@@ -524,14 +525,16 @@
 							this.imgList = data;
 							advert_cache.data = data;
 							this.$nextTick(function() {
-								imgagelazyload();
+								imagelazyload();
 							});
 						}.bind(this));
 					},
 					// 轮播点击
 					onAdvertTap: function(o) {
 						// 打开内部浏览器
-						mui.alert(JSON.stringify(o));
+						app.page.openBrowser({
+							url: o.adlink 
+						});
 					},
 					// 获取一个设备
 					getDeviceOne: function() {
@@ -565,23 +568,26 @@
 						return img1 || img2 || img3;
 					},
 					
-					// 查看附近的店更多
-					onNearbyMore: function(){
-						
-						// TODO 主页名称
-						B.emit('tabar', {
-							action: '1'
-						}, {
-							views: [this.$view.parent],
-						});
-					},
+					
 					// 查看猜你喜欢更多
 					onStoreMore: function(){
 						
 						B.emit('tabar', {
-							action: '2'
+							mindex: 2,
+							nindex: 1
 						}, {
-							views: [this.$view.parent],
+							views: [this.$view.parent()],
+						});
+					},
+					
+					// 查看附近的店更多
+					onNearbyMore: function(){
+						// TODO 主页名称
+						B.emit('tabar', {
+							mindex: 2,
+							nindex: 0
+						}, {
+							views: [this.$view.parent()],
 						});
 					},
 				}
