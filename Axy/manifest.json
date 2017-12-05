@@ -340,7 +340,8 @@
 					"html/smart/add/scan.html",
 					"html/smart/add/add_device.html",
 					"html/smart/add/family_menu.html",
-					"html/search/index.html"
+					"html/search/index.html",
+					"html/smart/test.html"
 				],
 				"priority": 0
 			},
@@ -541,7 +542,8 @@
 			"html/smart/scenes/edit_scenes.html": {
 				"resources": [],
 				"refer": [
-					"html/smart/scenes/trigger_conditions.html"
+					"html/smart/scenes/trigger_conditions.html",
+					"html/smart/scenes/perform_actions.html"
 				],
 				"priority": 0
 			},
@@ -596,6 +598,13 @@
 				"refer": [
 					"html/nearby/business/signup.html",
 					"html/nearby/discover/discover_release.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/perform_actions.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/select_device.html"
 				],
 				"priority": 0
 			}
