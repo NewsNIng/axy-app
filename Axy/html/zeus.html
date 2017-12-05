@@ -41,8 +41,7 @@
 				}
 			}).subscribe(function() {
 				D = new ni.Cache('dev_list', [], {
-					plus: 
-					
+					plus: true
 				});
 			});
 
@@ -58,6 +57,7 @@
 						// 如果已经登录就 next
 						app.user.has() && observer.next(app.user.get());
 					});
+					
 
 				})
 				// 获取顶级域名
