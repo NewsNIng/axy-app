@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>摄像机日志</title>
+		<title>基本信息</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -18,31 +18,25 @@
 			html,
 			body,
 			.mui-content {
-				background-color: white;
-				
+				background-color: #F4F8FB;
 			}
 			
-			.top {
-				height: 1.2rem;
-				border-bottom: 1px solid #CDCDCD;
-				padding: 0 0.346666rem;
-				display: flex;
-				display: -webkit-flex;
-				justify-content: space-around;
-				line-height: 1.2rem;
-			}
-			.top>div {
-				
+			ul {
+				margin-top: 0.266666rem !important;
+				margin-bottom: 0 !important;
 			}
 			
-			.top>div>img {
-				height: 0.4rem;
-				width: 0.4rem;
-				vertical-align: middle;
+			.mui-table-view-cell {
+				color: #777777 !important;
 			}
 			
+			.mui-badge {
+				color: #232323 !important;
+			}
 			
-			
+			.mui-table-view-cell:after {
+				left: 0;
+			}
 		</style>
 	</head>
 
@@ -51,21 +45,52 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">摄像机日志</h1>
+				<h1 class="mui-title">基本信息</h1>
 			</header>
 
 			<div class="mui-content">
-				<div class="top app-font-size-28">
-					<div>操作<img src="../../../image/smart/devices/others/down.png"/></div>
-					<div>终端<img src="../../../image/smart/devices/others/down.png"/></div>
-					<div>账号<img src="../../../image/smart/devices/others/down.png"/></div>
-					<div>日期<img src="../../../image/smart/devices/others/down.png"/></div>
-				</div>
-				<div class="log">
-					<div class="account app-font-size-28">135*****000<span></span>来自：联防平台</div>
-					<div class="state app-font-size-32">布防成功</div>
-					<div class="date app-font-size-28">2017/11/01<br />15:12:10</div>
-				</div>
+				<div class="menu-warp app-font-size-24 app-color-dark"></div>
+
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>摄像机型号</span>
+							<span class="mui-badge">AX-360</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>连接的WIFI</span>
+							<span class="mui-badge">ANXIN</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>WIFI信号强度</span>
+							<span class="mui-badge">60%</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>摄像机ID</span>
+							<span class="mui-badge">123456789</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>硬件版本</span>
+							<span class="mui-badge">AX-360</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>IP地址</span>
+							<span class="mui-badge">192.168.1.2</span>
+						</a>
+					</li>
+					<li style="background-color: #F4F8FB !important;"/>
+				</ul>
+
 			</div>
 
 		</div>
