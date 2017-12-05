@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>摄像机日志</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: white;
+				
+			}
+			
+			.top {
+				height: 1.2rem;
+				border-bottom: 1px solid #CDCDCD;
+				padding: 0 0.346666rem;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-around;
+				line-height: 1.2rem;
+			}
+			.top>div {
+				
+			}
+			
+			.top>div>img {
+				height: 0.4rem;
+				width: 0.4rem;
+				vertical-align: middle;
+			}
+			
+			
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">摄像机日志</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="top app-font-size-28">
+					<div>操作<img src="../../../image/smart/devices/others/down.png"/></div>
+					<div>终端<img src="../../../image/smart/devices/others/down.png"/></div>
+					<div>账号<img src="../../../image/smart/devices/others/down.png"/></div>
+					<div>日期<img src="../../../image/smart/devices/others/down.png"/></div>
+				</div>
+				<div class="log">
+					<div class="account app-font-size-28">135*****000<span></span>来自：联防平台</div>
+					<div class="state app-font-size-32">布防成功</div>
+					<div class="date app-font-size-28">2017/11/01<br />15:12:10</div>
+				</div>
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						isPwdProtection: true, // 是否开启密码保护
+					};
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {},
+				methods: {
+					// 切换开关
+					toggleSwitch: function() {
+						this.state = !this.state;
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

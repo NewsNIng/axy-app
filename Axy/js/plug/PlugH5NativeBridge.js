@@ -56,6 +56,46 @@
 }(window, window.plug || (window.plug = {})));
 
 (function(w) {
+	var xmlFactory = {};
+
+	var cid = 10;
+
+	var pucIDTag = "<PUC_ID></PUC_ID>";
+	var videoTag = "<Message><MEDIA><VIDEO>";
+	var videoTag_ = "</VIDEO></MEDIA></Message>";
+	var zonesTag = "<Message><SYSTEM><ZONES>";
+	var zonesTag_ = "</ZONES></SYSTEM></Message>";
+	var deviceNameTag = "<Message><SYSTEM>";
+	var deviceNamTag_ = "</SYSTEM></Message>";
+
+	var recplansTag = "<Message><SYSTEM><RECPLANS>";
+	var recplansTag_ = "</RECPLANS></SYSTEM></Message>";
+	var alarmPlansTag = "<Message><SYSTEM><PLANS>";
+	var alarmPlansTag_ = "</PLANS></SYSTEM></Message>";
+	var netTag = "<Message><NET>";
+	var netTag_ = "</NET></Message>";
+	var timeZonesTag = "<Message><SYSTEM>";
+	var timeZonesTag_ = "</SYSTEM></Message>";
+	
+	
+	xmlFactory.CreatDeviceName = function(DeviceName) {
+		var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+			"<Message CID=\"" + (cid++) + "\" " + "Verison=\"2.0.0\" MsgType=\"MSG_SET_PARAM_V2_REQ\">" +
+			"<DSW_BODY>" + pucIDTag +
+			deviceNameTag +
+			"<LOCATION VALUE=\"" + DeviceName + "\"/>" +
+			deviceNamTag_ +
+			"</DSW_BODY>" +
+			"</Message>";
+		return xml;
+	}
+	
+	
+
+	w.xmlFactory = xmlFactory;
+}(window));
+
+(function(w) {
 	var pg = w.plug,
 		N = 'H5NativeBridge',
 		pgn = pg[N] || (pg[N] = {});
@@ -255,12 +295,12 @@
 	pgn.StartVoiceSetWifi = function(ssid, pwd, random) {
 		return pg.syncExec(N, 'StartVoiceSetWifi', [ssid, pwd, random]);
 	}
-	
-	pgn.StopVoiceSetWifi = function(){
+
+	pgn.StopVoiceSetWifi = function() {
 		return pg.syncExec(N, 'StopVoiceSetWifi', []);
 	}
-	
-	pgn.CheckDevWifiConnect = function(random){
+
+	pgn.CheckDevWifiConnect = function(random) {
 		return pg.syncExec(N, 'CheckDevWifiConnect', [random]);
 	}
 
