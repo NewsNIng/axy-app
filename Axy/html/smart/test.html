@@ -32,6 +32,8 @@
 			<button type="button" class="mui-btn app-btn-main" @tap="test11()">开始声波配置WiFi</button><br />
 			<button type="button" class="mui-btn app-btn-main" @tap="test12()">中途停止声波</button><br />
 			<button type="button" class="mui-btn app-btn-main" @tap="test13()">检查声波配置是否成功</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test14()">智能配件查询通道</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test15()">智能配件控制通道</button><br />
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
@@ -200,6 +202,27 @@
 							// 检查声波配置是否成功
 							var list = P.CheckDevWifiConnect("s");
 							alert(list);
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test14: function() {
+						try {
+							//查询通道
+							alert(1);
+							P.SmartDeviceQueryChannelAsyn("AX-403A-2016061400005", "81457856", "KEY_OPEN", "<OPT VAL=\"QUERY\"></OPT>" function(data) {
+								alert(JSON.stringify(data));
+							});
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test15: function() {
+						try {
+							//控制通道
+							P.SmartDeviceControlChannelAsyn("AX-403A-2016061400005", "81457856", "KG_OPT", "<OPT VAL=\"OPEN\" ></OPT>", function(data) {
+								alert(JSON.stringify(data));
+							});
 						} catch(err) {
 							alert('err' + err.message);
 						}
