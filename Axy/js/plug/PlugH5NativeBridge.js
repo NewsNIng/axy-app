@@ -76,8 +76,7 @@
 	var netTag_ = "</NET></Message>";
 	var timeZonesTag = "<Message><SYSTEM>";
 	var timeZonesTag_ = "</SYSTEM></Message>";
-	
-	
+
 	xmlFactory.CreatDeviceName = function(DeviceName) {
 		var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
 			"<Message CID=\"" + (cid++) + "\" " + "Verison=\"2.0.0\" MsgType=\"MSG_SET_PARAM_V2_REQ\">" +
@@ -88,9 +87,30 @@
 			"</DSW_BODY>" +
 			"</Message>";
 		return xml;
-	}
-	
-	
+	};
+
+	/**
+	 * 设置wifi参数
+	 */
+	xmlFactory.CreatAnxinWifi = function(ssid, wifiPassword) {
+		var wifiXml = "";
+
+		wifiXml = "<WIFI EN=\"1\"  SSID=\"" +
+			ssid +
+			"\"  PASSW=\"" + wifiPassword +
+			"\"  SECURITYTYPE=\"1\"  ISHEX=\"0\"  IP=\"\"  MAC=\"\"  SIGNAL=\"\" />";
+
+		var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+			"<Message CID=\"" + (cid++) + "\" " + "Verison=\"2.0.0\" MsgType=\"MSG_SET_PARAM_V2_REQ\">" +
+			"<DSW_BODY>" + pucIDTag +
+			netTag +
+			wifiXml +
+			netTag_ +
+			"</DSW_BODY>" +
+			"</Message>";
+
+		return xml;
+	};
 
 	w.xmlFactory = xmlFactory;
 }(window));

@@ -75,13 +75,11 @@
 					-webkit-transform: translate3d(-50%, -50%, 0);
 					opcity: 75;
 					width: 1.6rem;
-				height: 1.6rem;
+					height: 1.6rem;
 				}
 				100% {
-					
 					transform: translate3d(-50%, -50%, 0);
 					-webkit-transform: translate3d(-50%, -50%, 0);
-					
 					left: 50%;
 					top: 50%;
 					opacity: 0;
@@ -99,6 +97,17 @@
 				background-color: #2BB8AA;
 				border-radius: 50%;
 				box-shadow: 0 0 10px rgba(0, 0, 0, .35) inset;
+				animation-name: 'ripple';
+				/*动画属性名，也就是我们前面keyframes定义的动画名*/
+				animation-duration: 1s;
+				/*动画持续时间*/
+				animation-timing-function: ease;
+				/*动画频率，和transition-timing-function是一样的*/
+				animation-delay: 0s;
+				/*动画延迟时间*/
+				animation-iteration-count: infinite;
+				/*定义循环资料，infinite为无限次*/
+				animation-direction: normal;
 				-webkit-animation-name: 'ripple';
 				/*动画属性名，也就是我们前面keyframes定义的动画名*/
 				-webkit-animation-duration: 1s;
@@ -153,12 +162,11 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
-		
-		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
+
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 		<script type="text/javascript">
-			
 			var P = plug.H5NativeBridge;
-			
+
 			mui.init();
 
 			new Vue({
@@ -168,7 +176,7 @@
 						wifiname: "",
 						wifipwd: "",
 						active: false,
-						
+
 						volume: 0.5,
 						setid: '',
 					};
@@ -184,66 +192,74 @@
 					// get wifiname & wifipwd
 					this.wifiname = GetQueryString("wifiname");
 					this.wifipwd = GetQueryString("wifipwd");
-					
-					
+
 				},
 				plusReady: function() {
 					// 获取设备当前音量
 					this.volume = plus.device.getVolume();
-					
+
 				},
 				methods: {
 					onNext: function() {
 						var url = "Lan_connect_camera.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd + "&setid=" + this.setid;
 						this._cancel();
 						// 保证指令已经发送
-						setTimeout(function(){
+						setTimeout(function() {
 							this.$view.loadURL(url, 'voice5');
 						}.bind(this));
-						
+
 					},
-					onVoiceTap: function(){
+					onVoiceTap: function() {
 						this.active = !this.active;
-						if(this.active){
+						if(this.activeT) {
+							window.clearTimeout(this.activeT);
+						}
+						// 估算
+						this.activeT = setTimeout(function() {
+							// 重置声波发送
+							this.active = false;
+							this.activeT = null;
+						}.bind(this), 5e3);
+
+						if(this.active) {
 							this._send();
-						}else{
+						} else {
 							this._cancel();
 						}
 					},
-					
+
 					// 发送
-					_send: function(){
+					_send: function() {
 						plus.device.setVolume(0.3);
 						this.setid = this._getRandomChar();
-						
+
 						// 保证设置设备音量后再同一声音大小上发送声波
-						setTimeout(function(){
+						setTimeout(function() {
 							var rs = P.StartVoiceSetWifi(this.wifiname, this.wifipwd, this.setid);
-							if(rs === 0){
+							if(rs === 0) {
 								this.active = false;
 								mui.toast("发送失败，请重试");
-							}	
+							}
 						}.bind(this), 500);
-						
-						
+
 					},
 					// 取消
-					_cancel: function(){
+					_cancel: function() {
 						plus.device.setVolume(this.volume);
 						P.StopVoiceSetWifi();
 					},
-					
+
 					// 获取随机字符
-					_getRandomChar: function(){
+					_getRandomChar: function() {
 						var str = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQSRTUVWXYZ",
 							len = str.length,
-							gerRm = function(){
+							gerRm = function() {
 								return parseInt(Math.random() * len);
 							},
 							index = gerRm();
-						return function _(){
+						return function _() {
 							var c = str[index];
-							if(!c){
+							if(!c) {
 								index = gerRm();
 								return _();
 							}
