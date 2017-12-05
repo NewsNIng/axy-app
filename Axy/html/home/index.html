@@ -81,6 +81,12 @@
 			
 			.dev_menu .d1 {
 				width: 50%;
+				overflow: hidden;
+			}
+			.dev_menu .d1 > span{
+				width: 80%;
+				white-space:nowrap;  
+				display: inline-block;
 			}
 			
 			.dev_menu .d2 {
@@ -290,7 +296,7 @@
 					<img @tap="openCamListWindow()" src="http://placehold.it/760x350" />
 					<div class="dev_status">{{dev.online === 1 ? '在线': '离线'}}</div>
 					<div class="dev_menu">
-						<div class="mui-icon d1 mui-ellipsis">
+						<div class="mui-icon d1">
 							<img src="../../image/home/dev_camera.png" />
 							<span class="app-font-size-24 app-color-main">{{dev.devid}}</span>
 						</div>

@@ -50,7 +50,6 @@
 				bottom: 0;
 				background-color: #06c1ae;
 			}
-			
 		</style>
 	</head>
 
@@ -66,11 +65,9 @@
 				<div class="dev_icon app-font-size-30">
 					<div class="dev_text">TIPS：<br />1.保持周围环境安静<br />2.将手机音量调至最大<br />3.将手机喇叭靠近摄像机</div>
 				</div>
-				
-				
-				
+
 			</div>
-			<div class="foot app-font-size-34" @tap="mui.openWindow('','')">下一步</div>
+			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -97,15 +94,29 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						
+						wifiname: "",
+						wifipwd: "",
 					};
 				},
 				mounted: function() {
-
+					// get prev url params
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					// get wifiname & wifipwd
+					this.wifiname = GetQueryString("wifiname");
+					this.wifipwd = GetQueryString("wifipwd");
 				},
 				plusReady: function() {},
 				methods: {
-					
+					onNext: function() {
+						
+						var url = "sonic_connect_dev2.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd;
+						this.$view.loadURL(url, 'voice4');
+					}
 				}
 			});
 		</script>

@@ -72,7 +72,7 @@
 							alert(1);
 							// 内网主机列表
 							var list = P.GetLanDevHostList();
-							<!--this.list = JSON.parse(list);-->
+							this.list = JSON.parse(list);
 							alert(list);
 						} catch(err) {
 							alert('err' + err.message);
@@ -210,7 +210,7 @@
 						try {
 							//查询通道
 							alert(1);
-							P.SmartDeviceQueryChannelAsyn("AX-403A-2016061400005", "81457856", "KEY_OPEN", "<OPT VAL=\"QUERY\"></OPT>" function(data) {
+							P.SmartDeviceQueryChannelAsyn("AX-403A-2016061400005", "81457856", "KEY_OPEN", "<OPT VAL=\"QUERY\"></OPT>", function(data) {
 								alert(JSON.stringify(data));
 							});
 						} catch(err) {

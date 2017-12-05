@@ -39,7 +39,7 @@
 				height: 9.2rem;
 				background-position: bottom;
 				position: relative;
-				style
+				background-repeat: no-repeat;
 			}
 			
 			.dev_text {
@@ -51,7 +51,7 @@
 				color: #333333;
 				font-weight: bold;
 			}
-			
+			 
 			.foot {
 				position: fixed;
 				width: 100%;
@@ -68,11 +68,10 @@
 				padding: 0.106666rem 0.346666rem;
 				float: left;
 				margin-left: 50%;
-				transform: translateX(-50%);			
+				transform: translateX(-50%);
 				-webkit-transform: translateX(-50%);
-				color: white;			
+				color: white;
 			}
-			
 		</style>
 	</head>
 
@@ -89,13 +88,9 @@
 					<div class="dev_text">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
 				</div>
 				<div class="time app-font-size-24" v-text="t+'s'"></div>
-				
-			
-				
-				
-				
+
 			</div>
-			<div class="foot app-font-size-34" @tap="mui.openWindow('','')">完成</div>
+			<div class="foot app-font-size-34" @tap="onNext()">完成</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -118,7 +113,10 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
 		<script type="text/javascript">
+			var P = plug.H5NativeBridge;
+
 			mui.init();
 
 			new Vue({
@@ -127,81 +125,113 @@
 					return {
 						t: 100,
 						timer: -1,
+
 						devid: "",
 						wifiname: "",
 						wifipwd: "",
+
+						setid: "",
 					};
 				},
 				mounted: function() {
 					// get prev url params
-					function GetQueryString(name){
-						 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-						 var r = window.location.search.substr(1).match(reg);
-						 if(r!=null)return  unescape(r[2]); return null;
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
 					}
-
-					// get devid
+					// get devid or setid
 					this.devid = GetQueryString("devid");
+					this.setid = GetQueryString("setid");
 					// get wifiname & wifipwd
 					this.wifiname = GetQueryString("wifiname");
 					this.wifipwd = GetQueryString("wifipwd");
-					
 					// start timer
 					this.startTimer();
 				},
 				plusReady: function() {
-					if(!this.devid){
-						return this.autoOver();
+
+					if(this.setid) {
+						// 声波	
+						this.addDeviceByVoice();
+					} else if(this.devid) {
+						// 内网 
+						this.addDeviceByHostLine();
+					} else {
+						this.autoOver();
 					}
-					// ajax
-					this.addDevice();
+
 				},
 				methods: {
-					addDevice: function(){
-						dal.device.add(this.devid, function(err, data){
-							if(err){
+					// 通过声波ID进行验证
+					addDeviceByVoice: function() {
+						var setid = this.setid;
+						var list;
+						(function _() {
+							list = this._getLanDevHostList();
+							alert(JSON.stringify(list));
+							if(list.some(function(item) {
+									return item.setid === setid;
+								})) {
+								this.over("设备添加成功", true);
+							} else {
+								setTimeout(_.bind(this), 5000);
+							}
+						}).call(this);
+					},
+					// 获取内网主机列表
+					_getLanDevHostList: function() {
+						var rs = P.GetLanDevHostList();
+						return JSON.parse(rs).devlist || [];
+					},
+
+					// 通过设备ID进行添加 且 验证
+					addDeviceByHostLine: function() {
+						dal.device.add(this.devid, function(err, data) {
+							if(err) {
 								return this.over(err.message || "连接失败，请重试");
 							}
 							// 判断是否需要配置WIFI
-							if(this.wifiname && this.wifipwd){
+							if(this.wifiname && this.wifipwd) {
 								this.nativeSetWIFI(this.wifiname, this.wifipwd);
-							}else{
+							} else {
 								return this.over("设备添加成功", true);
 							}
 						}.bind(this));
 					},
 
-					startTimer: function(){
+					startTimer: function() {
 						var that = this;
-						(function _(){
+						(function _() {
 							that.t--;
-							if(that.t <= 0){
+							if(that.t <= 0) {
 								that.over("连接失败，请重试");
 							}
 							that.timer = setTimeout(_, 1000);
 						}());
 					},
-					
-					
-					
-					over: function(msg, close){
-						if(this.timer >= 0){
+					onNext: function(){
+						this.$view.close();
+					},
+					over: function(msg, close) {
+						if(this.timer >= 0) {
 							window.clearTimeout(this.timer);
 							this.timer = -1;
 						}
 						mui.toast(msg);
-						if(close){
+						if(close) {
 							return this.$view.close();
 						}
 						this.$view.back();
 					},
 					// 配置WIFI
-					nativeSetWIFI: function(name, pwd){
+					nativeSetWIFI: function(name, pwd) {
 						var that = this;
 						// TODO 参数设置通道
-						setTimeout(function(){
+						setTimeout(function() {
 							that.over("设备添加成功", true);
-						},5000);
+						}, 5000);
 					},
 				}
 			});
