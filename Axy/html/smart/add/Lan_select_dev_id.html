@@ -65,7 +65,6 @@
 				border-bottom: 1px solid #2BB8AA;
 				color: #2BB8AA;
 			}
-			
 		</style>
 	</head>
 
@@ -92,8 +91,8 @@
 					</template>
 				</ul>
 			</div>
-			<div class="help app-font-size-24">配置WIFI</div>
-			<div class="foot app-font-size-34" @tap="mui.openWindow('','')">下一步</div>
+			<div class="help app-font-size-24" @tap="setWifi()">配置WIFI</div>
+			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -106,6 +105,9 @@
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -116,31 +118,55 @@
 		<script type="text/javascript">
 			mui.init();
 
+			var P = plug.H5NativeBridge;
+
 			new Vue({
 				el: '#warpper',
 				data: function() {
 					return {
 						devActive: 0,
-						devs: [{
-							name: "一楼展厅AX-203",
-							isSelect: true,
-						}, {
-							name: "一楼展厅AX-203",
-							isSelect: false,
-						}, {
-							name: "一楼展厅AX-203",
-							isSelect: false,
-						}],
+						devs: [],
+						wifiname: "",
+						wifipwd: "",
 					};
 				},
+				computed: {
+					indexDev: function() {
+						return this.devs[this.devActive];
+					}
+				},
+
 				mounted: function() {
 
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					this.getLanDevHostList();
+				},
 				methods: {
-					onSelectTap:function(i){
+					onSelectTap: function(i) {
 						this.devActive = i;
-					}
+					},
+					onNext: function() {
+						// this is action connet device
+						// get indexDev id
+						var devid = this.indexDev.devid;
+						this.$view.loadURL('Lan_connect_camera.html?devid=' + devid + "&wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd);
+					},
+					// 内网主机列表
+					getLanDevHostList: function() {
+						var rs = P.GetLanDevHostList();
+						if(rs) {
+							this.devs = JSON.parse(rs).devlist || [];
+						}
+
+					},
+					// 配置WIFI
+					setWifi: function() {
+						app.page.openForResultBy('connect_wifi.html', 'setwifi', function(data) {
+							this.wifiname = data.name;
+							this.wifipwd = data.pwd;
+						}.bind(this));
+					},
 				}
 			});
 		</script>

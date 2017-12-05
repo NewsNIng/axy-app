@@ -5,14 +5,16 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<script type="text/javascript" src="../../js/common/flexible.js"></script>
-
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
-
 		<link rel="stylesheet" href="../../css/app/app.css" />
 		<style type="text/css">
-			header img {
-				width: 0.48rem;
+			header {
+				padding-left: 2rem !important;
+				padding-right: 2rem !important;
+			}
+			
+			header a img {
+				width: 2rem;
 			}
 			
 			.mui-bar-nav~.mui-content {
@@ -35,10 +37,11 @@
 			
 			.model_type {
 				background-color: white;
+				padding: 1rem 0;
 			}
 			
 			.model_type>div {
-				padding: 0.32rem 0;
+				padding: 1rem 0;
 				display: inline-block;
 				/*//修改20%-->25%*/
 				width: 25%;
@@ -46,7 +49,7 @@
 			}
 			
 			.model_type>div>img {
-				width: 1.04rem;
+				width: 50%;
 			}
 			/*3轮播head阴影*/
 			/*.mui-slider{
@@ -65,68 +68,17 @@
 			}*/
 			/*3end*/
 			
-			.dev_menu>div {
-				padding: 0.2rem 0;
-				vertical-align: middle;
-				display: inline-block;
-			}
-			
-			.dev_menu .mui-icon img {
-				width: 0.506666rem;
-			}
-			
-			.dev_menu .mui-icon>* {
-				vertical-align: middle;
-			}
-			
-			.dev_menu .d1 {
-				width: 50%;
-			}
-			
-			.dev_menu .d2 {
-				width: 20%;
-			}
-			
-			.dev_menu .d3 {
-				width: 24%;
-				text-align: right;
-			}
-			 
-			.card {
-				background-color: white !important;
-				margin-top: 0.266666rem;
-			}
-			
-			.card_head {
-				padding: 0 0.346666rem;
-				color: #646464;
-			}
-			
-			.card_head>* {
-				height: 0.986666rem;
-				line-height: 0.986666rem;
-			}
-			
-			.card_head .mui-icon>* {
-				line-height: 0.986666rem;
-				vertical-align: middle;
-				color: #A8A8A9;
-			}
-			
-			.card_head img {
-				width: .17rem;
-			}
-			
 			.model_type>div>span {
 				display: block;
-				color: #2E2E2E;
-				margin-top: 0.266666rem;
+				color: #2e2e2e;
+				margin-top: 5px;
+				font-size: 1.4rem;
 			}
 			/*设备影像*/
 			
 			.device_show {
-				margin-top: 0.266666rem;
-				padding: 0.4rem 0.28rem 0 0.28rem;
+				margin-top: 12px;
+				padding: 20px 16px 0 16px;
 				background: white;
 				position: relative;
 			}
@@ -150,18 +102,67 @@
 				border-radius: 2px;
 			}
 			/*设备名称及菜单====start====*/
+			
+			.dev_info,
+			.dev_operating,
+			.dev_operating>div {
+				display: inline-block;
+				width: 49%;
+				font-size: 12px;
+			}
+			
+			.dev_info {
+				color: #2BB8AA;
+			}
+			
+			.dev_operating {
+				float: right;
+				color: #696969;
+			}
+			
+			.dev_setting {
+				text-align: right;
+			}
+			
+			.dev_info img,
+			.dev_operating img {
+				height: 20px;
+				width: 20px;
+				vertical-align: middle;
+			}
+			
+			.dev_info,
+			.dev_operating {
+				margin: 6px 0 16px 0;
+			}
 			/*设备名称及菜单====end====*/
 			/*猜你喜欢====start====*/
 			
 			.user_like {
 				background-color: white;
-				margin-top: 0.266666rem;
-				padding: 0.346666rem;
+				margin-top: 12px;
+				padding: 16px;
+			}
+			
+			.like_title {
+				font-size: 14px;
+				color: #646464;
+			}
+			
+			.see_more {
+				float: right;
+				font-size: 12px;
+				color: #a8a8a9;
+			}
+			
+			.see_more>img {
+				width: 6px;
+				margin-left: 2px;
 			}
 			
 			.like_image {
-				padding: 0 0.266666rem;
 				width: 100%;
+				margin-top: 10px;
 				overflow: hidden;
 				/*height: 230px;*/
 			}
@@ -206,16 +207,15 @@
 			}
 			
 			.shop_image {
-				padding: 0 0.266666rem 0.32rem 0;
+				margin-top: 10px;
 				overflow-x: scroll;
-				overflow-y: hidden;
 				white-space: nowrap;
 			}
 			
 			.shop_image>div {
 				display: inline-block;
 				border: 1px solid #ccc;
-				box-sizing: content-box;
+				box-sizing: border-box;
 				height: 0;
 				margin: 0 1%;
 				width: 31.33%;
@@ -226,8 +226,6 @@
 			}
 			/*附近的店====end====*/
 		</style>
-
-		<link rel="stylesheet" href="new_file.css" />
 	</head>
 
 	<body>
@@ -241,7 +239,7 @@
 				<a class="mui-icon mui-pull-right">
 					<img src="../../image/home/plus.png" />
 				</a>
-				<a class="mui-icon mui-pull-right" style="margin-right: 0.133333rem;" @tap="onSearchTap()">
+				<a class="mui-icon mui-pull-right" style="margin-right: .5rem;" @tap="onSearchTap()">
 					<img src="../../image/home/search.png" />
 				</a>
 			</header>
@@ -280,7 +278,7 @@
 					<template v-for="o,i in modelTypes">
 						<div @tap="onModelTap(o, i)">
 							<img :src="o.src" />
-							<span class="app-font-size-24">{{o.name}}</span>
+							<span>{{o.name}}</span>
 						</div>
 					</template>
 
@@ -289,46 +287,33 @@
 				<div class="device_show">
 					<img @tap="openCamListWindow()" src="http://placehold.it/760x350" />
 					<div class="dev_status">{{dev.online === 1 ? '在线': '离线'}}</div>
-					<div class="dev_menu">
-						<div class="mui-icon d1 mui-ellipsis">
-							<img src="../../image/home/dev_camera.png" />
-							<span class="app-font-size-24 app-color-main">{{dev.devid}}</span>
+					<div>
+						<div class="dev_info">
+							<img src="../../image/home/dev_camera.png" /> {{dev.devid}}
 						</div>
-
-						<div class="mui-icon d2">
-							<img src="../../image/home/dev_share.png" />
-							<span class="app-font-size-24" style="color: #696969;">分享</span>
+						<div class="dev_operating">
+							<div class="dev_share">
+								<img src="../../image/home/dev_share.png" /> 分享
+							</div>
+							<div class="dev_setting">
+								<img src="../../image/home/dev_setting.png" /> 设置
+							</div>
 						</div>
-						<div class="mui-icon d3">
-							<img src="../../image/home/dev_setting.png" />
-							<span class="app-font-size-24" style="color: #696969;">设置</span>
-						</div>
-
 					</div>
 				</div>
 
-				<!--v-if="like.length"-->
-				<div class="card">
-					<div class="card_head">
-						<span class="app-font-size-28">猜你喜欢</span>
-						<div @tap="onStoreMore()" class="app-font-size-24 mui-pull-right">
-
-							<span class="mui-icon">
-								<span class="app-font-size-24">查看更多</span>
-							<img src="../../image/home/see_more.png" />
-							</span>
-						</div>
-					</div>
-
+				<div class="user_like" v-if="like.length">
+					<label class="like_title">猜你喜欢</label>
+					<div @tap="onStoreMore()" class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
 					<div class="like_image">
-
-						<template v-for="o,i in like">
+						
+						<template v-for="o,i in like"> 
 							<div :style="{backgroundImage: 'url('+o.img+')'}" @tap="onLikeItemTap(o)">
-
-								<span class="app-font-size-24">{{o.title}}</span>
+								
+								<span>{{o.title}}</span>
 							</div>
 						</template>
-
+						
 						<!--<div>
 							<img src="../../image/home/like_a.png" />
 							<span>舌尖上的诱惑</span>
@@ -349,20 +334,12 @@
 
 					</div>
 				</div>
-				<div class="card" style="margin-bottom: 0.266666rem;">
-					<div class="card_head">
-						<span class="app-font-size-28">附近的店</span>
-						<div @tap="onNearbyMore()" class="app-font-size-24 mui-pull-right">
-
-							<span class="mui-icon">
-								<span class="app-font-size-24">查看更多</span>
-							<img src="../../image/home/see_more.png" />
-							</span>
-						</div>
-					</div>
+				<div class="near_shop">
+					<label class="near_title">附近的店</label>
+					<div @tap="onNearbyMore()"  class="see_more">查看更多 <img src="../../image/home/see_more.png" /></div>
 					<div class="shop_image">
 						<template v-for="o,i in nearShops">
-							<div @tap="onNearItemTap(o)" class="shop_a" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
+							<div  @tap="onNearItemTap(o)" class="shop_a" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
 						</template>
 
 					</div>
@@ -386,10 +363,10 @@
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 		<script type="text/javascript" src="../../js/dal/home.js"></script>
 		<script type="text/javascript" src="../../js/dal/device.js"></script>
-		<script type="text/javascript" src="../../js/dal/store.js"></script>
+		<script type="text/javascript" src="../../js/dal/store.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
@@ -399,7 +376,8 @@
 
 		<script type="text/javascript">
 			var advert_cache = new ni.Cache('advert_cache', []);
-
+			
+			
 			var B = new ni.Broadcast();
 
 			mui.init({
@@ -411,7 +389,7 @@
 				el: '#approom',
 				data: function() {
 					return {
-
+						
 						imgList: advert_cache.data,
 						modelTypes: [{
 								name: "回家模式",
@@ -442,11 +420,11 @@
 							"online": 1
 						},
 						like: [
-
+							
 						],
-
+						
 						nearShops: [],
-
+						
 						longitude: 0,
 						latitude: 0,
 						city: '深圳',
@@ -464,7 +442,7 @@
 					// 获取轮播广告图
 					this.getAdvert();
 					//如果用户登录了 则  获取第一个设备
-					if(app.user.has()) {
+					if(app.user.has()) { 
 						this.getDeviceOne();
 					}
 					// 同时监听登录成功事件
@@ -472,10 +450,11 @@
 						// 更新获取设备
 						this.getDeviceOne();
 					}.bind(this));
-
+					
 					// 获取喜欢列表
 					this.getThemeList();
-
+					
+					
 					// 动态沉浸式处理
 					//					var css = document.createElement('style');
 					//					css.innerText = ".mui-slider:before{height:"+ (immersed) +"px;}";
@@ -494,17 +473,20 @@
 						scrollIndicator: "none", // 隐藏滚动条
 						render: "always", // 始终进行渲染
 					});
-
+					
 					// 获取定位信息
-					this.getCurrentPosition().then(function() {
+					this.getCurrentPosition().then(function(){
 						// 附近的店
 						this.getNearShops();
 					}.bind(this));
+					
+					
+
 
 				},
 				methods: {
-					getCurrentPosition: function() {
-						return new Promise(function(re, rj) {
+					getCurrentPosition: function(){
+						return new Promise(function(re, rj){
 							plus.geolocation.getCurrentPosition(function(p) {
 								this.longitude = p.coords.longitude;
 								this.latitude = p.coords.latitude;
@@ -514,8 +496,8 @@
 							}.bind(this), rj);
 						}.bind(this));
 					},
-					onSearchTap: function() {
-						mui.openWindow('../search/index.html', 'search', {
+					onSearchTap: function(){
+						mui.openWindow('../search/index.html', 'search',{
 							show: {
 								aniShow: 'slide-in-bottom'
 							}
@@ -551,7 +533,7 @@
 					onAdvertTap: function(o) {
 						// 打开内部浏览器
 						app.page.openBrowser({
-							url: o.adlink
+							url: o.adlink 
 						});
 					},
 					// 获取一个设备
@@ -566,31 +548,31 @@
 					},
 					// 获取喜欢列表
 					getThemeList: function() {
-						dal.home.theme.get(function(err, data) {
+						dal.home.theme.get(function(err, data){
 							if(err) {
-								return
+								return 
 							}
 							this.like = data;
 						}.bind(this));
 					},
 					// 猜你喜欢点击
-					onLikeItemTap: function(o) {
+					onLikeItemTap: function(o){
 						// 打开内部浏览器
 						app.page.openBrowser({
-							url: o.link
+							url: o.link 
 						});
 					},
 					// 附近的店
-					getNearShops: function() {
-						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
-							if(err) {
+					getNearShops: function(){
+						dal.store.list(this.longitude, this.latitude, this.city, function(err, data){
+							if(err){
 								return;
 							}
 							this.nearShops = data;
 						}.bind(this), 1);
 					},
 					// 附近的店点击
-					onNearItemTap: function(o) {
+					onNearItemTap: function(o){
 						// 店铺
 						mui.openWindow('../nearby/business/store_details.html', 'store_details', {
 							extras: {
@@ -601,10 +583,11 @@
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
 					},
-
+					
+					
 					// 查看猜你喜欢更多
-					onStoreMore: function() {
-
+					onStoreMore: function(){
+						
 						B.emit('tabar', {
 							mindex: 2,
 							nindex: 1
@@ -612,9 +595,9 @@
 							views: [this.$view.parent()],
 						});
 					},
-
+					
 					// 查看附近的店更多
-					onNearbyMore: function() {
+					onNearbyMore: function(){
 						// TODO 主页名称
 						B.emit('tabar', {
 							mindex: 2,

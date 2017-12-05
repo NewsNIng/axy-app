@@ -88,7 +88,7 @@
 				<div class="dev_icon app-font-size-30">
 					<div class="dev_text">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
 				</div>
-				<div class="time app-font-size-24">100s</div>
+				<div class="time app-font-size-24" v-text="t+'s'"></div>
 				
 			
 				
@@ -104,6 +104,9 @@
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+
 		<!--请求相关-->
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
@@ -122,15 +125,84 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						
+						t: 100,
+						timer: -1,
+						devid: "",
+						wifiname: "",
+						wifipwd: "",
 					};
 				},
 				mounted: function() {
+					// get prev url params
+					function GetQueryString(name){
+						 var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+						 var r = window.location.search.substr(1).match(reg);
+						 if(r!=null)return  unescape(r[2]); return null;
+					}
 
-				},
-				plusReady: function() {},
-				methods: {
+					// get devid
+					this.devid = GetQueryString("devid");
+					// get wifiname & wifipwd
+					this.wifiname = GetQueryString("wifiname");
+					this.wifipwd = GetQueryString("wifipwd");
 					
+					// start timer
+					this.startTimer();
+				},
+				plusReady: function() {
+					if(!this.devid){
+						return this.autoOver();
+					}
+					// ajax
+					this.addDevice();
+				},
+				methods: {
+					addDevice: function(){
+						dal.device.add(this.devid, function(err, data){
+							if(err){
+								return this.over(err.message || "连接失败，请重试");
+							}
+							// 判断是否需要配置WIFI
+							if(this.wifiname && this.wifipwd){
+								this.nativeSetWIFI(this.wifiname, this.wifipwd);
+							}else{
+								return this.over("设备添加成功", true);
+							}
+						}.bind(this));
+					},
+
+					startTimer: function(){
+						var that = this;
+						(function _(){
+							that.t--;
+							if(that.t <= 0){
+								that.over("连接失败，请重试");
+							}
+							that.timer = setTimeout(_, 1000);
+						}());
+					},
+					
+					
+					
+					over: function(msg, close){
+						if(this.timer >= 0){
+							window.clearTimeout(this.timer);
+							this.timer = -1;
+						}
+						mui.toast(msg);
+						if(close){
+							return this.$view.close();
+						}
+						this.$view.back();
+					},
+					// 配置WIFI
+					nativeSetWIFI: function(name, pwd){
+						var that = this;
+						// TODO 参数设置通道
+						setTimeout(function(){
+							that.over("设备添加成功", true);
+						},5000);
+					},
 				}
 			});
 		</script>

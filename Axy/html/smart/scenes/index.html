@@ -88,12 +88,12 @@
 			<div class="mui-content">
 				<template v-for="o,i in scenes">
 
-					<div class="app-font-size-30" @tap="onClickTap(i)">
+					<div class="app-font-size-30" @tap="onClickTap(o, i)">
 						<span v-if="isEdit" class="del_icon" @tap.stop="onDelTap(i)"><img src="../../../image/smart/scenes/delete_icon.png"/></span>
 						<img :src="o.state?o.img_on:o.img_off" />{{o.title}}</div>
 				</template>
 			</div>
-			<div class="foot app-font-size-34" @tap="mui.openWindow('create_scenes.html','create_scenes')">添加新场景</div>
+			<div class="foot app-font-size-34" @tap="onNewTap()">添加新场景</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -108,7 +108,7 @@
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -146,11 +146,30 @@
 				},
 				plusReady: function() {},
 				methods: {
-					onClickTap: function(i) {
+					onNewTap: function() {
+						// 设定场景名称
+						app.page.getInput(function(data) {
+							data = data.content.trim();
+							if(!data || data.length === 0 || data.length > 12) {
+								return mui.toast('场景名称不能为空或者大于12个字符');
+							}
+							mui.openWindow('edit_scenes.html', 'edit_scenes',{
+								extras: {
+									name: data
+								}
+							});
+						}, {
+							title: "场景名称",
+							tips: "请输入名称..."
+						});
+					},
+
+					onClickTap: function(o, i) {
 						if(this.isEdit) {
 							mui.openWindow('edit_scenes.html', 'edit_scenes');
 						} else {
-							this.scenes[i].state = !this.scenes[i].state;
+							o.state = !o.state;
+							mui.toast(o.title + "已" + (o.state ? "开启" : "关闭"));
 						}
 					},
 					onDelTap: function(i) {
