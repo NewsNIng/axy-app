@@ -21,7 +21,7 @@
 				background-color: #FFFFFF;
 				width: 100%;
 			}
-
+			
 			.foot {
 				position: fixed;
 				width: 100%;
@@ -62,7 +62,6 @@
 				border-bottom: 1px solid #2BB8AA;
 				color: #2BB8AA;
 			}
-			
 		</style>
 	</head>
 
@@ -78,12 +77,10 @@
 				<div class="dev_icon app-font-size-30">
 					<div class="dev_text">检查摄像机是否橙灯闪烁<br />若是，则点击“下一步”</div>
 				</div>
-				
-				
-				
+
 			</div>
 			<div class="help app-font-size-24">橙灯未闪烁，戳这里查看</div>
-			<div class="foot app-font-size-34" @tap="mui.openWindow('','')">下一步</div>
+			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -110,15 +107,28 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						
+						wifiname: "",
+						wifipwd: "",
 					};
 				},
 				mounted: function() {
-
+					// get prev url params
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					// get wifiname & wifipwd
+					this.wifiname = GetQueryString("wifiname");
+					this.wifipwd = GetQueryString("wifipwd");
 				},
 				plusReady: function() {},
 				methods: {
-					
+					onNext: function(){
+						var url = "sonic_connect_camera2.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd;
+						this.$view.loadURL(url, 'voice2');
+					}
 				}
 			});
 		</script>

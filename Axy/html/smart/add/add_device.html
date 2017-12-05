@@ -259,10 +259,7 @@
 					
 					// 主机
 					onItemTap1: function(o){
-						if(!this.isWifi){
-							return mui.toast('请连接WIFI');
-						}
-						mui.openWindow('Lan_add_camera.html');
+						this._voiceDevLine();
 					},
 					// 控制配件
 					onItemTap2: function(o){
@@ -273,7 +270,29 @@
 						
 					},
 					
-					_scanCode: function(){
+					
+					
+					// 声波连接设备
+					_voiceDevLine: function(){
+						if(!this.isWifi){
+							return mui.toast('请连接WIFI');
+						}
+						app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data){
+							var url = "sonic_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
+							mui.openWindow(url, 'voice1');
+						});
+					},
+					
+					// 内网连接设备
+					_hostNetLine: function(){
+						if(!this.isWifi){
+							return mui.toast('请连接WIFI');
+						}
+						mui.openWindow('Lan_add_camera.html');
+					},
+					
+					// 扫码获取设备ID
+					_scanCodeLine: function(){
 						app.page.openForResultBy('scan.html', 'scan', function(data){
 							// 获取扫码结果
 							console.log(data.result);

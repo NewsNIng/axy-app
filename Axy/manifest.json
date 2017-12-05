@@ -595,7 +595,12 @@
 					"html/smart/add/Lan_add_camera.html",
 					"html/smart/add/Lan_connect_dev.html",
 					"html/smart/add/Lan_select_dev_id.html",
-					"html/smart/add/Lan_connect_camera.html"
+					"html/smart/add/Lan_connect_camera.html",
+					"html/smart/add/connect_wifi.html",
+					"html/smart/add/sonic_connect_camera1.html",
+					"html/smart/add/sonic_connect_camera2.html",
+					"html/smart/add/sonic_connect_dev1.html",
+					"html/smart/add/sonic_connect_dev2.html"
 				],
 				"priority": 0
 			},
@@ -659,6 +664,22 @@
 				"resources": [],
 				"refer": [
 					"html/smart/add/Lan_add_camera.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/sonic_connect_dev2.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/sonic_connect_dev1.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/sonic_connect_dev1.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/sonic_connect_dev2.html",
+					"html/smart/add/sonic_connect_camera2.html",
+					"html/smart/add/sonic_connect_camera1.html"
 				],
 				"priority": 0
 			}

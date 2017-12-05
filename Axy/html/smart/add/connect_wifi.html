@@ -97,7 +97,7 @@
 				</div>
 				<div class="next app-font-size-36" @tap='onNextTap()'>下一步</div>
 				
-				
+				<h5 style="margin: 1rem 0.906666rem;">温馨提醒：连入WIFI的路由器频段不支持5.0 G/hz</h5>
 				
 			</div>
 		</div>
@@ -133,7 +133,7 @@
 						wifinameCache: null,
 						wifipwdCache: null,
 						
-						isRemember: false, 
+						isRemember: true, 
 					};
 				},
 				mounted: function() {
@@ -148,6 +148,9 @@
 					if(!this.wifinameCache.data){
 						// TODO 原生端 获取 当前 WIFI 名称
 					}
+					
+					this.wifiname = 'TP-LINK_1BE7';
+					this.wifipwd = 'huihai20172018';
 				},
 				methods: {
 					onSelectTap:function(i){
