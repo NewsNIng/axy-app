@@ -553,10 +553,7 @@
 					},
 
 					openCamListWindow: function() {
-						//var rs = plus.plugintest.openCamListWindow(1,2,3);
-						//console.log(rs);
-						var id = this.dev.id || "AX-DSW-2012102400059";
-						plug.H5NativeBridge.StartDevicePlay(id);
+						plug.H5NativeBridge.StartDevicePlay(this.dev.devid);
 					},
 
 					// 获取轮播广告图

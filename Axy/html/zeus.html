@@ -111,21 +111,38 @@
 						});
 				})
 				// 消息中心事件
-				.subscribe(function(data) {
+				.subscribe(function(rs) {
+					try{
+						rs = JSON.parse(rs);	
+						if(rs.code !== 0){
+							throw Error(JSON.stringify(rs));
+							// 错误
+							return;
+						}
+						// 执行相关动作
+						NotifyAction[rs['funciton']](rs.data);
+					}catch(e){
+						//TODO handle the exception
+						alert(e.message);
+					}
 					
-//					alert("zeus.html : " + JSON.stringify(data));
-					
-//					var functionName = data && data.data && data.
 					
 				});
 				
 				
-				var functionAction = {
-					
-					// 设备运行状态通知 
+				
+				// 原生通知前端执行动作
+				
+				var NotifyAction = {
+					// 设备状态更新 
 					RunstateNotify: function(data){
 						
-					}
+					},
+					
+					// 设备信息更新
+					DeviceInfoNotify: function(data){
+						//alert(JSON.stringify(data));
+					},
 				}
 		</script>
 	</body>
