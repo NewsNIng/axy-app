@@ -112,8 +112,21 @@
 				})
 				// 消息中心事件
 				.subscribe(function(data) {
-					console.log("zeus.html : " + JSON.stringify(data));
+					
+					alert("zeus.html : " + JSON.stringify(data));
+					
+					var functionName = data && data.data && data.
+					
 				});
+				
+				
+				var functionAction = {
+					
+					// 设备运行状态通知 
+					RunstateNotify: function(data){
+						
+					}
+				}
 		</script>
 	</body>
 
