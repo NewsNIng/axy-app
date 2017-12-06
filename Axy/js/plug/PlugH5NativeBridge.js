@@ -146,9 +146,10 @@
 	 * @param {Number} deviceid 设备ID
 	 * @param {Number} way 播放通道，如果是单通道默认为0
 	 */
-	pgn.StartDevicePlay = function(deviceid, way) {
+	pgn.StartDevicePlay = function(deviceid, way, way1) {
 		typeof way === 'undefined' && (way = 0);
-		return pg.syncExec(N, 'StartDevicePlay', [deviceid, way]);
+		typeof way1 === 'undefined' && (way1 = 0);
+		return pg.syncExec(N, 'StartDevicePlay', [deviceid, way, way1]);
 	};
 
 	/**
