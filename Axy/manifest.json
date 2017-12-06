@@ -322,7 +322,8 @@
 				"refer": [
 					"html/search/index.html",
 					"html/public/browser.html",
-					"html/nearby/business/store_details.html"
+					"html/nearby/business/store_details.html",
+					"html/smart/devices/dev_my_list.html"
 				],
 				"priority": 0
 			},
@@ -634,7 +635,8 @@
 					"html/smart/scenes/index.html",
 					"html/common/login.html",
 					"html/smart/add/scan.html",
-					"html/smart/add/add_device.html"
+					"html/smart/add/add_device.html",
+					"html/smart/devices/dev_my_list.html"
 				],
 				"priority": 0
 			},
