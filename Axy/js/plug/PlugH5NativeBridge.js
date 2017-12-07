@@ -3,6 +3,12 @@
 	_plusFn = function() {
 		B = w.plus.bridge;
 	};
+	
+	if(w.plus) {
+		setTimeout(_plusFn);
+	} else {
+		document.addEventListener("plusready", _plusFn, true);
+	}
 
 	pg.fun2ok = function(fn) {
 		return typeof fn === 'function' ? function(args) {
@@ -48,11 +54,7 @@
 		return '<?xml version="1.0" encoding="utf-8"?>' + _jo2xml(_o);
 	}
 
-	if(w.plus) {
-		setTimeout(_plusFn);
-	} else {
-		document.addEventListener("plusready", _plusFn, true);
-	}
+	
 }(window, window.plug || (window.plug = {})));
 
 (function(w) {

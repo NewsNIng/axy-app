@@ -283,13 +283,16 @@
 					});
 
 					// 本地 所有设备的运行状态
-					var ALLR = new ni.Cache('AllDeviceRun', [], {
-						plus: true
-					});
+					//var ALLR = new ni.Cache('AllDeviceRun', [], {
+					//	plus: true
+					//});
 
 					devManager = new DevManager(ALLD);
-					runManager = new DevManager(ALLR);
-
+					//runManager = new DevManager(ALLR);
+					
+					this.devList = devManager.get();
+					
+					
 				},
 				methods: {
 					// 标签切换
