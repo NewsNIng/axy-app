@@ -684,6 +684,13 @@
 					"html/smart/add/sonic_connect_camera1.html"
 				],
 				"priority": 0
+			},
+			"html/smart/devices/dev_my_list.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/add_device.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

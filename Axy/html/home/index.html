@@ -138,20 +138,23 @@
 			}
 			/*设备预览图*/
 			
-			.device_show>img {
+			.device_show>.img {
 				width: 100%;
+				padding-top: 50%;
+				background-size: cover;
+				background-position: center;
 			}
 			/*设备状态*/
 			
 			.device_show .dev_status {
 				position: absolute;
 				background-color: #2bb8aa;
-				width: 42px;
-				height: 22px;
+				width: 0.76rem;
+				height: 0.4rem;
 				color: #f5fbfa;
-				right: 30px;
-				font-size: 11px;
-				top: 34px;
+				right: 0.626666rem;
+				top: 0.306666rem;
+				line-height: 0.4rem; 
 				text-align: center;
 				border-radius: 2px;
 			}
@@ -285,6 +288,7 @@
 				<div class="model_type">
 					<template v-for="o,i in modelTypes">
 						<div @tap="onModelTap(o, i)">
+							
 							<img :src="o.src" />
 							<span class="app-font-size-24">{{o.name}}</span>
 						</div>
@@ -305,8 +309,11 @@
 						</div>
 
 						<div class="device_show">
-							<img @tap="openCamListWindow()" src="http://placehold.it/760x350" />
-							<div class="dev_status">{{dev.online === 1 ? '在线': '离线'}}</div>
+							<div class="img" :style="{backgroundImage: 'url('+'http://placehold.it/760x350'+')'}" @tap="openCamListWindow()">
+
+								
+							</div>
+							<div class="dev_status app-font-size-22">{{dev.online === 1 ? '在线': '离线'}}</div>
 							<div class="dev_menu">
 								<div class="mui-icon d1">
 									<img src="../../image/home/dev_camera.png" />

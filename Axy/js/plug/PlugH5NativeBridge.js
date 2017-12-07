@@ -129,8 +129,8 @@
 	 * @param {Function} sfn 正确回调函数
 	 * @param {Function} ffn 失败回调函数
 	 */
-	pgn.InitNativeSysteam = function(username, serverurl, sfn, ffn) {
-		return pg.asyncExec(N, 'InitNativeSysteam', [username, serverurl], sfn, ffn);
+	pgn.InitNativeSysteam = function(username, password, serverurl, sfn, ffn) {
+		return pg.asyncExec(N, 'InitNativeSysteam', [username, password, serverurl], sfn, ffn);
 	};
 
 	/**
@@ -162,8 +162,8 @@
 	/**
 	 * 获取所有设备的信息
 	 */
-	pgn.GetAllDeviceInfoASync = function() {
-		return pg.syncExec(N, 'GetAllDeviceInfoASync', []);
+	pgn.GetAllDeviceInfoASync = function(sf, ff) {
+		return pg.asyncExec(N, 'GetAllDeviceInfoASync', [], sf, ff);
 	}
 
 	/**
