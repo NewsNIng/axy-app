@@ -244,9 +244,10 @@
 				<div class="menu-warp app-font-size-24 app-color-dark"></div>
 
 				<ul class="mui-table-view app-font-size-28">
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onDevNameTap()">
 						<a class="mui-navigate-right">
 							<span>摄像机名称</span>
+							<span class="mui-badge" v-text="devInfo.basicInfo.devName"></span>
 						</a>
 					</li>
 					<!--<li class="mui-table-view-cell">
@@ -259,7 +260,7 @@
 							</span>
 						</a>
 					</li>-->
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onInfoTap()">
 						<a class="mui-navigate-right">
 							<span>基本信息</span>
 						</a>
@@ -276,9 +277,14 @@
 							<span>摄像机日志</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell" @tap="onAutoArming()">
+					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
 							<span>自动布防计划</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>自动录像计划</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -335,7 +341,7 @@
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -354,12 +360,79 @@
 						index: -1, //弹框种类
 						//						mask: true, // 遮罩控制
 						//						index: 1, //弹框种类
+
+						devInfo: {
+							"alarmPlan": [{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								},
+								{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								}
+							],
+							"basicInfo": {
+								"appversion": "2017-09-28 09:36:04",
+								"devName": "104GN",
+								"devType": 4166,
+								"devid": "VH-104GN-2017061500043",
+								"hwversion": "2015-11-01 10:13:43"
+							},
+							"netInfo": {
+								"ip": "192.168.1.23",
+								"ssid": "aaa2.4",
+								"type": 0
+							},
+							"onvif": [{
+									"ch": 0,
+									"name": "第一个外部通道",
+									"online": 1
+								},
+								{
+									"ch": 1,
+									"name": "第二个外部通道",
+									"online": 1
+								}
+							],
+							"recordPlan": [{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								},
+								{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								}
+							],
+							"zones": [{
+									"ID": "81457896",
+									"bindV": 128,
+									"delay": 0,
+									"ptzSet": 0,
+									"zoneAction": "32775",
+									"zoneName": "红外幕帘1"
+								},
+								{
+									"ID": "81457897",
+									"bindV": 128,
+									"delay": 0,
+									"ptzSet": 0,
+									"zoneAction": "32775",
+									"zoneName": "红外幕帘1"
+								}
+							]
+						},
 					};
 				},
 				mounted: function() {
 
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					this.devInfo = this.$view.info;
+				},
 				methods: {
 					// 切换开关
 					toggleSwitch: function() {
@@ -382,7 +455,26 @@
 					onAutoArming: function() {
 						this.mask = true;
 						this.index = 1;
-					}
+					},
+					
+					// 摄像机名称点击
+					onDevNameTap: function(name){
+						var that = this;
+						app.page.getInput(function(data){
+							that.devInfo.basicInfo.devName = data.content;
+						}, {
+							title: "摄像机名称",
+							tips: that.devInfo.basicInfo.devName,
+						});
+					},
+					// 基本信息跳转
+					onInfoTap: function(){
+						mui.openWindow('camera_settings_info.html', 'camera_settings_info', {
+							extras: {
+								info: this.devInfo
+							}
+						});
+					},
 
 				}
 			});

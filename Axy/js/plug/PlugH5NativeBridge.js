@@ -327,4 +327,9 @@
 		return pg.syncExec(N, 'CheckDevWifiConnect', [random]);
 	}
 
+	
+	pgn.GetAllSmartDeviceState = function(sf, ff) {
+		return pg.asyncExec(N, 'GetAllSmartDeviceState', [], sf, ff);
+	};
+
 }(window));

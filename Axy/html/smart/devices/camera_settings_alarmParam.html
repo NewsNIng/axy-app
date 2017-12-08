@@ -3,16 +3,18 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>基本信息</title>
+		<title>告警参数</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
 		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
 		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
 		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
-
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
-		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+		<!--<link rel="stylesheet" href="../../../css/app/devices.css" />-->
 
 		<style type="text/css">
 			html,
@@ -21,21 +23,19 @@
 				background-color: #F4F8FB;
 			}
 			
-			ul {
+			.mui-content>ul {
 				margin-top: 0.266666rem !important;
 				margin-bottom: 0 !important;
 			}
-			
-			.mui-table-view-cell {
-				color: #777777 !important;
+			.mui-table-view:after,.mui-table-view:before {
+				height: 0;
 			}
-			
-			.mui-badge {
-				color: #232323 !important;
-			}
-			
 			.mui-table-view-cell:after {
-				left: 0;
+				background-color: #F2F2F3;
+			}
+			.mui-badge {
+				background-color: white;
+				color: #808080;
 			}
 		</style>
 	</head>
@@ -45,54 +45,27 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">基本信息</h1>
+				<h1 class="mui-title">告警参数</h1>
 			</header>
 
 			<div class="mui-content">
 				<div class="menu-warp app-font-size-24 app-color-dark"></div>
 
 				<ul class="mui-table-view app-font-size-28">
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>摄像机型号</span>
-							<span class="mui-badge" v-text="devInfo.cameraModel"></span>
+					<li class="mui-table-view-cell" @tap="onPickTap(0)">
+						<a class="mui-navigate-right">
+							<span>告警时间间隔</span>
+							<span class="mui-badge" v-text="intervalTimeText"></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>连接的WIFI</span>
-							<span class="mui-badge" v-text="devInfo.connectionWifi"></span>
+					<li class="mui-table-view-cell" @tap="onPickTap(1)">
+						<a class="mui-navigate-right">
+							<span>告警声音播放时间</span>
+							<span class="mui-badge" v-text="continuedTimeText"></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>WIFI信号强度</span>
-							<span class="mui-badge" v-text="devInfo.signalStrength"></span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>摄像机ID</span>
-							<span class="mui-badge" v-text="devInfo.cameraId"></span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>硬件版本</span>
-							<span class="mui-badge" v-text="devInfo.hardwareVersion"></span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>IP地址</span>
-							<span class="mui-badge" v-text="devInfo.ipAddress"></span>
-						</a>
-					</li>
-					<li style="background-color: #F4F8FB !important;"/>
 				</ul>
-
 			</div>
-
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -112,6 +85,9 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -119,32 +95,52 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						devInfo:{
-							cameraModel: "",
-							connectionWifi: "",
-							signalStrength: "",
-							cameraId: "",
-							hardwareVersion: "",
-							ipAddress: "",
-						},
+						index: -1, // 设置项下标
+						pick: null,
+						
+						intervalTime: 0,
+						continuedTime: 0,
+						
 					};
 				},
-				mounted: function() {
-
-				},
-				plusReady: function() {
-					this.devInfo.cameraModel = this.$view.info.basicInfo.devName;
-					this.devInfo.connectionWifi = this.$view.info.netInfo.ssid;
-					this.devInfo.signalStrength = "";
-					this.devInfo.cameraId = this.$view.info.basicInfo.devid;
-					this.devInfo.hardwareVersion = this.$view.info.basicInfo.hwversion;
-					this.devInfo.ipAddress = this.$view.info.netInfo.ip;
-				},
-				methods: {
-					// 切换开关
-					toggleSwitch: function() {
-						this.state = !this.state;
+				
+				computed: {
+					intervalTimeText: function(){
+						return this.intervalTime + 's';
+					},
+					continuedTimeText: function(){
+						return this.continuedTime + 's';
 					}
+				},
+				
+				mounted: function() {
+					this.pick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+					this.pick.setData(pick_data[1]);
+				},
+				plusReady: function() {},
+				methods: {
+					onPickTap: function(i) {
+						var that = this;
+						var p = 'intervalTime';
+						if(i === 1){
+							p = 'continuedTime';
+						}
+						
+						this.pick.pickers[0].setSelectedValue(that[p]);
+						
+						var fn = function(s) {
+							that[p] = s;
+						};
+
+						this.pick.show(function(items) {
+							fn(items[0].value);
+						}, function(items) {
+							
+						});
+					},
 				}
 			});
 		</script>
