@@ -80,13 +80,6 @@
 			</a>
 		</header>
 		<div class="mui-content">
-			<div class="conditions_item mui-input-row app-font-size-28">
-				<img class="conditions_icon" src="../../../image/smart/scenes/icon_Timing start@3x.png"/>
-				<label class="title">回店模式</label>
-				<div class="title mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isTimingSetting}" ref="switch1">
-					<div class="mui-switch-handle"></div>
-				</div>
-			</div>
 			<div class="conditions_item app-font-size-28">
 				<img class="conditions_icon" src="../../../image/smart/scenes/icon_Lock@3x.png" />
 				<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
@@ -119,7 +112,7 @@
 				el: '.mui-content',
 				data: function() {
 					return {
-						isTimingSetting: true,
+						
 					};
 				},
 				plusReady: function() {},

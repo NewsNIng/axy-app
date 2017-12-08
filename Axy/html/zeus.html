@@ -186,6 +186,7 @@
 								}
 								// 数据不为空时 向原生发送数据
 								if(data && data.length > 0) {
+									console.log(JSON.stringify(data));
 									D.data = data;
 									P.InitNativeDevList(JSON.stringify(data));
 								}
@@ -283,10 +284,11 @@
 			function appLoginFail(){
 				app.user.clear();
 				window.localStorage.setItem('_pwd_', '');
-				ALLD.clear();
-				ALLR.clear();
+				plus.storage.removeItem('dev_list');
+				plus.storage.removeItem('AllDeviceInfo');
+				plus.storage.removeItem('AllDeviceRun');
 				mui.toast("帐号存在异常，请重新登录");
-				app.user.get(function() {});
+				app.user.get(function() {}); 
 			}
 		</script>
 	</body>

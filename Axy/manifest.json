@@ -104,6 +104,9 @@
 		"Barcode": {}
 	},
 	"plus": {
+		"error":{
+			"url": "html/smart/devices/dev_error.html"
+		},
 		"statusbar": {
 			"immersed": true
 		},
@@ -317,7 +320,11 @@
 					"fonts/mui.ttf",
 					"js/lib/vue.min.js",
 					"js/lib/mui.min.js",
-					"js/lib/vue-ni.js"
+					"js/lib/vue-ni.js",
+					"js/dal/home.js",
+					"js/common/flexible.js",
+					"js/dal/store.js",
+					"js/app/app-page.js"
 				],
 				"refer": [
 					"html/search/index.html",
@@ -688,7 +695,9 @@
 			"html/smart/devices/dev_my_list.html": {
 				"resources": [],
 				"refer": [
-					"html/smart/add/add_device.html"
+					"html/smart/add/add_device.html",
+					"html/smart/devices/camera_settings.html",
+					"html/smart/devices/dev_17.html"
 				],
 				"priority": 0
 			}

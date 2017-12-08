@@ -7,10 +7,6 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
-		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
-		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
-		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
-
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
 
@@ -20,9 +16,147 @@
 			.mui-content {
 				background-color: #F4F8FB;
 			}
+			
 			ul {
 				margin-top: 0.266666rem !important;
 				margin-bottom: 0 !important;
+			}
+			
+			.com-dev-mask {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 98;
+			}
+			
+			.com-dev {
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				min-height: 30%;
+				z-index: 99;
+				/*				background-color: #FFFFFF;*/
+				background-color: #FBFCFD
+			}
+			
+			.pop_title {
+				color: #333333;
+				text-align: center;
+			}
+			
+			.pop_title {
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				border-bottom: 1px solid #E5E6E7;
+				background-color: white;
+			}
+			
+			.select {
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-around;
+				padding: 1.013333rem 0;
+			}
+			
+			.select>div {
+				text-align: center;
+				border-radius: 50%;
+				height: 2.613333rem;
+				width: 2.613333rem;
+				border: 1px solid #2BB8AA;
+				padding: 0.373333rem;
+			}
+			
+			.right {
+				border-color: #CDD2DE !important;
+			}
+			
+			.select>div>img {
+				height: 0.986666rem;
+			}
+			
+			.bottom_title {
+				text-align: center;
+				color: #B1B1B1;
+				margin-bottom: 0.853333rem;
+			}
+			
+			.cancel {
+				float: left;
+				padding-left: 0.346666rem;
+			}
+			
+			.ok {
+				float: right;
+				padding-right: 0.346666rem;
+			}
+			
+			.com-dev>ul {
+				margin-top: 0 !important;
+			}
+			
+			.com-dev>ul>.mui-table-view-cell:after {
+				left: 0;
+				background-color: #F2F2F3;
+			}
+			
+			.no_padding {
+				padding: 0 !important;
+			}
+			
+			.com-dev>ul>li {
+				height: 1.2rem;
+			}
+			/*.mui-switch-handle {
+				height: 18px !important;
+				width: 18px !important;
+			}
+			
+			.app-switch-main {
+				height: 20px;
+				width: 36px;
+			}*/
+			
+			.mui-btn {
+				width: 1.733333rem;
+				height: 0.72rem;
+				line-height: 0.1rem !important;
+				padding: 0;
+				border: none;
+				background-color: #E5E6E7;
+				border-radius: 3px;
+			}
+			
+			.mui-btn:active {
+				background-color: #06C1AE !important;
+			}
+			
+			.repeat1 {
+				padding: 0 15px;
+				height: 100%;
+			}
+			
+			.repeat1 .mui-btn {
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.repeat2 {
+				height: 100%;
+				padding: 0.266666rem 0 0 15px;
+			}
+			
+			.repeat2 .mui-btn {
+				margin-bottom: 0.213333rem;
+			}
+			
+			.li_repeat2 {
+				height: 2.186666rem !important;
 			}
 		</style>
 	</head>
@@ -34,6 +168,77 @@
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">设置</h1>
 			</header>
+
+			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
+				<slot></slot>
+				<div class="com-dev app-font-size-28" v-show="index === 0">
+					<div class="pop_title app-font-size-28">
+						矫正摄像机画面
+						<div class="cancel app-color-9f9fa0" @tap="onCancel()">取消</div>
+						<div class="ok app-color-main" @tap="onSave()">确定</div>
+					</div>
+					<div class="select">
+						<div class="left">
+							<img src="../../../image/home/dev_camera.png" /><br />正放
+						</div>
+						<div class="right">
+							<img src="../../../image/home/dev_camera.png" style="transform:rotate(180deg);-webkit-transform:rotate(180deg);" /><br />倒放
+						</div>
+					</div>
+					<div class="bottom_title app-font-size-26">若发现您的摄像机画面是倒立的,请选择更换位置。</div>
+				</div>
+				<div class="com-dev app-font-size-28" v-show="index === 1">
+					<div class="pop_title app-font-size-28">
+						自动布防计划
+						<div class="cancel app-color-9f9fa0" @tap="onCancel()">取消</div>
+						<div class="ok app-color-main" @tap="onSave()">确定</div>
+					</div>
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<a class="">
+								<span>重复</span>
+								<span class="mui-badge">
+									<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isPwdProtection}" ref="pwd_protection">
+										<div class="mui-switch-handle"></div>
+									</div>
+								</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell no_padding">
+							<div class="repeat1">
+								<button type="button" class="mui-btn app-font-size-26">每天</button>
+								<button type="button" class="mui-btn app-font-size-26">周末</button>
+								<button type="button" class="mui-btn app-font-size-26">工作日</button>
+							</div>
+
+						</li>
+						<li class="mui-table-view-cell li_repeat2 no_padding">
+							<div class="repeat2">
+								<button type="button" class="mui-btn app-font-size-26">周一</button>
+								<button type="button" class="mui-btn app-font-size-26">周二</button>
+								<button type="button" class="mui-btn app-font-size-26">周三</button>
+								<button type="button" class="mui-btn app-font-size-26">周四</button>
+								<button type="button" class="mui-btn app-font-size-26">周五</button>
+								<button type="button" class="mui-btn app-font-size-26">周六</button>
+								<button type="button" class="mui-btn app-font-size-26">周日</button>
+							</div>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<span>开始时间</span>
+								<span class="mui-badge">00：15</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<span>结束时间</span>
+								<span class="mui-badge">23：15</span>
+							</a>
+						</li>
+
+					</ul>
+				</div>
+			</div>
 
 			<div class="mui-content">
 				<div class="menu-warp app-font-size-24 app-color-dark"></div>
@@ -59,7 +264,7 @@
 							<span>基本信息</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onCalibration()">
 						<a class="mui-navigate-right">
 							<span>摄像机校准</span>
 						</a>
@@ -71,7 +276,7 @@
 							<span>摄像机日志</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onAutoArming()">
 						<a class="mui-navigate-right">
 							<span>自动布防计划</span>
 						</a>
@@ -145,6 +350,10 @@
 				data: function() {
 					return {
 						isPwdProtection: true, // 是否开启密码保护
+						mask: false, // 遮罩控制
+						index: -1, //弹框种类
+						//						mask: true, // 遮罩控制
+						//						index: 1, //弹框种类
 					};
 				},
 				mounted: function() {
@@ -155,7 +364,26 @@
 					// 切换开关
 					toggleSwitch: function() {
 						this.state = !this.state;
+					},
+					// 取消
+					onCancel: function() {
+						this.mask = false;
+					},
+					// 保存
+					onSave: function() {
+						this.mask = false;
+					},
+					// 校准
+					onCalibration: function() {
+						this.mask = true;
+						this.index = 0;
+					},
+					// 自动布防
+					onAutoArming: function() {
+						this.mask = true;
+						this.index = 1;
 					}
+
 				}
 			});
 		</script>
