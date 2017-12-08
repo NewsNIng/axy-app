@@ -37,9 +37,10 @@ Vue.component('dev-btns', {
 
 // AX-360摄像机弹框设置
 Vue.component('dev-360', {
-	template: '<div v-show="show"  class="com-dev com-dev-360 app-font-size-30"><ul class="mui-table-view app-font-size-28"><li class="mui-table-view-cell pop_title">请选择摄像机状态</li><li class="mui-table-view-cell">布防</li><li class="mui-table-view-cell">撤防</li></ul><dev-btns @action="onAction"></dev-btns></div>',
+	template: '<div v-show="show"  class="com-dev com-dev-360 app-font-size-30"><ul class="mui-table-view app-font-size-28"><li class="mui-table-view-cell pop_title">请选择摄像机状态</li><li class="mui-table-view-cell" :class="{\'app-color-main\': isSelect === 0}" @tap="isSelect = 0">撤防</li><li class="mui-table-view-cell" :class="{\'app-color-main\': isSelect === 1}" @tap="isSelect = 1">布防</li></ul><dev-btns @action="onAction"></dev-btns></div>',
 	data: function() {
 		return {
+			isSelect: -1,
 			arr: [{
 					name: 'x1',
 					state: false
@@ -65,11 +66,20 @@ Vue.component('dev-360', {
 	props: {
 		show: {
 			default: false,
+		},
+		index: {
+			default: -1,
 		}
+	},
+	
+	mounted: function(){
+		this.isSelect = this.index;
 	},
 	methods: {
 		onAction: function(save) {
-			this.$emit(save ? 'save' : 'cancel');
+			this.$emit(save ? 'save' : 'cancel', {
+				isSelect: this.isSelect,
+			});
 		}
 	}
 });
@@ -80,9 +90,6 @@ Vue.component('dev-men', {
 			content: "默认值"
 		}
 	},
-	//	mounted: function() {
-	//
-	//	},
 	props: {
 		show: {
 			default: false
@@ -91,7 +98,8 @@ Vue.component('dev-men', {
 	methods: {
 		onAction: function(save) {
 			this.$emit(save ? 'save' : 'cancel', {
-				content: this.content
+				content: this.content,
+				isSelect: this.isSelect,
 			});
 
 		}

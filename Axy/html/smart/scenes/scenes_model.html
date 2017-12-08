@@ -110,6 +110,7 @@
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
 			<h1 class="mui-title">回店模式</h1>
 		</header>
+		<div class="foot app-font-size-34">添加动作</div>
 		<div class="mui-content">
 			<div class="mui-input-row app-font-size-28">
 				<label>回店模式</label>
@@ -138,12 +139,11 @@
 					</div>
 					<div class="mui-slider-handle">
 						<img class="item_icon" :src="o.img" />
-						<div class="title app-font-size-28" v-text="o.title"></div>
+						<div class="title app-font-size-28" v-text="o.text+' | '+o.title"></div>
 					</div>
 				</div>
 			</template>
 		</div>
-		<div class="foot app-font-size-34">添加动作</div>
 
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -176,14 +176,17 @@
 							img: "../../../image/smart/scenes/icon_Lock@3x.png",
 						},
 						complys: [{
-							title: "撤防 | 智能摄像机AX-360",
+							title: "智能摄像机AX-360",
 							img: "../../../image/smart/scenes/icon_Video camera@3x.png",
+							text: "撤防",
 						}, {
-							title: "开启 | 智能开关",
+							title: "智能开关",
 							img: "../../../image/smart/scenes/inon_Intelligent switch@3x.png",
+							text: "开启",
 						}, {
-							title: "开启 | 窗帘控制器",
+							title: "窗帘控制器",
 							img: "../../../image/smart/scenes/icon_Window curtains@3x.png",
+							text: "开启",
 						}, ],
 					};
 				},

@@ -210,7 +210,7 @@
 						try {
 							//查询通道
 							alert(1);
-							P.SmartDeviceQueryChannelAsyn("AX-403A-2016061400005", "81457856", "KEY_OPEN", "<OPT VAL=\"QUERY\"></OPT>", function(data) {
+							P.SmartDeviceQueryChannelAsyn("VS-360-2017082400138", "150006FF", "KG_OPT", "<OPT VAL=\"QUERY\"></OPT>", function(data) {
 								alert(JSON.stringify(data));
 							});
 						} catch(err) {
@@ -220,7 +220,7 @@
 					test15: function() {
 						try {
 							//控制通道
-							P.SmartDeviceControlChannelAsyn("AX-403A-2016061400005", "81457856", "KG_OPT", "<OPT VAL=\"OPEN\" ></OPT>", function(data) {
+							P.SmartDeviceControlChannelAsyn("VS-360-2017082400138", "150006FF", "KG_OPT", "<OPT VAL=\"CLOSE\" />", function(data) {
 								alert(JSON.stringify(data));
 							});
 						} catch(err) {
