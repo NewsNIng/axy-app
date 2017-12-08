@@ -42,8 +42,13 @@
 				// 设备状态更新 
 				RunstateNotify: function(data) {
 					try {
-						runManager.updateById(data, function(o, n) {
+						var isUpdate = runManager.updateById(data, function(o, n) {
 							return o.devid === n.devid;
+						});
+						// 转发通知
+						b.emit('RunstateNotify', {
+							info: data,
+							add: !isUpdate
 						});
 					} catch(e) {
 						//TODO handle the exception
@@ -55,8 +60,13 @@
 				// 设备信息更新
 				DeviceInfoNotify: function(data) {
 					try {
-						devManager.updateById(data, function(o, n) {
+						var isUpdate = devManager.updateById(data, function(o, n) {
 							return o.basicInfo && o.basicInfo.devid === n.basicInfo.devid;
+						});
+						// 转发通知
+						b.emit('DeviceInfoNotify', {
+							info: data,
+							add: !isUpdate
 						});
 					} catch(e) {
 						//TODO handle the exception
@@ -98,10 +108,7 @@
 							dal.user.login(u.account, getPwd(), function(err, data) {
 								if(err) {
 									// 清除用户信息
-									app.user.clear();
-									window.localStorage.setItem('_pwd_');
-									mui.toast("帐号存在异常，请重新登录");
-									app.user.get(function() {});
+									appLoginFail();
 									return;
 								}
 								// 验证成功
@@ -110,7 +117,7 @@
 						} else {
 							// 未登录状态 
 						}
-					});
+					}); 
 				})
 				// 获取顶级域名 初始化变量
 				.mergeMap(function(account) {
@@ -253,6 +260,9 @@
 				//}
 				setTimeout(function _() {
 					var rs = P.GetAllDeviceRunStateSync();
+					if(!rs){
+						return;
+					}
 					rs = JSON.parse(rs);
 					if(rs && rs.data && rs.data.runstate) {
 						runManager.set(rs.data.runstate);
@@ -265,7 +275,18 @@
 					} else {
 
 					}
-				}, t);
+				}, t); 
+			}
+			
+			
+			
+			function appLoginFail(){
+				app.user.clear();
+				window.localStorage.setItem('_pwd_', '');
+				ALLD.clear();
+				ALLR.clear();
+				mui.toast("帐号存在异常，请重新登录");
+				app.user.get(function() {});
 			}
 		</script>
 	</body>

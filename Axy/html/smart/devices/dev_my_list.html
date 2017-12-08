@@ -49,7 +49,26 @@
 				vertical-align: middle;
 			}
 			
-			.card .imgdiv {}
+			.nolog {
+				text-align: center;
+			}
+			
+			.nolog>.nolog_divimg {
+				background-image: url(../../../image/other/icon_Nolog@3x.png);
+				background-size: cover;
+				background-position: center;
+				width: 4rem;
+				height: 3.12rem;
+				margin: 2.986666rem auto 1.413333rem auto;
+			}
+			
+			.nolog .app-btn-main {
+				padding: 0;
+				width: 8.373333rem;
+				margin: 1.226666rem auto;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+			}
 		</style>
 	</head>
 
@@ -67,40 +86,46 @@
 			</header>
 			<div class="mui-content">
 
-				<div class="app-font-size-28 a0" v-show="active === 0">
-					<div class="card" v-for="o,i in devList">
-						<!--<div class="imgdiv" :style="{backgroundImage: 'url('+'http://placehold.it/760x350'+')'}"></div>-->
+				<template v-if="devList.length">
+
+					<div class="app-font-size-28 a0" v-show="active === 0">
+						<div class="card" v-for="o,i in devList">
+							<div class="imgdiv" :style="{backgroundImage: 'url('+'sssss'+')'}"></div>
+						</div>
 					</div>
-
-				</div>
-
-				<div v-show="active === 1">
-
-					<ul class="mui-table-view app-font-size-28 a1" v-for="o,i in zones" @tap="onZoneTap(o)">
-						<li class="mui-table-view-cell">
-							<a>
-								<span class="left app-font-size-28 app-color-333333">
+					<div v-show="active === 1">
+						<ul class="mui-table-view app-font-size-28 a1" v-for="o,i in zones" @tap="onZoneTap(o)">
+							<li class="mui-table-view-cell">
+								<a>
+									<span class="left app-font-size-28 app-color-333333">
 								<img src="../../../image/smart/scenes/icon_Timing start@3x.png"/>
 								<span>{{o.zoneName}}</span>
-								</span>
-								<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main mui-active" >
+									</span>
+									<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main mui-active" >
 								<div class="mui-switch-handle"></div>
 							</div></span>
-							</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a>
-								<span class="app-font-size-28 app-color-9f9fa0">
-								{{o.bdevName}}
+								</a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a>
+									<span class="app-font-size-28 app-color-9f9fa0">
+								主机: {{o.bdevName}}
 							</span>
-								<span class="mui-badge app-color-main">运行正常</span>
-							</a>
-						</li>
-
-					</ul>
-
-				</div>
-
+									<span class="mui-badge app-color-main">运行正常</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</template>
+				<template v-else>
+					<div class="nolog">
+						<div class="nolog_divimg"></div>
+						<div class="app-font-size-30 app-color-9f9fa0">
+							这里空空如也， 快去商城挑挑看吧 ~
+						</div>
+						<button type="button" class="mui-btn app-btn-main app-font-size-34" @tap="onGoShop()">去商城逛逛</button>
+					</div>
+				</template>
 			</div>
 		</div>
 
@@ -119,6 +144,8 @@
 		<script type="text/javascript">
 			mui.init();
 			var devManager, runManager;
+			
+			var B = new ni.Broadcast();
 
 			new Vue({
 				el: '#box',
@@ -126,135 +153,7 @@
 					return {
 						active: 1,
 
-						devList: [{
-								"alarmPlan": [{
-										"end": "19:50:00",
-										"recycle": 129,
-										"start": "13:50:00"
-									},
-									{
-										"end": "19:50:00",
-										"recycle": 129,
-										"start": "13:50:00"
-									}
-								],
-								"basicInfo": {
-									"appversion": "2017-09-28 09:36:04",
-									"devName": "104GN",
-									"devType": 4166,
-									"devid": "VH-104GN-2017061500043",
-									"hwversion": "2015-11-01 10:13:43"
-								},
-								"netInfo": {
-									"ip": "192.168.1.23",
-									"ssid": "aaa2.4",
-									"type": 0
-								},
-								"onvif": [{
-										"ch": 0,
-										"name": "第一个外部通道",
-										"online": 1
-									},
-									{
-										"ch": 1,
-										"name": "第二个外部通道",
-										"online": 1
-									}
-								],
-								"recordPlan": [{
-										"end": "19:50:00",
-										"recycle": 129,
-										"start": "13:50:00"
-									},
-									{
-										"end": "19:50:00",
-										"recycle": 129,
-										"start": "13:50:00"
-									}
-								],
-								"zones": [{
-										"ID": "81457896",
-										"bindV": 128,
-										"delay": 0,
-										"ptzSet": 0,
-										"zoneAction": "32775",
-										"zoneName": "红外幕帘1"
-									},
-									{
-										"ID": "81457897",
-										"bindV": 128,
-										"delay": 0,
-										"ptzSet": 0,
-										"zoneAction": "32775",
-										"zoneName": "红外幕帘1"
-									}
-								]
-							},
-							{
-								"alarmPlan": [{
-										"end": "19:50:00",
-										"recycle": 129,
-										"start": "13:50:00"
-									},
-									{
-										"end": "19:50:00",
-										"recycle": 129,
-										"start": "13:50:00"
-									}
-								],
-								"basicInfo": {
-									"appversion": "2017-09-28 09:36:04",
-									"devName": "104GN2",
-									"devType": 4166,
-									"devid": "VH-104GN-2017061500043",
-									"hwversion": "2015-11-01 10:13:43"
-								},
-								"netInfo": {
-									"ip": "192.168.1.23",
-									"ssid": "aaa2.4",
-									"type": 0
-								},
-								"onvif": [{
-										"ch": 0,
-										"name": "第一个外部通道",
-										"online": 1
-									},
-									{
-										"ch": 1,
-										"name": "第二个外部通道",
-										"online": 1
-									}
-								],
-								"recordPlan": [{
-										"end": "19:50:00",
-										"recycle": 129,
-										"start": "13:50:00"
-									},
-									{
-										"end": "19:50:00",
-										"recycle": 129,
-										"start": "13:50:00"
-									}
-								],
-								"zones": [{
-										"ID": "81457896",
-										"bindV": 128,
-										"delay": 0,
-										"ptzSet": 0,
-										"zoneAction": "32775",
-										"zoneName": "红外幕帘1"
-									},
-									{
-										"ID": "81457897",
-										"bindV": 128,
-										"delay": 0,
-										"ptzSet": 0,
-										"zoneAction": "32775",
-										"zoneName": "红外幕帘1"
-									}
-								]
-							}
-						]
+						devList: []
 
 					};
 				},
@@ -289,12 +188,23 @@
 
 					devManager = new DevManager(ALLD);
 					//runManager = new DevManager(ALLR);
-					
+
 					this.devList = devManager.get();
+
+					this.$nextTick(function(){
+						mui('.mui-switch')['switch']();
+					});
 					
 					
+					// 监听zeus.html发布的消息
+					//B.on('')
+
 				},
 				methods: {
+					// 空空如也 
+					onGoShop: function() {
+
+					},
 					// 标签切换
 					onActive: function(index) {
 						this.active = index;
@@ -303,11 +213,10 @@
 					onAddTap: function() {
 						mui.openWindow('../add/add_device.html');
 					},
-					
 					// 智能配件点击
-					onZoneTap: function(o){
+					onZoneTap: function(o) {
 						console.log(JSON.stringify(o));
-					}
+					},
 
 				}
 			});

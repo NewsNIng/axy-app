@@ -158,6 +158,11 @@
 				text-align: center;
 				border-radius: 2px;
 			}
+			.device_show .dev_status.offline{
+				background-color: #9F9FA0;
+			}
+			
+			
 			/*设备名称及菜单====start====*/
 			/*设备名称及菜单====end====*/
 			/*猜你喜欢====start====*/
@@ -309,11 +314,11 @@
 						</div>
 
 						<div class="device_show">
-							<div class="img" :style="{backgroundImage: 'url('+'http://placehold.it/760x350'+')'}" @tap="openCamListWindow()">
+							<div class="img" :style="{backgroundImage: 'url('+'file:////storage/emulated/0/CameraFamily/Thumbnail/'+dev.devid+'.jpeg'+')'}" @tap="openCamListWindow()">
 
 								
 							</div>
-							<div class="dev_status app-font-size-22">{{dev.online === 1 ? '在线': '离线'}}</div>
+							<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
 							<div class="dev_menu">
 								<div class="mui-icon d1">
 									<img src="../../image/home/dev_camera.png" />
@@ -532,6 +537,9 @@
 						// 附近的店
 						this.getNearShops();
 					}.bind(this));
+					
+					// 监听设备变化
+					this.listenDev();
 
 				},
 				methods: {
@@ -593,6 +601,16 @@
 
 						}.bind(this), 1);
 					},
+					// 监听设备变化
+					listenDev: function(){
+						B.on('RunstateNotify', function(data){
+							// if(data.add)
+							if(data.info.devid === this.dev.devid){
+								this.dev = data.info;
+							}
+						}.bind(this));
+					},
+					
 					// 获取喜欢列表
 					getThemeList: function() {
 						dal.home.theme.get(function(err, data) {

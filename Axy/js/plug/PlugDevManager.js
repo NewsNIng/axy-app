@@ -43,10 +43,11 @@ const DevManager = (function() {
                 if(where(this.data[i], o)){
 					this.data[i] = o;
 					this._set();
-					return this;
+					return true;
 				}
 			}
-			return this.add(o);
+			this.add(o);
+			return false;
 		}
 	}
 
@@ -103,10 +104,11 @@ var DevManager = (function () {
                 if (where(this.data[i], o)) {
                     this.data[i] = o;
                     this._set();
-                    return this;
+                    return true;
                 }
             }
-            return this.add(o);
+            this.add(o);
+            return false;
         };
         return DevManager;
     }(ManagerBase));
