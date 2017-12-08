@@ -3,6 +3,12 @@
 	_plusFn = function() {
 		B = w.plus.bridge;
 	};
+	
+	if(w.plus) {
+		setTimeout(_plusFn);
+	} else {
+		document.addEventListener("plusready", _plusFn, true);
+	}
 
 	pg.fun2ok = function(fn) {
 		return typeof fn === 'function' ? function(args) {
@@ -48,11 +54,7 @@
 		return '<?xml version="1.0" encoding="utf-8"?>' + _jo2xml(_o);
 	}
 
-	if(w.plus) {
-		setTimeout(_plusFn);
-	} else {
-		document.addEventListener("plusready", _plusFn, true);
-	}
+	
 }(window, window.plug || (window.plug = {})));
 
 (function(w) {
@@ -76,8 +78,7 @@
 	var netTag_ = "</NET></Message>";
 	var timeZonesTag = "<Message><SYSTEM>";
 	var timeZonesTag_ = "</SYSTEM></Message>";
-	
-	
+
 	xmlFactory.CreatDeviceName = function(DeviceName) {
 		var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
 			"<Message CID=\"" + (cid++) + "\" " + "Verison=\"2.0.0\" MsgType=\"MSG_SET_PARAM_V2_REQ\">" +
@@ -88,9 +89,30 @@
 			"</DSW_BODY>" +
 			"</Message>";
 		return xml;
-	}
-	
-	
+	};
+
+	/**
+	 * 设置wifi参数
+	 */
+	xmlFactory.CreatAnxinWifi = function(ssid, wifiPassword) {
+		var wifiXml = "";
+
+		wifiXml = "<WIFI EN=\"1\"  SSID=\"" +
+			ssid +
+			"\"  PASSW=\"" + wifiPassword +
+			"\"  SECURITYTYPE=\"1\"  ISHEX=\"0\"  IP=\"\"  MAC=\"\"  SIGNAL=\"\" />";
+
+		var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+			"<Message CID=\"" + (cid++) + "\" " + "Verison=\"2.0.0\" MsgType=\"MSG_SET_PARAM_V2_REQ\">" +
+			"<DSW_BODY>" + pucIDTag +
+			netTag +
+			wifiXml +
+			netTag_ +
+			"</DSW_BODY>" +
+			"</Message>";
+
+		return xml;
+	};
 
 	w.xmlFactory = xmlFactory;
 }(window));
@@ -109,8 +131,8 @@
 	 * @param {Function} sfn 正确回调函数
 	 * @param {Function} ffn 失败回调函数
 	 */
-	pgn.InitNativeSysteam = function(username, serverurl, sfn, ffn) {
-		return pg.asyncExec(N, 'InitNativeSysteam', [username, serverurl], sfn, ffn);
+	pgn.InitNativeSysteam = function(username, password, serverurl, sfn, ffn) {
+		return pg.asyncExec(N, 'InitNativeSysteam', [username, password, serverurl], sfn, ffn);
 	};
 
 	/**
@@ -126,9 +148,10 @@
 	 * @param {Number} deviceid 设备ID
 	 * @param {Number} way 播放通道，如果是单通道默认为0
 	 */
-	pgn.StartDevicePlay = function(deviceid, way) {
+	pgn.StartDevicePlay = function(deviceid, way, way1) {
 		typeof way === 'undefined' && (way = 0);
-		return pg.syncExec(N, 'StartDevicePlay', [deviceid, way]);
+		typeof way1 === 'undefined' && (way1 = 0);
+		return pg.syncExec(N, 'StartDevicePlay', [deviceid, way, way1]);
 	};
 
 	/**
@@ -141,8 +164,8 @@
 	/**
 	 * 获取所有设备的信息
 	 */
-	pgn.GetAllDeviceInfoASync = function() {
-		return pg.syncExec(N, 'GetAllDeviceInfoASync', []);
+	pgn.GetAllDeviceInfoASync = function(sf, ff) {
+		return pg.asyncExec(N, 'GetAllDeviceInfoASync', [], sf, ff);
 	}
 
 	/**

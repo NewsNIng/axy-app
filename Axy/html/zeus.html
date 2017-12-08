@@ -16,71 +16,159 @@
 
 		<script type="text/javascript" src="../js/dal/base.js"></script>
 		<script type="text/javascript" src="../js/dal/device.js"></script>
+		<script type="text/javascript" src="../js/dal/user.js"></script>
 
 		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
 
+		<script type="text/javascript" src="../js/plug/PlugDevManager.js"></script>
+
 		<script type="text/javascript">
 			/**
-			 * H5Native 控制中心
+			 * H5Native 控制中心 
 			 */
 
 			var D, P = plug.H5NativeBridge;
+			var B = new ni.Broadcast();
 
 			var domain = "www.isee110.com";
 
 			var T = -1;
 			var TD = 60e3;
-			
-			Rx.Observable.create(function(ob) {
-				if(window.plus) {
-					ob.next();
-				} else {
-					document.addEventListener('plusready', function() {
-						ob.next();
-					});
-				}
-			}).subscribe(function() {
-				D = new ni.Cache('dev_list', [], {
-					plus: true
-				});
-			});
+
+			var devManager, runManager, ALLD, ALLR;
+
+			// 原生通知前端执行动作
+			var NotifyAction = {
+				// 设备状态更新 
+				RunstateNotify: function(data) {
+					try {
+						runManager.updateById(data, function(o, n) {
+							return o.devid === n.devid;
+						});
+					} catch(e) {
+						//TODO handle the exception
+						alert(e.message);
+					}
+
+				},
+
+				// 设备信息更新
+				DeviceInfoNotify: function(data) {
+					try {
+						devManager.updateById(data, function(o, n) {
+							return o.basicInfo && o.basicInfo.devid === n.basicInfo.devid;
+						});
+					} catch(e) {
+						//TODO handle the exception
+						alert(e.message);
+					}
+
+				},
+			};
+
+			var getPwd = function() {
+				return window.localStorage.getItem('_pwd_');
+			}
 
 			Rx.Observable
-				// 原始事件
-				.create(function(observer) {
-					// 监听登录成功事件
-					new ni.Broadcast().on('login_success', function(data) {
-						// next
-						observer.next(data.userInfo);
+				// plusReady
+				.create(function(ob) {
+					if(window.plus) {
+						ob.next();
+					} else {
+						document.addEventListener('plusready', function() {
+							ob.next();
+						});
+					}
+				})
+				// 是否登录
+				.mergeMap(function() {
+
+					return Rx.Observable.create(function(ob) {
+						// 监听登录成功事件
+						new ni.Broadcast().on('login_success', function(data) {
+							// next
+							ob.next(data.userInfo.account);
+						});
+
+						// 是否登录
+						if(app.user.has()) {
+							var u = app.user.get();
+							// 验证用户信息
+							dal.user.login(u.account, getPwd(), function(err, data) {
+								if(err) {
+									// 清除用户信息
+									app.user.clear();
+									window.localStorage.setItem('_pwd_');
+									mui.toast("帐号存在异常，请重新登录");
+									app.user.get(function() {});
+									return;
+								}
+								// 验证成功
+								ob.next(u.account);
+							});
+						} else {
+							// 未登录状态 
+						}
 					});
-					ni.plusReady(function() {
-						// 如果已经登录就 next
-						app.user.has() && observer.next(app.user.get());
+				})
+				// 获取顶级域名 初始化变量
+				.mergeMap(function(account) {
+					var pwd = getPwd();
+
+					D = new ni.Cache('dev_list', [], {
+						plus: true
 					});
+
+					// 本地 所有设备的信息
+					ALLD = new ni.Cache('AllDeviceInfo', [], {
+						plus: true
+					});
+
+					// 本地 所有设备的运行状态
+					ALLR = new ni.Cache('AllDeviceRun', [], {
+						plus: true
+					});
+
+					devManager = new DevManager(ALLD);
+					runManager = new DevManager(ALLR);
+					
+					
+					setTimeout(function(){
+						getNativeDeviceInfo();	
+					}, 3000);
 					
 
-				})
-				// 获取顶级域名
-				.mergeMap(function(user) {
-					user = user.account;
 					return Rx.Observable
-						.create(function(o2) {
+						.create(function(ob) {
 							// 有缓存就直接取用
 							if(domain) {
 								// next
-								o2.next(user, domain);
+								ob.next({
+									account: account,
+									pwd: pwd,
+									domain: domain
+								});
 							} else {
 								// 暂时模拟延迟获取
 								setTimeout(function() {
 									domain = '';
 									// next
-									o2.next(user, domain);
+									ob.next({
+										account: account,
+										pwd: pwd,
+										domain: domain
+									});
 								}, 300);
 							}
 						});
 				})
 				// 初始化原生插件
-				.mergeMap(function(user, domain) {
+				.mergeMap(function(o) {
+					var account = o.account,
+						pwd = o.pwd,
+						domain = o.domain;
+
 					// 判断定时器
 					if(T < 0) {
 						(function _() {
@@ -89,7 +177,6 @@
 								if(err) {
 									return;
 								}
-								console.log(JSON.stringify(data));
 								// 数据不为空时 向原生发送数据
 								if(data && data.length > 0) {
 									D.data = data;
@@ -103,17 +190,83 @@
 
 					return Rx.Observable
 						.create(function(o3) {
+
 							// 向原生注册 控制中心 处理函数回调
-							P.InitNativeSysteam(user, domain, function(arg) {
+							P.InitNativeSysteam(account, pwd, domain, function(arg) {
 								// next
 								o3.next(arg);
 							});
 						});
 				})
 				// 消息中心事件
-				.subscribe(function(data) {
-					console.log("zeus.html : " + JSON.stringify(data));
+				.subscribe(function(rs) {
+					try {
+						rs = JSON.parse(rs);
+						if(rs.code !== 0) {
+							throw Error(JSON.stringify(rs));
+							// 错误
+							return;
+						}
+						// 执行相关动作
+						NotifyAction[rs['function'] || rs['functoin']](rs.data);
+					} catch(e) {
+						//TODO handle the exception
+						alert("code读取错误" + e.message);
+					}
+
 				});
+
+			function getNativeDeviceInfo() {
+				// 获取本地设备缓存信息
+				var t = 0, n = 3;
+				//var data = devManager.get();
+				// 如果本地有 设备信息 则使用本地用户信息
+				//if(data.length !== 0) {
+					//t = 1e4;
+				//} else {
+					//t = 0;
+				//}
+				setTimeout(function _() {
+					P.GetAllDeviceInfoASync(function(rs) {
+						rs = JSON.parse(rs);
+						if(rs && rs.data && rs.data.devlist && rs.data.devlist.length > 0) {
+							devManager.set(rs.data.devlist);
+						} else if(n > 0) {
+							n--;
+							setTimeout(_, 1e3);
+						} else if(!b) {
+							// 多次未获取到应用信息
+							plus.nativeUI.toast('获取本地设备信息异常');
+						} else {
+
+						}
+					});
+				}, t);
+
+				var n2 = 3;
+				//data = runManger.get();
+				// 如果本地有 设备信息 则使用本地用户信息
+				//if(data.length !== 0) {
+				//	t = 1e4;
+				//} else {
+				//	t = 0;
+				//}
+				setTimeout(function _() {
+					var rs = P.GetAllDeviceRunStateSync();
+					rs = JSON.parse(rs);
+					if(rs && rs.data && rs.data.runstate) {
+						runManager.set(rs.data.runstate);
+					} else if(n2 > 0) {
+						n2--;
+						setTimeout(_, 1e3);
+					} else if(!b) {
+						// 多次未获取到应用信息
+						plus.nativeUI.toast('获取本地设备状态异常');
+					} else {
+
+					}
+				}, t);
+			}
 		</script>
 	</body>
 

@@ -51,7 +51,7 @@
 				color: #333333;
 				font-weight: bold;
 			}
-			 
+			
 			.foot {
 				position: fixed;
 				width: 100%;
@@ -113,7 +113,7 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
-		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 		<script type="text/javascript">
 			var P = plug.H5NativeBridge;
 
@@ -134,6 +134,7 @@
 					};
 				},
 				mounted: function() {
+
 					// get prev url params
 					function GetQueryString(name) {
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -167,17 +168,20 @@
 					// 通过声波ID进行验证
 					addDeviceByVoice: function() {
 						var setid = this.setid;
-						var list;
+						var list, i, item, l;
 						(function _() {
 							list = this._getLanDevHostList();
-							alert(JSON.stringify(list));
-							if(list.some(function(item) {
-									return item.setid === setid;
-								})) {
-								this.over("设备添加成功", true);
-							} else {
-								setTimeout(_.bind(this), 5000);
+							for(i = 0, l = list.length; i < l; i++) {
+								item = list[i];
+								if(item.setid === setid) {
+									this.devid = item.devid;
+									// 进行添加
+									this.addDeviceByHostLine();
+									return;
+								}
 							}
+							setTimeout(_.bind(this), 5000);
+
 						}).call(this);
 					},
 					// 获取内网主机列表
@@ -193,7 +197,7 @@
 								return this.over(err.message || "连接失败，请重试");
 							}
 							// 判断是否需要配置WIFI
-							if(this.wifiname && this.wifipwd) {
+							if(!this.setid && this.wifiname && this.wifipwd) {
 								this.nativeSetWIFI(this.wifiname, this.wifipwd);
 							} else {
 								return this.over("设备添加成功", true);
@@ -211,7 +215,7 @@
 							that.timer = setTimeout(_, 1000);
 						}());
 					},
-					onNext: function(){
+					onNext: function() {
 						this.$view.close();
 					},
 					over: function(msg, close) {
@@ -227,11 +231,16 @@
 					},
 					// 配置WIFI
 					nativeSetWIFI: function(name, pwd) {
-						var that = this;
-						// TODO 参数设置通道
+						// 生成xml字符串
+						var xml = xmlFactory.CreatAnxinWifi(name, pwd);
+						// 调用原生 设备参数配置通道 WIFI
+						P.SetDeviceParamAsyn(this.devid, xml, function(data) {
+							//alert(JSON.stringify(data));
+						});
+						// 参数配置WIFI 可选, 无论成功失败
 						setTimeout(function() {
-							that.over("设备添加成功", true);
-						}, 5000);
+							this.over("设备添加成功", true);
+						}.bind(this), 3000);
 					},
 				}
 			});
