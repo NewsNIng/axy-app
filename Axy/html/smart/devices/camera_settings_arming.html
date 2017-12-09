@@ -257,12 +257,12 @@
 			<div class="mui-content">
 				<template v-if="plans.length">
 					<ul class="mui-table-view">
-						<li class="mui-table-view-cell app-font-size-30" v-for="o,i in plans">
+						<li class="mui-table-view-cell app-font-size-30" v-for="o,i in plans" @tap="onEditTap(o, i)" @longtap="onDel(o, i)">
 							<a class="">
 								<span>{{o.start}} - {{o.end}}</span>
 								<br />
 								<span class="sign" v-for="p,i in _two2bool(o.recycle).splice(1)" v-if="p">周{{_number2string(i)}}</span>
-								<span class="mui-badge">
+								<span class="mui-badge" @tap.stop="">
 									<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': _two2bool(o.recycle)[0]}" ref="pwd_protection">
 										<div class="mui-switch-handle"></div>
 									</div>
@@ -305,7 +305,11 @@
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				gestureConfig: {
+					longtap: true
+				}
+			});
 
 			var P = plug.H5NativeBridge;
 
@@ -323,7 +327,17 @@
 						mask: false, // 遮罩控制
 						index: -1, //是否弹框
 						//isRepeat: true,
-						plans: [],
+						plans: [ {
+                        "end": "19:50:00",
+                        "recycle": 129,
+                        "start": "13:50:00"
+                    },
+                    {
+                        "end": "19:50:00",
+                        "recycle": 252,
+                        "start": "13:50:00"
+                    }],
+						actionType: -1,
 					};
 				},
 				computed: {
@@ -390,38 +404,72 @@
 					onCancel: function() {
 						this.mask = false;
 					},
-					// 保存
+					// 保存操作
 					onSave: function() {
 						this.mask = false;
+
 
 						var o = {
 							"end": this.endTime + ":00",
 							"recycle": this._bool2two([true].concat(this.weeks)),
 							"start": this.startTime + 　":00"
 						};
-						//this.plans.push(o);
-
-						var xml = xmlFactory.CreatAlarmListXml(this.plans.concat(o));
+						
+						if(this.actionType === -2){
+							// 删除	
+							
+						}else if(this.actionType === -1){
+							// 新增
+							this.plans.push(o);
+						}else{
+							// 修改
+							this.$set(this.plans, this.actionType, o);
+						}
+						
+						var xml = xmlFactory.CreatAlarmListXml(this.plans);
 
 						// 发送原生
 						P.SetDeviceParamAsyn(this.devid, xml, function(rs) {
 							rs = JSON.parse(rs);
 							if(rs.code !== 0) {
-								return mui.toast('添加失败');
+								
+								this.actionType === -1 && this.plans.pop();
+								return mui.toast('操作失败');
 							}
-							mui.toast('添加成功');
-							this.plans.push(o);
+							mui.toast('操作成功');
 							
 						}.bind(this));
 
 						// 
 
 					},
-					// 自动布防
+					
+					// 添加布防
 					onAutoArming: function() {
 						this.mask = true;
 						this.index = 1;
+						this.actionType = -1;
 					},
+					// 编辑布防
+					onEditTap: function(o, i){
+						this.mask = true;
+						this.index = 1;
+						this.actionType = i;
+						
+						this.weeks = this._two2bool(o.recycle).slice(1);
+						this.startTime = o.start.substr(0,5);
+						this.endTime = o.end.substr(0,5);
+						
+						
+						
+					},
+					
+					// 长按删除
+					onDel: function(o, i){
+						this.plans.splice(i, 1);
+						this.actionType = -2;
+					},
+					
 					onWeekTap: function(o, index) {
 						this.$set(this.weeks, index, !o);
 					},

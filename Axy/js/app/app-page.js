@@ -98,5 +98,10 @@
 		return indexV;
 	}
 	
+	// 打开告警参数
+	page.getAlarmParam = function(callback, ex){
+		this.openForResult('alarmParam', callback, ex);
+	}
+	
 	_.page = page;
 }(window.app || (window.app = {}), window));

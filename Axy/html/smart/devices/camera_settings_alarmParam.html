@@ -27,15 +27,23 @@
 				margin-top: 0.266666rem !important;
 				margin-bottom: 0 !important;
 			}
-			.mui-table-view:after,.mui-table-view:before {
+			
+			.mui-table-view:after,
+			.mui-table-view:before {
 				height: 0;
 			}
+			
 			.mui-table-view-cell:after {
 				background-color: #F2F2F3;
 			}
+			
 			.mui-badge {
 				background-color: white;
 				color: #808080;
+			}
+			
+			.mui-icon>img {
+				width: 0.586666rem;
 			}
 		</style>
 	</head>
@@ -46,6 +54,9 @@
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">告警参数</h1>
+				<a class="mui-icon mui-pull-right">
+					<img src="../../../image/smart/scenes/complete_icon.png" />
+				</a>
 			</header>
 
 			<div class="mui-content">
@@ -97,22 +108,22 @@
 					return {
 						index: -1, // 设置项下标
 						pick: null,
-						
+
 						intervalTime: 0,
 						continuedTime: 0,
-						
+
 					};
 				},
-				
+
 				computed: {
-					intervalTimeText: function(){
+					intervalTimeText: function() {
 						return this.intervalTime + 's';
 					},
-					continuedTimeText: function(){
+					continuedTimeText: function() {
 						return this.continuedTime + 's';
 					}
 				},
-				
+
 				mounted: function() {
 					this.pick = new mui.PopPicker({
 						layer: 1,
@@ -125,12 +136,12 @@
 					onPickTap: function(i) {
 						var that = this;
 						var p = 'intervalTime';
-						if(i === 1){
+						if(i === 1) {
 							p = 'continuedTime';
 						}
-						
+
 						this.pick.pickers[0].setSelectedValue(that[p]);
-						
+
 						var fn = function(s) {
 							that[p] = s;
 						};
@@ -138,7 +149,7 @@
 						this.pick.show(function(items) {
 							fn(items[0].value);
 						}, function(items) {
-							
+
 						});
 					},
 				}

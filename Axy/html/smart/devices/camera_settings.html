@@ -317,7 +317,7 @@
 							<span>WIFI配置</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onAlarmParam()">
 						<a class="mui-navigate-right">
 							<span>告警时间设置 </span>
 						</a>
@@ -341,16 +341,16 @@
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
-		
-		<script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
-		
+
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 
@@ -359,8 +359,7 @@
 				data: function() {
 					return {
 						TASK: null,
-						
-						
+
 						isPwdProtection: true, // 是否开启密码保护
 						mask: false, // 遮罩控制
 						index: -1, //弹框种类
@@ -429,36 +428,38 @@
 									"zoneAction": "32775",
 									"zoneName": "红外幕帘1"
 								}
-							]
+							],
+							"alarm": {
+								"interval": "5",
+								"alarmtime": "10",
+							}
 						},
 					};
 				},
-				
-				
-				
+
 				watch: {
 					devInfo: {
 						deep: true,
-						handler: function(){
-							if(this.TASK){
+						handler: function() {
+							if(this.TASK) {
 								window.clearTimeout(this.TASK);
 								this.TASK = null;
 							}
-							
-							this.TASK = setTimeout(function(){
+
+							this.TASK = setTimeout(function() {
 								//
 							}.bind(this), 1000);
 						}
 					}
-					
+
 				},
 				computed: {
-					devInfoXml: function(){
+					devInfoXml: function() {
 						return "";
 					}
 				},
 				mounted: function() {
-					
+
 				},
 				plusReady: function() {
 					this.devInfo = this.$view.localInfo;
@@ -489,27 +490,27 @@
 						this.mask = true;
 						this.index = 1;
 					},
-					
+
 					// 打开wifi设置
-					onWifiSetTap: function(){
-						app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data){
+					onWifiSetTap: function() {
+						app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data) {
 							// 生成xml字符串
 							var xml = xmlFactory.CreatAnxinWifi(data.name, data.pwd);
 							// 调用原生 设备参数配置通道 WIFI
 							P.SetDeviceParamAsyn(this.basicInfo.devid, xml, function(rs) {
 								rs = JSON.parse(rs);
-								if(!rs || rs.code !== 0){
+								if(!rs || rs.code !== 0) {
 									return mui.toast('配置WIFI失败');
 								}
 								return mui.toast('配置WIFI成功');
 							});
 						}.bind(this));
 					},
-					
+
 					// 摄像机名称点击
-					onDevNameTap: function(name){
+					onDevNameTap: function(name) {
 						var that = this;
-						app.page.getInput(function(data){
+						app.page.getInput(function(data) {
 							that.devInfo.basicInfo.devName = data.content;
 						}, {
 							title: "摄像机名称",
@@ -517,7 +518,7 @@
 						});
 					},
 					// 基本信息跳转
-					onInfoTap: function(){
+					onInfoTap: function() {
 						mui.openWindow('camera_settings_info.html', 'camera_settings_info', {
 							extras: {
 								info: this.devInfo,
@@ -526,7 +527,7 @@
 						});
 					},
 					// 布防计划跳转
-					onArmingTap: function(){
+					onArmingTap: function() {
 						mui.openWindow('camera_settings_arming.html', 'camera_settings_arming', {
 							extras: {
 								info: this.devInfo
@@ -534,9 +535,19 @@
 						});
 					},
 					// 录像计划跳转
-					onRecordTap: function(){
-						
-					}
+					onRecordTap: function() {
+
+					},
+					// 告警时间跳转
+					onAlarmParam: function() {
+						var that = this;
+						app.page.getAlarmParam(function(data) {
+
+						}, {
+							intervalTime: that.devInfo.alarm.interval,
+							continuedTime: that.devInfo.alarm.alarmtime,
+						});
+					},
 
 				}
 			});
