@@ -371,12 +371,12 @@
 					"js/app/app.js",
 					"js/lib/vue-ni.js",
 					"js/extend/String.js",
-					"html/nearby/pages/list.html"
+					"html/nearby/pages/list.html",
+					"html/nearby/pages/theme.html"
 				],
 				"refer": [
 					"html/public/position.html",
 					"html/nearby/business/signup.html",
-					"html/nearby/pages/theme.html",
 					"html/nearby/pages/discover.html",
 					"html/nearby/menu.html",
 					"html/search/index.html"
@@ -517,7 +517,12 @@
 				"priority": 0
 			},
 			"html/nearby/pages/list.html": {
-				"resources": [],
+				"resources": [
+					"image/nearby/time.png",
+					"image/nearby/phone.png",
+					"image/nearby/show.png",
+					"image/nearby/navigation.png"
+				],
 				"refer": [
 					"html/nearby/business/store_details.html"
 				],
@@ -698,6 +703,14 @@
 					"html/smart/add/add_device.html",
 					"html/smart/devices/camera_settings.html",
 					"html/smart/devices/dev_17.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/camera_settings.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/camera_settings_info.html",
+					"html/smart/devices/camera_settings_arming.html"
 				],
 				"priority": 0
 			}
