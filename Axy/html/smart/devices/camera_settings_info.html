@@ -96,22 +96,11 @@
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
-
 		<!--基础库-->
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
-		<!--App相关业务逻辑-->
-		<script type="text/javascript" src="../../../js/app/app.js"></script>
-
-		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
-		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
-
-		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
-		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
-		<script type="text/javascript" src="arr.js"></script>-->
+		
 		<script type="text/javascript">
 			mui.init();
 
@@ -135,7 +124,7 @@
 				plusReady: function() {
 					this.devInfo.cameraModel = this.$view.info.basicInfo.devName;
 					this.devInfo.connectionWifi = this.$view.info.netInfo.ssid;
-					this.devInfo.signalStrength = "";
+					this.devInfo.signalStrength = this.$view.signal + '%';
 					this.devInfo.cameraId = this.$view.info.basicInfo.devid;
 					this.devInfo.hardwareVersion = this.$view.info.basicInfo.hwversion;
 					this.devInfo.ipAddress = this.$view.info.netInfo.ip;

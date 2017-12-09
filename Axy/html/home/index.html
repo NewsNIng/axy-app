@@ -329,7 +329,7 @@
 									<img src="../../image/home/dev_share.png" />
 									<span class="app-font-size-24" style="color: #696969;">分享</span>
 								</div>
-								<div class="mui-icon d3">
+								<div class="mui-icon d3" @tap="onDeviceSetTap()">
 									<img src="../../image/home/dev_setting.png" />
 									<span class="app-font-size-24" style="color: #696969;">设置</span>
 								</div>
@@ -645,6 +645,12 @@
 							}
 						});
 					},
+					
+					// 设备设置点击
+					onDeviceSetTap: function(){
+						
+					},
+					
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
 					},

@@ -258,7 +258,7 @@
 									<div class="mui-switch-handle"></div>
 								</div>
 							</span>
-						</a>
+						</a>  
 					</li>-->
 					<li class="mui-table-view-cell" @tap="onInfoTap()">
 						<a class="mui-navigate-right">
@@ -277,7 +277,7 @@
 							<span>摄像机日志</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onArmingTap()">
 						<a class="mui-navigate-right">
 							<span>自动布防计划</span>
 						</a>
@@ -312,7 +312,7 @@
 							<span>摄像机报警提示音</span>
 						</a>
 					</li>-->
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onWifiSetTap()">
 						<a class="mui-navigate-right">
 							<span>WIFI配置</span>
 						</a>
@@ -348,6 +348,9 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
+		
+		<script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init();
 
@@ -355,6 +358,9 @@
 				el: '#warpper',
 				data: function() {
 					return {
+						TASK: null,
+						
+						
 						isPwdProtection: true, // 是否开启密码保护
 						mask: false, // 遮罩控制
 						index: -1, //弹框种类
@@ -427,11 +433,38 @@
 						},
 					};
 				},
+				
+				
+				
+				watch: {
+					devInfo: {
+						deep: true,
+						handler: function(){
+							if(this.TASK){
+								window.clearTimeout(this.TASK);
+								this.TASK = null;
+							}
+							
+							this.TASK = setTimeout(function(){
+								//
+							}.bind(this), 1000);
+						}
+					}
+					
+				},
+				computed: {
+					devInfoXml: function(){
+						return "";
+					}
+				},
 				mounted: function() {
-
+					
 				},
 				plusReady: function() {
-					this.devInfo = this.$view.info;
+					this.devInfo = this.$view.localInfo;
+					this.netInfo = this.$view.netInfo;
+					this.runInfo = this.$view.runInfo;
+					console.log(JSON.stringify(this.runInfo));
 				},
 				methods: {
 					// 切换开关
@@ -457,6 +490,22 @@
 						this.index = 1;
 					},
 					
+					// 打开wifi设置
+					onWifiSetTap: function(){
+						app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data){
+							// 生成xml字符串
+							var xml = xmlFactory.CreatAnxinWifi(data.name, data.pwd);
+							// 调用原生 设备参数配置通道 WIFI
+							P.SetDeviceParamAsyn(this.basicInfo.devid, xml, function(rs) {
+								rs = JSON.parse(rs);
+								if(!rs || rs.code !== 0){
+									return mui.toast('配置WIFI失败');
+								}
+								return mui.toast('配置WIFI成功');
+							});
+						}.bind(this));
+					},
+					
 					// 摄像机名称点击
 					onDevNameTap: function(name){
 						var that = this;
@@ -471,10 +520,23 @@
 					onInfoTap: function(){
 						mui.openWindow('camera_settings_info.html', 'camera_settings_info', {
 							extras: {
+								info: this.devInfo,
+								signal: this.runInfo.signal
+							}
+						});
+					},
+					// 布防计划跳转
+					onArmingTap: function(){
+						mui.openWindow('camera_settings_arming.html', 'camera_settings_arming', {
+							extras: {
 								info: this.devInfo
 							}
 						});
 					},
+					// 录像计划跳转
+					onRecordTap: function(){
+						
+					}
 
 				}
 			});

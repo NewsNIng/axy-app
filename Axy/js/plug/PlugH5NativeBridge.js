@@ -113,7 +113,34 @@
 
 		return xml;
 	};
-
+		
+		
+	xmlFactory.CreatAlarmListXml = function(arr){
+		var zoneXML = "";
+		var temp;
+		for(var i = 0, l = arr.length; i < l; i++){
+			temp = arr[i];
+			zoneXML += "<PLAN ACTION=\"1\""
+				+" START=\""
+				+ temp.start
+				+"\" END=\""+temp.end
+				+"\" RECYCLE=\""+temp.recycle
+				+"\" />";
+		}
+		
+		
+		var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+				+ "<Message CID=\""+(cid++)+"\" "+ "Verison=\"2.0.0\" MsgType=\"MSG_SET_PARAM_V2_REQ\">"
+				+"<DSW_BODY>"+pucIDTag
+				+alarmPlansTag
+				+zoneXML
+				+alarmPlansTag_ 
+				+"</DSW_BODY>"
+				+"</Message>";		
+		return xml;
+	
+	}
+	
 	w.xmlFactory = xmlFactory;
 }(window));
 

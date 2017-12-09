@@ -231,6 +231,8 @@
 				plusReady: function() {
 					this.getCurrentPosition().then(function(){
 						this._down();
+					}.bind(this)).catch(function(){
+						this._down();
 					}.bind(this));
 				},
 				methods: {

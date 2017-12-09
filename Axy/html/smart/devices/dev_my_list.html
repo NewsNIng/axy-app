@@ -144,7 +144,7 @@
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
 						<div class="card" v-for="o,i in netDivList">
-							<div class="imgdiv" :style="{backgroundImage: 'url('+'file:////storage/emulated/0/CameraFamily/Thumbnail/'+o.devid+'.jpeg'+')'}">
+							<div class="imgdiv" @tap="onCmTap(o.devid)" :style="{backgroundImage: 'url('+'file:////storage/emulated/0/CameraFamily/Thumbnail/'+o.devid+'.jpeg'+')'}">
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
@@ -203,6 +203,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 
@@ -211,14 +212,18 @@
 			var devManager, runManager;
 			
 			var B = new ni.Broadcast();
-
+			
 			new Vue({
 				el: '#box',
 				data: function() {
 					return {
-						active: 1,
+						active: 0,
 						
 						devList: [],
+						runList: [],
+						
+						
+						
 						netDivList: [],
 
 					};
@@ -244,22 +249,30 @@
 							o[item.basicInfo.devid] = item;
 							return o;
 						}, {});	
+					},
+					dirr: function(){
+						return this.runList.reduce(function(o, item){
+							o[item.devid] = item;
+							return o;
+						}, {});	
 					}
 				},
 
 				plusReady: function() {
+					
 					// 本地 所有设备的信息
 					var ALLD = new ni.Cache('AllDeviceInfo', [], {
 						plus: true
 					});
 
 					// 本地 所有设备的运行状态
-					//var ALLR = new ni.Cache('AllDeviceRun', [], {
-					//	plus: true
-					//});
+					var ALLR = new ni.Cache('AllDeviceRun', [], {
+						plus: true
+					});
 
 					devManager = new DevManager(ALLD);
-					//runManager = new DevManager(ALLR);
+					runManager = new DevManager(ALLR);
+					
 					var DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
@@ -267,157 +280,27 @@
 					this.netDivList = DEVD.data;
 					
 					
-					this.devList = [
-            {
-                "alarmPlan": [
-                    {
-                        "end": "19:50:00",
-                        "recycle": 129,
-                        "start": "13:50:00"
-                    },
-                    {
-                        "end": "19:50:00",
-                        "recycle": 129,
-                        "start": "13:50:00"
-                    }
-                ],
-                "basicInfo": {
-                    "appversion": "2017-09-28 09:36:04",
-                    "devName": "我的摄像机",
-                    "devType": 4166,
-                    "devid": "VS-360-2017082400138",
-                    "hwversion": "2015-11-01 10:13:43"
-                },
-                "netInfo": {
-                    "ip": "192.168.1.23",
-                    "ssid": "aaa2.4",
-                    "type": 0
-                },
-                "onvif": [
-                    {
-                        "ch": 0,
-                        "name": "第一个外部通道",
-                        "online": 1
-                    },
-                    {
-                        "ch": 1,
-                        "name": "第二个外部通道",
-                        "online": 1
-                    }
-                ],
-                "recordPlan": [
-                    {
-                        "end": "19:50:00",
-                        "recycle": 129,
-                        "start": "13:50:00"
-                    },
-                    {
-                        "end": "19:50:00",
-                        "recycle": 129,
-                        "start": "13:50:00"
-                    }
-                ],
-                "zones": [
-                    {
-                        "ID": "81457896",
-                        "bindV": 128,
-                        "delay": 0,
-                        "ptzSet": 0,
-                        "zoneAction": "32775",
-                        "zoneName": "红外幕帘1"
-                    },
-                    {
-                        "ID": "81457897",
-                        "bindV": 128,
-                        "delay": 0,
-                        "ptzSet": 0,
-                        "zoneAction": "32775",
-                        "zoneName": "红外幕帘1"
-                    }
-                ]
-            },
-            {
-                "alarmPlan": [
-                    {
-                        "end": "19:50:00",
-                        "recycle": 129,
-                        "start": "13:50:00"
-                    },
-                    {
-                        "end": "19:50:00",
-                        "recycle": 129,
-                        "start": "13:50:00"
-                    }
-                ],
-                "basicInfo": {
-                    "appversion": "2017-09-28 09:36:04",
-                    "devName": "我的403",
-                    "devType": 4166,
-                    "devid": "AX-403A-2018070500013",
-                    "hwversion": "2015-11-01 10:13:43"
-                },
-                "netInfo": {
-                    "ip": "192.168.1.23",
-                    "ssid": "aaa2.4",
-                    "type": 0
-                },
-                "onvif": [
-                    {
-                        "ch": 0,
-                        "name": "第一个外部通道",
-                        "online": 1
-                    },
-                    {
-                        "ch": 1,
-                        "name": "第二个外部通道",
-                        "online": 1
-                    }
-                ],
-                "recordPlan": [
-                    {
-                        "end": "19:50:00",
-                        "recycle": 129,
-                        "start": "13:50:00"
-                    },
-                    {
-                        "end": "19:50:00",
-                        "recycle": 129,
-                        "start": "13:50:00"
-                    }
-                ],
-                "zones": [
-                    {
-                        "ID": "81457896",
-                        "bindV": 128,
-                        "delay": 0,
-                        "ptzSet": 0,
-                        "zoneAction": "32775",
-                        "zoneName": "红外幕帘1"
-                    },
-                    {
-                        "ID": "81457897",
-                        "bindV": 128,
-                        "delay": 0,
-                        "ptzSet": 0,
-                        "zoneAction": "32775",
-                        "zoneName": "红外幕帘1"
-                    }
-                ]
-            }
-        ];//devManager.get();
+					this.devList = devManager.get();
 					
+					
+					this.runList =  runManager.get();
+           
 					
 					
 					this.$nextTick(function(){
 						mui('.mui-switch')['switch']();
 					});
 					
-					
 					// 监听zeus.html发布的消息
 					//B.on('')
 
 				},
 				methods: {
+					// 摄像机点击
+					onCmTap: function(id) {
+						plug.H5NativeBridge.StartDevicePlay(id);
+					},
+					
 					// 空空如也 
 					onGoShop: function() {
 
@@ -446,6 +329,10 @@
 					_net2local: function(devid){
 						return this.dirs[devid];
 					},
+					// 通过网络设备id获取本地设备运行状态
+					_net2run: function(devid){
+						return this.dirr[devid];
+					},
 					// 通过配件ID获取 配件的类型
 					_getZoneType: function(zonedevid){
 						return zonedevid.toString().substr(0, 2);
@@ -457,12 +344,16 @@
 					onSettingTap: function(o){
 						mui.openWindow('camera_settings.html', 'camera_settings', {
 							extras: {
-								info: o
+								localInfo: this._net2local(o.devid),
+								runInfo: this._net2run(o.devid),
+								netInfo: o
 							}
 						});
 					}
 				}
 			});
+			
+			
 		</script>
 	</body>
 
