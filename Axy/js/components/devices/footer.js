@@ -18,10 +18,17 @@ Vue && Vue.component('dev-footer', {
 		
 		_delDevice: function(){
 			this.w = plus.nativeUI.showWaiting();
-			setTimeout(function(){
+			
+			plug.H5NativeBridge.DelSmartDeviceAsyn(1,1, function(rs){
 				this.w.close();
+				rs = JSON.parse(rs);
+				if(!rs || rs.code !== 0){
+					return plus.nativeUI.toast('删除配件失败');
+				}
+				plus.nativeUI.toast('删除成功');
 				this.$emit('del', {});
-			}.bind(this), 2000);
+			}.bind(this));
+			
 		}
 	},
 	

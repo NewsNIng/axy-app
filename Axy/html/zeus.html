@@ -140,11 +140,6 @@
 					devManager = new DevManager(ALLD);
 					runManager = new DevManager(ALLR);
 					
-					
-					setTimeout(function(){
-						getNativeDeviceInfo();	
-					}, 3000);
-					
 
 					return Rx.Observable
 						.create(function(ob) {
@@ -198,12 +193,12 @@
 
 					return Rx.Observable
 						.create(function(o3) {
-
 							// 向原生注册 控制中心 处理函数回调
 							P.InitNativeSysteam(account, pwd, domain, function(arg) {
 								// next
 								o3.next(arg);
 							});
+							getNativeDeviceInfo();
 						});
 				})
 				// 消息中心事件
@@ -215,8 +210,9 @@
 							// 错误
 							return;
 						}
+						var methodsName = rs['function'] || rs['functoin'];
 						// 执行相关动作
-						NotifyAction[rs['function'] || rs['functoin']](rs.data);
+						methodsName && NotifyAction[methodsName](rs.data);
 					} catch(e) {
 						//TODO handle the exception
 						alert("code读取错误" + e.message); 
@@ -239,6 +235,8 @@
 						rs = JSON.parse(rs);
 						if(rs && rs.data && rs.data.devlist && rs.data.devlist.length > 0) {
 							devManager.set(rs.data.devlist);
+							// 转发通知
+							//B.emit('DeviceInfoNotifyAll', {});
 						} else if(n > 0) {
 							n--;
 							setTimeout(_, 1e3);
@@ -265,6 +263,8 @@
 					rs = JSON.parse(rs);
 					if(rs && rs.data && rs.data.runstate) {
 						runManager.set(rs.data.runstate);
+						// 转发通知
+						//B.emit('RunstateNotifyAll', {});
 					} else if(n2 > 0) {
 						n2--;
 						setTimeout(_, 1e3);
