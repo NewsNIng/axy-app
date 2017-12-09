@@ -206,7 +206,8 @@
 		
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
-
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init();
 			var devManager, runManager;
@@ -285,7 +286,13 @@
 					
 					this.runList =  runManager.get();
            
-					
+//					setTimeout(function(){
+//						var id = this.netDivList[0].devid;
+//						alert(JSON.stringify(this.dirs[id]));
+//						alert(JSON.stringify(devManager.selectByWhere(function(o){
+//							return o.basicInfo.devid === id;
+//						})));
+//					}.bind(this), 3000);
 					
 					this.$nextTick(function(){
 						mui('.mui-switch')['switch']();

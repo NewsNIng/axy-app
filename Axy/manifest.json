@@ -330,7 +330,8 @@
 					"html/search/index.html",
 					"html/public/browser.html",
 					"html/nearby/business/store_details.html",
-					"html/smart/devices/dev_my_list.html"
+					"html/smart/devices/dev_my_list.html",
+					"html/smart/devices/camera_settings.html"
 				],
 				"priority": 0
 			},

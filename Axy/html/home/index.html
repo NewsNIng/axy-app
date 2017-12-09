@@ -154,15 +154,14 @@
 				color: #f5fbfa;
 				right: 0.626666rem;
 				top: 0.306666rem;
-				line-height: 0.4rem; 
+				line-height: 0.4rem;
 				text-align: center;
 				border-radius: 2px;
 			}
-			.device_show .dev_status.offline{
+			
+			.device_show .dev_status.offline {
 				background-color: #9F9FA0;
 			}
-			
-			
 			/*设备名称及菜单====start====*/
 			/*设备名称及菜单====end====*/
 			/*猜你喜欢====start====*/
@@ -293,7 +292,7 @@
 				<div class="model_type">
 					<template v-for="o,i in modelTypes">
 						<div @tap="onModelTap(o, i)">
-							
+
 							<img :src="o.src" />
 							<span class="app-font-size-24">{{o.name}}</span>
 						</div>
@@ -316,7 +315,6 @@
 						<div class="device_show">
 							<div class="img" :style="{backgroundImage: 'url('+'file:////storage/emulated/0/CameraFamily/Thumbnail/'+dev.devid+'.jpeg'+')'}" @tap="openCamListWindow()">
 
-								
 							</div>
 							<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
 							<div class="dev_menu">
@@ -432,19 +430,23 @@
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
 		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
 
+		<script type="text/javascript" src="../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../js/plug/PlugH5NativeBridge.js"></script>
+		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
 			var advert_cache = new ni.Cache('advert_cache', []);
 
 			var B = new ni.Broadcast();
 
+			var runManager, devManager;
+
 			mui.init({
 				gestureConfig: {
 					longtap: true
 				}
 			});
-			new Vue({
+			var vm = new Vue({
 				el: '#approom',
 				data: function() {
 					return {
@@ -491,8 +493,10 @@
 						longitude: 0,
 						latitude: 0,
 						city: '深圳',
+
 					};
 				},
+
 				computed: {
 					imgFrist: function() {
 						return this.imgList[0];
@@ -504,15 +508,6 @@
 				mounted: function() {
 					// 获取轮播广告图
 					this.getAdvert();
-					//如果用户登录了 则  获取第一个设备
-					if(app.user.has()) {
-						this.getDeviceOne();
-					}
-					// 同时监听登录成功事件
-					new this.$Broadcast().on('login_success', function() {
-						// 更新获取设备
-						this.getDeviceOne();
-					}.bind(this));
 
 					// 获取喜欢列表
 					this.getThemeList();
@@ -529,6 +524,31 @@
 					});
 				},
 				plusReady: function() {
+					var that = this;
+
+					// 本地 所有设备的信息
+					var ALLD = new ni.Cache('AllDeviceInfo', [], {
+						plus: true
+					});
+
+					// 本地 所有设备的运行状态
+					var ALLR = new ni.Cache('AllDeviceRun', [], {
+						plus: true
+					});
+
+					devManager = new DevManager(ALLD);
+					runManager = new DevManager(ALLR);
+
+					//如果用户登录了 则  获取第一个设备
+					if(app.user.has()) {
+						this.getDeviceOne();
+					}
+					// 同时监听登录成功事件
+					new this.$Broadcast().on('login_success', function() {
+						// 更新获取设备
+						this.getDeviceOne();
+					}.bind(this));
+
 					// plus ready ! 现在可以使用plus相关api
 					// 设置本页面无滚动条显示
 					this.$view.setStyle({
@@ -540,8 +560,10 @@
 					this.getCurrentPosition().then(function() {
 						// 附近的店
 						this.getNearShops();
+					}.bind(this)).catch(function(){
+						this.getNearShops();
 					}.bind(this));
-					
+
 					// 监听设备变化
 					this.listenDev();
 
@@ -606,15 +628,15 @@
 						}.bind(this), 1);
 					},
 					// 监听设备变化
-					listenDev: function(){
-						B.on('RunstateNotify', function(data){
+					listenDev: function() {
+						B.on('RunstateNotify', function(data) {
 							// if(data.add)
-							if(data.info.devid === this.dev.devid){
+							if(data.info.devid === this.dev.devid) {
 								this.dev = data.info;
 							}
 						}.bind(this));
 					},
-					
+
 					// 获取喜欢列表
 					getThemeList: function() {
 						dal.home.theme.get(function(err, data) {
@@ -649,12 +671,27 @@
 							}
 						});
 					},
-					
+
 					// 设备设置点击
-					onDeviceSetTap: function(){
-						
+					onDeviceSetTap: function() {
+						var id = this.dev.devid;
+
+						var localInfo = devManager.selectByWhere(function(o) {
+								return o.basicInfo && o.basicInfo.devid === id;
+							}),
+							runInfo = runManager.selectByWhere(function(o) {
+								return o.devid = id
+							});
+
+						mui.openWindow('../smart/devices/camera_settings.html', 'camera_settings', {
+							extras: {
+								localInfo: localInfo,
+								runInfo: runInfo,
+								netInfo: this.dev
+							}
+						});
 					},
-					
+
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
 					},
@@ -681,7 +718,7 @@
 						});
 					},
 					// 查看我的设备
-					onDeviceMore: function(){
+					onDeviceMore: function() {
 						mui.openWindow('../smart/devices/dev_my_list.html');
 					},
 
