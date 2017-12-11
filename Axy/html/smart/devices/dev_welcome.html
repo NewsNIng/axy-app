@@ -56,7 +56,7 @@
 							<span class="mui-badge">123456789</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
 							<span class="mui-badge">xx房间的智能插座</span>
@@ -99,6 +99,7 @@
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -114,6 +115,70 @@
 				data: function() {
 					return {
 						state: true, // 当前状态
+						dev: {
+							"alarmPlan": [{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								},
+								{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								}
+							],
+							"basicInfo": {
+								"appversion": "2017-09-28 09:36:04",
+								"devName": "104GN",
+								"devType": 4166,
+								"devid": "VH-104GN-2017061500043",
+								"hwversion": "2015-11-01 10:13:43"
+							},
+							"netInfo": {
+								"ip": "192.168.1.23",
+								"ssid": "aaa2.4",
+								"type": 0
+							},
+							"onvif": [{
+									"ch": 0,
+									"name": "第一个外部通道",
+									"online": 1
+								},
+								{
+									"ch": 1,
+									"name": "第二个外部通道",
+									"online": 1
+								}
+							],
+							"recordPlan": [{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								},
+								{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								}
+							],
+							"zones": [{
+									"ID": "81457896",
+									"bindV": 128,
+									"delay": 0,
+									"ptzSet": 0,
+									"zoneAction": "32775",
+									"zoneName": "红外幕帘1"
+								},
+								{
+									"ID": "81457897",
+									"bindV": 128,
+									"delay": 0,
+									"ptzSet": 0,
+									"zoneAction": "32775",
+									"zoneName": "红外幕帘1"
+								}
+							]
+						},
 					};
 				},
 				mounted: function() {
