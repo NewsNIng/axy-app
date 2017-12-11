@@ -217,7 +217,17 @@
 					// 切换开关
 					toggleSwitch: function() {
 						this.state = !this.state;
-					}
+					},
+					// 设备名称
+					onNameTap: function(name) {
+						var that = this;
+						app.page.getInput(function(data) {
+							that.dev.basicInfo.devName = data.content;
+						}, {
+							title: "设备名称",
+							tips: that.dev.basicInfo.devName,
+						});
+					},
 				}
 			});
 		</script>

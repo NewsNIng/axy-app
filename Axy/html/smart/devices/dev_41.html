@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>甲醛探测器</title>
+		<title>门磁探测器</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -23,67 +23,15 @@
 			
 			.img-wrap {
 				height: 0;
-				padding-bottom: 7.613333rem;
-				background-image: url(../../../image/smart/devices/gas/btn_Formaldehydedetector@3x.png);
+				padding-bottom: 7rem;
+				/*background-image: url(../../../image/smart/devices/gas/btn_Formaldehydedetector@3x.png);*/
 				background-repeat: no-repeat;
-				background-size: 60%;
+				background-size: 50%;
 				background-position: bottom;
 			}
 			
 			.menu-warp {
-				display: flex;
-				display: -webkit-flex;
-				padding: 1.52rem 0.346666rem 0.826666rem 0.346666rem;
-				
-				justify-content: space-between;
-			}
-			
-			.menu-warp>div {
-				/*border: 1px solid #ccc;*/
-				flex: 1;
-				height: auto;
-				/*width: rem;*/
-				text-align: center;
-			}
-			.menu-warp>div>div {
-				color: #333333;
-			}
-			
-			/*.menu-warp>div>img {
-				width: 1.4rem;
-			}*/
-			
-			.battery_status {
-				color: #333333 !important;
-			}
-			
-			.point {
-				color: #9F9FA0;
-				padding-left: 0.266666rem;
-			}
-			
-			.state_show {
-				float: left;
-				position: relative;
-				top: 4.45rem;
-				text-align: center;
-				width: 100%;
-				
-			}
-			
-			.state_show>span {
-				display: block;
-				color: white;
-				padding-bottom: 0.133333rem;
-			}
-			
-			header img {
-				width: 0.48rem;
-			}
-			
-			.mui-icon {
-				margin-right: 0 !important;
-				padding-right: 0 !important;
+				height: 3.066666rem;
 			}
 		</style>
 	</head>
@@ -93,33 +41,13 @@
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">甲醛探测器</h1>
-				<span class="mui-icon mui-pull-right">
-					<img src="../../../image/smart/devices/gas/btn_Trendchart@3x.png" />
-				</span>
+				<h1 class="mui-title">门磁探测器</h1>
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div class="state_show"> 
-					<span class="app-font-size-30">0.08mg/m³</span>
-					<span class="app-font-size-44">舒适</span>
-					<span class="app-font-size-24">当前状态</span>
+				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/icon/btn_Infrareddetector@3x.png' : '../../../image/smart/devices/icon/btn_Infrareddetector1@3x.png') + ')'">
 				</div>
-				<div @tap="toggleSwitch()" class="img-wrap">
-				</div>
-				<div class="menu-warp app-font-size-24 app-color-dark">
-					<div class="app-font-size-26">
-						温度
-						<!--<img src="../../../image/smart/devices/lock/btn_Settingpassword@3x.png" />-->
-						<div class="app-font-size-34">12°C</div>
-					</div>
-
-					<div class="app-font-size-26">
-						湿度
-						<!--<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />-->
-						<div class="app-font-size-34">10%</div>
-					</div>
-				</div>
+				<div class="menu-warp app-font-size-24 app-color-dark"></div>
 
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell">
@@ -128,10 +56,10 @@
 							<span class="mui-badge">123456789</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right" @tap="onNameTap()">
+					<li class="mui-table-view-cell" @tap="onNameTap()">
+						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">xx房间的甲醛探测器</span>
+							<span class="mui-badge">xx家里的门磁探测器</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -141,21 +69,15 @@
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a class="battery_status">
-							<span>电池状态</span>
-							<span class="mui-badge battery_status">正常</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="battery_status">
-							<span>通讯状态</span>
-							<span class="mui-badge battery_status">正常</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
 						<a class="">
 							<span>防区类型</span>
-							<span class="mui-badge">24小时防区</span>
+							<span class="mui-badge">出入防区</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>告警延迟时间</span>
+							<span class="mui-badge">30S</span>
 						</a>
 					</li>
 				</ul>
@@ -192,7 +114,7 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						
+						state: true, // 当前状态
 						dev: {
 							"alarmPlan": [{
 									"end": "19:50:00",
@@ -264,7 +186,10 @@
 				},
 				plusReady: function() {},
 				methods: {
-					
+					// 切换开关
+					toggleSwitch: function() {
+						this.state = !this.state;
+					},
 					// 设备名称
 					onNameTap: function(name) {
 						var that = this;
