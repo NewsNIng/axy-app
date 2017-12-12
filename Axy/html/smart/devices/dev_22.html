@@ -108,7 +108,7 @@
 				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
 			</footer>-->
-			<dev-footer :deviceid = "5" :comid="6" @unbind="onUnBind" @deldevive="onDelDevice">
+			<dev-footer :deviceid = "5" :comid="6" @del="onDelDevice">
 				
 			</dev-footer>
 		</div>
@@ -228,9 +228,6 @@
 					onUnBind: function(){
 						console.log("unbind");
 					},
-					onDelDevice: function(){
-						console.log("deldevice");
-					},
 					// 设备名称
 					onNameTap: function(name) {
 						var that = this;
@@ -240,6 +237,10 @@
 							title: "设备名称",
 							tips: that.dev.basicInfo.devName,
 						});
+					},
+					// 删除设备
+					onDelDevice: function(){
+						console.log("deldevice");
 					},
 				}
 			});

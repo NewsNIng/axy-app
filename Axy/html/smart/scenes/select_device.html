@@ -16,11 +16,6 @@
 				background-color: #F4F8FB;
 			}
 			
-			.mui-content {
-				padding-bottom: 0;
-				margin-top: 0.293333rem !important;
-			}
-			
 			.mui-icon>img {
 				width: 0.613333rem;
 			}
@@ -185,7 +180,7 @@
 				<dev-light :show="devActive === 12" @save="onDevSave12" @cancel="mask = false"></dev-light>
 			</dev-mask>
 
-			<div class="mui-content">
+			<div class="mui-content ">
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell" v-for="o,i in devList">
 						<a class="mui-navigate-right" @tap="onClickTap(i)">
