@@ -251,7 +251,7 @@
 					<img src="../../image/home/message.png" />
 				</a>
 				<h1 class="mui-title"></h1>
-				<a class="mui-icon mui-pull-right">
+				<a class="mui-icon mui-pull-right" @tap="onPlusTap()">
 					<img src="../../image/home/plus.png" />
 				</a>
 				<a class="mui-icon mui-pull-right" style="margin-right: 0.133333rem;" @tap="onSearchTap()">
@@ -580,12 +580,19 @@
 							}.bind(this), rj);
 						}.bind(this));
 					},
+					
+					// 点击搜索按钮
 					onSearchTap: function() {
 						mui.openWindow('../search/index.html', 'search', {
 							show: {
 								aniShow: 'slide-in-bottom'
 							}
 						});
+					},
+					// 点击添加按钮
+					onPlusTap: function(){
+						
+						mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
 					},
 
 					// 当点击模式时

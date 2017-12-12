@@ -56,19 +56,12 @@
 						progressbar: null,
 					};
 				},
-				computed: {
-					eq: function(){
-						return this.url === this.curl;
-					}
-				},
 				mounted: function(){
-					
 					this.progressbar = mui('body').progressbar({progress: 100});
 					this.progressbar.show();
 				},
 				plusReady: function() {
 					mui.back = this.onBack.bind(this);
-					
 					this.init();
 					this.listen();
 				},

@@ -135,6 +135,12 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
+			
+			/**
+			 * type 0 声波
+			 * type 1内网
+			 * type 2扫码
+			 */
 
 			new Vue({
 				el: '#warpper',
@@ -147,98 +153,111 @@
 							devs: [{
 								img: "../../../image/smart/devices/dev_icon/AX-360@3x.png",
 								name: "AX-360",
+								type: 0
 							}, {
 								img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
 								name: "AX-203",
+								type: 1
 							}, {
 								img: "../../../image/smart/devices/dev_icon/AX-203A-D@3x.png",
 								name: "AX-203A/D",
+								type: 1
 							}, {
 								img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
 								name: "AX-403A",
+								type: 1
 							}, {
 								img: "../../../image/smart/devices/dev_icon/AX-503-HD@3x.png",
 								name: "AX-503/HD",
+								type: 1
 							}, {
 								img: "../../../image/smart/devices/dev_icon/AX-603@3x.png",
 								name: "AX-603",
+								type: 1
 							}, {
-								img: "../../../image/smart/devices/dev_icon/电力安全主机@3x.png",
+								img: "../../../image/smart/devices/dev_icon/dlaqzj@3x.png",
 								name: "电力安全主机",
+								type: 2
 							}, {
 								img: "../../../image/smart/devices/dev_icon/WG-100@3x.png",
 								name: "WG-100",
+								type: 1
 							}, {
 								img: "../../../image/smart/devices/dev_icon/AX-904@3x.png",
 								name: "AX-904",
+								type: 2
 							}, {
 								img: "../../../image/smart/devices/dev_icon/VH104D-N-MG@3x.png",
 								name: "VH104D/N/MG",
+								type: 1
 							}, ]
 						},
 						ctrl_fit: {
 							title: "智能控制配件",
 							devs: [{
-								img: "../../../image/smart/devices/dev_icon/智能门锁@3x.png",
+								img: "../../../image/smart/devices/dev_icon/znms@3x.png",
 								name: "智能门锁",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/智能插座@3x.png",
+								img: "../../../image/smart/devices/dev_icon/zncz@3x.png",
 								name: "智能插座",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/智能灯控@3x.png",
+								img: "../../../image/smart/devices/dev_icon/zndk@3x.png",
 								name: "智能灯控",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/窗帘控制器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/clkzq@3x.png",
 								name: "窗帘控制器",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/窗帘升降器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/clsjq@3x.png",
 								name: "窗帘升降器",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/门禁主机@3x.png",
+								img: "../../../image/smart/devices/dev_icon/mjzj@3x.png",
 								name: "门禁主机",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/红外遥控模块@3x.png",
+								img: "../../../image/smart/devices/dev_icon/hwyk@3x.png",
 								name: "红外遥控模块",
 							}, ],
 						},
 						safe_fit: {
 							title: "智能安全配件",
 							devs: [{
-								img: "../../../image/smart/devices/dev_icon/遥控器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/ykq@3x.png",
 								name: "遥控器",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/紧急按钮@3x.png",
+								img: "../../../image/smart/devices/dev_icon/jjan@3x.png",
 								name: "紧急按钮",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/声光报警器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/sgbj@3x.png",
 								name: "声光报警器",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/门磁探测器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/mctc@3x.png",
 								name: "门磁探测器",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/烟雾探测器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/ywtc@3x.png",
 								name: "烟雾探测器",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/燃气探测器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/rqtc@3x.png",
 								name: "燃气探测器",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/红外幕帘@3x.png",
+								img: "../../../image/smart/devices/dev_icon/hwml@3x.png",
 								name: "红外幕帘",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/一氧化碳探测器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/yyht@3x.png",
 								name: "一氧化碳探测器",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/隐形防盗探测器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/yxfd@3x.png",
 								name: "隐形防盗探测器",
 							}, {
-								img: "../../../image/smart/devices/dev_icon/迎宾器@3x.png",
+								img: "../../../image/smart/devices/dev_icon/ybq@3x.png",
 								name: "迎宾器",
 							}, ],
+							
+							
+							devCache: null
 						},
 					};
 				},
 				mounted: function() {
-
+					
 				},
 				plusReady: function() { 
 					this.isWifi = app.net.getType() === 'wifi';
@@ -246,6 +265,10 @@
 					app.net.listen(function(type){
 						this.isWifi = type === 'wifi';
 					}.bind(this));
+					
+					this.devCache = new ni.Cache("dev_list", [], {
+						plus: true
+					});
 				},
 				methods: {
 					// 切换开关
@@ -259,15 +282,30 @@
 					
 					// 主机
 					onItemTap1: function(o){
-						this._voiceDevLine();
+						if(o.type === 0){
+							this._voiceDevLine();
+						}else if(o.type === 1){
+							this._hostNetLine(o.img);
+						}else{
+							this._scanCodeLine(1);
+						}
 					},
 					// 控制配件
 					onItemTap2: function(o){
+						var l = this.devCache.data.length; 
+						if(!l || l === 0){
+							return mui.toast('请先添加主机');
+						}
 						
+						this._scanCodeLine();
 					},
 					// 安全配件
 					onItemTap3: function(o){
-						
+						var l = this.devCache.data.length; 
+						if(!l || l === 0){
+							return mui.toast('请先添加主机');
+						}
+						this._scanCodeLine();
 					},
 					
 					
@@ -284,20 +322,24 @@
 					},
 					
 					// 内网连接设备
-					_hostNetLine: function(){
+					_hostNetLine: function(img){
 						if(!this.isWifi){
 							return mui.toast('请连接WIFI');
 						}
+						// 保存当前设备img地址
+						window.localStorage.setItem('Lan_add_camera_img', img);
 						mui.openWindow('Lan_add_camera.html');
 					},
 					
 					// 扫码获取设备ID
-					_scanCodeLine: function(){
+					_scanCodeLine: function(type){
 						app.page.openForResultBy('scan.html', 'scan', function(data){
 							// 获取扫码结果
 							console.log(data.result);
 							// 执行设备添加
 							
+						}, {
+							type: type
 						});
 					}
 				}

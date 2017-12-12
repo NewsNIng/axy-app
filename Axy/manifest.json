@@ -282,7 +282,8 @@
 					"html/common/login.html",
 					"html/common/reset2.html",
 					"html/public/position.html",
-					"html/public/browser.html"
+					"html/public/browser.html",
+					"html/person/information.html"
 				],
 				"priority": 0
 			},
@@ -331,7 +332,8 @@
 					"html/public/browser.html",
 					"html/nearby/business/store_details.html",
 					"html/smart/devices/dev_my_list.html",
-					"html/smart/devices/camera_settings.html"
+					"html/smart/devices/camera_settings.html",
+					"html/smart/add/add_device.html"
 				],
 				"priority": 0
 			},
@@ -355,7 +357,8 @@
 					"html/smart/add/scan.html",
 					"html/smart/add/add_device.html",
 					"html/smart/add/family_menu.html",
-					"html/search/index.html"
+					"html/search/index.html",
+					"html/common/login.html"
 				],
 				"priority": 0
 			},
@@ -488,7 +491,8 @@
 					"html/nearby/business/signup_next.html",
 					"html/nearby/business/upload_store_pic.html",
 					"html/nearby/business/upload_store_time.html",
-					"html/common/login.html"
+					"html/common/login.html",
+					"html/nearby/business/signup_success.html"
 				],
 				"priority": 0
 			},
@@ -712,6 +716,22 @@
 				"refer": [
 					"html/smart/devices/camera_settings_info.html",
 					"html/smart/devices/camera_settings_arming.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_error.html": {
+				"resources": [
+					"js/common/immersed.js",
+					"js/common/flexible.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/person/information.html": {
+				"resources": [],
+				"refer": [
+					"html/public/image_cropper.html",
+					"html/public/input.html"
 				],
 				"priority": 0
 			}

@@ -5,127 +5,220 @@
 		<meta charset="UTF-8">
 		<title>智慧生活</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
-		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<style type="text/css">
+			.mui-bar-nav~.mui-content {
+				padding-top: 0;
+			}
+			
+			.mui-slider-indicator .mui-indicator {
+				/*background: transparent;*/
+				margin: 0 1.5px;
+				border: .5px white solid;
+			}
+			
+			.mui-slider-item {
+				width: 100%;
+				height: 0 !important;
+				padding-top: 47%;
+				background-size: cover;
+				background-position: center;
+			}
+			/*26分割线*/
+			
+			#slider {
+				margin-bottom: 0.346666rem;
+			}
+			/*end 26分割线*/
+			
+			
+			/*九宫格*/
+			ul{
+				background-color: #FFFFFF !important;
+			}
+			ul>li{
+				height: 3.333333rem;
+				width: 3.333333rem;
+				text-align: center;
+				padding-top: 0.55rem !important;
+				border-color: #E5E6E7 !important;
+			}
+			ul>li img{
+				width: 0.693333rem;
+			}
+			
+			/*end 九宫格*/
+		</style>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav app-header">
-			<!--<a class="mui-action-back mui-pull-left app-icon-back"></a>-->
-			<h1 class="mui-title">智慧生活</h1>
-		</header>
-		<div class="mui-content">
-			<template v-for='o,i in list'>
-				<button type="button" class="mui-btn app-btn-main" @tap="onButtonTap(o)">{{o.name}}</button>
-				<br />
-			</template>
+
+		<div class="mui-content noImmersed">
+			<!--<div class="mui-scroll">-->
+
+			<div id="slider" class="mui-slider" v-if="imgList.length > 0">
+				<div class="mui-slider-group mui-slider-loop">
+					<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+					<div @tap="onAdvertTap(imgLast)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.adimg">
+						<!--<a href="#">
+							<img :src="imgLast.src">
+						</a>-->
+					</div>
+
+					<!-- 第四张 -->
+					<div @tap="onAdvertTap(o)" class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o.adimg">
+						<a href="#">
+							<img :src="o.src">
+						</a>
+					</div>
+					<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+					<div @tap="onAdvertTap(imgFrist)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.adimg">
+						<!--<a href="#">
+							<img :src="imgFrist.src">
+						</a>-->
+					</div>
+				</div>
+				<div class="mui-slider-indicator">
+					<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+				</div>
+			</div>
+
+			<ul class="mui-table-view mui-grid-view mui-grid-9">
+				<template v-for="o,i in menuList">
+					
+			
+				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap(o)">
+					<a>
+						<span class="mui-icon">
+							<img :src="o.img"/>
+						</span>
+						<div class="mui-media-body">{{o.text}}</div>
+					</a>
+				</li>
+					</template>
+			</ul>
+
+			<div class="menu-room app-font-size-28">
+
+			</div>
 
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
-		<script src="../../js/lib/mui.min.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
-
-		<script type="text/javascript" src="../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../js/dal/user.js"></script>
-
+		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
+		
+		<script type="text/javascript" src="../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init();
+			
+			
+			
 			new Vue({
-				el: ".mui-content",
+				el: '.mui-content',
 				data: function() {
 					return {
-						list: [{
-								name: '原生测试页面',
-								href: 'test.html'
-							},{
-								name: '智能场景',
-								href: 'scenes/index.html'
+						hasDev: false,
+						imgList: [{
+								adimg: "https://user-gold-cdn.xitu.io/2017/12/1/16011e0577b180c5?imageView2/1/w/960/h/200/q/85/format/jpg/interlace/1"
 							},
 							{
-								name: '窗帘控制器',
-								href: 'devices/dev_curtain_controller.html'
-							},
-							{
-								name: '电管家',
-								href: 'devices/dev_electric_controller.html'
-							},
-							{
-								name: '红外探测',
-								href: 'devices/dev_Infrared_controller.html'
-							},
-							{
-								name: '添加家人设备',
-								href: 'add/family_menu.html'
-							},
-							{
-								name: '添加设备',
-								href: 'add/scan.html'
-							},
-							{
-								name: '搜索页面',
-								href: '../search/index.html',
-//								plusrequire: 'ahead' 
+								adimg: "https://user-gold-cdn.xitu.io/2017/12/1/16011e0577b180c5?imageView2/1/w/960/h/200/q/85/format/jpg/interlace/1"
 							}
-						]
-					};
+						],
+						menuList: [
+							{
+								text: "我的设备",
+								img: '../../image/smart/btn_Myequipment@3x.png',
+								href: 'devices/dev_my_list.html', 
+							},
+							{
+								text: "添加设备",
+								img: '../../image/smart/btn_Myequipment@3x.png',
+								href: 'add/add_device.html',
+							},
+							{
+								text: "智能场景",
+								img: '../../image/smart/btn_Intelligentscene@3x.png',
+								href: 'scenes/index.html',
+							},
+							{
+								text: "智能商城",
+								img: '../../image/smart/btn_Intelligentcommercialcity@3x.png',
+								href: '',
+							},
+							{
+								text: "体验馆",
+								img: '../../image/smart/btn_ExperienceHall@3x.png',
+								href: '',
+							},
+							{
+								text: "心管家服务",
+								img: '../../image/smart/btn_butlerservice@3x.png',
+								href: '',
+							},{
+								text: "我的设备",
+								img: '../../image/smart/btn_Myequipment@3x.png',
+								href: '',
+							},
+							{
+								text: "智能场景",
+								img: '../../image/smart/btn_Intelligentscene@3x.png',
+								href: '',
+							},
+							{
+								text: "智能商城",
+								img: '../../image/smart/btn_Intelligentcommercialcity@3x.png',
+								href: '',
+							}
+						],
+						
+						
+					}
 				},
-				mounted: function() {
-
+				computed: {
+					imgFrist: function() {
+						return this.imgList[0];
+					},
+					imgLast: function() {
+						return this.imgList[this.imgList.length - 1];
+					}
 				},
 				plusReady: function() {
-
+					imagelazyload();
+					var D = new ni.Cache('dev_list', [], {
+						plus: true
+					});
+					if(D.data.length > 0){
+						this.hasDev = true;
+					}
+					this.menuList.splice(+this.hasDev, 1);
 				},
 				methods: {
-					onButtonTap: function(o) {
-						mui.openWindow(o.href, o.id||o.href, {
-							plusrequire: o.plusrequire || 'normal'
-						}, {
-							
+					onAdvertTap: function() {
+
+					},
+					
+					onItemTap: function(o) {
+						// 验证登录
+						app.user.get(function(u){
+							u && mui.openWindow(o.href, o.id || o.href);	
 						});
 					},
-					onScanTap: function() {
-						return ;
-						mui.openWindowWithTitle({
-							url: 'add/scan.html'
-						}, {
-							height: '44px',
-							backgroundColor: 'rgba(0,0,0,0.5)',
-							bottomBorderColor: 'rgba(0,0,0,0)',
-							title: {
-								text: '扫码添加',
-								position: {
-									top: '0px',
-									left: '0px',
-									width: "100%",
-									height: "100%",
-								},
-								styles: {
-									color: "#FFFFFF",
-									align: "center",
-								}
-							},
-							back: {
-								image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjM4NDQ4NDk5QzM1NzExRTdCMTQwOTY5NDIwN0RGOTREIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjM4NDQ4NDlBQzM1NzExRTdCMTQwOTY5NDIwN0RGOTREIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6Mzg0NDg0OTdDMzU3MTFFN0IxNDA5Njk0MjA3REY5NEQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6Mzg0NDg0OThDMzU3MTFFN0IxNDA5Njk0MjA3REY5NEQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4oRe8oAAADC0lEQVR42uyaTUhVQRTHR18KtTDIj03RRjdBEeRCTMoMKyh6RAsXKS4CEcGFiEsRlyJBOxU3ofDaVFIZaWKZYYKfmwQ3ufErsty4aSH1+h88i4fMzOLduffOm3sP/BaPA/fO/83MuXPOnLx0Oi2iZPkiYhYLttSugRVQEQXB9eADuAI+gwsuC06C9+Ak/z4LvoDL2T4wz+Io3QhGQELiWwWVLs1wKxhViF0Dd11a0p1gSDG2RVAHfmb9dFrSFtGTVtssOO31HbYIpVjSrxE7BU6ZeJctYgc1Yt+AQlPvOxHyfk1wcHqk8D8HzeCvCyetQvBCI3bItNgwgxbtxwnNMn7CS934u8MQS5F2RiO218/3By32DFjQiO3yewxBBq1S8AlclPj+gXYw6PcgghJ8jjOdcoVYCk6pIAYShGDKYT+C8xLfIWgAr10pAFzimZWJ/QPuBynW7xmm9G0SlEh8B5zrzgb98fdL8FUwAYokvn1wDyyEcdrxQ/BN8C6jSpFpe1yy+eZKES/Jy1gmdgfUhCnWtGAqybwEBRLfBqgG310p07Zw1lOgKMlcB1uu1KU7wLDiWcu8p3dtqR95FdwNnip8XzlA/bKqYubhIN6nSQKmTZVkTBO5uyWv/1i3ZpbnTFQZbcyHOzSil0CpTYJNXbW0aIrn9Fm6DX7YsKJN3i3RweOZ5uBRZ8O32PRlWlJz2qKj5Y2wT1t+3B5GKnkQXLeq55z3uJWBGVDlkmCyeZ7p3xJfMZgCtS4JJlth0TsSXxEXCO64JFjwXqVAtSnx0R4fBw9cEiw4Ktfwp+m4UTR/xZ80ZwSTbXMBYE0xBsql21wSLDhNpEC1qBjHAOiyPXmIL9Pi61I11MYwphFNbRAJlwQLFpTSiE6ZFh12xYPaGZo4tZQZtUOMiaP2iJwNWpFvW4pkY1omnRrR1C5RYkOJx7S18kFEVTKi9DOrfsu4fdgio56Ph+KoLSLTKMd+bFOJx7TR8n3L6STl1rfAei4kD9naNBcKVjm3XvfysFyY4ZxND2PBYdh/AQYA8jAw6ktbh2IAAAAASUVORK5CYII=",
-								sprite: {
-									top: '0px',
-									left: '0px',
-									width: "100%",
-									height: "100%"
-								},
-								position: {
-									top: '10px',
-									left: '10px',
-									width: "24px",
-									height: "24px"
-								}
-							}
-						})
-					}
 				}
-			});
+
+			})
 		</script>
 	</body>
 

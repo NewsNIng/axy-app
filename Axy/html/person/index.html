@@ -3,100 +3,229 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title></title>
+		<title>个人中心</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
-		<style type="text/css">
+		<link rel="stylesheet" href="../../css/app/devices.css" />
 
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB !important;
+			}
+			
+			.app-touch:active {
+				/*触摸半透膜*/
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*背景*/
+			
+			.bg-box {
+				height: 5.333333rem;
+				width: 100%;
+				background-image: url(../../image/person/bg@3x.png);
+				background-position: center;
+				background-size: cover;
+				text-align: center;
+			}
+			/*end背景*/
+			/*头像*/
+			
+			.bg-box-avastr {
+				width: 1.813333rem;
+				height: 1.813333rem;
+				border: 1px #FFFFFF solid;
+				border-radius: 50%;
+				margin-top: 1.066666rem;
+			}
+			/*end头像*/
+			/*姓名*/
+			
+			.bg-box-nickname {
+				margin: 0.2rem 0;
+			}
+			/*end姓名*/
+			/*快捷菜单*/
+			
+			.fast-box {
+				background-color: #FFFFFF;
+			}
+			/*end快捷菜单*/
+			/*快捷菜单 item*/
+			
+			.fast-box-card {
+				float: left;
+				width: 25%;
+				text-align: center;
+				background-color: #FFFFFF;
+				padding-bottom: 0.333333rem;
+			}
+			
+			.fast-box-card>img {
+				margin: 0.4rem;
+				width: 0.56rem;
+				height: 0.56rem;
+			}
+			
+			.fast-box:after {
+				/*去除浮动*/
+				clear: both;
+				content: "";
+				display: block;
+			}
+			/*end快捷菜单 item*/
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*-left图片文字*/
+			
+			.menu-box a.mui-navigate-right {}
+			
+			.menu-box a.mui-navigate-right>img {
+				width: 0.48rem;
+				margin: 0 0.2rem;
+				vertical-align: middle;
+			}
+			
+			.menu-box a.mui-navigate-right>span {
+				vertical-align: middle;
+			}
+			/*end菜单*/
 		</style>
+
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav app-header">
-			<h1 class="mui-title">个人中心</h1>
-		</header>
-		<div class="mui-content" style="padding-left: 25px;">
-			<br />
-			<button type="button" id='openlogin' class="mui-btn app-btn-main">打开登录</button>
-			<br />
-			<button type="button" @tap='logout' class="mui-btn app-btn-main">注销登录</button>
-			<br />
-			<br />
-			<button type="button" id="testopen" class="mui-btn app-btn-main">测试打开position</button>
-			<br />
-			<button type="button" @tap='openBrowser()' class="mui-btn app-btn-main-ghost">测试打开浏览器</button>
-				<br />
-				<button type="button" class="mui-btn app-btn-main" @tap="mui.openWindow('../smart/index.html','index')">原生测试页面</button>
-				<br />
-			<template v-for="o,i in testList">
-				<br />
-				<input type="" name="" id="" value="" v-model="inputList[i]" placeholder="参数列表，逗号隔开" />
-				<br />
-				<button type="button" @tap='onTestTap(o, i)' class="mui-btn app-btn-main-ghost">{{o}}</button>
-				<br />
-			</template>
 
+		<div class="mui-content noImmersed">
+
+			<div class="bg-box">
+				<img @tap="onAvastrTap()" class="bg-box-avastr" src="https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256" />
+				<div class="app-font-size-34 app-color-white bg-box-nickname">NewsNing</div>
+				<div class="app-font-size-24 app-color-white">早安，美好的一天又开始了！</div>
+			</div>
+
+			<div class="fast-box">
+				<div class="fast-box-card app-touch">
+					<img src="../../image/person/btn_Myequipment@3x.png" />
+					<div class="app-font-size-24 app-color-333333">我的设备</div>
+				</div>
+				<div class="fast-box-card app-touch">
+					<img src="../../image/person/btn_Sharedequipment@3x.png" />
+					<div class="app-font-size-24 app-color-333333">共享设备</div>
+				</div>
+				<div class="fast-box-card app-touch">
+					<img src="../../image/person/btn_Collection@3x.png" />
+					<div class="app-font-size-24 app-color-333333">收藏</div>
+				</div>
+				<div class="fast-box-card app-touch">
+					<img src="../../image/person/btn_Myalbum@3x.png" />
+					<div class="app-font-size-24 app-color-333333">我的相册</div>
+				</div>
+			</div>
+
+			<div class="menu-box app-font-size-28">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Myattention@3x.png" />
+							<span class="app-color-333333">我的关注</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Mywallet@3x.png" />
+							<span class="app-color-333333">我的钱包</span>
+							<span class="mui-badge">100.00</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Mybusinesscity@3x.png" />
+							<span class="app-color-333333">我的商城</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Mycard@3x.png" />
+							<span class="app-color-333333">我的卡券</span>
+							<span class="mui-badge">5</span>
+						</a>
+					</li>
+
+				</ul>
+
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Messagecenter@3x.png" />
+							<span class="app-color-333333">消息中心</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_AboutAnXinyun@3x.png" />
+							<span class="app-color-333333">关于安心云</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Setup@3x.png" />
+							<span class="app-color-333333">设置</span>
+						</a>
+					</li>
+
+				</ul>
+			</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
-		<script src="../../js/lib/mui.min.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
-		<script type="text/javascript" src="../../js/app/app.js" ></script>
-		<script type="text/javascript" src="../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../js/plug/PlugH5NativeBridge.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
-
+			
+			
+			
 			new Vue({
 				el: '.mui-content',
-				data: function() {
-					return {
-						testList: [],
-						inputList: [],
-					};
+				data: function(){
+					return {};
 				},
-				mounted: function() {
-					document.querySelector("#openlogin").addEventListener('tap', function() {
-						mui.openWindow('_www/html/common/login.html', 'login', {
-							extras: {
-								qid: 123
-							}
-						});
+				plusReady: function(){
+					this.$view.setStyle({
+						scrollIndicator: 'none'
 					});
-					document.getElementById("testopen").addEventListener('tap', function() {
-						app.page.openForResult('position', function(data) {
-							data && alert(data.city);
-						});
-					});
-				},
-				plusReady: function() {
-					
 				},
 				methods: {
-					onTestTap: function(name, index) {
-						var arg = this.inputList[index].split(',');
-						var rs = plug.H5NativeBridge[name].apply(plug.H5NativeBridge[name], arg);
-						rs && mui.alert(JSON.stringify(rs));
-
+					//头像点击
+					onAvastrTap: function(){
+						mui.openWindow('information.html');
 					},
-					logout: function(){
-						app.user.logout();
-						window.localStorage.setItem('_pwd_', "");
-						//ﾟωﾟﾉ= /｀ｍ´）ﾉ ~┻━┻   //*´∇｀*/ ['_']; o=(ﾟｰﾟ)  =_=3; c=(ﾟΘﾟ) =(ﾟｰﾟ)-(ﾟｰﾟ); (ﾟДﾟ) =(ﾟΘﾟ)= (o^_^o)/ (o^_^o);(ﾟДﾟ)={ﾟΘﾟ: '_' ,ﾟωﾟﾉ : ((ﾟωﾟﾉ==3) +'_') [ﾟΘﾟ] ,ﾟｰﾟﾉ :(ﾟωﾟﾉ+ '_')[o^_^o -(ﾟΘﾟ)] ,ﾟДﾟﾉ:((ﾟｰﾟ==3) +'_')[ﾟｰﾟ] }; (ﾟДﾟ) [ﾟΘﾟ] =((ﾟωﾟﾉ==3) +'_') [c^_^o];(ﾟДﾟ) ['c'] = ((ﾟДﾟ)+'_') [ (ﾟｰﾟ)+(ﾟｰﾟ)-(ﾟΘﾟ) ];(ﾟДﾟ) ['o'] = ((ﾟДﾟ)+'_') [ﾟΘﾟ];(ﾟoﾟ)=(ﾟДﾟ) ['c']+(ﾟДﾟ) ['o']+(ﾟωﾟﾉ +'_')[ﾟΘﾟ]+ ((ﾟωﾟﾉ==3) +'_') [ﾟｰﾟ] + ((ﾟДﾟ) +'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ ((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [(ﾟｰﾟ) - (ﾟΘﾟ)]+(ﾟДﾟ) ['c']+((ﾟДﾟ)+'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ (ﾟДﾟ) ['o']+((ﾟｰﾟ==3) +'_') [ﾟΘﾟ];(ﾟДﾟ) ['_'] =(o^_^o) [ﾟoﾟ] [ﾟoﾟ];(ﾟεﾟ)=((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+ (ﾟДﾟ) .ﾟДﾟﾉ+((ﾟДﾟ)+'_') [(ﾟｰﾟ) + (ﾟｰﾟ)]+((ﾟｰﾟ==3) +'_') [o^_^o -ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+ (ﾟωﾟﾉ +'_') [ﾟΘﾟ]; (ﾟｰﾟ)+=(ﾟΘﾟ); (ﾟДﾟ)[ﾟεﾟ]='\\'; (ﾟДﾟ).ﾟΘﾟﾉ=(ﾟДﾟ+ ﾟｰﾟ)[o^_^o -(ﾟΘﾟ)];(oﾟｰﾟo)=(ﾟωﾟﾉ +'_')[c^_^o];(ﾟДﾟ) [ﾟoﾟ]='\"';(ﾟДﾟ) ['_'] ( (ﾟДﾟ) ['_'] (ﾟεﾟ+(ﾟДﾟ)[ﾟoﾟ]+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) - (ﾟΘﾟ))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((o^_^o) - (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟΘﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (o^_^o)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (o^_^o)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟoﾟ]) (ﾟΘﾟ)) ('_');
-						app.user.get(function(u){
-							console.log(JSON.stringify(u));
-						});
-					},
-					openBrowser: function(){
-						app.page.openBrowser({
-							url: 'https://segmentfault.com/u/newsning/articles'
-						});
-					}
 				}
-			});
+			})
 		</script>
 	</body>
 

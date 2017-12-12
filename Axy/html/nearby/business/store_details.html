@@ -200,7 +200,7 @@
 								return mui.toast(err.message);
 							}
 							console.log(JSON.stringify(data));
-							this.data = data;
+							this.data = data.store;
 						}.bind(this));
 					}
 				}

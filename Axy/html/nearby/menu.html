@@ -68,11 +68,11 @@
 
 	<body>
 		<ul class="mui-table-view room app-font-size-28 app-color-dark">
-			<li class="mui-table-view-cell" data-href="business/signup.html">
+			<li class="mui-table-view-cell" data-href="business/signup.html" data-id="signup">
 				<span class="mui-icon"><img src="../../image/nearby/discover/store@3x.png"/></span>
 				<span>商家入驻</span>
 			</li>
-			<li class="mui-table-view-cell" data-href="discover/discover_release.html">
+			<li class="mui-table-view-cell" data-href="discover/discover_release.html" data-id="discover_release">
 				<span class="mui-icon"><img src="../../image/nearby/discover/release@3x.png"/></span>
 				<span>发布说说</span>
 			</li>
@@ -86,8 +86,7 @@
 					mui.back();
 				});
 				mui('ul').on('tap', 'li', function(){
-					var href = this.getAttribute('data-href');
-					mui.openWindow(href);
+					mui.openWindow(this.dataset.href, this.dataset.id);
 				});
 			});
 		</script>

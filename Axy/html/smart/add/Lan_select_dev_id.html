@@ -140,6 +140,7 @@
 
 				},
 				plusReady: function() {
+					this.result = !!this.$view.result;
 					this.getLanDevHostList();
 				},
 				methods: {
@@ -149,8 +150,19 @@
 					onNext: function() {
 						// this is action connet device
 						// get indexDev id
-						var devid = this.indexDev.devid;
-						this.$view.loadURL('Lan_connect_camera.html?devid=' + devid + "&wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd);
+						try {
+							var devid = this.indexDev.devid;
+							if(this.result){
+								app.page.setResult({
+									devid: devid
+								}).close();
+							}else{
+								this.$view.loadURL('Lan_connect_camera.html?devid=' + devid + "&wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd);	
+							}
+							
+						} catch(e) {
+							mui.toast('获取主机信息失败');
+						}
 					},
 					// 内网主机列表
 					getLanDevHostList: function() {

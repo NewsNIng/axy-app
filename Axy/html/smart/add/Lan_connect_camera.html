@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>连接摄像机</title>
+		<title>连接设备</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -80,11 +80,11 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">连接摄像机</h1>
+				<h1 class="mui-title">连接设备</h1>
 			</header>
 
 			<div class="mui-content">
-				<div class="dev_icon app-font-size-30">
+				<div class="dev_icon app-font-size-30" :style="{backgroundImage: 'url('+ bgp +')'}">
 					<div class="dev_text">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
 				</div>
 				<div class="time app-font-size-24" v-text="t+'s'"></div>
@@ -131,10 +131,13 @@
 						wifipwd: "",
 
 						setid: "",
+						
+						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png'
 					};
 				},
 				mounted: function() {
-
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img');
+					
 					// get prev url params
 					function GetQueryString(name) {
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

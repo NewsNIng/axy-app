@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>个人主页</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../css/app/module/poppicker.css" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<link rel="stylesheet" href="../../css/app/devices.css" />
+		
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB !important;
+			}
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*end菜单*/
+			
+			.app-touch:active {
+				/*触摸半透膜*/
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*头像容器*/
+			
+			.avastr {
+				background-color: #FFFFFF;
+				padding: 0.466666rem 0 0.333333rem 0.64rem;
+				position: relative;
+			}
+			
+			.avastr img {
+				width: 1.6rem;
+				height: 1.6rem;
+				border-radius: 50%;
+				
+			}
+			
+			.avastr:after {
+				right: 15px;
+				content: '\e583';
+			}
+			
+			.avastr:after {
+				font-family: Muiicons;
+				font-size: inherit;
+				line-height: 1;
+				position: absolute;
+				top: 50%;
+				display: inline-block;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+				text-decoration: none;
+				color: #bbb;
+				-webkit-font-smoothing: antialiased;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div class="box">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">个人主页</h1>
+			</header>
+
+			<div class="mui-content">
+
+				<div class="menu-box app-font-size-28">
+					<div class="avastr app-touch" @tap="onAvastrTap()">
+						<img :src="avastr" />
+					</div>
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">用户ID</span>
+								<span class="mui-badge">8447466</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="onNickNameTap()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">昵称</span>
+								<span class="mui-badge" v-text="nickname"></span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="onGenderTap()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">性别</span>
+								<span class="mui-badge">男</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">生日</span>
+								<span class="mui-badge">选择生日</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">城市</span>
+								<span class="mui-badge">选择城市</span>
+							</a>
+						</li>
+					</ul>
+
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">帐号绑定</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">修改密码</span>
+							</a>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		
+		<script type="text/javascript" src="../../js/lib/mui.picker.js" ></script>
+		<script type="text/javascript" src="../../js/lib/mui.poppicker.js" ></script>
+
+		<script type="text/javascript">
+			mui.init();
+			
+			var sexPick;
+
+			new Vue({
+				el: '.box',
+				data: function() {
+					return {
+						avastr: "https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256",
+						nickname: "NewsNing",
+					};
+				},
+				plusReady: function() {
+					this.$view.setStyle({
+						scrollIndicator: 'none'
+					});
+				},
+				mounted: function(){
+					sexPick = new mui.PopPicker({
+						layer: 1
+					});
+					sexPick.setData([{
+						text: '男',
+						value: 0,
+					},{
+						text: '女',
+						value: 1,
+					}]);
+				},				
+				methods: {
+					// 头像点击
+					onAvastrTap: function(){
+						var that = this;
+						// 选取图片
+						this.$gallery(function(err, imgs){
+							if(err){
+								return mui.toast('选取图片失败');
+							}
+							// 打开图片剪裁
+							app.page.cropper(function(data){
+								that.avastr = data.src; 
+							}, imgs[0]);
+							
+						}, 1);
+					},
+					// 昵称修改
+					onNickNameTap: function(){
+						var that = this;
+						app.page.getInput(function(data){
+							that.nickname = data.content;
+						},{
+							title: '昵称',
+							tips: that.nickname
+						});
+					},
+					
+					// 性别选择
+					onGenderTap: function(){
+						console.log(sexPick);
+						sexPick.show(function(){
+							alert(123);
+						});
+					},
+					// 生日选择
+					onBirthdayTap: function(){},
+					// 城市选择
+					onCityTap: function(){},
+					
+				}
+			})
+		</script>
+	</body>
+
+</html>

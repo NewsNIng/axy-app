@@ -17,7 +17,8 @@
 			city: '_www/html/public/city.html',
 			maps: '_www/html/public/maps.html',
 			login: '_www/html/common/login.html',
-			browser: '_www/html/public/browser.html'
+			browser: '_www/html/public/browser.html',
+			image_cropper: '_www/html/public/image_cropper.html',
 		},cw = null;
 	
 	// 打开城市选择
@@ -42,6 +43,13 @@
 	// 打开地图
 	page.getMaps = function(callback){
 		this.openForResult('maps', callback, {});
+	}
+	
+	// 打开图片剪裁
+	page.cropper = function(callback, url){
+		this.openForResult('image_cropper', callback, {
+			imgurl: url
+		});
 	}
 	
 	page.openForResult = function(name, callback, ex){

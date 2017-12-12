@@ -103,7 +103,7 @@
 			}
 			.imgdiv>span.online{
 				background-color: #06C1AE;
-			}
+			} 
 			
 			
 			.menudiv{
@@ -140,7 +140,7 @@
 			</header>
 			<div class="mui-content">
 
-				<template v-if="devList.length">
+				<template v-if="netDivList.length">
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
 						<div class="card" v-for="o,i in netDivList">
@@ -278,6 +278,8 @@
 					var DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
+					
+					
 					
 					this.netDivList = DEVD.data;
 					

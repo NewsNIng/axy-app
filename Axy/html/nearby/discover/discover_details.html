@@ -466,6 +466,7 @@
 					getInfo: function(){
 						dal.article.get(this.aid, function(err, data){
 							if(err){return mui.toast(err.message)}
+							console.log(JSON.stringify(data));
 							this.info = data;
 						}.bind(this));
 					},

@@ -24,7 +24,7 @@
 			
 			.dev_icon {
 				width: 100%;
-				background-image: url(../../../image/smart/devices/dev_icon/AX-360@3x.png);
+				/*background-image: url(../../../image/smart/devices/dev_icon/AX-360@3x.png);*/
 				height: 9.2rem;
 				background-position: bottom;
 				position: relative;
@@ -75,8 +75,8 @@
 			</header>
 
 			<div class="mui-content">
-				<div class="dev_icon app-font-size-30">
-					<div class="dev_text">TIPS：<br />1.请将摄像机接上网线<br />2.网线另一端接入路由器<br />3.确保手机已连接路由器的WIFI</div>
+				<div class="dev_icon app-font-size-30" :style="{backgroundImage: 'url('+ bgp +')'}">
+					<div class="dev_text">TIPS：<br />1.请将设备接上网线<br />2.网线另一端接入路由器<br />3.确保手机已连接路由器的WIFI</div>
 				</div>
 				
 				
@@ -111,11 +111,11 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						
+						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png'
 					};
 				},
 				mounted: function() {
-
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img');
 				},
 				plusReady: function() {},
 				methods: {

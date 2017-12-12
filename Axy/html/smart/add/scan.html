@@ -97,6 +97,7 @@
 						frist: true, // 是否首次
 						scan: null,
 						t: -1,
+						type: 0, // 添加模式，默认为配件添加， 1 为主机添加
 					};
 				},
 				watch: {
@@ -109,6 +110,8 @@
 				},
 				
 				plusReady: function() {
+					this.type = this.$view.type || 0;
+					
 					setTimeout(function(){
 						this.resetScan();
 					}.bind(this), 200);
@@ -124,18 +127,37 @@
 						}.bind(this), {
 							tips: '请输入设备序列号',
 							title: '手动输入',
-							content: 'AX-NXW-2017112900008'
+							content: 'AX-NXW-2017112900008',
+							//r: '',
 						});
 						
 					},
 					// 发送添加设备请求
 					_addDevice: function(id){
 						var w = plus.nativeUI.showWaiting();
-						dal.device.add(id,function(err, data){
-							w && (w.close(), w = null);
-							if(err){return mui.toast(err.message || '添加失败')}
-							mui.alert('添加成功');
-						});
+						// 如果当前不是配件添加，是主机添加
+						if(this.type !== 0){
+							dal.device.add(id,function(err, data){
+								w && (w.close(), w = null);
+								if(err){return mui.toast(err.message || '添加失败')}
+								mui.alert('添加成功');
+							});
+						}
+						// 配件添加
+						else{
+							// 先选择主机设备
+							app.page.openForResultBy('Lan_select_dev_id.html', 'select_dev_id',function(data){
+								var devid = data.devid;
+							},{
+								result: true
+							});
+						}
+						
+						
+						
+						
+						
+						
 					},
 					resetScan: function(){
 						if(this.t && this.t >= 0){
@@ -160,9 +182,10 @@
 						this.scan = scan;
 					},
 					onMarked: function(type, result, file){
-						app.page.setResult({
-							result: result
-						}).close();
+						this._addDevice(result);
+//						app.page.setResult({
+//							result: result
+//						}).close();
 					},
 					startScan: function(){
 						this.scan && (this.scan.start(), this.frist = false);

@@ -221,8 +221,8 @@
 									name: "地址",
 									tips: '输入商户地址',
 									value: "",
-									longitude: "",
-									latitude: "",
+									longitude: 0,
+									latitude: 0,
 
 								}, {
 									name: "类型",
@@ -301,11 +301,24 @@
 						// 收集信息
 						var o = this._generateInfo();
 						
+						var imgList = this.infoList[2][0]['imgList'];
+						var hasimg = imgList.some(function(item){
+							return !!item;
+						});
+						
+						if(!hasimg){
+							return mui.toast('请选择至少一张店铺照片');
+						}
+						
 						// 简单验证空
 						for(var i in o){
 							if(o[i] === '' || o[i] === undefined){
 								return mui.toast("请填写完整信息");
 							}
+						}
+						
+						for(var j = 0; j < 3; j++){
+							o["image" + (j+1)] = imgList[j];
 						}
 						
 						var w = plus.nativeUI.showWaiting('正在提交信息...');
@@ -347,13 +360,13 @@
 							starttime: arr[1][1].starttime,
 							endtime: arr[1][1].endtime,
 							onlinestate: +(arr[1][2].onlinestate),
-
+							
+							//image1: arr[2][0]['imgList'][0],
+							//image2: arr[2][0]['imgList'][1],
+							//image3: arr[2][0]['imgList'][2],
+							
 							introduction: arr[3][0].t1,
-
-							image1: arr[2][0]['imgList'][0],
-							image2: arr[2][0]['imgList'][1],
-							image3: arr[2][0]['imgList'][2],
-
+							
 							longitude: arr[0][2].longitude, // 经度
 							latitude: arr[0][2].latitude, // 纬度
 						};
