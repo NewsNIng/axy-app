@@ -14,25 +14,25 @@
 .mui-content {
   padding-bottom: 1.173333rem;
 }
-ul {
+ul:not(.mui-pciker-list) {
   margin: 0 !important;
   margin-bottom: 0.266666rem !important;
 }
-ul:before {
+ul:not(.mui-pciker-list):before {
   height: 0 !important;
 }
-ul:after {
+ul:not(.mui-pciker-list):after {
   height: 0 !important;
 }
-ul li {
+ul:not(.mui-pciker-list) li {
   height: 1.333333rem;
   color: #333333 !important;
   padding: 0.4rem 15px !important;
 }
-ul li > a {
+ul:not(.mui-pciker-list) li > a {
   margin: -0.4rem -15px !important;
 }
-ul .mui-badge {
+ul:not(.mui-pciker-list) .mui-badge {
   font-size: inherit;
   color: #9F9FA0;
   background-color: transparent !important;
