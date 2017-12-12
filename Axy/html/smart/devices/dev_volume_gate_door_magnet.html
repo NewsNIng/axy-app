@@ -83,10 +83,13 @@
 				</ul>
 			</div>
 
-			<footer class="app-font-size-28">
+			<!--<footer class="app-font-size-28">
 				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
-			</footer>
+			</footer>-->
+			<dev-footer :deviceid = "5" :comid="6" @del="onDelDevice">
+				
+			</dev-footer>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -100,6 +103,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+        <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -199,6 +203,10 @@
 							title: "设备名称",
 							tips: that.dev.basicInfo.devName,
 						});
+					},
+					// 删除设备
+					onDelDevice: function(){
+						console.log("deldevice");
 					},
 				}
 			});

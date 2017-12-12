@@ -4,7 +4,8 @@
 	var _rslesObj = {
 		tel: /^1\d{10}$/,
 		pwd: /^\w{6,18}$/,
-		code: /^\d{6}$/
+		code: /^\d{6}$/,
+		//devName: /^\w{1,10}$/,
 	};
 
 	rules.testBy = function(rex, value, message) {

@@ -164,6 +164,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+        <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -265,6 +266,10 @@
 							title: "设备名称",
 							tips: that.dev.basicInfo.devName,
 						});
+					},
+					// 删除设备
+					onDelDevice: function(){
+						console.log("deldevice");
 					},
 				}
 			});
