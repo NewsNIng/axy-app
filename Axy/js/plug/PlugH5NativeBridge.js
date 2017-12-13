@@ -21,13 +21,11 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-		return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
@@ -159,8 +157,8 @@
 	 * @param {Function} sfn 正确回调函数
 	 * @param {Function} ffn 失败回调函数
 	 */
-	pgn.InitNativeSysteam = function(username, password, serverurl, sfn, ffn) {
-		return pg.asyncExec(N, 'InitNativeSysteam', [username, password, serverurl], sfn, ffn);
+	pgn.InitNativeSystem = function(username, password, serverurl, sfn, ffn) {
+		return pg.asyncExec(N, 'InitNativeSystem', [username, password, serverurl], sfn, ffn);
 	};
 
 	/**

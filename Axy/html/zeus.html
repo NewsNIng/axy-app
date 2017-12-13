@@ -194,7 +194,7 @@
 					return Rx.Observable
 						.create(function(o3) {
 							// 向原生注册 控制中心 处理函数回调
-							P.InitNativeSysteam(account, pwd, domain, function(arg) {
+							P.InitNativeSystem(account, pwd, domain, function(arg) {
 								// next
 								o3.next(arg);
 							});
