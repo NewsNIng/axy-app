@@ -100,7 +100,6 @@
 			
 			.com-dev>ul {
 				text-align: center;
-				margin-bottom: 0 !important;
 			}
 			
 			.com-dev>ul>.mui-table-view-cell:after {
@@ -108,8 +107,8 @@
 				background-color: #F2F2F3;
 			}
 			
-			.cancel {
-				margin-top: 0.266666rem !important;
+			.com-dev>.cancel {
+				margin-bottom: 0 !important;
 			}
 		</style>
 	</head>
@@ -189,9 +188,9 @@
 							state: false,
 							img: "../../../image/smart/scenes/btn_Departure1@3x.png",
 						}],
-						loadingImg: "../../../image/smart/scenes/loading.gif",
-						completeImg: "../../../image/smart/scenes/icon_Clickeffect@3x.png",
-						isLoading: false,
+						loadingImg: "../../../image/smart/scenes/loading.gif", // 加载动画
+						completeImg: "../../../image/smart/scenes/icon_Clickeffect@3x.png", // 完成标志
+						isLoading: false, // 是否加载中
 					};
 				},
 				plusReady: function() {},
@@ -215,21 +214,21 @@
 					},
 
 					onClickTap: function(o, i, img) {
-						// 执行的操作
-//						alert(this.scenes[i].img);
-						if(this.isLoading){
+						if(this.isLoading) {
 							return;
 						}
 						this.isLoading = true;
 						that = this,
 						this.scenes[i].img = this.loadingImg;
-						setTimeout(function(){
+						// 需要执行的操作
+						
+						setTimeout(function() {
 							that.scenes[i].img = that.completeImg;
-							setTimeout(function(){
+							setTimeout(function() {
 								that.scenes[i].img = img;
 								that.isLoading = false;
-							},600);
-						},1800);
+							}, 600);
+						}, 1800);
 					},
 					// 设置
 					onSetting: function(i) {
