@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>警告消息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.tabroom {
+				position: relative;
+				background-color: #F4F8FB;
+				z-index: 999;
+			}
+			
+			.tabroom:after {
+				clear: both;
+				content: '';
+				display: block;
+			}
+			
+			.tabroom:before {
+				content: '';
+				display: block;
+				width: 2px;
+				height: 0.746666rem;
+				position: absolute;
+				left: 50%;
+				top: 0.226666rem;
+				background-color: #E5E6E7;
+				transform: translate3d(-50%, 0, 0);
+				-webkit-transform: translate3d(-50%, 0, 0);
+			}
+			
+			.tabroom>div {
+				float: left;
+				width: 50%;
+				text-align: center;
+				height: 1.2rem;
+				line-height: 1rem;
+				border-bottom: 1px solid #E5E6E7;
+			}
+			
+			.card {
+				padding: 0.346666rem;
+				position: relative;
+			}
+			
+			.card>* {
+				float: left;
+			}
+			
+			.card>.card-header {
+				width: 2.333333rem;
+				height: 2.333333rem;
+				background-image: url(../../../image/home/like_b.png);
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: cover;
+			}
+			
+			.card>.card-body {
+				padding: 0.6rem 0.88rem;
+				position: relative;
+			}
+			
+			.card>.card-body>.app-color-333333 {
+				margin-bottom: 0.1rem;
+			}
+			/*红点*/
+			
+			.card>.card-body:before {
+				content: "";
+				display: block;
+				position: absolute;
+				width: 0.186666rem;
+				height: 0.186666rem;
+				background-color: #FF3B30;
+				left: 0.48rem;
+				border-radius: 50%;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			/*日期*/
+			
+			.card:before {
+				content: attr(data-time);
+				display: block;
+				position: absolute;
+				right: 0.346666rem;
+				border-radius: 50%;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			/*细线*/
+			
+			.card:after {
+				clear: both;
+				content: '';
+				display: block;
+				height: 1px;
+				background-color: #E5E6E7;
+				transform: scaleY(0.5) translateY(0.693333rem);
+				-webkit-transform: scaleY(0.5) translateY(0.693333rem);
+			}
+			/*日期*/
+			.tips{
+				padding: 0.533333rem 0 0.053333rem 0.346666rem;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">警告消息</h1>
+		</header>
+		<div class="mui-content">
+			<div class="tabroom app-color-333333" ref="tabroom">
+				<div>
+					<span class="app-font-size-28">所有摄像机</span>
+					<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
+				</div>
+
+				<div>
+					<span class="app-font-size-28">9/15</span>
+					<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
+				</div>
+
+			</div>
+
+			<div class="wrapper" ref="wrapper">
+
+				<div class="cardroom">
+					<div class="app-font-size-24 app-color-333333 tips">2015/11/11</div>
+					<div v-for="o,i in 4" class="card app-font-size-24 app-color-9f9fa0" data-time="17:00:56">
+						<div class="card-header"></div>
+						<div class="card-body app-font-size-28 ">
+							<div class="app-color-333333">移动侦测报警</div>
+							<div class="app-color-9f9fa0">来自凌成二家的摄像机</div>
+						</div>
+					</div>
+					
+					<div class="app-font-size-24 app-color-333333 tips">2015/11/11</div>
+					<div v-for="o,i in 4" class="card app-font-size-24 app-color-9f9fa0" data-time="17:00:56">
+						<div class="card-header"></div>
+						<div class="card-body app-font-size-28 ">
+							<div class="app-color-333333">移动侦测报警</div>
+							<div class="app-color-9f9fa0">来自凌成二家的摄像机</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/better-scroll.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+
+					};
+				},
+				mounted: function() {
+					var wrapper = this.$refs.wrapper;
+					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
+						this.$refs.tabroom.offsetHeight -
+						immersed -
+						44;
+
+					wrapper.style.height = wrapperHight + 'px';
+
+					this.$nextTick(function() {
+						if(!this.scroll) {
+							this.scroll = new BScroll(wrapper, {
+								click: true,
+								scrollY: true
+							});
+
+						} else {
+							this.scroll.refresh();
+						}
+
+					}.bind(this));
+				},
+				methods: {
+
+				}
+			})
+		</script>
+	</body>
+
+</html>

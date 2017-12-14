@@ -78,7 +78,7 @@ function requestAdapter(type, url, params, callback){
 		timeout: 8000,
 		success: function(data){
 			var o = {};
-			if(data.code !== "0000"){
+			if(data.code !== "0000" && data.code !== "0"){
 				o.err = {
 					code: data.code,
 					message: data.message

@@ -70,16 +70,14 @@
 				line-height: 1.173333rem;
 			}
 			
-			
-			
-			.card{
+			.card {
 				background-color: #FFFFFF;
 				padding: 0.346666rem;
 				padding-bottom: 0;
 				margin-bottom: 0.266666rem;
 			}
 			
-			.imgdiv{
+			.imgdiv {
 				height: 4.666666rem;
 				width: 9.306666rem;
 				background-color: #CCCCCC;
@@ -88,7 +86,8 @@
 				background-repeat: no-repeat;
 				position: relative;
 			}
-			.imgdiv>span{
+			
+			.imgdiv>span {
 				display: inline-block;
 				text-align: center;
 				width: 0.88rem;
@@ -99,34 +98,88 @@
 				border-radius: 5px;
 				position: absolute;
 				top: 0.266666rem;
-				left: 0.266666rem; 
+				left: 0.266666rem;
 			}
-			.imgdiv>span.online{
+			
+			.imgdiv>span.online {
 				background-color: #06C1AE;
-			} 
+			}
 			
-			
-			.menudiv{
+			.menudiv {
 				display: flex;
 				display: -webkit-flex;
 				align-items: center;
 				padding: 0.25rem 0.133333rem;
 			}
-			.menudiv>span{
+			
+			.menudiv>span {
 				flex-grow: 1;
 				white-space: nowrap;
 				overflow: hidden;
 			}
-			.menudiv img{
+			
+			.menudiv img {
 				margin-left: 0.4rem;
 				width: 0.773333rem;
-				height: 0.773333rem; 
+				height: 0.773333rem;
+			}
+			/*控制弹窗*/
+			
+			#controll {
+				border-radius: 0;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				background-color: #F4F8FB;
+			}
+			#controll .qmenu{
+				padding: 1.253333rem 0.826666rem;
+				background-color: #FFFFFF;
+			}
+			#controll div.qmenu>div {
+				text-align: center;
+				display: inline-block;
+				width: 22.5%;
+				/*float: left;*/
 			}
 			
+			#controll>div.qmenu img {
+				width: 1.466666rem;
+				margin-bottom: 0.3rem;
+			}
 		</style>
 	</head>
 
 	<body>
+
+		<div id="controll" class="mui-popover">
+			<div class="qmenu">
+
+				<div @tap="onTap(1)">
+					<img src="../../../image/smart/devices/btn_sos@3x.png" />
+					<h5 class="app-font-size-24">求救</h5>
+				</div>
+				<div @tap="onTap(8)">
+					<img src="../../../image/smart/devices/btn_Deploytroopsfordefence@3x.png" />
+					<h5 class="app-font-size-24">布防</h5>
+				</div>
+				<div @tap="onTap(4)">
+					<img src="../../../image/smart/devices/btn_Disarm@3x.png" />
+					<h5 class="app-font-size-24">撤防</h5>
+				</div>
+				<div @tap="onTap(2)">
+					<img src="../../../image/smart/devices/btn_Mute@3x.png" />
+					<h5 class="app-font-size-24">静音</h5>
+				</div>
+				
+			</div>
+			
+			<div class="app-font-size-28" style="height: 1.333333rem;line-height: 1.333333rem;clear: both;text-align: center; margin-top: 0.266666rem;background-color: #FFFFFF;">
+				<a href="#controll" class="app-color-333333">取消</a>
+			</div>
+
+		</div>
+
 		<div id="box">
 
 			<header class="mui-bar mui-bar-nav app-header">
@@ -138,6 +191,7 @@
 				<a class="app-icon-plus mui-pull-right" @tap="onAddTap()"></a>
 
 			</header>
+
 			<div class="mui-content">
 
 				<template v-if="netDivList.length">
@@ -148,16 +202,16 @@
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
-								<span class="app-color-main">{{_net2local(o.devid).basicInfo.devName}}</span>
-								<img src="../../../image/smart/camera/controller.png"/>
-								<img src="../../../image/smart/camera/history.png"/>
-								<img src="../../../image/smart/camera/share.png"/>
-								<img @tap="onSettingTap(o)" src="../../../image/smart/camera/setting.png"/>
+								<span class="app-color-main">{{o.location.trim() || o.devid}}</span>
+								<img @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
+								<img src="../../../image/smart/camera/history.png" />
+								<img src="../../../image/smart/camera/share.png" />
+								<img @tap="onSettingTap(o)" src="../../../image/smart/camera/setting.png" />
 							</div>
-							
+
 						</div>
 					</div>
-					<div v-show="active === 1">
+					<!--<div v-show="active === 1">
 						<ul class="mui-table-view app-font-size-28 a1" v-for="o,i in zones">
 							<li class="mui-table-view-cell" @tap="onZoneTap(o)">
 								<a>
@@ -179,7 +233,7 @@
 								</a>
 							</li>
 						</ul>
-					</div>
+					</div>-->
 				</template>
 				<template v-else>
 					<div class="nolog">
@@ -200,109 +254,73 @@
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		
+		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
+		
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-		
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
-		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
-		
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 			var devManager, runManager;
-			
+
 			var B = new ni.Broadcast();
+
 			
-			new Vue({
+			var menuV = new Vue({
+				el: '#controll',
+				methods: {
+					onTap: function(state){
+						plus.nativeUI.showWaiting();
+						var dev = listV.controlDev;
+						dal.devparam.remotecontrol(dev.devid, dev.type, state, function(err, rs){
+							plus.nativeUI.closeWaiting();
+							if(err){
+								console.log(JSON.stringify(err));
+								return mui.toast("操作失败, 请检查设备");
+							}
+							mui.toast("操作成功");
+							mui('#controll').popover('hide');
+						});
+					}
+				}
+				
+			});
+			
+
+			var listV = new Vue({
 				el: '#box',
 				data: function() {
 					return {
 						active: 0,
-						
-						devList: [],
-						runList: [],
-						
-						
-						
+						controlIndex: -1,
 						netDivList: [],
 
 					};
 				},
 
 				computed: {
-					zones: function() {
-						var z = [];
-						this.devList.forEach(function(item) {
-							z.push.apply(z, (function(o) {
-								return o.zones.map(function(_item) {
-									_item.bdevid = o.basicInfo.devid;
-									_item.bdevName = o.basicInfo.devName;
-									return _item;
-								});
-							}(item)));
-						});
-
-						return z;
-					},
-					dirs: function(){
-						return this.devList.reduce(function(o, item){
-							o[item.basicInfo.devid] = item;
-							return o;
-						}, {});	
-					},
-					dirr: function(){
-						return this.runList.reduce(function(o, item){
-							o[item.devid] = item;
-							return o;
-						}, {});	
+					controlDev: function(){
+						return this.netDivList[this.controlIndex];
 					}
 				},
 
 				plusReady: function() {
-					
-					// 本地 所有设备的信息
-					var ALLD = new ni.Cache('AllDeviceInfo', [], {
-						plus: true
-					});
-
-					// 本地 所有设备的运行状态
-					var ALLR = new ni.Cache('AllDeviceRun', [], {
-						plus: true
-					});
-
-					devManager = new DevManager(ALLD);
-					runManager = new DevManager(ALLR);
-					
 					var DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
-					
-					
-					
+
 					this.netDivList = DEVD.data;
-					
-					
-					this.devList = devManager.get();
-					
-					
-					this.runList =  runManager.get();
-           
-//					setTimeout(function(){
-//						var id = this.netDivList[0].devid;
-//						alert(JSON.stringify(this.dirs[id]));
-//						alert(JSON.stringify(devManager.selectByWhere(function(o){
-//							return o.basicInfo.devid === id;
-//						})));
-//					}.bind(this), 3000);
-					
-					this.$nextTick(function(){
+
+					this.$nextTick(function() {
 						mui('.mui-switch')['switch']();
 					});
-					
-					// 监听zeus.html发布的消息
-					//B.on('')
 
 				},
 				methods: {
@@ -310,7 +328,7 @@
 					onCmTap: function(id) {
 						plug.H5NativeBridge.StartDevicePlay(id);
 					},
-					
+
 					// 空空如也 
 					onGoShop: function() {
 
@@ -327,43 +345,39 @@
 					onZoneTap: function(o) {
 						var type = this._getZoneType(o.ID);
 						console.log(type);
-						//type = 17;
+						//type = 17; 
 						// 打开详情页
-						app.page.openForResultBy('dev_'+ type +'.html','dev_' + type, function(data){
+						app.page.openForResultBy('dev_' + type + '.html', 'dev_' + type, function(data) {
 							console.log(JSON.stringify(data));
-						},{
-							info: o 
+						}, {
+							info: o
 						});
 					},
-					// 通过网络设备id获取本地设备信息
-					_net2local: function(devid){
-						return this.dirs[devid];
-					},
-					// 通过网络设备id获取本地设备运行状态
-					_net2run: function(devid){
-						return this.dirr[devid];
-					},
+				
 					// 通过配件ID获取 配件的类型
-					_getZoneType: function(zonedevid){
+					_getZoneType: function(zonedevid) {
 						return zonedevid.toString().substr(0, 2);
 					},
-					
-					
-					
+
 					// 设备设置
-					onSettingTap: function(o){
+					onSettingTap: function(o) {
 						mui.openWindow('camera_settings.html', 'camera_settings', {
 							extras: {
-								localInfo: this._net2local(o.devid),
-								runInfo: this._net2run(o.devid),
-								netInfo: o
+								devInfo: o
 							}
 						});
-					}
+					},
+
+					// 设备控制
+					onControlTap: function(o, i) {
+						if(o.online !== 1){
+							return mui.toast("设备不在线");
+						}
+						this.controlIndex = i;
+						mui('#controll').popover('show');
+					},
 				}
 			});
-			
-			
 		</script>
 	</body>
 

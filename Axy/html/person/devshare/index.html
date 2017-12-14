@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>共享设备</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color:#FFFFFF;
+			}
+			
+			.room:before {
+				content: attr(data-time);
+				font-size: inherit;
+				color: #9F9FA0;
+				height: 0.906666rem;
+				line-height: 0.906666rem;
+				padding: 0 0.346666rem;
+			}
+			
+			.room>div {
+				background-color: #FFFFFF;
+				padding: 0.4rem 0.346666rem;
+				position: relative;
+			}
+			
+			.room>div:after {
+				content: '';
+				height: 1px;
+				position: absolute;
+				left: 0.346666rem;
+				bottom: 0;
+				width: 100%;
+				display: block;
+				background-color: #E5E6E7;
+				transform: scaleY(0.5);
+				-webkit-transform: scaleY(0.5);
+			}
+			
+			.room>div>.mui-slider-handle>* {
+				vertical-align: middle;
+			}
+			
+			.room>div>.mui-slider-handle>span {
+				margin-left: 0.48rem;
+			}
+			
+			.room>div>.mui-slider-handle>img {
+				width: 1.573333rem;
+				height: 1.573333rem;
+				border-radius: 50%;
+			}
+			
+			/*空记录*/
+			
+			.nullbox .bg{
+				height: 7.973333rem;
+				background-color:  #F4F8FB;
+				text-align: center;
+				position: relative;
+			}
+			.nullbox .bg img{
+				width: 2.8rem; 
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate3d(-50%,-50%,0); 
+				-webkit-transform: translate3d(-50%,-50%,0); 
+			}
+			
+			.nullbox .tip{
+				background-color: #FFFFFF;
+				padding: 2.8rem 1.173333rem 1.68rem 1.173333rem;
+			}
+			.nullbox button{
+				margin-left: 0.813333rem;
+				width: 8.373333rem;
+				height: 1.173333rem;
+			}
+			/*end空记录*/
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">共享设备</h1>
+		</header>
+		<div class="mui-content">
+			<!--空记录-->
+			<template v-if="list.length===0">
+				<div class="nullbox">
+					<div class="bg">
+						<img src="../../../image/person/devshare/icon_Connect@3x.png"/>
+					</div>
+					<div class="tip app-font-size-28 app-color-333333">
+						你可以与家人朋友共享你的设备，让他们用自己的帐号观看摄像机画面或使用更多功能。
+					</div>
+					<button @tap="onShareTap()" type="button" class="mui-btn app-btn-main app-font-size-34">与家人朋友共享设备</button>
+				</div>
+			</template>
+			<!--共享设备列表-->
+			<template v-else>
+
+				<div class="room app-font-size-28" data-time="安心云1号摄像机">
+					<div class="app-font-size-28 mui-table-view-cell">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red">删除</a>
+						</div>
+						<div class="mui-slider-handle">
+							<img src="../../../image/common/agree_selected.png" />
+							<span>NewsNing</span>
+						</div>
+					</div>
+					<div class="app-font-size-28 mui-table-view-cell">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red">删除</a>
+						</div>
+						<div class="mui-slider-handle">
+							<img src="../../../image/common/agree_selected.png" />
+							<span>NewsNing</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="room app-font-size-28" data-time="安心云2号摄像机">
+
+					<div class="app-font-size-28 mui-table-view-cell">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red">删除</a>
+						</div>
+						<div class="mui-slider-handle">
+							<img src="../../../image/common/agree_selected.png" />
+							<span>NewsNing</span>
+						</div>
+					</div>
+
+					<div class="app-font-size-28 mui-table-view-cell">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red">删除</a>
+						</div>
+						<div class="mui-slider-handle">
+							<img src="../../../image/common/agree_selected.png" />
+							<span>NewsNing</span>
+						</div>
+					</div>
+
+				</div>
+			</template>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						list: []
+					};
+				},
+				methods: {
+					onShareTap: function(){
+						// 跳转到主机列表(我的设备)
+						mui.openWindow('../../smart/devices/dev_my_list.html');
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

@@ -247,7 +247,7 @@
 					<li class="mui-table-view-cell" @tap="onDevNameTap()">
 						<a class="mui-navigate-right">
 							<span>摄像机名称</span>
-							<span class="mui-badge" v-text="devInfo.basicInfo.devName"></span>
+							<span class="mui-badge" v-text="devInfo.location"></span>
 						</a>
 					</li>
 					<!--<li class="mui-table-view-cell">
@@ -282,12 +282,12 @@
 							<span>自动布防计划</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onRecordTap()">
 						<a class="mui-navigate-right">
 							<span>自动录像计划</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<!--<li class="mui-table-view-cell">
 						<a class="">
 							<span>接收告警消息</span>
 							<span class="mui-badge">
@@ -307,7 +307,7 @@
 							</span>
 						</a>
 					</li>
-					<!--<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
 							<span>摄像机报警提示音</span>
 						</a>
@@ -327,7 +327,7 @@
 
 			<footer class="app-font-size-28">
 				<div class="app-color-main-dark">删除设备</div>
-				<div>解绑主机</div>
+				<div @tap="onReboot()">重启设备</div>
 			</footer>
 		</div>
 		<!--沉浸式动态处理-->
@@ -338,7 +338,8 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -367,73 +368,17 @@
 						//						index: 1, //弹框种类
 
 						devInfo: {
-							"alarmPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"basicInfo": {
-								"appversion": "2017-09-28 09:36:04",
-								"devName": "104GN",
-								"devType": 4166,
-								"devid": "VH-104GN-2017061500043",
-								"hwversion": "2015-11-01 10:13:43"
-							},
-							"netInfo": {
-								"ip": "192.168.1.23",
-								"ssid": "aaa2.4",
-								"type": 0
-							},
-							"onvif": [{
-									"ch": 0,
-									"name": "第一个外部通道",
-									"online": 1
-								},
-								{
-									"ch": 1,
-									"name": "第二个外部通道",
-									"online": 1
-								}
-							],
-							"recordPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"zones": [{
-									"ID": "81457896",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								},
-								{
-									"ID": "81457897",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								}
-							],
-							"alarm": {
-								"interval": "5",
-								"alarmtime": "10",
-							}
-						},
+							"streamfwdport": 0,
+							"location": "",
+							"devid": "",
+							"relation": 0,
+							"streamfwd": "",
+							"type": 0,
+							"signalfwd": "",
+							"signalfwdport": 0,
+							"online": 0
+						}
+
 					};
 				},
 
@@ -462,10 +407,7 @@
 
 				},
 				plusReady: function() {
-					this.devInfo = this.$view.localInfo;
-					this.netInfo = this.$view.netInfo;
-					this.runInfo = this.$view.runInfo;
-					console.log(JSON.stringify(this.runInfo));
+					this.devInfo = this.$view.devInfo;
 				},
 				methods: {
 					// 切换开关
@@ -511,18 +453,23 @@
 					onDevNameTap: function(name) {
 						var that = this;
 						app.page.getInput(function(data) {
-							that.devInfo.basicInfo.devName = data.content;
+							dal.devparam.devname(that.devInfo.devid, that.devInfo.type, data.content, function(err, rs){
+								if(err){
+									return mui.toast('名称更新失败');
+								}
+								that.devInfo.location = data.content;
+								mui.toast('名称更新成功');
+							});
 						}, {
 							title: "摄像机名称",
-							tips: that.devInfo.basicInfo.devName,
+							tips: that.devInfo.location,
 						});
 					},
 					// 基本信息跳转
 					onInfoTap: function() {
 						mui.openWindow('camera_settings_info.html', 'camera_settings_info', {
 							extras: {
-								info: this.devInfo,
-								signal: this.runInfo.signal
+								info: this.devInfo
 							}
 						});
 					},
@@ -536,7 +483,11 @@
 					},
 					// 录像计划跳转
 					onRecordTap: function() {
-
+						mui.openWindow('camera_settings_record.html', 'camera_settings_record', {
+							extras: {
+								info: this.devInfo
+							}
+						});
 					},
 					// 告警时间跳转
 					onAlarmParam: function() {
@@ -548,6 +499,36 @@
 							continuedTime: that.devInfo.alarm.alarmtime,
 						});
 					},
+					
+					// 重启设备
+					onReboot: function(){
+						var dev = this.devInfo;
+						mui.confirm("确定要重启设备吗？", "", ["重启", "取消"], function(e){
+							if(e.index === 0){
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs){
+									if(err){
+										return mui.toast('重启设备失败');
+									}
+									return mui.toast('重启设备成功');
+								});
+							}
+						});
+					},
+					
+					// 删除设备
+//					onDel: function(){
+//						var dev = this.devInfo;
+//						mui.confirm("确定要删除设备吗？", "", ["删除", "取消"], function(e){
+//							if(e.index === 0){
+//								dal.devparam.reboot(dev.devid, dev.type, function(err, rs){
+//									if(err){
+//										return mui.toast('删除设备失败');
+//									}
+//									return mui.toast('删除设备成功');
+//								});
+//							}
+//						});
+//					},
 
 				}
 			});

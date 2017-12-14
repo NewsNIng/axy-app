@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>系统设置</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*-left图片文字*/
+			
+			.menu-box a.mui-navigate-right {}
+			
+			.menu-box a.mui-navigate-right>img {
+				width: 0.48rem;
+				margin: 0 0.2rem;
+				vertical-align: middle;
+			}
+			
+			.menu-box a.mui-navigate-right>span {
+				vertical-align: middle;
+			}
+			/*end菜单*/
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">系统设置</h1>
+		</header>
+		<div class="mui-content menu-box app-font-size-28">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" data-href="push.html">
+					<a class="mui-navigate-right">
+						<span class="app-color-333333">消息推送</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-href="safe.html">
+					<a class="mui-navigate-right">
+						<span class="app-color-333333">帐号保护</span>
+						<span class="mui-badge">未开启</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-href="version.html">
+					<a class="mui-navigate-right">
+						<span class="app-color-333333">版本说明</span>
+					</a>
+				</li>
+			</ul>
+			
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-color-333333">服务号推送</span>
+					</a>
+				</li>
+			</ul>
+			
+			
+			
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+			
+			mui.ready(function(){
+				mui('.mui-content').on('tap', '*[data-href]', function(){
+					mui.openWindow(this.dataset.href);
+				});
+			});
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						list: []
+					};
+				},
+				methods: {
+
+				}
+			})
+		</script>
+	</body>
+
+</html>

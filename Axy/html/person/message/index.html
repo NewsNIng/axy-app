@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>消息中心</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+				overflow: hidden;
+			}
+			
+			
+			
+			.mui-content>div {
+				height: 1.653333rem;
+				background-color: #FFFFFF;
+				position: relative;
+				padding-top: 0.373333rem;
+			}
+			.mui-content>div:after{
+				content: "";
+				display: block;
+				position: absolute;
+				height: 1px;
+				background-color: #E5E6E7;
+				left:0.346666rem;
+				bottom: 0;
+				width: 100%;
+				transform: scaleY(0.5);
+				-webkit-transform: scaleY(0.5);
+			}
+			
+			.mui-content>div:before {
+				font-family: Muiicons;
+				font-size: .5rem;
+				line-height: 1;
+				position: absolute;
+				top: 50%;
+				display: inline-block;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+				text-decoration: none;
+				color: #bbb;
+				-webkit-font-smoothing: antialiased;
+				right: 0.346666rem;
+				content: '\e583';
+			}
+			.mui-content>div:last-child:after{
+				content: none !important;	
+			}
+			
+			.mui-content>div>.name {
+				margin-left: 1.146666rem;
+			}
+			
+			img {
+				width: 0.48rem;
+				position: absolute;
+				left: 0.346666rem;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			
+			.app-badge{
+				position: absolute;
+				right: 0.8rem;
+				background-color: #FF3B30;
+				color: #FFFFFF;
+				border-radius: 0.2rem;
+				padding: 0 0.1rem;
+				top: 50%;
+				min-width: 0.4rem;
+				height: 0.4rem;
+				text-align: center;
+				line-height: 0.4rem;
+				vertical-align: middle;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">消息中心</h1>
+		</header>
+		<div class="mui-content">
+			<div class="app-touch" style="margin-top: 0.266666rem;">
+				<img src="../../../image/person/message/btn_Alarmnews@3x.png" />
+				<div class="name">
+					<div class="app-font-size-28 app-color-333333">告警消息</div>
+					<div class="app-font-size-24 app-color-9f9fa0">有人闯进布防区域</div>
+					<span class="app-badge app-font-size-20">99+</span>
+				</div>
+			</div>
+			
+			<div class="app-touch">
+				<img src="../../../image/person/message/btn_Alarmnews@3x.png" />
+				<div class="name">
+					<div class="app-font-size-28 app-color-333333">告警消息</div>
+					<div class="app-font-size-24 app-color-9f9fa0">有人闯进布防区域</div>
+				</div>
+			</div>
+			
+			<div class="app-touch">
+				<img src="../../../image/person/message/btn_Alarmnews@3x.png" />
+				<div class="name">
+					<div class="app-font-size-28 app-color-333333">告警消息</div>
+					<div class="app-font-size-24 app-color-9f9fa0">有人闯进布防区域</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+
+					};
+				},
+				methods: {
+
+				}
+			})
+		</script>
+	</body>
+
+</html>
