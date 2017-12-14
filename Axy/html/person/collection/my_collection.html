@@ -1,0 +1,265 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设备列表</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				height: 100%;
+				background-color: white;
+				padding-bottom: 0;
+			}
+			
+			#box {
+				height: 100%;
+			}
+			
+			header>h1>span {
+				margin: 0 0.4rem;
+			}
+			
+			header>h1>span {
+				color: #d6f2ef;
+			}
+			
+			header>h1>span.active {
+				font-weight: bold;
+				color: #FFFFFF;
+			}
+			
+			.discovery,
+			.shop {
+				overflow: hidden;
+				position: relative;
+				height: 3.173333rem;
+				padding: 0.346666rem;
+			}
+			
+			.shop .shop_img {
+				width: 2.453333rem;
+				height: 100%;
+				display: block;
+			}
+			
+			.shop img {
+				width: 100%;
+				height: 100%;
+				vertical-align: middle;
+				display: block;
+			}
+			
+			.discovery .discovery_img {
+				width: 2.453333rem;
+				height: 100%;
+				display: block;
+			}
+			
+			.discovery img {
+				width: 100%;
+				height: 100%;
+				vertical-align: middle;
+				display: block;
+			}
+			
+			.info {
+				height: 100%;
+				display: inline-block;
+				padding-left: 0.346666rem;
+			}
+			
+			.shop .name {
+				height: 1.52rem;
+				line-height: 1.52rem;
+			}
+			
+			.info,
+			.shop_img,
+			.discovery_img {
+				float: left;
+			}
+			
+			.shop .address {
+				color: #9F9FA0;
+			}
+			
+			.shop .name {
+				/*font-weight: bold;*/
+				color: #333333;
+			}
+			
+			.discovery:after,
+			.shop:after {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				left: 0.346666rem;
+				height: 1px;
+				content: '';
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				background-color: #E5E6E7;
+			}
+			
+			.discovery span {
+				line-height: 30px;
+			}
+			
+			.desc,
+			.praise {
+				color: #9F9FA0;
+			}
+			
+			.shop:last-child:after,
+			.discovery:last-child:after {
+				height: 1px;
+			}
+			
+			.null {
+				height: 100%;
+				width: 100%;
+				background-color: #F4F8FB;
+				text-align: center;
+				color: #9F9FA0;
+			}
+			
+			.null>img {
+				width: 4.773333rem;
+				margin: 2.986666rem 2.613333rem 1.413333rem 2.613333rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title app-font-size-34">
+					<span @tap="onActive(0)" :class="{active: active === 0}">收藏的店</span>
+					<span @tap="onActive(1)" :class="{active: active === 1}">内容</span>
+				</h1>
+			</header>
+
+			<div class="mui-content">
+
+				<template v-for="o,i in shops" v-if="active === 0">
+					<div class="shop mui-table-view-cell">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red">删除</a>
+						</div>
+						<div class="shop_bg mui-slider-handle">
+							<div class="mui-slider-handle shop_img">
+								<img :src="o.img" />
+							</div>
+							<div class="info app-font-size-28"><span class="name">{{o.name}}</span><br /><span class="address">{{o.address}}</span></div>
+						</div>
+					</div>
+				</template>
+				<template v-for="o,i in discoverys" v-if="active === 1">
+					<div class="discovery mui-table-view-cell">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red">删除</a>
+						</div>
+						<div class="discovery_bg mui-slider-handle" @tap="alert(1);">
+							<div class="mui-slider-handle discovery_img">
+								<img :src="o.img" />
+							</div>
+							<div class="info app-font-size-28"><span class="name app-font-size-28">{{o.name}}</span><br /><span class="desc app-font-size-24">{{o.desc}}</span><br /><span class="praise 24">{{o.praise}}</span></div>
+						</div>
+					</div>
+				</template>
+				<div class="null app-font-size-30" v-show="(active === 0?shops.length:discoverys.length) === 0">
+					<img src="../../../image/person/collection/icon_Nocollection@3x.png" /> 亲，您还没有任何收藏哦
+				</div>
+
+			</div>
+		</div>
+
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+			var devManager, runManager;
+
+			var B = new ni.Broadcast();
+
+			new Vue({
+				el: '#box',
+				data: function() {
+					return {
+						active: 0,
+
+						shops: [{
+							name: "adidas官方旗舰店",
+							address: "深圳市南山区世界之窗塘头六坊",
+							img: "../../../image/home/gohome.png",
+						}, {
+							name: "adidas官方旗舰店",
+							address: "深圳市南山区世界之窗塘头六坊",
+							img: "../../../image/home/gohome.png",
+						}, {
+							name: "adidas官方旗舰店",
+							address: "深圳市南山区世界之窗塘头六坊",
+							img: "../../../image/home/gohome.png",
+						}, {
+							name: "adidas官方旗舰店",
+							address: "深圳市南山区世界之窗塘头六坊",
+							img: "../../../image/home/gohome.png",
+						}],
+						discoverys: [
+							//						{
+							//							name: "发现主题发现主题",
+							//							desc: "描述",
+							//							praise: "52021",
+							//							img: "../../../image/home/gohome.png",
+							//						}, {
+							//							name: "发现主题",
+							//							desc: "描述",
+							//							praise: "52021",
+							//							img: "../../../image/home/gohome.png",
+							//						}
+						],
+					};
+				},
+
+				mounted: function() {
+					this.$nextTick(function() {
+						mui.init();
+					});
+				},
+
+				plusReady: function() {
+
+				},
+				methods: {
+					// 标签切换
+					onActive: function(index) {
+						this.active = index;
+					},
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

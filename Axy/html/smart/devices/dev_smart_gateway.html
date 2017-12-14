@@ -12,6 +12,9 @@
 		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
 
 		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
 
 		<style type="text/css">
@@ -84,8 +87,7 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<!--<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/lock/btn_Intelligentdoorlock@3x.png' : '../../../image/smart/devices/lock/btn_Intelligentdoorlock1@3x.png') + ')'">-->
-				<div @tap="toggleSwitch()" class="img-wrap">
+				<div class="img-wrap">
 					<img src="../../../image/smart/devices/gateway/icon_audiofrequency@3x.png" />
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
@@ -133,9 +135,10 @@
 							<span class="mui-badge ">30S</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
 							<span>告警时间设置</span>
+							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -166,12 +169,9 @@
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
         <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
 
-		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
-		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
-
-		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
-		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -179,7 +179,11 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						statusLight: true, // 是否开启密码保护
+						// 告警延迟时间
+						alarmDelayTime: 0,
+						// 弹框
+						pick: null,
+						statusLight: true, // 是否开启状态指示灯
 						dev: {
 							"alarmPlan": [{
 									"end": "19:50:00",
@@ -250,13 +254,14 @@
 					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
 						this.statusLight = event.detail.isActive;
 					}.bind(this));
+					this.pick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+					this.pick.setData(pick_data[1]);
 				},
 				plusReady: function() {},
 				methods: {
-					// 切换开关
-					toggleSwitch: function() {
-						this.state = !this.state;
-					},
 					// 设备名称
 					onNameTap: function(name) {
 						var that = this;
@@ -270,6 +275,22 @@
 					// 删除设备
 					onDelDevice: function(){
 						console.log("deldevice");
+					},
+					// 告警延迟时间
+					onAlarmTap: function() {
+						var that = this;
+
+						this.pick.pickers[0].setSelectedValue(this.alarmDelayTime);
+
+						var fn = function(s) {
+							that.alarmDelayTime = s;
+						};
+
+						this.pick.show(function(items) {
+							fn(items[0].value);
+						}, function(items) {
+
+						});
 					},
 				}
 			});

@@ -7,11 +7,11 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
-		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
-		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
-		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
 
 		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
 
 		<style type="text/css">
@@ -80,10 +80,10 @@
 							<span class="mui-badge">求助防区</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell"  @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
 							<span>告警延迟</span>
-							<span class="mui-badge">30S</span>
+							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -121,6 +121,9 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
         <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
 		
 		<img src=""/>
@@ -136,6 +139,10 @@
 				el: '#warpper',
 				data: function() {
 					return {
+						// 告警延迟时间
+						alarmDelayTime: 0,
+						// 弹框
+						pick: null,
 						state: true, // 当前状态
 						dev: {
 							"alarmPlan": [{
@@ -203,6 +210,13 @@
 						},
 					};
 				},
+				mounted: function() {
+					this.pick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+					this.pick.setData(pick_data[1]);
+				},
 				
 				computed: {
 				},
@@ -218,6 +232,22 @@
 					// 删除设备
 					onDelDevice: function(){
 						console.log("deldevice");
+					},
+					// 告警延迟时间
+					onAlarmTap: function() {
+						var that = this;
+
+						this.pick.pickers[0].setSelectedValue(this.alarmDelayTime);
+
+						var fn = function(s) {
+							that.alarmDelayTime = s;
+						};
+
+						this.pick.show(function(items) {
+							fn(items[0].value);
+						}, function(items) {
+
+						});
 					},
 				}
 			});
