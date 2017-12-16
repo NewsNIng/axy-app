@@ -263,7 +263,7 @@
 								<br />
 								<span class="sign" v-for="p,i in _two2bool(o.recycle).splice(1)" v-if="p">周{{_number2string(i)}}</span>
 								<span class="mui-badge" @tap.stop="">
-									<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': _two2bool(o.recycle)[0]}" ref="pwd_protection">
+									<div @toggle="switchToggle(o, $event)" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': _two2bool(o.recycle)[0]}" ref="pwd_protection">
 										<div class="mui-switch-handle"></div>
 									</div>
 								</span>
@@ -292,7 +292,8 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 
@@ -318,6 +319,7 @@
 				data: function() {
 					return {
 						devid: -1,
+						type: -1,
 
 						weeks: [true, false, false, false, false, false, false],
 
@@ -327,16 +329,7 @@
 						mask: false, // 遮罩控制
 						index: -1, //是否弹框
 						//isRepeat: true,
-						plans: [ {
-                        "end": "19:50:00",
-                        "recycle": 129,
-                        "start": "13:50:00"
-                    },
-                    {
-                        "end": "19:50:00",
-                        "recycle": 252,
-                        "start": "13:50:00"
-                    }],
+						plans: [],
 						actionType: -1,
 					};
 				},
@@ -370,10 +363,33 @@
 				},
 				plusReady: function() {
 					var info = this.$view.info;
-					this.plans = info.alarmPlan;
-					this.devid = info.basicInfo.devid;
+					this.devid = info.devid;
+					this.type = info.type;
+					
+					this.getAlarmplan();
 				},
 				methods: {
+					switchToggle: function(o, e){
+						// 最高位取反
+						o.recycle ^= 128;
+						this._save();
+					},
+					
+					// 获取计划
+					getAlarmplan: function(){
+						plus.nativeUI.showWaiting();
+						dal.devparam.alarmplan(this.devid,this.type,function(err, rs){
+							plus.nativeUI.closeWaiting();
+							this.plans = rs;
+							
+							this.$nextTick(function() {
+								mui('.mui-switch')['switch']();
+							});
+							
+						}.bind(this))
+					},
+					
+					
 					onPickTap: function(i) {
 
 						var that = this;
@@ -426,22 +442,22 @@
 							this.$set(this.plans, this.actionType, o);
 						}
 						
-						var xml = xmlFactory.CreatAlarmListXml(this.plans);
+						this._save();
+						
 
-						// 发送原生
-						P.SetDeviceParamAsyn(this.devid, xml, function(rs) {
-							rs = JSON.parse(rs);
-							if(rs.code !== 0) {
-								
+					},
+					
+					_save: function(){
+						plus.nativeUI.showWaiting();
+						
+						dal.devparam.setAlarmplan(this.devid, this.type, this.plans, function(err, rs){
+							plus.nativeUI.closeWaiting();
+							if(err){
 								this.actionType === -1 && this.plans.pop();
 								return mui.toast('操作失败');
 							}
-							mui.toast('操作成功');
-							
+							mui.toast("更新成功");
 						}.bind(this));
-
-						// 
-
 					},
 					
 					// 添加布防
@@ -468,6 +484,7 @@
 					onDel: function(o, i){
 						this.plans.splice(i, 1);
 						this.actionType = -2;
+						this.onSave();
 					},
 					
 					onWeekTap: function(o, index) {
@@ -503,7 +520,7 @@
 					},
 
 					_two2bool: function(n) {
-						return n.toString(2).split("").map(function(item) {
+						return ("00000000" + n.toString(2)).substr(-8, 8).split("").map(function(item) {
 							return !!+item;
 						});
 					},

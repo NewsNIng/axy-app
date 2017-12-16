@@ -116,17 +116,17 @@
 		<div class="mui-content noImmersed">
 
 			<div class="bg-box">
-				<img @tap="onAvastrTap()" class="bg-box-avastr" src="https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256" />
+				<img data-href="information.html" class="bg-box-avastr" src="https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256" />
 				<div class="app-font-size-34 app-color-white bg-box-nickname">NewsNing</div>
 				<div class="app-font-size-24 app-color-white">早安，美好的一天又开始了！</div>
 			</div>
 
 			<div class="fast-box">
-				<div class="fast-box-card app-touch">
+				<div class="fast-box-card app-touch" data-href="../smart/devices/dev_my_list.html">
 					<img src="../../image/person/btn_Myequipment@3x.png" />
 					<div class="app-font-size-24 app-color-333333">我的设备</div>
 				</div>
-				<div class="fast-box-card app-touch">
+				<div class="fast-box-card app-touch" data-href="devshare/index.html" >
 					<img src="../../image/person/btn_Sharedequipment@3x.png" />
 					<div class="app-font-size-24 app-color-333333">共享设备</div>
 				</div>
@@ -134,7 +134,7 @@
 					<img src="../../image/person/btn_Collection@3x.png" />
 					<div class="app-font-size-24 app-color-333333">收藏</div>
 				</div>
-				<div class="fast-box-card app-touch">
+				<div class="fast-box-card app-touch" data-href="collection/my_camera.html">
 					<img src="../../image/person/btn_Myalbum@3x.png" />
 					<div class="app-font-size-24 app-color-333333">我的相册</div>
 				</div>
@@ -148,7 +148,7 @@
 							<span class="app-color-333333">我的关注</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" data-href="wallet/index.html">
 						<a class="mui-navigate-right">
 							<img src="../../image/person/btn_Mywallet@3x.png" />
 							<span class="app-color-333333">我的钱包</span>
@@ -161,7 +161,7 @@
 							<span class="app-color-333333">我的商城</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" data-href="coupon/index.html">
 						<a class="mui-navigate-right">
 							<img src="../../image/person/btn_Mycard@3x.png" />
 							<span class="app-color-333333">我的卡券</span>
@@ -172,7 +172,7 @@
 				</ul>
 
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" data-href="message/index.html">
 						<a class="mui-navigate-right">
 							<img src="../../image/person/btn_Messagecenter@3x.png" />
 							<span class="app-color-333333">消息中心</span>
@@ -184,7 +184,7 @@
 							<span class="app-color-333333">关于安心云</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" data-href="setting/index.html">
 						<a class="mui-navigate-right">
 							<img src="../../image/person/btn_Setup@3x.png" />
 							<span class="app-color-333333">设置</span>
@@ -203,10 +203,21 @@
 		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
 			
+			mui.ready(function(){
+				mui(".mui-content").on('tap', '*[data-href]', function(){
+					var url = this.dataset.href;
+					// 所有跳转 需要验证登录
+					app.user.get(function(u){
+						u && mui.openWindow(url);	
+					});
+				});
+			});
 			
 			
 			new Vue({
@@ -220,10 +231,7 @@
 					});
 				},
 				methods: {
-					//头像点击
-					onAvastrTap: function(){
-						mui.openWindow('information.html');
-					},
+					
 				}
 			})
 		</script>

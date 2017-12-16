@@ -39,9 +39,6 @@
 				padding-bottom: 3px;
 				margin-bottom: 10px;
 			}
-			
-			
-			
 		</style>
 	</head>
 
@@ -77,9 +74,9 @@
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -101,102 +98,100 @@
 					};
 				},
 				watch: {
-					flash: function(v){
+					flash: function(v) {
 						this.scan && this.scan.setFlash(v);
 					}
 				},
 				mounted: function() {
-					
+
 				},
-				
+
 				plusReady: function() {
 					this.type = this.$view.type || 0;
-					
-					setTimeout(function(){
+
+					setTimeout(function() {
 						this.resetScan();
 					}.bind(this), 200);
 				},
 				methods: {
 					// 手动添加设备号
-					onAddTap: function(){
+					onAddTap: function() {
 						this.flash = false;
 						this.closeScan();
 						// 手动输入序列号 
-						app.page.getInput(function(data){
+						app.page.getInput(function(data) {
 							this._addDevice(data.content);
 						}.bind(this), {
 							tips: '请输入设备序列号',
 							title: '手动输入',
-							content: 'AX-NXW-2017112900008',
+							content: '25000163',
 							//r: '',
 						});
-						
+
 					},
 					// 发送添加设备请求
-					_addDevice: function(id){
+					_addDevice: function(id) {
 						var w = plus.nativeUI.showWaiting();
 						// 如果当前不是配件添加，是主机添加
-						if(this.type !== 0){
-							dal.device.add(id,function(err, data){
+						if(this.type !== 0) {
+							dal.device.add(id, function(err, data) {
 								w && (w.close(), w = null);
-								if(err){return mui.toast(err.message || '添加失败')}
+								if(err) {
+									console.log(JSON.stringify(err));
+									return mui.toast(err.message || '添加失败')
+								}
 								mui.alert('添加成功');
 							});
 						}
 						// 配件添加
-						else{
+						else {
 							// 先选择主机设备
-							app.page.openForResultBy('Lan_select_dev_id.html', 'select_dev_id',function(data){
+							app.page.openForResultBy('Lan_select_dev_id.html', 'select_dev_id', function(data) {
 								var devid = data.devid;
-							},{
+							}, {
 								result: true
 							});
 						}
-						
-						
-						
-						
-						
-						
+
 					},
-					resetScan: function(){
-						if(this.t && this.t >= 0){
+					resetScan: function() {
+						if(this.t && this.t >= 0) {
 							return;
 						}
 						this.closeScan();
 						this.initScan();
 						this.startScan();
-						this.t = setTimeout(function(){
+						this.t = setTimeout(function() {
 							window.clearTimeout(this.t);
 							this.t = -1;
 						}.bind(this), 1000);
-						
+
 					},
-					initScan: function(){
-						var _arr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+					initScan: function() {
+						var _arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 						var scan = new plus.barcode.Barcode('axy', _arr, {
-							frameColor: '#06C1AE',  
+							frameColor: '#06C1AE',
 							scanbarColor: '#06C1AE',
 						});
 						scan.onmarked = this.onMarked.bind(this);
 						this.scan = scan;
 					},
-					onMarked: function(type, result, file){
+					onMarked: function(type, result, file) {
 						this._addDevice(result);
-//						app.page.setResult({
-//							result: result
-//						}).close();
+						//						app.page.setResult({
+						//							result: result
+						//						}).close();
 					},
-					startScan: function(){
+					startScan: function() {
 						this.scan && (this.scan.start(), this.frist = false);
 					},
-					stopScan: function(){
+					stopScan: function() {
 						this.scan && this.scan.cancel();
 					},
-					closeScan: function(){
+					closeScan: function() {
 						this.scan && (this.scan.close(), this.scan = null, this.t = -1);
 					}
-					
+
 				}
 			});
 		</script>

@@ -97,7 +97,7 @@
 			}];
 			
 			
-			var B = new ni.Broadcast();
+			var _B = new ni.Broadcast();
 			
 			new Vue({
 				el: "#warp",
@@ -150,7 +150,7 @@
 
 					// 监听登录成功事件
 					_listenLogin: function() {
-						B.on('login_success', function(data) {
+						_B.on('login_success', function(data) {
 							// TODO 登录注册重置密码等页面需要关闭
 							var w = null;
 							['login', 'reg'].forEach(function(id) {
@@ -162,7 +162,7 @@
 					},
 					// 监听tabar事件
 					_listenTabar: function(){
-						B.on("tabar", function(data){
+						_B.on("tabar", function(data){
 							var target = this.items[data.mindex];
 							var t = 0;
 							// 如果页面暂时还没打开过
@@ -173,7 +173,7 @@
 							this.onTap(this.items[data.mindex], data.mindex);
 							// 转发事件
 							setTimeout(function(){
-								B.emit("tabar", data, {
+								_B.emit("tabar", data, {
 									views: [target.id] 
 								});
 							}, t);
@@ -194,28 +194,25 @@
 					// 获取当前应用版本
 					plus.runtime.getProperty(plus.runtime.appid, function(info) {
 						var appVersion = version2number(info.version);
-
-						mui.toast("version: " + appVersion);
-
-						false && dal.system.update(appVersion, function(err, data) {
+						dal.system.update(appVersion, function(err, data) {
 							if(err) {
 								return mui.toast(err.message);
 							}
 							var newAppVersion = version2number(data.version);
 							if(newAppVersion > appVersion) {
-								var filePath = data.path;
+								var filePath = data.path; 
 								// 判断是否是更新资源文件
 								if(!rsmanager.isHotRresource(filePath)) {
 									return mui.alert("非更新资源文件\n" + filePath);
 								}
 								rsmanager.install(filePath, function(succ) {
 									//alert(succ); 
-								}, {
-									hide: false, // 是否隐藏更新
-									show: true, // 是否弹出提示框
-									force: true, // 强制更新 不能关闭提示框
-									title: '新版本: ' + newAppVersion, // 更新提示框的标题内容 可以设置为app的版本号
-									message: "是否现在更新" // 提示框显示内容，可以设置为app新版内容功能讲解  \n换行
+								}, { 
+									hide: data.hide, // 是否隐藏更新
+									show: data.show, // 是否弹出提示框
+									force: data.force, // 强制更新 不能关闭提示框
+									title: data.title, // 更新提示框的标题内容 可以设置为app的版本号
+									message: data.message // 提示框显示内容，可以设置为app新版内容功能讲解  \n换行
 								});
 							} else {
 								//console.log("无需更新");

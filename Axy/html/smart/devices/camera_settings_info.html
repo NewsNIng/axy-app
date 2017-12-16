@@ -55,40 +55,40 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>摄像机型号</span>
-							<span class="mui-badge" v-text="devInfo.cameraModel"></span>
+							<span class="mui-badge" v-text="o.devtype"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>连接的WIFI</span>
-							<span class="mui-badge" v-text="devInfo.connectionWifi"></span>
+							<span class="mui-badge" v-text="o.ssid"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>WIFI信号强度</span>
-							<span class="mui-badge" v-text="devInfo.signalStrength"></span>
+							<span class="mui-badge" v-text="o.signal || '未知'"></span> 
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>摄像机ID</span>
-							<span class="mui-badge" v-text="devInfo.cameraId"></span>
+							<span class="mui-badge" v-text="o.id"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>硬件版本</span>
-							<span class="mui-badge" v-text="devInfo.hardwareVersion"></span>
+							<span class="mui-badge" v-text="o.hdVersion"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>IP地址</span>
-							<span class="mui-badge" v-text="devInfo.ipAddress"></span>
+							<span class="mui-badge" v-text="o.ip"></span>
 						</a>
 					</li>
-					<li style="background-color: #F4F8FB !important;"/>
+					<li style="background-color: #F4F8FB !important;" />
 				</ul>
 
 			</div>
@@ -100,7 +100,10 @@
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 
@@ -108,31 +111,36 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						devInfo:{
-							cameraModel: "",
-							connectionWifi: "",
-							signalStrength: "",
-							cameraId: "",
-							hardwareVersion: "",
-							ipAddress: "",
-						},
+						o: {
+							"id": "",
+							"name": "",
+							"devtype": 0,
+							"appVersion": "",
+							"hdVersion": "",
+							"ip": "",
+							"owner": "",
+							"centerServer": "",
+							"centerPort": 0,
+							"ssid": "",
+							"signal": 0
+						}
 					};
 				},
-				mounted: function() {
-
-				},
+				
 				plusReady: function() {
-					this.devInfo.cameraModel = this.$view.info.basicInfo.devName;
-					this.devInfo.connectionWifi = this.$view.info.netInfo.ssid;
-					this.devInfo.signalStrength = this.$view.signal + '%';
-					this.devInfo.cameraId = this.$view.info.basicInfo.devid;
-					this.devInfo.hardwareVersion = this.$view.info.basicInfo.hwversion;
-					this.devInfo.ipAddress = this.$view.info.netInfo.ip;
+					this.devid = this.$view.info.devid;
+					this.type = this.$view.info.type;
+					this.getBasicinfo();	
 				},
 				methods: {
-					// 切换开关
-					toggleSwitch: function() {
-						this.state = !this.state;
+					getBasicinfo: function() {
+						
+						dal.devparam.basicinfo(this.devid, this.type, function(err, rs) {
+							if(err) {
+								return
+							}
+							this.o = rs;
+						}.bind(this));
 					}
 				}
 			});

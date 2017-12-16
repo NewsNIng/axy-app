@@ -10,7 +10,7 @@
 		return ra("post", "/device/add", {
 			devid: devid
 		}, callback);
-	}
+	};
 	
 	
 	/**
@@ -23,7 +23,25 @@
 			pageNumber: pageNumber,
 			pageSize: pageSize || 10
 		}, callback);
+	};
+	
+	
+	
+	/**
+	 * 设备删除
+	 */
+	device.delete = function(devid, callback){
+		return ra('get', '/device/delete/' + devid, {}, callback);
 	}
+	
+	/**
+	 * 分享设备删除
+	 */
+	device.deleteshare = function(devid, callback){
+		var account = window.localStorage.getItem("_account_");
+		return ra('get', '/device/delete/share/'+devid+'/user/' + account, {}, callback);
+	}
+	
 	
 	
 	

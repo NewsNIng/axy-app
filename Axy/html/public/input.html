@@ -64,12 +64,14 @@
 					this.tips = v.tips || "请输入内容...";
 					this.content = v.content || ''; 
 					this.regexpType = v.r;
+					this.regexpErrorMessage = v.rmsg || "请输入正确格式的内容";
+					//this.type = v.type || 'text';
 				},
 				methods: {
 					onOkTap: function(){
 						var errmsg = "";
 						if(this.regexpType){
-							errmsg = app.rules.testBy(this.regexpType, this.content, "请输入正确格式的内容");
+							errmsg = app.rules.testBy(this.regexpType, this.content, this.regexpErrorMessage);
 						}
 						if(errmsg){
 							return mui.alert(errmsg);

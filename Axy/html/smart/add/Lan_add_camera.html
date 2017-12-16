@@ -35,11 +35,11 @@
 			
 			.dev_icon {
 				width: 100%;
-				/*background-image: url(../../../image/smart/devices/dev_icon/AX-360@3x.png);*/
 				height: 9.2rem;
-				background-position: bottom;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: 50%;
 				position: relative;
-				style
 			}
 			
 			.dev_text {
@@ -103,7 +103,7 @@
 					};
 				},
 				mounted: function() {
-					this.bgp = window.localStorage.getItem('Lan_add_camera_img');
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '.png';
 				},
 				plusReady: function() {},
 				methods: {

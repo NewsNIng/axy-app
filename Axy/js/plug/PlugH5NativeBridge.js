@@ -21,11 +21,13 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
+		return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
+		return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
@@ -357,5 +359,28 @@
 	pgn.GetAllSmartDeviceState = function(sf, ff) {
 		return pg.asyncExec(N, 'GetAllSmartDeviceState', [], sf, ff);
 	};
+	
+	
+	//连接 WG100  
+	pgn.ConnectWG100 = function(devid, sf, ff){
+		return pg.asyncExec(N, 'ConnectWG100', [devid], sf, ff);
+	};
+	//静音
+	pgn.WG100Mute = function(){
+		return pg.syncExec(N, 'WG100Mute', []);
+	};
+	//按住喊话
+	pgn.WG100Call = function(){
+		return pg.syncExec(N, 'WG100Call', []);
+	};
+	//松手监听  
+	pgn.WG100Listen = function(){
+		return pg.syncExec(N, 'WG100Listen', []);
+	};
+	// 断开连接
+	pgn.DisconnectWG100 = function(){
+		return pg.syncExec(N, 'DisconnectWG100', []);
+	}
+
 
 }(window));

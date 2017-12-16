@@ -23,10 +23,12 @@
 			}
 			
 			.dev_icon {
+				background-image: url(../../../image/smart/devices/dev_icon/AX-360@3x.png.png);
 				width: 100%;
-				background-image: url(../../../image/smart/devices/dev_icon/AX-360@3x.png);
 				height: 9.2rem;
-				background-position: bottom;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: 50%;
 				position: relative;
 			}
 			
@@ -73,7 +75,7 @@
 					top: 50%;
 					transform: translate3d(-50%, -50%, 0);
 					-webkit-transform: translate3d(-50%, -50%, 0);
-					opcity: 75;
+					opacity: 0.75;
 					width: 1.6rem;
 					height: 1.6rem;
 				}
@@ -182,6 +184,9 @@
 					};
 				},
 				mounted: function() {
+					window.localStorage.setItem('Lan_add_camera_img','../../../image/smart/devices/dev_icon/AX-360@3x.png');
+					
+					
 					// get prev url params
 					function GetQueryString(name) {
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

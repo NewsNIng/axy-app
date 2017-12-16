@@ -88,45 +88,45 @@
 
 			<div class="mui-content">
 
-				<div class="menu-box app-font-size-28">
+				<div class="menu-box app-font-size-32">
 					<div class="avastr app-touch" @tap="onAvastrTap()">
-						<img :src="avastr" />
+						<img :src="user.headimgurl" />
 					</div>
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell">
 							<a class="mui-navigate-right">
 								<span class="app-color-333333">用户ID</span>
-								<span class="mui-badge">8447466</span>
+								<span class="mui-badge" v-text="user.account"></span>
 							</a>
 						</li>
 						<li class="mui-table-view-cell" @tap="onNickNameTap()">
 							<a class="mui-navigate-right">
 								<span class="app-color-333333">昵称</span>
-								<span class="mui-badge" v-text="nickname"></span>
+								<span class="mui-badge" v-text="user.nickname"></span>
 							</a>
 						</li>
 						<li class="mui-table-view-cell" @tap="onGenderTap()">
 							<a class="mui-navigate-right">
 								<span class="app-color-333333">性别</span>
-								<span class="mui-badge" v-text="gender"></span>
+								<span class="mui-badge" v-text="user.gender"></span>
 							</a>
 						</li>
 						<li class="mui-table-view-cell" @tap="onBirthdayTap()">
 							<a class="mui-navigate-right">
 								<span class="app-color-333333">生日</span>
-								<span class="mui-badge">选择生日</span>
+								<span class="mui-badge" v-text="user.birthday">选择生日</span>
 							</a>
 						</li>
 						<li class="mui-table-view-cell" @tap="onCityTap()">
 							<a class="mui-navigate-right">
 								<span class="app-color-333333">城市</span>
-								<span class="mui-badge">选择城市</span>
+								<span class="mui-badge" v-text="user.city"></span>
 							</a>
 						</li>
 					</ul>
 
 					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell" @tap="onBindTap()">
 							<a class="mui-navigate-right">
 								<span class="app-color-333333">帐号绑定</span>
 							</a>
@@ -150,6 +150,7 @@
 		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../js/app/app.js" ></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../../js/lib/mui.picker.js"></script>
@@ -165,9 +166,20 @@
 				el: '.box',
 				data: function() {
 					return {
-						avastr: "https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256",
-						nickname: "NewsNing",
-						gender: "男",
+						
+						user: {
+							"id": -1,
+							"account": "",
+							"gender": "",
+							"nickname": "",
+							"birthday": "",
+							"province": "",
+							"city": "",
+							"headimgurl": "",
+							"qqopenid": null,
+							"wxopenid": null,
+							"wbopenid": null
+						}
 					};
 				},
 				plusReady: function() {
@@ -186,6 +198,8 @@
 						text: '女',
 						value: 1,
 					}]);
+					var u = app.user.get();
+					this.user = u.vihiuser;
 				},
 				methods: {
 					// 头像点击
@@ -226,7 +240,7 @@
 							type: "date",
 							beginYear: "1900",
 							endYear: (new Date).getFullYear(),
-							value: "1995-10-22", // 当前生日
+							value: this.user.birthday, // 当前生日
 						};
 						dtPick = new mui.DtPicker(options);
 						dtPick.show(function(rs) {
@@ -266,6 +280,11 @@
 							//返回 false 可以阻止选择框的关闭
 							//return false;
 						});
+					},
+					
+					// 帐号绑定点击
+					onBindTap: function(){
+						mui.openWindow('relation/bind.html');
 					},
 
 				}

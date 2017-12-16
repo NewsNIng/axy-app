@@ -19,6 +19,7 @@
 			login: '_www/html/common/login.html',
 			browser: '_www/html/public/browser.html',
 			image_cropper: '_www/html/public/image_cropper.html',
+			alarmParam: '_www/html/public/alarmParam.html'
 		},cw = null;
 	
 	// 打开城市选择
