@@ -3,17 +3,19 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>设置</title>
+		<title>数据保存记录</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
-		<link rel="stylesheet" href="../../../css/app/devices.css" />
 		<style type="text/css">
 			html,
 			body,
 			.mui-content {
-				background-color: #F4F8FB;
+				background-color: white;
+			}
+			.mui-content li {
+				padding: 0.4rem 15px 0.4rem 0 !important;
 			}
 		</style>
 	</head>
@@ -21,38 +23,11 @@
 	<body>
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">设置</h1>
+			<h1 class="mui-title">数据保存记录</h1>
 		</header>
-		<div class="mui-content">
-			<ul class="mui-table-view app-font-size-28">
-				<li class="mui-table-view-cell">
-					<a class="">
-						<span>设备ID</span>
-						<span class="mui-badge">123456789</span>
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span>设备名称</span>
-						<span class="mui-badge">xx房间的智能插座</span>
-					</a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a class="mui-navigate-right">
-						<span>绑定的摄像机</span>
-						<span class="mui-badge">状态指示灯</span>
-					</a>
-				</li>
-				<li class="mui-table-view-cell" @tap="mui.openWindow('dev_electric_datasave.html','dev_electric_datasave');">
-					<a class="mui-navigate-right">
-						<span>数据保存记录</span>
-					</a>
-				</li>
-				<li class="mui-table-view-cell" @tap="mui.openWindow('alarm_log.html','alarm_log');">
-					<a class="mui-navigate-right">
-						<span>告警消息记录</span>
-					</a>
-				</li>
+		<div class="mui-content app-font-size-28">
+			<ul>
+				<li v-for="o in data" v-text="o.date"></li>
 			</ul>
 		</div>
 
@@ -80,7 +55,15 @@
 				el: '.mui-content',
 				data: function() {
 					return {
-
+						data: [{
+							date: "2017-11-03 19:00:00",
+						},{
+							date: "2017-11-03 19:00:00",
+						},{
+							date: "2017-11-03 19:00:00",
+						},{
+							date: "2017-11-03 19:00:00",
+						}]
 					};
 				},
 				plusReady: function() {},

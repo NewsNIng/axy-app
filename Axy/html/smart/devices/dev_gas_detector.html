@@ -84,7 +84,7 @@
 
 			<div class="mui-content noImmersed">
 				<div class="state_show"> 
-					<span class="app-font-size-30">0%LEL</span>
+					<span class="app-font-size-30" v-text="devInfo.density+'%LEL'"></span>
 					<span class="app-font-size-44">正常</span>
 					<span class="app-font-size-24">当前浓度值</span>
 				</div>
@@ -161,7 +161,9 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						
+						devInfo: {
+							density: 0,
+						},
 						dev: {
 							"alarmPlan": [{
 									"end": "19:50:00",

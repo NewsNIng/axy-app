@@ -80,12 +80,12 @@
 					</div>
 
 					<div>
-						<img src="../../../image/smart/devices/lock/btn_Onetimeunlocking@3x.png" />
+						<img src="../../../image/smart/devices/lock/btn_Onetimeunlocking@3x.png" @tap="mui.openWindow('dev_generation_password.html','dev_generation_password');" />
 						<div>一次性开锁密码</div>
 					</div>
 					<div>
 						<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />
-						<div>闭锁状态</div>
+						<div v-text="state?'开锁状态':'闭锁状态'">闭锁状态</div>
 					</div>
 				</div>
 

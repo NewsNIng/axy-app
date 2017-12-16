@@ -25,7 +25,7 @@
 			}
 			
 			.img-wrap {
-				height: 6.133333rem;
+				height: 7.946666rem;
 				/*padding-bottom: 6.133333rem;*/
 				background-image: url(../../../image/smart/devices/gateway/bg@3x.png);
 				background-repeat: no-repeat;
@@ -60,6 +60,7 @@
 			
 			.menu-warp>div>img {
 				width: 1.466666rem;
+				height: 1.466666rem;
 			}
 			
 			header img {
@@ -92,7 +93,7 @@
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
 					<div>
-						<img src="../../../image/smart/devices/gateway/icon_Mute@3x.png" />
+						<img :src="devInfo.isMute?'../../../image/smart/devices/gateway/icon_Mute@3x.png':'../../../image/smart/devices/gateway/btn_voice@3x.png'" @tap="onMuteTap()" />
 						<div>静音</div>
 					</div>
 
@@ -101,52 +102,11 @@
 						<div>语音对讲</div>
 					</div>
 					<div>
-						<img src="../../../image/smart/devices/gateway/btn_Disarm@3x.png" />
-						<div>一键布撤防</div>
+						<img src="../../../image/smart/devices/gateway/btn_Setup@3x.png" @tap="onSettingTap()" />
+						<div>设置</div>
 					</div>
 				</div>
 
-				<ul class="mui-table-view app-font-size-28">
-					<li class="mui-table-view-cell" @tap="onNameTap()">
-						<a class="mui-navigate-right">
-							<span>设备名称</span>
-							<span class="mui-badge">xxx的智能网关</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>自动布防计划</span>
-							<span class="mui-badge ">xx房间的智能插座</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>状态指示灯</span>
-							<span class="mui-badge">
-								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': statusLight}" ref="pwd_protection">
-									<div class="mui-switch-handle"></div>
-								</div>
-							</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>WIFI配置</span>
-							<span class="mui-badge ">30S</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onAlarmTap()">
-						<a class="mui-navigate-right">
-							<span>告警时间设置</span>
-							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>布撤防日志</span>
-						</a>
-					</li>
-				</ul>
 
 			</div>
 
@@ -184,6 +144,10 @@
 						// 弹框
 						pick: null,
 						statusLight: true, // 是否开启状态指示灯
+						devInfo:{
+							isMute: false,
+							isArming:false,
+						},
 						dev: {
 							"alarmPlan": [{
 									"end": "19:50:00",
@@ -251,9 +215,6 @@
 					};
 				},
 				mounted: function() {
-					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
-						this.statusLight = event.detail.isActive;
-					}.bind(this));
 					this.pick = new mui.PopPicker({
 						layer: 1,
 						more: false,
@@ -271,6 +232,14 @@
 							title: "设备名称",
 							tips: that.dev.basicInfo.devName,
 						});
+					},
+					// 是否开启静音
+					onMuteTap: function(){
+						this.devInfo.isMute = !this.devInfo.isMute;
+					},
+					// 一键布撤防
+					onSettingTap: function(){
+						mui.openWindow('dev_smart_gateway_setting.html','dev_smart_gateway_setting');
 					},
 					// 删除设备
 					onDelDevice: function(){
