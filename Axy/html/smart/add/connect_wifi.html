@@ -122,7 +122,10 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
-
+			
+			
+			var wifinameCache, wifipwdCache;
+			
 			new Vue({
 				el: '#warpper',
 				data: function() {
@@ -137,15 +140,17 @@
 					};
 				},
 				mounted: function() {
-					this.wifinameCache = new this.$Cache('wifinameCache', '');
-					this.wifipwdCache = new this.$Cache('wifipwdCache', '');
 					
-					this.wifiname = this.wifinameCache.data;
-					this.wifipwd = this.wifipwdCache.data;
 				},
 				plusReady: function() {
+					wifinameCache = new ni.Cache('wifinameCache', '');
+					wifipwdCache = new ni.Cache('wifipwdCache', '');
+					
+					this.wifiname = wifinameCache.data;
+					this.wifipwd = wifipwdCache.data;
+					
 					// 如果本地没有保存数据则
-					if(!this.wifinameCache.data){
+					if(!wifinameCache.data){
 						// TODO 原生端 获取 当前 WIFI 名称
 					}
 					
@@ -157,7 +162,7 @@
 						this.devActive = i;
 					},
 					onNextTap: function(){
-						// 验证
+						// 验证 
 						if(false){
 							return mui.toast('xx');
 						}
@@ -165,12 +170,12 @@
 						// 是否记住密码
 						if(this.isRemember){
 							// 保存
-							this.wifinameCache.data = this.wifiname;
-							this.wifipwdCache.data = this.wifipwd;
+							wifinameCache.data = this.wifiname;
+							wifipwdCache.data = this.wifipwd;
 						}else{
 							// 取消保存
-							this.wifinameCache.data = '';
-							this.wifipwdCache.data = '';
+							wifinameCache.data = '';
+							wifipwdCache.data = '';
 						}
 						
 						

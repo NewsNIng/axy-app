@@ -5,13 +5,13 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
-		<script type="text/javascript" src="../../js/common/flexible.js" ></script>
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<link rel="stylesheet" href="../../css/lib/mui.min.css" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
-		
+
 		<style type="text/css">
 			body {
-				background-color: rgba(0,0,0,0.1) !important;
+				background-color: rgba(0, 0, 0, 0.1) !important;
 			}
 			
 			* {
@@ -41,12 +41,12 @@
 				height: 0 !important;
 				border-left: 10px solid transparent;
 				border-right: 10px solid transparent;
-				border-bottom: 12px solid rgba(255,255,255,0.8);
+				border-bottom: 12px solid rgba(255, 255, 255, 0.8);
 				transform: translate(-10px, -100%);
-				-webkit-transform: translate(-10px, -100%); 
+				-webkit-transform: translate(-10px, -100%);
 			}
 			
-			li{
+			li {
 				width: 3.333333rem !important;
 				height: 1.2rem;
 			}
@@ -55,13 +55,29 @@
 				left: 0 !important;
 				/*background-color: #ccc !important;*/
 			}
-			img{
+			
+			img {
 				width: 0.773333rem;
 				vertical-align: middle;
 			}
-			span{
+			
+			span {
 				color: #A2ABB1;
 				vertical-align: middle;
+			}
+			
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				
+				.room {
+				  font-size: 12px !important;
+				}
+				[data-dpr="2"] .room {
+				  font-size: 24px !important;
+				}
+				[data-dpr="3"] .room {
+				  font-size: 36px !important;
+				}
+				.app-f
 			}
 		</style>
 	</head>
@@ -82,10 +98,10 @@
 		<script>
 			mui.ready(function() {
 				mui('.room')[0].style.marginTop = 44 + immersed + 'px';
-				document.addEventListener('touchend', function(){
+				document.addEventListener('touchend', function() {
 					mui.back();
 				});
-				mui('ul').on('tap', 'li', function(){
+				mui('ul').on('tap', 'li', function() {
 					mui.openWindow(this.dataset.href, this.dataset.id);
 				});
 			});

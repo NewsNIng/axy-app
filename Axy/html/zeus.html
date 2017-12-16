@@ -13,6 +13,7 @@
 		<script type="text/javascript" src="../js/plug/PlugH5NativeBridge.js"></script>
 
 		<script type="text/javascript" src="../js/app/app.js"></script>
+		<script type="text/javascript" src="../js/app/app-page.js" ></script>
 
 		<script type="text/javascript" src="../js/dal/base.js"></script>
 		<script type="text/javascript" src="../js/dal/device.js"></script>
@@ -28,7 +29,7 @@
 			 */
 
 			var D, P = plug.H5NativeBridge;
-			var B = new ni.Broadcast();
+			var _B = new ni.Broadcast();
 
 			var domain = "www.isee110.com";
 
@@ -41,37 +42,37 @@
 			var NotifyAction = {
 				// 设备状态更新 
 				RunstateNotify: function(data) {
-					try {
-						var isUpdate = runManager.updateById(data, function(o, n) {
-							return o.devid === n.devid;
-						});
-						// 转发通知
-						B.emit('RunstateNotify', {
-							info: data,
-							add: !isUpdate
-						});
-					} catch(e) {
-						//TODO handle the exception
-						alert(e.message);
-					}
+//					try {
+//						var isUpdate = runManager.updateById(data, function(o, n) {
+//							return o.devid === n.devid;
+//						});
+//						// 转发通知
+//						B.emit('RunstateNotify', {
+//							info: data,
+//							add: !isUpdate
+//						});
+//					} catch(e) {
+//						//TODO handle the exception
+//						alert(e.message);
+//					}
 
 				},
 
 				// 设备信息更新
 				DeviceInfoNotify: function(data) {
-					try {
-						var isUpdate = devManager.updateById(data, function(o, n) {
-							return o.basicInfo && o.basicInfo.devid === n.basicInfo.devid;
-						});
-						// 转发通知
-						B.emit('DeviceInfoNotify', {
-							info: data,
-							add: !isUpdate
-						});
-					} catch(e) {
-						//TODO handle the exception
-						alert(e.message);
-					}
+//					try {
+//						var isUpdate = devManager.updateById(data, function(o, n) {
+//							return o.basicInfo && o.basicInfo.devid === n.basicInfo.devid;
+//						});
+//						// 转发通知
+//						B.emit('DeviceInfoNotify', {
+//							info: data,
+//							add: !isUpdate
+//						});
+//					} catch(e) {
+//						//TODO handle the exception
+//						alert(e.message);
+//					}
 
 				},
 			};
@@ -128,17 +129,17 @@
 					});
 
 					// 本地 所有设备的信息
-					ALLD = new ni.Cache('AllDeviceInfo', [], {
-						plus: true
-					});
-
-					// 本地 所有设备的运行状态
-					ALLR = new ni.Cache('AllDeviceRun', [], {
-						plus: true
-					});
-
-					devManager = new DevManager(ALLD);
-					runManager = new DevManager(ALLR);
+//					ALLD = new ni.Cache('AllDeviceInfo', [], {
+//						plus: true
+//					});
+//
+//					// 本地 所有设备的运行状态
+//					ALLR = new ni.Cache('AllDeviceRun', [], {
+//						plus: true
+//					});
+//
+//					devManager = new DevManager(ALLD);
+//					runManager = new DevManager(ALLR);
 					
 
 					return Rx.Observable
@@ -198,7 +199,7 @@
 								// next
 								o3.next(arg);
 							});
-							getNativeDeviceInfo();
+							//getNativeDeviceInfo();
 						});
 				})
 				// 消息中心事件

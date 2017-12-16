@@ -75,7 +75,7 @@
 					</a>
 				</li>
 			</ul>
-			
+
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right">
@@ -83,34 +83,58 @@
 					</a>
 				</li>
 			</ul>
-			
-			
-			
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="exit">
+					<a class="mui-navigate-right">
+						<span class="app-color-ff3b30">退出帐号</span>
+					</a>
+				</li>
+			</ul>
+
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
-			
-			mui.ready(function(){
-				mui('.mui-content').on('tap', '*[data-href]', function(){
+
+			mui.ready(function() {
+				mui('.mui-content').on('tap', '*[data-href]', function() {
 					mui.openWindow(this.dataset.href);
 				});
+				document.getElementById("exit").addEventListener('tap', onExit);
 			});
 
-			new Vue({
-				el: ".mui-content",
-				data: function() {
-					return {
-						list: []
-					};
-				},
-				methods: {
-
-				}
-			})
+			function onExit() {
+				mui.confirm("您确定退出帐号吗？", "", ["退出帐号", "取消"], function(e) {
+					if(e.index === 0) {
+						var all = plus.webview.all();
+						var index = plus.webview.currentWebview();
+						var first = plus.webview.getLaunchWebview();
+						var id;
+						plus.nativeUI.showWaiting();
+						for(var i = 0, l = all.length; i < l; i++) {
+							id = all[i].id;
+							if(id !== index.id && id !== first.id) {
+								plus.webview.close(all[i]);
+							}
+						}
+						app.user.logout();
+						window.localStorage.setItem('_pwd_', "");
+						first.addEventListener('loaded', function() {
+							plus.nativeUI.closeWaiting();
+							index.close('none');
+						});
+						first.reload();
+						first.show("slide-in-bottom", 250);
+						//plus.nativeUI.closeWaiting();
+					}
+				});
+			}
 		</script>
 	</body>
 

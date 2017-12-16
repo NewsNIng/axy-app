@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>帐号绑定</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*-left图片文字*/
+			
+			.menu-box a.mui-navigate-right {}
+			
+			.menu-box a.mui-navigate-right>img {
+				width: 0.48rem;
+				margin: 0 0.2rem;
+				vertical-align: middle;
+			}
+			
+			.menu-box a.mui-navigate-right>span {
+				vertical-align: middle;
+			}
+			/*end菜单*/
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">帐号绑定</h1>
+		</header>
+		<div class="mui-content menu-box app-font-size-32">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" data-href="push.html" @tap="onTelphoneTap()">
+					<a class="mui-navigate-right">
+						<img src="../../../image/common/login_weibo.png" />
+						<span class="app-color-333333">手机号码</span>
+						<span class="mui-badge">{{telphone || "未绑定"}}</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-href="safe.html" @tap="onOAuthItemTap('weixin')">
+					<a class="mui-navigate-right">
+						<img src="../../../image/common/login_wechat.png" />
+						<span class="app-color-333333">微信帐号</span>
+						<span class="mui-badge">{{weixin.userInfo.nickname}}</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-href="safe.html" @tap="onOAuthItemTap('qq')">
+					<a class="mui-navigate-right">
+						<img src="../../../image/common/login_qq.png" />
+						<span class="app-color-333333">QQ帐号</span>
+						<span class="mui-badge">{{qq.userInfo.nickname}}</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-href="safe.html" @tap="onOAuthItemTap('sinaweibo')">
+					<a class="mui-navigate-right">
+						<img src="../../../image/common/login_weibo.png" />
+						<span class="app-color-333333">新浪微博</span>
+						<span class="mui-badge">{{sinaweibo.userInfo.nickname}}</span>
+					</a>
+				</li>
+			</ul>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			mui.ready(function() {
+				mui('.mui-content').on('tap', '*[data-href]', function() {
+					//mui.openWindow(this.dataset.href);
+				});
+			});
+
+			//			var aouth;
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						tel: "17098631995",
+
+						weixin: {
+							userInfo: {
+								nickname: "未绑定"
+							}
+						},
+						qq: {
+							userInfo: {
+								nickname: "未绑定"
+							}
+						},
+						sinaweibo: {
+							userInfo: {
+								nickname: "未绑定"
+							}
+						}
+
+					};
+				},
+
+				computed: {
+					telphone: function() {
+						if(/^1\d{10}$/.test(this.tel)) {
+							var temp = this.tel.split("");
+							temp.splice(3, 4, "*", "*", "*", "*")
+							temp = temp.join("");
+							return temp;
+						} else {
+							return null;
+						}
+					}
+				},
+
+				plusReady: function() {
+					this.getBindData();
+				},
+				methods: {
+
+					// 获取本地绑定信息
+					getBindData: function() {
+						var that = this;
+						plus.oauth.getServices(function(services) {
+							that.services = services;
+							services.forEach(function(item) {
+								if(item.userInfo) {
+									that[item.id] = item;
+								} else {
+									item.getUserInfo(function() {
+										that[item.id] = item;
+									});
+								}
+							});
+						}, function(err) {
+							mui.toast("获取绑定信息失败");
+						});
+					},
+
+					// 第三方授权信息点击
+					onOAuthItemTap: function(type) {
+						var that = this;
+						// 如果未登录
+						if(!this[type].authResult) {
+							new ni.OAuth(type, function(err, auth) {
+								if(!err) {
+									that[type] = auth;
+								}
+							});
+						} else {
+
+							mui.confirm("您要注销该绑定吗？", "", ["解除绑定", "取消"], function(e) {
+								if(e.index === 0) {
+									that[type].logout(function() {
+										that[type].userInfo = {
+											nickname: "已解除"
+										};
+									});
+								}
+							})
+
+						}
+					},
+					// 手机号点击
+					onTelphoneTap: function() {
+						// 如果未绑定
+						if(!this.telphone){
+							// 跳转绑定
+							console.log("// 跳转绑定");
+							
+						}else{
+							// 修改绑定
+							console.log("// 修改绑定");
+							
+						}
+					},
+				}
+			})
+		</script>
+	</body>
+
+</html>

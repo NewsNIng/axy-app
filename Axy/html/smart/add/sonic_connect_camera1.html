@@ -13,7 +13,7 @@
 
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
-
+		<link rel="stylesheet" href="../../../css/app/app-pop-tip.css" />
 		<style type="text/css">
 			html,
 			body,
@@ -62,10 +62,32 @@
 				border-bottom: 1px solid #2BB8AA;
 				color: #2BB8AA;
 			}
+			
+			
+			
+			
 		</style>
 	</head>
 
 	<body>
+		
+		<div id="popover_tip" class="mui-popover">
+			<div class="tip-card">
+				<div class="tip-card-header app-font-size-34 app-color-white">橙灯未闪烁，戳这里查看</div>
+				<div class="tip-card-body app-font-size-30">
+					1：天之道asdasdasdasdasdasd阿德萨苏大苏打<br />
+					2：2大家阿斯回答世界顶级阿萨德姐啊岁阿斯打扫打扫打扫打扫打扫打扫打扫<br />
+					1：天之道asdasdasdasdasdasd阿德萨苏大苏打<br />
+					2：2大家阿斯回答世界顶级阿萨德姐啊岁阿斯打扫打扫打扫打扫打扫打扫打扫<br />
+					1：天之道asdasdasdasdasdasd阿德萨苏大苏打<br />
+				</div>
+				<div class="tip-card-footer">
+					<a href="#popover_tip" class="mui-icon mui-icon-close app-color-white"></a>
+				</div>
+			</div>
+		</div> 
+		
+		
 		<div id="warpper">
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
@@ -79,7 +101,7 @@
 				</div>
 
 			</div>
-			<div class="help app-font-size-24">橙灯未闪烁，戳这里查看</div>
+			<a  href="#popover_tip" class="help app-font-size-24">橙灯未闪烁，戳这里查看</a>
 			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->

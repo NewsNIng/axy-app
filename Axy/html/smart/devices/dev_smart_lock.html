@@ -74,15 +74,15 @@
 				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/lock/btn_Intelligentdoorlock@3x.png' : '../../../image/smart/devices/lock/btn_Intelligentdoorlock1@3x.png') + ')'">
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
-					<div>
+					<div @tap="onSetPassword()">
 						<img src="../../../image/smart/devices/lock/btn_Settingpassword@3x.png" />
 						<div>设置密码</div>
 					</div>
 
-					<div>
+					<!--<div @tap="onOncePassword()">
 						<img src="../../../image/smart/devices/lock/btn_Onetimeunlocking@3x.png" />
 						<div>一次性开锁密码</div>
-					</div>
+					</div>-->
 					<div>
 						<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />
 						<div>闭锁状态</div>
@@ -257,6 +257,26 @@
 					onDelDevice: function(){
 						console.log("deldevice");
 					},
+					
+					// 设置密码
+					onSetPassword: function(){
+						app.page.getInput(function(rs){
+							
+						}, {
+							title: '密码',
+							tips: '请输入门锁密码',
+							r: 'loc4kpassword',
+							// type: 'tel',
+							rmsg: '门锁密码格式为4到8位数字'
+						});
+					},
+					// 一次性密码
+					onOncePassword: function(){
+						app.page.openForResultBy('dev_generation_password.html','dev_generation_password', function(data){
+							console.log(data.pwd);
+						});
+					}
+					
 				}
 			});
 		</script>

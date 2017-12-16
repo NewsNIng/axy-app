@@ -6,6 +6,7 @@
 		pwd: /^\w{6,18}$/,
 		code: /^\d{6}$/,
 		//devName: /^\w{1,10}$/,
+		lockpassword: /^\d{4,8}$/, // 智能门锁密码
 	};
 
 	rules.testBy = function(rex, value, message) {

@@ -205,8 +205,8 @@
 								<span class="app-color-main">{{o.location.trim() || o.devid}}</span>
 								<img @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
 								<img src="../../../image/smart/camera/history.png" />
-								<img src="../../../image/smart/camera/share.png" />
-								<img @tap="onSettingTap(o)" src="../../../image/smart/camera/setting.png" />
+								<img @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
+								<img @tap="onSettingTap(o, i)" src="../../../image/smart/camera/setting.png" />
 							</div>
 
 						</div>
@@ -270,7 +270,7 @@
 			mui.init();
 			var devManager, runManager;
 
-			var B = new ni.Broadcast();
+			var _B = new ni.Broadcast();
 
 			
 			var menuV = new Vue({
@@ -301,6 +301,8 @@
 						active: 0,
 						controlIndex: -1,
 						netDivList: [],
+						
+						tapIndex: -1,
 
 					};
 				},
@@ -321,6 +323,10 @@
 					this.$nextTick(function() {
 						mui('.mui-switch')['switch']();
 					});
+					
+					_B.on('delete', function(){
+						this.netDivList.splice(this.tapIndex, 1);
+					}.bind(this));
 
 				},
 				methods: {
@@ -360,7 +366,8 @@
 					},
 
 					// 设备设置
-					onSettingTap: function(o) {
+					onSettingTap: function(o, i) {
+						this.tapIndex = i;
 						mui.openWindow('camera_settings.html', 'camera_settings', {
 							extras: {
 								devInfo: o
@@ -376,6 +383,14 @@
 						this.controlIndex = i;
 						mui('#controll').popover('show');
 					},
+					// 设备分享
+					onShareTap: function(o, i){
+						mui.openWindow("../../person/devshare/share.html", 'dev_share', {
+							extras: {
+								devInfo: o	
+							}
+						});
+					}
 				}
 			});
 		</script>

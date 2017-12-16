@@ -86,7 +86,7 @@
 	 * @param {Object} callback
 	 */
 	devparam.devname = function(devid, type, location, callback) {
-		return ra('post', '/devparam/reboot', {
+		return ra('post', '/devparam/devname', {
 			devid: devid,
 			type: type,
 			location: location
@@ -106,9 +106,40 @@
 			type: type,
 			state: state
 		}, callback);
-	}
+	};
 	
 	
+	// 设置摄像机正反方向
+	devparam.imageorientation = function(devid, type, upside, callback){
+		return ra('post', '/devparam/imageorientation', {
+			devid: devid,
+			type: type,
+			upside: upside
+		}, callback);
+	};
+	
+	// 获取摄像机正反方向
+	devparam.getImageorientation = function(devid, type, callback){
+		return ra('get', '/devparam/imageorientation', {
+			devid: devid,
+			type: type
+		}, callback);
+	};
+	
+	
+	devparam.openled = function(devid, type, on, callback){
+		return ra('post', '/devparam/openled', {
+			devid: devid,
+			type: type,
+			on: on
+		}, callback);
+	};
+	devparam.getOpenled = function(devid, type, callback){
+		return ra('get', '/devparam/openled', {
+			devid: devid,
+			type: type
+		}, callback);
+	};
 	
 	
 

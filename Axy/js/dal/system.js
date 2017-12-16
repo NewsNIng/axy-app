@@ -2,11 +2,19 @@
 (function(_, ra){
 	var system = {};
 	
-	system.update = function(verison, callback){
-		callback();
-//		return ra("get", "/update", {
-//			verison: verison
-//		},callback);
+	system.update = function(version, callback){
+		 
+		mui.getJSON("http://192.168.1.193:8360/api/update", {
+			version: version
+		}, function(rs){
+			
+			if(rs.code !== 1000){
+				callback(rs);
+			}else{
+				callback(null, rs.data);
+			}
+		});
+
 	}
 	
 	/**

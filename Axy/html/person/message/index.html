@@ -17,21 +17,20 @@
 				overflow: hidden;
 			}
 			
-			
-			
 			.mui-content>div {
 				height: 1.653333rem;
 				background-color: #FFFFFF;
 				position: relative;
 				padding-top: 0.373333rem;
 			}
-			.mui-content>div:after{
+			
+			.mui-content>div:after {
 				content: "";
 				display: block;
 				position: absolute;
 				height: 1px;
 				background-color: #E5E6E7;
-				left:0.346666rem;
+				left: 0.346666rem;
 				bottom: 0;
 				width: 100%;
 				transform: scaleY(0.5);
@@ -53,8 +52,9 @@
 				right: 0.346666rem;
 				content: '\e583';
 			}
-			.mui-content>div:last-child:after{
-				content: none !important;	
+			
+			.mui-content>div:last-child:after {
+				content: none !important;
 			}
 			
 			.mui-content>div>.name {
@@ -70,8 +70,7 @@
 				-webkit-transform: translateY(-50%);
 			}
 			
-			
-			.app-badge{
+			.app-badge {
 				position: absolute;
 				right: 0.8rem;
 				background-color: #FF3B30;
@@ -87,7 +86,6 @@
 				transform: translateY(-50%);
 				-webkit-transform: translateY(-50%);
 			}
-			
 		</style>
 
 	</head>
@@ -99,7 +97,7 @@
 			<h1 class="mui-title">消息中心</h1>
 		</header>
 		<div class="mui-content">
-			<div class="app-touch" style="margin-top: 0.266666rem;">
+			<div class="app-touch" style="margin-top: 0.266666rem;" data-href="warning.html">
 				<img src="../../../image/person/message/btn_Alarmnews@3x.png" />
 				<div class="name">
 					<div class="app-font-size-28 app-color-333333">告警消息</div>
@@ -107,20 +105,20 @@
 					<span class="app-badge app-font-size-20">99+</span>
 				</div>
 			</div>
-			
-			<div class="app-touch">
-				<img src="../../../image/person/message/btn_Alarmnews@3x.png" />
+
+			<div class="app-touch" data-href="system.html">
+				<img src="../../../image/person/message/btn_Systemmessage@3x.png" />
 				<div class="name">
-					<div class="app-font-size-28 app-color-333333">告警消息</div>
-					<div class="app-font-size-24 app-color-9f9fa0">有人闯进布防区域</div>
+					<div class="app-font-size-28 app-color-333333">系统消息</div>
+					<div class="app-font-size-24 app-color-9f9fa0">获得一份优惠券</div>
 				</div>
 			</div>
-			
-			<div class="app-touch">
-				<img src="../../../image/person/message/btn_Alarmnews@3x.png" />
+
+			<div class="app-touch" data-href="activity.html">
+				<img src="../../../image/person/message/btn_Activitymessage@3x.png" />
 				<div class="name">
-					<div class="app-font-size-28 app-color-333333">告警消息</div>
-					<div class="app-font-size-24 app-color-9f9fa0">有人闯进布防区域</div>
+					<div class="app-font-size-28 app-color-333333">活动消息</div>
+					<div class="app-font-size-24 app-color-9f9fa0">新活动来袭</div>
 				</div>
 			</div>
 		</div>
@@ -130,6 +128,12 @@
 
 		<script type="text/javascript">
 			mui.init();
+			mui.ready(function() {
+				mui(".mui-content").on('tap', '*[data-href]', function() {
+					var url = this.dataset.href;
+					mui.openWindow(url);
+				});
+			});
 
 			new Vue({
 				el: ".mui-content",
