@@ -812,6 +812,13 @@
 					"html/common/login.html"
 				],
 				"priority": 0
+			},
+			"html/smart/devices/dev_WG-100.html": {
+				"resources": [
+					"image/smart/devices/gateway/btn_Setup@3x.png"
+				],
+				"refer": [],
+				"priority": 0
 			}
 		},
 		"idle": {
