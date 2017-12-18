@@ -83,6 +83,9 @@
 				focusaccount: focusaccount,
 			},callback);
 		},
+		list: function(callback){
+			return ra('post','/user/focus/list',{},callback);
+		}
 	}
 	
 	/**

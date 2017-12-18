@@ -36,7 +36,7 @@
 			
 			.attention_item>img {
 				width: 1.573333rem;
-				color: #333333;				
+				color: #333333;
 				display: inline-block;
 			}
 			
@@ -51,10 +51,11 @@
 				transform: scaleY(.5);
 				background-color: #E5E6E7;
 			}
+			
 			.attention_item:last-child:after {
 				height: 0;
 			}
-
+			
 			.vertical_center {
 				position: relative;
 				top: 50%;
@@ -71,7 +72,7 @@
 				padding-left: 1.92rem;
 			}
 			
-			.attention_icon{
+			.attention_icon {
 				float: right;
 				margin-right: 0.346666rem;
 			}
@@ -80,7 +81,6 @@
 				height: 100%;
 				width: 100%;
 			}
-			
 		</style>
 	</head>
 
@@ -92,13 +92,13 @@
 			</header>
 			<div class="mui-content app-font-size-28">
 				<div class="attention_item" v-for="o,i in attentions">
-					<img class="vertical_center" :src="o.img"/>
+					<img class="vertical_center" :src="o.img" />
 					<span class="name vertical_center app-font-size-28" v-text="o.name"></span>
-					<img class="attention_icon vertical_center" src="../../../image/person/collection/btn_Alreadypaidattentionto@3x.png"/>
+					<img class="attention_icon vertical_center" @tap="unBindTap()" src="../../../image/person/collection/btn_Alreadypaidattentionto@3x.png" />
 				</div>
-			<div class="null" v-show="attentions.length === 0">
-				
-			</div>
+				<div class="null" v-show="attentions.length === 0">
+
+				</div>
 			</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -112,6 +112,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -129,32 +130,42 @@
 				el: '#box',
 				data: function() {
 					return {
-						attentions: [
-						{
+						attentions: [{
 							img: "../../../image/home/gohome.png",
 							name: "冰封夕阳",
-						},{
+						}, {
 							img: "../../../image/home/gohome.png",
 							name: "冰封夕阳",
-						},{
+						}, {
 							img: "../../../image/home/gohome.png",
 							name: "冰封夕阳",
-						},{
+						}, {
 							img: "../../../image/home/gohome.png",
 							name: "冰封夕阳",
-						},{
+						}, {
 							img: "../../../image/home/gohome.png",
 							name: "冰封夕阳",
-						}
-						]
+						}]
 					};
 				},
 
 				mounted: function() {},
 				plusReady: function() {},
 				methods: {
-					
-				}
+					_getList: function(f) {
+						dal.user.focus.list(function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							f(data);
+						});
+					},
+					unBindTap: function(){
+						this._getList(function(data){
+							console.log(data);
+						});
+					}
+				},
 			});
 		</script>
 	</body>

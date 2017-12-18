@@ -283,7 +283,9 @@
 					"html/common/reset2.html",
 					"html/public/position.html",
 					"html/public/browser.html",
-					"html/person/information.html"
+					"html/person/information.html",
+					"html/person/wallet/index.html",
+					"html/person/collection/my_attention.html"
 				],
 				"priority": 0
 			},
@@ -732,6 +734,13 @@
 				"refer": [
 					"html/public/image_cropper.html",
 					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/zeus.html": {
+				"resources": [],
+				"refer": [
+					"html/common/login.html"
 				],
 				"priority": 0
 			}

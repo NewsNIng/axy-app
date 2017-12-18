@@ -50,7 +50,9 @@
 			"html/common/login.html",
 			"html/public/position.html",
 			"html/public/browser.html",
-			"html/person/information.html"
+			"html/person/information.html",
+			"html/person/wallet/index.html",
+			"html/person/collection/my_attention.html"
 		]
 	},
 	"html/common/reset.html": {
@@ -330,6 +332,11 @@
 		"refer": [
 			"html/public/image_cropper.html",
 			"html/public/input.html"
+		]
+	},
+	"html/zeus.html": {
+		"refer": [
+			"html/common/login.html"
 		]
 	}
 }
