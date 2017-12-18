@@ -92,7 +92,30 @@
 	 */
 	user.get = function(loginaccount, focusaccount, callback){
 		return ra('get', '/user/' + loginaccount +'/' + focusaccount, {}, callback);
-	}
+	};
+	
+	
+	/**
+	 * 修改个人信息
+	 * @param {UserInfo} data 用户信息
+	 * @param {Object} callback
+	 */
+	user.update = function(data, callback){
+		return ra('post', '/user/update', data, callback);
+	};
+	
+	/**
+	 * 修改密码
+	 * @param {UserInfo} data 用户信息
+	 * @param {Object} callback
+	 */
+	user.updatepwd = function(account, updatepwd, newpsswd, callback){
+		return ra('post', '/user/updatepwd', {
+			account: account,
+			updatepwd: updatepwd,
+			newpsswd: newpsswd
+		}, callback);
+	};
 	
 	
 	
