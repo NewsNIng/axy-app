@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>一氧化碳探测器</title>
+		<title>智能灯控</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -12,50 +12,69 @@
 		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
 
 		<link rel="stylesheet" href="../../../css/app/app.css" />
-		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
-		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
-		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
 
 		<style type="text/css">
 			html,
-			body,
+			body {
+				background-color: white;
+			}
+			
 			.mui-content {
 				background-color: #F4F8FB;
+				padding-bottom: 0;
 			}
 			
 			.img-wrap {
 				height: 0;
-				padding-bottom: 7.613333rem;
-				background-image: url(../../../image/smart/devices/gas/btn_Formaldehydedetector@3x.png);
+				padding-bottom: 7.333333rem;
+				/*background-image: url(../../../image/smart/devices/curtain/btn_Acoustoopticalarm@3x.png);*/
 				background-repeat: no-repeat;
-				background-size: 60%;
+				background-size: 50%;
 				background-position: bottom;
+			}
+			
+			.menu {
+				width: 100%;
+				height: auto;
+				padding: 1.493333rem 2.8rem 0.746666rem 2.8rem;
 			}
 			
 			.menu-warp {
 				display: flex;
 				display: -webkit-flex;
-				height: 3.013333rem;
 				justify-content: space-between;
+				border-radius: 5px;
+				border: 1px solid #06C1AE;
 			}
 			
-			.battery_status {
-				color: #333333 !important;
-			}
-			
-			.state_show {
-				float: left;
-				position: relative;
-				top: 4.2rem;
+			.menu-warp>div {
+				/*border: 1px solid #ccc;*/
+				color: #333333;
+				flex: 1;
+				height: auto;
+				/*width: rem;*/
 				text-align: center;
-				width: 100%;
+				position: relative;
 			}
 			
-			.state_show>span {
-				display: block;
-				color: white;
-				padding-bottom: 0.133333rem;
+			.menu-warp>div:after {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 1px;
+				content: '';
+				background-color: #06C1AE;
+			}
+			
+			.menu-warp>div:last-child:after {
+				width: 0;
+			}
+			
+			.select_item {
+				background-color: #06C1AE;
+				color: white !important;
 			}
 		</style>
 	</head>
@@ -65,62 +84,47 @@
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">一氧化碳探测器</h1>
+				<h1 class="mui-title">智能灯控</h1>
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div class="state_show">
-					<span class="app-font-size-30" v-text="devInfo.density+'ppm'"></span>
-					<span class="app-font-size-44">正常</span>
-					<span class="app-font-size-24">当前浓度值</span>
+				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/icon/btn_Intelligentlightcontrol@3x.png' : '../../../image/smart/devices/icon/btn_Intelligentlightcontrol1@3x.png') + ')'">
 				</div>
-				<div @tap="toggleSwitch()" class="img-wrap">
+				<div class="menu">
+					<div class="menu-warp app-font-size-24 app-color-dark">
+						<template v-for="o,i in lights">
+							<div @tap="onLightTap(i)" :class="{'select_item': i === select_index}" v-text="o.name"></div>
+						</template>
+					</div>
 				</div>
-				<div class="menu-warp app-font-size-24 app-color-dark"></div>
-
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>设备ID</span>
-							<span class="mui-badge">123456789</span>
+							<span class="mui-badge" v-text="lights[select_index].devId"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">xx房间的甲醛探测器</span>
+							<span class="mui-badge" v-text="lights[select_index].devName"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a class="">
-							<span>绑定主机</span>
-							<span class="mui-badge">AX-360主机</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="battery_status">
-							<span>电池状态</span>
-							<span class="mui-badge battery_status">正常</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="battery_status">
-							<span>通讯状态</span>
-							<span class="mui-badge battery_status">正常</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>防区类型</span>
-							<span class="mui-badge">求助防区</span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
-							<span>告警延迟时间</span>
-							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
+							<span>绑定主机</span>
+							<span class="mui-badge" v-text="lights[select_index].bindDev"></span>
 						</a>
 					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>总开</span>
+							<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': lights[select_index].alwaysOpen}" ref="lights[select_index].alwaysOpen">
+					<div class="mui-switch-handle"></div>
+				</div></span>
+						</a>
+					</li>
+					<li></li>
 				</ul>
 			</div>
 
@@ -141,14 +145,18 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
-		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
-		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
 
@@ -156,13 +164,30 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						// 告警延迟时间
-						alarmDelayTime: 0,
-						// 弹框
-						pick: null,
-						devInfo: {
-							density: 0,
-						},
+						state: true, // 当前状态
+//						isPwdProtection: true, // 是否开启密码保护
+						bindDev: "AX-360主机",
+						lights: [{
+							name: "K1",
+							devId: "VH-104GN-2017061500041",
+							devName: "104GN_1",
+							bindDev: "AX-360主机",
+							alwaysOpen: true,
+						}, {
+							name: "K2",
+							devId: "VH-104GN-2017061500042",
+							devName: "104GN_2",
+							bindDev: "AX-360主机",
+							alwaysOpen: false,
+						}, {
+							name: "K3",
+							devId: "VH-104GN-2017061500043",
+							devName: "104GN_3",
+							bindDev: "AX-360主机",
+							alwaysOpen: true,
+						}],
+						select_index: 0,
+
 						dev: {
 							"alarmPlan": [{
 									"end": "19:50:00",
@@ -230,15 +255,16 @@
 					};
 				},
 				mounted: function() {
-					this.pick = new mui.PopPicker({
-						layer: 1,
-						more: false,
-					});
-					this.pick.setData(pick_data[1]);
+					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
+						this.isPwdProtection = event.detail.isActive;
+					}.bind(this));
 				},
 				plusReady: function() {},
 				methods: {
-
+					// 切换开关
+					toggleSwitch: function() {
+						this.state = !this.state;
+					},
 					// 设备名称
 					onNameTap: function(name) {
 						var that = this;
@@ -247,27 +273,16 @@
 						}, {
 							title: "设备名称",
 							tips: that.dev.basicInfo.devName,
+							r: 'devName'
 						});
+					},
+					// 选择设备
+					onLightTap:function(i){
+						this.select_index = i;
 					},
 					// 删除设备
 					onDelDevice: function() {
 						console.log("deldevice");
-					},
-					// 告警延迟时间
-					onAlarmTap: function() {
-						var that = this;
-
-						this.pick.pickers[0].setSelectedValue(this.alarmDelayTime);
-
-						var fn = function(s) {
-							that.alarmDelayTime = s;
-						};
-
-						this.pick.show(function(items) {
-							fn(items[0].value);
-						}, function(items) {
-
-						});
 					},
 				}
 			});

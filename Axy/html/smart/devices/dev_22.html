@@ -67,16 +67,16 @@
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_Openthecurtains@3x.png"/>
+						<img src="../../../image/smart/devices/curtain/btn_Openthecurtains@3x.png" @tap="onOpenTap()"/>
 						<div>打开窗帘</div>
 					</div>
 					
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_suspend@3x.png"/>
+						<img src="../../../image/smart/devices/curtain/btn_suspend@3x.png" @tap="onStartTap()"/>
 						<div>暂停.开始.关闭</div>
 					</div>
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_Closecurtain@3x.png"/>
+						<img src="../../../image/smart/devices/curtain/btn_Closecurtain@3x.png" @tap="onCloseTap()"/>
 						<div>关闭窗帘</div>
 					</div>
 				</div>
@@ -85,19 +85,19 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>设备ID</span>
-							<span class="mui-badge">123456789</span>
+							<span class="mui-badge" v-text="dev.zones[0].ID"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">xx房间的智能插座</span>
+							<span class="mui-badge" v-text="dev.zones[0].zoneName"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
 							<span>绑定主机</span>
-							<span class="mui-badge">AX-360主机</span>
+							<span class="mui-badge" v-text="dev.zones[0].bindV"></span>
 						</a>
 					</li>
 				</ul>
@@ -237,6 +237,18 @@
 							title: "设备名称",
 							tips: that.dev.basicInfo.devName,
 						});
+					},
+					// 打开窗帘
+					onOpenTap: function(){
+						mui.toast("已打开！");
+					},
+					// 暂停 开始 关闭
+					onStartTap: function(){
+						
+					},
+					// 关闭窗帘
+					onCloseTap: function(){
+						mui.toast("已关闭！");
 					},
 					// 删除设备
 					onDelDevice: function(){

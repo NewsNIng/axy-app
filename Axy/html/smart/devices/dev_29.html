@@ -80,7 +80,7 @@
 					<li class="mui-table-view-cell" @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
 							<span>告警延迟时间</span>
-							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
+							<span class="mui-badge" v-text="devInfo.alarmDelayTime+'s'"></span>
 						</a>
 					</li>
 				</ul>
@@ -119,9 +119,15 @@
 					return {
 						state: true, // 当前状态
 						// 告警延迟时间
-						alarmDelayTime: 0,
 						// 弹框
 						pick: null,
+						devInfo: {
+							devId: "123456789",
+							devName: "声光报警器1",
+							bindDev: "AX-360主机",
+							zoneType: "火警防区",
+							alarmDelayTime: 0,
+						},
 						dev: {
 							"alarmPlan": [{
 									"end": "19:50:00",
@@ -219,10 +225,10 @@
 					onAlarmTap: function() {
 						var that = this;
 
-						this.pick.pickers[0].setSelectedValue(this.alarmDelayTime);
+						this.pick.pickers[0].setSelectedValue(this.devInfo.alarmDelayTime);
 
 						var fn = function(s) {
-							that.alarmDelayTime = s;
+							that.devInfo.alarmDelayTime = s;
 						};
 
 						this.pick.show(function(items) {
