@@ -634,7 +634,7 @@
 								if(err) {
 									return
 								}
-								this.dev = data[0];
+								data && (this.dev = data[0]);
 
 							}.bind(this), 1);
 						},

@@ -73,8 +73,12 @@ var imagelazyload = (function(doc) {
 
 	function setLoaded(dom, src) {
 		//dom.classList.add("anim_opacity"); //渐变动画
-		// 标记成功
-		domAttr(dom, "data-loaded", true);
+		
+		// 如果不是一直会变化的img，像是头像更改这类的需求，就得在dom上加上img-lay-forever类名，这样插件会一直检查
+		if(!dom.classList.contains('img-lazy-forever')){
+			// 标记成功
+			domAttr(dom, "data-loaded", true);	
+		}
 		//去掉灰色边,只有背景图才可居中铺满图片
 		//domAttr(dom, "src", img_translate);
 		
