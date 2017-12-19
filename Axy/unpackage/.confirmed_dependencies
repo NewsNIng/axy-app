@@ -20,7 +20,10 @@
 			"html/smart/index.html",
 			"html/nearby/index.html",
 			"image/main/smart.png",
-			"image/main/nearby_active.png"
+			"image/main/nearby_active.png",
+			"html/person/index.html",
+			"image/main/person.png",
+			"image/main/home_active.png"
 		],
 		"refer": [
 			"html/home/index.html",
@@ -52,6 +55,12 @@
 			"html/public/browser.html",
 			"html/person/information.html",
 			"html/person/wallet/index.html",
+			"html/smart/devices/dev_my_list.html",
+			"html/person/devshare/index.html",
+			"html/person/setting/index.html",
+			"html/person/coupon/index.html",
+			"html/person/message/index.html",
+			"html/person/collection/my_camera.html",
 			"html/person/collection/my_attention.html"
 		]
 	},
@@ -112,7 +121,8 @@
 			"html/smart/add/add_device.html",
 			"html/smart/add/family_menu.html",
 			"html/search/index.html",
-			"html/common/login.html"
+			"html/common/login.html",
+			"html/smart/devices/dev_my_list.html"
 		]
 	},
 	"html/smart/scenes/create_scenes.html": {
@@ -171,14 +181,14 @@
 			"image/smart/devices/dev_icon/���Kh@3x.png",
 			"image/smart/devices/dev_icon/�;:@3x.png",
 			"image/smart/devices/dev_icon/\u0027%\t�@3x.png",
-			"image/smart/devices/dev_icon/�b2עKh@3x.png",
+			"image/smart/devices/dev_icon/�b2�Kh@3x.png",
 			"image/smart/devices/dev_icon/�\u0018�6h@3x.png",
 			"image/smart/devices/dev_icon/z��\u0001@3x.png",
 			"image/smart/devices/dev_icon/z�o�@3x.png",
 			"image/smart/devices/dev_icon/e�h@3x.png",
 			"image/smart/devices/dev_icon/���Kh@3x.png",
-			"image/smart/devices/dev_icon/z�ҧ@3x.png",
-			"image/smart/devices/dev_icon/ξh@3x.png",
+			"image/smart/devices/dev_icon/z�@3x.png",
+			"image/smart/devices/dev_icon/�h@3x.png",
 			"image/smart/devices/dev_icon/�\u0018GMh@3x.png",
 			"image/smart/devices/dev_icon/�\u0016e�!W@3x.png",
 			"image/smart/devices/dev_icon/�I�fh@3x.png",
@@ -187,24 +197,24 @@
 			"image/smart/devices/dev_icon/5��h;:@3x.png",
 			"image/smart/devices/dev_icon/�\u0016U\u0018@3x.png",
 			"image/smart/devices/dev_icon/���Kh@3x.png",
-			"image/smart/devices/dev_icon/门禁主机@3x.png",
-			"image/smart/devices/dev_icon/紧急按钮@3x.png",
-			"image/smart/devices/dev_icon/隐形防盗探测器@3x.png",
-			"image/smart/devices/dev_icon/窗帘控制器@3x.png",
-			"image/smart/devices/dev_icon/智能门锁@3x.png",
-			"image/smart/devices/dev_icon/智能灯控@3x.png",
-			"image/smart/devices/dev_icon/遥控器@3x.png",
-			"image/smart/devices/dev_icon/烟雾探测器@3x.png",
-			"image/smart/devices/dev_icon/智能插座@3x.png",
-			"image/smart/devices/dev_icon/迎宾器@3x.png",
-			"image/smart/devices/dev_icon/窗帘升降器@3x.png",
-			"image/smart/devices/dev_icon/红外遥控模块@3x.png",
-			"image/smart/devices/dev_icon/声光报警器@3x.png",
-			"image/smart/devices/dev_icon/一氧化碳探测器@3x.png",
-			"image/smart/devices/dev_icon/燃气探测器@3x.png",
-			"image/smart/devices/dev_icon/电力安全主机@3x.png",
-			"image/smart/devices/dev_icon/红外幕帘@3x.png",
-			"image/smart/devices/dev_icon/门磁探测器@3x.png"
+			"image/smart/devices/dev_icon/�;:@3x.png",
+			"image/smart/devices/dev_icon/\u0027%\t�@3x.png",
+			"image/smart/devices/dev_icon/�b2�Kh@3x.png",
+			"image/smart/devices/dev_icon/�\u0018�6h@3x.png",
+			"image/smart/devices/dev_icon/z��\u0001@3x.png",
+			"image/smart/devices/dev_icon/z�o�@3x.png",
+			"image/smart/devices/dev_icon/e�h@3x.png",
+			"image/smart/devices/dev_icon/���Kh@3x.png",
+			"image/smart/devices/dev_icon/z�@3x.png",
+			"image/smart/devices/dev_icon/�h@3x.png",
+			"image/smart/devices/dev_icon/�\u0018GMh@3x.png",
+			"image/smart/devices/dev_icon/�\u0016e�!W@3x.png",
+			"image/smart/devices/dev_icon/�I�fh@3x.png",
+			"image/smart/devices/dev_icon/\u0000\u0027\u0016��Kh@3x.png",
+			"image/smart/devices/dev_icon/�\u0014�Kh@3x.png",
+			"image/smart/devices/dev_icon/5��h;:@3x.png",
+			"image/smart/devices/dev_icon/�\u0016U\u0018@3x.png",
+			"image/smart/devices/dev_icon/���Kh@3x.png"
 		],
 		"refer": [
 			"html/smart/add/family_menu.html",
@@ -289,7 +299,8 @@
 	},
 	"html/smart/add/Lan_connect_camera.html": {
 		"refer": [
-			"html/smart/add/Lan_select_dev_id.html"
+			"html/smart/add/Lan_select_dev_id.html",
+			"html/smart/add/sonic_connect_dev2.html"
 		]
 	},
 	"html/smart/add/Lan_connect_dev.html": {
@@ -313,25 +324,76 @@
 		"refer": [
 			"html/smart/add/add_device.html",
 			"html/smart/devices/camera_settings.html",
-			"html/smart/devices/dev_17.html"
+			"html/smart/devices/dev_17.html",
+			"html/person/devshare/share.html",
+			"html/smart/devices/dev_WG-100.html"
 		]
 	},
 	"html/smart/devices/camera_settings.html": {
 		"refer": [
 			"html/smart/devices/camera_settings_info.html",
-			"html/smart/devices/camera_settings_arming.html"
+			"html/smart/devices/camera_settings_arming.html",
+			"html/smart/add/connect_wifi.html",
+			"html/public/input.html",
+			"html/smart/devices/camera_settings_record.html",
+			"html/public/alarmParam.html"
 		]
 	},
 	"html/smart/devices/dev_error.html": {
 		"resources": [
 			"js/common/immersed.js",
-			"js/common/flexible.js"
+			"js/common/flexible.js",
+			"js/lib/mui.min.js"
 		]
 	},
 	"html/person/information.html": {
 		"refer": [
 			"html/public/image_cropper.html",
-			"html/public/input.html"
+			"html/public/input.html",
+			"html/person/relation/bind.html"
+		]
+	},
+	"html/person/wallet/index.html": {
+		"refer": [
+			"html/person/wallet/withdrawal.html",
+			"html/person/wallet/bills.html"
+		]
+	},
+	"html/public/browser.html": {
+		"resources": [
+			"html/smart/devices/dev_error.html"
+		],
+		"refer": [
+			"html/smart/devices/dev_error.html"
+		]
+	},
+	"html/person/devshare/index.html": {
+		"refer": [
+			"html/smart/devices/dev_my_list.html"
+		]
+	},
+	"html/smart/add/sonic_connect_camera2.html": {
+		"refer": [
+			"html/smart/add/sonic_connect_camera1.html"
+		]
+	},
+	"html/person/setting/index.html": {
+		"refer": [
+			"html/person/setting/version.html",
+			"html/person/setting/safe.html",
+			"html/person/setting/push.html",
+			"html/person/setting/setsafe.html"
+		]
+	},
+	"html/person/setting/setsafe.html": {
+		"refer": [
+			"html/person/setting/safe.html"
+		]
+	},
+	"html/person/message/index.html": {
+		"refer": [
+			"html/person/message/warning.html",
+			"html/person/message/system.html"
 		]
 	},
 	"html/zeus.html": {

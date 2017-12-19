@@ -202,7 +202,7 @@
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
-								<span class="app-color-main">{{o.location.trim() || o.devid}}</span>
+								<span class="app-color-main">{{o.location || o.devid}}</span>
 								<img @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
 								<img src="../../../image/smart/camera/history.png" />
 								<img @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
@@ -261,7 +261,8 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
+		
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
@@ -364,11 +365,29 @@
 					_getZoneType: function(zonedevid) {
 						return zonedevid.toString().substr(0, 2);
 					},
-
+	
 					// 设备设置
 					onSettingTap: function(o, i) {
 						this.tapIndex = i;
-						mui.openWindow('camera_settings.html', 'camera_settings', {
+						
+						var name = app.dev.findName(o.type);
+						
+						var url;
+						switch(name){
+							case "WG-100": {
+								url = "dev_WG-100.html";
+								break;
+							}
+							
+							default: {
+								url = "camera_settings.html";
+								break;
+							}
+						
+						}
+						
+						
+						mui.openWindow(url, url, {
 							extras: {
 								devInfo: o
 							}

@@ -25,7 +25,7 @@
 			}
 			
 			.img-wrap {
-				height: 7.946666rem;
+				height: 6.133333rem;
 				/*padding-bottom: 6.133333rem;*/
 				background-image: url(../../../image/smart/devices/gateway/bg@3x.png);
 				background-repeat: no-repeat;
@@ -60,7 +60,6 @@
 			
 			.menu-warp>div>img {
 				width: 1.466666rem;
-				height: 1.466666rem;
 			}
 			
 			header img {
@@ -155,7 +154,7 @@
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
 					<div>
-						<img :src="devInfo.isMute?'../../../image/smart/devices/gateway/icon_Mute@3x.png':'../../../image/smart/devices/gateway/btn_voice@3x.png'" @tap="onMuteTap()" />
+						<img src="../../../image/smart/devices/gateway/icon_Mute@3x.png" />
 						<div>静音</div>
 					</div>
 
@@ -164,11 +163,52 @@
 						<div>语音对讲</div>
 					</div>
 					<div>
-						<img src="../../../image/smart/devices/gateway/btn_Setup@3x.png" @tap="onSettingTap()" />
-						<div>设置</div>
+						<img src="../../../image/smart/devices/gateway/btn_Disarm@3x.png" />
+						<div>一键布撤防</div>
 					</div>
 				</div>
 
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell" @tap="onNameTap()">
+						<a class="mui-navigate-right">
+							<span>设备名称</span>
+							<span class="mui-badge">xxx的智能网关</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>自动布防计划</span>
+							<span class="mui-badge ">xx房间的智能插座</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>状态指示灯</span>
+							<span class="mui-badge">
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': statusLight}" ref="pwd_protection">
+									<div class="mui-switch-handle"></div>
+								</div>
+							</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>WIFI配置</span>
+							<span class="mui-badge ">30S</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onAlarmTap()">
+						<a class="mui-navigate-right">
+							<span>告警时间设置</span>
+							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>布撤防日志</span>
+						</a>
+					</li>
+				</ul>
 
 			</div>
 
@@ -207,83 +247,21 @@
 				data: function() {
 					return {
 						ready: false,
+						
+						devid: -1,
 
 						// 告警延迟时间
 						alarmDelayTime: 0,
 						// 弹框
 						pick: null,
 						statusLight: true, // 是否开启状态指示灯
-						devInfo:{
-							isMute: false,
-							isArming:false,
-						},
-						dev: {
-							"alarmPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"basicInfo": {
-								"appversion": "2017-09-28 09:36:04",
-								"devName": "104GN",
-								"devType": 4166,
-								"devid": "VH-104GN-2017061500043",
-								"hwversion": "2015-11-01 10:13:43"
-							},
-							"netInfo": {
-								"ip": "192.168.1.23",
-								"ssid": "aaa2.4",
-								"type": 0
-							},
-							"onvif": [{
-									"ch": 0,
-									"name": "第一个外部通道",
-									"online": 1
-								},
-								{
-									"ch": 1,
-									"name": "第二个外部通道",
-									"online": 1
-								}
-							],
-							"recordPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"zones": [{
-									"ID": "81457896",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								},
-								{
-									"ID": "81457897",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								}
-							]
-						},
+						
 					};
 				},
 				mounted: function() {
+					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
+						this.statusLight = event.detail.isActive;
+					}.bind(this));
 					this.pick = new mui.PopPicker({
 						layer: 1,
 						more: false,
@@ -291,11 +269,12 @@
 					this.pick.setData(pick_data[1]);
 				},
 				plusReady: function() {
+					this.devid = this.$view.devInfo.devid;
 					this._connectWG100();
 					var oldback = mui.back;
 					mui.back = function() {
 						this._disconnet();
-						return true;
+						this.$view.close();
 					}.bind(this)
 
 				},
@@ -309,14 +288,6 @@
 							title: "设备名称",
 							tips: that.dev.basicInfo.devName,
 						});
-					},
-					// 是否开启静音
-					onMuteTap: function(){
-						this.devInfo.isMute = !this.devInfo.isMute;
-					},
-					// 一键布撤防
-					onSettingTap: function(){
-						mui.openWindow('dev_smart_gateway_setting.html','dev_smart_gateway_setting');
 					},
 					// 删除设备
 					onDelDevice: function() {

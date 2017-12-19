@@ -182,6 +182,13 @@
 						}
 					};
 				},
+				
+				watch: {
+					user: {
+						deep: true,
+					}
+				},
+				
 				plusReady: function() {
 					this.$view.setStyle({
 						scrollIndicator: 'none'

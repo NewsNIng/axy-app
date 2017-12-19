@@ -169,7 +169,7 @@
 										<span v-if="i!==0"> | </span>{{type}}
 									</div>
 									<div class="activity app-font-size-28">店铺活动：{{o.introduction}}</div>
-								</div> 
+								</div>
 							</div>
 							<div class="address app-font-size-28">
 								地址:{{o.address}}
@@ -229,15 +229,15 @@
 					}.bind(this));
 				},
 				plusReady: function() {
-					this.getCurrentPosition().then(function(){
+					this.getCurrentPosition().then(function() {
 						this._down();
-					}.bind(this)).catch(function(){
+					}.bind(this)).catch(function() {
 						this._down();
 					}.bind(this));
 				},
 				methods: {
-					getCurrentPosition: function(){
-						return new Promise(function(re, rj){
+					getCurrentPosition: function() {
+						return new Promise(function(re, rj) {
 							plus.geolocation.getCurrentPosition(function(p) {
 								this.longitude = p.coords.longitude;
 								this.latitude = p.coords.latitude;
@@ -246,19 +246,18 @@
 								re();
 							}.bind(this), rj);
 						}.bind(this));
-						
+
 					},
-					_getList: function(f){
-						dal.store.list(this.longitude, this.latitude, this.city, function(err, data){
-							if(err){
+					_getList: function(f) {
+						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
+							if(err) {
 								return mui.toast(err.message);
 							}
-							
+
 							f(data);
 						}, this.n);
 					},
-					
-					
+
 					// 点击查看
 					onLookTap: function(o) {
 						mui.openWindow('../business/store_details.html', 'store_details', {
@@ -283,19 +282,20 @@
 						this.n++;
 						this._getList(function(data) {
 							console.log(JSON.stringify(data));
-							if(!data || !data.length){
-								return mui.toast('没有更多啦~');
-							}else{
-								this.shops.push.apply(this.shops, data);	
+							if(!data || !data.length) {
+								mui.toast('没有更多啦~~');
+								this.$pullRefresh.pullRefresh().endPullupToRefresh();
+							} else {
+								this.shops.push.apply(this.shops, data);
 							}
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
 						}.bind(this));
 					},
-					_min2time: function(n){
-						return (n < 10? '0': '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00': '30');
+					_min2time: function(n) {
+						return(n < 10 ? '0' : '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00' : '30');
 					},
-					_m2km: function(m){
-						return (m / 1000).toFixed(1);
+					_m2km: function(m) {
+						return(m / 1000).toFixed(1);
 					}
 				}
 

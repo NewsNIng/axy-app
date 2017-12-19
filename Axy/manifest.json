@@ -7,7 +7,7 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.6.0",/*应用版本名称*/
+		"name": "1.6.1",/*应用版本名称*/
 		"code": "83"
 	},
 	"description": "",/*应用描述信息*/
@@ -285,6 +285,12 @@
 					"html/public/browser.html",
 					"html/person/information.html",
 					"html/person/wallet/index.html",
+					"html/smart/devices/dev_my_list.html",
+					"html/person/devshare/index.html",
+					"html/person/setting/index.html",
+					"html/person/coupon/index.html",
+					"html/person/message/index.html",
+					"html/person/collection/my_camera.html",
 					"html/person/collection/my_attention.html"
 				],
 				"priority": 0
@@ -360,7 +366,8 @@
 					"html/smart/add/add_device.html",
 					"html/smart/add/family_menu.html",
 					"html/search/index.html",
-					"html/common/login.html"
+					"html/common/login.html",
+					"html/smart/devices/dev_my_list.html"
 				],
 				"priority": 0
 			},
@@ -677,7 +684,8 @@
 			"html/smart/add/Lan_connect_camera.html": {
 				"resources": [],
 				"refer": [
-					"html/smart/add/Lan_select_dev_id.html"
+					"html/smart/add/Lan_select_dev_id.html",
+					"html/smart/add/sonic_connect_dev2.html"
 				],
 				"priority": 0
 			},
@@ -709,7 +717,9 @@
 				"refer": [
 					"html/smart/add/add_device.html",
 					"html/smart/devices/camera_settings.html",
-					"html/smart/devices/dev_17.html"
+					"html/smart/devices/dev_17.html",
+					"html/person/devshare/share.html",
+					"html/smart/devices/dev_WG-100.html"
 				],
 				"priority": 0
 			},
@@ -717,14 +727,19 @@
 				"resources": [],
 				"refer": [
 					"html/smart/devices/camera_settings_info.html",
-					"html/smart/devices/camera_settings_arming.html"
+					"html/smart/devices/camera_settings_arming.html",
+					"html/smart/add/connect_wifi.html",
+					"html/public/input.html",
+					"html/smart/devices/camera_settings_record.html",
+					"html/public/alarmParam.html"
 				],
 				"priority": 0
 			},
 			"html/smart/devices/dev_error.html": {
 				"resources": [
 					"js/common/immersed.js",
-					"js/common/flexible.js"
+					"js/common/flexible.js",
+					"js/lib/mui.min.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -733,7 +748,62 @@
 				"resources": [],
 				"refer": [
 					"html/public/image_cropper.html",
-					"html/public/input.html"
+					"html/public/input.html",
+					"html/person/relation/bind.html"
+				],
+				"priority": 0
+			},
+			"html/person/wallet/index.html": {
+				"resources": [],
+				"refer": [
+					"html/person/wallet/withdrawal.html",
+					"html/person/wallet/bills.html"
+				],
+				"priority": 0
+			},
+			"html/public/browser.html": {
+				"resources": [
+					"html/smart/devices/dev_error.html"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/person/devshare/index.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_my_list.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/sonic_connect_camera2.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/sonic_connect_camera1.html"
+				],
+				"priority": 0
+			},
+			"html/person/setting/index.html": {
+				"resources": [],
+				"refer": [
+					"html/person/setting/version.html",
+					"html/person/setting/safe.html",
+					"html/person/setting/push.html",
+					"html/person/setting/setsafe.html"
+				],
+				"priority": 0
+			},
+			"html/person/setting/setsafe.html": {
+				"resources": [],
+				"refer": [
+					"html/person/setting/safe.html"
+				],
+				"priority": 0
+			},
+			"html/person/message/index.html": {
+				"resources": [],
+				"refer": [
+					"html/person/message/warning.html",
+					"html/person/message/system.html"
 				],
 				"priority": 0
 			},
@@ -742,6 +812,13 @@
 				"refer": [
 					"html/common/login.html"
 				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_WG-100.html": {
+				"resources": [
+					"image/smart/devices/gateway/btn_Setup@3x.png"
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},

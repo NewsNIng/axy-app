@@ -42,6 +42,18 @@
 		return ra('get', '/device/delete/share/'+devid+'/user/' + account, {}, callback);
 	}
 	
+	/**
+	 * 摄像机日志列表
+	 * @param {Object} pageNumber
+	 * @param {Object} devid
+	 * @param {Object} pageSize
+	 */
+	device.log_list = function(pageNumber, devid, pageSize){
+		return ra('post', '/device/log/list' + devid, {
+			pageNumber: pageNumber,
+			pageSize: pageSize || 10,
+			devid: devid
+		}, callback);
 	
 	
 	
