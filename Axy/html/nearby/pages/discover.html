@@ -134,6 +134,9 @@
 				background-size: cover;
 			}
 			/*发布按钮end*/
+			
+			
+			
 		</style>
 
 	</head>
@@ -187,8 +190,9 @@
 		<script type="text/javascript" src="../../../js/lib/md5.min.js" ></script>
 		<script type="text/javascript" src="../../../js/common/imagelazyload.js" ></script>
 		
+		
 		<script type="text/javascript">
-			new Vue({
+			var vm = new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
@@ -196,11 +200,12 @@
 						items:[],
 						isBusy: false,
 
-						n: 1,
+						n: 0,
 
 					};
 				},
 				mounted: function() {
+					 
 					this.$nextTick(function() {
 
 						this.$pullRefresh = mui(".mui-scroll-wrapper");
@@ -208,10 +213,11 @@
 							pullRefresh: {
 								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
 								down: {
-									auto: true,
 									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 								},
 								up: {
+									
+									auto: true,
 									callback: this._up
 								} 
 							}
@@ -269,7 +275,6 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							console.log('1' + JSON.stringify(data));
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
 							if(!data || data.length === 0){
 								return; 

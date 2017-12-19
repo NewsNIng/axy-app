@@ -210,6 +210,8 @@
 				list-style: none;
 				padding: 0.546666rem 0.346666rem;
 				position: relative;
+				
+				
 			}
 			
 			.wrapper li:after {
@@ -243,6 +245,7 @@
 				width: 6.4rem;
 				overflow: hidden;
 				position: relative;
+				float: right;
 			}
 			
 			.wrapper li .textdiv .tips {
@@ -631,6 +634,7 @@
 					},
 					// 获取搜索内容
 					searchResult: function(s) {
+						this.$refs.input.blur(); 
 						// 搜索中
 						this.searchIng = true;
 						this.content = s || this.content;
@@ -646,8 +650,8 @@
 							if(err) {
 								return console.log(JSON.stringify(err))
 							}
-							data.article && (this.articleList = data.article);
-							data.store && (this.storeList = data.store);
+							this.articleList = data.article || [];
+							this.storeList = data.store || [];
 							this.$nextTick(function() {
 								this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
 								imagelazyload();
@@ -667,6 +671,9 @@
 							return;
 						}
 						this.tab.active = i;
+						this.$nextTick(function(){
+							imagelazyload();
+						});
 					},
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;

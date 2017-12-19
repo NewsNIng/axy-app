@@ -131,7 +131,7 @@
 								<span class="app-color-333333">帐号绑定</span>
 							</a>
 						</li>
-						<li class="mui-table-view-cell">
+						<li class="mui-table-view-cell" @tap="onResetPwd()">
 							<a class="mui-navigate-right">
 								<span class="app-color-333333">修改密码</span>
 							</a>
@@ -348,6 +348,11 @@
 					// 帐号绑定点击
 					onBindTap: function(){
 						mui.openWindow('relation/bind.html');
+					},
+					
+					// 修改密码
+					onResetPwd: function(){
+						mui.openWindow('relation/reset_pwd.html');
 					},
 
 				}

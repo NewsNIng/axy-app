@@ -257,6 +257,7 @@
 		
 		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
 		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js" ></script>
 		
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
@@ -304,6 +305,9 @@
 						netDivList: [],
 						
 						tapIndex: -1,
+						
+						// 配件列表
+						devaccessroyList: [],
 
 					};
 				},
@@ -343,6 +347,10 @@
 					// 标签切换
 					onActive: function(index) {
 						this.active = index;
+						if(index === 1 && this.devaccessroyList.length === 0){
+							// 获取配件列表
+							this.getDevaccessroyData();
+						}
 					},
 					// 添加配件点击
 					onAddTap: function() {
@@ -361,10 +369,6 @@
 						});
 					},
 				
-					// 通过配件ID获取 配件的类型
-					_getZoneType: function(zonedevid) {
-						return zonedevid.toString().substr(0, 2);
-					},
 	
 					// 设备设置
 					onSettingTap: function(o, i) {
@@ -376,6 +380,11 @@
 						switch(name){
 							case "WG-100": {
 								url = "dev_WG-100.html";
+								break;
+							} 
+							
+							case "AX-903": {
+								url = "dev_AX-903.html";
 								break;
 							}
 							
@@ -408,6 +417,17 @@
 							extras: {
 								devInfo: o	
 							}
+						});
+					},
+					
+					// 获取配件列表数据
+					getDevaccessroyData: function(){
+						dal.devaccessory.allacc(function(err, data){
+							if(err){
+								return mui.toast(err.message);
+							}
+							console.log(JSON.stringify(data));
+							
 						});
 					}
 				}

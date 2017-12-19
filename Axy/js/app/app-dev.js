@@ -2,7 +2,8 @@
 	var dev = {};
 
 	var absTypeidDir = {
-		"WG-100": 0x80
+		"WG-100": 0x80, // 智能网关
+		"AX-903": 0x17, // 电力主机
 	};
 
 	var _isEqual = function(name, type) {

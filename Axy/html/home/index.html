@@ -143,6 +143,7 @@
 				padding-top: 50%;
 				background-size: cover;
 				background-position: center;
+				background-color: #CCCCCC;
 			}
 			/*设备状态*/
 			
@@ -247,7 +248,7 @@
 		<div id="approom">
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
-				<a class="mui-icon mui-pull-left">
+				<a class="mui-icon mui-pull-left" @tap="onMessageTap()">
 					<img src="../../image/home/message.png" />
 				</a>
 				<h1 class="mui-title"></h1>
@@ -582,6 +583,10 @@
 									re();
 								}.bind(this), rj);
 							}.bind(this));
+						},
+						// 点击消息按钮
+						onMessageTap: function(){
+							mui.openWindow('../person/message/index.html');
 						},
 
 						// 点击搜索按钮

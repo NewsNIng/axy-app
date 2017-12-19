@@ -351,19 +351,19 @@
 				},
 
 				watch: {
-					devInfo: {
-						deep: true,
-						handler: function() {
-							if(this.TASK) {
-								window.clearTimeout(this.TASK);
-								this.TASK = null;
-							}
-
-							this.TASK = setTimeout(function() {
-								//
-							}.bind(this), 1000);
-						}
-					}
+//					devInfo: {
+//						deep: true,
+//						handler: function() {
+//							if(this.TASK) {
+//								window.clearTimeout(this.TASK);
+//								this.TASK = null;
+//							}
+//
+//							this.TASK = setTimeout(function() {
+//								//
+//							}.bind(this), 1000);
+//						}
+//					}
 
 				},
 				computed: {

@@ -380,7 +380,7 @@
 						plus.nativeUI.showWaiting();
 						dal.devparam.alarmplan(this.devid,this.type,function(err, rs){
 							plus.nativeUI.closeWaiting();
-							this.plans = rs;
+							this.plans = rs || [];
 							
 							this.$nextTick(function() {
 								mui('.mui-switch')['switch']();
