@@ -21,9 +21,7 @@
 		"url": "http://www.dcloud.io"
 	},
 	"permissions": {
-		"Accelerometer": {
-			"description": "访问加速度感应器"
-		},
+		
 
 		"Cache": {
 			"description": "管理应用缓存"
@@ -34,9 +32,7 @@
 		"Console": {
 			"description": "跟踪调试输出日志"
 		},
-		"Contacts": {
-			"description": "访问系统联系人信息"
-		},
+		
 		"Device": {
 			"description": "访问设备信息"
 		},
@@ -57,12 +53,8 @@
 			"description": "使用Native.js能力"
 		},
 
-		"Orientation": {
-			"description": "访问方向感应器"
-		},
-		"Proximity": {
-			"description": "访问距离感应器"
-		},
+		
+		
 		"Storage": {
 			"description": "管理应用本地数据"
 		},
@@ -101,10 +93,12 @@
 		"H5NativeBridge": {
 			"description": "安心云智能"
 		},
-		"Barcode": {}
+		"Barcode": {},
+		"Messaging": {}
 	},
 	"plus": {
-		"error":{
+		"allowsInlineMediaPlayback": true,
+		"error": {
 			"url": "html/smart/devices/dev_error.html"
 		},
 		"statusbar": {
@@ -130,31 +124,7 @@
 				"keystore": "",/*Android应用打包使用的密钥库文件*/
 				"password": "",/*Android应用打包使用密钥库中证书的密码*/
 				"aliasname": "",/*Android应用打包使用密钥库中证书的别名*/
-				"permissions": [
-					"<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
-					"<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>",
-					"<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-					"<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
-					"<uses-permission android:name=\"android.permission.INTERNET\"/>",
-					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-					"<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
-					"<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-					"<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-					"<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
-					"<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-					"<uses-feature android:name=\"android.hardware.camera\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
-					"<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>",
-					"<uses-permission android:name=\"android.permission.CAMERA\"/>"
-				]
+				"permissions": ["<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>","<uses-permission android:name=\"android.permission.VIBRATE\"/>","<uses-permission android:name=\"android.permission.READ_LOGS\"/>","<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>","<uses-feature android:name=\"android.hardware.camera.autofocus\"/>","<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>","<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>","<uses-permission android:name=\"android.permission.CAMERA\"/>","<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>","<uses-permission android:name=\"android.permission.SEND_SMS\"/>","<uses-permission android:name=\"android.permission.INTERNET\"/>","<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>","<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>","<uses-permission android:name=\"android.permission.CALL_PHONE\"/>","<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>","<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>","<uses-feature android:name=\"android.hardware.camera\"/>","<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>","<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>","<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>","<uses-permission android:name=\"android.permission.WRITE_SMS\"/>","<uses-permission android:name=\"android.permission.READ_SMS\"/>"]
 			},
 			"orientation": [
 				"portrait-primary",
@@ -276,7 +246,8 @@
 					"css/lib/mui.min.css",
 					"css/app/app.css",
 					"js/common/immersed.js",
-					"js/lib/mui.min.js"
+					"js/lib/mui.min.js",
+					"image/person/bg@3x.png"
 				],
 				"refer": [
 					"html/common/login.html",
@@ -332,7 +303,8 @@
 					"js/dal/home.js",
 					"js/common/flexible.js",
 					"js/dal/store.js",
-					"js/app/app-page.js"
+					"js/app/app-page.js",
+					"image/home/btn_Adddevice@3x.png"
 				],
 				"refer": [
 					"html/search/index.html",
@@ -340,7 +312,8 @@
 					"html/nearby/business/store_details.html",
 					"html/smart/devices/dev_my_list.html",
 					"html/smart/devices/camera_settings.html",
-					"html/smart/add/add_device.html"
+					"html/smart/add/add_device.html",
+					"html/person/message/index.html"
 				],
 				"priority": 0
 			},
@@ -354,7 +327,12 @@
 					"js/common/flexible.js",
 					"js/common/immersed.js",
 					"js/lib/vue.min.js",
-					"js/lib/mui.min.js"
+					"js/lib/mui.min.js",
+					"image/smart/btn_ExperienceHall@3x.png",
+					"image/smart/btn_Intelligentscene@3x.png",
+					"image/smart/btn_Intelligentcommercialcity@3x.png",
+					"image/smart/btn_Myequipment@3x.png",
+					"image/smart/btn_butlerservice@3x.png"
 				],
 				"refer": [
 					"html/smart/scenes/index.html",
@@ -366,7 +344,8 @@
 					"html/smart/add/family_menu.html",
 					"html/search/index.html",
 					"html/common/login.html",
-					"html/smart/devices/dev_my_list.html"
+					"html/smart/devices/dev_my_list.html",
+					"html/public/browser.html"
 				],
 				"priority": 0
 			},
@@ -748,7 +727,8 @@
 				"refer": [
 					"html/public/image_cropper.html",
 					"html/public/input.html",
-					"html/person/relation/bind.html"
+					"html/person/relation/bind.html",
+					"html/person/relation/reset_pwd.html"
 				],
 				"priority": 0
 			},
@@ -816,6 +796,13 @@
 			"html/smart/devices/dev_WG-100.html": {
 				"resources": [
 					"image/smart/devices/gateway/btn_Setup@3x.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/public/image_cropper.html": {
+				"resources": [
+					"/storage/emulated/0/Tencent/QQfile_recv/~9W%ML2EXQE%7B7BOM)_8QV%7DN.png"
 				],
 				"refer": [],
 				"priority": 0
