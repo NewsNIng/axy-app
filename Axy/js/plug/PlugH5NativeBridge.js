@@ -21,13 +21,13 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-		return;
+		//return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		return;
+		//return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
@@ -175,11 +175,12 @@
 	 * 播放设备音视频
 	 * @param {Number} deviceid 设备ID
 	 * @param {Number} way 播放通道，如果是单通道默认为0
+	 * @param {Number} way2  播放通道2，如果是单通道默认为0
 	 */
-	pgn.StartDevicePlay = function(deviceid, way, way1) {
+	pgn.StartDevicePlay = function(deviceid, way, way1, sf, ff) {
 		typeof way === 'undefined' && (way = 0);
 		typeof way1 === 'undefined' && (way1 = 0);
-		return pg.syncExec(N, 'StartDevicePlay', [deviceid, way, way1]);
+		return pg.asyncExec(N, 'StartDevicePlay', [deviceid, way, way1], sf, ff);
 	};
 
 	/**

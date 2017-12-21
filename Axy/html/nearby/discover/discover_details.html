@@ -305,7 +305,7 @@
 			</header>
 
 			<div class="footer" :class="{'isFocus': inputFoucs}">
-				<input ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="" name="" id="" v-model="content" placeholder="写评论" />
+				<input style="margin-bottom: 0;" ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="text" name="" id="" v-model="content" placeholder="写评论" />
 				<button v-if="inputFoucs" :disabled="c.length === 0" @tap="onSendTap()" type="button" class="mui-btn app-btn-main" style="margin-left: 10px;">发送</button>
 				
 				
@@ -433,6 +433,9 @@
 					this.aid = this.$view.oid;
 					this.getInfo();
 					this.getComments();
+					this.$view.setStyle({
+						softinputMode: 'adjustResize'
+					})
 				},
 				methods: {
 					onHeadTap: function(account){

@@ -58,6 +58,8 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>-->
 		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
 		<!--App相关业务逻辑-->
 		<!--<script type="text/javascript" src="../../../js/app/app.js"></script>-->
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
@@ -80,13 +82,22 @@
 				methods: {
 					onCodeTap: function(){
 						app.page.openForResultBy('family_code.html', 'family_code', function(data){
-							alert(data.code); 
-						});
+							this.addFamiliDevice(data.code); 
+						}.bind(this));
 						
 					},
 					onScanTap: function(){
 						app.page.openForResultBy('family_scan.html', 'family_scan', function(data){
-							
+							this.addFamiliDevice(data.code); 
+						}.bind(this));
+					},
+					
+					addFamiliDevice: function(code){
+						dal.device.getShare(code, function(err, rs){
+							if(err){
+								return mui.toast(err.message);
+							}
+							console.log(JSON.stringify(rs));
 						});
 					}
 					

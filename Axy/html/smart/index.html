@@ -131,10 +131,12 @@
 					return {
 						hasDev: false,
 						imgList: [{
-								adimg: "https://user-gold-cdn.xitu.io/2017/12/1/16011e0577b180c5?imageView2/1/w/960/h/200/q/85/format/jpg/interlace/1"
+								adimg: "http://www.vihivision.com/Upload/1499210661.jpg",
+								link: "http://www.vihivision.com/product/301.html"
 							},
 							{
-								adimg: "https://user-gold-cdn.xitu.io/2017/12/1/16011e0577b180c5?imageView2/1/w/960/h/200/q/85/format/jpg/interlace/1"
+								adimg: "http://www.vihivision.com/Upload/1498810464.jpg",
+								link: "http://u2997108.viewer.maka.im/k/KHL9PW53"
 							}
 						],
 						menuList: [
@@ -206,8 +208,10 @@
 					this.menuList.splice(+this.hasDev, 1);
 				},
 				methods: {
-					onAdvertTap: function() {
-
+					onAdvertTap: function(o) {
+						app.page.openBrowser({
+							url: o.link
+						});
 					},
 					
 					onItemTap: function(o) {

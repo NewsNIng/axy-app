@@ -26,6 +26,7 @@
 				flex: 1;
 				/* NEW, Spec - Opera 12.1, Firefox 20+ */
 				-webkit-box-flex: 1/* OLD - iOS 6-, Safari 3.1-6 */
+				;
 			}
 		</style>
 
@@ -169,15 +170,15 @@
 										<span v-if="i!==0"> | </span>{{type}}
 									</div>
 									<div class="activity app-font-size-28">店铺活动：{{o.introduction}}</div>
-								</div> 
+								</div>
 							</div>
 							<div class="address app-font-size-28">
 								地址:{{o.address}}
 							</div>
 							<div class="shop_menu app-font-size-28">
-								<div class="flex1"><img src="../../../image/nearby/phone.png" />电话</div>
-								<div class="flex1"><img src="../../../image/nearby/navigation.png" />导航</div>
-								<div @tap="onLookTap(o)" class="flex1"><img src="../../../image/nearby/show.png" />查看</div>
+								<div @tap="onCallTap(o)" class="flex1"><img src="../../../image/nearby/phone.png" />电话</div>
+								<div @tap="onWithMapTap(o)" class="flex1"><img src="../../../image/nearby/navigation.png" />导航</div>
+								<div @tap="onLookTap(o)" class="flex1"><img style="vertical-align: middle; padding-top: 0.05rem;" src="../../../image/nearby/show.png" /><span style="vertical-align: middle;">查看</span></div>
 							</div>
 						</div>
 					</template>
@@ -195,6 +196,8 @@
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/gps.js"></script>
 
 		<script type="text/javascript">
 			new Vue({
@@ -229,36 +232,37 @@
 					}.bind(this));
 				},
 				plusReady: function() {
-					this.getCurrentPosition().then(function(){
+					this.getCurrentPosition().then(function() {
 						this._down();
-					}.bind(this)).catch(function(){
+					}.bind(this)).catch(function() {
 						this._down();
 					}.bind(this));
 				},
 				methods: {
-					getCurrentPosition: function(){
-						return new Promise(function(re, rj){
+					getCurrentPosition: function() {
+						return new Promise(function(re, rj) {
 							plus.geolocation.getCurrentPosition(function(p) {
 								this.longitude = p.coords.longitude;
 								this.latitude = p.coords.latitude;
 								this.city = p.address.city.replace('市', '');
-								this.position = p.address.poiName;
+								this.position = p.address.poiName || p.addresses;
 								re();
-							}.bind(this), rj);
+							}.bind(this), rj, {
+								provider: 'baidu',
+							});
 						}.bind(this));
-						
+
 					},
-					_getList: function(f){
-						dal.store.list(this.longitude, this.latitude, this.city, function(err, data){
-							if(err){
+					_getList: function(f) {
+						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
+							if(err) {
 								return mui.toast(err.message);
 							}
-							
+
 							f(data);
 						}, this.n);
 					},
-					
-					
+
 					// 点击查看
 					onLookTap: function(o) {
 						mui.openWindow('../business/store_details.html', 'store_details', {
@@ -266,6 +270,27 @@
 								oid: o.id
 							}
 						});
+					},
+
+					// 点击打电话
+					onCallTap: function(o) {
+						plus.device.dial(o.telphone);
+					},
+
+					// 点击导航
+					onWithMapTap: function(o) {
+						//BD-09 to GCJ-02先将百度坐标转成中国坐标
+						var tmp = GPS.bd_decrypt(parseFloat(o.latitude), parseFloat(o.longitude));
+						//GCJ-02 to WGS-84再将中国坐标转成GPS坐标
+						var dstarr = GPS.gcj_decrypt_exact(tmp['lat'], tmp['lon']);
+						//目的地
+						var dst = new plus.maps.Point(dstarr['lon'], dstarr['lat']);
+						//目的地描述
+						var shop = o.address + " - " + o.name;
+						//起始地   
+						var src = new plus.maps.Point(this.longitude, this.latitude);
+						//调用导航 
+						plus.maps.openSysMap(dst, shop, src);
 					},
 
 					_down: function() {
@@ -283,19 +308,19 @@
 						this.n++;
 						this._getList(function(data) {
 							console.log(JSON.stringify(data));
-							if(!data || !data.length){
+							if(!data || !data.length) {
 								return mui.toast('没有更多啦~');
-							}else{
-								this.shops.push.apply(this.shops, data);	
+							} else {
+								this.shops.push.apply(this.shops, data);
 							}
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
 						}.bind(this));
 					},
-					_min2time: function(n){
-						return (n < 10? '0': '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00': '30');
+					_min2time: function(n) {
+						return(n < 10 ? '0' : '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00' : '30');
 					},
-					_m2km: function(m){
-						return (m / 1000).toFixed(1);
+					_m2km: function(m) {
+						return(m / 1000).toFixed(1);
 					}
 				}
 

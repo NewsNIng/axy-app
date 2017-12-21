@@ -75,29 +75,29 @@
 				position: fixed;
 				height: auto;
 			}
+			
 			.mui-popover .mui-table-view {
-			   max-height: none;
-			   margin-bottom: 0 !important;
+				max-height: none;
+				margin-bottom: 0 !important;
 			}
-			#popover.mui-popover .mui-table-view-cell{
+			
+			#popover.mui-popover .mui-table-view-cell {
 				display: flex;
 				display: -webkit-flex;
 			}
-			#popover.mui-popover .mui-table-view-cell>*{
+			
+			#popover.mui-popover .mui-table-view-cell>* {
 				flex: 1;
-				
 				/*float: left;
 				display: inline-block;
 				width: 25%;*/
-				
 				text-align: center;
 			}
 			
-			#popover.mui-popover .mui-table-view-cell>*:nth-child(2){
+			#popover.mui-popover .mui-table-view-cell>*:nth-child(2) {
 				flex: 2;
 				/*width: 50%;*/
 			}
-			
 			/*#popover.mui-popover .mui-table-view-cell:last-child{
 				position: relative;
 				height: 1.6rem;
@@ -113,69 +113,34 @@
 				
 			}*/
 			
-			
-			
 			#popover.mui-popover .mui-table-view-cell:after {
-			    left: 0;
-			    background-color: #c8c7cc;
+				left: 0;
+				background-color: #c8c7cc;
 			}
-			
 		</style>
 	</head>
 
 	<body>
- 
+
 		<div id="popover" class="mui-popover app-font-size-28 app-color-333333">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell app-color-9f9fa0">
-					<span>参数</span>
-					<span>预警值</span>
-					<span>报警值</span>
-				</li>
-				<li class="mui-table-view-cell">
-					<span>剩余电流</span>
-					<span>1000mA</span>
-					<span class="app-color-ff3b30">2000mA</span>
-				</li>
-				<li class="mui-table-view-cell">
-					<span>剩余电流</span>
-					<span>1000mA</span>
-					<span class="app-color-ff3b30">2000mA</span>
-				</li>
-				<li class="mui-table-view-cell">
-					<span>剩余电流</span>
-					<span>1000mA</span>
-					<span class="app-color-ff3b30">2000mA</span>
-				</li>
-				<li class="mui-table-view-cell">
-					<span>剩余电流</span>
-					<span>1000mA</span>
-					<span class="app-color-ff3b30">2000mA</span>
-				</li>
-				<li class="mui-table-view-cell">
-					<span>剩余电流</span>
-					<span>1000mA</span>
-					<span class="app-color-ff3b30">2000mA</span>
-				</li>
-				<li class="mui-table-view-cell">
-					<span>剩余电流</span>
-					<span>1000mA</span>
-					<span class="app-color-ff3b30">2000mA</span>
-				</li>
-				<li class="mui-table-view-cell">
-					<span>剩余电流</span>
-					<span>1000mA</span>
-					<span class="app-color-ff3b30">2000mA</span>
-				</li>
-				<li class="mui-table-view-cell">
-					<span>剩余电流</span>
-					<span>1000mA</span>
-					<span class="app-color-ff3b30">2000mA</span>
-				</li>
+						<span>参数</span>
+						<span>预警值</span>
+						<span>报警值</span>
+					</li>
+				<template v-for="k,i in stateList">
+
+					<li class="mui-table-view-cell app-color-9f9fa0">
+						<span>{{k.name}}</span>
+						<span>{{w['state' + k.index] + k.company}}</span>
+						<span class="app-color-ff3b30">{{a['state' + k.index] + k.company}}</span>
+					</li>
+				</template>
 				<li class="mui-table-view-cell" style="text-align: center;">
 					<a href="#popover">取消</a>
 				</li>
-				
+
 			</ul>
 		</div>
 
@@ -184,7 +149,7 @@
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">电管家</h1>
-				<span class="mui-icon mui-pull-right">
+				<span class="mui-icon mui-pull-right" @tap="onShareTap()">
 					<img src="../../../image/smart/devices/electric/btn_share@3x.png" />
 				</span>
 				<span class="mui-icon mui-pull-right" @tap="mui('#popover').popover('show');">
@@ -194,13 +159,13 @@
 
 			<div class="mui-content">
 				<div class="cardRoom">
-					<template v-for="o,i in stateList">
-						<div class="app-color-333333" :class="o.switch? '':'app-color-9f9fa0'">
+					<template v-for="k,i in stateList">
+						<div class="app-color-9f9fa0" :class="getStateClass(k.index)">
 							<div class="app-font-size-28">
-								{{o.name}}
+								{{k.name}}
 							</div>
-							<div class="app-font-size-52">
-								{{o.value + o.company}}
+							<div class="app-font-size-52" >
+								{{o['state' + k.index] + k.company}}
 							</div>
 						</div>
 					</template>
@@ -208,7 +173,7 @@
 
 				<div class="menuRoom">
 					<template v-for="o,i in menuList">
-						<div class="app-font-size-24 app-color-9f9fa0">
+						<div class="app-font-size-24 app-color-9f9fa0" @tap="onMenuTap(o)">
 							<img :src="'../../../image/smart/devices/electric/'+ o.img +'@3x.png'" width="100%" />
 							<div>{{o.name}}</div>
 						</div>
@@ -227,64 +192,100 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/extend/Date.js" ></script>
 
 		<img src="" />
 		<script type="text/javascript">
 			mui.init();
 
-			
+			var _stateList = [{
+								name: "剩余电流",
+								index: 9,
+								company: 'mA'
+							},
+							{
+								name: "环境温度",
+								index: 5,
+								company: '℃',
+							},
+							{
+								name: "A相电流",
+								index: 6,
+								company: 'mA'
+							},
+							{
+								name: "A相温度",
+								index: 2,
+								company: '℃',
+							},
+							{
+								name: "B相电流",
+								index: 7,
+								company: 'mA'
+							},
+							{
+								name: "B相温度",
+								index: 3,
+								company: '℃',
+							},
+							{
+								name: "C相电流",
+								index: 8,
+								company: 'mA'
+							},
+							{
+								name: "C相温度",
+								index: 4,
+								company: '℃',
+							},
 
-			var _stateImgs = [];
+						];
+
+			var pv = new Vue({
+				el: "#popover",
+				data: function() {
+					return {
+						stateList: _stateList,
+						a: {
+							"intime": null,
+							"state1": null,
+							"state2": 0,
+							"state3": 0,
+							"state4": 0,
+							"state5": 0,
+							"state6": 0,
+							"state7": 0,
+							"state8": 0,
+							"state9": 0
+						},
+						w: {
+							"intime": null,
+							"state1": null,
+							"state2": 0,
+							"state3": 0,
+							"state4": 0,
+							"state5": 0,
+							"state6": 0,
+							"state7": 0,
+							"state8": 0,
+							"state9": 0
+						}
+					}
+				}
+			});
 
 			new Vue({
 				el: '#warpper',
 				data: function() {
 					return {
-						stateList: [{
-								name: '剩余电流',
-								value: '0',
-								company: 'mA',
-								switch: true,
-							},
-							{
-								name: '环境温度',
-								value: '26.0',
-								company: '℃',
-								switch: true,
-							},
-							{
-								name: '剩余电流',
-								value: '0',
-								company: 'mA'
-							},
-							{
-								name: '环境温度',
-								value: '26.0',
-								company: '℃'
-							},
-							{
-								name: '剩余电流',
-								value: '0',
-								company: 'mA'
-							},
-							{
-								name: '环境温度',
-								value: '26.0',
-								company: '℃'
-							}, {
-								name: '剩余电流',
-								value: '0',
-								company: 'mA'
-							},
-							{
-								name: '环境温度',
-								value: '26.0',
-								company: '℃'
-							}
-						],
+						stateList: _stateList,
+
 						menuList: [{
 								name: '实时视频',
 								img: 'btn_video'
@@ -301,14 +302,100 @@
 								name: '设置',
 								img: 'btn_Setup'
 							},
-						]
+						],
+						devInfo: {
+							devid: -1,
+							id: -1,
+						},
+						o: {
+							"state1": 0,
+							"id": 0,
+							"state2": 0,
+							"state3": 0,
+							"state4": 0,
+							"state5": 0,
+							"state6": 0,
+							"devid": 0,
+							"state7": 0,
+							"state8": 0,
+							"state9": 0,
+							"areaid": 0,
+							"intime": 0
+						}
 
 					};
 				},
-
-				plusReady: function() {},
+				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
+					this.getData();
+				},
 				methods: {
-
+					
+					// 获取状态数据
+					getData: function() {
+						dal.device.electric.state(this.devInfo.id, function(err, rs) {
+							if(err) {
+								return mui.toast("获取信息失败");
+							}
+							this.o = rs.state;
+							pv.w = rs.warn;
+							pv.a = rs.alarm;
+						}.bind(this));
+					},
+					
+					// 动态计算状态显示颜色
+					getStateClass: function(index){
+						var indexVal = this.o['state' + index];
+						var maxVal = pv.w['state' + index];
+						var noVal = pv.a['state' + index];
+						if(indexVal >= maxVal){
+							return "app-color-ff3b30";
+						}else if(indexVal >= noVal){
+							return "app-color-333333"; 
+						}
+						return "";
+					},
+					
+					// 分享按钮
+					onShareTap: function(){
+						mui.openWindow("../../person/devshare/share.html", 'dev_share', {
+							extras: {
+								devInfo: this.devInfo
+							}
+						});
+					},
+					
+					onMenuTap: function(o){
+						this[o.img + 'Tap']();
+					},
+					
+					// 保存数据
+					btn_SavedataTap: function(){
+						plus.nativeUI.showWaiting("正在保存...");
+						
+						if(!this.SaveDataCache && window.plus){
+							this.SaveDataCache = new ni.Cache("SaveDataCache_" + this.devInfo.id, [], {
+								plus: true
+							});
+						}
+						
+						this.SaveDataCache.push({
+							day: (new Date).toFormatString('yyyy-MM-dd hh:mm:ss'),
+							data: this.o
+						});
+						mui.toast("保存成功");
+						
+						plus.nativeUI.closeWaiting();
+					},
+					
+					// 设置
+					btn_SetupTap: function(){
+						mui.openWindow('dev_AX-903_setting.html', 'dev_AX-903_setting', {
+							extras: {
+								devInfo: this.devInfo	
+							}
+						});
+					},
 				}
 			});
 		</script>
