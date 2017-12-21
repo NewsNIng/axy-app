@@ -38,6 +38,21 @@
 		var account = window.localStorage.getItem("_account_");
 		return ra('get', '/device/delete/share/' + devid + '/user/' + account, {}, callback);
 	}
+	device.logs = {
+		/**
+		 * 摄像机日志列表
+		 * @param {Object} pageNumber
+		 * @param {Object} devid
+		 * @param {Object} pageSize
+		 */
+		list: function(pageNumber, devid, callback, pageSize) {
+			return ra('post', '/device/log/list', {
+				pageNumber: pageNumber,
+				pageSize: pageSize || 10,
+				devid: devid
+			}, callback);
+		}
+	}
 
 	/**
 	 * 电力主机

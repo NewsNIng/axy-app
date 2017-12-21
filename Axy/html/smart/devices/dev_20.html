@@ -59,10 +59,10 @@
 							<span class="mui-badge">123456789</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">xx家里的门磁探测器</span>
+							<span class="mui-badge" v-text="devInfo.accessory.name"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -80,14 +80,14 @@
 					<li class="mui-table-view-cell" @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
 							<span>告警延迟时间</span>
-							<span class="mui-badge" v-text="devInfo.alarmDelayTime+'s'"></span>
+							<span class="mui-badge" v-text="devInfo.accessory.delay+'s'"></span>
 						</a>
 					</li>
 				</ul>
 			</div>
 
-			<dev-footer :deviceid = "5" :comid="6" @del="onDelDevice">
-				
+			<dev-footer :deviceid="5" :comid="6" @del="onDelDevice">
+
 			</dev-footer>
 		</div>
 		<!--沉浸式动态处理-->
@@ -97,10 +97,12 @@
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		请求相关
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -111,7 +113,7 @@
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
-		<script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -120,14 +122,28 @@
 				data: function() {
 					return {
 						state: true, // 当前状态
-						
+
 						devInfo: {
-							devId: "123456789",
-							devName: "警示牌1",
-							bindDev: "AX-360主机",
-							// 告警延迟时间
-							zone_type: "出入防区",
-							alarmDelayTime: 0,
+							"accessory": {
+								"id": "14255286",
+								"devid": "VH-104GN-2017061500015",
+								"name": "123",
+								"action": 41990,
+								"type": 20,
+								"delay": 0,
+								"zonetype": 0,
+								"chnID": 0,
+								"externChn": true,
+								"x": 0,
+								"y": 0,
+								"ptzset": 0,
+								"xmlDescrition": "",
+								"enableDelete": true,
+								"enable": true
+							},
+							"devName": "",
+							"devType": 4166,
+							"statusCode": 0
 						},
 						// 弹框
 						pick: null,
@@ -140,21 +156,31 @@
 					});
 					this.pick.setData(pick_data[1]);
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					this.$view.info
+					//					获取状态
+					//					dal.devaccessory.getStatus("14255286", 20, "VH-104GN-2017061500015", 4166, function(err,data) {
+					//							if(err) {
+					//								return mui.toast(err.message);
+					//							}
+					//							alert(JSON.stringify(data));
+					//						});
+
+				},
 				methods: {
 					// 切换开关
 					toggleSwitch: function() {
 						this.state = !this.state;
 					},
 					// 删除设备
-					onDelDevice: function(){
+					onDelDevice: function() {
 						console.log("deldevice");
 					},
 					// 告警延迟时间
 					onAlarmTap: function() {
 						var that = this;
 
-						this.pick.pickers[0].setSelectedValue(this.devInfo.alarmDelayTime);
+						this.pick.pickers[0].setSelectedValue(this.devInfo.accessory.delay);
 
 						var fn = function(s) {
 							that.devInfo.alarmDelayTime = s;
@@ -166,6 +192,21 @@
 
 						});
 					},
+					onNameTap: function() {
+						var that = this;
+						app.page.getInput(function(data) {
+							dal.devaccessory.name(that.devInfo.accessory.id, that.devInfo.accessory.type, that.devInfo.accessory.devid, that.devInfo.devType, data.content, that.devInfo.accessory.name, that.devInfo.accessory.action, that.devInfo.accessory.delay, that.devInfo.accessory.zonetype, that.devInfo.accessory.chnID, that.devInfo.accessory.externChn, that.devInfo.accessory.x, that.devInfo.accessory.y, that.devInfo.accessory.ptzset, function(err, data) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("修改成功！");
+								that.devInfo.accessory.name = data.content;
+							});
+						}, {
+							title: "设备名称",
+							tips: that.devInfo.accessory.name,
+						});
+					}
 				}
 			});
 		</script>

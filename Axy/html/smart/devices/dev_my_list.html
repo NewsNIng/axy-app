@@ -220,17 +220,17 @@
 								<a class="mui-navigate-right">
 									<span class="left app-font-size-28 app-color-333333">
 								<img src="../../../image/smart/scenes/icon_Timing start@3x.png"/>
-								<span>{{o.name}}</span>
+								<span>{{o.accessory.name}}</span>
 									</span>
-									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.enable ? "已启用" : "未启用"}}</span>
+									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.accessory.enable ? "已启用" : "未启用"}}</span>
 								</a>
 							</li>
 							<li class="mui-table-view-cell">
 								<a>
 									<span class="app-font-size-28 app-color-9f9fa0">
-								主机: {{o.devid}}
+								主机: {{o.devName || o.accessory.devid}}
 							</span>
-									<span class="mui-badge app-color-main">运行正常</span>
+									<span class="mui-badge app-color-main">{{_getStateByCode(o.statusCode)}}</span>
 								</a>
 							</li>
 						</ul>
@@ -273,6 +273,9 @@
 			var devManager, runManager;
 
 			var _B = new ni.Broadcast();
+			
+			
+			var __stateCodearr = ["正常","失联","失压"];
 
 			var menuV = new Vue({
 				el: '#controll',
@@ -438,7 +441,9 @@
 
 					// 获取配件列表数据
 					getDevaccessroyData: function() {
+
 						plus.nativeUI.showWaiting("正在获取配件...");
+
 						dal.devaccessory.allacc(function(err, data) {
 							plus.nativeUI.closeWaiting();
 							if(err) {
@@ -455,6 +460,9 @@
 
 					_getDevImgByAndroid: function(devid) {
 						return 'file:////storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+					},
+					_getStateByCode: function(code){
+						return __stateCodearr[code];
 					}
 				}
 			});

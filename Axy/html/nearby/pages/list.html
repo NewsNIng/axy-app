@@ -309,7 +309,8 @@
 						this._getList(function(data) {
 							console.log(JSON.stringify(data));
 							if(!data || !data.length) {
-								return mui.toast('没有更多啦~');
+								mui.toast('没有更多啦~~');
+								this.$pullRefresh.pullRefresh().endPullupToRefresh();
 							} else {
 								this.shops.push.apply(this.shops, data);
 							}
