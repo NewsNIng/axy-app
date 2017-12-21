@@ -1,0 +1,208 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>修改密码</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.mui-content>.mui-table-view:first-child {
+				margin-top: 0.266666rem !important;
+			}
+			
+			img {
+				width: 0.7rem;
+			}
+			
+			a.mui-active {
+				background-color: transparent !important;
+			}
+			
+			.flex {
+				display: flex !important;
+				display: -webkit-flex !important;
+				align-items: center;
+			}
+			
+			input {
+				border: none;
+				margin-left: 0.293333rem;
+				flex: 1;
+			}
+			
+			input::-webkit-input-placeholder {
+				color: #CCCCCC;
+			}
+			
+			ul:not(.mui-pciker-list) li>a {
+				margin: -0.49rem -15px !important;
+			}
+			
+			button {
+				margin: 0.8rem 0.36rem;
+				width: 9.28rem;
+				height: 1.173333rem;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">修改密码</h1>
+		</header>
+		<div class="mui-content menu-box app-font-size-32">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a class="flex">
+						<img src="../../../image/person/info/tel2@3x.png" />
+						<input class="app-font-size-28" placeholder="请输入旧密码" v-model="oldPwd" />
+					</a>
+				</li>
+
+				<li class="mui-table-view-cell">
+					<a class="flex">
+						<img src="../../../image/person/info/safe@3x.png" />
+						<input class="app-font-size-28" placeholder="请输入新密码（6至20位数字或字母）" v-model="newPwd" />
+					</a>
+				</li>
+
+				<li class="mui-table-view-cell">
+					<a class="flex">
+						<img src="../../../image/person/info/safe@3x.png" />
+						<input class="app-font-size-28" placeholder="请再次输入新密码" v-model="newPwd2" />
+					</a>
+				</li>
+			</ul>
+
+			<button type="button" class="mui-btn app-btn-main" @tap="onSubmitTap()">完成</button>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-rules.js" ></script>
+		
+		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/user.js" ></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						oldPwd: "",
+						newPwd: "",
+						newPwd2: "",
+					};
+				},
+
+				computed: {
+					// 是否是旧密码
+					isOld: function() {
+						return this.newPwd === this.oldPwd;
+					},
+
+					// 新密码是否相同
+					isEqual: function() {
+						return this.newPwd === this.newPwd2;
+					}
+				},
+
+				plusReady: function() {
+
+				},
+				methods: {
+					onSubmitTap: function(){
+						// 验证密码格式
+						var errMessage = app.rules.testList([
+							{
+								type: "pwd",
+								value: this.oldPwd,
+								message: "旧密码格式错误"
+							},
+							{
+								type: "pwd",
+								value: this.newPwd,
+								message: "新密码第一个格式错误"
+							},
+							{
+								type: "pwd",
+								value: this.newPwd2,
+								message: "新密码第二个格式错误"
+							}
+						]);
+						if(errMessage){
+							return mui.toast(errMessage);
+						}
+						// 验证逻辑错误
+						if(!this.isEqual()){
+							return mui.toast("新密码两次输入的不同");
+						}
+						if(this.isOld()){
+							return mui.toast("新密码不能与旧密码相同");
+						}
+						
+						// 通过 ，提交服务器
+						this._submit();
+					},
+					_submit: function(){
+						mui.confirm("您确定修改密码吗？\n修改密码成功将需要重新登录", "", ["确定修改", "取消"], function(e) {
+							if(e.index === 0) {
+								dal.user.updatepwd(this.oldPwd, this.newPwd, function(err, rs){
+									if(err){
+										return mui.toast("修改密码失败");
+									}
+									
+									var all = plus.webview.all();
+									var index = plus.webview.currentWebview();
+									var first = plus.webview.getLaunchWebview();
+									var id;
+									plus.nativeUI.showWaiting();
+									for(var i = 0, l = all.length; i < l; i++) {
+										id = all[i].id;
+										if(id !== index.id && id !== first.id) {
+											plus.webview.close(all[i]);
+										}
+									}
+									app.user.logout();
+									window.localStorage.setItem('_pwd_', "");
+									first.addEventListener('loaded', function() {
+										plus.nativeUI.closeWaiting();
+										index.close('none');
+									});
+									first.reload();
+									first.show("slide-in-bottom", 250);
+									
+								});
+								
+								
+								
+							}
+						});
+						
+						
+						
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

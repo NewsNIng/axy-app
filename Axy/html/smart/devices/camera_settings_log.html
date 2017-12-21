@@ -81,7 +81,7 @@
 			}
 			
 			.box_1 {
-				padding-top: 0.56rem;
+				margin-top: 0.56rem;
 				flex: 1;
 				/*background-color: red;*/
 				position: relative;
@@ -91,7 +91,7 @@
 				position: absolute;
 				right: 0.1rem;
 				bottom: 0;
-				top: 0.56rem;
+				top: 0;
 				width: 1px;
 				height: 100%;
 				content: '';
@@ -110,9 +110,10 @@
 			
 			.icon {
 				float: right;
-				width: 0.693333rem;
+				width: 42px;
 				position: absolute;
-				left: 53%;
+				top: -9px;
+				left: 55%;
 				transform: translateX()(-50%);
 				-webkit-transform: translateX(-50%);
 			}
@@ -120,6 +121,12 @@
 			.img {
 				height: 1.815rem;
 				/*background-color: gray;*/
+				position: relative;
+			}
+			
+			.wrapper {
+				overflow: hidden;
+				height: 100%;
 			}
 		</style>
 	</head>
@@ -133,37 +140,39 @@
 			</header>
 
 			<div class="mui-content app-font-size-32">
-				<div class="top app-font-size-28">
-					<div>操作<img src="../../../image/smart/devices/others/down.png" /></div>
+				<div class="top app-font-size-28" ref=tabroom>
+					<div @tap="test()">操作<img src="../../../image/smart/devices/others/down.png" /></div>
 					<div>终端<img src="../../../image/smart/devices/others/down.png" /></div>
 					<div>账号<img src="../../../image/smart/devices/others/down.png" /></div>
 					<div>日期<img src="../../../image/smart/devices/others/down.png" /></div>
 				</div>
 
 				<div class="scroll wrapper" ref="wrapper">
-					<div class="box">
-						<div class="box_1">
-							<template v-for="o,i in logs">
-								<div class="img">
-									<img class="point" src="../../../image/smart/devices/electric/point.png" />
-									<img class="icon" :src="o.state === '布防成功'?'../../../image/smart/devices/btn_Deploytroopsfordefence@3x.png':'../../../image/smart/devices/btn_Disarm@3x.png'" />
-								</div>
-							</template>
-						</div>
-						<div class="box_2">
-							<div class="log_all">
+					<div>
+						<div class="box">
+							<div class="box_1">
 								<template v-for="o,i in logs">
-									<div class="log">
-										<div class="account">{{o.phone}}<br /><span class="from app-font-size-28">来自：{{o.from}}</span></div>
-										<div class="state app-font-size-32">{{o.state}}</div>
-										<div class="date app-font-size-28">{{o.date}}<br />{{o.time}}</div>
+									<div class="img">
+										<img class="point" src="../../../image/smart/devices/electric/point.png" />
+										<img class="icon" :src="o.eventid == '2'?'../../../image/smart/devices/btn_Deploytroopsfordefence@3x.png':o.eventid == '3'?'../../../image/smart/devices/btn_Disarm@3x.png':'../../../image/smart/devices/restart.png'" />
 									</div>
 								</template>
 							</div>
+							<div class="box_2">
+								<div class="log_all">
+									<template v-for="o,i in logs">
+										<div class="log">
+											<div class="account">{{o.handlers}}<br /><span class="from app-font-size-28">来自：{{hdtypes[o.hdtypeid - 1]}}</span></div>
+											<div class="state app-font-size-32">{{o.eventid == '2'?'布防成功':o.eventid == '3'?'撤防成功':'重启成功'}}</div>
+											<div class="date app-font-size-28">{{o.attime.split(" ")[0]}}<br />{{o.attime.split(" ")[1]}}</div>
+										</div>
+									</template>
+								</div>
+							</div>
 						</div>
-
 					</div>
 				</div>
+
 			</div>
 
 		</div>
@@ -175,10 +184,12 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
+		<!--<script type="text/javascript" src="../../../js/dal/devaccessory.js" ></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script src="../../js/lib/better-scroll.min.js"></script>
+		<script src="../../../js/lib/better-scroll.min.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -193,57 +204,11 @@
 				el: '#warpper',
 				data: function() {
 					return {
+						n: 0,
 						isPwdProtection: true, // 是否开启密码保护
-						logs: [{
-							phone: "135*****000",
-							from: "联防平台",
-							state: "布防成功",
-							date: "2017/11/01",
-							time: "15:12:10",
-						}, {
-							phone: "135*****000",
-							from: "联防平台",
-							state: "撤防成功",
-							date: "2017/11/01",
-							time: "15:12:10",
-						}, {
-							phone: "135*****000",
-							from: "联防平台",
-							state: "布防成功",
-							date: "2017/11/01",
-							time: "15:12:10",
-						}, {
-							phone: "135*****000",
-							from: "联防平台",
-							state: "撤防成功",
-							date: "2017/11/01",
-							time: "15:12:10",
-						}, {
-							phone: "135*****000",
-							from: "联防平台",
-							state: "撤防成功",
-							date: "2017/11/01",
-							time: "15:12:10",
-						}, {
-							phone: "135*****000",
-							from: "联防平台",
-							state: "布防成功",
-							date: "2017/11/01",
-							time: "15:12:10",
-						}, {
-							phone: "135*****000",
-							from: "联防平台",
-							state: "撤防成功",
-							date: "2017/11/01",
-							time: "15:12:10",
-						}, {
-							phone: "135*****000",
-							from: "联防平台",
-							state: "布防成功",
-							date: "2017/11/01",
-							time: "15:12:10",
-						}, ],
-						maxScrollY: 200,
+						devInfo: {},
+						hdtypes:["网页","遥控器","APP","PC播放器","联防"],
+						logs: [],
 					};
 				},
 				mounted: function() {
@@ -258,17 +223,13 @@
 					this.$nextTick(function() {
 						if(!this.scroll) {
 							this.scroll = new BScroll(wrapper, {
-								click: true,
-								scrollY: true,
 								pullUpLoad: {
 									threshold: -70, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
 								}
 							});
 							this.scroll.on('pullingUp', function() {
 								// 获取更多 TODO
-								this.n++;
 								this.searchResult();
-
 							}.bind(this));
 
 						} else {
@@ -277,22 +238,51 @@
 
 					}.bind(this));
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					this.devInfo = this.$view.info;
+					console.log(JSON.stringify(this.devInfo));
+					this.searchResult();
+				},
 				methods: {
 					// 切换开关
 					toggleSwitch: function() {
 						this.state = !this.state;
 					},
 					// 加载
-					hotResult: function() {
-						//						dal.search.hotkeyword(function(err, data) {
-						//							if(err) {
-						//								return;
-						//							}
-						//							this.hotList = data;
-						//						}.bind(this));
-						alert(0);
+					searchResult: function() {
+						this.n++;
+						this.$nextTick(function() {
+							this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
+						}.bind(this));
+//						alert(JSON.stringify(this.devInfo));
+						dal.device.logs.list(this.n,this.devInfo.devid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							console.log(JSON.stringify(data));
+							
+							if(!data.result || !data.result) {
+//								alert(JSON.stringify(data)+"\t"+data+data.length);
+								mui.toast('没有更多啦~~');
+							} else {
+								this.logs.push.apply(this.logs, data.result);
+							}
+						}.bind(this));
 					},
+					// 接口测试
+					test: function() {
+						mui.openWindow('test.html','test');
+						// 获取用户所有配件
+//						dal.devaccessory.allacc(function(data){
+//							alert(JSON.stringify(data));
+//						});
+						// 设置智能灯控
+//						dal.devaccessory.getStatus("14255286","20","VH-104GN-2017061500015","20",function(data){
+//							alert(JSON.stringify(data));
+//						});
+
+//						alert("==接口测试==");
+					}
 				}
 			});
 		</script>

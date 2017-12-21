@@ -116,9 +116,9 @@
 		<div class="mui-content noImmersed">
 
 			<div class="bg-box">
-				<img data-href="information.html" class="bg-box-avastr" src="https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256" />
-				<div class="app-font-size-34 app-color-white bg-box-nickname">NewsNing</div>
-				<div class="app-font-size-24 app-color-white">早安，美好的一天又开始了！</div>
+				<img data-href="information.html" class="img-lazy-load img-lazy-forever bg-box-avastr" :data-src="user.headimgurl" />
+				<div class="app-font-size-34 app-color-white bg-box-nickname" v-text="user.nickname"></div>
+				<!--<div class="app-font-size-24 app-color-white">也许我会迟到，但我从不会缺席。</div>-->
 			</div>
 
 			<div class="fast-box">
@@ -126,7 +126,7 @@
 					<img src="../../image/person/btn_Myequipment@3x.png" />
 					<div class="app-font-size-24 app-color-333333">我的设备</div>
 				</div>
-				<div class="fast-box-card app-touch" data-href="devshare/index.html" >
+				<div class="fast-box-card app-touch" data-href="devshare/index.html">
 					<img src="../../image/person/btn_Sharedequipment@3x.png" />
 					<div class="app-font-size-24 app-color-333333">共享设备</div>
 				</div>
@@ -203,35 +203,78 @@
 		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
-		<script type="text/javascript" src="../../js/app/app.js" ></script>
-		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		
+			<script type="text/javascript" src="../../js/lib/md5.min.js" ></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
-			
-			mui.ready(function(){
-				mui(".mui-content").on('tap', '*[data-href]', function(){
+
+			var _B = new ni.Broadcast();
+
+			mui.ready(function() {
+				mui(".mui-content").on('tap', '*[data-href]', function() {
 					var url = this.dataset.href;
 					// 所有跳转 需要验证登录
-					app.user.get(function(u){
-						u && mui.openWindow(url);	
+					app.user.get(function(u) {
+						u && mui.openWindow(url);
 					});
 				});
 			});
-			
-			
+
 			new Vue({
 				el: '.mui-content',
-				data: function(){
-					return {};
+				data: function() {
+					return {
+						user: {
+							"id": -1,
+							"account": "",
+							"gender": "",
+							"nickname": "",
+							"birthday": "",
+							"province": "",
+							"city": "",
+							"headimgurl": "",
+							"qqopenid": null,
+							"wxopenid": null,
+							"wbopenid": null
+						}
+					};
 				},
-				plusReady: function(){
+				mounted: function() {
+					this.getUserInfo();
+					// 监听用户信息更新
+					_B.on("userinfo_update", function(data){
+						this.user = data.userInfo;
+						this.updateLazyImage();
+					}.bind(this));
+					
+					// 监听用户登录
+					_B.on("login_success", function(data){
+						this.getUserInfo();
+					}.bind(this));
+					
+				},
+				plusReady: function() {
 					this.$view.setStyle({
 						scrollIndicator: 'none'
 					});
 				},
 				methods: {
+					getUserInfo: function(){
+						// 获取用户信息
+						this.user = app.user.get();
+						this.updateLazyImage();
+					},
 					
+					updateLazyImage: function(){
+						var that = this;
+						this.$nextTick(function(){
+							imagelazyload();
+						});
+					},
 				}
 			})
 		</script>

@@ -88,7 +88,8 @@
 			var size = 0;
 			task.addEventListener('statechanged', function(d, status) {
 				size = +(d.downloadedSize / d.totalSize * 100);
-				size = size.toFixed(2)
+				size = size.toFixed(2);
+				size = isNaN(size) ? 0: size;
 				w.setTitle('正在下载...\n' + size + '%');
 			});
 		}

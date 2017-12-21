@@ -336,7 +336,8 @@
 			"html/smart/add/connect_wifi.html",
 			"html/public/input.html",
 			"html/smart/devices/camera_settings_record.html",
-			"html/public/alarmParam.html"
+			"html/public/alarmParam.html",
+			"html/smart/devices/camera_settings_log.html"
 		]
 	},
 	"html/smart/devices/dev_error.html": {
@@ -399,6 +400,21 @@
 	"html/zeus.html": {
 		"refer": [
 			"html/common/login.html"
+		]
+	},
+	"html/smart/devices/camera_settings_log.html": {
+		"refer": [
+			"html/smart/devices/test.html"
+		]
+	},
+	"html/smart/devices/test.html": {
+		"refer": [
+			"html/smart/devices/dev_warning_sign.html"
+		]
+	},
+	"html/smart/devices/dev_warning_sign.html": {
+		"refer": [
+			"html/public/input.html"
 		]
 	}
 }

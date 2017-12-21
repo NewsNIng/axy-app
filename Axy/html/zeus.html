@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="../js/plug/PlugH5NativeBridge.js"></script>
 
 		<script type="text/javascript" src="../js/app/app.js"></script>
-		<script type="text/javascript" src="../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../js/dal/base.js"></script>
 		<script type="text/javascript" src="../js/dal/device.js"></script>
@@ -42,37 +42,37 @@
 			var NotifyAction = {
 				// 设备状态更新 
 				RunstateNotify: function(data) {
-//					try {
-//						var isUpdate = runManager.updateById(data, function(o, n) {
-//							return o.devid === n.devid;
-//						});
-//						// 转发通知
-//						B.emit('RunstateNotify', {
-//							info: data,
-//							add: !isUpdate
-//						});
-//					} catch(e) {
-//						//TODO handle the exception
-//						alert(e.message);
-//					}
+					//					try {
+					//						var isUpdate = runManager.updateById(data, function(o, n) {
+					//							return o.devid === n.devid;
+					//						});
+					//						// 转发通知
+					//						B.emit('RunstateNotify', {
+					//							info: data,
+					//							add: !isUpdate
+					//						});
+					//					} catch(e) {
+					//						//TODO handle the exception
+					//						alert(e.message);
+					//					}
 
 				},
 
 				// 设备信息更新
 				DeviceInfoNotify: function(data) {
-//					try {
-//						var isUpdate = devManager.updateById(data, function(o, n) {
-//							return o.basicInfo && o.basicInfo.devid === n.basicInfo.devid;
-//						});
-//						// 转发通知
-//						B.emit('DeviceInfoNotify', {
-//							info: data,
-//							add: !isUpdate
-//						});
-//					} catch(e) {
-//						//TODO handle the exception
-//						alert(e.message);
-//					}
+					//					try {
+					//						var isUpdate = devManager.updateById(data, function(o, n) {
+					//							return o.basicInfo && o.basicInfo.devid === n.basicInfo.devid;
+					//						});
+					//						// 转发通知
+					//						B.emit('DeviceInfoNotify', {
+					//							info: data,
+					//							add: !isUpdate
+					//						});
+					//					} catch(e) {
+					//						//TODO handle the exception
+					//						alert(e.message);
+					//					}
 
 				},
 			};
@@ -97,7 +97,7 @@
 
 					return Rx.Observable.create(function(ob) {
 						// 监听登录成功事件
-						new ni.Broadcast().on('login_success', function(data) {
+						_B.on('login_success', function(data) {
 							// next
 							ob.next(data.userInfo.account);
 						});
@@ -105,20 +105,46 @@
 						// 是否登录
 						if(app.user.has()) {
 							var u = app.user.get();
-							// 验证用户信息
-							dal.user.login(u.account, getPwd(), function(err, data) {
-								if(err) {
-									// 清除用户信息
-									appLoginFail();
-									return;
-								}
-								// 验证成功
-								ob.next(u.account);
-							});
+							var type = window.localStorage.getItem('login_type');
+							
+							
+							
+							if(type === 'pwd') {
+								// 验证用户信息
+								dal.user.login(u.account, getPwd(), function(err, data) {
+									if(err) {
+										// 清除用户信息
+										appLoginFail();
+										return;
+									}
+									// 验证成功
+									// 保存用户信息
+									updateUserInfo(data);
+									ob.next(u.account);
+								});
+							} else {
+								
+								var o = {
+									type: type, 
+								};
+								o[type + "openid"] = u[type + "openid"];
+								// 自动第三方登录
+								dal.user.ologin(o, function(err, data) {
+									if(err) {
+										// 清除用户信息
+										appLoginFail();
+										return;
+									} 
+									// 验证成功
+									// 保存用户信息
+									updateUserInfo(data);
+									ob.next(u.account);
+								});
+							}
 						} else {
 							// 未登录状态 
 						}
-					}); 
+					});
 				})
 				// 获取顶级域名 初始化变量
 				.mergeMap(function(account) {
@@ -129,18 +155,17 @@
 					});
 
 					// 本地 所有设备的信息
-//					ALLD = new ni.Cache('AllDeviceInfo', [], {
-//						plus: true
-//					});
-//
-//					// 本地 所有设备的运行状态
-//					ALLR = new ni.Cache('AllDeviceRun', [], {
-//						plus: true
-//					});
-//
-//					devManager = new DevManager(ALLD);
-//					runManager = new DevManager(ALLR);
-					
+					//					ALLD = new ni.Cache('AllDeviceInfo', [], {
+					//						plus: true
+					//					});
+					//
+					//					// 本地 所有设备的运行状态
+					//					ALLR = new ni.Cache('AllDeviceRun', [], {
+					//						plus: true
+					//					});
+					//
+					//					devManager = new DevManager(ALLD);
+					//					runManager = new DevManager(ALLR);
 
 					return Rx.Observable
 						.create(function(ob) {
@@ -216,20 +241,21 @@
 						methodsName && NotifyAction[methodsName](rs.data);
 					} catch(e) {
 						//TODO handle the exception
-						alert("code读取错误" + e.message); 
+						alert("code读取错误" + e.message);
 					}
 
 				});
 
 			function getNativeDeviceInfo() {
 				// 获取本地设备缓存信息
-				var t = 0, n = 3;
+				var t = 0,
+					n = 3;
 				//var data = devManager.get();
 				// 如果本地有 设备信息 则使用本地用户信息
 				//if(data.length !== 0) {
-					//t = 1e4;
+				//t = 1e4;
 				//} else {
-					//t = 0;
+				//t = 0;
 				//}
 				setTimeout(function _() {
 					P.GetAllDeviceInfoASync(function(rs) {
@@ -244,7 +270,7 @@
 						} else {
 							// 多次未获取到应用信息
 							plus.nativeUI.toast('获取本地设备信息异常');
-						} 
+						}
 					});
 				}, t);
 
@@ -258,7 +284,7 @@
 				//}
 				setTimeout(function _() {
 					var rs = P.GetAllDeviceRunStateSync();
-					if(!rs){
+					if(!rs) {
 						return;
 					}
 					rs = JSON.parse(rs);
@@ -273,20 +299,42 @@
 						// 多次未获取到应用信息
 						plus.nativeUI.toast('获取本地设备状态异常');
 					}
-				}, t); 
+				}, t);
 			}
-			
-			
-			
-			function appLoginFail(){
+
+			function appLoginFail() {
 				app.user.clear();
 				window.localStorage.setItem('_pwd_', '');
 				plus.storage.removeItem('dev_list');
 				plus.storage.removeItem('AllDeviceInfo');
 				plus.storage.removeItem('AllDeviceRun');
 				mui.toast("帐号存在异常，请重新登录");
-				app.user.get(function() {}); 
+				app.user.get(function() {});
 			}
+
+			// 更新本地用户信息
+			function updateUserInfo(data) {
+				if(data.vihiuser) {
+					data = data.vihiuser;
+				}
+				// 更新用户信息
+				app.user.set(data);
+				window.localStorage.setItem('_account_', data.account);
+			}
+
+			Rx.Observable.create(function(ob) {
+				// 监听用户登录成功消息
+				_B.on('login_success', function(data) {
+					ob.next(data.userInfo);
+				});
+				// 监听用户资料更改信息
+				_B.on('userinfo_update', function(data) {
+					ob.next(data.userInfo);
+				});
+
+			}).subscribe(function(userinfo) {
+				updateUserInfo(userinfo);
+			});
 		</script>
 	</body>
 
