@@ -314,7 +314,7 @@
 						</div>
 
 						<div class="device_show">
-							<div class="img" :style="{backgroundImage: 'url('+'file:////storage/emulated/0/CameraFamily/Thumbnail/'+dev.devid+'.jpeg'+')'}" @tap="openCamListWindow()">
+							<div class="img" :style="{backgroundImage: 'url('+dev.devimg+')'}" @tap="openCamListWindow()">
 
 							</div>
 							<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
@@ -482,7 +482,8 @@
 								"type": 1,
 								"signalfwd": "",
 								"signalfwdport": 0,
-								"online": 1
+								"online": 1,
+								"devimg": "",
 							},
 							localDev: {
 
@@ -531,17 +532,17 @@
 						var that = this;
 
 						// 本地 所有设备的信息
-//						var ALLD = new ni.Cache('AllDeviceInfo', [], {
-//							plus: true
-//						});
-//
-//						// 本地 所有设备的运行状态
-//						var ALLR = new ni.Cache('AllDeviceRun', [], {
-//							plus: true
-//						});
-//
-//						devManager = new DevManager(ALLD);
-//						runManager = new DevManager(ALLR);
+						//						var ALLD = new ni.Cache('AllDeviceInfo', [], {
+						//							plus: true
+						//						});
+						//
+						//						// 本地 所有设备的运行状态
+						//						var ALLR = new ni.Cache('AllDeviceRun', [], {
+						//							plus: true
+						//						});
+						//
+						//						devManager = new DevManager(ALLD);
+						//						runManager = new DevManager(ALLR);
 
 						//如果用户登录了 则  获取第一个设备
 						if(app.user.has()) {
@@ -585,7 +586,7 @@
 							}.bind(this));
 						},
 						// 点击消息按钮
-						onMessageTap: function(){
+						onMessageTap: function() {
 							mui.openWindow('../person/message/index.html');
 						},
 
@@ -609,7 +610,10 @@
 						},
 
 						openCamListWindow: function() {
-							plug.H5NativeBridge.StartDevicePlay(this.dev.devid);
+							plug.H5NativeBridge.StartDevicePlay(this.dev.devid, 0, 0, function() {
+								o.devimg = this._getDevImgByAndroid(o.devid);
+							}.bind(this));
+							//plug.H5NativeBridge.StartDevicePlay(this.dev.devid);
 						},
 
 						// 获取轮播广告图
@@ -639,7 +643,10 @@
 								if(err) {
 									return
 								}
-								data && (this.dev = data[0]);
+								if(data) {
+									this.dev = data[0]
+									this.dev.devimg = this._getDevImg(this.dev.devid);
+								}
 
 							}.bind(this), 1);
 						},
@@ -692,18 +699,18 @@
 						onDeviceSetTap: function() {
 							var id = this.dev.devid;
 
-//							var localInfo = devManager.selectByWhere(function(o) {
-//									return o.basicInfo && o.basicInfo.devid === id;
-//								}),
-//								runInfo = runManager.selectByWhere(function(o) {
-//									return o.devid = id
-//								});
+							//							var localInfo = devManager.selectByWhere(function(o) {
+							//									return o.basicInfo && o.basicInfo.devid === id;
+							//								}),
+							//								runInfo = runManager.selectByWhere(function(o) {
+							//									return o.devid = id
+							//								});
 
 							mui.openWindow('../smart/devices/camera_settings.html', 'camera_settings', {
 								extras: {
-//									localInfo: localInfo,
-//									runInfo: runInfo,
-									netInfo: this.dev
+									//									localInfo: localInfo,
+									//									runInfo: runInfo,
+									devInfo: this.dev
 								}
 							});
 						},
@@ -746,6 +753,14 @@
 								views: [this.$view.parent()],
 							});
 						},
+
+						_getDevImg: function(devid) {
+							if(this.$os.android) {
+								return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+							} else if(this.$os.ios) {
+								return app.ios.getSafeBoxPath() + "Documents/account_18718690160/assets" + devid + '.jpeg?t=' + new Date().getTime();
+							}
+						}
 					}
 				});
 			} catch(err) {

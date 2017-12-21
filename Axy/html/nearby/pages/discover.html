@@ -159,7 +159,7 @@
 								<p class="mui-ellipsis-2 app-font-size-28">{{item.content}}</p>
 								<div class="menu">
 									<div @tap.stop="onAvastrTap(item.account)">
-										<img class="avastr" :src="item.headimgurl" />
+										<img class="avastr img-lazy-load" :data-src="item.headimgurl" />
 										<span class="nickname app-font-size-28">{{item.nickname}}</span>
 									</div>
 									<div @tap.stop="onLikeTap(item)"> 

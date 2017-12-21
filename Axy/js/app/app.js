@@ -57,12 +57,12 @@ function addMethod(obj, name, fn) {
 (function(app) {
 	// 用户进行登录
 	app.user.login = function() {
-		
+
 	};
 	// 用户进行注销
 	app.user.logout = function() {
 		// 提示用户
-		
+
 		// 清除本地用户信息
 		app.user.clear();
 
@@ -82,14 +82,14 @@ function addMethod(obj, name, fn) {
 			// app.user.login();
 		}
 	};
-	
+
 	// 重载 user.get 如果传入function 则跳转登录并且登录成功会通知这个回调函数
-	addMethod(app.user,'get', function(fn){
-		
+	addMethod(app.user, 'get', function(fn) {
+
 		var u = null;
-		if(app.user.has()){
+		if(app.user.has()) {
 			u = app.user.get();
-			return typeof fn === 'function' ? fn(u): u;
+			return typeof fn === 'function' ? fn(u) : u;
 		}
 		return app.page && app.page.getLogin(fn);
 	});
@@ -164,16 +164,14 @@ function addMethod(obj, name, fn) {
 	app.device = device;
 }(window.app));
 
+(function(app) {
 
-(function(app){
-	
 	var net = {};
-	
-	
+
 	/**
 	 * 获取当前的网络类型
 	 */
-	net.getType = function(){
+	net.getType = function() {
 		var networkTypes = {};
 		networkTypes[plus.networkinfo.CONNECTION_UNKNOW] = "unknow"; //未知
 		networkTypes[plus.networkinfo.CONNECTION_NONE] = "none"; //未连接
@@ -184,28 +182,41 @@ function addMethod(obj, name, fn) {
 		networkTypes[plus.networkinfo.CONNECTION_CELL4G] = "4g"; //4g
 		return networkTypes[plus.networkinfo.getCurrentType()];
 	};
-	
+
 	/**
 	 * 增加网络变化监听
 	 * @param {net.TYPE} name 需要监听的名称 可选
 	 * @param {Function} fn 函数
 	 */
-	net.listen = function(name, fn){
-		if(typeof name === 'function'){
+	net.listen = function(name, fn) {
+		if(typeof name === 'function') {
 			fn = name;
 			name = "";
 		}
-		document.addEventListener('netchange', function(){
-			if(name && name !== net.getType()){
+		document.addEventListener('netchange', function() {
+			if(name && name !== net.getType()) {
 				return false;
 			}
 			fn(net.getType());
 		});
 	};
-	
+
 	app.net = net;
-	
-	
+
 }(window.app));
 
+(function(app) {
+	var ios = {};
 
+	var __iosSafeBoxPath = "";
+
+	// 获取ios沙盒地址
+	ios.getSafeBoxPath = function() {
+		if(!__iosSafeBoxPath) {
+			__iosSafeBoxPath = plus.io.convertLocalFileSystemURL("../../../../../../../") + '/';
+		}
+		return __iosSafeBoxPath;
+	}
+
+	app.ios = ios;
+}(window.app));

@@ -79,6 +79,13 @@
 		},callback);
 	};
 	
+	/**
+	 * 获取我的分享好友列表
+	 */
+	device.shareList = function(callback){
+		return ra("get", "/share/list", {},callback);
+	};
+	
 	
 	
 	

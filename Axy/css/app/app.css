@@ -269,3 +269,7 @@ a.mui-icon {
   height: 20px !important;
   width: 20px !important;
 }
+.anim_opacity {
+  animation: anim_opacity 1s;
+  -webkit-animation: anim_opacity 1s;
+}
