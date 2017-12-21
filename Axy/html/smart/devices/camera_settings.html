@@ -427,6 +427,12 @@
 								}
 								that.devInfo.location = data.content;
 								mui.toast('名称更新成功');
+								// 通知上层
+								_B.emit("update", {
+									info: that.devInfo
+								}, {
+									views: [that.$view.opener()]
+								});
 							});
 						}, {
 							title: "摄像机名称",

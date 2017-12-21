@@ -38,7 +38,6 @@
 		var account = window.localStorage.getItem("_account_");
 		return ra('get', '/device/delete/share/' + devid + '/user/' + account, {}, callback);
 	}
-
 	device.logs = {
 		/**
 		 * 摄像机日志列表
@@ -54,6 +53,50 @@
 			}, callback);
 		}
 	}
+
+	/**
+	 * 电力主机
+	 */
+	device.electric = {
+		// 当前状态
+		state: function(_id, callback) {
+			return ra('get', '/device/electric/state/' + _id, {}, callback);
+		},
+		// 告警日志
+		alarmlist: function(_id, pageNumber, callback, pageSize) {
+			return ra('get', '/alarm/electric/list', {
+				did: _id,
+				pageNumber: pageNumber,
+				pageSize: pageSize || 10
+			}, callback);
+		}
+	};
+	
+	/**
+	 * 设备分享
+	 * @param {String} did 设备主键
+	 * @param {Number} authorize 权限
+	 */
+	device.share = function(did, authorize, callback){
+		return ra("get", "/share/getVcode", {
+			did: did,
+			authorize: authorize
+		},callback);
+	};
+	
+	/**
+	 * 获取分享的设备
+	 * @param {String} code
+	 */
+	device.getShare = function(code, callback){
+		return ra("get", "/share/codeValidation", {
+			keystr: code
+		},callback);
+	};
+	
+	
+	
+	
 
 	_.device = device;
 

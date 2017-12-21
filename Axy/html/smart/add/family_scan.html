@@ -11,9 +11,6 @@
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 
 		<style type="text/css">
-			
-			
-			
 			html,
 			body,
 			.mui-content {
@@ -21,11 +18,9 @@
 				background-color: transparent;
 			}
 			
-			body{
-				background-color: rgba(0,0,0,0.3);
+			body {
+				background-color: rgba(0, 0, 0, 0.3);
 			}
-			
-			
 			
 			.scanRoom {
 				width: 7.2rem;
@@ -52,9 +47,6 @@
 				padding-bottom: 3px;
 				margin-bottom: 10px;
 			}
-			
-			
-			
 		</style>
 	</head>
 
@@ -74,8 +66,7 @@
 
 				<div class="tips app-font-size-28">
 					此二维码仅可以使用一次，有效期30分钟。
-					<br />
-					如二维码失效，请让家人重新生成。
+					<br /> 如二维码失效，请让家人重新生成。
 				</div>
 			</div>
 
@@ -91,7 +82,7 @@
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -101,7 +92,7 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
-			var _arr = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+			var _arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 			new Vue({
 				el: '#warpper',
 				data: function() {
@@ -112,65 +103,71 @@
 					};
 				},
 				watch: {
-					
+
 				},
 				mounted: function() {
-					
+
 				},
-				
+
 				plusReady: function() {
-					setTimeout(function(){
+					setTimeout(function() {
 						this.resetScan();
 					}.bind(this), 200);
 				},
 				methods: {
 					// 手动添加设备号
-					onPicTap: function(){
+					onPicTap: function() {
 						// this.flash = false;
 						this.closeScan();
 						// 选择图片二维码
-						this.$gallery(function(err, imgs){
-							plus.barcode.scan(imgs[0], this.onMarked.bind(this), function(err){
+						this.$gallery(function(err, imgs) {
+							plus.barcode.scan(imgs[0], this.onMarked.bind(this), function(err) {
 								return mui.toast('无法识别');
 							}, _arr);
 						}.bind(this), 1);
-						
+
 					},
-					resetScan: function(){
-						if(this.t && this.t >= 0){
+					resetScan: function() {
+						if(this.t && this.t >= 0) {
 							return;
 						}
 						this.closeScan();
 						this.initScan();
 						this.startScan();
-						this.t = setTimeout(function(){
+						this.t = setTimeout(function() {
 							window.clearTimeout(this.t);
 							this.t = -1;
 						}.bind(this), 1000);
-						
+
 					},
-					initScan: function(){
-						
+					initScan: function() {
+
 						var scan = new plus.barcode.Barcode('axy', _arr, {
-							frameColor: '#06C1AE',  
+							frameColor: '#06C1AE',
 							scanbarColor: '#06C1AE',
 						});
 						scan.onmarked = this.onMarked.bind(this);
 						this.scan = scan;
 					},
-					onMarked: function(type, result, file){
-						mui.alert(result);
+					onMarked: function(type, result, file) {
+						if(!(/\d{8}/.test(result))) {
+							this.startScan();
+							return mui.toast("扫描结果错误");
+						}
+						app.page.setResult({
+							code: result
+						}).close();
 					},
-					startScan: function(){
+					startScan: function() {
 						this.scan && (this.scan.start(), this.frist = false);
 					},
-					stopScan: function(){
+					stopScan: function() {
 						this.scan && this.scan.cancel();
 					},
-					closeScan: function(){
+					closeScan: function() {
 						this.scan && (this.scan.close(), this.scan = null, this.t = -1);
 					}
-					
+
 				}
 			});
 		</script>

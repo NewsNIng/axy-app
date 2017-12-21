@@ -57,7 +57,7 @@
 		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
 			<div class="mui-scroll  app-font-size-28">
 				<template v-for="o in items">
-					<div class="theme_item">
+					<div class="theme_item" @tap="onClickTap(o)">
 						<img :src="o.img" />
 						<div class="share">
 							<img src="../../../image/nearby/share_icon.png" />
@@ -77,6 +77,10 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
 		<script type="text/javascript" src="../../../js/dal/home.js" ></script>
+		
+		
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		
 		<script type="text/javascript">
 			new Vue({
 				el: ".mui-content",
@@ -106,7 +110,9 @@
 				},
 				methods: {
 					onClickTap: function(e) {
-
+						app.page.openBrowser({
+							url: e.link
+						});
 					},
 					_down: function() {
 						this.n = 1;

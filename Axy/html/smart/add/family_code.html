@@ -95,7 +95,7 @@
 				methods: {
 					onSaveTap: function() {
 						var code = this.code.trim();
-						var emsg = app.rules.testBy(/^\d{4}$/, code, "邀请码格式错误");
+						var emsg = app.rules.testBy(/^\d{8}$/, code, "邀请码格式错误");
 						if(emsg){
 							return mui.toast(emsg);
 						}

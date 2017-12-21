@@ -126,16 +126,19 @@
 			/*控制弹窗*/
 			
 			#controll {
+				position: fixed;
 				border-radius: 0;
 				left: 0;
 				bottom: 0;
 				width: 100%;
 				background-color: #F4F8FB;
 			}
-			#controll .qmenu{
+			
+			#controll .qmenu {
 				padding: 1.253333rem 0.826666rem;
 				background-color: #FFFFFF;
 			}
+			
 			#controll div.qmenu>div {
 				text-align: center;
 				display: inline-block;
@@ -171,9 +174,9 @@
 					<img src="../../../image/smart/devices/btn_Mute@3x.png" />
 					<h5 class="app-font-size-24">静音</h5>
 				</div>
-				
+
 			</div>
-			
+
 			<div class="app-font-size-28" style="height: 1.333333rem;line-height: 1.333333rem;clear: both;text-align: center; margin-top: 0.266666rem;background-color: #FFFFFF;">
 				<a href="#controll" class="app-color-333333">取消</a>
 			</div>
@@ -198,42 +201,40 @@
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
 						<div class="card" v-for="o,i in netDivList">
-							<div class="imgdiv" @tap="onCmTap(o.devid)" :style="{backgroundImage: 'url('+'file:////storage/emulated/0/CameraFamily/Thumbnail/'+o.devid+'.jpeg'+')'}">
+							<div class="imgdiv" @swipeleft="onSwipe($event, o)" @tap="onCmTap(o)" :style="{backgroundImage: 'url('+o.devimg+')'}">
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
 								<span class="app-color-main">{{o.location || o.devid}}</span>
 								<img @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
-								<img src="../../../image/smart/camera/history.png" />
+								<img @tap="onAlbmTap(o,i)" src="../../../image/smart/camera/history.png" />
 								<img @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
 								<img @tap="onSettingTap(o, i)" src="../../../image/smart/camera/setting.png" />
 							</div>
 
 						</div>
 					</div>
-					<!--<div v-show="active === 1">
-						<ul class="mui-table-view app-font-size-28 a1" v-for="o,i in zones">
+					<div v-show="active === 1">
+						<ul class="mui-table-view app-font-size-28 a1" v-for="o,i in devaccessroyList">
 							<li class="mui-table-view-cell" @tap="onZoneTap(o)">
-								<a>
+								<a class="mui-navigate-right">
 									<span class="left app-font-size-28 app-color-333333">
 								<img src="../../../image/smart/scenes/icon_Timing start@3x.png"/>
-								<span>{{o.zoneName}}</span>
+								<span>{{o.accessory.name}}</span>
 									</span>
-									<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main" @tap.stop="" :class="'mui-active'">
-								<div class="mui-switch-handle"></div>
-							</div></span>
+									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.accessory.enable ? "已启用" : "未启用"}}</span>
 								</a>
 							</li>
 							<li class="mui-table-view-cell">
 								<a>
 									<span class="app-font-size-28 app-color-9f9fa0">
-								主机: {{o.bdevName}}
+								主机: {{o.devName || o.accessory.devid}}
 							</span>
-									<span class="mui-badge app-color-main">运行正常</span>
+									<span class="mui-badge app-color-main">{{_getStateByCode(o.statusCode)}}</span>
 								</a>
 							</li>
 						</ul>
-					</div>-->
+					</div>
 				</template>
 				<template v-else>
 					<div class="nolog">
@@ -254,16 +255,15 @@
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		
-		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/devaccessory.js" ></script>
-		
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
-		
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
@@ -273,17 +273,19 @@
 			var devManager, runManager;
 
 			var _B = new ni.Broadcast();
-
 			
+			
+			var __stateCodearr = ["正常","失联","失压"];
+
 			var menuV = new Vue({
 				el: '#controll',
 				methods: {
-					onTap: function(state){
+					onTap: function(state) {
 						plus.nativeUI.showWaiting();
 						var dev = listV.controlDev;
-						dal.devparam.remotecontrol(dev.devid, dev.type, state, function(err, rs){
+						dal.devparam.remotecontrol(dev.devid, dev.type, state, function(err, rs) {
 							plus.nativeUI.closeWaiting();
-							if(err){
+							if(err) {
 								console.log(JSON.stringify(err));
 								return mui.toast("操作失败, 请检查设备");
 							}
@@ -292,9 +294,8 @@
 						});
 					}
 				}
-				
+
 			});
-			
 
 			var listV = new Vue({
 				el: '#box',
@@ -303,9 +304,9 @@
 						active: 0,
 						controlIndex: -1,
 						netDivList: [],
-						
+
 						tapIndex: -1,
-						
+
 						// 配件列表
 						devaccessroyList: [],
 
@@ -313,31 +314,41 @@
 				},
 
 				computed: {
-					controlDev: function(){
+					controlDev: function() {
 						return this.netDivList[this.controlIndex];
 					}
 				},
 
 				plusReady: function() {
+
 					var DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
-
-					this.netDivList = DEVD.data;
+					var devData = DEVD.data;
+					this.netDivList = devData.map(function(item) {
+						item.devimg = this._getDevImgByAndroid(item.devid);
+						return item;
+					}.bind(this));
 
 					this.$nextTick(function() {
 						mui('.mui-switch')['switch']();
 					});
-					
-					_B.on('delete', function(){
+
+					_B.on('delete', function() {
 						this.netDivList.splice(this.tapIndex, 1);
+					}.bind(this));
+
+					_B.on('update', function(data) {
+						this.$set(this.netDivList, this.tapIndex, data.info);
 					}.bind(this));
 
 				},
 				methods: {
 					// 摄像机点击
-					onCmTap: function(id) {
-						plug.H5NativeBridge.StartDevicePlay(id);
+					onCmTap: function(o) {
+						plug.H5NativeBridge.StartDevicePlay(o.devid, 0, 0, function() {
+							o.devimg = this._getDevImgByAndroid(o.devid);
+						}.bind(this));
 					},
 
 					// 空空如也 
@@ -347,7 +358,7 @@
 					// 标签切换
 					onActive: function(index) {
 						this.active = index;
-						if(index === 1 && this.devaccessroyList.length === 0){
+						if(index === 1 && this.devaccessroyList.length === 0) {
 							// 获取配件列表
 							this.getDevaccessroyData();
 						}
@@ -358,44 +369,42 @@
 					},
 					// 智能配件点击
 					onZoneTap: function(o) {
-						var type = this._getZoneType(o.ID);
-						console.log(type);
-						//type = 17; 
-						// 打开详情页
+						return alert(JSON.stringify(o));
 						app.page.openForResultBy('dev_' + type + '.html', 'dev_' + type, function(data) {
 							console.log(JSON.stringify(data));
 						}, {
 							info: o
 						});
 					},
-				
-	
+
 					// 设备设置
 					onSettingTap: function(o, i) {
 						this.tapIndex = i;
-						
+
 						var name = app.dev.findName(o.type);
-						
+
 						var url;
-						switch(name){
-							case "WG-100": {
-								url = "dev_WG-100.html";
-								break;
-							} 
-							
-							case "AX-903": {
-								url = "dev_AX-903.html";
-								break;
-							}
-							
-							default: {
-								url = "camera_settings.html";
-								break;
-							}
-						
+						switch(name) {
+							case "WG-100":
+								{
+									url = "dev_WG-100.html";
+									break;
+								}
+
+							case "AX-903":
+								{
+									url = "dev_AX-903.html";
+									break;
+								}
+
+							default:
+								{
+									url = "camera_settings.html";
+									break;
+								}
+
 						}
-						
-						
+
 						mui.openWindow(url, url, {
 							extras: {
 								devInfo: o
@@ -405,30 +414,55 @@
 
 					// 设备控制
 					onControlTap: function(o, i) {
-						if(o.online !== 1){
+						if(o.online !== 1) {
 							return mui.toast("设备不在线");
 						}
 						this.controlIndex = i;
 						mui('#controll').popover('show');
 					},
+
 					// 设备分享
-					onShareTap: function(o, i){
+					onShareTap: function(o, i) {
 						mui.openWindow("../../person/devshare/share.html", 'dev_share', {
 							extras: {
-								devInfo: o	
+								devInfo: o
 							}
 						});
 					},
-					
+
+					// 设备录像
+					onAlbmTap: function(o, i) {
+						mui.openWindow("../../person/collection/my_camera.html", 'my_camera', {
+							extras: {
+								devInfo: o
+							}
+						});
+					},
+
 					// 获取配件列表数据
-					getDevaccessroyData: function(){
-						dal.devaccessory.allacc(function(err, data){
-							if(err){
+					getDevaccessroyData: function() {
+
+						plus.nativeUI.showWaiting("正在获取配件...");
+
+						dal.devaccessory.allacc(function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
 								return mui.toast(err.message);
 							}
-							console.log(JSON.stringify(data));
-							
-						});
+							this.devaccessroyList = data;
+
+						}.bind(this));
+					},
+
+					onSwipe: function(e, o) {
+						console.log(JSON.stringify(e));
+					},
+
+					_getDevImgByAndroid: function(devid) {
+						return 'file:////storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+					},
+					_getStateByCode: function(code){
+						return __stateCodearr[code];
 					}
 				}
 			});

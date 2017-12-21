@@ -28,27 +28,27 @@
 				<li class="mui-table-view-cell">
 					<a class="">
 						<span>设备ID</span>
-						<span class="mui-badge">123456789</span>
+						<span class="mui-badge" v-text="devInfo.devid">123456789</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="onNameTap()">
 					<a class="mui-navigate-right">
 						<span>设备名称</span>
-						<span class="mui-badge">xx房间的智能插座</span>
+						<span class="mui-badge" v-text="devInfo.location || ''"></span>
 					</a>
 				</li>
 				<li class="mui-table-view-cell">
 					<a class="mui-navigate-right">
 						<span>绑定的摄像机</span>
-						<span class="mui-badge">状态指示灯</span>
+						<span class="mui-badge" v-text="devInfo.binding"></span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell" @tap="mui.openWindow('dev_electric_datasave.html','dev_electric_datasave');">
+				<li class="mui-table-view-cell" @tap="onDataSaveTap()">
 					<a class="mui-navigate-right">
 						<span>数据保存记录</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell" @tap="mui.openWindow('alarm_log.html','alarm_log');">
+				<li class="mui-table-view-cell" @tap="onArarmlogTap()">
 					<a class="mui-navigate-right">
 						<span>告警消息记录</span>
 					</a>
@@ -67,8 +67,10 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -80,12 +82,62 @@
 				el: '.mui-content',
 				data: function() {
 					return {
-
+						devInfo: {
+							"id": 0,
+							"streamfwdport": 0,
+							"location": "",
+							"devid": "",
+							"relation": 0,
+							"streamfwd": "",
+							"type": 0,
+							"signalfwd": "",
+							"signalfwdport": 0,
+							"online": 0,
+							"binding" : "",
+						},
 					};
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
+				},
 				methods: {
-
+					onArarmlogTap: function(){
+						mui.openWindow("dev_AX-903_alarmlog.html", "dev_AX-903_alarmlog", {
+							extras: {
+								_id: this.devInfo.id	
+							}
+						});
+					},
+					onDataSaveTap: function(){
+						mui.openWindow("dev_AX-903_datasave.html", "dev_AX-903_datasave", {
+							extras: {
+								_id: this.devInfo.id	 
+							}
+						});
+					},
+					
+					// 设备名称点击
+					onNameTap: function(){
+						var that = this;
+						app.page.getInput(function(data) {
+							dal.devparam.devname(that.devInfo.devid, that.devInfo.type, data.content, function(err, rs) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.devInfo.location = data.content;
+								mui.toast('名称更新成功');
+								// 通知上层的上层
+								_B.emit("update", {
+									info: that.devInfo
+								}, {
+									views: [that.$view.opener().opener()]
+								});
+							});
+						}, {
+							title: "摄像机名称",
+							tips: that.devInfo.location,
+						});
+					}
 				}
 			});
 		</script>

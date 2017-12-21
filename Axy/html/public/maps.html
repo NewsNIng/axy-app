@@ -90,7 +90,9 @@
 						}, "address");
 					},
 					point: function(value) {
-						plus.maps.Map.reverseGeocode(value, {}, function(p) {
+						plus.maps.Map.reverseGeocode(value, {
+//							coordType: "gcj02"
+						}, function(p) {
 							console.log(JSON.stringify(p));
 							this.address = p.address;
 							this.longitude = p.coord.longitude;
@@ -155,7 +157,6 @@
 						//							this.marker && this.marker.setPoint(point);
 						//						}.bind(this);
 						this.map.onstatuschanged = function(event) {
-							console.log(JSON.stringify(event));
 							this.point = event.center;
 						}.bind(this);
 					},
@@ -290,13 +291,13 @@
 
 						searchObj.setPageCapacity(20);
 
-						plus.geolocation.getCurrentPosition(function(p) {
-							console.log(JSON.stringify(p));
-							//searchObj.poiSearchNearBy(p.address.street, point, 25);
-
-						}, function() {
-
-						});
+//						plus.geolocation.getCurrentPosition(function(p) {
+//							console.log(JSON.stringify(p));
+//							//searchObj.poiSearchNearBy(p.address.street, point, 25);
+//
+//						}, function() {
+//
+//						});
 					}
 				}
 			});

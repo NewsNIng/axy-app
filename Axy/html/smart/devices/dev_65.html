@@ -3,13 +3,10 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>声光报警器</title>
+		<title>门磁探测器</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
-		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
-		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
-		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
 
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
@@ -44,11 +41,11 @@
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">声光报警器</h1>
+				<h1 class="mui-title">门磁探测器</h1>
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/icon/btn_Acoustoopticalarm@3x.png' : '../../../image/smart/devices/icon/btn_Acoustoopticalarm1@3x.png') + ')'">
+				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/icon/btn_Infrareddetector@3x.png' : '../../../image/smart/devices/icon/btn_Infrareddetector1@3x.png') + ')'">
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark"></div>
 
@@ -62,7 +59,7 @@
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">xx房间的智能插座</span>
+							<span class="mui-badge">xx家里的门磁探测器</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -74,13 +71,13 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>防区类型</span>
-							<span class="mui-badge">火警防区</span>
+							<span class="mui-badge">出入防区</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
 							<span>告警延迟时间</span>
-							<span class="mui-badge" v-text="devInfo.alarmDelayTime+'s'"></span>
+							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
 						</a>
 					</li>
 				</ul>
@@ -107,6 +104,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
         <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
+
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
@@ -119,15 +117,9 @@
 					return {
 						state: true, // 当前状态
 						// 告警延迟时间
+						alarmDelayTime: 0,
 						// 弹框
 						pick: null,
-						devInfo: {
-							devId: "123456789",
-							devName: "声光报警器1",
-							bindDev: "AX-360主机",
-							zoneType: "火警防区",
-							alarmDelayTime: 0,
-						},
 						dev: {
 							"alarmPlan": [{
 									"end": "19:50:00",
@@ -225,10 +217,10 @@
 					onAlarmTap: function() {
 						var that = this;
 
-						this.pick.pickers[0].setSelectedValue(this.devInfo.alarmDelayTime);
+						this.pick.pickers[0].setSelectedValue(this.alarmDelayTime);
 
 						var fn = function(s) {
-							that.devInfo.alarmDelayTime = s;
+							that.alarmDelayTime = s;
 						};
 
 						this.pick.show(function(items) {
@@ -236,7 +228,7 @@
 						}, function(items) {
 
 						});
-					}
+					},
 				}
 			});
 		</script>
