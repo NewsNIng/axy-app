@@ -222,7 +222,7 @@
 					</div>
 					<div v-show="active === 1">
 						<ul class="mui-table-view app-font-size-28 a1" v-for="o,i in devaccessroyList">
-							<li class="mui-table-view-cell" @tap="onZoneTap(o)">
+							<li class="mui-table-view-cell" @tap="onZoneTap(o, i)">
 								<a class="mui-navigate-right">
 									<span class="left app-font-size-28 app-color-333333">
 								<img src="../../../image/smart/scenes/icon_Timing start@3x.png"/>
@@ -435,10 +435,22 @@
 						mui.openWindow('../add/add_device.html');
 					},
 					// 智能配件点击
-					onZoneTap: function(o) {
-						return alert(JSON.stringify(o));
-						app.page.openForResultBy('dev_' + type + '.html', 'dev_' + type, function(data) {
-							console.log(JSON.stringify(data));
+					onZoneTap: function(o, i) {
+						var that = this;
+						var actionDir = {
+							del: function(){
+								that.devaccessroyList.splice(i, 1);
+							},
+							update: function(info){
+								that.$set(that.devaccessroyList, i, info);
+							},
+							unbind: function(){
+								that.devaccessroyList.splice(i, 1);
+							}
+						}
+//						alert(JSON.stringify(o));
+						app.page.openForResultBy('dev_' + o.accessory.type + '.html', 'dev_' + o.accessory.type, function(data) {
+							actionDir[data.action](data.info);
 						}, {
 							info: o
 						});

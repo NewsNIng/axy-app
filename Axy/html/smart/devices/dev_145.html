@@ -56,31 +56,41 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>设备ID</span>
-							<span class="mui-badge">123456789</span>
+							<span class="mui-badge" v-text="devInfo.accessory.id"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">xx房间的隐形防盗器</span>
+							<span class="mui-badge" v-text="devInfo.accessory.name"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>绑定主机</span>
-							<span class="mui-badge">AX-360主机</span>
+							<span class="mui-badge" v-text="devInfo.devName"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>防区类型</span>
-							<span class="mui-badge">周边防区</span>
+							<span class="mui-badge" v-text="zonetypes[devInfo.accessory.zonetype]"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
 							<span>告警延迟时间</span>
-							<span class="mui-badge" v-text="alarmDelayTime+'s'">30S</span>
+							<span class="mui-badge" v-text="devInfo.accessory.delay+'s'"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a>
+							<span>启用此设备</span>
+							<span class="mui-badge">
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': devInfo.accessory.enable}" ref="switch1">
+									<div class="mui-switch-handle"></div>
+								</div>
+							</span>
 						</a>
 					</li>
 				</ul>
@@ -102,7 +112,8 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
@@ -124,80 +135,79 @@
 						// 弹框
 						pick: null,
 						state: true, // 当前状态
-						dev: {
-							"alarmPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"basicInfo": {
-								"appversion": "2017-09-28 09:36:04",
-								"devName": "104GN",
-								"devType": 4166,
-								"devid": "VH-104GN-2017061500043",
-								"hwversion": "2015-11-01 10:13:43"
+						
+						// 防区类型
+						zonetypes: ["Normal Zones",
+							"Activity Zones",
+							"Periphery Zones",
+							"SOS Zones",
+							"Fires Zones",
+							"Gas Zones",
+							"Tamper Zones",
+							"Hostage Zones",
+							"Low Power",
+							"Off Line",
+							"Lost AC",
+							"24H"
+						], 
+						
+						// 设备信息
+						devInfo: {
+							"accessory": {
+								"id": "14255286",
+								"devid": "VH-104GN-2017061500015",
+								"name": "123",
+								"action": 41990,
+								"type": 20,
+								"delay": 0,
+								"zonetype": 0,
+								"chnID": 0,
+								"externChn": true,
+								"x": 0,
+								"y": 0,
+								"ptzset": 0,
+								"xmlDescrition": "",
+								"enableDelete": true,
+								"enable": true
 							},
-							"netInfo": {
-								"ip": "192.168.1.23",
-								"ssid": "aaa2.4",
-								"type": 0
-							},
-							"onvif": [{
-									"ch": 0,
-									"name": "第一个外部通道",
-									"online": 1
-								},
-								{
-									"ch": 1,
-									"name": "第二个外部通道",
-									"online": 1
-								}
-							],
-							"recordPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"zones": [{
-									"ID": "81457896",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								},
-								{
-									"ID": "81457897",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								}
-							]
+							"devName": "",
+							"devType": 4166,
+							"statusCode": 0
 						},
 					};
 				},
 				mounted: function() {
+					this.$refs.switch1.addEventListener("toggle", function(event) {
+						if(this.isErr) {
+							this.isErr = false;
+							return;
+						}
+						var that = this;
+						// 发送更改请求
+						plus.nativeUI.showWaiting();
+						this.devInfo.accessory.enable = event.detail.isActive;
+						dal.devaccessory.enable(this.devInfo.accessory, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								that.isErr = true;
+								mui(that.$refs.switch1).switch().toggle();
+								that.devInfo.accessory.enable = !that.devInfo.accessory.enable;
+								return mui.toast(err.message);
+							}
+							mui.toast("操作成功！");
+						})
+					}.bind(this));
+					
 					this.pick = new mui.PopPicker({
 						layer: 1,
 						more: false,
 					});
 					this.pick.setData(pick_data[1]);
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					this.devInfo = this.$view.info;
+					console.log(JSON.stringify(this.devInfo));
+				},
 				methods: {
 					// 切换开关
 					toggleSwitch: function() {
@@ -231,6 +241,28 @@
 							fn(items[0].value);
 						}, function(items) {
 
+						});
+					},
+					//修改名称
+					onNameTap: function() {
+						var that = this;
+						app.page.getInput(function(data1) {
+							plus.nativeUI.showWaiting();
+							dal.devaccessory.name(that.devInfo.accessory.id, that.devInfo.accessory.type, that.devInfo.accessory.devid, that.devInfo.devType, data1.content, that.devInfo.accessory.name, that.devInfo.accessory.action, that.devInfo.accessory.delay, that.devInfo.accessory.zonetype, that.devInfo.accessory.chnID, that.devInfo.accessory.externChn, that.devInfo.accessory.x, that.devInfo.accessory.y, that.devInfo.accessory.ptzset, function(err, data) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("修改成功！");
+								that.devInfo.accessory.name = data1.content;
+								app.page.setResult({
+									action: "update",
+									info: that.devInfo
+								});
+							});
+						}, {
+							title: "设备名称",
+							tips: that.devInfo.accessory.name,
 						});
 					},
 				}
