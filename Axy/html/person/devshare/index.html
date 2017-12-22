@@ -110,56 +110,32 @@
 			</template>
 			<!--共享设备列表-->
 			<template v-else>
-
-				<div class="room app-font-size-28" data-time="安心云1号摄像机">
-					<div class="app-font-size-28 mui-table-view-cell">
-						<div class="mui-slider-right mui-disabled">
+				
+				
+				
+				<div class="room app-font-size-28" v-for="o,i in list" :data-time="o.name || o.id">
+					<div class="app-font-size-28 mui-table-view-cell" v-for="oo,ii in o.list">
+						<div class="mui-slider-right mui-disabled" @tap="onDelTap(oo, ii, $event)">
 							<a class="mui-btn mui-btn-red">删除</a>
 						</div>
-						<div class="mui-slider-handle">
-							<img src="../../../image/common/agree_selected.png" />
-							<span>NewsNing</span>
-						</div>
-					</div>
-					<div class="app-font-size-28 mui-table-view-cell">
-						<div class="mui-slider-right mui-disabled">
-							<a class="mui-btn mui-btn-red">删除</a>
-						</div>
-						<div class="mui-slider-handle">
-							<img src="../../../image/common/agree_selected.png" />
-							<span>NewsNing</span>
+						<div class="mui-slider-handle" @tap="onUserTap(oo)">
+							<img :data-src="oo.headimgurl" class="img-lazy-load" /> 
+							<span v-text="oo.nickname"></span>
 						</div>
 					</div>
 				</div>
 
-				<div class="room app-font-size-28" data-time="安心云2号摄像机">
-
-					<div class="app-font-size-28 mui-table-view-cell">
-						<div class="mui-slider-right mui-disabled">
-							<a class="mui-btn mui-btn-red">删除</a>
-						</div>
-						<div class="mui-slider-handle">
-							<img src="../../../image/common/agree_selected.png" />
-							<span>NewsNing</span>
-						</div>
-					</div>
-
-					<div class="app-font-size-28 mui-table-view-cell">
-						<div class="mui-slider-right mui-disabled">
-							<a class="mui-btn mui-btn-red">删除</a>
-						</div>
-						<div class="mui-slider-handle">
-							<img src="../../../image/common/agree_selected.png" />
-							<span>NewsNing</span>
-						</div>
-					</div>
-
-				</div>
+				
 			</template>
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
+
+		<script type="text/javascript" src="../../../js/lib/md5.min.js" ></script>
+		<script type="text/javascript" src="../../../js/common/imagelazyload.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -168,13 +144,74 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						list: []
+						list_: []
 					};
 				},
+				
+				computed: {
+					list: function(){
+						var dir = {}, arr = [];
+						this.list_.forEach(function(item){
+							if(!dir[item.devid]){
+								dir[item.devid] = {
+									id: item.devid,
+									name: item.location,
+									list: []
+								};
+							}
+							dir[item.devid].list.push(item);
+						});
+						for(var i in dir){
+							arr.push(dir[i]);
+						}
+						
+						return arr;
+					}
+				},
+				
+				mounted: function(){
+					this.getList();
+				},
+				
 				methods: {
 					onShareTap: function(){
 						// 跳转到主机列表(我的设备)
 						mui.openWindow('../../smart/devices/dev_my_list.html');
+					},
+					
+					// 获取列表
+					getList: function(){
+						dal.device.shareList(function(err, data){
+							data && data.length && (this.list_ = data);
+							this.$nextTick(function(){
+								imagelazyload();  
+							});
+						}.bind(this));
+					},
+					
+					// 用户点击
+					onUserTap: function(o){
+						console.log(JSON.stringify(o));
+					},
+					// 删除点击
+					onDelTap: function(o, i, e){
+						mui.confirm("确定要删除对该用户的分享吗？", "", ["删除", "取消"], function(e) {
+							if(e.index === 0) {
+								dal.device[methodName](dev.devid, function(err, rs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast('删除设备失败');
+									}
+									_B.emit("delete", {}, {
+										views: [that.$view.opener()]
+									});
+									that.$view.close();
+									return mui.toast('删除设备成功');
+								});
+							} else {
+								plus.nativeUI.closeWaiting();
+							}
+						});
 					}
 				}
 			});

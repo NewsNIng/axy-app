@@ -9,6 +9,11 @@
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+
 		<style type="text/css">
 			html,
 			body,
@@ -114,6 +119,7 @@
 			
 			.menudiv>span {
 				flex-grow: 1;
+				max-width: 50% !important;
 				white-space: nowrap;
 				overflow: hidden;
 			}
@@ -268,14 +274,20 @@
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 			var devManager, runManager;
 
 			var _B = new ni.Broadcast();
-			
-			
-			var __stateCodearr = ["正常","失联","失压"];
+
+			var wayPick;
+
+			var __stateCodearr = ["正常", "失联", "失压"];
 
 			var menuV = new Vue({
 				el: '#controll',
@@ -319,6 +331,14 @@
 					}
 				},
 
+				mounted: function() {
+					wayPick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+
+				},
+
 				plusReady: function() {
 
 					var DEVD = new ni.Cache('dev_list', [], {
@@ -326,7 +346,8 @@
 					});
 					var devData = DEVD.data;
 					this.netDivList = devData.map(function(item) {
-						item.devimg = this._getDevImgByAndroid(item.devid);
+						item.devimg = this._getDevImg(item.devid);
+						item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
 						return item;
 					}.bind(this));
 
@@ -346,9 +367,55 @@
 				methods: {
 					// 摄像机点击
 					onCmTap: function(o) {
-						plug.H5NativeBridge.StartDevicePlay(o.devid, 0, 0, function() {
-							o.devimg = this._getDevImgByAndroid(o.devid);
-						}.bind(this));
+						var that = this;
+
+						if(o.online !== 1) {
+							return mui.toast("设备不在线");
+						}
+
+						Rx.Observable.create(function(ob) {
+							if(o.type >= 0x1040 && o.type <= 0x1080) {
+								// 动态设置设备通道
+								wayPick.setData([{
+										text: '通道一',
+										value: 0
+									},
+									{
+										text: '通道二',
+										value: 1
+									},
+									{
+										text: '通道三',
+										value: 2
+									},
+									{
+										text: '通道四',
+										value: 3
+									}
+								]);
+								// 重置弹出层到第一个通道位置
+								wayPick.pickers[0].setSelectedValue(1);
+								// 显示通道选择器
+								wayPick.show(function(items) {
+									ob.next({
+										b: items[0].value
+									});
+								}, function(items) {
+									// 取消 或者 隐藏
+								});
+							} else {
+								ob.next({
+									b: 0
+								});
+							}
+						}).subscribe(function(data) {
+							var w1 = data.b;
+							var w2 = o.type === 0x1046 ? 1 : 0;
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, function() {
+								o.devimg = that._getDevImg(o.devid);
+							});
+						});
+
 					},
 
 					// 空空如也 
@@ -371,17 +438,17 @@
 					onZoneTap: function(o, i) {
 						var that = this;
 						var actionDir = {
-							del: function(){
+							del: function() {
 								that.devaccessroyList.splice(i, 1);
 							},
-							update: function(info){
+							update: function(info) {
 								that.$set(that.devaccessroyList, i, info);
 							},
-							unbind: function(){
+							unbind: function() {
 								that.devaccessroyList.splice(i, 1);
 							}
 						}
-//						alert(JSON.stringify(o));
+						//						alert(JSON.stringify(o));
 						app.page.openForResultBy('dev_' + o.accessory.type + '.html', 'dev_' + o.accessory.type, function(data) {
 							actionDir[data.action](data.info);
 						}, {
@@ -470,10 +537,16 @@
 						console.log(JSON.stringify(e));
 					},
 
-					_getDevImgByAndroid: function(devid) {
-						return 'file:////storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+
+					_getDevImg: function(devid) {
+						if(this.$os.android) {
+							return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+						} else if(this.$os.ios) {
+							return app.ios.getSafeBoxPath() + "Documents/account_18718690160/assets" + devid + '.jpeg?t=' + new Date().getTime();
+						}
 					},
-					_getStateByCode: function(code){
+
+					_getStateByCode: function(code) {
 						return __stateCodearr[code];
 					}
 				}

@@ -556,7 +556,6 @@
 	 */
 	devaccessory.devDelete = function(accessory, devType, callback) {
 		accessory.devType = devType;
-		alert(JSON.stringify(accessory));
 		return ra("post", "/devaccessory/delete", accessory, callback);
 	}
 

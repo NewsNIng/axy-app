@@ -21,13 +21,13 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-		return;
+		//return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		return;
+		//return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
@@ -175,11 +175,11 @@
 	 * 播放设备音视频
 	 * @param {Number} deviceid 设备ID
 	 * @param {Number} way 播放通道，如果是单通道默认为0
-	 * @param {Number} way2  播放通道2，如果是单通道默认为0
+	 * @param {Number} way2  内部通道或者外部通道 0 -- 内部通道 1-- 外部通道 通道号从0开始 除104GN外其他的都默认为内部通道
 	 */
 	pgn.StartDevicePlay = function(deviceid, way, way1, sf, ff) {
 		typeof way === 'undefined' && (way = 0);
-		typeof way1 === 'undefined' && (way1 = 0);
+		typeof way1 === 'undefined' && (way1 = 1);
 		return pg.asyncExec(N, 'StartDevicePlay', [deviceid, way, way1], sf, ff);
 	};
 
@@ -381,6 +381,16 @@
 	// 断开连接
 	pgn.DisconnectWG100 = function(){
 		return pg.syncExec(N, 'DisconnectWG100', []);
+	}
+	
+	
+	/**
+	 * 获取指定摄像机在指定时间内的本地录像和截图记录
+	 * @param {String} deviceID 设备id 为空时表示所有摄像机
+	 * @param {Strintg} createTime 要求格式：“yyyy-MM-dd”,为空时表示搜索结果不限制时间区间
+	 */
+	pgn.GetLocalRecordInfoSync = function(deviceID, createTime){
+		return pg.syncExec(N, 'GetLocalRecordInfoSync', [deviceID, createTime]);
 	}
 
 

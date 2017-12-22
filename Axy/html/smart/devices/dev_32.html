@@ -100,7 +100,7 @@
 				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
 			</footer>-->
-			<dev-footer :accessory="devInfo.accessory" :devType="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind()">
+			<dev-footer :accessory="devInfo.accessory" :devtype="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind()">
 
 			</dev-footer>
 		</div>
@@ -190,7 +190,7 @@
 						// 发送更改请求
 						plus.nativeUI.showWaiting();
 						this.devInfo.accessory.enable = event.detail.isActive;
-						dal.devaccessory.enable(this.devInfo.accessory, function(err, data) {
+						dal.devaccessory.enable(this.devInfo.accessory, this.devInfo.devType, function(err, data) {
 							plus.nativeUI.closeWaiting();
 							if(err) {
 								that.isErr = true;
@@ -247,10 +247,17 @@
 					onAlarmTap: function() {
 						var that = this;
 
-						this.pick.pickers[0].setSelectedValue(this.alarmDelayTime);
+						this.pick.pickers[0].setSelectedValue(this.devInfo.accessory.delay);
 
 						var fn = function(s) {
-							that.alarmDelayTime = s;
+							// 发起请求
+							dal.devaccessory.delay(that.devInfo.accessory, that.devInfo.devType, s, function(err, data) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("修改成功！");
+								that.devInfo.accessory.delay = s;
+							});
 						};
 
 						this.pick.show(function(items) {

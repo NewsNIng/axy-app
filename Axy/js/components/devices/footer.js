@@ -3,7 +3,7 @@
 Vue && Vue.component('dev-footer', {
 	template: '<footer class="app-font-size-28"><div class="app-color-main-dark" @tap="onDelTap()">删除配件</div><div @tap="onUnBindTap()">解绑主机</div></footer>',
 	//	props: ["deviceid", "comid"],
-	props: ["accessory", "devType"],
+	props: ["accessory", "devtype"],
 	methods: {
 		onDelTap: function() {
 			mui.confirm("删除后将无法关联主机，\n确定要删除吗？", "", ['残忍删除', '我再看看'], function(e) {
@@ -18,9 +18,8 @@ Vue && Vue.component('dev-footer', {
 		},
 
 		_delDevice: function() {
-			this.w = plus.nativeUI.showWaiting();
 			plus.nativeUI.showWaiting();
-			dal.devaccessory.devDelete(this.accessory, this.devType, function(err, data) {
+			dal.devaccessory.devDelete(this.accessory, this.devtype, function(err, data) {
 				plus.nativeUI.closeWaiting();
 				if(err) {
 					return mui.toast(err.message);

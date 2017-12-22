@@ -175,7 +175,7 @@
 				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
 			</footer>-->
-			<dev-footer :accessory="devInfo.accessory" :devType="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind()">
+			<dev-footer :accessory="devInfo.accessory" :devtype="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind()">
 
 			</dev-footer>
 		</div>
@@ -257,7 +257,7 @@
 						// 发送更改请求
 						plus.nativeUI.showWaiting();
 						this.devInfo.accessory.enable = event.detail.isActive;
-						dal.devaccessory.enable(this.devInfo.accessory, function(err, data) {
+						dal.devaccessory.enable(this.devInfo.accessory, this.devInfo.devType, function(err, data) {
 							plus.nativeUI.closeWaiting();
 							if(err) {
 								that.isErr = true;
@@ -274,6 +274,7 @@
 				plusReady: function() {
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
+					getState();
 				},
 				methods: {
 					
@@ -325,6 +326,15 @@
 							tips: that.devInfo.accessory.name,
 						});
 					},
+					// 获取甲醛探测器状态
+					getState: function() {
+						dal.devaccessory.formaldehydedetector(this.devInfo.accessory.id, this.devInfo.accessory.name, this.devInfo.accessory.devId, this.devInfo.devType, function(err, data) {
+							if(err){
+								return mui.toast(err.message);
+							}
+							console.log(JSON.stringify(data));
+						});
+					}
 				}
 			});
 		</script>

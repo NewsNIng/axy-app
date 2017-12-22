@@ -93,6 +93,7 @@
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -194,15 +195,21 @@
 					// 手机号点击
 					onTelphoneTap: function() {
 						// 如果未绑定
-						if(!this.telphone){
-							// 跳转绑定
-							console.log("// 跳转绑定");
-							
-						}else{
-							// 修改绑定
-							console.log("// 修改绑定");
-							
-						}
+//						if(!this.tel) {
+//							// 跳转绑定
+//							console.log("// 跳转绑定");
+//
+//						} else {
+//							// 修改绑定
+//							console.log("// 修改绑定");
+//
+//						}
+
+						app.page.openForResultBy("bind_tel.html", "bind_tel", function(data) {
+
+						},{
+							tel: this.telphone 
+						});
 					},
 				}
 			})

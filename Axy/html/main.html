@@ -194,17 +194,23 @@
 					// 获取当前应用版本
 					plus.runtime.getProperty(plus.runtime.appid, function(info) {
 						var appVersion = version2number(info.version);
-						dal.system.update(appVersion, function(err, data) {
+						dal.system.update(info.version, function(err, data) {
 							if(err) {
 								return mui.toast(err.message);
 							}
+							
+							if(!data){
+								return;
+							}
 							var newAppVersion = version2number(data.version);
+							
 							if(newAppVersion > appVersion) {
 								var filePath = data.path; 
 								// 判断是否是更新资源文件
 								if(!rsmanager.isHotRresource(filePath)) {
 									return mui.alert("非更新资源文件\n" + filePath);
 								}
+								
 								rsmanager.install(filePath, function(succ) {
 									//alert(succ); 
 								}, { 
@@ -225,7 +231,7 @@
 				});
 				
 				//plus.webview.create('zeus.html');
-			}, 3000); //3s 后检查更新
+			}, 1000); //3s 后检查更新
 			
 			
 			

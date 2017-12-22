@@ -4,16 +4,21 @@
 	
 	system.update = function(version, callback){
 		 
-		mui.getJSON("http://192.168.1.193:8360/api/update", {
+//		mui.getJSON("http://192.168.1.193:8360/api/update", {
+//			version: version
+//		}, function(rs){
+//			
+//			if(rs.code !== 1000){
+//				callback(rs);
+//			}else{
+//				callback(null, rs.data);
+//			}
+//		});
+//		
+		
+		return ra('get', '/app/appversion', {
 			version: version
-		}, function(rs){
-			
-			if(rs.code !== 1000){
-				callback(rs);
-			}else{
-				callback(null, rs.data);
-			}
-		});
+		}, callback);
 
 	}
 	

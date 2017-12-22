@@ -14,6 +14,8 @@
 		<link rel="stylesheet" href="../../../css/lib/mui.dtpicker.css" />
 		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 
+		<link rel="stylesheet" href="../../../css/lib/mui.zoom.css" />
+
 		<style type="text/css">
 			html,
 			body,
@@ -24,7 +26,7 @@
 			.tabroom {
 				position: relative;
 				background-color: #F4F8FB;
-				z-index: 997;
+				z-index: 10;
 			}
 			
 			.tabroom:after {
@@ -47,6 +49,7 @@
 			}
 			
 			.tabroom>div {
+				overflow: hidden;
 				float: left;
 				width: 50%;
 				text-align: center;
@@ -54,7 +57,9 @@
 				border-bottom: 1px solid #E5E6E7;
 			}
 			
-			
+			.tabroom span {
+				line-height: 1.2rem;
+			}
 			/*日期*/
 			
 			.tips {
@@ -62,36 +67,77 @@
 				clear: both;
 			}
 			
-			
-			.imgroom{
+			.imgroom {
 				padding: 0.3rem 0.066666rem;
 				position: relative;
 			}
 			
-			.imgroom>div{
+			.imgroom>div {
+				background-color: #9F9FA0;
 				width: 2.333333rem;
 				height: 2.333333rem;
-				background-color: burlywood;
 				float: left;
-				margin: 0.066666rem;
-				
-				background-image: url(../../../image/home/like_a.png);
+				margin: 0.066665rem;
+				/*background-image: url(../../../image/home/like_a.png);*/
 				background-position: center;
 				background-size: cover;
 				background-repeat: no-repeat;
 				position: relative;
 			}
-			.imgroom:after{
+			
+			.imgroom:after {
 				content: '';
-				display: block; 
+				display: block;
 				clear: both;
 			}
-			.imgroom>div:after{
-				content: attr(data-hs);
-				position: absolute;
-				right: 0.133333rem;
-				bottom: 0;
+			
+			.imgroom>div.video {
+				background-size: 0;
+				background-color: #FFFFFF;
 			}
+			
+			.imgroom>div.video:after {
+				content: "";
+				position: absolute;
+				left: 0;
+				top: 0;
+				background-color: rgba(0, 0, 0, 0.35);
+				background-image: url(../../../image/person/devshare/1_1.png);
+				background-size: 50%;
+				background-repeat: no-repeat;
+				background-position: center;
+				width: 100%;
+				height: 100%;
+			}
+			
+			
+			.video-root{
+				position: fixed;
+				left: 0;
+				top: 0;
+				z-index: 66;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0,0,0,0.75);
+			}
+			
+			.video-root .video-room{
+				position: fixed;
+				left: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+				
+				
+				width: 10rem;
+				height: 5.625rem;
+			}
+			
+				.video-root .video-room video{
+				width: 100%;
+				height: 100%;
+			}
+			
 		</style>
 
 	</head>
@@ -105,9 +151,9 @@
 		<div class="mui-content">
 			<div class="tabroom app-color-333333" ref="tabroom">
 				<div @tap="onDevTap()">
-					<span class="app-font-size-28">{{devName}}</span>
+					<span class="app-font-size-28">{{devName || '全部设备'}}</span>
 					<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
-				</div> 
+				</div>
 
 				<div @tap="onDateTap()">
 					<span class="app-font-size-28">{{dateText}}</span>
@@ -115,53 +161,109 @@
 				</div>
 
 			</div>
+			
+			<div class="video-root" v-if="videoplay" @tap.self="videoplay=false">
+				<div class="video-room"> 
+					<video :src="videosrc" controls="controls" autoplay="autoplay" playsinline webkit-playsinline></video>	
+				</div>
+			</div>
 
 			<div class="wrapper" ref="wrapper">
 
 				<div>
-					<div class="app-font-size-24 app-color-333333 tips">2015/11/11</div>
-					<div class="imgroom app-font-size-24 app-color-white">
-						<div v-for="o,i in 10" data-hs="00:02"></div>
-					</div>
-					
-					<div class="app-font-size-24 app-color-333333 tips">2015/11/11</div>
-					<div class="imgroom app-font-size-24 app-color-white">
-						<div v-for="o,i in 10"></div>
-					</div>
-				</div>
 
+					<template v-for="o,i in record">
+						<div class="app-font-size-24 app-color-333333 tips">{{o.day}}</div>
+						<div class="imgroom app-font-size-24 app-color-white">
+							<template v-for="oo,ii in o.list">
+								<template v-if="isVideo(oo.fileName)">
+									<div class="video" @tap="onVideoTap(oo)"></div>
+								</template>
+								<template v-else>
+									<div :style="{backgroundImage: 'url('+ fixPath(oo.fileName) +')'}" :data-preview-src="fixPath(oo.fileName)" data-preview-group="1"></div>
+								</template>
+							</template>
+
+						</div>
+
+					</template>
+				</div>
 			</div>
 
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/lib/better-scroll.min.js"></script>
 
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.dtpicker.js"></script>
 
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 
-			var dtPick,devPick;
+			var P = plug.H5NativeBridge;
+			
+			
+			var dtPick, devPick;
 
 			new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
-						dateTime: new Date(),
-						devName: "所有摄像机"
+						dateTime: "",
+						devName: "",
+						devId: "",
+
+						record_: [
+						
+						],
+						
+						videoplay: false,
+						videosrc: "",
 					};
 				},
-				
+
 				computed: {
-					dateText: function(){
-						return (this.dateTime.getMonth() + 1) + "/" +this.dateTime.getDate();
+					dateText: function() {
+						if(this.dateTime===""){
+							return "所有";
+						}
+						return (this.dateTime.getMonth() + 1) + "/" + this.dateTime.getDate();
+					},
+					record: function() {
+						var dir = [],
+							temp, arr = [];
+						this.record_.forEach(function(item) {
+							temp = (new Date(item.time.replace(/-/g, '/'))).toFormatString('yyyy-MM-dd');
+							if(!dir[temp]) {
+								dir[temp] = [];
+							}
+							dir[temp].push(item);
+						});
+
+						for(var i in dir) {
+							arr.push({
+								day: i,
+								list: dir[i]
+							});
+						}
+						return arr;
 					}
 				},
 				
+				
+
 				mounted: function() {
 					var wrapper = this.$refs.wrapper;
 					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
@@ -183,30 +285,59 @@
 						}
 
 					}.bind(this));
-					
-					
-					
-					
+
 					devPick = new mui.PopPicker({
 						layer: 1
 					});
-					devPick.setData([{
-						text: '智能360',
-						value: "123213", // id
-					}, {
-						text: '403',
-						value: "1232134", 
-					}]);
-				},
-				methods: {
 					
+					
+					
+					
+					
+					
+				},
+
+				plusReady: function() {
+					this.$view.setStyle({
+						kernel: 'WKWebview'
+					});
+
+					this.getRecord();
+					
+					var D = new this.$Cache("dev_list", [], {
+						plus: true
+					});
+					
+					
+					var devPickData = D.data;
+					devPickData = devPickData.map(function(item){
+						return {
+							text: item.location || item.devid,
+							value: item.devid
+						};
+					});
+					
+					devPick.setData(devPickData);
+					
+					var devInfo = this.$view.devInfo;
+					
+					if(devInfo){
+						this.devId = devInfo.devid;
+						this.devName = devInfo.location || this.devId;
+					}
+					
+				},
+
+				methods: {
+
 					// 设备选择
 					onDevTap: function() {
 						devPick.show(function(items) {
 							this.devName = items[0].text;
+							this.devId = items[0].value;
 						}.bind(this));
 					},
-					
+
 					// 日期选择
 					onDateTap: function() {
 						var that = this;
@@ -243,6 +374,43 @@
 						});
 
 					},
+
+					// 获取本地 录像/图片列表
+					getRecord: function() {
+						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd'): "");
+						console.log(rs);
+						//rs = JSON.parse(rs);
+						
+						// TODO as调试
+						
+						
+						this.$nextTick(function() {
+							mui.previewImage();
+						});
+					},
+
+					// 视频被点击时
+					onVideoTap: function(o) {
+						//this.videosrc = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8";
+						this.videosrc = this.fixPath(o.fileName);
+						this.videoplay = true;
+					},
+
+					// 是否为视频
+					isVideo: function(path) {
+						return /.mp4$/.test(path);
+					},
+
+					// 修复文件路径
+					fixPath: function(path) {
+						if(mui.os.ios) {
+							path = app.ios.getSafeBoxPath() + path;
+						}
+						if(!/^file:/.test(path)) {
+							path = "file://" + path;
+						}
+						return path;
+					}
 				}
 			})
 		</script>

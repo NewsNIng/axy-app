@@ -126,6 +126,7 @@
 		
 		if(isHide){
 			options.show = false;
+			log("隐藏更新模式");
 		}
 		
 		if(options.show){
