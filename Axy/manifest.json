@@ -261,7 +261,8 @@
 					"html/person/setting/index.html",
 					"html/person/coupon/index.html",
 					"html/person/message/index.html",
-					"html/person/collection/my_camera.html"
+					"html/person/collection/my_camera.html",
+					"html/person/collection/my_attention.html"
 				],
 				"priority": 0
 			},
@@ -313,7 +314,8 @@
 					"html/smart/devices/dev_my_list.html",
 					"html/smart/devices/camera_settings.html",
 					"html/smart/add/add_device.html",
-					"html/person/message/index.html"
+					"html/person/message/index.html",
+					"html/person/devshare/share.html"
 				],
 				"priority": 0
 			},
@@ -697,7 +699,8 @@
 					"html/smart/devices/camera_settings.html",
 					"html/smart/devices/dev_17.html",
 					"html/person/devshare/share.html",
-					"html/smart/devices/dev_WG-100.html"
+					"html/smart/devices/dev_WG-100.html",
+					"html/smart/devices/dev_AX-903.html"
 				],
 				"priority": 0
 			},
@@ -782,7 +785,8 @@
 				"resources": [],
 				"refer": [
 					"html/person/message/warning.html",
-					"html/person/message/system.html"
+					"html/person/message/system.html",
+					"html/person/message/activity.html"
 				],
 				"priority": 0
 			},
@@ -805,6 +809,21 @@
 					"/storage/emulated/0/Tencent/QQfile_recv/~9W%ML2EXQE%7B7BOM)_8QV%7DN.png"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-903.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_AX-903_setting.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-903_setting.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_select_id.html",
+					"html/smart/devices/dev_AX-903_datasave.html"
+				],
 				"priority": 0
 			}
 		},
