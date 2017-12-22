@@ -95,8 +95,8 @@
 				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
 			</footer>-->
-			<dev-footer :deviceid = "5" :comid="6" @del="onDelDevice">
-				
+			<dev-footer :accessory="devInfo.accessory" :devType="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind()">
+
 			</dev-footer>
 		</div>
 		<!--沉浸式动态处理-->
@@ -220,9 +220,21 @@
 							tips: that.dev.basicInfo.devName,
 						});
 					},
-					// 删除设备
-					onDelDevice: function(){
+					// 删除配件
+					onDelDevice: function() {
+						app.page.setResult({
+							action: "del"
+						}).close();
+
 						console.log("deldevice");
+					},
+					// 解绑配件
+					onDevUnBind: function() {
+						app.page.setResult({
+							action: "unbind"
+						}).close();
+						// TODO 可能需要重新选择主机
+						console.log("editdevice");
 					},
 					// 告警延迟时间
 					onAlarmTap: function() {

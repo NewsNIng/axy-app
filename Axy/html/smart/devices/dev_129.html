@@ -101,7 +101,7 @@
 				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
 			</footer>-->
-			<dev-footer :deviceid="5" :comid="6" @del="onDelDevice">
+			<dev-footer :accessory="devInfo.accessory" :devType="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind()">
 
 			</dev-footer>
 		</div>
@@ -193,7 +193,7 @@
 						// 发送更改请求
 						plus.nativeUI.showWaiting();
 						this.devInfo.accessory.enable = event.detail.isActive;
-						dal.devaccessory.enable(this.devInfo.accessory, function(err, data) {
+						dal.devaccessory.enable(this.devInfo.accessory,, function(err, data) {
 							plus.nativeUI.closeWaiting();
 							if(err) {
 								that.isErr = true;
@@ -223,9 +223,21 @@
 					toggleSwitch: function() {
 						this.state = !this.state;
 					},
-					// 删除设备
+					// 删除配件
 					onDelDevice: function() {
+						app.page.setResult({
+							action: "del"
+						}).close();
+
 						console.log("deldevice");
+					},
+					// 解绑配件
+					onDevUnBind: function() {
+						app.page.setResult({
+							action: "unbind"
+						}).close();
+						// TODO 可能需要重新选择主机
+						console.log("editdevice");
 					},
 					// 告警延迟时间
 					onAlarmTap: function() {
@@ -234,13 +246,15 @@
 						this.pick.pickers[0].setSelectedValue(this.alarmDelayTime);
 
 						var fn = function(s) {
+							// 发起请求
+							
 							that.alarmDelayTime = s;
 						};
 
 						this.pick.show(function(items) {
 							fn(items[0].value);
 						}, function(items) {
-
+							
 						});
 					},
 					//修改名称

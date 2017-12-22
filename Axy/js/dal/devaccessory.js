@@ -533,34 +533,35 @@
 	 * @param {Object} newdelay
 	 * @param {Object} callback
 	 */
-	devaccessory.delay = function(id, type, devid, devtype, name, action, delay, zonetype, chnID, externChn, x, y, ptzset, newdelay, callback) {
-		return ra("post", "/devaccessory/delay", {
-			id: id,
-			type: type,
-			devid: devid,
-			devtype: devtype,
-			name: name,
-			action: action,
-			delay: delay,
-			zonetype: zonetype,
-			chnID: chnID,
-			externChn: externChn,
-			x: x,
-			y: y,
-			ptzset: ptzset,
-			newdelay: newdelay
-		}, callback);
+	devaccessory.delay = function(accessory, devType, newdelay, callback) {
+		accessory.devType = devType;
+		accessory.newdelay = newdelay;
+		return ra("post", "/devaccessory/delay", accessory, callback);
 	}
-	
+
 	/**
 	 * 修改配件使能
 	 * @param {Object} accessory
 	 * @param {Object} callback
 	 */
-	devaccessory.enable = function(accessory, callback) {
+	devaccessory.enable = function(accessory, devType, callback) {
+		accessory.devType = devType;
 		return ra("post", "/devaccessory/enable", accessory, callback);
 	}
 	
+	/**
+	 * 删除配件
+	 * @param {Object} accessory
+	 * @param {Object} callback
+	 */
+	devaccessory.devDelete = function(accessory, devType, callback) {
+		accessory.devType = devType;
+		alert(JSON.stringify(accessory));
+		return ra("post", "/devaccessory/delete", accessory, callback);
+	}
+
+	
+
 	_.devaccessory = devaccessory;
 
 }(window.dal, window.requestAdapter));
