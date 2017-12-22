@@ -346,8 +346,8 @@
 					});
 					var devData = DEVD.data;
 					this.netDivList = devData.map(function(item) {
-						item.devimg = this._getDevImgByAndroid(item.devid);
-						item.location = item.location? item.location.replace(/<[^<]*>/gi, ""): "";
+						item.devimg = this._getDevImg(item.devid);
+						item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
 						return item;
 					}.bind(this));
 
@@ -412,7 +412,7 @@
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, function() {
-								o.devimg = that._getDevImgByAndroid(o.devid);
+								o.devimg = that._getDevImg(o.devid);
 							});
 						});
 
@@ -438,17 +438,17 @@
 					onZoneTap: function(o, i) {
 						var that = this;
 						var actionDir = {
-							del: function(){
+							del: function() {
 								that.devaccessroyList.splice(i, 1);
 							},
-							update: function(info){
+							update: function(info) {
 								that.$set(that.devaccessroyList, i, info);
 							},
-							unbind: function(){
+							unbind: function() {
 								that.devaccessroyList.splice(i, 1);
 							}
 						}
-//						alert(JSON.stringify(o));
+						//						alert(JSON.stringify(o));
 						app.page.openForResultBy('dev_' + o.accessory.type + '.html', 'dev_' + o.accessory.type, function(data) {
 							actionDir[data.action](data.info);
 						}, {
@@ -537,9 +537,15 @@
 						console.log(JSON.stringify(e));
 					},
 
-					_getDevImgByAndroid: function(devid) {
-						return 'file:////storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+
+					_getDevImg: function(devid) {
+						if(this.$os.android) {
+							return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+						} else if(this.$os.ios) {
+							return app.ios.getSafeBoxPath() + "Documents/account_18718690160/assets" + devid + '.jpeg?t=' + new Date().getTime();
+						}
 					},
+
 					_getStateByCode: function(code) {
 						return __stateCodearr[code];
 					}

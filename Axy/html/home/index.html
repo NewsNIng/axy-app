@@ -28,6 +28,7 @@
 				background: transparent;
 				margin: 0 1.5px;
 				border: .5px white solid;
+				
 			}
 			
 			.mui-slider-item {
@@ -268,7 +269,7 @@
 			<div class="mui-content noImmersed">
 				<!--<div class="mui-scroll">-->
 
-				<div id="slider" class="mui-slider" v-if="imgList.length > 0">
+				<div id="slider" class="mui-slider" v-if="imgList.length > 0"> 
 					<div class="mui-slider-group mui-slider-loop">
 						<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
 						<div @tap="onAdvertTap(imgLast)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.adimg">
@@ -294,6 +295,11 @@
 						<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
 					</div>
 				</div>
+				<template v-else>
+					<div style="height: 0;width: 100%; padding-top: 50%;">
+						
+					</div>
+				</template>
 
 				<div class="model_type">
 					<template v-for="o,i in modelTypes">

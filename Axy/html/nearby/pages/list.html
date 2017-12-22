@@ -162,7 +162,7 @@
 								<div class="shop_image">
 									<img :src="o.image1" />
 								</div>
-								<div class="shop_info flex1">
+								<div class="shop_info flex1" @tap="onLookTap(o)">
 									<div class="distance app-font-size-20">{{_m2km(o.distance)}} km</div>
 									<div class="name app-font-size-30">{{o.name}}</div>
 									<div class="time app-font-size-20"><img src="../../../image/nearby/time.png" />{{_min2time(o.starttime)+ '-' + _min2time(o.endtime)}}</div>
@@ -178,7 +178,7 @@
 							<div class="shop_menu app-font-size-28">
 								<div @tap="onCallTap(o)" class="flex1"><img src="../../../image/nearby/phone.png" />电话</div>
 								<div @tap="onWithMapTap(o)" class="flex1"><img src="../../../image/nearby/navigation.png" />导航</div>
-								<div @tap="onLookTap(o)" class="flex1"><img style="vertical-align: middle; padding-top: 0.05rem;" src="../../../image/nearby/show.png" /><span style="vertical-align: middle;">查看</span></div>
+								<div class="flex1"><img style="vertical-align: middle; padding-top: 0.05rem;" src="../../../image/nearby/show.png" /><span style="vertical-align: middle;">查看</span></div>
 							</div>
 						</div>
 					</template>
