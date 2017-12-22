@@ -551,7 +551,16 @@
 			newdelay: newdelay
 		}, callback);
 	}
-
+	
+	/**
+	 * 修改配件使能
+	 * @param {Object} accessory
+	 * @param {Object} callback
+	 */
+	devaccessory.enable = function(accessory, callback) {
+		return ra("post", "/devaccessory/enable", accessory, callback);
+	}
+	
 	_.devaccessory = devaccessory;
 
 }(window.dal, window.requestAdapter));

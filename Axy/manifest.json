@@ -719,7 +719,11 @@
 					"html/smart/devices/camera_settings.html",
 					"html/smart/devices/dev_17.html",
 					"html/person/devshare/share.html",
-					"html/smart/devices/dev_WG-100.html"
+					"html/smart/devices/dev_WG-100.html",
+					"html/smart/devices/dev_20.html",
+					"html/smart/devices/dev_65.html",
+					"html/smart/devices/dev_129.html",
+					"html/smart/devices/dev_48.html"
 				],
 				"priority": 0
 			},
@@ -837,6 +841,27 @@
 				"priority": 0
 			},
 			"html/smart/devices/dev_warning_sign.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_129.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_20.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_65.html": {
 				"resources": [],
 				"refer": [
 					"html/public/input.html"
