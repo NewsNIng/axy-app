@@ -202,10 +202,16 @@
 			mui.init({
 				//处理窗口关闭前的业务
 				beforeback: function() {
+					plus.navigator.setStatusBarStyle('light');
 					app.page.setResult(null).close();
 					return false;
 				},
 			});
+			
+			mui.plusReady(function(){
+				plus.navigator.setStatusBarStyle('dark');
+			});
+			
 			
 			mui.ready(function(){
 				// 注册按钮
@@ -288,6 +294,8 @@
 							var mainView = plus.webview.getLaunchWebview();
 							mainView.show('slide-in-bottom', 250);
 							
+							
+							plus.navigator.setStatusBarStyle('light');
 							
 							
 							

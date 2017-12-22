@@ -10,6 +10,11 @@
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 
 		<link rel="stylesheet" href="../../css/app/app.css" />
+
+		<link rel="stylesheet" href="../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../css/app/module/poppicker.css" />
+
 		<style type="text/css">
 			header img {
 				width: 0.48rem;
@@ -324,7 +329,7 @@
 									<span class="app-font-size-24 app-color-main">{{dev.devid}}</span>
 								</div>
 
-								<div class="mui-icon d2">
+								<div class="mui-icon d2" @tap="onShareTap()">
 									<img src="../../image/home/dev_share.png" />
 									<span class="app-font-size-24" style="color: #696969;">分享</span>
 								</div>
@@ -436,11 +441,18 @@
 		<script type="text/javascript" src="../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../js/plug/PlugH5NativeBridge.js"></script>
 
+		<script type="text/javascript" src="../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.poppicker.js"></script>
+ 
+		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
+
 		<script type="text/javascript">
 			try {
 				var advert_cache = new ni.Cache('advert_cache', []);
 
 				var _B = new ni.Broadcast();
+
+				var wayPick;
 
 				var runManager, devManager;
 
@@ -511,6 +523,11 @@
 						}
 					},
 					mounted: function() {
+						wayPick = new mui.PopPicker({
+							layer: 1,
+							more: false,
+						});
+
 						// 获取轮播广告图
 						this.getAdvert();
 
@@ -610,10 +627,58 @@
 						},
 
 						openCamListWindow: function() {
-							plug.H5NativeBridge.StartDevicePlay(this.dev.devid, 0, 0, function() {
-								o.devimg = this._getDevImgByAndroid(o.devid);
-							}.bind(this));
-							//plug.H5NativeBridge.StartDevicePlay(this.dev.devid);
+
+							var that = this;
+
+							var o = this.dev;
+
+							if(o.online !== 1) {
+								return mui.toast("设备不在线");
+							}
+
+							Rx.Observable.create(function(ob) {
+								if(o.type >= 0x1040 && o.type <= 0x1080) {
+									// 动态设置设备通道
+									wayPick.setData([{
+											text: '通道一',
+											value: 0
+										},
+										{
+											text: '通道二',
+											value: 1
+										},
+										{
+											text: '通道三',
+											value: 2
+										},
+										{
+											text: '通道四',
+											value: 3
+										}
+									]);
+									// 重置弹出层到第一个通道位置
+									wayPick.pickers[0].setSelectedValue(1);
+									// 显示通道选择器
+									wayPick.show(function(items) {
+										ob.next({
+											b: items[0].value
+										});
+									}, function(items) {
+										// 取消 或者 隐藏
+									});
+								} else {
+									ob.next({
+										b: 0
+									});
+								}
+							}).subscribe(function(data) {
+								var w1 = data.b;
+								var w2 = o.type === 0x1046 ? 1 : 0;
+								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, function() {
+									that.dev.devimg = that._getDevImg(o.devid);
+								});
+							});
+
 						},
 
 						// 获取轮播广告图
@@ -644,8 +709,23 @@
 									return
 								}
 								if(data) {
-									this.dev = data[0]
+									//this.dev = data[0]
+									this.dev = {
+										"id": 3528,
+										"streamfwdport": 17600,
+										"location": "test",
+										"devid": "AX-403A-2018070500013",
+										"relation": 0,
+										"binding": "",
+										"streamfwd": "vh.anxin-net.com",
+										"workmode": 0,
+										"type": 48,
+										"signalfwd": "vh.anxin-net.com",
+										"signalfwdport": 17700,
+										"online": 1
+									};
 									this.dev.devimg = this._getDevImg(this.dev.devid);
+									this.dev.location = this.dev.location? this.dev.location.replace(/<[^<]*>/gi, ""): "";
 								}
 
 							}.bind(this), 1);
@@ -710,6 +790,14 @@
 								extras: {
 									//									localInfo: localInfo,
 									//									runInfo: runInfo,
+									devInfo: this.dev
+								}
+							});
+						},
+						// 设备分享
+						onShareTap: function() {
+							mui.openWindow("../person/devshare/share.html", 'dev_share', {
+								extras: {
 									devInfo: this.dev
 								}
 							});

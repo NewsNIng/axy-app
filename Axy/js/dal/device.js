@@ -69,6 +69,13 @@
 				pageNumber: pageNumber,
 				pageSize: pageSize || 10
 			}, callback);
+		},
+		// 绑定摄像头主机
+		binding: function(devid, binding, callback){
+			return ra('post', '/device/electric/binding', {
+				devid: devid,
+				binding: binding
+			}, callback);
 		}
 	};
 	
