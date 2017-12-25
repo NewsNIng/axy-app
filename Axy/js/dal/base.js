@@ -44,6 +44,7 @@ function requestAdapter(type, url, params, callback) {
 			callback({
 				code: xhr.status,
 				message: errDir[type] || "其它错误"
+				
 			}, null);
 		}
 	};

@@ -23,7 +23,13 @@
       "image/main/nearby_active.png",
       "html/person/index.html",
       "image/main/person.png",
-      "image/main/home_active.png"
+      "image/main/home_active.png",
+      "js/lib/vue.min.js",
+      "js/lib/mui.min.js",
+      "js/dal/system.js",
+      "js/dal/base.js",
+      "js/common/rsmanager.js",
+      "js/lib/vue-ni.js"
     ],
     "refer": [
       "html/home/index.html",
@@ -122,7 +128,8 @@
       "html/smart/add/family_menu.html",
       "html/search/index.html",
       "html/common/login.html",
-      "html/smart/devices/dev_my_list.html"
+      "html/smart/devices/dev_my_list.html",
+      "html/public/browser.html"
     ]
   },
   "html/smart/scenes/create_scenes.html": {
@@ -249,7 +256,9 @@
       "html/nearby/business/store_details.html",
       "html/smart/devices/dev_my_list.html",
       "html/smart/devices/camera_settings.html",
-      "html/smart/add/add_device.html"
+      "html/smart/add/add_device.html",
+      "html/smart/scenes/index.html",
+      "html/common/login.html"
     ],
     "resources": [
       "js/dal/home.js",

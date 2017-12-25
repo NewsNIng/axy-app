@@ -274,7 +274,22 @@
 
 					// 点击打电话
 					onCallTap: function(o) {
-						plus.device.dial(o.telphone);
+						var buttons = o.telphone.split("/").map(function(item) {
+							return {
+								color: "rgb(0,0,255)",
+								style: "default",
+								title: item
+							}
+						});
+						plus.nativeUI.actionSheet({
+								cancel: "取消",
+								buttons: buttons
+							},
+							function(e) {
+								if(e.index > 0) {
+									plus.device.dial(buttons[e.index - 1].title);
+								}
+							});
 					},
 
 					// 点击导航

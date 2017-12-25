@@ -230,6 +230,7 @@
 				overflow-x: scroll;
 				overflow-y: hidden;
 				white-space: nowrap;
+				width: 100%;
 			}
 			
 			.shop_image>div {
@@ -629,7 +630,10 @@
 
 						// 当点击模式时
 						onModelTap: function(o, index) {
-							console.log(JSON.stringify(o));
+							// console.log(JSON.stringify(o));
+							app.user.get(function(u){
+								u && mui.openWindow('../smart/scenes/index.html'); 
+							});
 						},
 
 						openCamListWindow: function() {
