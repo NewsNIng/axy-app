@@ -705,7 +705,8 @@
 					"html/smart/devices/dev_20.html",
 					"html/smart/devices/dev_65.html",
 					"html/smart/devices/dev_129.html",
-					"html/smart/devices/dev_48.html"
+					"html/smart/devices/dev_48.html",
+					"html/person/collection/my_camera.html"
 				],
 				"priority": 0
 			},

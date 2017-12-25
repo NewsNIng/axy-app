@@ -28,7 +28,6 @@
 				background: transparent;
 				margin: 0 1.5px;
 				border: .5px white solid;
-				
 			}
 			
 			.mui-slider-item {
@@ -270,7 +269,7 @@
 			<div class="mui-content noImmersed">
 				<!--<div class="mui-scroll">-->
 
-				<div id="slider" class="mui-slider" v-if="imgList.length > 0"> 
+				<div id="slider" class="mui-slider" v-if="imgList.length > 0">
 					<div class="mui-slider-group mui-slider-loop">
 						<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
 						<div @tap="onAdvertTap(imgLast)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.adimg">
@@ -298,7 +297,7 @@
 				</div>
 				<template v-else>
 					<div style="height: 0;width: 100%; padding-top: 50%;">
-						
+
 					</div>
 				</template>
 
@@ -450,420 +449,419 @@
 
 		<script type="text/javascript" src="../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../js/lib/mui.poppicker.js"></script>
- 
+
 		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
 
+		<script type="text/javascript" src="temp_like_json.js"></script>
+
 		<script type="text/javascript">
-			try {
-				var advert_cache = new ni.Cache('advert_cache', []);
+			var advert_cache = new ni.Cache('advert_cache', []);
 
-				var _B = new ni.Broadcast();
+			var _B = new ni.Broadcast();
 
-				var wayPick;
+			var wayPick;
 
-				var runManager, devManager;
+			var runManager, devManager;
 
-				mui.init({
-					gestureConfig: {
-						longtap: true
-					}
-				});
+			mui.init({
+				gestureConfig: {
+					longtap: true
+				}
+			});
 
-				var vm = new Vue({
-					el: '#approom',
-					data: function() {
-						return {
+			var vm = new Vue({
+				el: '#approom',
+				data: function() {
+					return {
 
-							imgList: advert_cache.data,
-							modelTypes: [{
-									name: "回家模式",
-									src: "../../image/home/gohome.png"
-								},
-								{
-									name: "离家模式",
-									src: "../../image/home/outhome.png"
-								},
-								{
-									name: "回店模式",
-									src: "../../image/home/goshop.png"
-								},
-								{
-									name: "离店模式",
-									src: "../../image/home/outshop.png"
-								}
-							],
-							dev: {
-								"streamfwdport": 0,
-								"location": "",
-								"devid": "",
-								"relation": 0,
-								"streamfwd": "",
-								"type": 1,
-								"signalfwd": "",
-								"signalfwdport": 0,
-								"online": 1,
-								"devimg": "",
+						imgList: advert_cache.data,
+						modelTypes: [{
+								name: "回家模式",
+								src: "../../image/home/gohome.png"
 							},
-							localDev: {
-
+							{
+								name: "离家模式",
+								src: "../../image/home/outhome.png"
 							},
-
-							like: [
-
-							],
-
-							nearShops: [],
-
-							longitude: 0,
-							latitude: 0,
-							city: '深圳',
-
-						};
-					},
-
-					computed: {
-						imgFrist: function() {
-							return this.imgList[0];
+							{
+								name: "回店模式",
+								src: "../../image/home/goshop.png"
+							},
+							{
+								name: "离店模式",
+								src: "../../image/home/outshop.png"
+							}
+						],
+						dev: {
+							"streamfwdport": 0,
+							"location": "",
+							"devid": "",
+							"relation": 0,
+							"streamfwd": "",
+							"type": 1,
+							"signalfwd": "",
+							"signalfwdport": 0,
+							"online": 1,
+							"devimg": "",
 						},
-						imgLast: function() {
-							return this.imgList[this.imgList.length - 1];
-						}
+						localDev: {
+
+						},
+
+						like: [
+
+						],
+
+						nearShops: [],
+
+						longitude: 0,
+						latitude: 0,
+						city: '深圳',
+
+					};
+				},
+
+				computed: {
+					imgFrist: function() {
+						return this.imgList[0];
 					},
-					mounted: function() {
-						wayPick = new mui.PopPicker({
-							layer: 1,
-							more: false,
-						});
+					imgLast: function() {
+						return this.imgList[this.imgList.length - 1];
+					}
+				},
+				mounted: function() {
+					wayPick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
 
-						// 获取轮播广告图
-						this.getAdvert();
+					// 获取轮播广告图
+					this.getAdvert();
 
-						// 获取喜欢列表
-						this.getThemeList();
+					// 获取喜欢列表
+					this.getThemeList();
 
-						// 动态沉浸式处理
-						//					var css = document.createElement('style');
-						//					css.innerText = ".mui-slider:before{height:"+ (immersed) +"px;}";
-						//					document.body.appendChild(css);
-						// 缓存机制加载图片
-						imagelazyload();
-						// 图片轮播
-						mui('#slider').slider({
-							interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
+					// 动态沉浸式处理
+					//					var css = document.createElement('style');
+					//					css.innerText = ".mui-slider:before{height:"+ (immersed) +"px;}";
+					//					document.body.appendChild(css);
+					// 缓存机制加载图片
+					imagelazyload();
+					// 图片轮播
+					mui('#slider').slider({
+						interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
+					});
+				},
+				plusReady: function() {
+					var that = this;
+
+					// 本地 所有设备的信息
+					//						var ALLD = new ni.Cache('AllDeviceInfo', [], {
+					//							plus: true
+					//						});
+					//
+					//						// 本地 所有设备的运行状态
+					//						var ALLR = new ni.Cache('AllDeviceRun', [], {
+					//							plus: true
+					//						});
+					//
+					//						devManager = new DevManager(ALLD);
+					//						runManager = new DevManager(ALLR);
+
+					//如果用户登录了 则  获取第一个设备
+					if(app.user.has()) {
+						this.getDeviceOne();
+					}
+					// 同时监听登录成功事件
+					new this.$Broadcast().on('login_success', function() {
+						// 更新获取设备
+						this.getDeviceOne();
+					}.bind(this));
+
+					// plus ready ! 现在可以使用plus相关api
+					// 设置本页面无滚动条显示
+					this.$view.setStyle({
+						scrollIndicator: "none", // 隐藏滚动条
+						render: "always", // 始终进行渲染
+					});
+
+					// 获取定位信息
+					this.getCurrentPosition().then(function() {
+						// 附近的店
+						this.getNearShops();
+					}.bind(this)).catch(function() {
+						this.getNearShops();
+					}.bind(this));
+
+					// 监听设备变化
+					this.listenDev();
+
+				},
+				methods: {
+					getCurrentPosition: function() {
+						return new Promise(function(re, rj) {
+							plus.geolocation.getCurrentPosition(function(p) {
+								this.longitude = p.coords.longitude;
+								this.latitude = p.coords.latitude;
+								this.city = p.address.city.replace('市', '');
+								this.position = p.address.poiName;
+								re();
+							}.bind(this), rj);
+						}.bind(this));
+					},
+					// 点击消息按钮
+					onMessageTap: function() {
+						mui.openWindow('../person/message/index.html');
+					},
+
+					// 点击搜索按钮
+					onSearchTap: function() {
+						mui.openWindow('../search/index.html', 'search', {
+							show: {
+								aniShow: 'slide-in-bottom'
+							}
 						});
 					},
-					plusReady: function() {
+					// 点击添加按钮
+					onPlusTap: function() {
+
+						mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
+					},
+
+					// 当点击模式时
+					onModelTap: function(o, index) {
+						// console.log(JSON.stringify(o));
+						app.user.get(function(u) {
+							u && mui.openWindow('../smart/scenes/index.html');
+						});
+					},
+
+					openCamListWindow: function() {
+
 						var that = this;
 
-						// 本地 所有设备的信息
-						//						var ALLD = new ni.Cache('AllDeviceInfo', [], {
-						//							plus: true
-						//						});
-						//
-						//						// 本地 所有设备的运行状态
-						//						var ALLR = new ni.Cache('AllDeviceRun', [], {
-						//							plus: true
-						//						});
-						//
-						//						devManager = new DevManager(ALLD);
-						//						runManager = new DevManager(ALLR);
+						var o = this.dev;
 
-						//如果用户登录了 则  获取第一个设备
-						if(app.user.has()) {
-							this.getDeviceOne();
+						if(o.online !== 1) {
+							return mui.toast("设备不在线");
 						}
-						// 同时监听登录成功事件
-						new this.$Broadcast().on('login_success', function() {
-							// 更新获取设备
-							this.getDeviceOne();
-						}.bind(this));
 
-						// plus ready ! 现在可以使用plus相关api
-						// 设置本页面无滚动条显示
-						this.$view.setStyle({
-							scrollIndicator: "none", // 隐藏滚动条
-							render: "always", // 始终进行渲染
+						Rx.Observable.create(function(ob) {
+							if(o.type >= 0x1040 && o.type <= 0x1080) {
+								// 动态设置设备通道
+								wayPick.setData([{
+										text: '通道一',
+										value: 0
+									},
+									{
+										text: '通道二',
+										value: 1
+									},
+									{
+										text: '通道三',
+										value: 2
+									},
+									{
+										text: '通道四',
+										value: 3
+									}
+								]);
+								// 重置弹出层到第一个通道位置
+								wayPick.pickers[0].setSelectedValue(1);
+								// 显示通道选择器
+								wayPick.show(function(items) {
+									ob.next({
+										b: items[0].value
+									});
+								}, function(items) {
+									// 取消 或者 隐藏
+								});
+							} else {
+								ob.next({
+									b: 0
+								});
+							}
+						}).subscribe(function(data) {
+							var w1 = data.b;
+							var w2 = o.type === 0x1046 ? 1 : 0;
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, function() {
+								that.dev.devimg = that._getDevImg(o.devid);
+							});
 						});
 
-						// 获取定位信息
-						this.getCurrentPosition().then(function() {
-							// 附近的店
-							this.getNearShops();
-						}.bind(this)).catch(function() {
-							this.getNearShops();
-						}.bind(this));
-
-						// 监听设备变化
-						this.listenDev();
-
 					},
-					methods: {
-						getCurrentPosition: function() {
-							return new Promise(function(re, rj) {
-								plus.geolocation.getCurrentPosition(function(p) {
-									this.longitude = p.coords.longitude;
-									this.latitude = p.coords.latitude;
-									this.city = p.address.city.replace('市', '');
-									this.position = p.address.poiName;
-									re();
-								}.bind(this), rj);
-							}.bind(this));
-						},
-						// 点击消息按钮
-						onMessageTap: function() {
-							mui.openWindow('../person/message/index.html');
-						},
 
-						// 点击搜索按钮
-						onSearchTap: function() {
-							mui.openWindow('../search/index.html', 'search', {
-								show: {
-									aniShow: 'slide-in-bottom'
-								}
+					// 获取轮播广告图
+					getAdvert: function() {
+
+						dal.home.advert(function(err, data) {
+							if(err) {
+								return
+							}
+							this.imgList = data;
+							advert_cache.data = data;
+							this.$nextTick(function() {
+								imagelazyload();
 							});
-						},
-						// 点击添加按钮
-						onPlusTap: function() {
-
-							mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
-						},
-
-						// 当点击模式时
-						onModelTap: function(o, index) {
-							// console.log(JSON.stringify(o));
-							app.user.get(function(u){
-								u && mui.openWindow('../smart/scenes/index.html'); 
-							});
-						},
-
-						openCamListWindow: function() {
-
-							var that = this;
-
-							var o = this.dev;
-
-							if(o.online !== 1) {
-								return mui.toast("设备不在线");
+						}.bind(this));
+					},
+					// 轮播点击
+					onAdvertTap: function(o) {
+						// 打开内部浏览器
+						app.page.openBrowser({
+							url: o.adlink
+						});
+					},
+					// 获取一个设备
+					getDeviceOne: function() {
+						dal.device.list(1, function(err, data) {
+							if(err) {
+								return
+							}
+							if(data) {
+								this.dev = data[0]
+//								this.dev = {
+//									"id": 3528,
+//									"streamfwdport": 17600,
+//									"location": "test",
+//									"devid": "AX-403A-2018070500013",
+//									"relation": 0,
+//									"binding": "",
+//									"streamfwd": "vh.anxin-net.com",
+//									"workmode": 0,
+//									"type": 48,
+//									"signalfwd": "vh.anxin-net.com",
+//									"signalfwdport": 17700,
+//									"online": 1
+//								};
+								this.dev.devimg = this._getDevImg(this.dev.devid);
+								this.dev.location = this.dev.location ? this.dev.location.replace(/<[^<]*>/gi, "") : "";
 							}
 
-							Rx.Observable.create(function(ob) {
-								if(o.type >= 0x1040 && o.type <= 0x1080) {
-									// 动态设置设备通道
-									wayPick.setData([{
-											text: '通道一',
-											value: 0
-										},
-										{
-											text: '通道二',
-											value: 1
-										},
-										{
-											text: '通道三',
-											value: 2
-										},
-										{
-											text: '通道四',
-											value: 3
-										}
-									]);
-									// 重置弹出层到第一个通道位置
-									wayPick.pickers[0].setSelectedValue(1);
-									// 显示通道选择器
-									wayPick.show(function(items) {
-										ob.next({
-											b: items[0].value
-										});
-									}, function(items) {
-										// 取消 或者 隐藏
-									});
-								} else {
-									ob.next({
-										b: 0
-									});
-								}
-							}).subscribe(function(data) {
-								var w1 = data.b;
-								var w2 = o.type === 0x1046 ? 1 : 0;
-								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, function() {
-									that.dev.devimg = that._getDevImg(o.devid);
-								});
-							});
-
-						},
-
-						// 获取轮播广告图
-						getAdvert: function() {
-
-							dal.home.advert(function(err, data) {
-								if(err) {
-									return
-								}
-								this.imgList = data;
-								advert_cache.data = data;
-								this.$nextTick(function() {
-									imagelazyload();
-								});
-							}.bind(this));
-						},
-						// 轮播点击
-						onAdvertTap: function(o) {
-							// 打开内部浏览器
-							app.page.openBrowser({
-								url: o.adlink
-							});
-						},
-						// 获取一个设备
-						getDeviceOne: function() {
-							dal.device.list(1, function(err, data) {
-								if(err) {
-									return
-								}
-								if(data) {
-									//this.dev = data[0]
-									this.dev = {
-										"id": 3528,
-										"streamfwdport": 17600,
-										"location": "test",
-										"devid": "AX-403A-2018070500013",
-										"relation": 0,
-										"binding": "",
-										"streamfwd": "vh.anxin-net.com",
-										"workmode": 0,
-										"type": 48,
-										"signalfwd": "vh.anxin-net.com",
-										"signalfwdport": 17700,
-										"online": 1
-									};
-									this.dev.devimg = this._getDevImg(this.dev.devid);
-									this.dev.location = this.dev.location? this.dev.location.replace(/<[^<]*>/gi, ""): "";
-								}
-
-							}.bind(this), 1);
-						},
-						// 监听设备变化
-						listenDev: function() {
-							_B.on('RunstateNotify', function(data) {
-								// if(data.add)
-								if(data.info.devid === this.dev.devid) {
-									this.dev = data.info;
-								}
-							}.bind(this));
-						},
-
-						// 获取喜欢列表
-						getThemeList: function() {
-							dal.home.theme.get(function(err, data) {
-								if(err) {
-									return
-								}
-								this.like = data;
-							}.bind(this));
-						},
-						// 猜你喜欢点击
-						onLikeItemTap: function(o) {
-							// 打开内部浏览器
-							app.page.openBrowser({
-								url: o.link
-							});
-						},
-						// 附近的店
-						getNearShops: function() {
-							dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
-								if(err) {
-									return;
-								}
-								this.nearShops = data;
-							}.bind(this), 1);
-						},
-						// 附近的店点击
-						onNearItemTap: function(o) {
-							// 店铺
-							mui.openWindow('../nearby/business/store_details.html', 'store_details', {
-								extras: {
-									oid: o.id
-								}
-							});
-						},
-
-						// 设备设置点击
-						onDeviceSetTap: function() {
-							var id = this.dev.devid;
-
-							//							var localInfo = devManager.selectByWhere(function(o) {
-							//									return o.basicInfo && o.basicInfo.devid === id;
-							//								}),
-							//								runInfo = runManager.selectByWhere(function(o) {
-							//									return o.devid = id
-							//								});
-
-							mui.openWindow('../smart/devices/camera_settings.html', 'camera_settings', {
-								extras: {
-									//									localInfo: localInfo,
-									//									runInfo: runInfo,
-									devInfo: this.dev
-								}
-							});
-						},
-						// 设备分享
-						onShareTap: function() {
-							mui.openWindow("../person/devshare/share.html", 'dev_share', {
-								extras: {
-									devInfo: this.dev
-								}
-							});
-						},
-
-						_getImg: function(img1, img2, img3) {
-							return img1 || img2 || img3;
-						},
-
-						// 查看猜你喜欢更多
-						onStoreMore: function() {
-
-							_B.emit('tabar', {
-								mindex: 2,
-								nindex: 1
-							}, {
-								views: [this.$view.parent()],
-							});
-						},
-
-						// 查看附近的店更多
-						onNearbyMore: function() {
-							// TODO 主页名称
-							_B.emit('tabar', {
-								mindex: 2,
-								nindex: 0
-							}, {
-								views: [this.$view.parent()],
-							});
-						},
-						// 查看我的设备
-						onDeviceMore: function() {
-							mui.openWindow('../smart/devices/dev_my_list.html');
-						},
-
-						addDeviceTap: function() {
-							_B.emit('tabar', {
-								mindex: 1,
-								nindex: 0
-							}, {
-								views: [this.$view.parent()],
-							});
-						},
-
-						_getDevImg: function(devid) {
-							if(this.$os.android) {
-								return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
-							} else if(this.$os.ios) {
-								return app.ios.getSafeBoxPath() + "Documents/account_18718690160/assets" + devid + '.jpeg?t=' + new Date().getTime();
+						}.bind(this), 1);
+					},
+					// 监听设备变化
+					listenDev: function() {
+						_B.on('RunstateNotify', function(data) {
+							// if(data.add)
+							if(data.info.devid === this.dev.devid) {
+								this.dev = data.info;
 							}
+						}.bind(this));
+					},
+
+					// 获取喜欢列表
+					getThemeList: function() {
+						return this.like = temp_like_json;
+						dal.home.theme.get(function(err, data) {
+							if(err) {
+								return
+							}
+							this.like = data;
+						}.bind(this));
+					},
+					// 猜你喜欢点击
+					onLikeItemTap: function(o) {
+						// 打开内部浏览器
+						app.page.openBrowser({
+							url: o.link
+						});
+					},
+					// 附近的店
+					getNearShops: function() {
+						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
+							if(err) {
+								return;
+							}
+							this.nearShops = data;
+						}.bind(this), 1);
+					},
+					// 附近的店点击
+					onNearItemTap: function(o) {
+						// 店铺
+						mui.openWindow('../nearby/business/store_details.html', 'store_details', {
+							extras: {
+								oid: o.id
+							}
+						});
+					},
+
+					// 设备设置点击
+					onDeviceSetTap: function() {
+						var id = this.dev.devid;
+
+						//							var localInfo = devManager.selectByWhere(function(o) {
+						//									return o.basicInfo && o.basicInfo.devid === id;
+						//								}),
+						//								runInfo = runManager.selectByWhere(function(o) {
+						//									return o.devid = id
+						//								});
+
+						mui.openWindow('../smart/devices/camera_settings.html', 'camera_settings', {
+							extras: {
+								//									localInfo: localInfo,
+								//									runInfo: runInfo,
+								devInfo: this.dev
+							}
+						});
+					},
+					// 设备分享
+					onShareTap: function() {
+						mui.openWindow("../person/devshare/share.html", 'dev_share', {
+							extras: {
+								devInfo: this.dev
+							}
+						});
+					},
+
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
+
+					// 查看猜你喜欢更多
+					onStoreMore: function() {
+
+						_B.emit('tabar', {
+							mindex: 2,
+							nindex: 1
+						}, {
+							views: [this.$view.parent()],
+						});
+					},
+
+					// 查看附近的店更多
+					onNearbyMore: function() {
+						// TODO 主页名称
+						_B.emit('tabar', {
+							mindex: 2,
+							nindex: 0
+						}, {
+							views: [this.$view.parent()],
+						});
+					},
+					// 查看我的设备
+					onDeviceMore: function() {
+						mui.openWindow('../smart/devices/dev_my_list.html');
+					},
+
+					addDeviceTap: function() {
+						_B.emit('tabar', {
+							mindex: 1,
+							nindex: 0
+						}, {
+							views: [this.$view.parent()],
+						});
+					},
+
+					_getDevImg: function(devid) {
+						if(this.$os.android) {
+							return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+						} else if(this.$os.ios) {
+							return app.ios.getSafeBoxPath() + "Documents/account_18718690160/assets" + devid + '.jpeg?t=' + new Date().getTime();
 						}
 					}
-				});
-			} catch(err) {
-				alert(err.message)
-			}
+				}
+			});
 		</script>
 	</body>
 
