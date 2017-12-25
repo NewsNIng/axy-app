@@ -27,7 +27,7 @@ function requestAdapter(type, url, params, callback) {
 	var options = {
 		data: params,
 		type: type,
-		timeout: 30000,
+		timeout: 60000,
 		success: function(data) {
 			var o = {};
 			if(data.code !== "0000" && data.code !== "0") {
