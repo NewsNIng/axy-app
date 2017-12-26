@@ -90,7 +90,33 @@
 				background-position: center;
 				background-repeat: no-repeat;
 				position: relative;
+			} 
+			
+			.imgdiv.WG-100:after{
+				content: "";
+				position: absolute;
+				width: 100%;
+				height: 100%; 
+				background-image: url(../../../image/smart/devices/bg/wg_100@3xweb.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 8;  
 			}
+			/*TODO 修复*/
+			.imgdiv.AX-903:after{
+				content: "";
+				position: absolute;
+				width: 100%;
+				height: 100%; 
+				background-image: url(../../../image/smart/devices/bg/903@3xweb.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 8;  
+			}
+			
+			
 			
 			.imgdiv>span {
 				display: inline-block;
@@ -207,7 +233,7 @@
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
 						<div class="card" v-for="o,i in netDivList">
-							<div class="imgdiv" @swipeleft="onSwipe($event, o)" @tap="onCmTap(o)" :style="{backgroundImage: 'url('+o.devimg+')'}">
+							<div class="imgdiv" :class="_getDevName(o.type)" @tap="onCmTap(o)" :style="{backgroundImage: 'url('+o.devimg+')'}">
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
@@ -472,7 +498,11 @@
 							info: o
 						});
 					},
-
+					
+					_getDevName: function(type){
+						return app.dev.findName(type);
+					},
+					
 					// 设备设置
 					onSettingTap: function(o, i) {
 						this.tapIndex = i;

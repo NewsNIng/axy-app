@@ -230,7 +230,8 @@
 						var that = this;
 						dal.user.update(this.updateUser, function(err, rs){
 							if(err){
-								return mui.toast("用户资料更新失败");
+								console.log(JSON.stringify(err));
+								return mui.toast(err.message || "用户资料更新失败");
 							}
 							// 通知其它页面 用户更新了
 							new ni.Broadcast().emit("userinfo_update", {
