@@ -119,20 +119,26 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>总开</span>
-							<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': lights[select_index].alwaysOpen}" ref="lights[select_index].alwaysOpen">
+							<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': lights[select_index].alwaysOpen}" ref="always_open">
 					<div class="mui-switch-handle"></div>
 				</div></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a>
+							<span>启用此设备</span>
+							<span class="mui-badge">
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': devInfo.accessory.enable}" ref="switch1">
+									<div class="mui-switch-handle"></div>
+								</div>
+							</span>
 						</a>
 					</li>
 					<li></li>
 				</ul>
 			</div>
 
-			<!--<footer class="app-font-size-28">
-				<div class="app-color-main-dark">删除设备</div>
-				<div>解绑主机</div>
-			</footer>-->
-			<dev-footer :deviceid="5" :comid="6" @del="onDelDevice">
+			<dev-footer :accessory="devInfo.accessory" :devtype="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind">
 
 			</dev-footer>
 		</div>
@@ -144,12 +150,14 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+		
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
-		<!--App相关业务逻辑-->
-		<script type="text/javascript" src="../../../js/app/app.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -173,90 +181,76 @@
 							devName: "104GN_1",
 							bindDev: "AX-360主机",
 							alwaysOpen: true,
+							enable: true,
 						}, {
 							name: "K2",
 							devId: "VH-104GN-2017061500042",
 							devName: "104GN_2",
 							bindDev: "AX-360主机",
 							alwaysOpen: false,
+							enable: false,
 						}, {
 							name: "K3",
 							devId: "VH-104GN-2017061500043",
 							devName: "104GN_3",
 							bindDev: "AX-360主机",
 							alwaysOpen: true,
+							enable: true,
 						}],
 						select_index: 0,
-
-						dev: {
-							"alarmPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"basicInfo": {
-								"appversion": "2017-09-28 09:36:04",
-								"devName": "104GN",
-								"devType": 4166,
-								"devid": "VH-104GN-2017061500043",
-								"hwversion": "2015-11-01 10:13:43"
+						
+						// 设备信息
+						devInfo: {
+							"accessory": {
+								"id": "14255286",
+								"devid": "VH-104GN-2017061500015",
+								"name": "123",
+								"action": 41990,
+								"type": 20,
+								"delay": 0,
+								"zonetype": 0,
+								"chnID": 0,
+								"externChn": true,
+								"x": 0,
+								"y": 0,
+								"ptzset": 0,
+								"xmlDescrition": "",
+								"enableDelete": true,
+								"enable": true
 							},
-							"netInfo": {
-								"ip": "192.168.1.23",
-								"ssid": "aaa2.4",
-								"type": 0
-							},
-							"onvif": [{
-									"ch": 0,
-									"name": "第一个外部通道",
-									"online": 1
-								},
-								{
-									"ch": 1,
-									"name": "第二个外部通道",
-									"online": 1
-								}
-							],
-							"recordPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"zones": [{
-									"ID": "81457896",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								},
-								{
-									"ID": "81457897",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								}
-							]
+							"devName": "",
+							"devType": 4166,
+							"statusCode": 0
 						},
 					};
 				},
 				mounted: function() {
-					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
-						this.isPwdProtection = event.detail.isActive;
+					
+					this.$refs.switch1.addEventListener("toggle", function(event) {
+						if(this.isErr) {
+							this.isErr = false;
+							return;
+						}
+						var that = this;
+						// 发送更改请求
+						plus.nativeUI.showWaiting();
+						this.devInfo.accessory.enable = event.detail.isActive;
+						dal.devaccessory.enable(this.devInfo.accessory, this.devInfo.devType, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								that.isErr = true;
+								mui(that.$refs.switch1).switch().toggle();
+								that.devInfo.accessory.enable = !that.devInfo.accessory.enable;
+								return mui.toast(err.message);
+							}
+							mui.toast("操作成功！");
+						})
+					}.bind(this));
+					
+					this.$refs.always_open.addEventListener("toggle", function(event) {
+						this.lights[this.select_index].alwaysOpen = event.detail.isActive;
+						//TODO 总开的请求。。。
+						
 					}.bind(this));
 				},
 				plusReady: function() {},
@@ -283,6 +277,14 @@
 					// 删除设备
 					onDelDevice: function() {
 						console.log("deldevice");
+					},
+					// 解绑配件
+					onDevUnBind: function() {
+						app.page.setResult({
+							action: "unbind"
+						}).close();
+						// TODO 可能需要重新选择主机
+						console.log("editdevice");
 					},
 				}
 			});

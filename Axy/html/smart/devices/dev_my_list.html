@@ -255,7 +255,8 @@
 							<li class="mui-table-view-cell" @tap="onZoneTap(o, i)">
 								<a class="mui-navigate-right">
 									<span class="left app-font-size-28 app-color-333333">
-								<img src="../../../image/smart/scenes/icon_Timing start@3x.png"/>
+								<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-if="iconList[o.accessory.type] == null"/>
+								<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[o.accessory.type]" v-if="!(iconList[o.accessory.type] == null)"/>
 								<span>{{o.accessory.name}}</span>
 									</span>
 									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.accessory.enable ? "已启用" : "未启用"}}</span>
@@ -351,6 +352,22 @@
 
 						// 配件列表
 						devaccessroyList: [],
+						
+						iconList:{
+							"20":"btn_Warningsign@3x.png",
+							"21":"btn_Intelligentsocket@3x.png",
+							"22":"btn_Formaldehydedetector@3x.png",
+							"32":"btn_Greetingdevice@3x.png",
+							"41":"btn_Acousto-opticalarm@3x.png",
+							"48":"btn_Emergencybutton@3x.png",
+							"52":"btn_Curtainscontroller@3x.png",
+							"65":"btn_Infrareddetector@3x.png",
+							"80":"btn_Smokedetector@3x.png",
+							"129":"btn_Infrareddetector@3x (2).png",
+							"145":"btn_Stealthburglardetector@3x.png",
+							"160":"btn_Gasdetector@3x.png",
+							"161":"btn_Carbonmonoxidedetector@3x.png"
+						},
 
 					};
 				},

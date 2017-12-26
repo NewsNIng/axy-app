@@ -236,7 +236,8 @@
 								name: "商户电话",
 								tips: '输入商户电话',
 								value: "",
-								r: 'tel'
+								r: 'tel',
+								regexpErrorMessage: "请输入正确格式的手机号码！例如：13912345678",
 							}, {
 								name: "营业时间",
 								value: "00:00-24:00",
@@ -292,7 +293,8 @@
 							r: o.r,
 							t1: o.t1,
 							t2: o.t2,
-							imgList: o.imgList
+							imgList: o.imgList,
+							regexpErrorMessage: regexpErrorMessage
 						});
 					},
 					onNextTap: function() {
