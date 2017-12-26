@@ -123,7 +123,8 @@
 			"html/search/index.html",
 			"html/common/login.html",
 			"html/smart/devices/dev_my_list.html",
-			"html/public/browser.html"
+			"html/public/browser.html",
+			"html/smart/scenes/index2.html"
 		]
 	},
 	"html/smart/scenes/create_scenes.html": {
@@ -450,6 +451,11 @@
 	"html/smart/devices/dev_65.html": {
 		"refer": [
 			"html/public/input.html"
+		]
+	},
+	"html/smart/scenes/index2.html": {
+		"refer": [
+			"html/smart/scenes/edit_scenes.html"
 		]
 	}
 }

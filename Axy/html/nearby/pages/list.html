@@ -116,6 +116,7 @@
 			
 			.address {
 				padding: 0.4rem 0;
+				color: #5D5C5C;
 			}
 			
 			.address,
@@ -151,7 +152,7 @@
 		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
 			<div class="mui-scroll">
 
-				<div class="position app-font-size-22 ">
+				<div class="position app-font-size-24 ">
 					<img src="../../../image/nearby/map.png" />
 					<span v-text="position"></span>
 				</div>
@@ -163,9 +164,9 @@
 									<img :src="o.image1" />
 								</div>
 								<div class="shop_info flex1" @tap="onLookTap(o)">
-									<div class="distance app-font-size-20">{{_m2km(o.distance)}} km</div>
+									<div class="distance app-font-size-28">{{_m2km(o.distance)}} km</div>
 									<div class="name app-font-size-30">{{o.name}}</div>
-									<div class="time app-font-size-20"><img src="../../../image/nearby/time.png" />{{_min2time(o.starttime)+ '-' + _min2time(o.endtime)}}</div>
+									<div class="time app-font-size-28"><img src="../../../image/nearby/time.png" />{{_min2time(o.starttime)+ '-' + _min2time(o.endtime)}}</div>
 									<div class="types app-font-size-28" v-for="(type,i) in o.types">
 										<span v-if="i!==0"> | </span>{{type}}
 									</div>
