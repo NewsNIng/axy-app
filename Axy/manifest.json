@@ -872,6 +872,13 @@
 					"html/smart/scenes/edit_scenes.html"
 				],
 				"priority": 0
+			},
+			"html/nearby/pages/theme.html": {
+				"resources": [],
+				"refer": [
+					"html/public/browser.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {
