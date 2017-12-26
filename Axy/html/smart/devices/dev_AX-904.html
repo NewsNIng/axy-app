@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>设置</title>
+		<title>GPRS报警主机设置</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -49,13 +49,13 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>设备ID</span>
-							<span class="mui-badge" v-text="dev.basicInfo.devid"></span>
+							<span class="mui-badge" v-text="devInfo.devid"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge" v-text="dev.basicInfo.devName"></span>
+							<span class="mui-badge" v-text="devInfo.location"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -95,14 +95,11 @@
 					</li>
 				</ul>
 			</div>
+			
+			<footer class="app-font-size-28">
+				<div @tap="onDel()" class="app-color-main-dark">删除设备</div>
+			</footer>
 
-			<!--<footer class="app-font-size-28">
-				<div class="app-color-main-dark">删除设备</div>
-				<div>解绑主机</div>
-			</footer>-->
-			<dev-footer :deviceid = "5" :comid="6" @del="onDelDevice">
-				
-			</dev-footer>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -131,78 +128,25 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						state: true, // 当前状态
-						dev: {
-							"alarmPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"basicInfo": {
-								"appversion": "2017-09-28 09:36:04",
-								"devName": "104GN",
-								"devType": 4166,
-								"devid": "VH-104GN-2017061500043",
-								"hwversion": "2015-11-01 10:13:43"
-							},
-							"netInfo": {
-								"ip": "192.168.1.23",
-								"ssid": "aaa2.4",
-								"type": 0
-							},
-							"onvif": [{
-									"ch": 0,
-									"name": "第一个外部通道",
-									"online": 1
-								},
-								{
-									"ch": 1,
-									"name": "第二个外部通道",
-									"online": 1
-								}
-							],
-							"recordPlan": [{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								},
-								{
-									"end": "19:50:00",
-									"recycle": 129,
-									"start": "13:50:00"
-								}
-							],
-							"zones": [{
-									"ID": "81457896",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								},
-								{
-									"ID": "81457897",
-									"bindV": 128,
-									"delay": 0,
-									"ptzSet": 0,
-									"zoneAction": "32775",
-									"zoneName": "红外幕帘1"
-								}
-							]
+						devInfo: {
+							"streamfwdport": 0,
+							"location": "",
+							"devid": "",
+							"relation": 0,
+							"streamfwd": "",
+							"type": 0,
+							"signalfwd": "",
+							"signalfwdport": 0,
+							"online": 0
 						},
-
 					};
 				},
 				mounted: function() {
 
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
+				},
 				methods: {
 					// 切换开关
 					toggleSwitch: function() {
@@ -219,8 +163,33 @@
 						});
 					},
 					// 删除设备
-					onDelDevice: function(){
-						console.log("deldevice");
+					onDel: function() {
+						plus.nativeUI.showWaiting();
+
+						var dev = this.devInfo;
+						var methodName = 'delete';
+						var that = this;
+						if(dev.relation === 2) {
+							methodName += 'share';
+						}
+						mui.confirm("确定要删除设备吗？", "", ["删除", "取消"], function(e) {
+							if(e.index === 0) {
+
+								dal.device[methodName](dev.devid, function(err, rs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast('删除设备失败');
+									}
+									_B.emit("delete", {}, {
+										views: [that.$view.opener()]
+									});
+									that.$view.close();
+									return mui.toast('删除设备成功');
+								});
+							} else {
+								plus.nativeUI.closeWaiting();
+							}
+						});
 					},
 				}
 			});

@@ -21,6 +21,10 @@
 				font-family: Helvetica, sans-serif;
 			}
 			
+			.mui-scroll{
+				background-color: #f5f5f9;
+			}
+			
 			.item {
 				position: absolute;
 				top: 0.173333rem;
@@ -49,6 +53,8 @@
 				display: -webkit-flex;
 				flex-direction: column;
 				justify-content: space-between;
+				/*box-shadow: 0 0 3px #E5E6E7;*/
+				outline: 1px solid #E5E6E7;
 			}
 			
 			.item>div.imgBg {
@@ -60,6 +66,7 @@
 				background-size: cover;
 				background-position: center;
 				position: relative;
+				border-bottom: 1px solid #E5E6E7;
 			}
 			
 			/*.item>div.imgBg:after {
@@ -116,25 +123,7 @@
 			
 			.nickname {
 				color: #333333;
-			}
-			/*发布按钮*/
-			
-			#releaseBtn {
-				position: fixed;
-				z-index: 99;
-				right: 0.5rem;
-				bottom: 0.7rem;
-				width: 1.173333rem;
-				height: 1.173333rem;
-				border-radius: 50%;
-				/*box-shadow: 0px 0px 5px #CCCCCC;
-				-webkit-box-shadow: 0px 0px 5px #CCCCCC;*/
-				background-image: url(../../../image/nearby/release.png);
-				background-repeat: no-repeat;
-				background-size: cover;
-			}
-			/*发布按钮end*/
-			
+			}			
 			
 			
 		</style>
@@ -155,12 +144,12 @@
 						<div class="item" @tap="onItemTap(item, index)">
 							<div class="imgBg img-lazy-load" :data-src="_getImg(item.image1,item.image2,item.image3)" :index="item.id" :height="_getH()"></div>
 							<div class="info">
-								<div class="title app-font-size-26">#{{item.title}}</div>
-								<p class="mui-ellipsis-2 app-font-size-28">{{item.content}}</p>
+								<div class="title app-font-size-26" v-text="'#'+item.title"></div>
+								<p class="mui-ellipsis-2 app-font-size-28" v-text="item.content"></p>
 								<div class="menu">
 									<div @tap.stop="onAvastrTap(item.account)">
 										<img class="avastr img-lazy-load" :data-src="item.headimgurl" />
-										<span class="nickname app-font-size-28">{{item.nickname}}</span>
+										<span class="nickname app-font-size-28" v-text="item.nickname"></span>
 									</div>
 									<div @tap.stop="onLikeTap(item)"> 
 										<img class="icon" :src='"../../../image/nearby/discover/" + (item.like?"":"no") + "like.png"' />
@@ -254,9 +243,9 @@
 
 					},
 					shuffle: function() {
-						this.items.sort(function() {
-							return Math.random() - 0.5
-						})
+//						this.items.sort(function() {
+//							return Math.random() - 0.5
+//						})
 					},
 					reflowed: function() {
 						//this.isBusy = false
@@ -270,7 +259,7 @@
 					},
 					_down: function() {
 						this.n = 1;
-						this.$pullRefresh.pullRefresh().enablePullupToRefresh();
+						
 						dal.article.list(this.n, function(err, data) {
 							if(err) {
 								return mui.toast(err.message);
@@ -283,6 +272,7 @@
 							this.$nextTick(function(){
 								imagelazyload();
 								this.shuffle(); 
+								this.$pullRefresh.pullRefresh().enablePullupToRefresh();
 							}.bind(this)); 
 							
 						}.bind(this), 8);

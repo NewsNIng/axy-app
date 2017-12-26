@@ -325,24 +325,24 @@
 					<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'">
 
 					</div>
-					<div class="user_tittle app-font-size-26">
+					<div class="user_tittle app-font-size-28">
 						<img  @tap="onHeadTap(info.account)" :src="info.headimgurl" />
 						<div style="display: inline;" v-text="info.nickname"></div>
 						<!--<div class="attention">+ 关注</div>-->
 					</div>
-					<div class="label app-font-size-26" v-text="'#' + info.title"></div>
-					<div class="description app-font-size-26" v-text="info.content"></div>
-					<div class="reply_tittle app-font-size-26">
+					<div class="label app-font-size-34" v-text="'#' + info.title"></div>
+					<div class="description app-font-size-30" v-text="info.content"></div>
+					<div class="reply_tittle app-font-size-28">
 						评论&nbsp;
 						<div style="display: inline;" v-text="'('+(total || 0)+')'"></div>
 					</div>
 					<div class="comments" v-for="o in clist">
 						<img @tap="onHeadTap(o.account)" :src="o.headimgurl" />
 						<div class="comment_info">
-							<div class="user_name app-font-size-26" v-text="o.nickname"></div>
-							<div class="comment_value app-font-size-32" v-text="o.content"></div>
-							<div class="time_replynum app-font-size-20">
-								<div class="app-font-size-20" style="display: inline;" v-text="o.senddate"></div>
+							<div class="user_name app-font-size-28" v-text="o.nickname"></div>
+							<div class="comment_value app-font-size-34" v-text="o.content"></div>
+							<div class="time_replynum app-font-size-34">
+								<div class="app-font-size-28" style="display: inline;" v-text="o.senddate"></div>
 								<!--·-->
 								<!--<div class="replynum" v-text="o.replys.length+'回复'"></div>-->
 							</div>

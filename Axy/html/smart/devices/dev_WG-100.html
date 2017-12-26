@@ -172,20 +172,20 @@
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">xxx的智能网关</span>
+							<span class="mui-badge" v-text="devInfo.location"></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onAutoArm()">
 						<a class="mui-navigate-right">
 							<span>自动布防计划</span>
-							<span class="mui-badge ">xx房间的智能插座</span>
+							<span class="mui-badge "></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li v-show="otherInfo.on !== null" class="mui-table-view-cell">
 						<a class="">
-							<span>状态指示灯</span>
+							<span>状态指示灯</span> 
 							<span class="mui-badge">
-								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': statusLight}" ref="pwd_protection">
+								<div @toggle="onOnToggle($event)" ref="onSwitch" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': otherInfo.on}" >
 									<div class="mui-switch-handle"></div>
 								</div>
 							</span>
@@ -194,15 +194,15 @@
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
 							<span>WIFI配置</span>
-							<span class="mui-badge ">30S</span>
+							<span class="mui-badge "></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell" @tap="onAlarmTap()">
+					<!--<li class="mui-table-view-cell" @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
 							<span>告警时间设置</span>
 							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
 						</a>
-					</li>
+					</li>-->
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
 							<span>布撤防日志</span>
@@ -213,9 +213,11 @@
 			</div>
 
 			<footer class="app-font-size-28">
-				<div class="app-color-main-dark">删除设备</div>
-				<div>重启设备</div>
+				<div @tap="onDel()" class="app-color-main-dark">删除设备</div>
+				<div @tap="onReboot()">重启设备</div>
 			</footer>
+			
+			
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -225,7 +227,9 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -247,21 +251,37 @@
 				data: function() {
 					return {
 						ready: false,
-						
+
 						devid: -1,
 
 						// 告警延迟时间
 						alarmDelayTime: 0,
 						// 弹框
 						pick: null,
-						statusLight: true, // 是否开启状态指示灯
-						
+						statusLight: true, // 是否开启状态指示灯,
+						devInfo: {
+							"id": 0,
+							"streamfwdport": 0,
+							"location": "",
+							"devid": "",
+							"relation": 0,
+							"binding": "",
+							"streamfwd": "vh.anxin-net.com",
+							"workmode": 0,
+							"type": 0,
+							"signalfwd": "vh.anxin-net.com",
+							"signalfwdport": 0,
+							"online": 0,
+							
+						},
+						otherInfo: {
+							on: null,
+						}
+
 					};
 				},
 				mounted: function() {
-					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
-						this.statusLight = event.detail.isActive;
-					}.bind(this));
+
 					this.pick = new mui.PopPicker({
 						layer: 1,
 						more: false,
@@ -269,9 +289,12 @@
 					this.pick.setData(pick_data[1]);
 				},
 				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
 					this.devid = this.$view.devInfo.devid;
-					
+					 
 					this._connectWG100();
+					this._getOpenled();
+					
 					var oldback = mui.back;
 					mui.back = function() {
 						this._disconnet();
@@ -290,6 +313,33 @@
 							tips: that.dev.basicInfo.devName,
 						});
 					},
+					// 自动布防计划
+					onAutoArm: function(){
+						mui.openWindow('camera_settings_arming.html', 'arming', {
+							extras: {
+								info: this.devInfo
+							}
+						});
+					},
+					// 获取指示灯 
+					_getOpenled: function() {
+						var that = this;
+						dal.devparam.getOpenled(this.devInfo.devid, this.devInfo.type, function(err, rs) {
+							that.otherInfo.on = !rs.on;
+						});
+					},
+					// 状态指示灯
+					onOnToggle: function(e){
+						var isActive = e.detail.isActive;
+						var that = this;
+						dal.devparam.openled(this.devInfo.devid, this.devInfo.type, !isActive, function(err, rs) {
+							if(err) { 
+								return mui.toast(err.message); 
+							}
+							that.otherInfo.on = !isActive;
+						});
+					},
+					
 					// 删除设备
 					onDelDevice: function() {
 						console.log("deldevice");
@@ -313,18 +363,17 @@
 
 					// 初始化连接
 					_connectWG100: function() {
-						try{
+						try {
 							this.ready || P.ConnectWG100(this.devid, function() {
 								this.ready = true;
 								mui.toast("初始化完毕");
 							}.bind(this));
-							
-						}catch(e){
+
+						} catch(e) {
 							//TODO handle the exception
 							alert(e.message);
 						}
-						
-						
+
 					},
 
 					// 静音按钮
@@ -347,7 +396,52 @@
 
 					_disconnet: function() {
 						this.ready && P.DisconnectWG100();
-					}
+					},
+					
+					
+					// 删除设备
+					onDel: function() {
+						plus.nativeUI.showWaiting();
+
+						var dev = this.devInfo;
+						var methodName = 'delete';
+						var that = this;
+						if(dev.relation === 2) {
+							methodName += 'share';
+						}
+						mui.confirm("确定要删除设备吗？", "", ["删除", "取消"], function(e) {
+							if(e.index === 0) {
+
+								dal.device[methodName](dev.devid, function(err, rs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast('删除设备失败');
+									}
+									_B.emit("delete", {}, {
+										views: [that.$view.opener()]
+									});
+									that.$view.close();
+									return mui.toast('删除设备成功');
+								});
+							} else {
+								plus.nativeUI.closeWaiting();
+							}
+						});
+					},
+					// 重启设备
+					onReboot: function() {
+						var dev = this.devInfo;
+						mui.confirm("确定要重启设备吗？", "", ["重启", "取消"], function(e) {
+							if(e.index === 0) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									if(err) {
+										return mui.toast('重启设备失败');
+									}
+									return mui.toast('重启设备成功');
+								});
+							}
+						});
+					},
 				}
 			});
 		</script>

@@ -77,7 +77,6 @@
 				[data-dpr="3"] .room {
 				  font-size: 36px !important;
 				}
-				.app-f
 			}
 		</style>
 	</head>
@@ -95,6 +94,8 @@
 		</ul>
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
 		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 		
 		<script>
 			
@@ -112,7 +113,9 @@
 					mui.back();
 				});
 				mui('ul').on('tap', 'li', function() {
-					mui.openWindow(this.dataset.href, this.dataset.id);
+					app.user.get(function(u){
+						u && mui.openWindow(this.dataset.href, this.dataset.id);	
+					}.bind(this));
 				});
 			});
 		</script>

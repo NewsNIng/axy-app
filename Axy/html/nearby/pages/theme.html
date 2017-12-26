@@ -33,6 +33,7 @@
 				width: 0.586666rem;
 				vertical-align: middle;
 			}
+			
 			.theme_item>div>span {
 				vertical-align: middle;
 			}
@@ -62,25 +63,25 @@
 						<div class="share">
 							<img src="../../../image/nearby/share_icon.png" />
 							<span>分享给好友</span>
-							
+
 						</div>
 						<div class="see">
 							共{{o.clickcount}}人看过<img src="../../../image/nearby/right_icon.png" />
 						</div>
 					</div>
 				</template>
+				
 			</div>
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/home.js" ></script>
-		
-		
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-		
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/home.js"></script>
+
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
 		<script type="text/javascript">
 			new Vue({
 				el: ".mui-content",
@@ -100,7 +101,7 @@
 								down: {
 									auto: true,
 									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
-								},
+								}, 
 								up: {
 									callback: this._up
 								}
@@ -116,30 +117,32 @@
 					},
 					_down: function() {
 						this.n = 1;
-						dal.home.theme.list(this.n, function(err, data){
-							if(err){
+						this.$pullRefresh.pullRefresh().endPulldownToRefresh();
+						dal.home.theme.list(this.n, function(err, data) {
+							
+							if(err) {
 								return mui.toast(err.message);
 							}
 							this.items = data;
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
+
 						}.bind(this));
-						
+
 					},
 					_up: function() {
 						this.n++;
-						dal.home.theme.list(this.n, function(err, data){
-							if(err){
+						dal.home.theme.list(this.n, function(err, data) {
+							if(err) {
 								return mui.toast(err.message);
 							}
-							
+
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
 							if(!data || data.length === 0) {
 								mui.toast('没有更多了~');
 								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
 							}
 							this.items.push.apply(this.items, data);
-							
-							
+
 						}.bind(this));
 					}
 				}

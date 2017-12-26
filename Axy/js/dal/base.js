@@ -1,5 +1,5 @@
 var dal = {
-	//	BASE_URL: "http://192.168.1.213:8080/vihiManager/vihiapi",
+//		BASE_URL: "http://192.168.1.213:8080/vihiManager/vihiapi",
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
 };
 

@@ -16,12 +16,12 @@
 				background-color: #F4F8FB;
 			}
 			
-			
-			.card-header{
+			.card-header {
 				padding: 0.613333rem 0;
 				text-align: center;
 			}
-			.card-header>div{
+			
+			.card-header>div {
 				background-color: #d9d9d9;
 				width: 2rem;
 				margin: 0 auto;
@@ -31,8 +31,7 @@
 				border-radius: 5px;
 			}
 			
-			
-			.card-body{
+			.card-body {
 				margin: 0 0.346666rem;
 				padding: 0.48rem 0.4rem 0 0.4rem;
 				background-color: #FFFFFF;
@@ -40,19 +39,16 @@
 				position: relative;
 			}
 			
-			
-			
-			.card-body>.app-font-size-32{
+			.card-body>.app-font-size-32 {
 				margin-bottom: 0.48rem;
 			}
 			
-			
-			.card-body .tips{
+			.card-body .tips {
 				position: relative;
 				padding: 0.4rem 1.893333rem 0.4rem 0;
 			}
 			
-			.card-body .tips:after{
+			.card-body .tips:after {
 				content: "";
 				height: 1px;
 				display: block;
@@ -92,21 +88,24 @@
 			<span class="app-font-size-30 app-color-white mui-pull-right" style="line-height: 44px;">清空</span>
 		</header>
 		<div class="mui-content" style="padding-bottom: 1.333333rem;">
-			
-			<div class="card" v-for="o,i in 10">
+
+			<div class="card" v-for="o,i in list" @tap="onCardTap(o)">
 				<div class="card-header">
-					<div class="app-font-size-20">今天 10:00</div>
+					<div class="app-font-size-20" v-text="o.time"></div>
 				</div>
 				<div class="card-body">
-					<div class="app-font-size-32">您有一张优惠券到帐了</div>
-					<div class="tips app-font-size-28 app-color-9f9fa0">您昨天累计收到1张价值10.0元的优惠券，赶紧去看看吧！</div>
+					<div class="app-font-size-32" v-text="o.title"></div>
+					<div class="tips app-font-size-28 app-color-9f9fa0" v-text="o.summary"></div>
 				</div>
 			</div>
-			
+
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/message.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -115,11 +114,39 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-
+						n: 1,
+						list: []
 					};
 				},
-				methods: {
 
+				mounted: function() {
+					this.getMessageList();
+				},
+
+				methods: {
+					// 获取消息列表
+					getMessageList: function() {
+						var that = this;
+						dal.message.getSystemList(this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							console.log(JSON.stringify(data));
+
+							that.list.push({
+								"summary": "tests",
+								"id": 2,
+								"time": "testt",
+								"detail": "testd",
+								"title": "test",
+								"status": 1
+							});
+						});
+					},
+					// 卡片被点击时
+					onCardTap: function(o){
+						console.log(JSON.stringify(o));
+					}
 				}
 			})
 		</script>
