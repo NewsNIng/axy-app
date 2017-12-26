@@ -79,7 +79,9 @@
 				padding: 0.24rem 0.293333rem 0.293333rem 0.24rem;
 			}
 			
-			.item>div.info>.title {}
+			.item>div.info>.title {
+				padding-bottom: 0.16rem;
+			}
 			
 			p.mui-ellipsis-2 {
 				line-height: 16px;
@@ -155,12 +157,12 @@
 						<div class="item" @tap="onItemTap(item, index)">
 							<div class="imgBg img-lazy-load" :data-src="_getImg(item.image1,item.image2,item.image3)" :index="item.id" :height="_getH()"></div>
 							<div class="info">
-								<div class="title app-font-size-26">#{{item.title}}</div>
+								<div class="title app-font-size-30">#{{item.title}}#</div>
 								<p class="mui-ellipsis-2 app-font-size-28">{{item.content}}</p>
 								<div class="menu">
 									<div @tap.stop="onAvastrTap(item.account)">
 										<img class="avastr img-lazy-load" :data-src="item.headimgurl" />
-										<span class="nickname app-font-size-28">{{item.nickname}}</span>
+										<span class="nickname app-font-size-26">{{item.nickname}}</span>
 									</div>
 									<div @tap.stop="onLikeTap(item)"> 
 										<img class="icon" :src='"../../../image/nearby/discover/" + (item.like?"":"no") + "like.png"' />
