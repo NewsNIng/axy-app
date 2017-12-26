@@ -122,7 +122,7 @@
 			</div>
 
 			<div class="fast-box">
-				<div class="fast-box-card app-touch" data-href="../smart/devices/dev_my_list.html">
+				<div class="fast-box-card app-touch" data-href="../smart/devices/dev_my_list.html" data-pid="dev_my_list">
 					<img src="../../image/person/btn_Myequipment@3x.png" />
 					<div class="app-font-size-28 app-color-333333">我的设备</div>
 				</div>
@@ -217,9 +217,10 @@
 			mui.ready(function() {
 				mui(".mui-content").on('tap', '*[data-href]', function() {
 					var url = this.dataset.href;
+					var id = this.dataset.pid || url;
 					// 所有跳转 需要验证登录
 					app.user.get(function(u) {
-						u && mui.openWindow(url);
+						u && mui.openWindow(url, id);
 					});
 				});
 			});

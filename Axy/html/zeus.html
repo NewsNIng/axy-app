@@ -41,40 +41,9 @@
 			// 原生通知前端执行动作
 			var NotifyAction = {
 				// 设备状态更新 
-				RunstateNotify: function(data) {
-					//					try {
-					//						var isUpdate = runManager.updateById(data, function(o, n) {
-					//							return o.devid === n.devid;
-					//						});
-					//						// 转发通知
-					//						B.emit('RunstateNotify', {
-					//							info: data,
-					//							add: !isUpdate
-					//						});
-					//					} catch(e) {
-					//						//TODO handle the exception
-					//						alert(e.message);
-					//					}
-
-				},
-
+				RunstateNotify: function(data) {},
 				// 设备信息更新
-				DeviceInfoNotify: function(data) {
-					//					try {
-					//						var isUpdate = devManager.updateById(data, function(o, n) {
-					//							return o.basicInfo && o.basicInfo.devid === n.basicInfo.devid;
-					//						});
-					//						// 转发通知
-					//						B.emit('DeviceInfoNotify', {
-					//							info: data,
-					//							add: !isUpdate
-					//						});
-					//					} catch(e) {
-					//						//TODO handle the exception
-					//						alert(e.message);
-					//					}
-
-				},
+				DeviceInfoNotify: function(data) {},
 			};
 
 			var getPwd = function() {
@@ -106,9 +75,7 @@
 						if(app.user.has()) {
 							var u = app.user.get();
 							var type = window.localStorage.getItem('login_type');
-							
-							
-							
+
 							if(type === 'pwd') {
 								// 验证用户信息
 								dal.user.login(u.account, getPwd(), function(err, data) {
@@ -123,9 +90,9 @@
 									ob.next(u.account);
 								});
 							} else {
-								
+
 								var o = {
-									type: type, 
+									type: type,
 								};
 								o[type + "openid"] = u[type + "openid"];
 								// 自动第三方登录
@@ -134,7 +101,7 @@
 										// 清除用户信息
 										appLoginFail();
 										return;
-									} 
+									}
 									// 验证成功
 									// 保存用户信息
 									updateUserInfo(data);
@@ -153,19 +120,6 @@
 					D = new ni.Cache('dev_list', [], {
 						plus: true
 					});
-
-					// 本地 所有设备的信息
-					//					ALLD = new ni.Cache('AllDeviceInfo', [], {
-					//						plus: true
-					//					});
-					//
-					//					// 本地 所有设备的运行状态
-					//					ALLR = new ni.Cache('AllDeviceRun', [], {
-					//						plus: true
-					//					});
-					//
-					//					devManager = new DevManager(ALLD);
-					//					runManager = new DevManager(ALLR);
 
 					return Rx.Observable
 						.create(function(ob) {
@@ -187,7 +141,7 @@
 										pwd: pwd,
 										domain: domain
 									});
-								}, 300);
+								}, 0);
 							}
 						});
 				})
@@ -197,25 +151,9 @@
 						pwd = o.pwd,
 						domain = o.domain;
 					D.data = [];
-					// 判断定时器
-					if(T < 0) {
-						(function _() {
-							// 请求服务端数据 TODO 取消分页
-							dal.device.list(1, function(err, data) {
-								if(err) {
-									return;
-								}
-								// 数据不为空时 向原生发送数据
-								if(data && data.length > 0) {
-									console.log(JSON.stringify(data));
-									D.data = data;
-									P.InitNativeDevList(JSON.stringify(data));
-								}
-							}, 1000);
-							// 递归调用 模拟定时器 60s频率
-							T = setTimeout(_, TD);
-						}());
-					}
+					
+					var getDevFun = listenDevListUpdate();
+					getDevFun();
 
 					return Rx.Observable
 						.create(function(o3) {
@@ -224,7 +162,6 @@
 								// next
 								o3.next(arg);
 							});
-							//getNativeDeviceInfo();
 						});
 				})
 				// 消息中心事件
@@ -245,62 +182,6 @@
 					}
 
 				});
-
-			function getNativeDeviceInfo() {
-				// 获取本地设备缓存信息
-				var t = 0,
-					n = 3;
-				//var data = devManager.get();
-				// 如果本地有 设备信息 则使用本地用户信息
-				//if(data.length !== 0) {
-				//t = 1e4;
-				//} else {
-				//t = 0;
-				//}
-				setTimeout(function _() {
-					P.GetAllDeviceInfoASync(function(rs) {
-						rs = JSON.parse(rs);
-						if(rs && rs.data && rs.data.devlist && rs.data.devlist.length > 0) {
-							devManager.set(rs.data.devlist);
-							// 转发通知
-							//B.emit('DeviceInfoNotifyAll', {});
-						} else if(n > 0) {
-							n--;
-							setTimeout(_, 1e3);
-						} else {
-							// 多次未获取到应用信息
-							plus.nativeUI.toast('获取本地设备信息异常');
-						}
-					});
-				}, t);
-
-				var n2 = 3;
-				//data = runManger.get();
-				// 如果本地有 设备信息 则使用本地用户信息
-				//if(data.length !== 0) {
-				//	t = 1e4;
-				//} else {
-				//	t = 0;
-				//}
-				setTimeout(function _() {
-					var rs = P.GetAllDeviceRunStateSync();
-					if(!rs) {
-						return;
-					}
-					rs = JSON.parse(rs);
-					if(rs && rs.data && rs.data.runstate) {
-						runManager.set(rs.data.runstate);
-						// 转发通知
-						//B.emit('RunstateNotifyAll', {});
-					} else if(n2 > 0) {
-						n2--;
-						setTimeout(_, 1e3);
-					} else {
-						// 多次未获取到应用信息
-						plus.nativeUI.toast('获取本地设备状态异常');
-					}
-				}, t);
-			}
 
 			function appLoginFail() {
 				app.user.clear();
@@ -335,6 +216,42 @@
 			}).subscribe(function(userinfo) {
 				updateUserInfo(userinfo);
 			});
+
+
+			// 不断获取设备信息
+			function listenDevListUpdate(){
+				var rx_time, rx_listen;
+				function getDevListSaveLocal() {
+					// 请求服务端数据 TODO 取消分页
+					dal.device.list(1, function(err, data) {
+						if(err) {
+							return;
+						}
+						// 数据不为空时 向原生发送数据
+						if(data && data.length > 0) {
+							D.data = data;
+							// 通知其它页面
+							// _B.emit('device_update', {});
+							data = JSON.stringify(data);
+							console.log(data);
+							P.InitNativeDevList(data);
+						}
+					}, 1000);
+				}
+				return function(){
+					if(rx_time){return}
+					rx_time = Rx.Observable.interval(30e3); 
+					rx_listen = Rx.Observable.create(function(ob){
+						_B.on('device_update', function(){
+							ob.next();
+						});
+					});
+					rx_time.subscribe(getDevListSaveLocal);
+					rx_listen.subscribe(getDevListSaveLocal);
+					getDevListSaveLocal();
+				}
+			}
+
 		</script>
 	</body>
 

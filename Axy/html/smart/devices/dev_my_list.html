@@ -391,12 +391,24 @@
 					var DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
-					var devData = DEVD.data;
-					this.netDivList = devData.map(function(item) {
-						item.devimg = this._getDevImg(item.devid);
-						item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
-						return item;
-					}.bind(this));
+					
+					var that = this;
+					
+					function getDevData(){
+						var devData = DEVD.data;
+						that.netDivList = devData.map(function(item) {
+							item.devimg = that._getDevImg(item.devid);
+							item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
+							return item;
+						});
+					}
+					
+					getDevData();
+					
+					_B.on('device_update', function(){
+						alert(123213213213);
+						getDevData();
+					});
 
 					this.$nextTick(function() {
 						mui('.mui-switch')['switch']();
