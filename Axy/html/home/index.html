@@ -245,6 +245,42 @@
 				background-repeat: no-repeat;
 			}
 			/*附近的店====end====*/
+			/*设备背景图fix*/
+			.imgdiv{
+				position: relative;
+			}
+			.imgdiv.WG-100:after {
+				content: "";
+				top: 0;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-image: url(../../image/smart/devices/bg/wg_100@3xweb.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 8;
+			}
+			/*TODO 修复*/
+			
+			.imgdiv.AX-903:after {
+				content: "";
+				top: 0;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-image: url(../../image/smart/devices/bg/903@3xweb.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 8;
+			}
+			
+			.imgdiv.WG-100,
+			.imgdiv.AX-903 {
+				pointer-events: none;
+			}
+			/*设备背景图fix--------*/
 		</style>
 
 		<link rel="stylesheet" href="new_file.css" />
@@ -304,9 +340,8 @@
 				<div class="model_type">
 					<template v-for="o,i in modelTypes">
 						<div @tap="onModelTap(o, i)">
-
 							<img :src="o.src" />
-							<span class="app-font-size-24">{{o.name}}</span>
+							<span class="app-font-size-26">{{o.name}}</span>
 						</div>
 					</template>
 
@@ -325,7 +360,7 @@
 						</div>
 
 						<div class="device_show">
-							<div class="img" :style="{backgroundImage: 'url('+dev.devimg+')'}" @tap="openCamListWindow()">
+							<div class="img imgdiv" :class="_getDevName(dev.type)" :style="{backgroundImage: 'url('+dev.devimg+')'}" @tap="openCamListWindow()">
 
 							</div>
 							<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
@@ -439,6 +474,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/app/app-dev.js" ></script>
 
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
@@ -599,6 +635,7 @@
 				},
 				methods: {
 					getCurrentPosition: function() {
+
 						return new Promise(function(re, rj) {
 							plus.geolocation.getCurrentPosition(function(p) {
 								this.longitude = p.coords.longitude;
@@ -606,7 +643,9 @@
 								this.city = p.address.city.replace('市', '');
 								this.position = p.address.poiName;
 								re();
-							}.bind(this), rj);
+							}.bind(this), function() {
+								rj();
+							});
 						}.bind(this));
 					},
 					// 点击消息按钮
@@ -720,20 +759,20 @@
 							}
 							if(data) {
 								this.dev = data[0]
-//								this.dev = {
-//									"id": 3528,
-//									"streamfwdport": 17600,
-//									"location": "test",
-//									"devid": "AX-403A-2018070500013",
-//									"relation": 0,
-//									"binding": "",
-//									"streamfwd": "vh.anxin-net.com",
-//									"workmode": 0,
-//									"type": 48,
-//									"signalfwd": "vh.anxin-net.com",
-//									"signalfwdport": 17700,
-//									"online": 1
-//								};
+								//								this.dev = {
+								//									"id": 3528,
+								//									"streamfwdport": 17600,
+								//									"location": "test",
+								//									"devid": "AX-403A-2018070500013",
+								//									"relation": 0,
+								//									"binding": "",
+								//									"streamfwd": "vh.anxin-net.com",
+								//									"workmode": 0,
+								//									"type": 48,
+								//									"signalfwd": "vh.anxin-net.com",
+								//									"signalfwdport": 17700,
+								//									"online": 1
+								//								};
 								this.dev.devimg = this._getDevImg(this.dev.devid);
 								this.dev.location = this.dev.location ? this.dev.location.replace(/<[^<]*>/gi, "") : "";
 							}
@@ -859,7 +898,11 @@
 						} else if(this.$os.ios) {
 							return app.ios.getSafeBoxPath() + "Documents/account_18718690160/assets" + devid + '.jpeg?t=' + new Date().getTime();
 						}
-					}
+					},
+					_getDevName: function(type){
+						return app.dev.findName(type);
+					},
+					
 				}
 			});
 		</script>

@@ -85,6 +85,11 @@
 				height: 1.173333rem;
 			}
 			/*end空记录*/
+			
+			
+			.del{
+				display: none;
+			}
 		</style>
 
 	</head>
@@ -114,7 +119,7 @@
 				
 				
 				<div class="room app-font-size-28" v-for="o,i in list" :data-time="o.name || o.id">
-					<div class="app-font-size-28 mui-table-view-cell" v-for="oo,ii in o.list">
+					<div class="app-font-size-28 mui-table-view-cell" v-for="oo,ii in o.list"> 
 						<div class="mui-slider-right mui-disabled" @tap="onDelTap(oo, ii, $event)">
 							<a class="mui-btn mui-btn-red">删除</a>
 						</div>
@@ -195,21 +200,18 @@
 					},
 					// 删除点击
 					onDelTap: function(o, i, e){
-						mui.confirm("确定要删除对该用户的分享吗？", "", ["删除", "取消"], function(e) {
-							if(e.index === 0) {
-								dal.device[methodName](dev.devid, function(err, rs) {
+						mui.confirm("确定要删除对该用户的分享吗？", "", ["删除", "取消"], function(ee) {
+							if(ee.index === 0) {
+								plus.nativeUI.showWaiting();
+								dal.device.delShare(o.id, function(err, rs) {
 									plus.nativeUI.closeWaiting();
 									if(err) {
-										return mui.toast('删除设备失败');
+										return mui.toast('删除失败');
 									}
-									_B.emit("delete", {}, {
-										views: [that.$view.opener()]
-									});
-									that.$view.close();
-									return mui.toast('删除设备成功');
+									// TODO 添加样式隐藏
+									e.target.parentNode.parentNode.classList.add('del');
+									return mui.toast('删除成功');
 								});
-							} else {
-								plus.nativeUI.closeWaiting();
 							}
 						});
 					}

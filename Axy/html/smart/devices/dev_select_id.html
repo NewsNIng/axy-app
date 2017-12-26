@@ -156,7 +156,8 @@
 					},
 					onNext: function() {
 						app.page.setResult({
-							devid: this.indexDev.devid
+							devid: this.indexDev.devid,
+							type: this.indexDev.type
 						}).close();
 					},
 					// 主机列表

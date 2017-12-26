@@ -177,16 +177,17 @@
   },
   "html/smart/add/scan.html": {
     "refer": [
-      "html/public/input.html"
+      "html/public/input.html",
+      "html/smart/devices/dev_select_id.html"
     ],
     "resources": []
   },
   "html/smart/add/add_device.html": {
     "resources": [
-      "image/smart/devices/dev_icon/?:@3x.png",
+      "image/smart/devices/dev_icon/ý;:@3x.png",
       "image/smart/devices/dev_icon/\u0027%\tý@3x.png",
       "image/smart/devices/dev_icon/ýb2ýKh@3x.png",
-      "image/smart/devices/dev_icon/ý\u0018?h@3x.png",
+      "image/smart/devices/dev_icon/ý\u0018ý6h@3x.png",
       "image/smart/devices/dev_icon/zýý\u0001@3x.png",
       "image/smart/devices/dev_icon/zýoý@3x.png",
       "image/smart/devices/dev_icon/eýh@3x.png",
@@ -194,17 +195,17 @@
       "image/smart/devices/dev_icon/zý@3x.png",
       "image/smart/devices/dev_icon/ýh@3x.png",
       "image/smart/devices/dev_icon/ý\u0018GMh@3x.png",
-      "image/smart/devices/dev_icon/ý\u0016e?W@3x.png",
+      "image/smart/devices/dev_icon/ý\u0016eý!W@3x.png",
       "image/smart/devices/dev_icon/ýIýfh@3x.png",
       "image/smart/devices/dev_icon/\u0000\u0027\u0016ýýKh@3x.png",
       "image/smart/devices/dev_icon/ý\u0014ýKh@3x.png",
       "image/smart/devices/dev_icon/5ýýh;:@3x.png",
       "image/smart/devices/dev_icon/ý\u0016U\u0018@3x.png",
       "image/smart/devices/dev_icon/ýýýKh@3x.png",
-      "image/smart/devices/dev_icon/?:@3x.png",
+      "image/smart/devices/dev_icon/ý;:@3x.png",
       "image/smart/devices/dev_icon/\u0027%\tý@3x.png",
       "image/smart/devices/dev_icon/ýb2ýKh@3x.png",
-      "image/smart/devices/dev_icon/ý\u0018?h@3x.png",
+      "image/smart/devices/dev_icon/ý\u0018ý6h@3x.png",
       "image/smart/devices/dev_icon/zýý\u0001@3x.png",
       "image/smart/devices/dev_icon/zýoý@3x.png",
       "image/smart/devices/dev_icon/eýh@3x.png",
@@ -212,17 +213,17 @@
       "image/smart/devices/dev_icon/zý@3x.png",
       "image/smart/devices/dev_icon/ýh@3x.png",
       "image/smart/devices/dev_icon/ý\u0018GMh@3x.png",
-      "image/smart/devices/dev_icon/ý\u0016e?W@3x.png",
+      "image/smart/devices/dev_icon/ý\u0016eý!W@3x.png",
       "image/smart/devices/dev_icon/ýIýfh@3x.png",
       "image/smart/devices/dev_icon/\u0000\u0027\u0016ýýKh@3x.png",
       "image/smart/devices/dev_icon/ý\u0014ýKh@3x.png",
       "image/smart/devices/dev_icon/5ýýh;:@3x.png",
       "image/smart/devices/dev_icon/ý\u0016U\u0018@3x.png",
       "image/smart/devices/dev_icon/ýýýKh@3x.png",
-      "image/smart/devices/dev_icon/?:@3x.png",
+      "image/smart/devices/dev_icon/ý;:@3x.png",
       "image/smart/devices/dev_icon/\u0027%\tý@3x.png",
       "image/smart/devices/dev_icon/ýb2ýKh@3x.png",
-      "image/smart/devices/dev_icon/ý\u0018?h@3x.png",
+      "image/smart/devices/dev_icon/ý\u0018ý6h@3x.png",
       "image/smart/devices/dev_icon/zýý\u0001@3x.png",
       "image/smart/devices/dev_icon/zýoý@3x.png",
       "image/smart/devices/dev_icon/eýh@3x.png",
@@ -230,7 +231,7 @@
       "image/smart/devices/dev_icon/zý@3x.png",
       "image/smart/devices/dev_icon/ýh@3x.png",
       "image/smart/devices/dev_icon/ý\u0018GMh@3x.png",
-      "image/smart/devices/dev_icon/ý\u0016e?W@3x.png",
+      "image/smart/devices/dev_icon/ý\u0016eý!W@3x.png",
       "image/smart/devices/dev_icon/ýIýfh@3x.png",
       "image/smart/devices/dev_icon/\u0000\u0027\u0016ýýKh@3x.png",
       "image/smart/devices/dev_icon/ý\u0014ýKh@3x.png",
@@ -262,7 +263,8 @@
   "html/nearby/menu.html": {
     "refer": [
       "html/nearby/business/signup.html",
-      "html/nearby/discover/discover_release.html"
+      "html/nearby/discover/discover_release.html",
+      "html/common/login.html"
     ],
     "resources": []
   },
@@ -275,7 +277,8 @@
       "html/smart/devices/camera_settings.html",
       "html/smart/add/add_device.html",
       "html/smart/scenes/index.html",
-      "html/common/login.html"
+      "html/common/login.html",
+      "html/person/message/index.html"
     ],
     "resources": [
       "js/dal/home.js",
@@ -300,7 +303,8 @@
   "html/search/index.html": {
     "refer": [
       "html/nearby/discover/discover_details.html",
-      "html/nearby/business/store_details.html"
+      "html/nearby/business/store_details.html",
+      "html/search/index.html"
     ],
     "resources": []
   },
@@ -365,7 +369,8 @@
       "html/smart/devices/dev_65.html",
       "html/smart/devices/dev_129.html",
       "html/smart/devices/dev_48.html",
-      "html/person/collection/my_camera.html"
+      "html/person/collection/my_camera.html",
+      "html/smart/devices/dev_AX-903.html"
     ],
     "resources": []
   },
@@ -487,5 +492,27 @@
       "html/public/input.html"
     ],
     "resources": []
+  },
+  "html/nearby/pages/theme.html": {
+    "refer": [
+      "html/public/browser.html"
+    ]
+  },
+  "html/smart/devices/dev_AX-903.html": {
+    "refer": [
+      "html/smart/devices/dev_AX-903_setting.html"
+    ]
+  },
+  "html/smart/devices/dev_AX-903_setting.html": {
+    "refer": [
+      "html/smart/devices/dev_AX-903_datasave.html",
+      "html/smart/devices/dev_AX-903_alarmlog.html",
+      "html/public/input.html"
+    ]
+  },
+  "html/smart/devices/dev_WG-100.html": {
+    "refer": [
+      "html/smart/devices/camera_settings_arming.html"
+    ]
   }
 }

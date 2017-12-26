@@ -271,10 +271,7 @@
 					});
 				},
 				methods: {
-					// 切换开关
-					toggleSwitch: function() {
-						this.state = !this.state;
-					},
+					
 					// 点击连接家人的摄像机
 					onFamilyTap: function() {
 						mui.openWindow('family_menu.html');
@@ -287,7 +284,7 @@
 						}else if(o.type === 1){
 							this._hostNetLine(o.img);
 						}else{
-							this._scanCodeLine();
+							this._scanCodeLine(true);
 						}
 					},
 					// 控制配件
@@ -332,14 +329,14 @@
 					},
 					
 					// 扫码获取设备ID
-					_scanCodeLine: function(type){
+					_scanCodeLine: function(isDev){
 						app.page.openForResultBy('scan.html', 'scan', function(data){
 							// 获取扫码结果
 							console.log(data.result);
 							// 执行设备添加
 							
 						}, {
-							type: type
+							isDev: isDev
 						});
 					}
 				}

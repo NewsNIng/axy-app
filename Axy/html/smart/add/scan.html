@@ -94,7 +94,7 @@
 						frist: true, // 是否首次
 						scan: null,
 						t: -1,
-						type: 0, // 添加模式，默认为配件添加， 1 为主机添加
+						isDev: false,
 					};
 				},
 				watch: {
@@ -107,8 +107,9 @@
 				},
 
 				plusReady: function() {
-					this.type = this.$view.type || 0;
-
+					
+					this.isDev = this.$view.isDev;
+					
 					setTimeout(function() {
 						this.resetScan();
 					}.bind(this), 200);
@@ -121,19 +122,22 @@
 						// 手动输入序列号 
 						app.page.getInput(function(data) {
 							this._addDevice(data.content);
+							// 验证
+							// 
+
 						}.bind(this), {
 							tips: '请输入设备序列号',
 							title: '手动输入',
-							content: '25000163',
-							//r: '',
+							content: '',
+							// r: '',
 						});
 
 					},
 					// 发送添加设备请求
 					_addDevice: function(id) {
-						var w = plus.nativeUI.showWaiting();
 						// 如果当前不是配件添加，是主机添加
-						if(this.type !== 0) {
+						if(this.isDev) {
+							var w = plus.nativeUI.showWaiting();
 							dal.device.add(id, function(err, data) {
 								w && (w.close(), w = null);
 								if(err) {
@@ -146,8 +150,12 @@
 						// 配件添加
 						else {
 							// 先选择主机设备
-							app.page.openForResultBy('Lan_select_dev_id.html', 'select_dev_id', function(data) {
-								var devid = data.devid;
+							app.page.openForResultBy('../devices/dev_select_id.html', 'dev_select_id', function(data) {
+								app.page.setResult({
+									devid: data.devid,
+									devtype: data.type,
+									id: id
+								}).close();
 							}, {
 								result: true
 							});
@@ -168,7 +176,8 @@
 
 					},
 					initScan: function() {
-						var _arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+						//var _arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+						var _arr = [10];
 						var scan = new plus.barcode.Barcode('axy', _arr, {
 							frameColor: '#06C1AE',
 							scanbarColor: '#06C1AE',
@@ -178,9 +187,6 @@
 					},
 					onMarked: function(type, result, file) {
 						this._addDevice(result);
-						//						app.page.setResult({
-						//							result: result
-						//						}).close();
 					},
 					startScan: function() {
 						this.scan && (this.scan.start(), this.frist = false);

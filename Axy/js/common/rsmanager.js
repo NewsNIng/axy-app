@@ -26,20 +26,21 @@
 			callback(e.index === 0);
 		}, {
 			title: title || "提示",
-			buttons: ["立即更新", "取消"]
-		})
+			buttons: ["立即更新", "取消"],
+			verticalAlign: "center"
+		});
 	}
 	
 	function _install(uri, callback, isHide){
 		var w = {
 			close: function(){},
 			setTitle: function(){}
-		}, result = function(success){
+		}, result = function(success, e){
 			w.close();
 			if(success){
 				callback(true);	
 			}else{
-				plus.nativeUI.toast("更新失败，请重试。");
+				plus.nativeUI.toast("更新失败，请重试。\n" + e.message);
 				callback(false);
 			}
 		};

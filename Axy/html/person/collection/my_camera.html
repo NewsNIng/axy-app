@@ -208,6 +208,8 @@
 
 		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
+		
+		<script type="text/javascript" src="../../../js/extend/Date.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -302,8 +304,6 @@
 						kernel: 'WKWebview'
 					});
 
-					this.getRecord();
-					
 					var D = new this.$Cache("dev_list", [], {
 						plus: true
 					});
@@ -320,18 +320,24 @@
 					devPick.setData(devPickData);
 					
 					var devInfo = this.$view.devInfo;
-					
 					if(devInfo){
+						
 						this.devId = devInfo.devid;
 						this.devName = devInfo.location || this.devId;
 					}
 					
+					
+					this.$watch('devId', this.getRecord);
+					this.$watch('dateTime', this.getRecord);
+					
+					this.getRecord();
 				},
 
 				methods: {
 
 					// 设备选择
 					onDevTap: function() {
+						this.devId && devPick.pickers[0].setSelectedValue(this.devId);
 						devPick.show(function(items) {
 							this.devName = items[0].text;
 							this.devId = items[0].value;
@@ -347,6 +353,11 @@
 							beginYear: y,
 							endYear: y
 						};
+						
+						if(this.dateTime!==""){
+							options.value =  this.dateTime.toFormatString('yyyy-MM-dd');
+						}
+						
 						dtPick = new mui.DtPicker(options);
 						dtPick.show(function(rs) {
 							/*
@@ -378,12 +389,8 @@
 					// 获取本地 录像/图片列表
 					getRecord: function() {
 						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd'): "");
-						console.log(rs);
-						//rs = JSON.parse(rs);
-						
-						// TODO as调试
-						
-						
+						rs = JSON.parse(rs);
+						this.record_ = rs.data.record;
 						this.$nextTick(function() {
 							mui.previewImage();
 						});
