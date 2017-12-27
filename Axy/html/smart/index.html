@@ -32,24 +32,35 @@
 				margin-bottom: 0.346666rem;
 			}
 			/*end 26分割线*/
-			
-			
 			/*九宫格*/
-			ul{
+			
+			ul {
 				background-color: #FFFFFF !important;
 			}
-			ul>li{
+			
+			ul>li {
 				height: 3.333333rem;
 				width: 3.333333rem;
 				text-align: center;
 				padding-top: 0.55rem !important;
 				border-color: #E5E6E7 !important;
 			}
-			ul>li img{
+			
+			ul>li img {
 				width: 0.693333rem;
 			}
 			
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell {
+				border-right: 1px solid #F5F5F5 !important;
+				border-bottom: 1px solid #F5F5F5 !important;
+			}
 			/*end 九宫格*/
+			
+			.mui-media-body {
+				height: 0.533333rem !important;
+				line-height: 0.533333rem !important;
+			}
+			
 		</style>
 	</head>
 
@@ -87,17 +98,24 @@
 
 			<ul class="mui-table-view mui-grid-view mui-grid-9">
 				<template v-for="o,i in menuList">
-					
-			
-				<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap(o)">
-					<a>
-						<span class="mui-icon">
+
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap(o)">
+						<a>
+							<span class="mui-icon">
 							<img :src="o.img"/>
 						</span>
-						<div class="mui-media-body">{{o.text}}</div>
-					</a>
-				</li>
-					</template>
+							<div class="mui-media-body">{{o.text}}</div>
+						</a>
+					</li>
+				</template>
+				<template v-for="o,i in 3-(menuList.length % 3 == 0? 3:menuList.length % 3)">
+					<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4">
+						<a>
+							<span class="mui-icon"></span>
+							<div class="mui-media-body"></div>
+						</a>
+					</li>
+				</template>
 			</ul>
 
 			<div class="menu-room app-font-size-28">
@@ -116,30 +134,26 @@
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
 		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
-		
-		<script type="text/javascript" src="../../js/app/app.js" ></script>
-		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
-		
+
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
-			
-			
-			
+
 			new Vue({
 				el: '.mui-content',
 				data: function() {
 					return {
 						hasDev: false,
 						imgList: [{
-								adimg: "https://tuya-static.oss-cn-hangzhou.aliyuncs.com/portalbe/images/1513656623_0.jpg",
-								link: "http://www.vihivision.com/product/301.html"
-							}
-						],
-						menuList: [
-							{
+							adimg: "https://tuya-static.oss-cn-hangzhou.aliyuncs.com/portalbe/images/1513656623_0.jpg",
+							link: "http://www.vihivision.com/product/301.html"
+						}],
+						menuList: [{
 								text: "我的设备",
 								img: '../../image/smart/btn_Myequipment@3x.png',
-								href: 'devices/dev_my_list.html', 
+								href: 'devices/dev_my_list.html',
 							},
 							{
 								text: "添加设备",
@@ -167,8 +181,7 @@
 								href: '',
 							}
 						],
-						
-						
+
 					}
 				},
 				computed: {
@@ -184,7 +197,7 @@
 //					var D = new ni.Cache('dev_list', [], {
 //						plus: true
 //					});
-//					if(D.data.length > 0){
+//					if(D.data.length > 0) {
 //						this.hasDev = true;
 //					}
 //					this.menuList.splice(+this.hasDev, 1);
@@ -195,11 +208,11 @@
 							url: o.link
 						});
 					},
-					
+
 					onItemTap: function(o) {
 						// 验证登录
-						app.user.get(function(u){
-							u && mui.openWindow(o.href, o.id || o.href);	
+						app.user.get(function(u) {
+							u && mui.openWindow(o.href, o.id || o.href);
 						});
 					},
 				}

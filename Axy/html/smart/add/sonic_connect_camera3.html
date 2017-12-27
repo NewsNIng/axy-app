@@ -33,7 +33,7 @@
 				background-color: #06c1ae;
 			}
 			
-			.dev_icon {
+			/*.dev_icon {
 				background-image: url(../../../image/smart/devices/dev_icon/AX-360@3x.png.png);
 				width: 100%;
 				height: 9.2rem;
@@ -41,11 +41,9 @@
 				background-position: center;
 				background-size: 50%;
 				position: relative;
-			}
+			}*/
 			
 			.dev_text {
-				position: absolute;
-				bottom: 0;
 				width: 100%;
 				margin-bottom: 0.4rem;
 				text-align: center;
@@ -74,6 +72,16 @@
 				color: white;			
 			}
 			
+			.imgbg{
+				width: 100%;
+				padding: 1.5rem;
+			}
+			
+			.imgbg > img{
+				width: 100%;
+			}
+			
+			
 		</style>
 	</head>
 
@@ -86,6 +94,9 @@
 			</header>
 
 			<div class="mui-content">
+				<div class="imgbg">
+					<img src="../../../image/smart/devices/dev_icon/AX-360@3x.png.png"/>
+				</div>
 				<div class="dev_icon app-font-size-30">
 					<div class="dev_text">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
 				</div>

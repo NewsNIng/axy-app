@@ -96,7 +96,7 @@
 		"NativeObj": {
 			"description": "原生对象"
 		},
-
+		
 		"Geolocation": {},
 		"H5NativeBridge": {
 			"description": "安心云智能"
@@ -104,7 +104,7 @@
 		"Barcode": {}
 	},
 	"plus": {
-		"error": {
+		"error":{
 			"url": "html/smart/devices/dev_error.html"
 		},
 		"statusbar": {
@@ -116,18 +116,7 @@
 		},
 		"runmode": "liberate",/*应用的首次启动运行模式，可取liberate或normal，liberate模式在第一次启动时将解压应用资源（Android平台File API才可正常访问_www目录）*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
-		"distribute": {
-			"plugins": {
-				"oauth": {},
-				"maps": {
-					"baidu": {
-						"appkey_ios": "gcFrC4FpFYgTMMFkMRQNP4zR5wQ5yOcK",
-						"appkey_android": "nuSPRZlyd5fy3dRBRcvX6iZNHWUxyH7c",
-						"appkey": "",
-						"description": ""
-					}
-				}
-			},
+		"distribute": {"plugins":{"oauth":{},"maps":{"baidu":{"appkey_ios":"gcFrC4FpFYgTMMFkMRQNP4zR5wQ5yOcK","appkey_android":"nuSPRZlyd5fy3dRBRcvX6iZNHWUxyH7c","appkey":"","description":""}}},
 			"apple": {
 				"appid": "",/*iOS应用标识，苹果开发网站申请的appid，如io.dcloud.HelloH5*/
 				"mobileprovision": "",/*iOS应用打包配置文件*/
@@ -141,31 +130,7 @@
 				"keystore": "",/*Android应用打包使用的密钥库文件*/
 				"password": "",/*Android应用打包使用密钥库中证书的密码*/
 				"aliasname": "",/*Android应用打包使用密钥库中证书的别名*/
-				"permissions": [
-					"<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
-					"<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>",
-					"<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-					"<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
-					"<uses-permission android:name=\"android.permission.INTERNET\"/>",
-					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-					"<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
-					"<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-					"<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-					"<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
-					"<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>",
-					"<uses-feature android:name=\"android.hardware.camera\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
-					"<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>",
-					"<uses-permission android:name=\"android.permission.CAMERA\"/>"
-				]
+				"permissions": ["<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>","<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>","<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>","<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>","<uses-permission android:name=\"android.permission.INTERNET\"/>","<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>","<uses-permission android:name=\"android.permission.VIBRATE\"/>","<uses-permission android:name=\"android.permission.READ_LOGS\"/>","<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>","<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>","<uses-permission android:name=\"android.permission.CALL_PHONE\"/>","<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>","<uses-feature android:name=\"android.hardware.camera.autofocus\"/>","<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>","<uses-feature android:name=\"android.hardware.camera\"/>","<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>","<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>","<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>","<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>","<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>","<uses-permission android:name=\"android.permission.CAMERA\"/>"]
 			},
 			"orientation": [
 				"portrait-primary",
@@ -359,7 +324,7 @@
 					"html/smart/add/add_device.html",
 					"html/smart/scenes/index.html",
 					"html/common/login.html",
-					"html/person/devshare/share.html"
+					"html/person/message/index.html"
 				],
 				"priority": 0
 			},
@@ -745,9 +710,7 @@
 					"html/smart/devices/dev_65.html",
 					"html/smart/devices/dev_129.html",
 					"html/smart/devices/dev_48.html",
-					"html/person/collection/my_camera.html",
-					"html/smart/devices/dev_AX-903.html",
-					"html/smart/devices/dev_AX-904.html"
+					"html/person/collection/my_camera.html"
 				],
 				"priority": 0
 			},
@@ -918,27 +881,6 @@
 				"resources": [],
 				"refer": [
 					"html/public/browser.html"
-				],
-				"priority": 0
-			},
-			"html/person/relation/bind.html": {
-				"resources": [],
-				"refer": [
-					"html/person/relation/bind_tel.html"
-				],
-				"priority": 0
-			},
-			"html/smart/devices/dev_AX-903.html": {
-				"resources": [],
-				"refer": [
-					"html/smart/devices/dev_AX-903_setting.html"
-				],
-				"priority": 0
-			},
-			"html/smart/devices/dev_AX-903_setting.html": {
-				"resources": [],
-				"refer": [
-					"html/smart/devices/dev_select_id.html"
 				],
 				"priority": 0
 			}

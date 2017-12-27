@@ -7,6 +7,12 @@
 		code: /^\d{6}$/,
 		//devName: /^\w{1,10}$/,
 		lockpassword: /^\d{4,8}$/, // 智能门锁密码
+		devName: function(value){
+			if(value.length > 15){
+				return false;
+			}
+			return true;
+		}
 	};
 
 	rules.testBy = function(rex, value, message) {
@@ -21,7 +27,9 @@
 			}
 		}
 		if(type === "[object Function]") {
-			return rex(value);
+			if(rex(value)){
+				return null;
+			}
 		}
 		return message;
 	}
