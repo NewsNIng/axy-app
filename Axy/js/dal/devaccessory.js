@@ -296,22 +296,11 @@
 	 * @param {Object} ptzset
 	 * @param {Object} callback
 	 */
-	devaccessory.bindcam = function(id, type, devid, devtype, newDevid, action, delay, zonetype, chnID, externChn, x, y, ptzset, callback) {
-		return ra("post", "/devaccessory/bindcam", {
-			id: id,
-			type: type,
-			devid: devid,
-			devtype: devtype,
-			newDevid: newDevid,
-			action: action,
-			delay: delay,
-			zonetype: zonetype,
-			chnID: chnID,
-			externChn: externChn,
-			x: x,
-			y: y,
-			ptzset: ptzset
-		}, callback);
+	devaccessory.bindcam = function(devaccessoryinfo, newDevid, devtype, callback) {
+		devaccessoryinfo.newDevid = newDevid;
+		devaccessoryinfo.devtype = devtype;
+		devaccessoryinfo.id = devaccessoryinfo.aid;
+		return ra("post", "/devaccessory/bindcam", devaccessoryinfo, callback);
 	}
 
 	/**
@@ -557,6 +546,18 @@
 	devaccessory.devDelete = function(accessory, devType, callback) {
 		accessory.devType = devType;
 		return ra("post", "/devaccessory/delete", accessory, callback);
+	}
+	
+	
+	/**
+	 * 通过配件ID获取配件初始化信息
+	 * @param {Object} id 配件id
+	 * @param {Object} callback
+	 */
+	devaccessory.initbyid = function(id, callback){
+		return ra("get", "/devaccessory/initbyid", {
+			id: id
+		}, callback);
 	}
 
 	

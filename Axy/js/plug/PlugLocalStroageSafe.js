@@ -16,8 +16,6 @@ window.localStorage.clear = function(){
 	return;
 };
 
-window.vvv = "123";
-
-console.log('防外部网址恶意JS注入成功');
+console.log('防JS注入');
 
 
