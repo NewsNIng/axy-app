@@ -105,6 +105,8 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
 		<script type="text/javascript" src="../../../js/dal/user.js" ></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -183,7 +185,17 @@
 							return mui.toast("输入验证码错误");
 						}
 						// TODO 调用接口
-						
+						plus.nativeUI.showWaiting();
+						dal.user.bindphone(this.tel, function(err, data){
+							plus.nativeUI.closeWaiting();
+							if(err){
+								return mui.toast(err.message);
+							}
+							mui.toast("绑定手机成功");
+							app.page.setResult({
+								tel: this.tel
+							}).close();
+						}.bind(this));
 					}
 				}
 			})

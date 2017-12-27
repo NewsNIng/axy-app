@@ -37,7 +37,8 @@
 			"html/person/index.html",
 			"html/smart/index.html",
 			"html/zeus.html",
-			"html/smart/index2.html"
+			"html/smart/index2.html",
+			"html/common/login.html"
 		]
 	},
 	"html/nearby/business/signup.html": {

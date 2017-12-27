@@ -93,7 +93,10 @@
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js" ></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/user.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -110,7 +113,7 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						tel: "17098631995",
+						tel: "",
 
 						weixin: {
 							userInfo: {
@@ -145,10 +148,17 @@
 				},
 
 				plusReady: function() {
+					this.getBindTel();
 					this.getBindData();
 				},
 				methods: {
+					// 获取本地用户绑定手机
+					getBindTel: function(){
+						var u = app.user.get();
+						this.tel = u.bindmobile; 
+					},
 
+					
 					// 获取本地绑定信息
 					getBindData: function() {
 						var that = this;
@@ -174,39 +184,58 @@
 						// 如果未登录
 						if(!this[type].authResult) {
 							new ni.OAuth(type, function(err, auth) {
-								if(!err) {
-									that[type] = auth;
+								if(err) {
+									return mui.toast("授权失败");
 								}
+								that[type] = auth;
+								dal.user.bindother(type, auth.userInfo.unionid || auth.authResult.openid, function(err, data){
+									if(err){
+										that[type].logout(function() {});
+										return mui.toast(err.message);
+									}
+									return mui.toast("绑定成功！");
+								});
 							});
 						} else {
-
-							mui.confirm("您要注销该绑定吗？", "", ["解除绑定", "取消"], function(e) {
+							
+							if(!this.telphone){
+								mui.toast("您需要先绑定手机号");
+								return this.onTelphoneTap();
+							}
+							
+							mui.confirm("您确定要注销该绑定吗？\n以后将不能用改方式登录您的帐号。", "", ["解除绑定", "取消"], function(e) {
 								if(e.index === 0) {
-									that[type].logout(function() {
-										that[type].userInfo = {
-											nickname: "已解除"
-										};
+									
+									dal.user.deletebind(type, function(err, data){
+										if(err){
+											return mui.toast(err.message);
+										}
+										mui.toast("解绑成功");
+										that[type].logout(function() {
+											that[type].userInfo = {
+												nickname: "已解除"
+											};
+										});
 									});
+									
+									
+									
+									
 								}
-							})
+							});
 
 						}
 					},
 					// 手机号点击
 					onTelphoneTap: function() {
-						// 如果未绑定
-//						if(!this.tel) {
-//							// 跳转绑定
-//							console.log("// 跳转绑定");
-//
-//						} else {
-//							// 修改绑定
-//							console.log("// 修改绑定");
-//
-//						}
-
+					
+						var that = this;
+						
 						app.page.openForResultBy("bind_tel.html", "bind_tel", function(data) {
-
+							if(data.tel){
+								// 更改成功后修改页面中的tel
+								that.tel = data.tel;
+							}
 						},{
 							tel: this.telphone 
 						});

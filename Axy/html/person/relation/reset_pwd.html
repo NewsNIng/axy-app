@@ -165,7 +165,9 @@
 					_submit: function(){
 						mui.confirm("您确定修改密码吗？\n修改密码成功将需要重新登录", "", ["确定修改", "取消"], function(e) {
 							if(e.index === 0) {
+								plus.nativeUI.showWaiting();
 								dal.user.updatepwd(this.oldPwd, this.newPwd, function(err, rs){
+									plus.nativeUI.closeWaiting();
 									if(err){
 										return mui.toast("修改密码失败");
 									}

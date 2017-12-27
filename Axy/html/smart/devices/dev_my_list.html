@@ -117,8 +117,21 @@
 				z-index: 8;
 			}
 			
+			.imgdiv.AX-904:after {
+				content: "";
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-image: url(../../../image/smart/devices/bg/904@3xweb.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 8;
+			}
+			
 			.imgdiv.WG-100,
-			.imgdiv.AX-903 {
+			.imgdiv.AX-903,
+			.imgdiv.AX-904 {
 				pointer-events: none;
 			}
 			
@@ -134,6 +147,7 @@
 				position: absolute;
 				top: 0.266666rem;
 				left: 0.266666rem;
+				z-index: 9;
 			}
 			
 			.imgdiv>span.online {
@@ -241,7 +255,7 @@
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
-								<span class="app-color-main">{{o.location || o.devid}}</span>
+								<span class="app-color-main">{{_fixDevLocation(o.location) || o.devid}}</span>
 								<img @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
 								<img @tap="onAlbmTap(o,i)" src="../../../image/smart/camera/history.png" />
 								<img @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
@@ -255,25 +269,25 @@
 							<li class="mui-table-view-cell" @tap="onZoneTap(o, i)">
 								<a class="mui-navigate-right">
 									<span class="left app-font-size-28 app-color-333333">
-								<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-if="iconList[o.accessory.type] == null"/>
-								<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[o.accessory.type]" v-if="!(iconList[o.accessory.type] == null)"/>
-								<span>{{o.accessory.name}}</span>
+								<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-if="iconList[o.type] == null"/>
+								<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[o.type]" v-if="!(iconList[o.type] == null)"/>
+								<span>{{o.name}}</span>
 									</span>
-									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.accessory.enable ? "已启用" : "未启用"}}</span>
+									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.enable ? "已启用" : "未启用"}}</span>
 								</a>
 							</li>
 							<li class="mui-table-view-cell">
 								<a>
 									<span class="app-font-size-28 app-color-9f9fa0">
-								主机: {{o.devName || o.accessory.devid}}
+								主机: {{_fixDevLocation(o.devname) || o.devid}}
 							</span>
-									<span class="mui-badge app-color-main">{{_getStateByCode(o.statusCode)}}</span>
+									<span class="mui-badge app-color-main">{{_getStateByCode(o.statuscode)}}</span>
 								</a>
 							</li>
 						</ul>
 					</div>
 				</template>
-				<template v-else-if="isGeted">
+				<template v-else>
 					<div class="nolog">
 						<div class="nolog_divimg"></div>
 						<div class="app-font-size-30 app-color-9f9fa0">
@@ -347,8 +361,6 @@
 						active: 0,
 						controlIndex: -1,
 						netDivList: [],
-						// 标志是否获取过
-						isGeted: false,
 
 						tapIndex: -1,
 
@@ -389,6 +401,7 @@
 				},
 
 				plusReady: function() {
+
 					var DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
@@ -397,19 +410,16 @@
 
 					function getDevData() {
 						var devData = DEVD.data;
-						that.isGeted = true;
 						that.netDivList = devData.map(function(item) {
 							item.devimg = that._getDevImg(item.devid);
-							item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
+							//item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
 							return item;
 						});
-
 					}
 
 					getDevData();
 
 					_B.on('device_update', function() {
-						alert(123213213213);
 						getDevData();
 					});
 
@@ -424,6 +434,7 @@
 					_B.on('update', function(data) {
 						this.$set(this.netDivList, this.tapIndex, data.info);
 					}.bind(this));
+
 				},
 				methods: {
 					// 摄像机点击
@@ -509,17 +520,29 @@
 								that.devaccessroyList.splice(i, 1);
 							}
 						}
-						//						alert(JSON.stringify(o));
-						app.page.openForResultBy('dev_' + o.accessory.type + '.html', 'dev_' + o.accessory.type, function(data) {
+						
+						// TODO 修复数据结构问题
+						var info = {
+							accessory: o,
+							devName: o.devname,
+							devType: o.devtype,
+							statusCode: o.statuscode
+						};
+						
+						app.page.openForResultBy('dev_' + o.type + '.html', 'dev_' + o.type, function(data) {
 							actionDir[data.action](data.info);
 						}, {
-							info: o
+							info: info
 						});
 					},
 
 					_getDevName: function(type) {
 						return app.dev.findName(type);
 					},
+					_fixDevLocation: function(name){
+						return app.dev.fixName(name);
+					},
+					
 
 					// 设备设置
 					onSettingTap: function(o, i) {
@@ -538,6 +561,12 @@
 							case "AX-903":
 								{
 									url = "dev_AX-903.html";
+									break;
+								}
+
+							case "AX-904":
+								{
+									url = "dev_AX-904.html";
 									break;
 								}
 
@@ -593,6 +622,7 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
+							console.log(JSON.stringify(data));
 							this.devaccessroyList = data;
 
 						}.bind(this));
