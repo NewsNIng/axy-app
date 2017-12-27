@@ -16,18 +16,33 @@
 				background-color: #F4F8FB;
 			}
 			
-			
-			textarea{
+			textarea {
 				width: 100%;
-				border: 0 !important; 
+				border: 0 !important;
 			}
 			
+			.input {
+				margin-top: 0.266666rem;
+				height: 1rem;
+			}
+			
+			.input::-webkit-input-placeholder {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .input::-webkit-input-placeholder {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .input::-webkit-input-placeholder {
+				font-size: 45px !important;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div id="warpper">
-			
+
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left app-color-white"></a>
 				<h1 class="mui-title" v-text="'编辑' + title"></h1>
@@ -35,46 +50,47 @@
 					确定
 				</span>
 			</header>
-			<div class="mui-content app-font-size-22">
-				<textarea rows="3" cols=""  :placeholder="tips" v-model="content"></textarea>
+			<div class="mui-content">
+				<textarea class="input app-font-size-30" rows="3" cols="" :placeholder="tips" v-model="content"></textarea>
 			</div>
 		</div>
-		
+
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
-		<script type="text/javascript" src="../../js/lib/mui.min.js" ></script>
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
-		<script type="text/javascript" src="../../js/lib/vue.min.js" ></script>
-		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript">
 			mui.init();
 			new Vue({
 				el: '#warpper',
-				data: function(){
+				data: function() {
 					return {
 						title: "",
 						tips: "请输入内容...",
 						content: "",
-						regexpType: "",
+						regexpType: ""
 					};
 				},
-				plusReady: function(){
+				plusReady: function() {
 					var v = this.$view;
 					this.title = v.title || "编辑";
 					this.tips = v.tips || "请输入内容...";
-					this.content = v.content || ''; 
+					this.content = v.content || '';
 					this.regexpType = v.r;
 					this.regexpErrorMessage = v.rmsg || "请输入正确格式的内容";
 					//this.type = v.type || 'text';
 				},
 				methods: {
-					onOkTap: function(){
+					onOkTap: function() {
 						var errmsg = "";
-						if(this.regexpType){
+						if(this.regexpType) {
 							errmsg = app.rules.testBy(this.regexpType, this.content, this.regexpErrorMessage);
 						}
-						if(errmsg){
-							return mui.alert(errmsg);
+						if(errmsg) {
+//							return mui.alert(errmsg);
+							return mui.toast(errmsg);
 						}
 						app.page.setResult({
 							content: this.content

@@ -46,14 +46,14 @@
 				height: 1.413333rem;
 				line-height: 1.413333rem;
 				color: #333333;
-				border-bottom: 1px solid #E5E6E7;
+				border-bottom: 1px solid #f5f5f5;
 			}
 			
 			.user_tittle>img {
 				width: 0.986666rem;
 				height: 0.986666rem;
 				border-radius: 50%;
-				margin-right: 0.4rem;
+				margin-right: 0.2rem;
 				vertical-align: middle;
 			}
 			
@@ -100,7 +100,7 @@
 				height: 0.906666rem;
 				line-height: 0.906666rem;
 				/*border-top: 1px solid #E5E6E7;*/
-				border-bottom: 1px solid #E5E6E7;
+				border-bottom: 1px solid #f5f5f5;
 				color: #808080;
 			}
 			
@@ -329,10 +329,10 @@
 					<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'">
 
 					</div>
-					<div class="user_tittle app-font-size-26">
+					<div class="user_tittle app-font-size-28">
 						<img  @tap="onHeadTap(info.account)" :src="info.headimgurl" />
 						<div style="display: inline;" v-text="info.nickname"></div>
-						<!--<div class="attention">+ 关注</div>-->
+						<div class="attention">+ 关注</div>
 					</div>
 					<div class="label app-font-size-34" v-text="'#' + info.title"></div>
 					<div class="description app-font-size-32" >这是因为toString为Object的原型方法，而Array ，function等类型作为Object的实例，都重写了toString方法。不同的对象类型调用toString方法时，根据原型链的知识，调用的是对应的重写之后的toString方法（function类型返回内容为函数体的字符串，Array类型返回元素组成的字符串.....），而不会去调用Object上原型toString方法（返回对象的具体类型），所以采用obj.toString()不能得到其对象类型，只能将obj转换为字符串类型；因此，在想要得到对象的具体类型时，应该调用Object上原型toString方法。</div>

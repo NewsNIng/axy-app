@@ -35,7 +35,6 @@
 			
 			.dev_icon {
 				width: 100%;
-				height: 9.2rem;
 				background-repeat: no-repeat;
 				background-position: center;
 				background-size: 50%;
@@ -72,6 +71,16 @@
 				-webkit-transform: translateX(-50%);
 				color: white;
 			}
+			
+			.imgbg{
+				width: 100%;
+				padding: 1.5rem;
+			}
+			
+			.imgbg > img{
+				width: 100%;
+			}
+			
 		</style>
 	</head>
 
@@ -84,7 +93,10 @@
 			</header>
 
 			<div class="mui-content">
-				<div class="dev_icon app-font-size-30" :style="{backgroundImage: 'url('+ bgp +')'}">
+				<div class="imgbg">
+					<img :src="bgp"/>
+				</div>
+				<div class="dev_icon app-font-size-30">
 					<div class="dev_text">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
 				</div>
 				<div class="time app-font-size-24" v-text="t+'s'"></div>

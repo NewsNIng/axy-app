@@ -33,23 +33,14 @@
 				background-color: #06c1ae;
 			}
 			
-			.dev_icon {
-				width: 100%;
-				background-image: url(../../../image/smart/devices/dev_icon/AX-360@3x.png);
-				height: 9.2rem;
-				background-position: bottom;
-				position: relative;
-				style
-			}
+			
 			
 			.dev_text {
-				position: absolute;
-				bottom: 0;
+
 				width: 100%;
-				text-align: center;
-				margin-bottom: 0.4rem;
-				color: #333333;
-				font-weight: bold;
+				padding: 0 25%;
+				text-align: left;
+				/*font-weight: bold;*/
 			}
 			
 			.help {
@@ -64,30 +55,35 @@
 			}
 			
 			
+			.imgbg{
+				width: 100%;
+				height: 10rem;
+			}
 			
-			
+			.imgbg > img{
+				width: 100%;
+			}
 		</style>
 	</head>
 
 	<body>
-		
+
 		<div id="popover_tip" class="mui-popover">
 			<div class="tip-card">
 				<div class="tip-card-header app-font-size-34 app-color-white">橙灯未闪烁，戳这里查看</div>
 				<div class="tip-card-body app-font-size-30">
-					1.请重新拔插摄像机电源，确保电源和数据线已插好；<br />
-					2.摄像机接电后，启动过程大约1~2分钟，请耐心等候；<br />
-					3.如果绿灯或者红灯亮（闪烁），先登录已绑定该设备的帐号并将设备删除（新设备则用顶针轻插配置孔[SET]，并按住超过10秒，恢复出厂默认设置。），再尝试连接摄像机。若您只是重新配置wifi，忽略此步骤，直接下一步操作；<br />
-					4.如有其它问题，请拨打客服电话：<br />
-					4006-328-988
+					1.请重新拔插摄像机电源，确保电源插和数据线都插好;<br /> 2.摄像机上电后，启动过程需要大约1-2分钟，请耐心等候! 若上电2分钟后，未见指示灯闪烁，请尝试直接继续下一步操作;<br /> 3.如果绿灯或者红灯亮或闪烁，说明该设备已经被绑定，请登陆该设备的绑定账号，并将该设备删除，再尝试连接摄像机;
+					<br /> 4.若不是添加新设备，而是配置wifi,请忽略此步，直接继续下一步操作。
+					<br /> 5.其他问题，请您联系当地服务运营商。
 				</div>
 				<div class="tip-card-footer">
 					<a href="#popover_tip" class="mui-icon mui-icon-close app-color-white"></a>
 				</div>
 			</div>
-		</div> 
+		</div>
 		
 		
+
 		<div id="warpper">
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
@@ -96,12 +92,14 @@
 			</header>
 
 			<div class="mui-content">
-				<div class="dev_icon app-font-size-30">
-					<div class="dev_text">检查摄像机是否橙灯闪烁<br />若是，则点击“下一步”</div>
+				<div class="imgbg">
+					<img src="../../../image/smart/devices/dev_icon/AX-360@3x.png"/>
 				</div>
+				
+				<div class="dev_text app-font-size-32 app-color-333333">检查摄像机是否橙灯闪烁<br />若是，则点击“下一步”。</div>
 
 			</div>
-			<a  href="#popover_tip" class="help app-font-size-24">橙灯未闪烁，戳这里查看</a>
+			<a href="#popover_tip" class="help app-font-size-24">橙灯未闪烁，戳这里查看</a>
 			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -147,7 +145,7 @@
 				},
 				plusReady: function() {},
 				methods: {
-					onNext: function(){
+					onNext: function() {
 						var url = "sonic_connect_camera2.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd;
 						this.$view.loadURL(url, 'voice2');
 					}

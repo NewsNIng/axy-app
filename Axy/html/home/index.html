@@ -225,16 +225,17 @@
 			}
 			
 			.shop_image {
-				padding: 0 0.266666rem 0.32rem 0;
+				padding: 0 0.266666rem 0.32rem 0.266666rem;
 				overflow-x: scroll;
 				overflow-y: hidden;
 				white-space: nowrap;
 				width: 100%;
+				margin-right: 0.266666rem !important;
 			}
 			
 			.shop_image>div {
 				display: inline-block;
-				border: 1px solid #ccc;
+				border: 1px solid #F5F5F5;
 				box-sizing: content-box;
 				height: 0;
 				margin: 0 1%;
@@ -349,7 +350,7 @@
 				<template v-if="dev.devid">
 					<div class="card">
 						<div class="card_head">
-							<span class="app-font-size-28">我的设备</span>
+							<span class="app-font-size-30">我的设备</span>
 							<div @tap="onDeviceMore()" class="app-font-size-24 mui-pull-right">
 
 								<span class="mui-icon">
@@ -394,7 +395,7 @@
 				<!--v-if="like.length"-->
 				<div class="card">
 					<div class="card_head">
-						<span class="app-font-size-28">猜你喜欢</span>
+						<span class="app-font-size-30">猜你喜欢</span>
 						<div @tap="onStoreMore()" class="app-font-size-24 mui-pull-right">
 
 							<span class="mui-icon">
@@ -435,7 +436,7 @@
 				</div>
 				<div class="card" style="margin-bottom: 0.266666rem;">
 					<div class="card_head">
-						<span class="app-font-size-28">附近的店</span>
+						<span class="app-font-size-30">附近的店</span>
 						<div @tap="onNearbyMore()" class="app-font-size-24 mui-pull-right">
 
 							<span class="mui-icon">
@@ -747,9 +748,9 @@
 					// 轮播点击
 					onAdvertTap: function(o) {
 						// 打开内部浏览器
-						app.page.openBrowser({
-							url: o.adlink
-						});
+//						app.page.openBrowser({
+//							url: o.adlink
+//						});
 					},
 					// 获取一个设备
 					getDeviceOne: function() {
