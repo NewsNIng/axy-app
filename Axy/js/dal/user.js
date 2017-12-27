@@ -1,5 +1,20 @@
 // 用户相关请求
 (function(_, ra) {
+
+	var IMEI = "";
+	
+	function initImei(){
+		IMEI = plus.device.uuid;
+	}
+	
+	if(window.plus) {
+		initImei();
+	} else {
+		document.addEventListener('plusready', function() {
+			initImei();
+		});
+	}
+
 	var user = {};
 	/**
 	 * 用户登录
@@ -10,7 +25,8 @@
 	user.login = function(account, passwd, callback) {
 		return ra("post", "/user/login", {
 			account: account,
-			passwd: passwd
+			passwd: passwd,
+			imei: IMEI,
 		}, callback);
 	}
 
@@ -117,6 +133,38 @@
 			account: account,
 			updatepwd: updatepwd,
 			newpsswd: newpsswd
+		}, callback);
+	};
+
+	/**
+	 * 绑定手机号
+	 * @param {String} bindmobile 手机号
+	 */
+	user.bindphone = function(bindmobile, callback) {
+		return ra('post', '/user/bindphone', {
+			bindmobile: bindmobile
+		}, callback);
+	};
+
+	/**
+	 * 第三方绑定
+	 * @param {String} type 类型
+	 * @param {String} openid 唯一id
+	 */
+	user.bindother = function(type, openid, callback) {
+		return ra('post', '/user/bindother', {
+			openid: openid,
+			type: type
+		}, callback);
+	};
+
+	/**
+	 * 解除第三方绑定
+	 * @param {String} type 类型
+	 */
+	user.deletebind = function(type, callback) {
+		return ra('post', '/user/deletebind', {
+			type: type
 		}, callback);
 	};
 

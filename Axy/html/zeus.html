@@ -76,37 +76,35 @@
 							var u = app.user.get();
 							var type = window.localStorage.getItem('login_type');
 
+							var ajaxResult = function(err, data) {
+								if(err) {
+									// 清除用户信息
+									appLoginFail();
+									return;
+								}
+								updateUserInfo(data);
+								ob.next(u.account);
+//								if(data.validation === 1) {
+//									// 验证通过
+//									updateUserInfo(data);
+//									ob.next(u.account);
+//								} else {
+//									// 跳转页面认证
+//									// TODO
+//									
+//								}
+							};
+
 							if(type === 'pwd') {
 								// 验证用户信息
-								dal.user.login(u.account, getPwd(), function(err, data) {
-									if(err) {
-										// 清除用户信息
-										appLoginFail();
-										return;
-									}
-									// 验证成功
-									// 保存用户信息
-									updateUserInfo(data);
-									ob.next(u.account);
-								});
+								dal.user.login(u.account, getPwd(), ajaxResult);
 							} else {
-
 								var o = {
 									type: type,
 								};
 								o[type + "openid"] = u[type + "openid"];
 								// 自动第三方登录
-								dal.user.ologin(o, function(err, data) {
-									if(err) {
-										// 清除用户信息
-										appLoginFail();
-										return;
-									}
-									// 验证成功
-									// 保存用户信息
-									updateUserInfo(data);
-									ob.next(u.account);
-								});
+								dal.user.ologin(o, ajaxResult);
 							}
 						} else {
 							// 未登录状态 
@@ -151,7 +149,7 @@
 						pwd = o.pwd,
 						domain = o.domain;
 					D.data = [];
-					
+
 					var getDevFun = listenDevListUpdate();
 					getDevFun();
 
@@ -195,9 +193,7 @@
 
 			// 更新本地用户信息
 			function updateUserInfo(data) {
-				if(data.vihiuser) {
-					data = data.vihiuser;
-				}
+				data = fixUserData(data);
 				// 更新用户信息
 				app.user.set(data);
 				window.localStorage.setItem('_account_', data.account);
@@ -217,10 +213,10 @@
 				updateUserInfo(userinfo);
 			});
 
-
 			// 不断获取设备信息
-			function listenDevListUpdate(){
+			function listenDevListUpdate() {
 				var rx_time, rx_listen;
+
 				function getDevListSaveLocal() {
 					// 请求服务端数据 TODO 取消分页
 					dal.device.list(1, function(err, data) {
@@ -238,11 +234,13 @@
 						}
 					}, 1000);
 				}
-				return function(){
-					if(rx_time){return}
-					rx_time = Rx.Observable.interval(30e3); 
-					rx_listen = Rx.Observable.create(function(ob){
-						_B.on('device_update', function(){
+				return function() {
+					if(rx_time) {
+						return
+					}
+					rx_time = Rx.Observable.interval(30e3);
+					rx_listen = Rx.Observable.create(function(ob) {
+						_B.on('device_update', function() {
 							ob.next();
 						});
 					});
@@ -252,6 +250,30 @@
 				}
 			}
 
+			// 用户资料整合
+			function fixUserData(data) {
+				if(!data.vihiuser) {
+					return data;
+				}
+				// 绑定手机号
+				var bindmobile = data.bindmobile;
+				// 是否开启权限验证
+				var lockterminal = data.lockterminal;
+				// 是否需要登录验证
+				var validation = data.validation;
+				// 是否是主帐号
+				var ismaster = data.ismaster;
+
+				data = data.vihiuser;
+
+				data.bindmobile = bindmobile;
+				data.lockterminal = lockterminal;
+				data.validation = validation;
+				data.ismaster = ismaster;
+
+				return data;
+
+			}
 		</script>
 	</body>
 

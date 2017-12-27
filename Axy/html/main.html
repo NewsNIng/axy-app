@@ -27,6 +27,11 @@
 			.mui-bar .mui-icon:active {
 				opacity: 1;
 			}
+			
+			.mui-tab-item.mui-active{
+				color: #929292 !important;
+			}
+			
 		</style>
 	</head>
 
@@ -56,8 +61,11 @@
 		<script type="text/javascript" src="../js/dal/base.js"></script>
 		<script type="text/javascript" src="../js/dal/system.js"></script>
 		<script type="text/javascript" src="../js/common/rsmanager.js"></script>
-		
-		
+
+		<script type="text/javascript" src="../js/app/app.js"></script>
+		<script type="text/javascript" src="../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
 
 		<script>
 			// 4个子webview统一样式
@@ -95,10 +103,9 @@
 				styles: _styles,
 				extras: {},
 			}];
-			
-			
+
 			var _B = new ni.Broadcast();
-			
+
 			new Vue({
 				el: "#warp",
 				data: function() {
@@ -132,12 +139,27 @@
 						if(this.index === index) {
 							return;
 						}
-						// 更新index下标
-						this.index = index;
-						// 控制webview切换
-						this.group.switchTab(o.id);
-						// 吐司
-						//mui.toast(o.name);
+
+						Rx.Observable.create(function(ob) {
+							// 个人中心登录拦截
+							if(index === 3) {
+								app.user.get(function(u) {
+									u && ob.next();
+								})
+							} else {
+								ob.next();
+							}
+						}).subscribe(function() {
+							// 更新index下标
+							this.index = index;
+							// 控制webview切换
+							this.group.switchTab(o.id);
+							// 吐司
+							//mui.toast(o.name);
+						}.bind(this));
+						
+						
+
 					},
 					// 页面切换时
 					onChange: function(o) {
@@ -161,24 +183,23 @@
 						});
 					},
 					// 监听tabar事件
-					_listenTabar: function(){
-						_B.on("tabar", function(data){
+					_listenTabar: function() {
+						_B.on("tabar", function(data) {
 							var target = this.items[data.mindex];
 							var t = 0;
 							// 如果页面暂时还没打开过
-							if(!plus.webview.getWebviewById(target.id)){
+							if(!plus.webview.getWebviewById(target.id)) {
 								t = 1000;
 							}
 							// 跳转相应的页面
 							this.onTap(this.items[data.mindex], data.mindex);
 							// 转发事件
-							setTimeout(function(){
+							setTimeout(function() {
 								_B.emit("tabar", data, {
-									views: [target.id] 
+									views: [target.id]
 								});
 							}, t);
-							
-							
+
 						}.bind(this));
 					}
 				}
@@ -198,22 +219,22 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							
-							if(!data){
+
+							if(!data) {
 								return;
 							}
 							var newAppVersion = version2number(data.version);
-							
+
 							if(newAppVersion > appVersion) {
-								var filePath = data.path; 
+								var filePath = data.path;
 								// 判断是否是更新资源文件
 								if(!rsmanager.isHotRresource(filePath)) {
 									return mui.alert("非更新资源文件\n" + filePath);
 								}
-								
+
 								rsmanager.install(filePath, function(succ) {
 									//alert(succ); 
-								}, { 
+								}, {
 									hide: data.hide, // 是否隐藏更新
 									show: data.show, // 是否弹出提示框
 									force: data.force, // 强制更新 不能关闭提示框
@@ -229,13 +250,9 @@
 					});
 
 				});
-				
+
 				//plus.webview.create('zeus.html');
 			}, 1000); //3s 后检查更新
-			
-			
-			
-			
 		</script>
 	</body>
 

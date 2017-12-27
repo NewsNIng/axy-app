@@ -37,7 +37,8 @@
       "html/person/index.html",
       "html/smart/index.html",
       "html/zeus.html",
-      "html/smart/index2.html"
+      "html/smart/index2.html",
+      "html/common/login.html"
     ]
   },
   "html/nearby/business/signup.html": {
@@ -137,7 +138,8 @@
       "html/search/index.html",
       "html/common/login.html",
       "html/smart/devices/dev_my_list.html",
-      "html/public/browser.html"
+      "html/public/browser.html",
+      "html/smart/scenes/index2.html"
     ],
     "resources": []
   },
@@ -278,7 +280,8 @@
       "html/smart/add/add_device.html",
       "html/smart/scenes/index.html",
       "html/common/login.html",
-      "html/person/message/index.html"
+      "html/person/message/index.html",
+      "html/person/devshare/share.html"
     ],
     "resources": [
       "js/dal/home.js",
@@ -370,7 +373,8 @@
       "html/smart/devices/dev_129.html",
       "html/smart/devices/dev_48.html",
       "html/person/collection/my_camera.html",
-      "html/smart/devices/dev_AX-903.html"
+      "html/smart/devices/dev_AX-903.html",
+      "html/smart/devices/dev_AX-904.html"
     ],
     "resources": []
   },
@@ -398,7 +402,8 @@
     "refer": [
       "html/public/image_cropper.html",
       "html/public/input.html",
-      "html/person/relation/bind.html"
+      "html/person/relation/bind.html",
+      "html/person/relation/reset_pwd.html"
     ],
     "resources": []
   },
@@ -509,7 +514,8 @@
     "refer": [
       "html/smart/devices/dev_AX-903_datasave.html",
       "html/smart/devices/dev_AX-903_alarmlog.html",
-      "html/public/input.html"
+      "html/public/input.html",
+      "html/smart/devices/dev_select_id.html"
     ],
     "resources": []
   },
@@ -522,6 +528,7 @@
   "html/person/relation/bind.html": {
     "refer": [
       "html/person/relation/bind_tel.html"
-    ]
+    ],
+    "resources": []
   }
 }

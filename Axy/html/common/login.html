@@ -9,9 +9,8 @@
 		<link rel="stylesheet" href="../../css/app/app.css" />
 		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<style type="text/css">
-			
 			html,
-			body{
+			body {
 				overflow: hidden;
 			}
 			
@@ -20,9 +19,11 @@
 			.mui-content {
 				background-color: white;
 			}
+			
 			.mui-content {
 				padding-bottom: 2rem;
 			}
+			
 			.mui-bar-nav,
 			.mui-bar {
 				background-color: #FFFFFF;
@@ -57,10 +58,10 @@
 				border-radius: 0;
 				border-bottom: 1px solid #CCCCCC;
 			}
+			
 			div.mui-input-row>input::-webkit-input-placeholder {
 				color: #CCCCCC;
 			}
-				
 			
 			.mui-content div.mui-input-row {
 				display: block;
@@ -83,40 +84,44 @@
 				height: 1.173333rem;
 				margin: 0.8rem 0.826666rem 0.56rem 0.826666rem;
 			}
+			
 			.forget_pwd {
 				color: #999999;
 				text-align: right;
 				padding-right: 0.826666rem;
 			}
-			.forget_pwd>a{
+			
+			.forget_pwd>a {
 				color: #999999;
 			}
+			
 			.third_party_login {
 				/*background-color: #CCCCCC;*/
 				margin-top: 1.8rem;
 				height: 0.8rem;
 			}
-			.third_party_login{
+			
+			.third_party_login {
 				color: #999999;
 				position: relative;
 			}
-			
 			/*第三方登录横线*/
-			.third_party_login:before{
+			
+			.third_party_login:before {
 				content: "";
 				width: 8.4rem;
 				position: absolute;
 				left: 0.826666rem;
 				top: 50%;
 				height: 1px;
-				
 				background-color: #999999;
 				display: block;
 				transform: translateY(-50%) scaleY(0.5);
 				-webkit-transform: translateY(-50%) scaleY(0.5);
 			}
 			/*第三方登录文字*/
-			.third_party_login > div{
+			
+			.third_party_login>div {
 				display: inline-block;
 				text-align: center;
 				padding: 0 0.2rem;
@@ -128,18 +133,18 @@
 				-webkit-transform: translate(-50%, -50%);
 			}
 			
-			.third_party_login > div.imgRoom{
+			.third_party_login>div.imgRoom {
 				width: 100%;
 				margin: 1.5rem 0.36rem;
 				padding: 0;
 			}
-			.third_party_login > div.imgRoom > img{
+			
+			.third_party_login>div.imgRoom>img {
 				float: left;
 				width: 0.906666rem;
 				height: 0.906666rem;
 				margin-left: 1.64rem;
 			}
-			
 		</style>
 	</head>
 
@@ -166,11 +171,11 @@
 
 			<!--登录按钮-->
 			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在登录..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">登录</button>
-			
-			<div class="forget_pwd app-font-size-24"><a href="reset.html">忘记密码</a></div>
-			
-			
-			
+
+			<div class="forget_pwd app-font-size-24">
+				<a href="reset.html">忘记密码</a>
+			</div>
+
 			<!--第三方登录-->
 
 			<div class="third_party_login">
@@ -178,9 +183,9 @@
 					第三方账号登录
 				</div>
 				<div class="imgRoom">
-					<img src="../../image/common/login_qq.png" @tap="onOtherLoginTap('qq')"/>
-					<img src="../../image/common/login_weibo.png" @tap="onOtherLoginTap('sinaweibo')"/>
-					<img src="../../image/common/login_wechat.png" @tap="onOtherLoginTap('weixin')"/>
+					<img src="../../image/common/login_qq.png" @tap="onOtherLoginTap('qq')" />
+					<img src="../../image/common/login_weibo.png" @tap="onOtherLoginTap('sinaweibo')" />
+					<img src="../../image/common/login_wechat.png" @tap="onOtherLoginTap('weixin')" />
 				</div>
 			</div>
 
@@ -189,14 +194,15 @@
 
 		<script src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
-		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
-		
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
 			mui.init({
@@ -207,23 +213,22 @@
 					return false;
 				},
 			});
-			
-			mui.plusReady(function(){
+
+			mui.plusReady(function() {
 				plus.navigator.setStatusBarStyle('dark');
 			});
-			
-			
-			mui.ready(function(){
+
+			mui.ready(function() {
 				// 注册按钮
-				document.getElementById("reg").addEventListener('tap',function(){
-//					var regView = plus.webview.getWebviewById('reg');
-//					var type = 'pop-in';
-//					
-//					if(!regView){
-//						regView = plus.webview.create('register.html', 'reg');
-//						type = 'pop-in';
-//					}
-//					regView.show(type, 250); 
+				document.getElementById("reg").addEventListener('tap', function() {
+					//					var regView = plus.webview.getWebviewById('reg');
+					//					var type = 'pop-in';
+					//					
+					//					if(!regView){
+					//						regView = plus.webview.create('register.html', 'reg');
+					//						type = 'pop-in';
+					//					}
+					//					regView.show(type, 250); 
 					mui.openWindow('register.html', 'reg', {
 						waiting: {
 							autoShow: false
@@ -241,10 +246,10 @@
 						loading: false
 					};
 				},
-				plusReady: function(){
+				plusReady: function() {
 					// 获取到创建者 (webview)
 					var opener = this.$view.opener();
-					
+
 				},
 				methods: {
 					onLoginTap: function(e) {
@@ -254,118 +259,120 @@
 						}
 
 						var that = this;
-						
-						
+
 						var errorMessage = app.rules.testBy(/^\w{6,20}$/, this.username, "帐号输入错误") ||
-								 		   app.rules.testBy("pwd", this.password, "密码输入错误");
-						 
-						if(errorMessage){
+							app.rules.testBy("pwd", this.password, "密码输入错误");
+
+						if(errorMessage) {
 							return mui.toast(errorMessage);
 						}
-						
+
 						// 更新登录状态
 						this.loading = true;
-						
-						
+
 						dal.user.login(this.username, this.password, function(err, data) {
 							that.loading = false;
-							
-							if(err){
-								return mui.toast(err.code + ": " +err.message);
+
+							if(err) {
+								return mui.toast(err.code + ": " + err.message);
 							}
-							mui.toast("登录成功");
-							
-							data = data.vihiuser;
-							// 保存用户信息
-							//app.user.set(data); 
-							//window.localStorage.setItem('_account_', data.account);
-							window.localStorage.setItem('_pwd_', that.password);
-							window.localStorage.setItem('login_type', 'pwd');
-							//ﾟωﾟﾉ= /｀ｍ´）ﾉ ~┻━┻   //*´∇｀*/ ['_']; o=(ﾟｰﾟ)  =_=3; c=(ﾟΘﾟ) =(ﾟｰﾟ)-(ﾟｰﾟ); (ﾟДﾟ) =(ﾟΘﾟ)= (o^_^o)/ (o^_^o);(ﾟДﾟ)={ﾟΘﾟ: '_' ,ﾟωﾟﾉ : ((ﾟωﾟﾉ==3) +'_') [ﾟΘﾟ] ,ﾟｰﾟﾉ :(ﾟωﾟﾉ+ '_')[o^_^o -(ﾟΘﾟ)] ,ﾟДﾟﾉ:((ﾟｰﾟ==3) +'_')[ﾟｰﾟ] }; (ﾟДﾟ) [ﾟΘﾟ] =((ﾟωﾟﾉ==3) +'_') [c^_^o];(ﾟДﾟ) ['c'] = ((ﾟДﾟ)+'_') [ (ﾟｰﾟ)+(ﾟｰﾟ)-(ﾟΘﾟ) ];(ﾟДﾟ) ['o'] = ((ﾟДﾟ)+'_') [ﾟΘﾟ];(ﾟoﾟ)=(ﾟДﾟ) ['c']+(ﾟДﾟ) ['o']+(ﾟωﾟﾉ +'_')[ﾟΘﾟ]+ ((ﾟωﾟﾉ==3) +'_') [ﾟｰﾟ] + ((ﾟДﾟ) +'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ ((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [(ﾟｰﾟ) - (ﾟΘﾟ)]+(ﾟДﾟ) ['c']+((ﾟДﾟ)+'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ (ﾟДﾟ) ['o']+((ﾟｰﾟ==3) +'_') [ﾟΘﾟ];(ﾟДﾟ) ['_'] =(o^_^o) [ﾟoﾟ] [ﾟoﾟ];(ﾟεﾟ)=((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+ (ﾟДﾟ) .ﾟДﾟﾉ+((ﾟДﾟ)+'_') [(ﾟｰﾟ) + (ﾟｰﾟ)]+((ﾟｰﾟ==3) +'_') [o^_^o -ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+ (ﾟωﾟﾉ +'_') [ﾟΘﾟ]; (ﾟｰﾟ)+=(ﾟΘﾟ); (ﾟДﾟ)[ﾟεﾟ]='\\'; (ﾟДﾟ).ﾟΘﾟﾉ=(ﾟДﾟ+ ﾟｰﾟ)[o^_^o -(ﾟΘﾟ)];(oﾟｰﾟo)=(ﾟωﾟﾉ +'_')[c^_^o];(ﾟДﾟ) [ﾟoﾟ]='\"';(ﾟДﾟ) ['_'] ( (ﾟДﾟ) ['_'] (ﾟεﾟ+(ﾟДﾟ)[ﾟoﾟ]+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) - (ﾟΘﾟ))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((o^_^o) - (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟΘﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (o^_^o)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (o^_^o)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((o^_^o) - (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟoﾟ]) (ﾟΘﾟ)) ('_');
-							// 通知上层
-							app.page.setResult(data);
-							// 通知全部
-							new that.$Broadcast().emit("login_success", {
-								userInfo: data
+							data = fixUserData(data);
+
+							Rx.Observable.create(function(ob) {
+								ob.next(data);
+//								if(data.validation === 1) {
+//									// 验证通过
+//									ob.next(data);
+//								}else{
+//									// 跳转页面认证
+//									// TODO
+//									
+//								}
+							}).subscribe(function(data) {
+								mui.toast("登录成功");
+								// 保存用户信息
+								//app.user.set(data); 
+								//window.localStorage.setItem('_account_', data.account);
+								window.localStorage.setItem('_pwd_', that.password);
+								window.localStorage.setItem('login_type', 'pwd');
+								//ﾟωﾟﾉ= /｀ｍ´）ﾉ ~┻━┻   //*´∇｀*/ ['_']; o=(ﾟｰﾟ)  =_=3; c=(ﾟΘﾟ) =(ﾟｰﾟ)-(ﾟｰﾟ); (ﾟДﾟ) =(ﾟΘﾟ)= (o^_^o)/ (o^_^o);(ﾟДﾟ)={ﾟΘﾟ: '_' ,ﾟωﾟﾉ : ((ﾟωﾟﾉ==3) +'_') [ﾟΘﾟ] ,ﾟｰﾟﾉ :(ﾟωﾟﾉ+ '_')[o^_^o -(ﾟΘﾟ)] ,ﾟДﾟﾉ:((ﾟｰﾟ==3) +'_')[ﾟｰﾟ] }; (ﾟДﾟ) [ﾟΘﾟ] =((ﾟωﾟﾉ==3) +'_') [c^_^o];(ﾟДﾟ) ['c'] = ((ﾟДﾟ)+'_') [ (ﾟｰﾟ)+(ﾟｰﾟ)-(ﾟΘﾟ) ];(ﾟДﾟ) ['o'] = ((ﾟДﾟ)+'_') [ﾟΘﾟ];(ﾟoﾟ)=(ﾟДﾟ) ['c']+(ﾟДﾟ) ['o']+(ﾟωﾟﾉ +'_')[ﾟΘﾟ]+ ((ﾟωﾟﾉ==3) +'_') [ﾟｰﾟ] + ((ﾟДﾟ) +'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ ((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [(ﾟｰﾟ) - (ﾟΘﾟ)]+(ﾟДﾟ) ['c']+((ﾟДﾟ)+'_') [(ﾟｰﾟ)+(ﾟｰﾟ)]+ (ﾟДﾟ) ['o']+((ﾟｰﾟ==3) +'_') [ﾟΘﾟ];(ﾟДﾟ) ['_'] =(o^_^o) [ﾟoﾟ] [ﾟoﾟ];(ﾟεﾟ)=((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+ (ﾟДﾟ) .ﾟДﾟﾉ+((ﾟДﾟ)+'_') [(ﾟｰﾟ) + (ﾟｰﾟ)]+((ﾟｰﾟ==3) +'_') [o^_^o -ﾟΘﾟ]+((ﾟｰﾟ==3) +'_') [ﾟΘﾟ]+ (ﾟωﾟﾉ +'_') [ﾟΘﾟ]; (ﾟｰﾟ)+=(ﾟΘﾟ); (ﾟДﾟ)[ﾟεﾟ]='\\'; (ﾟДﾟ).ﾟΘﾟﾉ=(ﾟДﾟ+ ﾟｰﾟ)[o^_^o -(ﾟΘﾟ)];(oﾟｰﾟo)=(ﾟωﾟﾉ +'_')[c^_^o];(ﾟДﾟ) [ﾟoﾟ]='\"';(ﾟДﾟ) ['_'] ( (ﾟДﾟ) ['_'] (ﾟεﾟ+(ﾟДﾟ)[ﾟoﾟ]+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) - (ﾟΘﾟ))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((o^_^o) - (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟΘﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (o^_^o)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (o^_^o)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟｰﾟ)+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ ((o^_^o) +(o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (c^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((ﾟｰﾟ) + (ﾟΘﾟ))+ ((ﾟｰﾟ) + (o^_^o))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ ((o^_^o) +(o^_^o))+ ((o^_^o) - (ﾟΘﾟ))+ (ﾟДﾟ)[ﾟεﾟ]+(ﾟΘﾟ)+ (ﾟｰﾟ)+ (ﾟｰﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (ﾟΘﾟ))+ (ﾟΘﾟ)+ (ﾟДﾟ)[ﾟεﾟ]+((ﾟｰﾟ) + (o^_^o))+ (o^_^o)+ (ﾟДﾟ)[ﾟoﾟ]) (ﾟΘﾟ)) ('_');
+								// 通知上层
+								app.page.setResult(data);
+								// 通知全部
+								new that.$Broadcast().emit("login_success", {
+									userInfo: data
+								});
+
+								// 跳转到首页
+								// TODO 页面变动 逻辑需要改动
+								var mainView = plus.webview.getLaunchWebview();
+								mainView.show('slide-in-bottom', 250);
+
+								plus.navigator.setStatusBarStyle('light');
 							});
-							
-							// 跳转到首页
-							// TODO 页面变动 逻辑需要改动
-							var mainView = plus.webview.getLaunchWebview();
-							mainView.show('slide-in-bottom', 250);
-							
-							
-							plus.navigator.setStatusBarStyle('light');
-							
-							
-							
+
 						});
 
 					},
-					onOtherLoginTap: function(type){
+					onOtherLoginTap: function(type) {
 						var w = plus.nativeUI.showWaiting();
 						var that = this;
-						setTimeout(function(){
+						setTimeout(function() {
 							plus.nativeUI.closeWaiting();
 						}, 1e3);
-						
-						new Promise(function(resolve, reject){
-							new that.$OAuth(type, function(err, info){
-								if(err){
-									return reject(err);
-								}
-								return resolve(info);
-								
-								w && w.close();
-								if(err){
-									return mui.toast(JSON.stringify(err));
-								}
-								info = authInfoAdapter(info);
-								
-							}, that);
-						})
-						.then(authInfoAdapter)
-						.then(function(info){
-							return new Promise(function(resolve, reject){
-								dal.user.ologin(info, function(err, data){
-									if(err){
+
+						new Promise(function(resolve, reject) {
+								new that.$OAuth(type, function(err, info) {
+									if(err) {
 										return reject(err);
 									}
-									return resolve(data);
+									return resolve(info);
+
+									w && w.close();
+									if(err) {
+										return mui.toast(JSON.stringify(err));
+									}
+									info = authInfoAdapter(info);
+
+								}, that);
+							})
+							.then(authInfoAdapter)
+							.then(function(info) {
+								return new Promise(function(resolve, reject) {
+									dal.user.ologin(info, function(err, data) {
+										if(err) {
+											return reject(err);
+										}
+										return resolve(data);
+									});
 								});
+							})
+							.then(function(data) {
+								w && w.close();
+								console.log(JSON.stringify(data));
+								// 保存
+								mui.toast('登录成功');
+
+								data = fixUserData(data);
+
+								window.localStorage.setItem('login_type', ({
+									qq: 'qq',
+									sinaweibo: 'wb',
+									weixin: 'wx'
+								}[type]));
+								// 通知上层
+								app.page.setResult(data);
+								// 通知全部
+								new that.$Broadcast().emit("login_success", {
+									userInfo: data
+								});
+
+							})
+							.catch(function(err) {
+								w && w.close();
+								mui.toast(JSON.stringify(err));
 							});
-						})
-						.then(function(data){
-							w && w.close();
-							console.log(JSON.stringify(data));
-							// 保存
-							mui.toast('登录成功');
-							
-							data = data.vihiuser;
-							
-							
-							
-							window.localStorage.setItem('login_type', ({
-								qq: 'qq',
-								sinaweibo: 'wb',
-								weixin: 'wx'
-							}[type]));
-							// 通知上层
-							app.page.setResult(data);
-							// 通知全部
-							new that.$Broadcast().emit("login_success", {
-								userInfo: data
-							});
-							
-						})
-						.catch(function(err){ 
-							w&&w.close();
-							mui.toast(JSON.stringify(err));
-						});
-						
-						
-						
-						
+
 					}
 				},
 				watch: {
@@ -375,45 +382,70 @@
 				}
 
 			});
-			
-			
-			function authInfoAdapter(info){
-				var _qq = function(_o){
-					return {
-						type: 'qq',
-						qqopenid: _o.authResult.openid,
-						nickname: _o.userInfo.nickname,
-						gender: _o.userInfo.gender,
-						province: _o.userInfo.province,
-						city: _o.userInfo.city,
-						headimgurl: _o.userInfo.figureurl_qq_2
-					};
-				},
-				_sinaweibo = function(_o){
-					return {
-						type: 'sinaweibo',
-						wbopenid: _o.authResult.openid,
-						nickname: _o.userInfo.nickname,
-						gender: _o.userInfo.gender === 'm' ? '男': '女',
-						province: _o.userInfo.location.split(' ')[0],
-						city: _o.userInfo.location.split(' ')[1],
-						headimgurl: _o.userInfo.avatar_large
-					};
-				},
-				_weixin = function(_o){
-					return {
-						type: 'weixin',
-						wxopenid: _o.userInfo.unionid,
-						nickname: _o.userInfo.nickname,
-						gender: _o.userInfo.sex === 1 ? '男': '女',
-						province: _o.userInfo.province,
-						city: _o.userInfo.city,
-						headimgurl: _o.userInfo.headimgurl
-					};
-				}
-				
-				return ({qq: _qq, sinaweibo: _sinaweibo, weixin: _weixin})[info.id](info);
-				
+
+			function authInfoAdapter(info) {
+				var _qq = function(_o) {
+						return {
+							type: 'qq',
+							qqopenid: _o.authResult.openid,
+							nickname: _o.userInfo.nickname,
+							gender: _o.userInfo.gender,
+							province: _o.userInfo.province,
+							city: _o.userInfo.city,
+							headimgurl: _o.userInfo.figureurl_qq_2
+						};
+					},
+					_sinaweibo = function(_o) {
+						return {
+							type: 'sinaweibo',
+							wbopenid: _o.authResult.openid,
+							nickname: _o.userInfo.nickname,
+							gender: _o.userInfo.gender === 'm' ? '男' : '女',
+							province: _o.userInfo.location.split(' ')[0],
+							city: _o.userInfo.location.split(' ')[1],
+							headimgurl: _o.userInfo.avatar_large
+						};
+					},
+					_weixin = function(_o) {
+						return {
+							type: 'weixin',
+							wxopenid: _o.userInfo.unionid,
+							nickname: _o.userInfo.nickname,
+							gender: _o.userInfo.sex === 1 ? '男' : '女',
+							province: _o.userInfo.province,
+							city: _o.userInfo.city,
+							headimgurl: _o.userInfo.headimgurl
+						};
+					}
+
+				return({
+					qq: _qq,
+					sinaweibo: _sinaweibo,
+					weixin: _weixin
+				})[info.id](info);
+
+			}
+
+			// 用户资料整合
+			function fixUserData(data) {
+				// 绑定手机号
+				var bindmobile = data.bindmobile;
+				// 是否开启权限验证
+				var lockterminal = data.lockterminal;
+				// 是否需要登录验证
+				var validation = data.validation;
+				// 是否是主帐号
+				var ismaster = data.ismaster;
+
+				data = data.vihiuser;
+
+				data.bindmobile = bindmobile;
+				data.lockterminal = lockterminal;
+				data.validation = validation;
+				data.ismaster = ismaster;
+
+				return data;
+
 			}
 		</script>
 	</body>

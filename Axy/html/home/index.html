@@ -85,7 +85,7 @@
 			}
 			
 			.dev_menu .d1 {
-				width: 50%;
+				min-width: 50%;
 				overflow: hidden;
 			}
 			
@@ -279,14 +279,27 @@
 				z-index: 8;
 			}
 			
+			.imgdiv.AX-904:after {
+				content: "";
+				top: 0;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-image: url(../../image/smart/devices/bg/904@3xweb.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 8;
+			}
+			
 			.imgdiv.WG-100,
-			.imgdiv.AX-903 {
+			.imgdiv.AX-903,
+			.imgdiv.AX-904 {
 				pointer-events: none;
 			}
 			/*设备背景图fix--------*/
 		</style>
 
-		<link rel="stylesheet" href="new_file.css" />
 	</head>
 
 	<body>
@@ -372,7 +385,6 @@
 									<img src="../../image/home/dev_camera.png" />
 									<span class="app-font-size-24 app-color-main">{{dev.devid}}</span>
 								</div>
-
 								<div class="mui-icon d2" @tap="onShareTap()">
 									<img src="../../image/home/dev_share.png" />
 									<span class="app-font-size-24" style="color: #696969;">分享</span>
