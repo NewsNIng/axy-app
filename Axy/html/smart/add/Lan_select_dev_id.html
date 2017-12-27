@@ -66,8 +66,14 @@
 				color: #2BB8AA;
 			}
 			
-			ul:not(.mui-pciker-list){
+			ul:not(.mui-pciker-list) {
 				margin-bottom: 2rem !important;
+			}
+			
+			
+			.wrapper {
+				overflow: hidden;
+				height: 100%;
 			}
 		</style>
 	</head>
@@ -81,22 +87,25 @@
 			</header>
 
 			<div class="mui-content">
-				<div class="title app-font-size-24">
+				<div class="title app-font-size-24" ref="tabroom">
 					选择需要添加的设备ID
 				</div>
-				<ul class="mui-table-view app-font-size-28">
-					<template v-for="o,i in devs">
-						<li class="mui-table-view-cell" @tap="onSelectTap(i)">
-							<a>
-								<span class="mui-badge select"><img v-if="i === devActive" src="../../../image/smart/devices/add/select1.png"/><img v-if="i !== devActive" src="../../../image/smart/devices/add/select2.png"/></span>
-								<span class="name">{{o.name}}</span>
-							</a>
-						</li>
-					</template>
-				</ul>
+				<div class="wrapper" ref="wrapper">
+
+					<ul class="mui-table-view app-font-size-28">
+						<template v-for="o,i in devs">
+							<li class="mui-table-view-cell" @tap="onSelectTap(i)">
+								<a>
+									<span class="mui-badge select"><img v-if="i === devActive" src="../../../image/smart/devices/add/select1.png"/><img v-if="i !== devActive" src="../../../image/smart/devices/add/select2.png"/></span>
+									<span class="name">{{o.name}}</span>
+								</a>
+							</li>
+						</template>
+					</ul>
+				</div>
 			</div>
 			<div class="help app-font-size-24" @tap="setWifi()">配置WIFI</div>
-			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
+			<div class="foot app-font-size-34" @tap="onNext()" ref="btn">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -119,6 +128,9 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
+
+		<script type="text/javascript" src="../../../js/lib/better-scroll.min.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 
@@ -141,7 +153,27 @@
 				},
 
 				mounted: function() {
+					var wrapper = this.$refs.wrapper;
+					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
+						this.$refs.tabroom.offsetHeight -
+						this.$refs.btn.offsetHeight * 2 -
+						immersed -
+						44;
 
+					wrapper.style.height = wrapperHight + 'px';
+
+					this.$nextTick(function() {
+						if(!this.scroll) {
+							this.scroll = new BScroll(wrapper, {
+								click: true,
+								scrollY: true 
+							});
+
+						} else {
+							this.scroll.refresh();
+						}
+
+					}.bind(this));
 				},
 				plusReady: function() {
 					this.result = !!this.$view.result;
@@ -156,14 +188,14 @@
 						// get indexDev id
 						try {
 							var devid = this.indexDev.devid;
-							if(this.result){
+							if(this.result) {
 								app.page.setResult({
 									devid: devid
 								}).close();
-							}else{
-								this.$view.loadURL('Lan_connect_camera.html?devid=' + devid + "&wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd);	
+							} else {
+								this.$view.loadURL('Lan_connect_camera.html?devid=' + devid + "&wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd);
 							}
-							
+
 						} catch(e) {
 							mui.toast('获取主机信息失败');
 						}

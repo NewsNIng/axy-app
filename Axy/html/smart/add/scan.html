@@ -210,9 +210,9 @@
 							.subscribe(function(result){
 								if(result){
 									// 通知配件更新 TODO
-									_B.emit('acc_add', function(){
-										
-									})
+									_B.emit('acc_update', {}, {
+										views: ['zeus', 'dev_my_list']
+									});
 								}
 								app.page.setResult({
 									result: result

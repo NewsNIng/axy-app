@@ -496,23 +496,32 @@
   "html/nearby/pages/theme.html": {
     "refer": [
       "html/public/browser.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_AX-903.html": {
     "refer": [
       "html/smart/devices/dev_AX-903_setting.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_AX-903_setting.html": {
     "refer": [
       "html/smart/devices/dev_AX-903_datasave.html",
       "html/smart/devices/dev_AX-903_alarmlog.html",
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_WG-100.html": {
     "refer": [
       "html/smart/devices/camera_settings_arming.html"
+    ],
+    "resources": []
+  },
+  "html/person/relation/bind.html": {
+    "refer": [
+      "html/person/relation/bind_tel.html"
     ]
   }
 }

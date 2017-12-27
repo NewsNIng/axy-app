@@ -665,16 +665,16 @@
 							this.resultOver = true;
 
 							if(err) {
-								return console.log(JSON.stringify(err))
+								return mui.toast(err.message);
 							}
 							var article = data.article || [];
-							var sotre = data.store || [];	
+							var store = data.store || [];	
 							if(this.n > 1){
-								this.articleList.push.call(this.articleList, article);
-								this.storeList.push.call(this.storeList, store);
+								article.length && this.articleList.push.call(this.articleList, article);
+								store.length && this.storeList.push.call(this.storeList, store);
 							}else{
 								this.articleList = article;
-								this.storeList = sotre;
+								this.storeList = store;
 							}
 							
 							

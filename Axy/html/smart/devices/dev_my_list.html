@@ -134,6 +134,7 @@
 				position: absolute;
 				top: 0.266666rem;
 				left: 0.266666rem;
+				z-index: 9;
 			}
 			
 			.imgdiv>span.online {
@@ -255,19 +256,19 @@
 							<li class="mui-table-view-cell" @tap="onZoneTap(o, i)">
 								<a class="mui-navigate-right">
 									<span class="left app-font-size-28 app-color-333333">
-								<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-if="iconList[o.accessory.type] == null"/>
-								<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[o.accessory.type]" v-if="!(iconList[o.accessory.type] == null)"/>
-								<span>{{o.accessory.name}}</span>
+								<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-if="iconList[o.type] == null"/>
+								<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[o.type]" v-if="!(iconList[o.type] == null)"/>
+								<span>{{o.name}}</span>
 									</span>
-									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.accessory.enable ? "已启用" : "未启用"}}</span>
+									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.enable ? "已启用" : "未启用"}}</span>
 								</a>
 							</li>
 							<li class="mui-table-view-cell">
 								<a>
 									<span class="app-font-size-28 app-color-9f9fa0">
-								主机: {{o.devName || o.accessory.devid}}
+								主机: {{o.devname || o.devid}}
 							</span>
-									<span class="mui-badge app-color-main">{{_getStateByCode(o.statusCode)}}</span>
+									<span class="mui-badge app-color-main">{{_getStateByCode(o.statuscode)}}</span>
 								</a>
 							</li>
 						</ul>
@@ -591,6 +592,7 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
+							console.log(JSON.stringify(data));
 							this.devaccessroyList = data;
 
 						}.bind(this));

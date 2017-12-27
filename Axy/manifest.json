@@ -880,6 +880,13 @@
 					"html/public/browser.html"
 				],
 				"priority": 0
+			},
+			"html/person/relation/bind.html": {
+				"resources": [],
+				"refer": [
+					"html/person/relation/bind_tel.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

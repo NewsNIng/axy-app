@@ -153,6 +153,7 @@
 			/*设备状态*/
 			
 			.device_show .dev_status {
+				z-index: 9;
 				position: absolute;
 				background-color: #2bb8aa;
 				width: 0.76rem;
@@ -246,9 +247,11 @@
 			}
 			/*附近的店====end====*/
 			/*设备背景图fix*/
-			.imgdiv{
+			
+			.imgdiv {
 				position: relative;
 			}
+			
 			.imgdiv.WG-100:after {
 				content: "";
 				top: 0;
@@ -474,7 +477,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../js/app/app-dev.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-dev.js"></script>
 
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
@@ -884,11 +887,8 @@
 					},
 
 					addDeviceTap: function() {
-						_B.emit('tabar', {
-							mindex: 1,
-							nindex: 0
-						}, {
-							views: [this.$view.parent()],
+						app.user.get(function(u) {
+							u && mui.openWindow('../smart/add/add_device.html', 'add_device');
 						});
 					},
 
@@ -899,10 +899,10 @@
 							return app.ios.getSafeBoxPath() + "Documents/account_18718690160/assets" + devid + '.jpeg?t=' + new Date().getTime();
 						}
 					},
-					_getDevName: function(type){
+					_getDevName: function(type) {
 						return app.dev.findName(type);
 					},
-					
+
 				}
 			});
 		</script>
