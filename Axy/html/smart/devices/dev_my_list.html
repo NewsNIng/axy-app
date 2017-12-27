@@ -90,37 +90,37 @@
 				background-position: center;
 				background-repeat: no-repeat;
 				position: relative;
-			} 
+			}
 			
-			.imgdiv.WG-100:after{
+			.imgdiv.WG-100:after {
 				content: "";
 				position: absolute;
 				width: 100%;
-				height: 100%; 
+				height: 100%;
 				background-image: url(../../../image/smart/devices/bg/wg_100@3xweb.png);
 				background-size: cover;
 				background-position: center;
 				background-repeat: no-repeat;
-				z-index: 8;  
+				z-index: 8;
 			}
 			/*TODO 修复*/
-			.imgdiv.AX-903:after{
+			
+			.imgdiv.AX-903:after {
 				content: "";
 				position: absolute;
 				width: 100%;
-				height: 100%; 
+				height: 100%;
 				background-image: url(../../../image/smart/devices/bg/903@3xweb.png);
 				background-size: cover;
 				background-position: center;
 				background-repeat: no-repeat;
-				z-index: 8;  
+				z-index: 8;
 			}
 			
-			.imgdiv.WG-100,.imgdiv.AX-903{
+			.imgdiv.WG-100,
+			.imgdiv.AX-903 {
 				pointer-events: none;
 			}
-			
-			
 			
 			.imgdiv>span {
 				display: inline-block;
@@ -273,7 +273,7 @@
 						</ul>
 					</div>
 				</template>
-				<template v-else>
+				<template v-else-if="isGeted">
 					<div class="nolog">
 						<div class="nolog_divimg"></div>
 						<div class="app-font-size-30 app-color-9f9fa0">
@@ -347,26 +347,28 @@
 						active: 0,
 						controlIndex: -1,
 						netDivList: [],
+						// 标志是否获取过
+						isGeted: false,
 
 						tapIndex: -1,
 
 						// 配件列表
 						devaccessroyList: [],
-						
-						iconList:{
-							"20":"btn_Warningsign@3x.png",
-							"21":"btn_Intelligentsocket@3x.png",
-							"22":"btn_Formaldehydedetector@3x.png",
-							"32":"btn_Greetingdevice@3x.png",
-							"41":"btn_Acousto-opticalarm@3x.png",
-							"48":"btn_Emergencybutton@3x.png",
-							"52":"btn_Curtainscontroller@3x.png",
-							"65":"btn_Infrareddetector@3x.png",
-							"80":"btn_Smokedetector@3x.png",
-							"129":"btn_Infrareddetector@3x (2).png",
-							"145":"btn_Stealthburglardetector@3x.png",
-							"160":"btn_Gasdetector@3x.png",
-							"161":"btn_Carbonmonoxidedetector@3x.png"
+
+						iconList: {
+							"20": "btn_Warningsign@3x.png",
+							"21": "btn_Intelligentsocket@3x.png",
+							"22": "btn_Formaldehydedetector@3x.png",
+							"32": "btn_Greetingdevice@3x.png",
+							"41": "btn_Acousto-opticalarm@3x.png",
+							"48": "btn_Emergencybutton@3x.png",
+							"52": "btn_Curtainscontroller@3x.png",
+							"65": "btn_Infrareddetector@3x.png",
+							"80": "btn_Smokedetector@3x.png",
+							"129": "btn_Infrareddetector@3x (2).png",
+							"145": "btn_Stealthburglardetector@3x.png",
+							"160": "btn_Gasdetector@3x.png",
+							"161": "btn_Carbonmonoxidedetector@3x.png"
 						},
 
 					};
@@ -387,25 +389,26 @@
 				},
 
 				plusReady: function() {
-
 					var DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
-					
+
 					var that = this;
-					
-					function getDevData(){
+
+					function getDevData() {
 						var devData = DEVD.data;
+						that.isGeted = true;
 						that.netDivList = devData.map(function(item) {
 							item.devimg = that._getDevImg(item.devid);
 							item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
 							return item;
 						});
+
 					}
-					
+
 					getDevData();
-					
-					_B.on('device_update', function(){
+
+					_B.on('device_update', function() {
 						alert(123213213213);
 						getDevData();
 					});
@@ -421,7 +424,6 @@
 					_B.on('update', function(data) {
 						this.$set(this.netDivList, this.tapIndex, data.info);
 					}.bind(this));
-
 				},
 				methods: {
 					// 摄像机点击
@@ -514,11 +516,11 @@
 							info: o
 						});
 					},
-					
-					_getDevName: function(type){
+
+					_getDevName: function(type) {
 						return app.dev.findName(type);
 					},
-					
+
 					// 设备设置
 					onSettingTap: function(o, i) {
 						this.tapIndex = i;
@@ -599,7 +601,6 @@
 					onSwipe: function(e, o) {
 						console.log(JSON.stringify(e));
 					},
-
 
 					_getDevImg: function(devid) {
 						if(this.$os.android) {

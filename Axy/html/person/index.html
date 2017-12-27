@@ -248,7 +248,6 @@
 					this.getUserInfo();
 					// 监听用户信息更新
 					_B.on("userinfo_update", function(data){
-//						alert(JSON.stringify(data));
 						this.user = data.userInfo;
 						this.updateLazyImage();
 					}.bind(this));
@@ -268,6 +267,7 @@
 					getUserInfo: function(){
 						// 获取用户信息
 						this.user = app.user.get();
+//						alert(JSON.stringify(this.user));
 						this.updateLazyImage();
 					},
 					
