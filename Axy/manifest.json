@@ -16,9 +16,9 @@
 	},
 	"launch_path": "html/main.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
 	"developer": {
-		"name": "",/*开发者名称*/
-		"email": "",/*开发者邮箱地址*/
-		"url": "http://www.dcloud.io"
+		"name": "NewsNing",/*开发者名称*/
+		"email": "nxw1995@qq.com",/*开发者邮箱地址*/
+		"url": "http://www.vihivision.com/"
 	},
 	"permissions": {
 		"Accelerometer": {
@@ -800,7 +800,8 @@
 				"resources": [],
 				"refer": [
 					"html/person/message/warning.html",
-					"html/person/message/system.html"
+					"html/person/message/system.html",
+					"html/person/message/activity.html"
 				],
 				"priority": 0
 			},
@@ -886,6 +887,13 @@
 				"resources": [],
 				"refer": [
 					"html/public/browser.html"
+				],
+				"priority": 0
+			},
+			"html/person/relation/bind.html": {
+				"resources": [],
+				"refer": [
+					"html/person/relation/bind_tel.html"
 				],
 				"priority": 0
 			}

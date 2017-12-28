@@ -453,7 +453,8 @@
 	"html/person/message/index.html": {
 		"refer": [
 			"html/person/message/warning.html",
-			"html/person/message/system.html"
+			"html/person/message/system.html",
+			"html/person/message/activity.html"
 		],
 		"resources": []
 	},
@@ -520,6 +521,11 @@
 	"html/smart/devices/dev_WG-100.html": {
 		"refer": [
 			"html/smart/devices/camera_settings_arming.html"
+		]
+	},
+	"html/person/relation/bind.html": {
+		"refer": [
+			"html/person/relation/bind_tel.html"
 		]
 	}
 }

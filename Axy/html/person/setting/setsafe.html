@@ -73,21 +73,29 @@
 				点击 “
 				<span style="color: #F42362;">获取验证码</span>
 				” ， 系统将自动推送短信验证码至
-				<span class="">138****8888</span>
+				<span class="" v-text="telphone"></span>
 				手机号上，待验证通过后此手机将成为注册手机并获得管理终端登录权限，原注册手机则自动失效。
 			</div>
 			
+			
 			<div style="padding: 0 0.8rem 0.05rem 0.8rem; background-color: #FFFFFF; border-bottom: 1px #E5E6E7 solid;">
 				<input v-model="code" type="number" placeholder="请在此输入验证码" style="width: 6rem; border: none;" />
-				<button @tap="onGetCode()" class="code" style="width: 2.2rem; border-color: #E5E6E7 !important;" type="button" class="mui-btn app-btn-main-ghost">获取验证码</button>
+				<button class="code" style="width: 2.2rem; border-color: #E5E6E7 !important;" type="button" class="mui-btn app-btn-main-ghost" :class="{'mui-disabled': codeTime}" @tap="onCodeTap()" v-text="codeText"></button>
 			</div>
-			
+
 			<button @tap="onSubmit()" type="button" class="mui-btn app-btn-main app-font-size-34">完成</button>
 
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
-		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../../js/dal/protect.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -96,18 +104,100 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						code: "1234",
+
+						account: "",
+						tel: "",
+
+						code: "",
+						validcode: "",
 						
+						
+
+						codeT: 90,
+						codeTime: null,
+
 					};
 				},
-				methods: {
+				
+				plusReady: function() {
 					
+					var u = app.user.get(); 
+					
+					
+					this.tel = u.bindmobile;
+					this.account = u.account;
+
+					this.$view.setStyle({
+						softinputMode: 'adjustResize'
+					});
+				},
+				
+				computed: {
+					codeText: function() {
+						if(this.codeTime !== null) {
+							return this.codeT + "s";
+						}
+						return "发送验证码"
+					},
+					telphone: function() {
+						if(/^1\d{10}$/.test(this.tel)) {
+							var temp = this.tel.split("");
+							temp.splice(3, 4, "*", "*", "*", "*")
+							temp = temp.join("");
+							return temp;
+						} else {
+							return null;
+						}
+					}
+				},
+				
+				methods: {
+
 					// 提交申请
-					onSubmit: function(){
+					onSubmit: function() {
+						if(!this.code){
+							return mui.toast("请输入验证码");
+						}
+						if(this.validcode !== this.code) {
+							return mui.toast("输入验证码错误");
+						}
+						plus.nativeUI.showWaiting();
+						// 修改主设备
+						dal.user.bindphone(this.tel, function(err, data){
+							plus.nativeUI.closeWaiting();
+							if(err){
+								return mui.toast(err.message);
+							}
+							mui.toast("更改成功!");
+							app.page.setResult().close();
+						}.bind(this));
 						
 					},
-					onGetCode: function(){
-						
+					// 获取验证码
+					getCode: function() {
+						dal.user.getCode(this.tel, function(err, rs) {
+							if(err) {
+								this.codeT = 90;
+								window.clearTimeout(this.codeTime);
+								this.codeTime = null;
+								return mui.toast(err.message);
+							}
+							this.validcode = rs.validcode;
+						}.bind(this));
+					},
+					// 按钮点击
+					onCodeTap: function() {
+						(function _() {
+							this.codeT--;
+							if(this.codeT <= 0) {
+								this.codeT = 90;
+								window.clearTimeout(this.codeTime);
+								this.codeTime = null;
+								return;
+							}
+							this.codeTime = setTimeout(_.bind(this), 1000);
+						}.bind(this)())
+						this.getCode();
 					},
 				}
 			})

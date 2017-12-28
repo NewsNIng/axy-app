@@ -25,8 +25,7 @@
 	 * 获取账号授权列表
 	 * @param {Object} callback
 	 */
-	protect.list = function(callback) {
-		var account = window.localStorage.getItem("_account_");
+	protect.list = function(account, callback) {
 		return ra('get', '/protect/list/' + account, {}, callback);
 	};
 
