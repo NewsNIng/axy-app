@@ -178,8 +178,12 @@
 					
 					// 提交
 					onSubmitTap: function(){
+						
 						if(!this.isTel){
 							return mui.toast("请输入正确的手机号");
+						}
+						if(!this.code){
+							return mui.toast("请输入验证码");
 						}
 						if(this.validcode !== this.code){
 							return mui.toast("输入验证码错误");

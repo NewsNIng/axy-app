@@ -634,9 +634,9 @@
 
 					_getDevImg: function(devid) {
 						if(this.$os.android) {
-							return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+							return app.android.getScreenshotByDevId(devid);
 						} else if(this.$os.ios) {
-							return app.ios.getSafeBoxPath() + "Documents/account_18718690160/assets" + devid + '.jpeg?t=' + new Date().getTime();
+							return app.ios.getScreenshotByDevId(devid);
 						}
 					},
 

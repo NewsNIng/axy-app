@@ -209,14 +209,45 @@ function addMethod(obj, name, fn) {
 	var ios = {};
 
 	var __iosSafeBoxPath = "";
-
+	
+	var _account_;
+	
 	// 获取ios沙盒地址
 	ios.getSafeBoxPath = function() {
 		if(!__iosSafeBoxPath) {
 			__iosSafeBoxPath = plus.io.convertLocalFileSystemURL("../../../../../../../") + '/';
 		}
+		if(__iosSafeBoxPath.indexOf('file://') < 0){
+			__iosSafeBoxPath = 'file://' + __iosSafeBoxPath;
+		}
+		return __iosSafeBoxPath;
+	}
+	
+	ios.getScreenshotByDevId = function(devid){
+		if(!_account_){
+			_account_ = window.localStorage.getItem('_account_');
+		}
+		if(!__iosSafeBoxPath) {
+			__iosSafeBoxPath = plus.io.convertLocalFileSystemURL("../../../../../../../") + '/';
+		}
+		if(__iosSafeBoxPath.indexOf('file://') < 0){
+			__iosSafeBoxPath = 'file://' + __iosSafeBoxPath;
+		}
+		__iosSafeBoxPath = __iosSafeBoxPath + "Documents/account_"+ _account_ +"/assets/" + devid + '.jpeg?t=' + new Date().getTime();
 		return __iosSafeBoxPath;
 	}
 
 	app.ios = ios;
+}(window.app));
+
+
+(function(app) {
+	var android = {};
+
+	// 获取ios沙盒地址
+	android.getScreenshotByDevId = function(devid) {
+		return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+	}
+
+	app.android = android;
 }(window.app));

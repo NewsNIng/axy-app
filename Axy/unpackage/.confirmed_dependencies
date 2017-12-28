@@ -29,7 +29,10 @@
 			"js/dal/system.js",
 			"js/dal/base.js",
 			"js/common/rsmanager.js",
-			"js/lib/vue-ni.js"
+			"js/lib/vue-ni.js",
+			"js/app/app-page.js",
+			"js/lib/Rx.min.js",
+			"js/app/app.js"
 		],
 		"refer": [
 			"html/home/index.html",
@@ -83,7 +86,8 @@
 	"html/common/login.html": {
 		"refer": [
 			"html/common/register.html",
-			"html/common/reset.html"
+			"html/common/reset.html",
+			"html/common/authorized.html"
 		],
 		"resources": []
 	},
@@ -455,7 +459,8 @@
 	},
 	"html/zeus.html": {
 		"refer": [
-			"html/common/login.html"
+			"html/common/login.html",
+			"html/common/authorized.html"
 		],
 		"resources": []
 	},

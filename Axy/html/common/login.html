@@ -151,7 +151,7 @@
 	<body>
 
 		<header class="mui-bar mui-bar-nav app-header">
-			<a class="mui-action-back mui-icon mui-icon closeempty mui-pull-left app-color-gray">
+			<a class="mui-action-back mui-icon mui-icon-closeempty mui-pull-left app-color-gray">
 			</a>
 			<span class="mui-pull-right app-font-size-30 app-color-main" id="reg">新用户注册</span>
 		</header>
@@ -276,18 +276,24 @@
 							if(err) {
 								return mui.toast(err.code + ": " + err.message);
 							}
+							
 							data = fixUserData(data);
 
 							Rx.Observable.create(function(ob) {
-								ob.next(data);
-//								if(data.validation === 1) {
-//									// 验证通过
-//									ob.next(data);
-//								}else{
-//									// 跳转页面认证
-//									// TODO
-//									
-//								}
+								//ob.next(data);
+								if(data.lockterminal === 0 || data.validation === 1) {
+									// 验证通过
+									ob.next(data);
+								} else {
+									// 跳转页面认证
+									// TODO
+									mui.toast("帐号已保护，您需要权限认证");
+									app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
+										if(rs.result) {
+											ob.next(data);
+										}
+									});
+								}
 							}).subscribe(function(data) {
 								mui.toast("登录成功");
 								// 保存用户信息
@@ -305,8 +311,8 @@
 
 								// 跳转到首页
 								// TODO 页面变动 逻辑需要改动
-								var mainView = plus.webview.getLaunchWebview();
-								mainView.show('slide-in-bottom', 250);
+								//var mainView = plus.webview.getLaunchWebview();
+								//mainView.show('slide-in-bottom', 250);
 
 								plus.navigator.setStatusBarStyle('light');
 							});
@@ -349,22 +355,40 @@
 							})
 							.then(function(data) {
 								w && w.close();
-								console.log(JSON.stringify(data));
-								// 保存
-								mui.toast('登录成功');
 
-								data = fixUserData(data);
+								Rx.Observable.create(function(ob) {
+									if(data.lockterminal === 0 || data.validation === 1) {
+										// 验证通过
+										ob.next(data);
+									} else {
+										// 跳转页面认证
+										// TODO
+										mui.toast("帐号已保护，您需要权限认证");
+										app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
+											if(rs.result) {
+												ob.next(data);
+											}
+										});
+									}
+								}).subscribe(function(data) {
+									// 保存
+									mui.toast('登录成功');
 
-								window.localStorage.setItem('login_type', ({
-									qq: 'qq',
-									sinaweibo: 'wb',
-									weixin: 'wx'
-								}[type]));
-								// 通知上层
-								app.page.setResult(data);
-								// 通知全部
-								new that.$Broadcast().emit("login_success", {
-									userInfo: data
+									data = fixUserData(data);
+
+									window.localStorage.setItem('login_type', ({
+										qq: 'qq',
+										sinaweibo: 'wb',
+										weixin: 'wx'
+									}[type]));
+									// 通知上层
+									app.page.setResult(data);
+									// 通知全部
+									new that.$Broadcast().emit("login_success", {
+										userInfo: data
+									});
+									
+									plus.navigator.setStatusBarStyle('light');
 								});
 
 							})

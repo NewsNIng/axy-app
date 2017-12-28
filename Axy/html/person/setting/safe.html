@@ -64,7 +64,7 @@
 			
 			
 			<!--以验证-->
-			<div v-if="safe">
+			<div v-if="ismaster">
 				<div class="app-font-size-28 app-color-9f9fa0" style="padding: 0.346666rem;">
 					开启帐号保护后，如果在不常用的手机上登录，需验证您的手机。
 				</div>
@@ -115,6 +115,7 @@
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -123,14 +124,22 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						safe: Math.random() > 0.45, 
-						state: true,
+						ismaster: false, 
+						state: false,
 						
 					};
 				},
-				
+				mounted: function(){
+					var that = this;
+					app.user.get(function(u){
+						if(u && u.ismaster){ 
+							that.ismaster = true;
+							that.state = true;
+						}
+					});
+				},
 				watch: {
-					safe: function(){
+					ismaster: function(){
 						// TODO 测试页面改动 数据接入后去除
 						this.$nextTick(function(){
 							mui('.mui-switch')['switch']();	

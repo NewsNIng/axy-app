@@ -241,7 +241,10 @@
 					"html/nearby/index.html",
 					"js/dal/system.js",
 					"js/dal/base.js",
-					"js/common/rsmanager.js"
+					"js/common/rsmanager.js",
+					"js/app/app-page.js",
+					"js/lib/Rx.min.js",
+					"js/app/app.js"
 				],
 				"refer": [
 					"html/zeus.html",
@@ -404,7 +407,8 @@
 					"js/app/app-rules.js"
 				],
 				"refer": [
-					"html/common/register.html"
+					"html/common/register.html",
+					"html/common/authorized.html"
 				],
 				"priority": 0
 			},
@@ -803,7 +807,8 @@
 			"html/zeus.html": {
 				"resources": [],
 				"refer": [
-					"html/common/login.html"
+					"html/common/login.html",
+					"html/common/authorized.html"
 				],
 				"priority": 0
 			},
