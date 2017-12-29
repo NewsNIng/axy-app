@@ -14,7 +14,7 @@
 	"icons": {
 		"72": "icon.png"
 	},
-	"launch_path": "html/main.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
+	"launch_path": "index.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
 	"developer": {
 		"name": "NewsNing",/*开发者名称*/
 		"email": "nxw1995@qq.com",/*开发者邮箱地址*/
@@ -209,9 +209,13 @@
 			"index.html": {
 				"resources": [
 					"js/mui.min.js",
-					"css/mui.min.css"
+					"css/mui.min.css",
+					"html/home/index.html"
 				],
-				"refer": [],
+				"refer": [
+					"html/common/guide.html",
+					"html/main.html"
+				],
 				"priority": 0
 			},
 			"html/main.html": {
@@ -893,7 +897,8 @@
 			"html/person/relation/bind.html": {
 				"resources": [],
 				"refer": [
-					"html/person/relation/bind_tel.html"
+					"html/person/relation/bind_tel.html",
+					"html/person/relation/reset_tel.html"
 				],
 				"priority": 0
 			}

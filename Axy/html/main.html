@@ -66,6 +66,8 @@
 		<script type="text/javascript" src="../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
+		
+		<script type="text/javascript" src="../js/common/android-back.js" ></script>
 
 		<script>
 			// 4个子webview统一样式
@@ -123,7 +125,7 @@
 					plus.webview.create('zeus.html', 'zeus');
 					// plus ready !
 					// 这时候才能调用 plus 相关 API
-					this.group = new this.$WebviewGroupLow(plus.webview.getLaunchWebview().id, {
+					this.group = new this.$WebviewGroupLow(plus.webview.currentWebview().id, {
 						items: this.items,
 						onChange: this.onChange.bind(this)
 					});

@@ -6,13 +6,36 @@
     <title></title>
 </head>
 <body>
-	<script type="text/javascript" src="js/lib/mui.min.js" ></script>
+	<script type="text/javascript" src="js/app/app-page.js" ></script>
+	
 	<script>
 		
-		mui.init({
-			//statusBarBackground: "", // 设置ios沉浸式 背景颜色
-		});
-		 
+		if(window.plus){
+			setTimeout(plusReady);
+		}else{
+			document.addEventListener('plusready', plusReady, false);	
+		}
+		
+		function plusReady(){
+			if(plus.runtime.version == plus.storage.getItem("FirstTimeFlag")){
+				// 打开主页
+				openMain();
+			}else{
+				// 打开引导页
+				app.page.openForResultBy('html/common/guide.html', 'guide', function(){
+					openMain();
+				});
+			}
+		}
+		
+		function openMain(){
+			var w = plus.webview.currentWebview();
+			plus.webview.create('html/main.html', 'main').show('none', 0, function(){
+				setTimeout(function(){
+					w.close('none');
+				}, 3000);
+			});
+		}
 	</script>
 </body>
 </html>

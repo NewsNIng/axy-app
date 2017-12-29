@@ -98,7 +98,8 @@
 				pageNumber: pageNumber,
 				pageSize: pageSize || 10,
 			},callback);
-		}
+		},
+		
 	}
 	
 	_.article = article; 

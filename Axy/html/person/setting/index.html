@@ -108,7 +108,7 @@
 			mui.init();
 			
 			var lockterminal;
-	
+			
 			mui.ready(function() {
 				mui('.mui-content').on('tap', '*[data-href]', function() {
 					mui.openWindow(this.dataset.href);
@@ -117,6 +117,7 @@
 				
 				lockterminal = document.querySelector(".lockterminal");
 				app.user.get(function(u){
+					user = u;
 					if(u && u.lockterminal === 1){ 
 						lockterminal.innerHTML = "已开启"; 
 						lockterminal.classList.add("app-color-main");
@@ -124,6 +125,17 @@
 				});
 				
 				document.getElementById("safe").addEventListener('tap',function(){
+					
+					if(!user || !user.bindmobile){
+						mui.toast("请先绑定手机！");
+						app.page.openForResultBy('../relation/bind.html', 'bind', function(data){
+							user.bindmobile = data.tel;
+						});
+						return;
+					}
+					
+					
+					
 					app.page.openForResultBy('safe.html', 'safe', function(data){
 						if(data.result){ 
 							lockterminal.innerHTML = "已开启"; 

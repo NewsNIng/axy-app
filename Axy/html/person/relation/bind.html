@@ -230,14 +230,22 @@
 					onTelphoneTap: function() {
 					
 						var that = this;
+						var page;
+						if(this.telphone){
+							page = "reset_tel";
+						}else{
+							page = "bind_tel";
+						}
 						
-						app.page.openForResultBy("bind_tel.html", "bind_tel", function(data) {
+						app.page.openForResultBy(page + ".html", page, function(data) {
 							if(data.tel){
 								// 更改成功后修改页面中的tel
 								that.tel = data.tel;
+								// 继续通知上层
+								app.page.setResult({tel: data.tel});
 							}
 						},{
-							tel: this.telphone 
+							tel: this.tel
 						});
 					},
 				}

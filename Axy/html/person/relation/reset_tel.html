@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>绑定手机号码</title>
+		<title>修改手机</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -73,25 +73,28 @@
 		<div id="box">
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">绑定手机号码</h1>
+				<h1 class="mui-title">修改手机</h1>
 			</header>
 			<div class="mui-content menu-box app-font-size-32">
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
 						<a class="">
 							<img src="../../../image/person/info/tel2@3x.png" />
-							<input type="tel" v-model="tel" placeholder="请输入手机号码" />
+							<input type="tel" v-model="tel" placeholder="请输入新手机号码" />
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<img src="../../../image/person/info/safe@3x.png" />
-							<input v-model="code" type="number" placeholder="请输入验证码" />
+							<input v-model="code" type="number" placeholder="请输入原手机验证码" />
 							<button type="button" class="mui-btn app-btn-main-ghost app-font-size-24 " :class="{'mui-disabled': codeTime}" @tap="onCodeTap()" v-text="codeText"></button>
 						</a>
 					</li>
 					
 				</ul>
+				<div style="margin-left: 0.36rem;" class="app-font-size-26 app-color-9f9fa0">
+					手机号码修改成功后需要使用新的手机号码进行登录。
+				</div>
 				<button type="button" class="mui-btn app-btn-main" @tap="onSubmitTap()">确定</button>
 
 			</div>
@@ -99,6 +102,7 @@
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
 		<script type="text/javascript" src="../../../js/dal/user.js" ></script>
 		
@@ -113,6 +117,8 @@
 					return {
 						
 						tel: "",
+						
+						otel: "",
 						
 						code: "",
 						validcode: "",
@@ -134,9 +140,12 @@
 					}
 				},
 
+				plusReady: function() {
+					this.otel = this.$view.tel;
+				},
 				methods: {
 					getCode: function(){
-						dal.user.getCode(this.tel, function(err, rs){
+						dal.user.getCode(this.otel, function(err, rs){
 							if(err){
 								this.codeT = 90;
 								window.clearTimeout(this.codeTime);

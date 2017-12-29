@@ -271,7 +271,7 @@
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell app-font-size-30" v-for="o,i in plans" @tap="onEditTap(o, i)" @longtap="onDel(o, i)">
 							<a class="">
-								<span>{{o.start}} - {{o.end}}</span>
+								<span>{{_fixTime(o.start)}} - {{_fixTime(o.end)}}</span>
 								<br />
 								<span class="sign" v-for="p,i in _two2bool(o.recycle).splice(1)" v-if="p">周{{_number2string(i)}}</span>
 								<span class="mui-badge" @tap.stop="">
@@ -541,6 +541,15 @@
 							return +item;
 						}).join("");
 						return parseInt(s, 2);
+					},
+					
+					_fixTime: function(str){
+						var arr = str.split(':');
+						if(arr.length >= 3){
+							arr.pop();
+							return arr.join(':');
+						}
+						return str;
 					},
 
 				}

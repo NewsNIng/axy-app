@@ -173,7 +173,7 @@
 			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在登录..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">登录</button>
 
 			<div class="forget_pwd app-font-size-24">
-				<a href="reset.html">忘记密码</a>
+				<a :href="'reset.html?tel='+username">忘记密码</a>
 			</div>
 
 			<!--第三方登录-->

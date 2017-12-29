@@ -294,10 +294,13 @@
 					},
 					// 生日选择
 					onBirthdayTap: function() {
+						var d = new Date();
 						var options = {
 							type: "date",
 							beginYear: "1900",
-							endYear: (new Date).getFullYear(),
+							endYear: d.getFullYear(),
+							endMonth: d.getMonth() + 1,
+							endDay: d.getDate(),
 							value: this.user.birthday, // 当前生日
 						};
 						var that = this;

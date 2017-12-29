@@ -3,6 +3,13 @@
 
 	var _rslesObj = {
 		tel: /^1\d{10}$/,
+		number: function(value){
+			console.log(value);
+			if(!_rslesObj.tel.test(value) && !/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(value)){
+				return false;
+			}
+			return true;
+		},
 		pwd: /^\w{6,18}$/,
 		code: /^\d{6}$/,
 		//devName: /^\w{1,10}$/,
