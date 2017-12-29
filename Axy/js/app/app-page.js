@@ -19,7 +19,8 @@
 			login: '_www/html/common/login.html',
 			browser: '_www/html/public/browser.html',
 			image_cropper: '_www/html/public/image_cropper.html',
-			alarmParam: '_www/html/public/alarmParam.html'
+			alarmParam: '_www/html/public/alarmParam.html',
+			authorized: "_www/html/common/authorized.html",
 		},cw = null;
 	
 	// 打开城市选择
@@ -63,6 +64,14 @@
 	
 	page.openBrowser = function(options){
 		this.openForResult('browser', function(){}, options);
+	}
+	
+	// 打开权限认证
+	page.openAuthorized = function(account, tel, callback){
+		this.openForResult('authorized', callback, {
+			account: account,
+			tel: tel
+		});
 	}
 	
 	page.openForResultBy = function(url, id, callback, ex){

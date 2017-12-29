@@ -68,10 +68,10 @@
 						<span class="app-color-333333">消息推送</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell" data-href="safe.html">
+				<li class="mui-table-view-cell" id="safe">
 					<a class="mui-navigate-right">
 						<span class="app-color-333333">帐号保护</span>
-						<span class="mui-badge">未开启</span>
+						<span class="mui-badge lockterminal">未开启</span>
 					</a>
 				</li>
 				<li class="mui-table-view-cell" data-href="version.html">
@@ -106,13 +106,37 @@
 
 		<script type="text/javascript">
 			mui.init();
-
+			
+			var lockterminal;
+	
 			mui.ready(function() {
 				mui('.mui-content').on('tap', '*[data-href]', function() {
 					mui.openWindow(this.dataset.href);
 				});
 				document.getElementById("exit").addEventListener('tap', onExit);
+				
+				lockterminal = document.querySelector(".lockterminal");
+				app.user.get(function(u){
+					if(u && u.lockterminal === 1){ 
+						lockterminal.innerHTML = "已开启"; 
+						lockterminal.classList.add("app-color-main");
+					}
+				});
+				
+				document.getElementById("safe").addEventListener('tap',function(){
+					app.page.openForResultBy('safe.html', 'safe', function(data){
+						if(data.result){ 
+							lockterminal.innerHTML = "已开启"; 
+							lockterminal.classList.add("app-color-main");
+						}else{
+							lockterminal.innerHTML = "已关闭"; 
+							lockterminal.classList.remove("app-color-main");
+						}
+					});
+				})
 			});
+			
+			
 
 			function onExit() {
 				mui.confirm("您确定退出帐号吗？", "", ["退出帐号", "取消"], function(e) {

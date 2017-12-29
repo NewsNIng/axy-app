@@ -377,6 +377,10 @@
 						</div>
 
 						<div class="device_show">
+							<!--<div class="app-font-size-22">
+								{{dev.devimg}}	
+							</div>-->
+							
 							<div class="img imgdiv" :class="_getDevName(dev.type)" :style="{backgroundImage: 'url('+dev.devimg+')'}" @tap="openCamListWindow()">
 
 							</div>
@@ -906,9 +910,9 @@
 
 					_getDevImg: function(devid) {
 						if(this.$os.android) {
-							return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
+							return app.android.getScreenshotByDevId(devid);
 						} else if(this.$os.ios) {
-							return app.ios.getSafeBoxPath() + "Documents/account_18718690160/assets" + devid + '.jpeg?t=' + new Date().getTime();
+							return app.ios.getScreenshotByDevId(devid);
 						}
 					},
 					_getDevName: function(type) {

@@ -330,7 +330,7 @@
 
 					</div>
 					<div class="user_tittle app-font-size-28">
-						<img  @tap="onHeadTap(info.account)" :src="info.headimgurl" />
+						<img @tap="onHeadTap(info.account)" class="avastr img-lazy-load" :data-src="info.headimgurl" data-type="avatar" />
 						<div style="display: inline;" v-text="info.nickname"></div>
 						<div class="attention">+ 关注</div>
 					</div>
@@ -341,7 +341,7 @@
 						<div style="display: inline;" v-text="'('+(total || 0)+')'"></div>
 					</div>
 					<div class="comments" v-for="o in clist">
-						<img @tap="onHeadTap(o.account)" :src="o.headimgurl" />
+						<img @tap="onHeadTap(o.account)" class="avastr img-lazy-load" :data-src="o.headimgurl" data-type="avatar" />
 						<div class="comment_info">
 							<div class="user_name app-font-size-28" v-text="o.nickname"></div>
 							<div class="comment_value app-font-size-30" v-text="o.content"></div>
@@ -376,8 +376,8 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 
-		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
-		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+		<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -439,7 +439,8 @@
 					this.getComments();
 					this.$view.setStyle({
 						softinputMode: 'adjustResize'
-					})
+					});
+					
 				},
 				methods: {
 					onHeadTap: function(account){
@@ -466,6 +467,13 @@
 							});
 						});
 					},
+					
+					_loadImage: function(){
+						this.$nextTick(function(){
+							imagelazyload();
+						});
+					},
+					
 					_up: function() {
 						this.n++;
 						this.getComments();
@@ -488,6 +496,7 @@
 								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
 							}
 							this.clist.push.apply(this.clist, data);
+							this._loadImage();
 						}.bind(this), 5); 
 					},
 					_getImg: function(img1, img2, img3) {

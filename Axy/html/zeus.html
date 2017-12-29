@@ -82,17 +82,26 @@
 									appLoginFail();
 									return;
 								}
-								updateUserInfo(data);
-								ob.next(u.account);
-//								if(data.validation === 1) {
-//									// 验证通过
-//									updateUserInfo(data);
-//									ob.next(u.account);
-//								} else {
-//									// 跳转页面认证
-//									// TODO
-//									
-//								}
+								//updateUserInfo(data);
+								//ob.next(u.account);
+								if(data.lockterminal === 0 || data.validation === 1) {
+									// 验证通过
+									updateUserInfo(data);
+									ob.next(u.account);
+								} else {
+									// 跳转页面认证
+									// TODO
+									mui.toast("帐号已保护，您需要权限认证");
+									app.page.openAuthorized(data.account, data.bindmobile, function(rs){
+										if(rs.result){
+											updateUserInfo(data);
+											ob.next(u.account);
+										}else{
+											// 清除用户信息
+											appLoginFail();
+										}
+									});
+								}
 							};
 
 							if(type === 'pwd') {

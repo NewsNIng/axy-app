@@ -142,7 +142,8 @@
 	 */
 	user.bindphone = function(bindmobile, callback) {
 		return ra('post', '/user/bindphone', {
-			bindmobile: bindmobile
+			bindmobile: bindmobile,
+			imei: IMEI,
 		}, callback);
 	};
 

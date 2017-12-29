@@ -104,7 +104,7 @@
 				extras: {},
 			}];
 
-			var _B = new ni.Broadcast();
+			var _B;
 
 			new Vue({
 				el: "#warp",
@@ -118,6 +118,8 @@
 
 				},
 				plusReady: function() {
+					_B = new ni.Broadcast();
+					
 					plus.webview.create('zeus.html', 'zeus');
 					// plus ready !
 					// 这时候才能调用 plus 相关 API
