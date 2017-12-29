@@ -4,6 +4,7 @@
 	var _rslesObj = {
 		tel: /^1\d{10}$/,
 		pwd: /^\w{6,18}$/,
+		pwd620: /^\w{6,18}$/,
 		code: /^\d{6}$/,
 		//devName: /^\w{1,10}$/,
 		lockpassword: /^\d{4,8}$/, // 智能门锁密码

@@ -710,7 +710,9 @@
 					"html/smart/devices/dev_65.html",
 					"html/smart/devices/dev_129.html",
 					"html/smart/devices/dev_48.html",
-					"html/person/collection/my_camera.html"
+					"html/person/collection/my_camera.html",
+					"html/smart/devices/dev_16711680.html",
+					"html/smart/devices/dev_AX-903.html"
 				],
 				"priority": 0
 			},
@@ -796,7 +798,8 @@
 				"resources": [],
 				"refer": [
 					"html/person/message/warning.html",
-					"html/person/message/system.html"
+					"html/person/message/system.html",
+					"html/person/message/activity.html"
 				],
 				"priority": 0
 			},
@@ -881,6 +884,20 @@
 				"resources": [],
 				"refer": [
 					"html/public/browser.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-903.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_AX-903_setting.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-903_setting.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_select_id.html"
 				],
 				"priority": 0
 			}

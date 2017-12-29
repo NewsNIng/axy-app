@@ -371,7 +371,8 @@
 			"html/smart/devices/dev_129.html",
 			"html/smart/devices/dev_48.html",
 			"html/person/collection/my_camera.html",
-			"html/smart/devices/dev_AX-903.html"
+			"html/smart/devices/dev_AX-903.html",
+			"html/smart/devices/dev_16711680.html"
 		],
 		"resources": []
 	},
@@ -449,7 +450,8 @@
 	"html/person/message/index.html": {
 		"refer": [
 			"html/person/message/warning.html",
-			"html/person/message/system.html"
+			"html/person/message/system.html",
+			"html/person/message/activity.html"
 		],
 		"resources": []
 	},
@@ -509,7 +511,8 @@
 		"refer": [
 			"html/smart/devices/dev_AX-903_datasave.html",
 			"html/smart/devices/dev_AX-903_alarmlog.html",
-			"html/public/input.html"
+			"html/public/input.html",
+			"html/smart/devices/dev_select_id.html"
 		]
 	},
 	"html/smart/devices/dev_WG-100.html": {

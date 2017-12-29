@@ -198,7 +198,7 @@
 			<a class="mui-action-back mui-icon mui-icon-closeempty mui-pull-left app-color-gray">
 			</a>
 		</header>
-		
+
 		<div class="mui-content">
 
 			<img src="../../image/common/login_logo.png" />
@@ -215,7 +215,7 @@
 			</div>
 			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="请稍后..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">下一步</button>
 		</div>
-		
+
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
 
 		<script src="../../js/lib/mui.min.js"></script>
@@ -225,8 +225,8 @@
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
-		
+		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
+
 		<script type="text/javascript">
 			mui.init()
 
@@ -246,24 +246,29 @@
 				},
 
 				methods: {
-					getCodeTap: function(){
-						if(this.codeT){return}
-						
-						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误");
-						if(errorMessage){
+					getCodeTap: function() {
+						if(this.codeT) {
+							return
+						}
+
+						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确");
+						if(errorMessage) {
 							return mui.toast(errorMessage);
 						}
 						// 发送获取验证码的请求
-						dal.user.getCode(this.username, function(err, data){
-							if(err){
+						dal.user.getCode(this.username, function(err, data) {
+							if(err) {
+								this.codeT = null;
+								this.codeState = false;
+								this.codeTimer = 60;
 								return mui.toast(JSON.stringify(err));
 							}
 							this.codeNumber = data.validcode;
 						}.bind(this));
-						
-						(function t(c){
-							c.codeT = setTimeout(function(){
-								if(c.codeTimer <= 0){
+
+						(function t(c) {
+							c.codeT = setTimeout(function() {
+								if(c.codeTimer <= 0) {
 									c.codeT = null;
 									c.codeState = false;
 									c.codeTimer = 60;
@@ -272,7 +277,7 @@
 								c.codeTimer--;
 								t(c);
 							}, 1000);
-						}(this)); 
+						}(this));
 						this.codeState = true;
 					},
 					onLoginTap: function(e) {
@@ -283,18 +288,18 @@
 						var that = this;
 
 						//this.loading = true;
-						
+
 						// 验证验证码
-						if(this.verifycode !== this.codeNumber){
+						if(this.verifycode !== this.codeNumber) {
 							//this.loading = false;
-							return mui.toast('验证码错误');
+							return mui.toast('短信验证码不正确');
 						}
-						
-						mui.openWindow('reset2.html','reset2', {
+
+						mui.openWindow('reset2.html', 'reset2', {
 							extras: {
-								account: this.username	
+								account: this.username
 							}
-							
+
 						});
 
 					}
@@ -303,7 +308,7 @@
 					loading: function(newVal, oldVal) {
 						mui('#loginBtn').button(newVal ? "loading" : "reset");
 					},
-					username: function(){
+					username: function() {
 						this.codeNumber = "";
 					}
 				}

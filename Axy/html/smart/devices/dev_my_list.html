@@ -287,7 +287,7 @@
 						</ul>
 					</div>
 				</template>
-				<template v-else>
+				<template v-else-if="isGeted">
 					<div class="nolog">
 						<div class="nolog_divimg"></div>
 						<div class="app-font-size-30 app-color-9f9fa0">
@@ -363,6 +363,8 @@
 						netDivList: [],
 
 						tapIndex: -1,
+						// 是否获取过数据
+						isGeted: false,
 
 						// 配件列表
 						devaccessroyList: [],
@@ -410,6 +412,7 @@
 
 					function getDevData() {
 						var devData = DEVD.data;
+						that.isGeted = true;
 						that.netDivList = devData.map(function(item) {
 							item.devimg = that._getDevImg(item.devid);
 							//item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
@@ -522,9 +525,10 @@
 						}
 						
 						// TODO 修复数据结构问题
+						o.id = o.aid;
 						var info = {
 							accessory: o,
-							devName: o.devname,
+							devName: this._fixDevLocation(o.devname), 
 							devType: o.devtype,
 							statusCode: o.statuscode
 						};
