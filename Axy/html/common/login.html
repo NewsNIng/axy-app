@@ -260,8 +260,8 @@
 
 						var that = this;
 
-						var errorMessage = app.rules.testBy(/^\w{6,20}$/, this.username, "帐号输入错误") ||
-							app.rules.testBy("pwd", this.password, "密码输入错误");
+						var errorMessage = app.rules.testBy(/^\w{6,20}$/, this.username, "账号格式不正确") ||
+							app.rules.testBy("/^\w{6,20}$/", this.password, "密码长度需6-20位");
 
 						if(errorMessage) {
 							return mui.toast(errorMessage);
@@ -274,7 +274,7 @@
 							that.loading = false;
 
 							if(err) {
-								return mui.toast(err.code + ": " + err.message);
+								return mui.toast(err.message);
 							}
 							
 							data = fixUserData(data);

@@ -243,7 +243,7 @@
 
 			<div class="user_agree">
 				<div class="agree_select" :class="{'red': user_agree}" @tap="user_agree = !user_agree"></div>
-				<div class="agree_text app-font-size-26" @tap="user_agree = !user_agree">已阅读并同意《<span class="user_service">用户服务协议</span>》</div>
+				<div class="agree_text app-font-size-26" @tap="user_agree = !user_agree">已阅读并同意<span @tap.self="onProtocol()" class="user_service">《用户服务协议》</span></div>
 			</div>
 		</div>
 
@@ -273,7 +273,6 @@
 							plus.webview.currentWebview().close();
 						});
 					}
-
 				});
 			});
 
@@ -332,8 +331,8 @@
 						var that = this;
 						
 						
-						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误") ||
-								 		   app.rules.test("pwd", this.password, "密码输入错误") || 
+						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确") ||
+								 		   app.rules.test("pwd", this.password, "密码长度需6-20位") || 
 								 		   app.rules.test("code", this.verifycode, "验证码格式错误");
 						
 						if(errorMessage){

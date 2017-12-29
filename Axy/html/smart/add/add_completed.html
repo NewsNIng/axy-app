@@ -22,6 +22,17 @@
 				width: 100%;
 			}
 			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
 			.dev_icon {
 				width: 100%;
 				background-repeat: no-repeat;
@@ -31,14 +42,13 @@
 			}
 			
 			.dev_text {
-				
 				position: absolute;
-				bottom: -1.066666rem;
-				left: 50%;
-				transform: translateX(-50%);
-				-webkit-transform: translateX(-50%);
-				/*font-weight: bold;*/
+				bottom: 0;
+				width: 100%;
+				margin-bottom: 0.4rem;
+				text-align: center;
 				color: #333333;
+				/*font-weight: bold;*/
 			}
 			
 			.foot {
@@ -52,13 +62,32 @@
 				background-color: #06c1ae;
 			}
 			
+			.time {
+				background-color: #06C1AE;
+				padding: 0.106666rem 0.346666rem;
+				float: left;
+				margin-left: 50%;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				color: white;
+			}
+			
 			.imgbg{
-				width: 100%;
-				padding: 1.5rem;
+				/*width: 100%;*/
+				margin: 1.5rem;
+				position: relative;
 			}
 			
 			.imgbg > img{
 				width: 100%;
+			}
+			
+			.text {
+				position: absolute;
+				bottom: 0.8rem;
+				left: 50%;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
 			}
 			
 		</style>
@@ -74,14 +103,10 @@
 
 			<div class="mui-content">
 				<div class="imgbg">
-					<img src="../../../image/smart/devices/dev_icon/360_4.png"/>
+					<img :src="bgp"/>
+					<div class="text app-font-size-28 app-color-9f9fa0">设备连接成功!</div>
 				</div>
-				<div class="dev_icon app-font-size-30">
-					<div class="dev_text app-font-size-34">TIPS：<br />1.保持周围环境安静<br />2.将手机音量调至最大<br />3.将手机喇叭靠近摄像机</div>
-				</div>
-
 			</div>
-			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -90,6 +115,9 @@
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+
 		<!--请求相关-->
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
@@ -101,6 +129,7 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -108,29 +137,17 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						wifiname: "",
-						wifipwd: "",
+						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png'
 					};
 				},
 				mounted: function() {
-					// get prev url params
-					function GetQueryString(name) {
-						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-						var r = window.location.search.substr(1).match(reg);
-						if(r != null) return unescape(r[2]);
-						return null;
-					}
-					// get wifiname & wifipwd
-					this.wifiname = GetQueryString("wifiname");
-					this.wifipwd = GetQueryString("wifipwd");
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img');
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					
+				},
 				methods: {
-					onNext: function() {
-						
-						var url = "sonic_connect_dev2.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd;
-						this.$view.loadURL(url, 'voice4');
-					}
+					
 				}
 			});
 		</script>

@@ -23,7 +23,10 @@
 			
 			.input {
 				margin-top: 0.266666rem;
-				height: 1rem;
+				height: 1.2rem;
+				line-height: 1.2rem;
+				padding: 0 !important;
+				padding-left: 0.346666rem !important;
 			}
 			
 			.input::-webkit-input-placeholder {
@@ -37,6 +40,23 @@
 			[data-dpr="3"] .input::-webkit-input-placeholder {
 				font-size: 45px !important;
 			}
+			
+			.save_icon {
+				position: absolute;
+				height: 0.6rem;
+				top: 50%;
+				right: 0.346666rem;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.app-header .app-icon-back {
+				border: none;
+			}
+			
+			header {
+				position: relative;
+			}
 		</style>
 	</head>
 
@@ -46,12 +66,18 @@
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left app-color-white"></a>
 				<h1 class="mui-title" v-text="'编辑' + title"></h1>
-				<span style="line-height: 44px;padding-left: 10px;" class="mui-pull-right app-color-white app-font-size-26" @tap="onOkTap()">
-					确定
+				<span style="line-height: 44px;padding-left: 10px;" class="mui-pull-right app-color-white app-font-size-28" @tap="onOkTap()">
+					<!--确定-->
+					<template v-if="isIconSave">
+						<img class="save_icon" src="../../image/smart/scenes/btn_Preservation@3x.png"/>
+					</template>
+					<template v-else>
+						确定
+					</template>
 				</span>
 			</header>
 			<div class="mui-content">
-				<textarea class="input app-font-size-30" rows="3" cols="" :placeholder="tips" v-model="content"></textarea>
+				<textarea class="input app-font-size-28" rows="3" cols="" :placeholder="tips" v-model="content"></textarea>
 			</div>
 		</div>
 
@@ -70,7 +96,8 @@
 						title: "",
 						tips: "请输入内容...",
 						content: "",
-						regexpType: ""
+						regexpType: "",
+						isIconSave: false,
 					};
 				},
 				plusReady: function() {
@@ -80,6 +107,7 @@
 					this.content = v.content || '';
 					this.regexpType = v.r;
 					this.regexpErrorMessage = v.rmsg || "请输入正确格式的内容";
+					this.isIconSave = v.isIconSave || false;
 					//this.type = v.type || 'text';
 				},
 				methods: {
@@ -89,7 +117,7 @@
 							errmsg = app.rules.testBy(this.regexpType, this.content, this.regexpErrorMessage);
 						}
 						if(errmsg) {
-//							return mui.alert(errmsg);
+							//							return mui.alert(errmsg);
 							return mui.toast(errmsg);
 						}
 						app.page.setResult({

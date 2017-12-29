@@ -46,7 +46,7 @@
 				text-align: center;
 				margin-bottom: 0.4rem;
 				color: #333333;
-				font-weight: bold;
+				/*font-weight: bold;*/
 			}
 			
 			.imgbg{
@@ -76,7 +76,7 @@
 					<img :src="bgp"/>
 				</div>
 				<div class="dev_icon app-font-size-30">
-					<div class="dev_text">确定接通电源后，点击“下一步”</div>
+					<div class="dev_text app-font-size-34">确定接通电源后，点击“下一步”</div>
 				</div>
 				
 			</div>
@@ -107,11 +107,11 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png' 
+						bgp: '../../../image/smart/devices/dev_icon/AX-203@3x.png' 
 					};
 				},
 				mounted: function() {
-					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '.png';
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '1.png';
 				},
 				plusReady: function() {},
 				methods: {

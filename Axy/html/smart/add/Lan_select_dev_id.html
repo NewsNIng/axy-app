@@ -52,28 +52,48 @@
 			}
 			
 			.name {
-				padding-left: 0.693333rem;
+				/*padding-left: 0.693333rem;*/
 			}
 			
 			.help {
+				padding-top: 0.5rem !important;
 				position: fixed;
-				bottom: 60px;
+				bottom: 0;
 				left: 50%;
+				height: 2.5rem;
 				padding: 0.01rem 0;
 				transform: translateX(-50%);
 				-webkit-transform: translateX(-50%);
 				border-bottom: 1px solid #2BB8AA;
 				color: #2BB8AA;
+				width: 100%;
+				text-align: center;
+				height: ;
+				/*background-color: gray*/
 			}
 			
 			ul:not(.mui-pciker-list) {
 				margin-bottom: 2rem !important;
 			}
 			
-			
 			.wrapper {
 				overflow: hidden;
 				height: 100%;
+			}
+			
+			.mui-table-view-cell,
+			.mui-table-view-cell>a {
+				height: 1.6rem !important;
+			}
+			
+			.mui-table-view-cell>a {
+				padding: 0.3rem !important;
+				padding-left: 1.04rem !important;
+				line-height: 0.6rem !important;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7 !important;
 			}
 		</style>
 	</head>
@@ -97,14 +117,14 @@
 							<li class="mui-table-view-cell" @tap="onSelectTap(i)">
 								<a>
 									<span class="mui-badge select"><img v-if="i === devActive" src="../../../image/smart/devices/add/select1.png"/><img v-if="i !== devActive" src="../../../image/smart/devices/add/select2.png"/></span>
-									<span class="name">{{o.name}}</span>
+									<span class="name app-color-333333 app-font-size-34">{{o.name}}<br /><span class="id app-color-9f9fa0 app-font-size-26">设备ID:{{o.id}}</span></span>
 								</a>
 							</li>
 						</template>
 					</ul>
 				</div>
 			</div>
-			<div class="help app-font-size-24" @tap="setWifi()">配置WIFI</div>
+			<div class="help app-font-size-34" @tap="setWifi()">配置WIFI</div>
 			<div class="foot app-font-size-34" @tap="onNext()" ref="btn">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -141,7 +161,9 @@
 				data: function() {
 					return {
 						devActive: 0,
-						devs: [],
+						devs: [
+						
+						],
 						wifiname: "",
 						wifipwd: "",
 					};
@@ -166,7 +188,7 @@
 						if(!this.scroll) {
 							this.scroll = new BScroll(wrapper, {
 								click: true,
-								scrollY: true 
+								scrollY: true
 							});
 
 						} else {

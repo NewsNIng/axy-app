@@ -234,29 +234,15 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						username: '',
-						verifycode: '',
+						username: '17620391022',
+						verifycode: '499447',
 						loading: false,
 						user_agree: false, // 用户协议
 						codeState: false,
 						codeTimer: 60,
 						codeT: null,
 						codeNumber: "", // 验证码
-					}; 
-				},
-
-				mounted: function() {
-					function GetQueryString(name) {
-						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-						var r = window.location.search.substr(1).match(reg);
-						if(r != null) return unescape(r[2]);
-						return null;
-					}
-					var tel = GetQueryString("tel");
-					if(tel) {
-						this.username = tel;
-					}
-
+					};
 				},
 
 				methods: {
@@ -265,13 +251,16 @@
 							return
 						}
 
-						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误");
+						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确");
 						if(errorMessage) {
 							return mui.toast(errorMessage);
 						}
 						// 发送获取验证码的请求
 						dal.user.getCode(this.username, function(err, data) {
 							if(err) {
+								this.codeT = null;
+								this.codeState = false;
+								this.codeTimer = 60;
 								return mui.toast(JSON.stringify(err));
 							}
 							this.codeNumber = data.validcode;
@@ -303,7 +292,7 @@
 						// 验证验证码
 						if(this.verifycode !== this.codeNumber) {
 							//this.loading = false;
-							return mui.toast('验证码错误');
+							return mui.toast('短信验证码不正确');
 						}
 
 						mui.openWindow('reset2.html', 'reset2', {

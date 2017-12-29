@@ -37,7 +37,7 @@
 				width: 60%;
 				transform: translateX(-50%);
 				-webkit-transform: translateX(-50%);
-				font-weight: bold;
+				/*font-weight: bold;*/
 				color: #333333;
 			}
 			
@@ -102,12 +102,12 @@
 					<img :src="bgp"/>
 				</div>
 				<div class="dev_icon app-font-size-30">
-					<div class="dev_text">TIPS：<br />1.请将设备接上网线<br />2.网线另一端接入路由器<br />3.确保手机已连接路由器的WIFI</div>
+					<div class="dev_text app-font-size-34">TIPS：<br />1.请将设备接上网线<br />2.网线另一端接入路由器<br />3.确保手机已连接路由器的WIFI</div>
 				</div>
 
 			</div>
 
-			<a href="#popover_tip" class="help app-font-size-24">戳这里查看如何连接网络~</a>
+			<a href="#popover_tip" class="help app-font-size-28">戳这里查看如何连接网络~</a>
 			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -139,7 +139,7 @@
 					};
 				},
 				mounted: function() {
-					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '.png';
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '2.png';
 				},
 				plusReady: function() {},
 				methods: {
