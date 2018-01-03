@@ -1,6 +1,6 @@
 var dal = {
-//		BASE_URL: "http://192.168.1.213:8080/vihiManager/vihiapi",
-	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
+	BASE_URL_DEV: "http://192.168.1.213:8080/vihiManager/vihiapi",
+	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi"
 };
 
 /**
@@ -11,7 +11,13 @@ var dal = {
  * @param {Function} callback  回调函数
  */
 function requestAdapter(type, url, params, callback) {
-	url = dal.BASE_URL + url;
+	var BASE_URL = params.BASE_URL;
+	if(BASE_URL) {
+		delete params.BASE_URL;
+	} else {
+		BASE_URL = dal.BASE_URL;
+	}
+	url = BASE_URL + url;
 
 	// 获取用户account
 
@@ -50,7 +56,7 @@ function requestAdapter(type, url, params, callback) {
 			callback({
 				code: xhr.status,
 				message: errDir[type] || "其它错误"
-				
+
 			}, null);
 		}
 	};

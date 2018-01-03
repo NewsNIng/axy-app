@@ -252,10 +252,13 @@
 						//this.isBusy = false
 					},
 					onItemTap: function(o, index) {
-						mui.openWindow('../../nearby/discover/discover_details.html', 'discover_details', {
-							extras: {
-								oid: o.id
+						var that = this;
+						app.page.openForResultBy('discover_details.html', 'discover_details_edit', function(data){
+							if(data.del){
+								that.items.splice(index, 1);
 							}
+						},{
+							oid: o.id
 						});
 					},
 

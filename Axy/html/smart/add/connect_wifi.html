@@ -164,6 +164,9 @@
 					
 					
 					this.GetPhoneWifiListSyn();
+					
+					
+					
 				},
 				methods: {
 					onSelectTap:function(i){
@@ -195,6 +198,7 @@
 					GetPhoneWifiListSyn: function(){
 						var rs = plug.H5NativeBridge.GetPhoneWifiListSyn();
 						console.log(rs);
+						
 					}
 				}
 			});
