@@ -6,6 +6,7 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<!--mui css-->
+		<script type="text/javascript" src="../js/common/flexible.js" ></script>
 		<link rel="stylesheet" href="../css/lib/mui.min.css" />
 		<link rel="stylesheet" href="../css/app/app.css" />
 		<style type="text/css">
@@ -17,11 +18,12 @@
 			}
 			
 			.mui-tab-item img {
-				width: 2.2rem;
+				width: 0.586666rem;
 			}
 			
 			.mui-tab-item span.mui-tab-label {
-				font-size: 1.2rem !important;
+				margin-top: 0.133333rem;
+				/*font-size: 1.2rem !important;*/
 			}
 			
 			.mui-bar .mui-icon:active {
@@ -44,7 +46,7 @@
 						<span class="mui-icon">
 							<img :src="'../image/main/'+ o.id + (i === index ? '_active' : '') +'.png'"/>
 						</span>
-						<span class="mui-tab-label">{{o.name}}</span>
+						<span class="mui-tab-label app-font-size-20">{{o.name}}</span>
 					</a>
 				</template>
 

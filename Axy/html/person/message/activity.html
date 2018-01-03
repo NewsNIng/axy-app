@@ -16,12 +16,12 @@
 				background-color: #F4F8FB;
 			}
 			
-			
-			.card-header{
+			.card-header {
 				padding: 0.613333rem 0;
 				text-align: center;
 			}
-			.card-header>div{
+			
+			.card-header>div {
 				background-color: #d9d9d9;
 				width: 2rem;
 				margin: 0 auto;
@@ -31,8 +31,7 @@
 				border-radius: 5px;
 			}
 			
-			
-			.card-body{
+			.card-body {
 				margin: 0 0.346666rem;
 				padding: 0.48rem 0.4rem 0 0.4rem;
 				background-color: #FFFFFF;
@@ -40,7 +39,7 @@
 				position: relative;
 			}
 			
-			.card-body:after{
+			.card-body:after {
 				content: "";
 				height: 1px;
 				right: 0.4rem;
@@ -53,12 +52,12 @@
 				-webkit-transform: scaleY(0.5);
 			}
 			
-			.card-body>.mui-ellipsis-2{
+			.card-body>.mui-ellipsis-2 {
 				margin-top: 0.666666rem;
 				margin-bottom: 0.533333rem;
 			}
 			
-			.card-body .tips{
+			.card-body .tips {
 				height: 1.2rem;
 				line-height: 1.2rem;
 				position: relative;
@@ -91,22 +90,25 @@
 			<span class="app-font-size-30 app-color-white mui-pull-right" style="line-height: 44px;">清空</span>
 		</header>
 		<div class="mui-content" style="padding-bottom: 1.333333rem;">
-			
-			<div class="card" v-for="o,i in 10">
+
+			<div class="card" v-for="o,i in list" @tap="onCardTap(o)">
 				<div class="card-header">
 					<div class="app-font-size-20">今天 10:00</div>
 				</div>
 				<div class="card-body">
-					<div class="app-font-size-32">你的地球日优惠福利来啦</div>
-					<div class="app-font-size-28 app-color-333333 mui-ellipsis-2">部分绿色环保限时免单，饮食、居家类目等满减。福利天天有！最高直减160元，赶紧来看吧！</div>
+					<div class="app-font-size-32" v-text="o.title"></div>
+					<div class="app-font-size-28 app-color-333333 mui-ellipsis-2" v-text="o.summary"></div>
 					<div class="tips app-font-size-28 app-color-9f9fa0">查看详情</div>
 				</div>
 			</div>
-			
+
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/message.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -115,11 +117,30 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-
+						n: 1,
+						list: []
 					};
 				},
-				methods: {
 
+				mounted: function() {
+					this.getMessageList();
+				},
+
+				methods: {
+					// 获取消息列表
+					getMessageList: function() {
+						var that = this;
+						dal.message.getActivityList(this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							that.list.push.apply(that.list, data);
+						});
+					},
+					// 卡片被点击时
+					onCardTap: function(o) {
+						console.log(JSON.stringify(o));
+					}
 				}
 			})
 		</script>

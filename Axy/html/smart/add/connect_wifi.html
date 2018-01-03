@@ -1,4 +1,4 @@
-+<!doctype html>
+<!doctype html>
 <html>
 
 	<head>
@@ -120,8 +120,13 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
+		
+		
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init();
+			
 			
 			
 			var wifinameCache, wifipwdCache;
@@ -156,6 +161,9 @@
 					
 					this.wifiname = 'TP-LINK_1BE7';
 					this.wifipwd = 'huihai20172018';
+					
+					
+					this.GetPhoneWifiListSyn();
 				},
 				methods: {
 					onSelectTap:function(i){
@@ -183,6 +191,10 @@
 							name: this.wifiname,
 							pwd: this.wifipwd,
 						}).close();
+					},
+					GetPhoneWifiListSyn: function(){
+						var rs = plug.H5NativeBridge.GetPhoneWifiListSyn();
+						console.log(rs);
 					}
 				}
 			});

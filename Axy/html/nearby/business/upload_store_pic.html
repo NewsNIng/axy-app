@@ -179,7 +179,7 @@
 
 						new Promise(function(re, rj) {
 							// 压缩图片
-							new that.$Zip().processImage(that.imgs, 300, function(err, data) {
+							new that.$Zip().processImage(that.imgs, 1000, function(err, data) {
 								if(err) {
 									return rj(err);
 								}
