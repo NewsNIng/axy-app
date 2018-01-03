@@ -718,7 +718,8 @@
 					"html/smart/devices/dev_65.html",
 					"html/smart/devices/dev_129.html",
 					"html/smart/devices/dev_48.html",
-					"html/person/collection/my_camera.html"
+					"html/person/collection/my_camera.html",
+					"html/smart/devices/dev_16711680.html"
 				],
 				"priority": 0
 			},
@@ -899,6 +900,13 @@
 				"refer": [
 					"html/person/relation/bind_tel.html",
 					"html/person/relation/reset_tel.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_16711680.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
 				],
 				"priority": 0
 			}
