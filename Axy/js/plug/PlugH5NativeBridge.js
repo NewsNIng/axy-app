@@ -391,7 +391,14 @@
 	 */
 	pgn.GetLocalRecordInfoSync = function(deviceID, createTime){
 		return pg.syncExec(N, 'GetLocalRecordInfoSync', [deviceID, createTime]);
-	}
+	};
+	
+	/**
+	 * 获取手机附近的wifi列表
+	 */
+	pgn.GetPhoneWifiListSyn = function(){
+		return pg.syncExec(N, 'GetPhoneWifiListSyn', []);
+	};
 
 
 }(window));

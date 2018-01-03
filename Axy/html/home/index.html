@@ -325,24 +325,11 @@
 				<div id="slider" class="mui-slider" v-if="imgList.length > 0">
 					<div class="mui-slider-group mui-slider-loop">
 						<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-						<div @tap="onAdvertTap(imgLast)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.adimg">
-							<!--<a href="#">
-							<img :src="imgLast.src">
-						</a>-->
-						</div>
-
-						<!-- 第四张 -->
-						<div @tap="onAdvertTap(o)" class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o.adimg">
-							<a href="#">
-								<img :src="o.src">
-							</a>
-						</div>
+						<div @tap="onAdvertTap(imgLast)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.adimg"></div>
+						<!-- 中间 -->
+						<div @tap="onAdvertTap(o)" class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o.adimg"></div>
 						<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-						<div @tap="onAdvertTap(imgFrist)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.adimg">
-							<!--<a href="#">
-							<img :src="imgFrist.src">
-						</a>-->
-						</div>
+						<div @tap="onAdvertTap(imgFrist)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.adimg"></div>
 					</div>
 					<div class="mui-slider-indicator">
 						<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>

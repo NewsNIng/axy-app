@@ -98,6 +98,8 @@
 				width: 100%;
 				height: 100%;
 				z-index: 9999;
+				
+				zoom: 0.5;
 			}
 			
 			.mask canvas {
@@ -200,9 +202,9 @@
 				</div>
 			</div>
 
-			<div class="mask" v-show="mask" @touchstart.self="mask = false">
+			<div class="mask" v-show="mask" @tap.self="mask = false">
 
-				<canvas ref="canvas" id="code" width="0" height="0"></canvas>
+				<canvas ref="canvas" id="code" width="1000px" height="1000px"></canvas>
 				<div id="qrcode" ref="qrcode"></div>
 			</div>
 
@@ -294,9 +296,10 @@
 
 				mounted: function() {
 					// 动态计算canvas的宽，设置为屏幕宽度一半大小
-					this.canvasWidth = window.innerWidth / 1.5;
+					this.canvasWidth = window.innerWidth / 1.5 * 2;
 					this.$refs.canvas.width = this.canvasWidth;
-					this.$refs.canvas.height = window.innerWidth;
+					this.$refs.canvas.height = window.innerWidth * 2;
+					
 				},
 
 				plusReady: function() {
@@ -385,14 +388,16 @@
 						var context = this.$refs.canvas.getContext('2d');
 						var that = this;
 						var src = document.querySelector("#qrcode img").src;
-
+						
+						//context.scale(2, 2);
+						
 						// 绘制二维码
 						var img = new Image();
 						var iconImg = new Image();
 						img.onload = function() {
-							context.drawImage(img, 25, 25, that.canvasWidth - 50, that.canvasWidth - 50);
+							context.drawImage(img, 50, 50, that.canvasWidth - 100, that.canvasWidth - 100);
 							setTimeout(function() {
-								context.drawImage(iconImg, that.canvasWidth / 2 - 25, that.canvasWidth / 2 - 25, 50, 50);
+								context.drawImage(iconImg, that.canvasWidth / 2 - 50, that.canvasWidth / 2 - 50, 100, 100);
 							}, 123);
 
 						}
@@ -400,10 +405,10 @@
 						img.src = src;
 
 						// 绘制文字
-						context.font = "16px 黑体";
+						context.font = "30px 黑体";
 						context.fillStyle = "#333333";
 						context.textAlign = "center";
-						context.fillText("摄像机邀请码", that.canvasWidth / 2, that.canvasWidth + 10);
+						context.fillText("摄像机邀请码", that.canvasWidth / 2, that.canvasWidth + 20);
 
 						// 绘制圆圈
 						//开始一个新的绘制路径
@@ -413,13 +418,13 @@
 						context.fillStyle = "rgba(0,0,0,0.5)";
 						var circle = {
 							x: 0, //圆心的x轴坐标值
-							y: that.canvasWidth + 5, //圆心的y轴坐标值
-							r: 10 //圆的半径
+							y: that.canvasWidth + 10, //圆心的y轴坐标值
+							r: 20 //圆的半径
 						};
 						var circle2 = {
 							x: that.canvasWidth, //圆心的x轴坐标值
-							y: that.canvasWidth + 5, //圆心的y轴坐标值
-							r: 10 //圆的半径
+							y: that.canvasWidth + 10, //圆心的y轴坐标值
+							r: 20 //圆的半径
 						};
 						context.arc(circle.x, circle.y, circle.r, 0, 2 * Math.PI, false);
 						context.arc(circle2.x, circle2.y, circle2.r, 0, 2 * Math.PI, false);
@@ -429,36 +434,38 @@
 						// 绘制线条
 						context.beginPath();
 						context.strokeStyle = "#333333"
-						context.moveTo(20, that.canvasWidth + 5);
-						context.lineTo(that.canvasWidth / 4, that.canvasWidth + 5);
-						context.moveTo(that.canvasWidth - 20, that.canvasWidth + 5);
-						context.lineTo(that.canvasWidth / 4 * 3, that.canvasWidth + 5);
+						context.moveTo(30, that.canvasWidth + 10);
+						context.lineTo(that.canvasWidth / 4, that.canvasWidth + 10);
+						context.moveTo(that.canvasWidth - 30, that.canvasWidth + 10);
+						context.lineTo(that.canvasWidth / 4 * 3, that.canvasWidth + 10);
 						context.stroke();
 
 						// 绘制code
 						context.fillStyle = "#06C1AE";
-						context.fillRect(20, that.canvasWidth + 30, that.canvasWidth - 40, 45);
+						
+						context.fillRect(40, that.canvasWidth + 60, that.canvasWidth - 80, 90);
 
-						context.font = "20px 黑体";
+						context.font = "40px 黑体";
 						context.fillStyle = "#FFFFFF";
 						context.textAlign = "center";
-						context.fillText(code.split('').join(' '), that.canvasWidth / 2, that.canvasWidth + 60);
+						context.fillText(code.split('').join(' '), that.canvasWidth / 2, that.canvasWidth + 120);
 
-						context.font = "14px 黑体";
+						context.font = "32px 黑体";
 						context.fillStyle = "#9F9FA0";
 						context.textAlign = "center";
-						context.fillText("邀请码30分钟之内有效", that.canvasWidth / 2, that.canvasWidth + 100);
+						context.fillText("邀请码30分钟之内有效", that.canvasWidth / 2, that.canvasWidth + 200);
 
 					},
 					// 保存二维码到本地
 					saveCanvasCode: function() {
-						var path = "_documents/share/code.jpg";
+						var path = "_documents/share/code.png";
 						var codeBitmap = new plus.nativeObj.Bitmap("code");
 						var data64 = this.$refs.canvas.toDataURL("image/png");
 						codeBitmap.loadBase64Data(data64, function() {
 							codeBitmap.save(path, {
 								overwrite: true,
-								quality: 100
+								quality: 100,
+								format: 'png'
 							}, function(e) {
 								plus.gallery.save(e.target, function() {
 									mui.toast("已保存二维码在本地");

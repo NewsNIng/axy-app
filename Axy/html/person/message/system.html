@@ -131,20 +131,12 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							console.log(JSON.stringify(data));
 
-							that.list.push({
-								"summary": "tests",
-								"id": 2,
-								"time": "testt",
-								"detail": "testd",
-								"title": "test",
-								"status": 1
-							});
+							that.list.push.apply(that.list, data);
 						});
 					},
 					// 卡片被点击时
-					onCardTap: function(o){
+					onCardTap: function(o) {
 						console.log(JSON.stringify(o));
 					}
 				}

@@ -155,11 +155,12 @@
 					if(e.index === 0) {
 						var all = plus.webview.all();
 						var index = plus.webview.currentWebview();
-						var first = plus.webview.getLaunchWebview();
+						var first = plus.webview.getLaunchWebview() || plus.webview.getWebviewById('main');
 						var id;
 						plus.nativeUI.showWaiting();
 						for(var i = 0, l = all.length; i < l; i++) {
 							id = all[i].id;
+							
 							if(id !== index.id && id !== first.id) {
 								plus.webview.close(all[i]);
 							}

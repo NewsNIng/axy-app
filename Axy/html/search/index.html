@@ -418,11 +418,10 @@
 		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
 
 		<script type="text/javascript">
-			function onSubmit(){
+			function onSubmit() {
 				return false;
 			}
-			
-			
+
 			mui.init();
 			// 搜索历史缓存
 			var historyList = new ni.Cache("search_history_list", ['智能主机'], {
@@ -496,6 +495,32 @@
 						return [this.allList, this.storeList, this.articleList][this.tab.active];
 					},
 					allList: function() {
+						var l1 = this.articleList.length,
+							l2 = this.storeList.length;
+						var i1 = 0,
+							i2 = 0;
+						var arr = [];
+						var b = true;
+						while(i1 < l1 && i2 < l2) {
+							if(b) {
+								arr.push(this.articleList[i1]);
+								i1++;
+							} else {
+								arr.push(this.storeList[i2]);
+								i2++;
+							}
+							b = !b;
+						}
+						if(i1 >= l1) {
+							arr.push.apply(arr, this.storeList.slice(i2 - 1, l2 - i2 + 1));
+						} else {
+							arr.push.apply(arr, this.articleList.slice(i1 - 1, l1 - i1 + 1));
+						}
+
+						return arr;
+						// 以上代码是 两个队列每次各塞一个，循环下来多余的补齐尾部
+						
+						// 以下代码是 以前的随机排序   放弃
 						var arr = this.articleList.concat(this.storeList).sort(function() {
 							var _ = 1;
 							return function() {
@@ -570,12 +595,12 @@
 					// 自动打开软键盘 
 
 					if(ni.os.android) {
-						this.softinput = new ni.android.SoftInput();
+						//this.softinput = new ni.android.SoftInput();
 					} else {
 						this.softinput = new ni.ios.SoftInput();
 					}
 					setTimeout(function() {
-						this.softinput.show(this.$refs.input);
+						this.softinput && this.softinput.show(this.$refs.input);
 					}.bind(this))
 
 					// 获取定位信息
@@ -668,16 +693,15 @@
 								return mui.toast(err.message);
 							}
 							var article = data.article || [];
-							var store = data.store || [];	
-							if(this.n > 1){
+							var store = data.store || [];
+							if(this.n > 1) {
 								article.length && this.articleList.push.call(this.articleList, article);
 								store.length && this.storeList.push.call(this.storeList, store);
-							}else{
+							} else {
 								this.articleList = article;
 								this.storeList = store;
 							}
-							
-							
+
 							this.$nextTick(function() {
 								this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
 								imagelazyload();

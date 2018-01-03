@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>警告消息</title>
+		<title>告警消息</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -54,75 +54,7 @@
 				border-bottom: 1px solid #E5E6E7;
 			}
 			
-			.card {
-				padding: 0.346666rem;
-				position: relative;
-			}
-			
-			.card>* {
-				float: left;
-			}
-			
-			.card>.card-header {
-				width: 2.333333rem;
-				height: 2.333333rem;
-				background-image: url(../../../image/home/like_b.png);
-				background-repeat: no-repeat;
-				background-position: center;
-				background-size: cover;
-			}
-			
-			.card>.card-body {
-				padding: 0.6rem 0.88rem;
-				position: relative;
-			}
-			
-			.card>.card-body>.app-color-333333 {
-				margin-bottom: 0.1rem;
-			}
-			/*红点*/
-			
-			.card>.card-body:before {
-				content: "";
-				display: block;
-				position: absolute;
-				width: 0.186666rem;
-				height: 0.186666rem;
-				background-color: #FF3B30;
-				left: 0.48rem;
-				border-radius: 50%;
-				top: 50%;
-				transform: translateY(-50%);
-				-webkit-transform: translateY(-50%);
-			}
-			/*日期*/
-			
-			.card:before {
-				content: attr(data-time);
-				display: block;
-				position: absolute;
-				right: 0.346666rem;
-				border-radius: 50%;
-				top: 50%;
-				transform: translateY(-50%);
-				-webkit-transform: translateY(-50%);
-			}
-			/*细线*/
-			
-			.card:after {
-				clear: both;
-				content: '';
-				display: block;
-				height: 1px;
-				background-color: #E5E6E7;
-				transform: scaleY(0.5) translateY(0.693333rem);
-				-webkit-transform: scaleY(0.5) translateY(0.693333rem);
-			}
-			/*日期*/
-			
-			.tips {
-				padding: 0.533333rem 0 0.053333rem 0.346666rem;
-			}
+		
 		</style>
 
 	</head>
@@ -131,13 +63,13 @@
 
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">警告消息</h1>
+			<h1 class="mui-title">告警消息</h1>
 		</header>
 		<div class="mui-content">
 			<div class="tabroom app-color-333333" ref="tabroom">
 				<div @tap="onDevTap()">
-					<span class="app-font-size-28">{{devName}}</span>
-					<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
+					<span class="app-font-size-28 app-color-main">{{devName}}</span>
+					<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown app-color-main"></span>
 				</div> 
 
 				<div @tap="onDateTap()">
@@ -150,23 +82,7 @@
 			<div class="wrapper" ref="wrapper">
 
 				<div class="cardroom">
-					<div class="app-font-size-24 app-color-333333 tips">2015/11/11</div>
-					<div v-for="o,i in 4" class="card app-font-size-24 app-color-9f9fa0" data-time="17:00:56">
-						<div class="card-header"></div>
-						<div class="card-body app-font-size-28 ">
-							<div class="app-color-333333">移动侦测报警</div>
-							<div class="app-color-9f9fa0">来自凌成二家的摄像机</div>
-						</div>
-					</div>
-
-					<div class="app-font-size-24 app-color-333333 tips">2015/11/11</div>
-					<div v-for="o,i in 4" class="card app-font-size-24 app-color-9f9fa0" data-time="17:00:56">
-						<div class="card-header"></div>
-						<div class="card-body app-font-size-28 ">
-							<div class="app-color-333333">移动侦测报警</div>
-							<div class="app-color-9f9fa0">来自凌成二家的摄像机</div>
-						</div>
-					</div>
+					
 				</div>
 
 			</div>
@@ -180,6 +96,7 @@
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.dtpicker.js"></script>
+		<script type="text/javascript" src="../../../js/extend/Date.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -191,13 +108,13 @@
 				data: function() {
 					return {
 						dateTime: new Date(),
-						devName: "所有摄像机"
+						devName: "所有设备"
 					};
 				},
 				
 				computed: {
 					dateText: function(){
-						return (this.dateTime.getMonth() + 1) + "/" +this.dateTime.getDate();
+						return this.dateTime.toFormatString('MM/dd');
 					}
 				},
 				
@@ -222,8 +139,6 @@
 						}
 
 					}.bind(this));
-					
-					
 					
 					
 					devPick = new mui.PopPicker({

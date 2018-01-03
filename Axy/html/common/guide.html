@@ -89,7 +89,7 @@
 				methods: {
 					onCloseTap: function() {
 						plus.storage.setItem("FirstTimeFlag", plus.runtime.version);
-						app.page.setResult({}).close('none');
+						app.page.setResult({}).close();  
 					}
 				}
 			});

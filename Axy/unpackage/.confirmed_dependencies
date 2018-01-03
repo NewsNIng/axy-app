@@ -72,7 +72,8 @@
 			"html/person/coupon/index.html",
 			"html/person/message/index.html",
 			"html/person/collection/my_camera.html",
-			"html/person/collection/my_attention.html"
+			"html/person/collection/my_attention.html",
+			"html/person/about.html"
 		],
 		"resources": []
 	},
@@ -142,7 +143,8 @@
 			"html/search/index.html",
 			"html/common/login.html",
 			"html/smart/devices/dev_my_list.html",
-			"html/public/browser.html"
+			"html/public/browser.html",
+			"html/smart/scenes/index2.html"
 		],
 		"resources": []
 	},
@@ -283,7 +285,8 @@
 			"html/smart/add/add_device.html",
 			"html/smart/scenes/index.html",
 			"html/common/login.html",
-			"html/person/message/index.html"
+			"html/person/message/index.html",
+			"html/person/devshare/share.html"
 		],
 		"resources": [
 			"js/dal/home.js",
@@ -405,7 +408,8 @@
 			"html/public/image_cropper.html",
 			"html/public/input.html",
 			"html/person/relation/bind.html",
-			"html/person/relation/reset_pwd.html"
+			"html/person/relation/reset_pwd.html",
+			"html/person/myself/discover.html"
 		],
 		"resources": []
 	},
@@ -545,7 +549,12 @@
 			"html/home/index.html"
 		]
 	},
-	"html/smart/devices/dev_16711680.html": {
+	"html/person/myself/discover.html": {
+		"refer": [
+			"html/nearby/discover/discover_details.html"
+		]
+	},
+	"html/smart/scenes/index2.html": {
 		"refer": [
 			"html/public/input.html"
 		]

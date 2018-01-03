@@ -345,9 +345,11 @@
 								if(errMessage) {
 									rj(new Error(errMessage));
 								}
-
+								
+								
+								
 								// 压缩图片
-								new that.$Zip().processImage(that.imgs, 500, function(err, data) {
+								new that.$Zip().processImage(that.imgs, 1000, function(err, data) {
 									if(err) {
 										return rj(err);
 									}

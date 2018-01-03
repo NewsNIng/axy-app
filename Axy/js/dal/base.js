@@ -3,7 +3,13 @@ var dal = {
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
 };
 
-// 统一请求 适配器
+/**
+ * 统一请求 适配器
+ * @param {String} type  post/get
+ * @param {String} url  请求地址
+ * @param {Object} params  参数
+ * @param {Function} callback  回调函数
+ */
 function requestAdapter(type, url, params, callback) {
 	url = dal.BASE_URL + url;
 

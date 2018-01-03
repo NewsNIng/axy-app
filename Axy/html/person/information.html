@@ -74,6 +74,33 @@
 				color: #bbb;
 				-webkit-font-smoothing: antialiased;
 			}
+			/*专辑*/
+			
+			.album>div {
+				width: 1.866666rem;
+				height: 1.866666rem;
+				background-color: #f5f8fa;
+				float: left;
+				margin-right: 0.4rem;
+				
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+			}
+			
+			.album>div:last-child {
+				margin-right: 0;
+			}
+			
+			.album {
+				padding: 0.64rem 0.666666rem;
+			}
+			
+			.album:after {
+				content: "";
+				clear: both;
+				display: block;
+			}
 		</style>
 
 	</head>
@@ -90,8 +117,21 @@
 
 				<div class="menu-box app-font-size-32">
 					<div class="avastr app-touch" @tap="onAvastrTap()">
-						<img class="img-lazy-load img-lazy-forever" :data-src="user.headimgurl" data-type="avatar"  />
+						<img class="img-lazy-load img-lazy-forever" :data-src="user.headimgurl" data-type="avatar" />
 					</div>
+
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" @tap="onAlbumTap()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">个人专辑</span>
+							</a>
+						</li>
+						<div class="album">
+							<div v-for="o,i in articleList" class="img-lazy-load" :data-src="o.image1||o.image2||o.image3"></div>
+							<div v-for="o,i in albumNullLen"></div>
+						</div>
+					</ul>
+
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell">
 							<a class="">
@@ -150,20 +190,21 @@
 		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
-		<script type="text/javascript" src="../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
-		
-		<script type="text/javascript" src="../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../js/dal/user.js" ></script>
-		<script type="text/javascript" src="../../js/dal/system.js" ></script>
-		
+
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../js/dal/article.js"></script>
+		<script type="text/javascript" src="../../js/dal/system.js"></script>
+
 		<script type="text/javascript" src="../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../js/lib/mui.dtpicker.js"></script>
-		<script type="text/javascript" src="../../js/data/city.data-3.js" ></script>
-		
-		<script type="text/javascript" src="../../js/lib/md5.min.js" ></script>
-		<script type="text/javascript" src="../../js/common/imagelazyload.js" ></script>
+		<script type="text/javascript" src="../../js/data/city.data-3.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -173,9 +214,9 @@
 				el: '.box',
 				data: function() {
 					return {
-						
+
 						updateUser: {},
-						
+
 						user: {
 							"id": -1,
 							"account": "",
@@ -188,10 +229,19 @@
 							"qqopenid": null,
 							"wxopenid": null,
 							"wbopenid": null
-						}
+						},
+						articleList: []
 					};
 				},
 				
+				computed: {
+					albumNullLen: function(){
+						var l = 4 - this.articleList.length;
+						l = l < 0 ? 0 : l;
+						return l;
+					}
+				},
+
 				plusReady: function() {
 					this.$view.setStyle({
 						scrollIndicator: 'none'
@@ -210,26 +260,38 @@
 					}]);
 					this.user = app.user.get();
 					this.updateUserInit();
-					this.$watch('user', function(){
+					this.$watch('user', function() {
 						// 用户信息更改后提交信息更新
 						this.updateUserAction();
 					}.bind(this), {
 						deep: true
 					});
 					this.updateLazyImage();
+					this.getArticleList();
 				},
-				methods: {
+				methods: { 
+					// 获取个人文章信息
+					getArticleList: function() {
+						dal.article.user.list(this.account, 1, function(err, data) {
+							if(err) {
+								return;
+							}
+							this.articleList = data;
+							this.updateLazyImage();
+						}.bind(this), 4);
+					},
+
 					// 需要更新的信息初始化
-					updateUserInit: function(){
+					updateUserInit: function() {
 						this.updateUser = {
 							id: this.user.id,
 							account: this.user.account
 						}
 					},
-					updateUserAction: function(){
+					updateUserAction: function() {
 						var that = this;
-						dal.user.update(this.updateUser, function(err, rs){
-							if(err){
+						dal.user.update(this.updateUser, function(err, rs) {
+							if(err) {
 								console.log(JSON.stringify(err));
 								return mui.toast(err.message || "用户资料更新失败");
 							}
@@ -242,12 +304,12 @@
 							that.updateLazyImage();
 						});
 					},
-					updateLazyImage: function(){
-						this.$nextTick(function(){
+					updateLazyImage: function() {
+						this.$nextTick(function() {
 							imagelazyload();
 						});
 					},
-					
+
 					// 头像点击
 					onAvastrTap: function() {
 						var that = this;
@@ -260,19 +322,29 @@
 							app.page.cropper(function(data) {
 								plus.nativeUI.showWaiting("正在上传头像...")
 								// 上传到服务器
-								dal.system.uploadImg([data.src], function(err, rs){
+								dal.system.uploadImg([data.src], function(err, rs) {
 									plus.nativeUI.closeWaiting();
-									if(err){
+									if(err) {
 										return mui.toast("头像更新失败");
 									}
-									that.user.headimgurl = rs[0]; 
+									that.user.headimgurl = rs[0];
 									that.updateUser.headimgurl = rs[0];
 								});
-							
+
 							}, imgs[0]);
 
 						}, 1);
 					},
+					
+					// 个人专辑点击
+					onAlbumTap: function(){
+						mui.openWindow('myself/discover.html', 'myself_discover', {
+							extras: {
+								uid: this.user.account
+							}
+						});
+					},
+					
 					// 昵称修改
 					onNickNameTap: function() {
 						var that = this;
@@ -346,14 +418,14 @@
 							that.updateUser.city = items[1].text;
 						});
 					},
-					
+
 					// 帐号绑定点击
-					onBindTap: function(){
+					onBindTap: function() {
 						mui.openWindow('relation/bind.html');
 					},
-					
+
 					// 修改密码
-					onResetPwd: function(){
+					onResetPwd: function() {
 						mui.openWindow('relation/reset_pwd.html');
 					},
 
