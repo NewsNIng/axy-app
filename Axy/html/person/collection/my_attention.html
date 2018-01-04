@@ -93,10 +93,10 @@
 				<h1 class="mui-title">我的关注</h1>
 			</header>
 			<div class="mui-content mui-scroll-wrapper app-font-size-28">
-				<div class="attention_item" v-for="o,i in attentions">
+				<div class="attention_item" v-for="o,i in attentions" v-if="o">
 					<img class="vertical_center" :src="o.headimgurl" />
 					<span class="name vertical_center app-font-size-28" v-text="o.nickname"></span>
-					<img class="attention_icon vertical_center" @tap="unBindTap()" src="../../../image/person/collection/btn_Alreadypaidattentionto@3x.png" />
+					<img class="attention_icon vertical_center" @tap="unBindTap(o.account,i)" src="../../../image/person/collection/btn_Alreadypaidattentionto@3x.png" />
 				</div>
 				<div class="null" v-show="attentions.length === 0">
 
@@ -158,10 +158,10 @@
 				mounted: function() {
 					that = this;
 					this.$pullRefresh = mui(".mui-scroll-wrapper");
-					//					this._getList(function(data) {
-					//						console.log(JSON.stringify(data));
-					//						that.attentions = data;
-					//					});
+//										this._getList(function(data) {
+//											console.log(JSON.stringify(data));
+//											that.attentions = data;
+//										});
 					mui.init({
 						pullRefresh: {
 							container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
@@ -182,8 +182,21 @@
 							f(data);
 						});
 					},
-					unBindTap: function() {
-
+					_unfollow: function(account,f) {
+						dal.user.focus.delete(account,function(err, data){
+							if(err){
+								return mui.toast(err.massage);
+							}
+							f(data);
+						});
+					},
+					unBindTap: function(account,index) {
+						var that = this;
+						this._unfollow(account, function(data){
+							// 提示确认是否被删除
+							that.attentions.splice(index,1);
+							
+						});
 					},
 					_up: function() {
 						console.log("up");

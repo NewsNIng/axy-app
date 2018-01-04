@@ -243,7 +243,7 @@
 
 			<div class="user_agree">
 				<div class="agree_select" :class="{'red': user_agree}" @tap="user_agree = !user_agree"></div>
-				<div class="agree_text app-font-size-26" @tap="user_agree = !user_agree">已阅读并同意<span @tap.self="onProtocol()" class="user_service">《用户服务协议》</span></div>
+				<div class="agree_text app-font-size-26" @tap.self="user_agree = !user_agree">已阅读并同意<span @tap.self="onProtocol()" class="user_service">《用户服务协议》</span></div>
 			</div>
 		</div>
 
@@ -370,6 +370,9 @@
 							
 						});
 
+					},
+					onProtocol: function(){
+						mui.openWindow('user_protocol.html','user_protocol');
 					}
 				},
 				watch: {
