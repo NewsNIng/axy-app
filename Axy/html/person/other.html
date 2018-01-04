@@ -149,7 +149,7 @@
 		<!--请求相关-->
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
-		<script type="text/javascript" src="../../js/dal/article.js" ></script>
+		<script type="text/javascript" src="../../js/dal/article.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 
@@ -169,7 +169,7 @@
 						isAttention: false,
 
 						dynamic: [],
-//						focus: false,
+						//						focus: false,
 						focuscount: 0,
 						isfocus: 0,
 						userInfo: {
@@ -189,7 +189,7 @@
 					};
 				},
 				computed: {
-					focus: function(){
+					focus: function() {
 						return this.isfocus !== 0;
 					}
 				},
@@ -198,7 +198,7 @@
 					this.from = app.user.get().account || "null";
 					this.getInfo();
 					this.getList();
-					
+
 				},
 				methods: {
 					getInfo: function() {
@@ -208,11 +208,12 @@
 							}
 							this.isfocus = data.isfocus;
 							this.focuscount = data.focuscount;
+							alert(JSON.stringify(this.focuscount));
 							this.userInfo = data.user;
 						}.bind(this));
 					},
-					getList: function(){
-						dal.article.user.list(this.uid, this.n, function(err, data){
+					getList: function() {
+						dal.article.user.list(this.uid, this.n, function(err, data) {
 							if(err) {
 								return mui.toast(JSON.stringify(err));
 							}
@@ -220,7 +221,7 @@
 						}.bind(this), 6);
 					},
 					onFocusTap: function() {
-						if(this.from === this.uid){
+						if(this.from === this.uid) {
 							return mui.toast("您不能关注自己！");
 						}
 						this.isfocus = +!this.isfocus;
@@ -229,10 +230,13 @@
 					changeFocus: function() {
 						var methodName = 'add';
 						if(!this.focus) {
+							this.focuscount--;
 							methodName = 'delete';
+						}else{
+							this.focuscount++;
 						}
 						dal.user.focus[methodName](this.uid, function(err, data) {
-							
+
 						});
 					},
 					_getImg: function(img1, img2, img3) {

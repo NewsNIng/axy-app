@@ -558,5 +558,15 @@
 		"refer": [
 			"html/public/input.html"
 		]
+	},
+	"html/smart/devices/dev_16711680.html": {
+		"refer": [
+			"html/public/input.html"
+		]
+	},
+	"html/common/register.html": {
+		"refer": [
+			"html/common/user_protocol.html"
+		]
 	}
 }

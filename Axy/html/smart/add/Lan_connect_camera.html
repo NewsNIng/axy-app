@@ -81,6 +81,10 @@
 				width: 100%;
 			}
 			
+			.unavailable {
+				background: #7FD4CC;
+			}
+			
 		</style>
 	</head>
 
@@ -102,7 +106,7 @@
 				<div class="time app-font-size-24" v-text="t+'s'"></div>
 
 			</div>
-			<div class="foot app-font-size-34" @tap="onNext()">完成</div>
+			<div class="foot app-font-size-34" :class="{unavailable:!isConnected}" @tap="onNext()">完成</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -144,7 +148,9 @@
 
 						setid: "",
 						
-						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png'
+						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png',
+						
+						isConnected: false,
 					};
 				},
 				mounted: function() {
@@ -211,6 +217,7 @@
 							if(err) {
 								return this.over(err.message || "连接失败，请重试");
 							}
+							
 							// 判断是否需要配置WIFI
 							if(!this.setid && this.wifiname && this.wifipwd) {
 								this.nativeSetWIFI(this.wifiname, this.wifipwd);
@@ -231,6 +238,9 @@
 						}());
 					},
 					onNext: function() {
+						if(!this.isConnected){
+							return;
+						}
 						this.$view.close();
 					},
 					over: function(msg, close) {
@@ -240,6 +250,9 @@
 						}
 						mui.toast(msg);
 						if(close) {
+							// 连接成功
+							isConnected = true;
+							mui.toast("添加成功，请点击完成！");
 							return this.$view.close();
 						}
 						this.$view.back();

@@ -438,7 +438,8 @@
 					"image/common/agree_selected.png"
 				],
 				"refer": [
-					"html/common/login.html"
+					"html/common/login.html",
+					"html/common/user_protocol.html"
 				],
 				"priority": 0
 			},
@@ -911,6 +912,13 @@
 				"resources": [],
 				"refer": [
 					"html/nearby/discover/discover_details.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_16711680.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
 				],
 				"priority": 0
 			}
