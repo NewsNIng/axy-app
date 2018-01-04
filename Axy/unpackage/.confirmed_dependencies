@@ -379,7 +379,9 @@
 			"html/smart/devices/dev_48.html",
 			"html/person/collection/my_camera.html",
 			"html/smart/devices/dev_AX-903.html",
-			"html/smart/devices/dev_16711680.html"
+			"html/smart/devices/dev_16711680.html",
+			"html/smart/devices/dev_80.html",
+			"html/smart/devices/dev_21.html"
 		],
 		"resources": []
 	},
@@ -551,7 +553,8 @@
 	},
 	"html/person/myself/discover.html": {
 		"refer": [
-			"html/nearby/discover/discover_details.html"
+			"html/nearby/discover/discover_details.html",
+			"html/person/myself/discover_details.html"
 		]
 	},
 	"html/smart/scenes/index2.html": {

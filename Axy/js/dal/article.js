@@ -85,6 +85,14 @@
 	 */
 	article.like = function(aid, callback){
 		return ra('post', '/article/like/' + aid, {}, callback);
+	};
+	/**
+	 * 删除说说
+	 * @param {Number} aid 说说id
+	 * @param {Function} callback
+	 */
+	article.delete = function(aid, callback){
+		return ra('post', '/article/delete/' + aid, {}, callback);
 	}
 	
 	

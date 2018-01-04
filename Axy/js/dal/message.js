@@ -48,6 +48,33 @@
 		return ra('post', '/systemmsg/delete/' + id, {}, callback);
 	};
 	
+	/**
+	 * 获取告警消息列表
+	 * @param {Object} pageNumber
+	 * @param {Object} callback
+	 *  @param {Object}pageSize
+	 */
+	message.getAlarmList = function(pageNumber, devid, atime, callback, pageSize){
+		return ra('post', '/alarm/device/list', {
+			BASE_URL: _.BASE_URL_DEV,
+			devid: devid,
+			atime: atime,
+			pageNumber: pageNumber,
+			pageSize: pageSize || 10
+		}, callback);
+	};
+	
+	/**
+	 * 获取告警消息详情
+	 */
+	message.getAlarm = function(aid, callback){
+		return ra('get', '/alarm/device/info/' + aid, {}, callback);
+	};
+	
+	
+	
 	_.message = message;
+	
+	
 	
 }(window.dal, window.requestAdapter));

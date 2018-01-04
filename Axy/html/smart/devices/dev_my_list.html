@@ -403,7 +403,11 @@
 				},
 
 				plusReady: function() {
-
+					
+					this.$view.setStyle({
+						scrollIndicator: "none"
+					});
+					
 					var DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});

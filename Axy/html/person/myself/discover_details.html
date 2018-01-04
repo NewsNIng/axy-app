@@ -127,7 +127,7 @@
 			.comment_value {
 				color: #333333;
 				width: 100%;
-				word-break:break-all; 
+				word-break: break-all;
 			}
 			
 			.replynum {
@@ -288,11 +288,75 @@
 				background-size: cover;
 				background-position: center;
 			}
+			
+			#popover-menu {
+				width: 3.333333rem;
+				position: fixed;
+				right: 0;
+				border-radius: 0;
+			}
+			
+			#popover-menu>ul {
+				border-radius: 0;
+			}
+			
+			#popover-menu:before {
+				position: absolute;
+				content: "";
+				height: 0;
+				width: 0;
+				top: 0;
+				right: 8px;
+				left: initial;
+				background-color: transparent !important;
+				width: 0 !important;
+				height: 0 !important;
+				border-left: 12px solid transparent;
+				border-right: 12px solid transparent;
+				border-bottom: 12px solid rgba(255, 255, 255, 0.8);
+				transform: translate(-10px, -100%);
+				-webkit-transform: translate(-10px, -100%);
+			}
+			
+			.room.mui-table-view li {
+				width: 3.333333rem !important;
+				height: 1.2rem;
+				display: flex;
+				display: -webkit-flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.room.mui-table-view li:after {
+				left: 0 !important;
+			}
+			
+			.room.mui-table-view img {
+				width: 0.773333rem;
+				margin-right: 0.266666rem;
+				vertical-align: middle;
+			}
+			
+			.room.mui-table-view span {
+				color: #A2ABB1;
+				vertical-align: middle;
+			}
+			
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				.room.mui-table-view {
+					font-size: 12px !important;
+				}
+				[data-dpr="2"] .room.mui-table-view {
+					font-size: 24px !important;
+				}
+				[data-dpr="3"] .room.mui-table-view {
+					font-size: 36px !important;
+				}
+			}
 		</style>
 	</head>
 
 	<body>
-
 		<div class="wrapper">
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
@@ -300,19 +364,29 @@
 					<img src="../../../image/nearby/business/back.png" />
 				</a>
 				<h1 class="mui-title"></h1>
-				<a class="mui-icon mui-pull-right">
-					<img src="../../../image/nearby/business/share.png" />
+				<a class="mui-icon mui-pull-right" @tap="mui('#popover-menu').popover('show')">
+					<img src="../../../image/person/myself/more@3x.png" />
 				</a>
-				<a class="mui-icon mui-pull-right" style="margin-right: -4px;">
-					<img src="../../../image/nearby/business/collect.png" />
-				</a>
+
 			</header>
 
-			<div class="footer" :class="{'isFocus': inputFoucs}">
+			<div id="popover-menu" class="mui-popover">
+				<ul class="mui-table-view room app-font-size-28 app-color-dark">
+					<li class="mui-table-view-cell" data-href="business/signup.html" @tap="onDelTap()">
+						<span class="mui-icon"><img src="../../../image/person/myself/delete@3x.png"/></span>
+						<span>删除</span>
+					</li>
+					<li class="mui-table-view-cell" data-href="discover/discover_release.html" @tap="onShareTap()">
+						<span class="mui-icon"><img src="../../../image/person/myself/share@3x.png"/></span>
+						<span>分享</span>
+					</li>
+				</ul>
+			</div>
+
+			<!--<div class="footer" :class="{'isFocus': inputFoucs}">
 				<input style="margin-bottom: 0;" ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="text" name="" id="" v-model="content" placeholder="写评论" />
 				<button v-if="inputFoucs" :disabled="c.length === 0" @tap="onSendTap()" type="button" class="mui-btn app-btn-main" style="margin-left: 10px;">发送</button>
-				
-				
+
 				<div class="data-count" :data-count="clist.length">
 					<img src="../../../image/nearby/discover/comment.png" />
 				</div>
@@ -322,7 +396,7 @@
 				<div>
 					<img src="../../../image/nearby/discover/.png" />
 				</div>
-			</div>
+			</div>-->
 
 			<div class="mui-content noImmersed  mui-scroll-wrapper">
 				<div class="mui-scroll">
@@ -331,11 +405,16 @@
 					</div>
 					<div class="user_tittle app-font-size-28">
 						<img @tap="onHeadTap(info.account)" class="avastr img-lazy-load" :data-src="info.headimgurl" data-type="avatar" />
-						<div style="display: inline;" v-text="info.nickname"></div>
-						<div class="attention">+ 关注</div>
+						<div class="mui-inline" style="line-height: 0.5rem;padding-top: 0.3rem;">
+							<span v-text="info.nickname" class="app-color-333333"></span>
+							<br />
+							<span v-text="new Date().ago(info.senddate)" class="app-color-9f9fa0 app-font-size-24"></span>
+						</div>
+
+						<div class="mui-pull-right app-color-ff3b30">{{info.likecount}}人赞过</div>
 					</div>
 					<div class="label app-font-size-34" v-text="'#' + info.title"></div>
-					<div class="description app-font-size-32" v-text="info.content"></div> 
+					<div class="description app-font-size-32" v-text="info.content"></div>
 					<div class="reply_tittle app-font-size-34">
 						评论&nbsp;
 						<div style="display: inline;" v-text="'('+(total || 0)+')'"></div>
@@ -347,13 +426,8 @@
 							<div class="comment_value app-font-size-30" v-text="o.content"></div>
 							<div class="time_replynum app-font-size-20">
 								<div class="app-font-size-28" style="display: inline;" v-text="o.senddate"></div>
-								<!--·-->
-								<!--<div class="replynum" v-text="o.replys.length+'回复'"></div>-->
+
 							</div>
-							<!--<div class="reply app-font-size-26" v-for="p in o.replys">
-								<div class="user_name app-font-size-26" style="display: inline;" v-text="p.respondent"></div>:
-								<div class="app-font-size-26" style="display: inline;" v-text="p.text"></div>
-							</div>-->
 						</div>
 					</div>
 				</div>
@@ -371,13 +445,15 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../../js/dal/article.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/article.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>
 		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
+
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -399,23 +475,23 @@
 							"nickname": null,
 							"headimgurl": null
 						},
-						
+
 						clist: [],
 						n: 1,
 						content: "",
-						
-						inputFoucs: false,
-						isAttention: false,
+
 						total: 0,
 
 					};
 				},
 				computed: {
-					c: function(){
+					c: function() {
 						return this.content.trim();
 					}
 				},
 				mounted: function() {
+					mui('#popover-menu')[0].style.top = 56 + immersed + 'px';
+
 					this.$nextTick(function() {
 
 						this.$pullRefresh = mui(".mui-scroll-wrapper");
@@ -442,62 +518,74 @@
 					});
 				},
 				methods: {
-					onHeadTap: function(account){
+					// 删除说说
+					onDelTap: function() {
+						var that = this;
+						mui.confirm("确定删除这条说说吗？", "", ['残忍删除', '取消'], function(e) {
+							if(!e.index) {
+								// 删除
+								dal.article.delete(that.info.id, function(err, data){
+									if(err){
+										return mui.toast(err.message);
+									}
+									mui.toast("删除成功");
+									app.page.setResult({
+										del: true
+									}).close();
+								});
+							}
+
+						});
+						mui('#popover-menu').popover('hide');
+					},
+					// 分享说说
+					onShareTap: function() {
+						mui('#popover-menu').popover('hide');
+					},
+
+					onHeadTap: function(account) {
 						mui.openWindow('../../person/other.html', 'other', {
 							extras: {
 								uid: account
 							}
 						});
 					},
-					onSendTap: function(){
-						var that = this;
-						app.user.get(function(u){
-							dal.article.comments.add(that.info.id, that.c, function(err, data){
-								if(err){
-									return mui.toast('发送评论失败，请重试');
-								}
-								mui.toast("评论成功");
-								that.$refs.cinput.blur();
-								that.content = "";
-								//that.total++;
-								that.clist = [];
-								that.n = 1;
-								that.getComments();
-							});
-						});
-					},
-					
-					_loadImage: function(){
-						this.$nextTick(function(){
+
+					_loadImage: function() {
+						this.$nextTick(function() {
 							imagelazyload();
 						});
 					},
-					
+
 					_up: function() {
 						this.n++;
 						this.getComments();
 					},
-					getInfo: function(){
-						dal.article.get(this.aid, function(err, data){
-							if(err){return mui.toast(err.message)}
+					getInfo: function() {
+						dal.article.get(this.aid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
 							console.log(JSON.stringify(data));
-							this.info = data; 
+							this.info = data;
 							this._loadImage();
 						}.bind(this));
 					},
-					getComments: function(){
-						dal.article.comments.list(this.aid, this.n, function(err, data){
-							if(err){return mui.toast(err.message)}
+					getComments: function() {
+						dal.article.comments.list(this.aid, this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
 							this.total = data.total;
 							data = data.list;
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
-							if(!data || data.length === 0){
+							if(!data || data.length === 0) {
 								this.n > 1 && mui.toast('没有更多了~');
 								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
 							}
 							this.clist.push.apply(this.clist, data);
 							this._loadImage();
-						}.bind(this), 5); 
+						}.bind(this), 5);
 					},
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
