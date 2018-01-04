@@ -127,7 +127,7 @@
 			.comment_value {
 				color: #333333;
 				width: 100%;
-				word-break:break-all; 
+				word-break: break-all;
 			}
 			
 			.replynum {
@@ -288,6 +288,29 @@
 				background-size: cover;
 				background-position: center;
 			}
+			/*share*/
+			
+			#popover-share {
+				bottom: 0 !important;
+				width: 100%;
+				padding: 1rem .75rem;
+				border-radius: 0;
+			}
+			
+			#popover-share .share-title {
+				text-align: center;
+				color: #a1a1a1;
+			}
+			
+			#popover-share .share-body {}
+			
+			#popover-share .share-body>img {
+				float: left;
+				margin-top: .8rem;
+				width: 25%;
+				padding: 6%;
+			}
+			/*end share*/
 		</style>
 	</head>
 
@@ -300,7 +323,7 @@
 					<img src="../../../image/nearby/business/back.png" />
 				</a>
 				<h1 class="mui-title"></h1>
-				<a class="mui-icon mui-pull-right">
+				<a class="mui-icon mui-pull-right" @tap="mui('#popover-share').popover('show')">
 					<img src="../../../image/nearby/business/share.png" />
 				</a>
 				<a class="mui-icon mui-pull-right" style="margin-right: -4px;">
@@ -308,8 +331,24 @@
 				</a>
 			</header>
 
-			<div class="footer" :class="{'isFocus': inputFoucs}">
+			<div id="popover-share" class="mui-popover app-font-size-30">
+				<div class="share-title">
+					快把说说分享给朋友，获取更多关注~
+				</div>
+				<div class="share-body">
+					<img @tap="onShareTo('qq')" src="../../../image/common/login_qq.png" />
+					<img @tap="onShareTo('wxhy')" src="../../../image/common/login_wechat.png" />
+					<img @tap="onShareTo('wxpyq')" src="../../../image/common/pyq@3x.png" />
+					<img @tap="onShareTo('sinaweibo')" src="../../../image/common/login_weibo.png" />
+				</div>
+			</div>
+
+			<div class="footer" :class="{'isFocus': true}">
+
 				<input style="margin-bottom: 0;" ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="text" name="" id="" v-model="content" placeholder="写评论" />
+				<button :disabled="c.length === 0" @tap="onSendTap()" type="button" class="mui-btn app-btn-main" style="margin-left: 10px;">发送</button>
+
+				<!--<input style="margin-bottom: 0;" ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="text" name="" id="" v-model="content" placeholder="写评论" />
 				<button v-if="inputFoucs" :disabled="c.length === 0" @tap="onSendTap()" type="button" class="mui-btn app-btn-main" style="margin-left: 10px;">发送</button>
 				
 				
@@ -321,7 +360,7 @@
 				</div>
 				<div>
 					<img src="../../../image/nearby/discover/send.png" />
-				</div>
+				</div>-->
 			</div>
 
 			<div class="mui-content noImmersed  mui-scroll-wrapper">
@@ -335,7 +374,7 @@
 						<div class="attention">+ 关注</div>
 					</div>
 					<div class="label app-font-size-34" v-text="'#' + info.title"></div>
-					<div class="description app-font-size-32" v-text="info.content"></div> 
+					<div class="description app-font-size-32" v-text="info.content"></div>
 					<div class="reply_tittle app-font-size-34">
 						评论&nbsp;
 						<div style="display: inline;" v-text="'('+(total || 0)+')'"></div>
@@ -371,13 +410,14 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../../js/dal/article.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/article.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>
 		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -399,11 +439,11 @@
 							"nickname": null,
 							"headimgurl": null
 						},
-						
+
 						clist: [],
 						n: 1,
 						content: "",
-						
+
 						inputFoucs: false,
 						isAttention: false,
 						total: 0,
@@ -411,7 +451,7 @@
 					};
 				},
 				computed: {
-					c: function(){
+					c: function() {
 						return this.content.trim();
 					}
 				},
@@ -442,18 +482,66 @@
 					});
 				},
 				methods: {
-					onHeadTap: function(account){
+
+					// 分享至
+					onShareTo: function(type) {
+						var that = this;
+						Rx.Observable
+							// 压缩
+							.create(function(ob) {
+								plus.nativeUI.showWaiting("正在处理图片...");
+								new ni.Zip().processImage(that._getImg(that.info.image1, that.info.image2, that.info.image3), 32, function(err, overImgs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return plus.nativeUI.toast(err.message);
+									}
+									ob.next(overImgs[0]);
+								});
+
+							})
+							// 分享
+							.mergeMap(function(img) {
+								return Rx.Observable.create(function(ob) {
+									plus.nativeUI.showWaiting("正在拉取分享...");
+									setTimeout(plus.nativeUI.closeWaiting, 3e3);
+									new ni.Share(type, function(err, data) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
+											if(err.code === -100 || err.code === -2){
+												err.message = "用户取消分享";
+											}
+											return plus.nativeUI.toast(err.message);
+										}
+										ob.next(data);
+									}, {
+										img: img, //图片地址 暂不支持网络地址 
+										href: 'http://www.vihivision.com/', //分享的超链接
+										title: that.info.title, //当且仅当href存在时有效
+										content: that.info.content //当且仅当href存在时有效
+									});
+								});
+							})
+							// 回调
+							.subscribe(function(data) {
+								console.log(JSON.stringify(data));
+							});
+
+					},
+
+					// 头像点击
+					onHeadTap: function(account) {
 						mui.openWindow('../../person/other.html', 'other', {
 							extras: {
 								uid: account
 							}
 						});
 					},
-					onSendTap: function(){
+					// 发送评论
+					onSendTap: function() {
 						var that = this;
-						app.user.get(function(u){
-							dal.article.comments.add(that.info.id, that.c, function(err, data){
-								if(err){
+						app.user.get(function(u) {
+							dal.article.comments.add(that.info.id, that.c, function(err, data) {
+								if(err) {
 									return mui.toast('发送评论失败，请重试');
 								}
 								mui.toast("评论成功");
@@ -466,39 +554,46 @@
 							});
 						});
 					},
-					
-					_loadImage: function(){
-						this.$nextTick(function(){
+					// 动态加载缓存图片
+					_loadImage: function() {
+						this.$nextTick(function() {
 							imagelazyload();
 						});
 					},
-					
+					// 上拉加载更多
 					_up: function() {
 						this.n++;
 						this.getComments();
 					},
-					getInfo: function(){
-						dal.article.get(this.aid, function(err, data){
-							if(err){return mui.toast(err.message)}
+					// 获取说说信息
+					getInfo: function() {
+						dal.article.get(this.aid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
 							console.log(JSON.stringify(data));
-							this.info = data; 
+							this.info = data;
 							this._loadImage();
 						}.bind(this));
 					},
-					getComments: function(){
-						dal.article.comments.list(this.aid, this.n, function(err, data){
-							if(err){return mui.toast(err.message)}
+					// 获取评论列表
+					getComments: function() {
+						dal.article.comments.list(this.aid, this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
 							this.total = data.total;
 							data = data.list;
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
-							if(!data || data.length === 0){
+							if(!data || data.length === 0) {
 								this.n > 1 && mui.toast('没有更多了~');
 								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
 							}
 							this.clist.push.apply(this.clist, data);
 							this._loadImage();
-						}.bind(this), 5); 
+						}.bind(this), 5);
 					},
+					// 获取一张存在的图片
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
 					},

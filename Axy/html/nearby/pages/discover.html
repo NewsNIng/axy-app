@@ -21,7 +21,7 @@
 				font-family: Helvetica, sans-serif;
 			}
 			
-			.mui-scroll{
+			.mui-scroll {
 				background-color: #f5f5f9;
 			}
 			
@@ -68,7 +68,6 @@
 				position: relative;
 				border-bottom: 1px solid #E5E6E7;
 			}
-			
 			/*.item>div.imgBg:after {
 				content: attr(height);
 				font-size: .33rem;
@@ -125,9 +124,7 @@
 			
 			.nickname {
 				color: #333333;
-			}			
-			
-			
+			}
 		</style>
 
 	</head>
@@ -153,9 +150,9 @@
 										<img class="avastr img-lazy-load" :data-src="item.headimgurl" data-type="avatar" />
 										<span class="nickname app-font-size-26" v-text="item.nickname"></span>
 									</div>
-									<div @tap.stop="onLikeTap(item)"> 
+									<div @tap.stop="onLikeTap(item)">
 										<img class="icon" :src='"../../../image/nearby/discover/" + (item.like?"":"no") + "like.png"' />
-										<span class="app-font-size-28" v-text="item.likecount || 0"></span> 
+										<span class="app-font-size-28" v-text="item.likecount || 0"></span>
 									</div>
 
 								</div>
@@ -163,7 +160,7 @@
 						</div>
 
 					</waterfall-slot>
-					
+
 				</waterfall>
 			</div>
 		</div>
@@ -177,18 +174,17 @@
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/article.js"></script>
-		
-		<script type="text/javascript" src="../../../js/lib/md5.min.js" ></script>
-		<script type="text/javascript" src="../../../js/common/imagelazyload.js" ></script>
-		
-		
+
+		<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
+
 		<script type="text/javascript">
 			var vm = new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
-						grow: [1, 1], 
-						items:[],
+						grow: [1, 1],
+						items: [],
 						isBusy: false,
 
 						n: 0,
@@ -196,7 +192,6 @@
 					};
 				},
 				mounted: function() {
-					 
 					this.$nextTick(function() {
 
 						this.$pullRefresh = mui(".mui-scroll-wrapper");
@@ -207,29 +202,33 @@
 									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 								},
 								up: {
-									
 									auto: true,
 									callback: this._up
-								} 
+								}
 							}
-						})
+						});
 					}.bind(this));
+					
+					new ni.Broadcast().on('discover_update', function() {
+						this._down();
+					}.bind(this));
+					
+
 				},
 				methods: {
-					onLikeTap: function(item){
-						app.user.get(function(u){
-							if(item.like){
+					onLikeTap: function(item) {
+						app.user.get(function(u) {
+							if(item.like) {
 								//已经点过赞了
 								return;
 							}
 							item.likecount++;
-							dal.article.like(item.id, function(err, data){
+							dal.article.like(item.id, function(err, data) {
 								err && mui.toast(err.message);
 							});
 							item.like = true;
 						});
-						
-						
+
 					},
 					onAvastrTap: function(id) {
 						mui.openWindow('../../person/other.html', 'other', {
@@ -245,9 +244,9 @@
 
 					},
 					shuffle: function() {
-//						this.items.sort(function() {
-//							return Math.random() - 0.5
-//						})
+						//						this.items.sort(function() {
+						//							return Math.random() - 0.5
+						//						})
 					},
 					reflowed: function() {
 						//this.isBusy = false
@@ -261,22 +260,22 @@
 					},
 					_down: function() {
 						this.n = 1;
-						
+
 						dal.article.list(this.n, function(err, data) {
 							if(err) {
 								return mui.toast(err.message);
 							}
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
-							if(!data || data.length === 0){
-								return; 
+							if(!data || data.length === 0) {
+								return;
 							}
 							this.items = data;
-							this.$nextTick(function(){
+							this.$nextTick(function() {
 								imagelazyload();
-								this.shuffle(); 
+								this.shuffle();
 								this.$pullRefresh.pullRefresh().enablePullupToRefresh();
-							}.bind(this)); 
-							
+							}.bind(this));
+
 						}.bind(this), 8);
 					},
 					_up: function() {
@@ -291,11 +290,11 @@
 								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
 							}
 							this.items.push.apply(this.items, data);
-							this.$nextTick(function(){
+							this.$nextTick(function() {
 								imagelazyload();
 							});
 
-						}.bind(this),8);
+						}.bind(this), 8);
 					},
 					_getH: function() {
 						return 1.3 + Math.random() / 2;

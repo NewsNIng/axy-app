@@ -1,0 +1,333 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>我的店铺</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			.box {
+				display: flex;
+				display: -webkit-flex;
+				/* 新版本语法: Chrome 21+ */
+				display: -webkit-box;
+				/* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+				align-content: center;
+				justify-content: center;
+			}
+			
+			.flex1 {
+				-webkit-flex: 1;
+				/* Chrome */
+				flex: 1;
+				/* NEW, Spec - Opera 12.1, Firefox 20+ */
+				-webkit-box-flex: 1/* OLD - iOS 6-, Safari 3.1-6 */
+				;
+			}
+		</style>
+
+		<style type="text/css">
+			.mui-content {
+				background-color: #f5f5f9;
+			}
+			/*位置显示start*/
+			
+			.position {
+				height: 1.04rem;
+				/*margin-bottom: 0.266666rem;*/
+				/*background-color: white;*/
+			}
+			
+			.position>img {
+				margin: 0.306666rem;
+				width: 0.4rem;
+				height: 0.4rem;
+				vertical-align: middle;
+			}
+			/*位置显示end*/
+			/*店铺详情start*/
+			
+			.shop_imgtext {
+				height: 2.4rem;
+			}
+			
+			.shop_image>img {
+				width: 2.4rem;
+				height: 2.4rem;
+				border: 0.5px solid #F5F5F5;
+			}
+			
+			.shop_image {
+				width: 2.4rem;
+				height: 2.4rem;
+				margin-right: 0.346666rem;
+			}
+			
+			.shop_info {
+				line-height: 0.426666rem;
+				padding-right: 0.346666rem;
+			}
+			
+			.shop_info>div {
+				margin: 5px 0;
+			}
+			
+			.types {
+				display: inline;
+			}
+			
+			.distance {
+				float: right;
+			}
+			
+			.shop {
+				padding: 0.346666rem 0 0 0.346666rem;
+				background-color: white;
+				margin-bottom: 0.266666rem;
+			}
+			
+			.name {
+				font-weight: bold;
+				color: #2E2E2E;
+			}
+			
+			.time>img {
+				width: 0.4rem;
+				height: 0.4rem;
+				vertical-align: middle;
+				margin-right: 0.32rem;
+			}
+			
+			.time,
+			.distance {
+				color: #9F9FA0;
+			}
+			
+			.types {
+				color: #2BB8AA;
+			}
+			
+			.activity {
+				color: #F46276;
+				/*color: #2BB8AA;*/
+			}
+			
+			.address {
+				padding: 0.4rem 0;
+				padding-right: 0.4rem !important;
+				color: #5D5C5C;
+			}
+			
+			.address,
+			.shop_info {
+				border-bottom: 1px solid #f5f5f5;
+			}
+			
+			.shop_menu {
+				color: #5D5C5C;
+				padding-right: 0.346666rem;
+				display: flex;
+				display: -webkit-flex;
+				/* 新版本语法: Chrome 21+ */
+				display: -webkit-box;
+				/* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+				/*align-content: center;*/
+				/*justify-content:  center;*/
+				text-align: center;
+			}
+			
+			.shop_menu>div>img {
+				vertical-align: middle;
+				margin: 0.346666rem 0.346666rem 0.346666rem 0;
+				/*height: 0.373333rem;*/
+				width: 0.373333rem;
+			}
+			/*店铺详情end*/
+		</style>
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">我的店铺</h1>
+		</header>
+
+		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
+			<div class="mui-scroll">
+
+				<div>
+					<template v-for="o in shops">
+						<div class="shop">
+							<div class="shop_imgtext box">
+								<div class="shop_image">
+									<img :src="o.image1" />
+								</div>
+								<div class="shop_info flex1" @tap="onLookTap(o)">
+									<div class="distance app-font-size-28">{{_m2km(o.distance)}} km</div>
+									<div class="name app-font-size-30 mui-ellipsis">{{o.name}}</div>
+									<div class="time app-font-size-28"><img src="../../../image/nearby/time.png" />{{_min2time(o.starttime)+ '-' + _min2time(o.endtime)}}</div>
+									<!--<div class="types app-font-size-28" v-for="(type,i) in o.types">
+										<span v-if="i!==0"> | </span>{{type}}
+									</div>-->
+									<!--{{JSON.stringify(o)}}-->
+									<div class="types app-font-size-26" v-for="(type,i) in ['自助烧烤','自助烧烤','自助烧烤']">
+										<span v-if="i!==0"> | </span>{{type}}
+									</div>
+									<div class="activity app-font-size-26 mui-ellipsis">{{o.introduction}}</div>
+								</div>
+							</div>
+							<div class="address app-font-size-28">
+								{{o.address}}
+							</div>
+							<div class="shop_menu app-font-size-28">
+								<div @tap="onCallTap(o)" class="flex1"><img src="../../../image/nearby/phone.png" />电话</div>
+								<div @tap="onWithMapTap(o)" class="flex1"><img src="../../../image/nearby/navigation.png" />导航</div>
+								<div class="flex1"><img style="vertical-align: middle; padding-top: 0.05rem;" src="../../../image/nearby/show.png" /><span style="vertical-align: middle;">查看</span></div>
+							</div>
+						</div>
+					</template>
+				</div>
+
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+
+		<script src="../../../js/lib/mui.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/store.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/gps.js"></script>
+
+		<script type="text/javascript">
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						n: 0,
+						position: "未知",
+						longitude: 0, 
+						latitude: 0,
+						city: '深圳',
+						shops: [],
+					};
+				},
+				mounted: function() {
+
+					this.$nextTick(function() {
+
+						this.$pullRefresh = mui(".mui-scroll-wrapper");
+						mui.init({
+							pullRefresh: {
+								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+							
+								up: {
+									auto: true,
+									callback: this._up
+									
+								}
+							}
+						})
+					}.bind(this));
+				},
+				plusReady: function() {
+					this.$view.setStyle({
+						scrollIndicator: "none"
+					});
+					
+					
+				},
+				methods: {
+					
+					_getList: function(f) {
+						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+
+							f(data);
+						}, this.n);
+					},
+
+					// 点击查看
+					onLookTap: function(o) {
+						mui.openWindow('../business/store_details.html', 'store_details', {
+							extras: {
+								oid: o.id
+							}
+						});
+					},
+
+					// 点击打电话
+					onCallTap: function(o) {
+						var buttons = o.telphone.split("/").map(function(item) {
+							return {
+								color: "rgb(0,0,255)",
+								style: "default",
+								title: item
+							}
+						});
+						plus.nativeUI.actionSheet({
+								cancel: "取消",
+								buttons: buttons
+							},
+							function(e) {
+								if(e.index > 0) {
+									plus.device.dial(buttons[e.index - 1].title);
+								}
+							});
+					},
+
+					// 点击导航
+					onWithMapTap: function(o) {
+						//BD-09 to GCJ-02先将百度坐标转成中国坐标
+						var tmp = GPS.bd_decrypt(parseFloat(o.latitude), parseFloat(o.longitude));
+						//GCJ-02 to WGS-84再将中国坐标转成GPS坐标
+						var dstarr = GPS.gcj_decrypt_exact(tmp['lat'], tmp['lon']);
+						//目的地
+						var dst = new plus.maps.Point(dstarr['lon'], dstarr['lat']);
+						//目的地描述
+						var shop = o.address + " - " + o.name;
+						//起始地   
+						var src = new plus.maps.Point(this.longitude, this.latitude);
+						//调用导航 
+						plus.maps.openSysMap(dst, shop, src);
+					},
+
+				
+					_up: function() {
+						console.log("up");
+						this.n++;
+						this._getList(function(data) {
+							console.log(JSON.stringify(data));
+							if(!data || !data.length) {
+								mui.toast('没有更多啦~~');
+								this.$pullRefresh.pullRefresh().endPullupToRefresh();
+							} else {
+								this.shops.push.apply(this.shops, data);
+							}
+							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+						}.bind(this));
+					},
+					_min2time: function(n) {
+						return(n < 10 ? '0' : '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00' : '30');
+					},
+					_m2km: function(m) {
+						return(m / 1000).toFixed(1);
+					}
+				}
+
+			});
+		</script>
+	</body>
+
+</html>

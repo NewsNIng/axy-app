@@ -245,6 +245,9 @@
 		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
 
 		<script type="text/javascript">
+			
+			
+			
 			new Vue({
 				el: ".mui-content",
 				data: function() {
@@ -281,6 +284,11 @@
 					//					plus.geolocation.getCurrentPosition(function(){
 					//						
 					//					});
+					new ni.Broadcast().emit("discover_update", {
+									
+								}, {
+									views: ['discover'],
+								});
 				},
 				mounted: function() {
 
@@ -386,8 +394,12 @@
 							.then(function() {
 								w.close();
 								mui.toast("发布成功");
+								new ni.Broadcast().emit("discover_update", {
+									
+								}, {
+									views: ['discover'],
+								});
 								mui.back();
-
 							})
 							.catch(function(err) {
 								w.close();

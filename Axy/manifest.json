@@ -7,8 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.7.5",/*应用版本名称*/
-		"code": "83"
+		"name": "1.7.6",/*应用版本名称*/
+		"code": "20180104"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -94,9 +94,10 @@
 			"description": "安心云智能"
 		},
 		"Barcode": {},
-		
+
 		"OAuth": {},
-		"Messaging": {}
+		"Messaging": {},
+		"Share": {}
 	},
 	"plus": {
 		"error": {
@@ -113,7 +114,37 @@
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
 		"distribute": {
 			"plugins": {
-				"oauth": {},
+				"share": {
+					"qq": {
+						"appid": "1104763696",
+						"description": "QQ分享"
+					},
+					"sina": {
+						"appkey": "619676523",
+						"appsecret": "452783db93630b4fd82a1dd42c4f4be2",
+						"redirect_uri": "https://api.weibo.com/oauth2/default.html",
+						"description": "可选，新浪微博分享"
+					},
+					"weixin": {
+						"appid": "wx880affb92989a60e",
+						"appsecret": "85471c18b19a88d181e4f732968cea55",
+						"description": "可选，微信分享"
+					}
+				},
+				"oauth": {
+					"qq": {
+						"appid": "1104763696"
+					},
+					"sina": {
+						"appkey": "619676523",
+						"appsecret": "452783db93630b4fd82a1dd42c4f4be2",
+						"redirect_uri": "https://api.weibo.com/oauth2/default.html"
+					},
+					"weixin": {
+						"appid": "wx880affb92989a60e",
+						"appsecret": "85471c18b19a88d181e4f732968cea55"
+					}
+				},
 				"maps": {
 					"baidu": {
 						"appkey_ios": "gcFrC4FpFYgTMMFkMRQNP4zR5wQ5yOcK",
@@ -137,6 +168,7 @@
 				"password": "",/*Android应用打包使用密钥库中证书的密码*/
 				"aliasname": "",/*Android应用打包使用密钥库中证书的别名*/
 				"permissions": [
+					"<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
 					"<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>",
 					"<uses-permission android:name=\"android.permission.SEND_SMS\"/>",
 					"<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
@@ -158,8 +190,8 @@
 					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
 					"<uses-permission android:name=\"android.permission.WRITE_SMS\"/>",
 					"<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>",
-					"<uses-permission android:name=\"android.permission.READ_SMS\"/>",
-					"<uses-permission android:name=\"android.permission.CAMERA\"/>"
+					"<uses-permission android:name=\"android.permission.CAMERA\"/>",
+					"<uses-permission android:name=\"android.permission.READ_SMS\"/>"
 				]
 			},
 			"orientation": [
@@ -309,7 +341,8 @@
 					"html/person/message/index.html",
 					"html/person/collection/my_camera.html",
 					"html/person/collection/my_attention.html",
-					"html/person/about.html"
+					"html/person/about.html",
+					"html/person/myself/business.html"
 				],
 				"priority": 0
 			},
@@ -351,7 +384,12 @@
 					"js/dal/home.js",
 					"js/common/flexible.js",
 					"js/dal/store.js",
-					"js/app/app-page.js"
+					"js/app/app-page.js",
+					"html/home/picture_4@3x.png",
+					"html/home/picture_2@3x.png",
+					"html/home/picture_1@3x.png",
+					"image/home/btn_Adddevice@3x.png",
+					"html/home/picture_3@3x.png"
 				],
 				"refer": [
 					"html/search/index.html",
@@ -945,6 +983,20 @@
 					"html/nearby/discover/discover_details.html",
 					"html/person/myself/discover_details.html"
 				],
+				"priority": 0
+			},
+			"html/person/myself/discover_details.html": {
+				"resources": [],
+				"refer": [
+					"html/person/other.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/discover/discover_release.html": {
+				"resources": [
+					"/storage/emulated/0/Tencent/QQfile_recv/1M6KU%0[TC%60H5FMIE%7DW1IZP.png"
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},

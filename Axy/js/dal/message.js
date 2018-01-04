@@ -56,7 +56,7 @@
 	 */
 	message.getAlarmList = function(pageNumber, devid, atime, callback, pageSize){
 		return ra('post', '/alarm/device/list', {
-			BASE_URL: _.BASE_URL_DEV,
+			
 			devid: devid,
 			atime: atime,
 			pageNumber: pageNumber,
@@ -68,7 +68,8 @@
 	 * 获取告警消息详情
 	 */
 	message.getAlarm = function(aid, callback){
-		return ra('get', '/alarm/device/info/' + aid, {}, callback);
+		return ra('get', '/alarm/device/info/' + aid, {
+		}, callback);
 	};
 	
 	

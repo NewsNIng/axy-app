@@ -353,6 +353,29 @@
 					font-size: 36px !important;
 				}
 			}
+			/*share*/
+			
+			#popover-share {
+				bottom: 0 !important;
+				width: 100%;
+				padding: 1rem .75rem;
+				border-radius: 0;
+			}
+			
+			#popover-share .share-title {
+				text-align: center;
+				color: #a1a1a1;
+			}
+			
+			#popover-share .share-body {}
+			
+			#popover-share .share-body>img {
+				float: left;
+				margin-top: .8rem;
+				width: 25%;
+				padding: 6%;
+			}
+			/*end share*/
 		</style>
 	</head>
 
@@ -369,6 +392,18 @@
 				</a>
 
 			</header>
+
+			<div id="popover-share" class="mui-popover app-font-size-30">
+				<div class="share-title">
+					快把专辑分享给朋友，获取更多赞~
+				</div>
+				<div class="share-body">
+					<img @tap="onShareTo('qq')" src="../../../image/common/login_qq.png" />
+					<img @tap="onShareTo('wxhy')" src="../../../image/common/login_wechat.png" />
+					<img @tap="onShareTo('wxpyq')" src="../../../image/common/pyq@3x.png" />
+					<img @tap="onShareTo('sinaweibo')" src="../../../image/common/login_weibo.png" />
+				</div>
+			</div>
 
 			<div id="popover-menu" class="mui-popover">
 				<ul class="mui-table-view room app-font-size-28 app-color-dark">
@@ -454,6 +489,7 @@
 		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
 
 		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -524,8 +560,8 @@
 						mui.confirm("确定删除这条说说吗？", "", ['残忍删除', '取消'], function(e) {
 							if(!e.index) {
 								// 删除
-								dal.article.delete(that.info.id, function(err, data){
-									if(err){
+								dal.article.delete(that.info.id, function(err, data) {
+									if(err) {
 										return mui.toast(err.message);
 									}
 									mui.toast("删除成功");
@@ -538,9 +574,53 @@
 						});
 						mui('#popover-menu').popover('hide');
 					},
-					// 分享说说
+					// 分享点击
 					onShareTap: function() {
-						mui('#popover-menu').popover('hide');
+						mui('#popover-share').popover('show');
+//						mui('#popover-menu').popover('hide');
+					},
+					// 分享至
+					onShareTo: function(type) {
+						var that = this;
+						Rx.Observable
+							// 压缩
+							.create(function(ob) {
+								plus.nativeUI.showWaiting("正在处理图片...");
+								new ni.Zip().processImage(that._getImg(that.info.image1, that.info.image2, that.info.image3), 32, function(err, overImgs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return plus.nativeUI.toast(err.message);
+									}
+									ob.next(overImgs[0]);
+								});
+
+							})
+							// 分享
+							.mergeMap(function(img) {
+								return Rx.Observable.create(function(ob) {
+									plus.nativeUI.showWaiting("正在拉取分享...");
+									setTimeout(plus.nativeUI.closeWaiting, 3e3);
+									new ni.Share(type, function(err, data) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
+											if(err.code === -100 || err.code === -2){
+												err.message = "用户取消分享";
+											}
+											return plus.nativeUI.toast(err.message);
+										}
+										ob.next(data);
+									}, {
+										img: img, //图片地址 暂不支持网络地址 
+										href: 'http://www.vihivision.com/', //分享的超链接
+										title: that.info.title, //当且仅当href存在时有效
+										content: that.info.content //当且仅当href存在时有效
+									});
+								});
+							})
+							// 回调
+							.subscribe(function(data) {
+								console.log(JSON.stringify(data));
+							});
 					},
 
 					onHeadTap: function(account) {
