@@ -492,7 +492,6 @@
 					});
 				},
 				methods: {
-<<<<<<< .mine
 
 					// 分享至
 					onShareTo: function(type) {
@@ -541,69 +540,16 @@
 
 					// 头像点击
 					onHeadTap: function(account) {
-=======
-					onHeadTap: function(account) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs
 						mui.openWindow('../../person/other.html', 'other', {
 							extras: {
 								uid: account
 							}
 						});
 					},
-<<<<<<< .mine
+
 					// 发送评论
 					onSendTap: function() {
-=======
-					onSendTap: function() {
-
->>>>>>> .theirs
 						var that = this;
 						app.user.get(function(u) {
 							dal.article.comments.add(that.info.id, that.c, function(err, data) {
@@ -620,63 +566,35 @@
 							});
 						});
 					},
-<<<<<<< .mine
 					// 动态加载缓存图片
 					_loadImage: function() {
 						this.$nextTick(function() {
-=======
-
-					_loadImage: function() {
-						this.$nextTick(function() {
->>>>>>> .theirs
 							imagelazyload();
 						});
 					},
-<<<<<<< .mine
 					// 上拉加载更多
-=======
-
->>>>>>> .theirs
 					_up: function() {
 						this.n++;
 						this.getComments();
 					},
-<<<<<<< .mine
 					// 获取说说信息
 					getInfo: function() {
 						dal.article.get(this.aid, function(err, data) {
 							if(err) {
 								return mui.toast(err.message)
 							}
-=======
-					getInfo: function() {
-						dal.article.get(this.aid, function(err, data) {
-							if(err) {
-								return mui.toast(err.message)
-							}
-
->>>>>>> .theirs
 							console.log(JSON.stringify(data));
 							this.info = data;
 							this._loadImage();
 							this._getInfo();
 						}.bind(this));
 					},
-<<<<<<< .mine
 					// 获取评论列表
 					getComments: function() {
 						dal.article.comments.list(this.aid, this.n, function(err, data) {
 							if(err) {
 								return mui.toast(err.message)
 							}
-=======
-					getComments: function() {
-						dal.article.comments.list(this.aid, this.n, function(err, data) {
-							if(err) {
-								return mui.toast(err.message)
-							}
-
->>>>>>> .theirs
 							this.total = data.total;
 							data = data.list;
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
