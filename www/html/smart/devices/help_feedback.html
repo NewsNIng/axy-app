@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>帮助与反馈</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.row {
+				margin: 0.346666rem 0.173333rem 0 0.173333rem;
+				display: flex; 
+				display: -webkit-flex;
+				justify-content: space-around;
+			}
+			
+			.row>div {
+				background: white;
+				width: 4.48rem;
+				height: 3.066666rem;
+				border-radius: 5px;
+				box-shadow: 0px 0px 6px #EFEFEF;
+				text-align: center;
+				line-height: 3.066666rem;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">帮助与反馈</h1>
+			</header>
+
+			<div class="mui-content app-font-size-30 app-color-333333">
+				<div class="row">
+					<div class="item">设备安装&绑定</div>
+					<div class="item">设备购买</div>
+				</div>
+				<div class="row">
+					<div class="item">智能场景</div>
+					<div class="item">设备联动</div>
+				</div>
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						
+					};
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {},
+				methods: {
+					
+				}
+			});
+		</script>
+	</body>
+
+</html>

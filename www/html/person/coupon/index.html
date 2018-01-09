@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>卡券中心</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			/*tab*/
+			
+			.menu-nav {
+				background-color: #FFFFFF;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-between;
+				padding: 0 0.906666rem;
+				box-shadow: 0 1px 1px #E5E6E7;
+			}
+			
+			.menu-nav>div {
+				display: inline-block;
+				height: 1.2rem;
+				width: 1.2rem;
+				text-align: center;
+				line-height: 1.2rem;
+				margin-right: 2.2rem;
+				border-bottom: 3px solid transparent;
+			}
+			
+			.menu-nav>div.active {
+				color: #FF3B30 !important;
+				border-color: #FF3B30;
+			}
+			
+			.menu-nav>div:last-child {
+				margin-right: 0;
+			}
+			/*end tab*/
+			/*卡片*/
+			
+			.cardroom {
+				padding: 0.346666rem;
+			}
+			
+			.card {
+				background-color: #F4F8FB;
+				height: 2.666666rem;
+				margin-bottom: 0.346666rem;
+			}
+			
+			.card>* {
+				float: left;
+			}
+			
+			.card>.card-header {
+				width: 3.333333rem;
+				height: 2.666666rem;
+				background-size: cover;
+				color: #FFFFFF;
+				text-align: center;
+				padding-top: 0.75rem;
+			}
+			
+			.app-font-size-84 {
+				font-size: 42px !important;
+			}
+			
+			[data-dpr="2"] .app-font-size-84 {
+				font-size: 84px !important;
+			}
+			
+			[data-dpr="3"] .app-font-size-84 {
+				font-size: 126px !important;
+			}
+			
+			.app-font-size-40 {
+				font-size: 20px !important;
+				transform: translateX(-5%);
+				-webkit-transform: translateX(-5%);
+			}
+			
+			[data-dpr="2"] .app-font-size-40 {
+				font-size: 40px !important;
+			}
+			
+			[data-dpr="3"] .app-font-size-40 {
+				font-size: 60px !important;
+			}
+			
+			.card-body {
+				background-color: #FFFFFF;
+				height: 2.666666rem;
+				width: 5.973333rem;
+				padding: 0.533333rem;
+				position: relative;
+			}
+			
+			.card-body:after {
+				content: "";
+				display: block;
+				width: 1.866666rem;
+				height: 1.866666rem;
+				position: absolute;
+				right: 0;
+				top: 0;
+				background-size: 100%;
+				background-repeat: no-repeat;
+			}
+			/*未使用*/
+			
+			.active0 .card-body:after {
+				background-image: url(../../../image/person/coupon/icon_Overdue@3x.png);
+				background-size: 66%;
+				background-position: right top;
+			}
+			
+			.active0 .card-header {
+				background-image: url(../../../image/person/coupon/notused@3x.png);
+			}
+			/*已使用*/
+			
+			.active1 .card-body:after {
+				background-image: url(../../../image/person/coupon/icon_Alreadyused@3x.png);
+			}
+			/*已过期*/
+			
+			.active2 .card-body:after {
+				background-image: url(../../../image/person/coupon/icon_Expired@3x.png);
+			}
+			
+			.active1 .card-header,
+			.active2 .card-header {
+				background-image: url(../../../image/person/coupon/icon_Beijhasbeenused@3x.png);
+			}
+			/*end卡片*/
+			
+			.wrapper {
+				overflow: hidden;
+				height: 100%;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">卡券中心</h1>
+		</header>
+		<div class="mui-content">
+			<div class="menu-nav app-font-size-28 app-color-333333" ref='tabroom'>
+				<template v-for="o,i in navItem">
+					<div @tap="active = i" :class="{active: active === i}">{{o.text}}</div>
+				</template>
+			</div>
+			<div class="wrapper" ref="wrapper">
+
+				<div class="cardroom" :class="'active' + active">
+
+					<div class="card" v-for="o,i in 10">
+						<div class="card-header">
+							<div class="app-font-size-40">￥<span class="app-font-size-84">60</span></div>
+							<div class="app-font-size-24">满400元可用</div>
+						</div>
+						<div class="card-body app-font-size-24">
+							<div class="app-font-size-28 ">全品类通用券</div>
+							<div class="app-color-333333">适用平台：艾尔天猫旗舰店</div>
+							<div class="app-color-9f9fa0">有效期至：2017-08-01</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/better-scroll.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						active: 0,
+						navItem: [{
+								text: "未使用"
+							},
+							{
+								text: "已使用"
+							},
+							{
+								text: "已过期"
+							}
+						]
+					};
+				},
+
+				mounted: function() {
+					var wrapper = this.$refs.wrapper;
+					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
+						this.$refs.tabroom.offsetHeight -
+						immersed -
+						44;
+
+					wrapper.style.height = wrapperHight + 'px';
+
+					this.$nextTick(function() {
+						if(!this.scroll) {
+							this.scroll = new BScroll(wrapper, {
+								click: true,
+								scrollY: true 
+							});
+
+						} else {
+							this.scroll.refresh();
+						}
+
+					}.bind(this));
+				},
+
+				methods: {
+
+				}
+			})
+		</script>
+	</body>
+
+</html>

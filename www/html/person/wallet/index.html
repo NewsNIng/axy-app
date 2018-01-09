@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>我的钱包</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css"> 
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+				text-align: center;
+			}
+			
+			
+			img.icon{
+				width: 2.586666rem;
+				margin: 1.866666rem auto 1.786666rem auto;
+			}
+			
+			div.number {
+			  font-size: 36px !important;
+			  margin-bottom: 1rem;
+			}
+			[data-dpr="2"] div.number {
+			  font-size: 72px !important;
+			}
+			[data-dpr="3"] div.number {
+			  font-size: 108px !important;
+			}
+			
+			
+			button{
+				width: 9.04rem;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				margin-bottom: 0.4rem !important;
+				border-radius: 4px;
+			}
+			button.app-color-333333{
+				border: 1px #d5d5d5 solid;
+			}
+			
+			button.app-color-333333:active {
+			  background-color: #EFEFF4 !important;
+			}
+		
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">我的钱包</h1>
+		</header>
+		<div class="mui-content">
+			<img class="icon" src="../../../image/person/wallet/icon_Mywallet@3x.png"/>
+			<div class="number">￥100.00</div>
+			<button type="button" class="mui-btn app-btn-main app-font-size-34" data-href="withdrawal.html">我要提现</button>
+			<button type="button" class="mui-btn app-font-size-34 app-color-333333" data-href="bills.html">交易明细</button>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+
+		
+
+		<script type="text/javascript">
+			
+			
+			mui.ready(function(){
+				mui(".mui-content").on('tap', 'button', function(){
+					var url = this.dataset.href;
+					mui.openWindow(url);
+				});
+			});
+		</script>
+	</body>
+
+</html>

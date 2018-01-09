@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>添加完成</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+				width: 100%;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.dev_icon {
+				width: 100%;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: 50%;
+				position: relative;
+			}
+			
+			.dev_text {
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				margin-bottom: 0.4rem;
+				text-align: center;
+				color: #333333;
+				/*font-weight: bold;*/
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.time {
+				background-color: #06C1AE;
+				padding: 0.106666rem 0.346666rem;
+				float: left;
+				margin-left: 50%;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				color: white;
+			}
+			
+			.imgbg{
+				/*width: 100%;*/
+				margin: 0.8rem 1.5rem 0 1.5rem;
+				position: relative;
+			}
+			
+			.imgbg > img{
+				width: 100%;
+			}
+			
+			.text {
+				position: absolute;
+				bottom: 0.8rem;
+				left: 50%;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+			}
+			
+			.btn_bind,.examine {
+				height: 1.2rem;
+				line-height: 1.2rem;
+				padding: 0;
+				margin: 0 0.853333rem;
+				display: inline;
+				width: 8.293333rem;
+				margin-bottom: 0.266666rem;
+			}
+			
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">添加完成</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="imgbg">
+					<img :src="bgp"/>
+					<div class="text app-font-size-28 app-color-9f9fa0">设备连接成功!</div>
+				</div>
+				<button type="button" class=" examine mui-btn app-btn-main-ghost app-font-size-34">查看设备</button>
+				<button type="button" class="btn_bind mui-btn app-btn-main app-font-size-34">去绑定摄像机</button>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png'
+					};
+				},
+				mounted: function() {
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '4.png';
+				},
+				plusReady: function() {
+					
+				},
+				methods: {
+					
+				}
+			});
+		</script>
+	</body>
+
+</html>

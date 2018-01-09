@@ -1,0 +1,649 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			header {
+				padding-left: 0.346666rem !important;
+				padding-right: 0.346666rem !important;
+			}
+			
+			header a img {
+				width: 0.48rem;
+			}
+			
+			.mui-bar-nav~.mui-content {
+				padding-top: 0;
+			}
+			
+			.mui-content {
+				background-color: white
+			}
+			
+			.mui-content>img {
+				width: 100%;
+				height: 7.866666rem;
+			}
+			
+			.mui-icon>img {
+				width: 0.8rem;
+			}
+			
+			.user_tittle,
+			.label,
+			.description {
+				margin-left: 0.346666rem;
+				margin-right: 0.346666rem;
+			}
+			
+			.user_tittle {
+				height: 1.413333rem;
+				line-height: 1.413333rem;
+				color: #333333;
+				border-bottom: 1px solid #f5f5f5;
+			}
+			
+			.user_tittle>img {
+				width: 0.986666rem;
+				height: 0.986666rem;
+				border-radius: 50%;
+				margin-right: 0.2rem;
+				vertical-align: middle;
+			}
+			
+			.attention {
+				float: right;
+				color: #FF3B30;
+				border: 1px solid #ff3b30;
+				border-radius: 3px;
+				padding: 0.16rem;
+				text-align: center;
+				min-width: 1.5rem;
+				height: 0.746666rem;
+				line-height: 0.426666rem;
+				position: relative;
+				font-weight: bold;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.attention.active {
+				color: #FFFFFF;
+				/*background-color: rgba(255, 0, 0, .6);*/
+				background-color: #F82746;
+			}
+			
+			.label {
+				color: #343434;
+				font-weight: bold;
+				margin-top: 0.32rem;
+				line-height: 24px;
+				padding: 0.106666rem 0;
+			}
+			
+			.description {
+				padding-top: 0.213333rem;
+				color: #666666;
+				/*width: 100%;*/
+				line-height: 24px;
+				padding-bottom: 0.32rem;
+			}
+			
+			.reply_tittle {
+				padding-left: 0.346666rem;
+				height: 0.906666rem;
+				line-height: 0.906666rem;
+				/*border-top: 1px solid #E5E6E7;*/
+				border-bottom: 1px solid #f5f5f5;
+				color: #808080;
+			}
+			
+			.comments {
+				padding: 0.346666rem;
+				/*border: 1 px solid #BBBBBB;*/
+			}
+			
+			.comments>img {
+				height: 0.986666rem;
+				width: 0.986666rem;
+				border-radius: 50%;
+				float: left;
+			}
+			
+			.comment_info {
+				padding-left: 1.333333rem;
+			}
+			
+			.user_name {
+				color: #406599;
+			}
+			
+			.comment_value {
+				color: #333333;
+				width: 100%;
+				word-break: break-all;
+			}
+			
+			.replynum {
+				display: inline-block;
+				padding: 0;
+				width: 1.466666rem;
+				background-color: #F4F8FB;
+				border-radius: 20px;
+				text-align: center;
+			}
+			
+			.time_replynum {
+				padding: 0.266666rem 0;
+				color: gray !important;
+			}
+			
+			.reply {
+				padding: 0.133333rem;
+				margin-bottom: 0.026666rem;
+				background-color: #F4F8FB
+			}
+			/*footer*/
+			
+			.mui-content {
+				padding-bottom: 1.36rem;
+			}
+			
+			.footer {
+				position: fixed;
+				z-index: 99;
+				width: 100%;
+				height: 1.36rem;
+				left: 0;
+				bottom: 0;
+				background-color: #FFFFFF;
+				box-shadow: 0px -2px 5px #DDDDDD;
+				-webkit-box-shadow: 0px -2px 5px #DDDDDD;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 0.4rem;
+			}
+			
+			.footer img {
+				width: .5rem;
+				height: .5rem;
+			}
+			
+			.footer>div {
+				/*width: 0;*/
+				position: relative;
+				/*animation: show .25s forwards;
+				-webkit-animation: show .25s forwards;*/
+			}
+			
+			.footer>div.data-count:after {
+				content: attr(data-count);
+				font-size: 10px;
+				color: #FFFFFF;
+				text-align: center;
+				line-height: 0.24rem;
+				position: absolute;
+				width: 0.25rem;
+				height: 0.213333rem;
+				background-color: red;
+				padding: 2px;
+				/*padding-top: 4px;
+				padding-bottom: 4px;*/
+				right: 0.1rem;
+				top: 0;
+				/*line-height: 2px;*/
+				border-radius: 50%;
+			}
+			
+			.footer input {
+				height: 0.88rem;
+				border-radius: 5px;
+				border: none;
+				background-color: #F4F8FB;
+				width: 5.2rem;
+				padding-left: 0.4rem;
+				transition-delay: 50ms;
+				transition-property: width;
+				transition-duration: 250ms;
+			}
+			
+			@keyframes show {
+				from {
+					opacity: 0;
+					width: 0;
+				}
+				to {
+					opacity: 1;
+					width: .5rem;
+				}
+			}
+			
+			@-webkit-keyframes show {
+				from {
+					opacity: 0;
+					width: 0;
+				}
+				to {
+					opacity: 1;
+					width: .5rem;
+				}
+			}
+			
+			@keyframes hide {
+				from {
+					opacity: 1;
+					width: .5rem;
+				}
+				to {
+					opacity: 0;
+					width: 0;
+				}
+			}
+			
+			@-webkit-keyframes hide {
+				from {
+					opacity: 1;
+					width: .5rem;
+				}
+				to {
+					opacity: 0;
+					width: 0;
+				}
+			}
+			
+			.footer.isFocus>div {
+				/*display: none;*/
+				animation: hide .25s forwards;
+				-webkit-animation: hide .25s forwards;
+			}
+			
+			.footer.isFocus>div:after {
+				display: none;
+			}
+			
+			.footer.isFocus input {
+				width: 100%;
+			}
+			
+			.footer img {
+				width: 0.853333rem;
+				height: 0.853333rem;
+			}
+			
+			.footer>div {}
+			/*背景图片*/
+			
+			.bgimage {
+				width: 100%;
+				height: 0;
+				padding-bottom: 78.666666%;
+				background-size: cover;
+				background-position: center;
+			}
+			/*share*/
+			
+			#popover-share {
+				bottom: 0 !important;
+				width: 100%;
+				padding: 1rem .75rem;
+				border-radius: 0;
+			}
+			
+			#popover-share .share-title {
+				text-align: center;
+				color: #a1a1a1;
+			}
+			
+			#popover-share .share-body {}
+			
+			#popover-share .share-body>img {
+				float: left;
+				margin-top: .8rem;
+				width: 25%;
+				padding: 6%;
+			}
+			/*end share*/
+		</style>
+	</head>
+
+	<body>
+
+		<div class="wrapper">
+
+			<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back mui-icon mui-pull-left">
+					<img src="../../../image/nearby/business/back.png" />
+				</a>
+				<h1 class="mui-title"></h1>
+				<a class="mui-icon mui-pull-right" @tap="mui('#popover-share').popover('show')">
+					<img src="../../../image/nearby/business/share.png" />
+				</a>
+				<a class="mui-icon mui-pull-right" style="margin-right: -4px;">
+					<img src="../../../image/nearby/business/collect.png" />
+				</a>
+			</header>
+
+			<div id="popover-share" class="mui-popover app-font-size-30">
+				<div class="share-title">
+					快把说说分享给朋友，获取更多关注~
+				</div>
+				<div class="share-body">
+					<img @tap="onShareTo('qq')" src="../../../image/common/login_qq.png" />
+					<img @tap="onShareTo('wxhy')" src="../../../image/common/login_wechat.png" />
+					<img @tap="onShareTo('wxpyq')" src="../../../image/common/pyq@3x.png" />
+					<img @tap="onShareTo('sinaweibo')" src="../../../image/common/login_weibo.png" />
+				</div>
+			</div>
+
+			<div class="footer" :class="{'isFocus': true}">
+
+				<input style="margin-bottom: 0;" ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="text" name="" id="" v-model="content" placeholder="写评论" />
+				<button :disabled="c.length === 0" @tap="onSendTap()" type="button" class="mui-btn app-btn-main" style="margin-left: 10px;">发送</button>
+
+				<!--<input style="margin-bottom: 0;" ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="text" name="" id="" v-model="content" placeholder="写评论" />
+				<button v-if="inputFoucs" :disabled="c.length === 0" @tap="onSendTap()" type="button" class="mui-btn app-btn-main" style="margin-left: 10px;">发送</button>
+
+				<div class="data-count" :data-count="clist.length">
+					<img src="../../../image/nearby/discover/comment.png" />
+				</div>
+				<div>
+					<img src="../../../image/nearby/discover/collection.png" />
+				</div>
+				<div>
+					<img src="../../../image/nearby/discover/send.png" />
+				</div>-->
+			</div>
+
+			<div class="mui-content noImmersed  mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'">
+
+					</div>
+					<div class="user_tittle app-font-size-28">
+						<img @tap="onHeadTap(info.account)" class="avastr img-lazy-load" :data-src="info.headimgurl" data-type="avatar" />
+						<div style="display: inline;" v-text="info.nickname"></div>
+						<div class="attention" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
+					</div>
+					<div class="label app-font-size-34" v-text="'#' + info.title"></div>
+					<div class="description app-font-size-32" v-text="info.content"></div>
+					<div class="reply_tittle app-font-size-34">
+						评论&nbsp;
+						<div style="display: inline;" v-text="'('+(total || 0)+')'"></div>
+					</div>
+					<div class="comments" v-for="o in clist">
+						<img @tap="onHeadTap(o.account)" class="avastr img-lazy-load" :data-src="o.headimgurl" data-type="avatar" />
+						<div class="comment_info">
+							<div class="user_name app-font-size-28" v-text="o.nickname"></div>
+							<div class="comment_value app-font-size-30" v-text="o.content"></div>
+							<div class="time_replynum app-font-size-20">
+								<div class="app-font-size-28" style="display: inline;" v-text="o.senddate"></div>
+								<!--·-->
+								<!--<div class="replynum" v-text="o.replys.length+'回复'"></div>-->
+							</div>
+							<!--<div class="reply app-font-size-26" v-for="p in o.replys">
+								<div class="user_name app-font-size-26" style="display: inline;" v-text="p.respondent"></div>:
+								<div class="app-font-size-26" style="display: inline;" v-text="p.text"></div>
+							</div>-->
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../../js/dal/article.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '.wrapper',
+				data: function() {
+					return {
+						info: {
+							"id": -1,
+							"account": "",
+							"title": "",
+							"content": "",
+							"image1": "",
+							"image2": "",
+							"image3": "",
+							"senddate": "",
+							"likecount": 0,
+							"nickname": null,
+							"headimgurl": null
+						},
+
+						clist: [],
+						n: 1,
+						content: "",
+
+						inputFoucs: false,
+						isAttention: false,
+						total: 0,
+
+						isfocus: 0,
+						focuscount: "",
+						userInfo: null,
+						from: "",
+					};
+				},
+				computed: {
+					c: function() {
+						return this.content.trim();
+					},
+					focus: function() {
+						return this.isfocus !== 0;
+					}
+				},
+				mounted: function() {
+					this.$nextTick(function() {
+
+						this.$pullRefresh = mui(".mui-scroll-wrapper");
+						mui.init({
+							pullRefresh: {
+								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+								down: {
+
+								},
+								up: {
+									callback: this._up
+								}
+							}
+						})
+					}.bind(this));
+				},
+				plusReady: function() {
+					plus.nativeUI.showWaiting();
+					this.from = app.user.get().account || "null";
+					// 获取传过来的id值
+					this.aid = this.$view.oid;
+					this.getInfo();
+					this.getComments();
+					this.$view.setStyle({
+						softinputMode: 'adjustResize'
+					});
+				},
+				methods: {
+
+					// 分享至
+					onShareTo: function(type) {
+						var that = this;
+						Rx.Observable
+							// 压缩
+							.create(function(ob) {
+								plus.nativeUI.showWaiting("正在处理图片...");
+								new ni.Zip().processImage(that._getImg(that.info.image1, that.info.image2, that.info.image3), 32, function(err, overImgs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return plus.nativeUI.toast(err.message);
+									}
+									ob.next(overImgs[0]);
+								});
+
+							})
+							// 分享
+							.mergeMap(function(img) {
+								return Rx.Observable.create(function(ob) {
+									plus.nativeUI.showWaiting("正在拉取分享...");
+									setTimeout(plus.nativeUI.closeWaiting, 3e3);
+									new ni.Share(type, function(err, data) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
+											if(err.code === -100 || err.code === -2){
+												err.message = "用户取消分享";
+											}
+											return plus.nativeUI.toast(err.message);
+										}
+										ob.next(data);
+									}, {
+										img: img, //图片地址 暂不支持网络地址 
+										href: 'http://www.vihivision.com/', //分享的超链接
+										title: that.info.title, //当且仅当href存在时有效
+										content: that.info.content //当且仅当href存在时有效
+									});
+								});
+							})
+							// 回调
+							.subscribe(function(data) {
+								console.log(JSON.stringify(data));
+							});
+
+					},
+
+					// 头像点击
+					onHeadTap: function(account) {
+
+						mui.openWindow('../../person/other.html', 'other', {
+							extras: {
+								uid: account
+							}
+						});
+					},
+
+					// 发送评论
+					onSendTap: function() {
+						var that = this;
+						app.user.get(function(u) {
+							dal.article.comments.add(that.info.id, that.c, function(err, data) {
+								if(err) {
+									return mui.toast('发送评论失败，请重试');
+								}
+								mui.toast("评论成功");
+								that.$refs.cinput.blur();
+								that.content = "";
+								//that.total++;
+								that.clist = [];
+								that.n = 1;
+								that.getComments();
+							});
+						});
+					},
+					// 动态加载缓存图片
+					_loadImage: function() {
+						this.$nextTick(function() {
+							imagelazyload();
+						});
+					},
+					// 上拉加载更多
+					_up: function() {
+						this.n++;
+						this.getComments();
+					},
+					// 获取说说信息
+					getInfo: function() {
+						dal.article.get(this.aid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							console.log(JSON.stringify(data));
+							this.info = data;
+							this._loadImage();
+							this._getInfo();
+						}.bind(this));
+					},
+					// 获取评论列表
+					getComments: function() {
+						dal.article.comments.list(this.aid, this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							this.total = data.total;
+							data = data.list;
+							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+							if(!data || data.length === 0) {
+								this.n > 1 && mui.toast('没有更多了~');
+								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
+							}
+							this.clist.push.apply(this.clist, data);
+							this._loadImage();
+						}.bind(this), 5);
+					},
+					// 获取一张存在的图片
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
+					onAttention: function() {
+
+					},
+					onFocusTap: function() {
+						if(this.from === this.info.account) {
+							return mui.toast("您不能关注自己！");
+						}
+						this.isfocus = +!this.isfocus;
+						this.changeFocus();
+					},
+					changeFocus: function() {
+						var methodName = 'add';
+						if(!this.focus) {
+							methodName = 'delete';
+						}
+						dal.user.focus[methodName](this.info.account, function(err, data) {
+
+						});
+					},
+					_getInfo: function() {
+						dal.user.get(this.from, this.info.account, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.isfocus = data.isfocus;
+							this.focuscount = data.focuscount;
+							this.userInfo = data.user;
+							// 结束加载
+							plus.nativeUI.closeWaiting();
+						}.bind(this));
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>商户类型</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content,
+			{
+				background-color: #F4F8FB;
+			}
+			
+			.mui-content{
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				display: -webkit-flex;	
+				justify-content: center;
+				align-items: flex-start;
+				
+			}
+			
+			.left{
+				width: 3.2rem;
+				background-color: #FFFFFF;
+				color: #888888;
+			}
+			.left>div{
+				position: relative;
+				padding-left: 0.8rem;
+			}
+			.left>div.active{
+				color: #2BB8AA;
+				background-color: #F4F8FB;
+			}
+			.left>div:after{
+				content: "";
+				position: absolute;
+				left: 0;
+				bottom:0;
+				width: 100%;
+				height: 1px;
+				background-color: #F4F8FB;
+				transform: scaleY(.5);
+				-webkit-transform: scaleY(.5);
+				
+			}
+			
+			.right{
+				width: 6.8rem;
+				background-color: #F4F8FB;
+				color: #333333;
+				
+			}
+			
+			.right>div:after{
+				content: "";
+				position: absolute;
+				left: 0;
+				bottom:0;
+				width: 100%;
+				height: 1px;
+				background-color: #FFFFFF;
+				transform: scaleY(.5);
+				-webkit-transform: scaleY(.5);
+				
+			}
+			
+			.right>div{
+				padding-left: 0.533333rem;
+				position: relative;
+			}
+			.right>div:active{
+				color: #000000;
+				background-color: #FFFFFF;
+			}
+			
+			.left,.right{
+				height: 100%;
+				overflow-x: hidden;
+				overflow-y: scroll;
+				
+			}
+			
+			.left>div,.right>div{
+				height: 1.186666rem;
+				text-align: left;
+				height: 1.186666rem;
+				line-height: 1.186666rem;
+			}
+			
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+			
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left app-color-white"></a>
+				<h1 class="mui-title">商户类型</h1>
+				
+			</header>
+			<div class="mui-content app-font-size-28">
+				<div class="left">
+					<template v-for="o,i in category">
+						<div :class="{'active': i === leftIndex}" @tap="onLeftTap(o, i)">{{o.name}}</div>
+					</template>
+				</div>
+				<div class="right">
+					<template v-for="o,i in indexList">
+						<div @tap="onRightTap(o, i)">{{o.name}}</div>
+					</template>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.min.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js" ></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript" src="../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../js/dal/store.js" ></script>
+		<script type="text/javascript">
+			new Vue({
+				el: '#warpper',
+				data: function(){
+					return {
+						leftIndex: 0,
+						category: [
+							
+						]
+					};
+				},
+				computed: {
+					indexList: function(){
+						return this.category[this.leftIndex].children;
+					}
+				},
+				mounted: function(){
+					dal.store.category(function(err, data){
+						if(err){
+							return mui.toast(err.message);
+						}
+						this.category = data.category;
+						console.log(JSON.stringify(data));
+					}.bind(this));
+				},
+				plusReady: function(){
+					
+				},
+				methods: {
+					onLeftTap: function(o, i){
+						if(this.leftIndex === i){return;}
+						this.leftIndex = i;
+					},
+					onRightTap: function(o, i){
+						app.page.setResult({
+							value: o.name,
+							oid: o.id
+						}).close();
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

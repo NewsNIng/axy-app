@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>发布活动</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.tips {
+				padding: 0.346666rem;
+				background-color: #F4F8FB;
+				color: #b4b4b7;
+			}
+			
+			.tips2 {
+				padding: 0.346666rem;
+				background-color: #FFFFFF;
+				color: #333333;
+				position: relative;
+			}
+			
+			.tips2:after {
+				content: "";
+				position: absolute;
+				height: 1px;
+				width: 9.306666rem;
+				left: 0.346666rem;
+				bottom: 0;
+				background-color: #f5f5f5;
+				transform: scaleY(0.5);
+				-webkit-transform: scaleY(0.5);
+			}
+			
+			.imgRoom {
+				background-color: #FFFFFF;
+				padding: 0.346666rem;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+			}
+			
+			.imgRoom>div {
+				width: 2.88rem;
+				height: 2.88rem;
+				background-color: #F4F8FB;
+				margin: 0.173333rem 0;
+				background-size: cover;
+				background-position: center;
+			}
+			
+			.imgRoom>div {
+				pointer-events: none;
+			}
+			
+			.imgRoom>div.last,
+			.imgRoom>div.over {
+				pointer-events: all;
+				position: relative;
+			}
+			
+			.imgRoom>div.last:after {
+				content: '';
+				z-index: 20;
+				position: absolute;
+				background-image: url(../../../image/nearby/business/add_icon.png);
+				background-size: cover;
+				background-position: center;
+				height: 0.666666rem;
+				width: 0.666666rem;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				-webkit-transform: translate(-50%, -50%);
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back mui-pull-left app-icon-back"></a>
+			<h1 class="mui-title">上传店铺图片</h1>
+		</header>
+		<div class="mui-content">
+			<div class="tips app-font-size-26">
+				您可上传店铺门脸图、店内环境图或店铺主图
+			</div>
+
+			<div class="tips2 app-font-size-30">
+				上传店铺图片
+			</div>
+
+			<div class="imgRoom app-font-size-26">
+				<template v-for="o,i in imgs">
+					<div :class="{'last': i === firstNullIndex, 'over': o !== ''}" :style="'background-image: url('+ o +')'" @tap="onImgTap(i)"></div>
+				</template>
+			</div>
+
+			<button type="button" @tap="onSuccessTap()" class="mui-btn app-btn-main" style="width: 9.293333rem; margin:0.506666rem 0.346666rem;height: 1.173333rem;font-size: 17px;">完成</button>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/system.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				//处理窗口关闭前的业务
+				beforeback: function() {
+					mui.confirm("操作将清除您已输入的信息，确认退出么？", "温馨提示", ['确认退出', '取消'], function(e) {
+						!e.index && plus.webview.currentWebview().close();
+					});
+					return false;
+				},
+			});
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						imgs: ["", "", ""]
+					};
+				},
+				computed: {
+					//					validImgList: function(){
+					//						return this.imgs.filter(function(url){
+					//							return url !== "";
+					//						});
+					//					},
+					firstNullIndex: function() {
+						var i;
+						for(i = 0; i < this.len; i++) {
+							if(this.imgs[i] === "") {
+								return i;
+							}
+						}
+						return -1;
+					},
+
+					len: function() {
+						return this.imgs.length;
+					}
+				},
+				plusReady: function() {
+					this.imgs = this.$view.imgList || ["", "", ""];
+				},
+				methods: {
+					onImgTap: function(index) {
+						var that = this;
+						this.$gallery(function(err, imgArr) {
+							if(err) {
+								return mui.toast("图片选取失败");
+							}
+							if(imgArr.length > that.len) {
+								mui.toast("您最多只能选择" + that.len + "张");
+								imgArr = imgArr.splice(0, that.len);
+							}
+
+							// 先bind固定参数，再apply不定数量参数
+							that.imgs.splice.bind(that.imgs, index, imgArr.length).apply(that.imgs, imgArr);
+
+						}, this.len - index);
+					},
+					onSuccessTap: function() {
+						var w = plus.nativeUI.showWaiting("正在上传图片...");
+						var that = this;
+
+						new Promise(function(re, rj) {
+							// 压缩图片
+							new that.$Zip().processImage(that.imgs, 500, function(err, data) {
+								if(err) {
+									return rj(err);
+								}
+								re(data);
+							});
+						})
+						.then(function(imgs) {
+							that.imgs = [];
+							that.imgs.push.apply(that.imgs, imgs);
+							// 提交服务器
+							return new Promise(function(re, rj) {
+								dal.system.uploadImg(that.imgs, function(err, imgList) {
+									if(err) {
+										return rj(err);
+									}
+									re(imgList);
+								});
+							});
+						})
+						.then(function(imgList) {
+							// 关闭本页传递图片路径
+							w.close();
+							app.page.setResult({
+								imgList: imgList
+							}).close();
+						})
+						.catch(function(err){
+							w.close();
+							//err.message
+							mui.toast("上传失败，请重试");
+						});
+
+						
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

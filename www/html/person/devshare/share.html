@@ -1,0 +1,487 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>共享设备</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+			}
+			
+			.mui-bar-nav~.mui-content {
+				padding-top: 0;
+			}
+			
+			.imgdiv {
+				height: 6.16rem;
+				background-color: #9F9FA0;
+				background-position: center;
+				background-size: cover;
+				background-repeat: no-repeat;
+			}
+			
+			.menu:before {
+				content: '';
+				display: block;
+				height: 0.266666rem;
+				background-color: #F4F8FB;
+			}
+			
+			.tips {
+				padding: 0.4rem 0.373333rem;
+			}
+			
+			.menu-icon>div {
+				text-align: center;
+				float: left;
+				width: 25%;
+				margin: 0.373333rem 0;
+			}
+			
+			.menu-icon>div>img {
+				width: 1rem;
+			}
+			
+			.xian {
+				clear: both;
+				padding: 0.693333rem 0;
+				text-align: center;
+				position: relative;
+				/*display: inline-block;*/
+			}
+			
+			.xian:before {
+				content: '';
+				display: block;
+				height: 1px;
+				background-color: #9f9fa0;
+				z-index: 0;
+				position: absolute;
+				left: 0.633333rem;
+				right: 0.633333rem;
+				top: 50%;
+				transform: scaleY(0.5);
+				-webkit-transform: scaleY(0.5);
+			}
+			
+			.xian:after {
+				position: relative;
+				z-index: 1;
+				content: attr(data-content);
+				display: inline-block;
+				padding: 0 0.4rem;
+				background-color: #FFFFFF;
+			}
+			
+			.share-icon {
+				text-align: center;
+			}
+			
+			.share-icon>img {
+				width: 0.8rem;
+				margin: 0 0.7rem;
+			}
+			
+			.mask {
+				position: fixed;
+				background-color: rgba(0, 0, 0, 0.5);
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				z-index: 9999;
+				
+				zoom: 0.5;
+			}
+			
+			.mask canvas {
+				background-color: #FFFFFF;
+				transform: translate3d(25%, 35%, 0);
+				-webkit-transform: translate3d(25%, 35%, 0);
+				border-radius: 5px;
+				/*height: 0;
+				padding-top: 50%;
+				width: 50%;*/
+			}
+			
+			#qrcode {
+				visibility: hidden;
+			}
+			/*设备背景图fix*/
+			
+			.imgdiv {
+				position: relative;
+			}
+			
+			.imgdiv.WG-100:after {
+				content: "";
+				top: 0;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-image: url(../../../image/smart/devices/bg/wg_100@3xweb.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 8;
+			}
+			/*TODO 修复*/
+			
+			.imgdiv.AX-903:after {
+				content: "";
+				top: 0;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-image: url(../../../image/smart/devices/bg/903@3xweb.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 8;
+			}
+			
+			.imgdiv.AX-904:after {
+				content: "";
+				top: 0;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-image: url(../../../image/smart/devices/bg/904@3xweb.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				z-index: 8;
+			}
+			
+			.imgdiv.WG-100,
+			.imgdiv.AX-903,
+			.imgdiv.AX-904 {
+				pointer-events: none;
+			}
+			/*设备背景图fix--------*/
+		</style>
+
+	</head>
+
+	<body>
+
+		<div id="box">
+			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title app-color-white" v-text="devInfo.location || devInfo.devid"></h1>
+			</header>
+
+			<div class="mui-content noImmersed">
+				<div class="imgdiv" :class="_getDevName(devInfo.type)" :style="{backgroundImage: 'url('+'file:////storage/emulated/0/CameraFamily/Thumbnail/'+devInfo.devid+'.jpeg'+')'}"></div>
+				<div class="menu app-font-size-28">
+					<div class="tips">
+						<span class="app-color-333333">请选择权限：</span>
+						<span class="app-color-9f9fa0">（选择权限后，共享的成员可直接使用该摄像头相应功能，请注意隐私保护。）</span>
+					</div>
+					<div class="menu-icon">
+						<div v-for="o,i in menus" @tap="o.selected = !o.selected">
+							<img :src='"../../../image/person/devshare/"+ (o.imgindex) + (o.selected?("_"+(o.imgindex)):"") +".png"' />
+							<div v-text="o.name"></div>
+						</div>
+					</div>
+
+					<div class="xian app-color-9f9fa0" data-content="分享至"></div>
+					<div class="share-icon">
+						<img @tap="onShare('code')" src="../../../image/person/devshare/code@3x.png" />
+						<img @tap="onShare('weixin')" src="../../../image/person/devshare/wx@3x.png" />
+						<img @tap="onShare('msg')" src="../../../image/person/devshare/sms@3x.png" />
+					</div>
+				</div>
+			</div>
+
+			<div class="mask" v-show="mask" @tap.self="mask = false">
+
+				<canvas ref="canvas" id="code" width="1000px" height="1000px"></canvas>
+				<div id="qrcode" ref="qrcode"></div>
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/lib/qrcode.min.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: "#box",
+				data: function() {
+					return {
+						devInfo: {
+							"location": "",
+							"devid": "",
+							"id": 0,
+							"type": 0,
+
+						},
+						canvasWidth: 0,
+						mask: false,
+						menus: [{
+								name: "视频查看",
+								selected: true,
+								bitleft: 1 << 0,
+								imgindex: 1,
+							},
+							{
+								name: "告警提醒",
+								selected: true,
+								bitleft: 1 << 1,
+								imgindex: 3,
+							},
+							{
+								name: "遥控器操作",
+								selected: false,
+								bitleft: 1 << 2,
+								imgindex: 7,
+							},
+							{
+								name: "智能安全",
+								selected: false,
+								bitleft: 1 << 3,
+								imgindex: 0,
+							},
+							{
+								name: "智能控制",
+								selected: false,
+								bitleft: 1 << 4,
+								imgindex: 2,
+							},
+
+							{
+								name: "云台",
+								selected: false,
+								bitleft: 1 << 5,
+								imgindex: 9,
+							},
+
+							{
+								name: "查看电管家",
+								selected: false,
+								bitleft: 1 << 6,
+								imgindex: 8,
+							},
+						]
+					};
+				},
+
+				computed: {
+					// 权限
+					authorize: function() {
+						return this.menus.reduce(function(n, item) {
+							if(item.selected) {
+								n = n | item.bitleft;
+							}
+							return n;
+						}, 0);
+					}
+				},
+
+				mounted: function() {
+					// 动态计算canvas的宽，设置为屏幕宽度一半大小
+					this.canvasWidth = window.innerWidth / 1.5 * 2;
+					this.$refs.canvas.width = this.canvasWidth;
+					this.$refs.canvas.height = window.innerWidth * 2;
+					
+				},
+
+				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
+					// console.log(JSON.stringify(this.devInfo));
+				},
+				methods: {
+					getCode: function() {
+						return new Promise(function(re, rj) {
+							dal.device.share(this.devInfo.id, this.authorize, function(err, code) {
+								if(err || !code) {
+									return rj(err.message || "获取授权码失败");
+								}
+								re(code);
+							});
+						}.bind(this));
+
+					},
+
+					onShare: function(type) {
+						plus.nativeUI.showWaiting("正在获取授权码...");
+
+						this.getCode().then(function(code) {
+							plus.nativeUI.closeWaiting();
+							// 如果是二维码方式 则生成二维码 并保存二维码图片到本地 再toast提示
+							if(type === 'code') {
+								// 生成二维码
+								this.generateCodeImage(code);
+								// 遮罩打开
+								this.mask = true;
+
+								setTimeout(function() {
+									// 绘制canvas
+									this.render(code);
+								}.bind(this), 500);
+
+								setTimeout(function() {
+									// 保存图片
+									this.saveCanvasCode();
+								}.bind(this), 1000);
+								return;
+							}
+							// 如果是短信方式则 拿到自定义文字 打开短信发送页面
+							if(type === 'msg') {
+								this.sms(code);
+								return;
+							}
+							// 如果是wechat则使用 分享功能
+							if(type === 'weixin') {
+
+								new ni.Share('wxhy', function(err, data) {
+									if(err) {
+										console.log(err)
+									}
+									console.log(JSON.stringify(data))
+								}, {
+									img: '../../../image/common/login_logo.png', //图片地址 暂不支持网络地址 
+									href: 'http://www.vihivision.com?code=' + code, //分享的超链接
+									title: '亲友邀请您一起看', //当且仅当href存在时有效
+									content: '安装[安心云]App后，输入邀请码#' + code + '#就能看到我家的美景啦，快来体验全新的智能家居、智能安防哦——来自安心云' //当且仅当href存在时有效
+								});
+							}
+						}.bind(this)).catch(function(msg) {
+							plus.nativeUI.closeWaiting();
+							mui.toast(msg);
+						});
+
+					},
+
+					// 发送短信分享
+					sms: function(code) {
+						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
+						msg.to = [];
+						msg.body = '亲友邀请您一起看，安装[安心云]App后，输入邀请码#' + code + '#就能看到我家的美景啦，快来体验全新的智能家居、智能安防哦——来自安心云';
+						plus.messaging.sendMessage(msg);
+					},
+
+					// 生成二维码图片
+					generateCodeImage: function(code) {
+						new QRCode(document.getElementById("qrcode"), code);
+					},
+
+					// 渲染图片二维码
+					render: function(code) {
+
+						var context = this.$refs.canvas.getContext('2d');
+						var that = this;
+						var src = document.querySelector("#qrcode img").src;
+						
+						//context.scale(2, 2);
+						
+						// 绘制二维码
+						var img = new Image();
+						var iconImg = new Image();
+						img.onload = function() {
+							context.drawImage(img, 50, 50, that.canvasWidth - 100, that.canvasWidth - 100);
+							setTimeout(function() {
+								context.drawImage(iconImg, that.canvasWidth / 2 - 50, that.canvasWidth / 2 - 50, 100, 100);
+							}, 123);
+
+						}
+						iconImg.src = "../../../image/common/login_logo.png";
+						img.src = src;
+
+						// 绘制文字
+						context.font = "30px 黑体";
+						context.fillStyle = "#333333";
+						context.textAlign = "center";
+						context.fillText("摄像机邀请码", that.canvasWidth / 2, that.canvasWidth + 20);
+
+						// 绘制圆圈
+						//开始一个新的绘制路径
+						context.beginPath();
+						//设置弧线的颜色为蓝色
+						context.strokeStyle = "red";
+						context.fillStyle = "rgba(0,0,0,0.5)";
+						var circle = {
+							x: 0, //圆心的x轴坐标值
+							y: that.canvasWidth + 10, //圆心的y轴坐标值
+							r: 20 //圆的半径
+						};
+						var circle2 = {
+							x: that.canvasWidth, //圆心的x轴坐标值
+							y: that.canvasWidth + 10, //圆心的y轴坐标值
+							r: 20 //圆的半径
+						};
+						context.arc(circle.x, circle.y, circle.r, 0, 2 * Math.PI, false);
+						context.arc(circle2.x, circle2.y, circle2.r, 0, 2 * Math.PI, false);
+						//按照指定的路径绘制半圈
+						context.fill();
+
+						// 绘制线条
+						context.beginPath();
+						context.strokeStyle = "#333333"
+						context.moveTo(30, that.canvasWidth + 10);
+						context.lineTo(that.canvasWidth / 4, that.canvasWidth + 10);
+						context.moveTo(that.canvasWidth - 30, that.canvasWidth + 10);
+						context.lineTo(that.canvasWidth / 4 * 3, that.canvasWidth + 10);
+						context.stroke();
+
+						// 绘制code
+						context.fillStyle = "#06C1AE";
+						
+						context.fillRect(40, that.canvasWidth + 60, that.canvasWidth - 80, 90);
+
+						context.font = "40px 黑体";
+						context.fillStyle = "#FFFFFF";
+						context.textAlign = "center";
+						context.fillText(code.split('').join(' '), that.canvasWidth / 2, that.canvasWidth + 120);
+
+						context.font = "32px 黑体";
+						context.fillStyle = "#9F9FA0";
+						context.textAlign = "center";
+						context.fillText("邀请码30分钟之内有效", that.canvasWidth / 2, that.canvasWidth + 200);
+
+					},
+					// 保存二维码到本地
+					saveCanvasCode: function() {
+						var path = "_documents/share/code.png";
+						var codeBitmap = new plus.nativeObj.Bitmap("code");
+						var data64 = this.$refs.canvas.toDataURL("image/png");
+						codeBitmap.loadBase64Data(data64, function() {
+							codeBitmap.save(path, {
+								overwrite: true,
+								quality: 100,
+								format: 'png'
+							}, function(e) {
+								plus.gallery.save(e.target, function() {
+									mui.toast("已保存二维码在本地");
+								});
+							});
+						});
+						return path;
+					},
+
+					_getDevName: function(type) {
+						return app.dev.findName(type);
+					},
+
+				}
+			})
+		</script>
+	</body>
+
+</html>

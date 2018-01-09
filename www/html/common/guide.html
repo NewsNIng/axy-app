@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="../../css/lib/mui.min.css" />
+		<style>
+			#close {
+				position: absolute;
+				width: 160px;
+				left: 50%;
+				margin-left: -80px;
+				bottom: 5%;
+				padding: 10px;
+				color: #fff;
+				border-color: rgba(255, 255, 255, 0.8);
+				background-color: #5C75EE;
+				background: transparent !important;
+			}
+			
+			.item-logo {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				background-repeat: no-repeat !important;
+				background-size: cover !important;
+				background-position: center !important;
+			}
+			
+			.out {
+				position: absolute;
+				width: 70px;
+				height: 70px;
+				background-color: transparent;
+				top: 0;
+				right: 0;
+				z-index: 10;
+			}
+			
+			.out2 {
+				width: 66%;
+				height: 70px;
+				background-color: transparent;
+				position: absolute;
+				bottom: 88px;
+				left: 17%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="slider" class="mui-slider mui-fullscreen" style="background-color: white;">
+
+			<div class="out" @tap="onCloseTap()"></div>
+
+			<div class="mui-slider-group">
+				<div v-for='o,i in list' class="mui-slider-item" :itemIndex='i'>
+					<div class="item-logo" :style="{backgroundImage: 'url('+o.img+')'}">
+						<div @tap="onCloseTap()" v-if="i===list.length-1" class="out2"></div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="js/common/android-back.js" ></script>
+		<script type="text/javascript">
+			mui.init();
+			new Vue({
+				el: '#slider',
+				data: function() {
+					return {
+						list: [{
+							"img": "../../image/common/guide1.png"
+						}, {
+							"img": "../../image/common/guide2.png"
+						}, {
+							"img": "../../image/common/guide3.png"
+						}, {
+							"img": "../../image/common/guide4.png"
+						}]
+					};
+				},
+				methods: {
+					onCloseTap: function() {
+						plus.storage.setItem("FirstTimeFlag", plus.runtime.version);
+						app.page.setResult({}).close();  
+					}
+				}
+			});
+
+			// 扩展API加载
+			mui.plusReady(function() {
+				//仅支持竖屏显示
+				plus.screen.lockOrientation("portrait-primary");
+				//去除滚动条
+				plus.webview.currentWebview().setStyle({
+					scrollIndicator: 'none'
+				});
+			});
+
+			(function($) {
+				var backButtonPress = 0;
+				$.back = function() {
+					backButtonPress++;
+					if(backButtonPress > 1) {
+						//退出
+						plus.runtime.quit();
+						//后台
+						//var main = plus.android.runtimeMainActivity();
+						//main.moveTaskToBack(false);
+					} else {
+						plus.nativeUI.toast('再按一次退出程序');
+					}
+					setTimeout(function() {
+						backButtonPress = 0;
+					}, 1000);
+					return false;
+				};
+			}(mui));
+		</script>
+	</body>
+
+</html>

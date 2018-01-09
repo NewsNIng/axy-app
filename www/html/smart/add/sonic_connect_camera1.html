@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>连接摄像机</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		<link rel="stylesheet" href="../../../css/app/app-pop-tip.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+				width: 100%;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			
+			
+			.dev_text {
+
+				width: 100%;
+				padding: 0 25%;
+				text-align: left;
+				/*font-weight: bold;*/
+			}
+			
+			.help {
+				position: fixed;
+				bottom: 60px;
+				left: 50%;
+				padding: 0.01rem 0;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				border-bottom: 1px solid #2BB8AA;
+				color: #2BB8AA;
+			}
+			
+			
+			.imgbg{
+				width: 100%;
+				padding: 1.5rem;
+			}
+			
+			.imgbg > img{
+				width: 100%;
+			}
+			
+			.tip-card-body {
+				overflow-y: scroll;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+
+		<div id="popover_tip" class="mui-popover">
+			<div class="tip-card">
+				<div class="tip-card-header app-font-size-34 app-color-white">橙灯未闪烁，戳这里查看</div>
+				<div class="tip-card-body app-font-size-30">
+					1.请重新拔插摄像机电源，确保电源插和数据线都插好;<br /> 2.摄像机上电后，启动过程需要大约1-2分钟，请耐心等候! 若上电2分钟后，未见指示灯闪烁，请尝试直接继续下一步操作;<br /> 3.如果绿灯或者红灯亮或闪烁，说明该设备已经被绑定，请登陆该设备的绑定账号，并将该设备删除，再尝试连接摄像机;
+					<br /> 4.若不是添加新设备，而是配置wifi,请忽略此步，直接继续下一步操作。
+					<br /> 5.其他问题，请您联系当地服务运营商。1.请重新拔插摄像机电源，确保电源插和数据线都插好;<br /> 2.摄像机上电后，启动过程需要大约1-2分钟，请耐心等候! 若上电2分钟后，未见指示灯闪烁，请尝试直接继续下一步操作;<br /> 3.如果绿灯或者红灯亮或闪烁，说明该设备已经被绑定，请登陆该设备的绑定账号，并将该设备删除，再尝试连接摄像机;
+					<br /> 4.若不是添加新设备，而是配置wifi,请忽略此步，直接继续下一步操作。
+					<br /> 5.其他问题，请您联系当地服务运营商。
+				</div>
+				<div class="tip-card-footer">
+					<a href="#popover_tip" class="mui-icon mui-icon-close app-color-white"></a>
+				</div>
+			</div>
+		</div>
+		
+		
+
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">连接摄像机</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="imgbg">
+					<img src="../../../image/smart/devices/dev_icon/360_1.png"/>
+				</div>
+				
+				<div class="dev_text app-font-size-34 app-color-333333">检查摄像机是否橙灯闪烁<br />若是，则点击“下一步”。</div>
+
+			</div>
+			<a href="#popover_tip" class="help app-font-size-28">橙灯未闪烁，戳这里查看</a>
+			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						wifiname: "",
+						wifipwd: "",
+					};
+				},
+				mounted: function() {
+					// get prev url params
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					// get wifiname & wifipwd
+					this.wifiname = GetQueryString("wifiname");
+					this.wifipwd = GetQueryString("wifipwd");
+				},
+				plusReady: function() {},
+				methods: {
+					onNext: function() {
+						var url = "sonic_connect_camera2.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd;
+						this.$view.loadURL(url, 'voice2');
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>
