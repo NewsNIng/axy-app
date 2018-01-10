@@ -795,7 +795,9 @@
 					"html/smart/devices/dev_16711680.html",
 					"html/smart/devices/dev_80.html",
 					"html/smart/devices/dev_21.html",
-					"html/smart/devices/dev_22.html"
+					"html/smart/devices/dev_22.html",
+					"html/smart/devices/dev_160.html",
+					"html/smart/devices/dev_161.html"
 				],
 				"priority": 0
 			},

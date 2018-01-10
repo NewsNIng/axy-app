@@ -343,7 +343,9 @@
 					onChartTap: function(){
 						mui.openWindow('dev_chart.html', 'chart', {
 							extras: {
-								
+								info: this.devInfo,
+								methodName: "formaldehyde",
+								typeName: '甲醛浓度',
 							}
 						});
 					}

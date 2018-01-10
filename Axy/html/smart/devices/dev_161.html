@@ -167,6 +167,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js" ></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
@@ -259,7 +260,7 @@
 				plusReady: function() {
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
-					getCoState();
+					this.getCoState();
 				},
 				methods: {
 
@@ -336,7 +337,7 @@
 					},
 					// 获取一氧化碳状态
 					getCoState: function() {
-						dal.devaccessory.codectector(this.devInfo.accessory.id, this.devInfo.accessory.name, this.devInfo.accessory.devId, this.devInfo.devType, function(err, data) {
+						dal.devaccessory.codectector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devId, this.devInfo.devType, function(err, data) {
 							if(err){
 								return mui.toast(err.message);
 							}

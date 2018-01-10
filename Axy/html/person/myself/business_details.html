@@ -164,7 +164,6 @@
 					font-size: 36px !important;
 				}
 			}
-			
 			/*share*/
 			
 			#popover-share {
@@ -203,8 +202,7 @@
 				</a>
 
 			</header>
-			
-			
+
 			<div id="popover-share" class="mui-popover app-font-size-30">
 				<div class="share-title">
 					快把商家分享给朋友，获取更多赞~
@@ -270,9 +268,9 @@
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
-			<script type="text/javascript" src="../../../js/lib/Rx.min.js" ></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -307,7 +305,7 @@
 						this.getInfo();
 					},
 				},
-				mounted: function(){
+				mounted: function() {
 					mui('#popover-menu')[0].style.top = 56 + immersed + 'px';
 				},
 				plusReady: function() {
@@ -317,7 +315,7 @@
 					// 编辑
 					onEditTap: function() {
 						var that = this;
-						app.page.openForResultBy('../../nearby/business/signup.html','business_update', function(){
+						app.page.openForResultBy('../../nearby/business/signup.html', 'business_update', function() {
 							// 更新信息
 							that.getInfo();
 						}, {
@@ -332,24 +330,58 @@
 					// 分享至
 					onShareTo: function(type) {
 						var that = this;
-						var _img = that._getImg(that.data.image1, that.data.image2, that.data.image3);
+						var shareImg = that._getImg(that.info.image1, that.info.image2, that.info.image3);
+						var w;
+
 						Rx.Observable
-							// 压缩
+							// 获取授权
 							.create(function(ob) {
-								plus.nativeUI.showWaiting("正在处理图片...");
-								new ni.Zip().processImage(_img, 32, function(err, overImgs) {
-									plus.nativeUI.closeWaiting();
+								w = plus.nativeUI.showWaiting('获取授权...');
+								new that.$OAuth(type, function(err, info) {
 									if(err) {
-										return plus.nativeUI.toast(err.message);
+										return mui.toast(err.message);
 									}
-									ob.next(overImgs[0]);
-								});
+									ob.next();
+								}, that);
+							})
+
+							// 处理为本地图片
+							.mergeMap(function(ob) {
+								return Rx.Observable.create(function(ob) {
+									if(shareImg.indexOf('file:') >= 0) {
+										// 本地图片
+										return ob.next(shareImg);
+									}
+									// 下载
+									w.setTitle("处理图片...");
+
+									new ni.Download(shareImg, {
+										filename: 'share_temp_'+ +new Date, 
+										suffix: '.jpg',
+									}).onSuccess(function(src) {
+										ob.next(src);
+									}).start();
+								})
+
+							})
+							// 压缩
+							.mergeMap(function(_img) {
+								w.setTitle("压缩图片...");
+								return Rx.Observable.create(function(ob) {
+									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
+											return plus.nativeUI.toast(err.message);
+										}
+										ob.next(overImgs[0]);
+									});
+								})
 
 							})
 							// 分享
 							.mergeMap(function(img) {
 								return Rx.Observable.create(function(ob) {
-									plus.nativeUI.showWaiting("正在拉取分享...");
+									w.setTitle("拉取分享...");
 									setTimeout(plus.nativeUI.closeWaiting, 3e3);
 									new ni.Share(type, function(err, data) {
 										plus.nativeUI.closeWaiting();
@@ -363,8 +395,8 @@
 									}, {
 										img: img, //图片地址 暂不支持网络地址 
 										href: 'http://www.vihivision.com/', //分享的超链接
-										title: that.data.name, //当且仅当href存在时有效
-										content: that.data.introduction //当且仅当href存在时有效
+										title: that.info.title, //当且仅当href存在时有效
+										content: that.info.content //当且仅当href存在时有效
 									});
 								});
 							})

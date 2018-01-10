@@ -576,6 +576,22 @@
 			id: id
 		}, callback);
 	}
+	
+	
+	/**
+	 * 甲醛趋势图
+	 * @param {Object} devid 设备ID
+	 * @param {Object} areaid 防区ID
+	 * @param {Object} type 1天，2月,3年
+	 * @param {Object} callback
+	 */
+	devaccessory.formaldehydeChart = function(devid, areaid, type, callback){
+		return ra('get', "/alarm/formaldehyde/list", {
+			devid: devid,
+			areaid: areaid,
+			type: type
+		}, callback);
+	}
 
 	
 
