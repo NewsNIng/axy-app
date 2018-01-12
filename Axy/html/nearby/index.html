@@ -21,9 +21,7 @@
 					width: 6.12rem;
 				}
 			}*/
-		
 			/*搜索框图标*/
-			
 			/*.mui-icon-search:before {
 				line-height: 45px;
 			}
@@ -42,7 +40,6 @@
 			    font-size: 15px;
 			    color: #333;
 			}*/
-			
 			/*tab*/
 			
 			.tabroom {
@@ -81,16 +78,12 @@
 				/*bottom: 0.293333rem;*/
 				bottom: 0.3rem;
 			}
-			
-			
-			
-			
 			/*搜索框头部*/
-			
 			/*.mui-bar {
 				padding: 0 0 0 0.346666rem;
 			}
 			*/
+			
 			.app-input-room input::-webkit-input-placeholder {
 				font-size: 12px !important;
 				color: #9F9FA0 !important;
@@ -136,7 +129,8 @@
 				background-color: #FFFFFF !important;
 			}
 			/*end搜索框头部*/
-			header{
+			
+			header {
 				display: flex;
 				display: -webkit-flex;
 			}
@@ -149,9 +143,9 @@
 			<header class="mui-bar mui-bar-nav app-header">
 				<div>
 					<span class="app-color-white app-font-size-28 mui-pull-left" v-text="city" style="line-height: 45px;" @tap="onHeaderCityTap()"></span>
-					<a class="mui-icon mui-icon-arrowdown app-color-white" @tap="onHeaderCityTap()" style="font-size: 20px; padding-top: 12px;"></a>	
+					<a class="mui-icon mui-icon-arrowdown app-color-white" @tap="onHeaderCityTap()" style="font-size: 20px; padding-top: 12px;"></a>
 				</div>
-				
+
 				<div class="app-input-room" style="flex: 1;">
 					<span class="mui-icon">
 						<img src="../../image/search/search@3x.png"/>
@@ -172,8 +166,6 @@
 			    </h1>
 			    <a class="mui-pull-right app-icon-plus" @tap="onHeaderAddTap()"></a>
 			</header>-->
-			
-			 
 
 			<div class="mui-content">
 				<div class="tabroom">
@@ -184,7 +176,7 @@
 					</template>
 
 				</div>
-				
+
 			</div>
 		</div>
 
@@ -214,7 +206,7 @@
 				$.init();
 				$.ready(function() {
 					$('.app-input-room')[0].addEventListener('tap', function() {
-						mui.openWindow('../search/index.html', 'search',{
+						mui.openWindow('../search/index.html', 'search', {
 							show: {
 								aniShow: 'slide-in-bottom'
 							}
@@ -272,9 +264,9 @@
 					css.innerText = ".mui-pull-top-pocket{top: " + _styles.top + " !important;}"
 
 					document.body.appendChild(css);
-						
+
 					this._preload();
-					
+
 					this._listenMore();
 				},
 				methods: {
@@ -298,15 +290,23 @@
 					onHeaderCityTap: function() {
 						app.page.getPosition(function(data) {
 							this.city = data.city;
+							// 通知经纬度变化
+							new this.$Broadcast().emit("city_change", {
+								longitude: data.longitude,
+								latitude: data.latitude,
+								city: data.city
+							}, {
+								views: ['nearby_pages_list']
+							});
 						}.bind(this));
 					},
 					// 添加按钮点击
-					onHeaderAddTap: function(){
+					onHeaderAddTap: function() {
 						this._menuShow();
 						this.menuState = true;
 					},
 					// 预加载菜单
-					_preload: function(){
+					_preload: function() {
 						this.menu = mui.preload({
 							url: 'menu.html',
 							id: 'nearby_menu',
@@ -316,15 +316,15 @@
 						});
 						//this.$view.append(this.menu);
 					},
-					_menuShow: function(){
+					_menuShow: function() {
 						this.menu && this.menu.show('none');
 					},
-					_menuHide: function(){
+					_menuHide: function() {
 						this.menu && this.menu.hide('none');
 					},
-					
-					_listenMore: function(){
-						new ni.Broadcast().on('tabar', function(data){
+
+					_listenMore: function() {
+						new ni.Broadcast().on('tabar', function(data) {
 							this.onTabTap(this.tab.items[data.nindex], data.nindex);
 						}.bind(this));
 					}

@@ -9,17 +9,21 @@
 			"html/person/about.html",
 			"html/person/information.html",
 			"html/person/message/index.html",
-			"html/person/collection/my_camera.html"
+			"html/person/collection/my_camera.html",
+			"html/person/devshare/index.html",
+			"html/person/collection/my_attention.html"
 		]
 	},
 	"html/person/setting/index.html": {
 		"refer": [
-			"html/person/setting/push.html"
+			"html/person/setting/push.html",
+			"html/person/setting/safe.html"
 		]
 	},
 	"index.html": {
 		"refer": [
-			"html/main.html"
+			"html/main.html",
+			"html/common/guide.html"
 		],
 		"resources": [
 			"js/app/app-page.js"
@@ -63,7 +67,9 @@
 			"html/nearby/menu.html",
 			"html/nearby/pages/list.html",
 			"html/nearby/pages/discover.html",
-			"html/nearby/pages/theme.html"
+			"html/nearby/pages/theme.html",
+			"html/public/position.html",
+			"html/search/index.html"
 		]
 	},
 	"html/nearby/pages/list.html": {
@@ -84,7 +90,8 @@
 	},
 	"html/person/myself/business_details.html": {
 		"refer": [
-			"html/nearby/business/signup.html"
+			"html/nearby/business/signup.html",
+			"html/nearby/business/signup_next.html"
 		]
 	},
 	"html/nearby/business/signup.html": {
@@ -114,7 +121,8 @@
 			"html/person/myself/discover.html",
 			"html/public/input.html",
 			"html/person/relation/reset_pwd.html",
-			"html/person/relation/bind.html"
+			"html/person/relation/bind.html",
+			"html/person/myself/discover_details.html"
 		]
 	},
 	"html/person/myself/discover.html": {
@@ -141,7 +149,8 @@
 	},
 	"html/smart/index.html": {
 		"refer": [
-			"html/smart/devices/dev_my_list.html"
+			"html/smart/devices/dev_my_list.html",
+			"html/smart/scenes/index2.html"
 		]
 	},
 	"html/home/index.html": {
@@ -152,7 +161,8 @@
 	},
 	"html/search/index.html": {
 		"refer": [
-			"html/nearby/business/store_details.html"
+			"html/nearby/business/store_details.html",
+			"html/nearby/discover/discover_details.html"
 		]
 	},
 	"html/smart/devices/dev_22.html": {
@@ -163,6 +173,28 @@
 	"html/smart/add/add_device.html": {
 		"refer": [
 			"html/smart/add/family_menu.html"
+		]
+	},
+	"html/nearby/pages/theme.html": {
+		"refer": [
+			"html/public/browser.html"
+		]
+	},
+	"html/nearby/discover/discover_details.html": {
+		"refer": [
+			"html/person/other.html"
+		]
+	},
+	"html/person/message/index.html": {
+		"refer": [
+			"html/person/message/warning.html",
+			"html/person/message/system.html",
+			"html/person/message/activity.html"
+		]
+	},
+	"html/public/position.html": {
+		"refer": [
+			"html/public/city.html"
 		]
 	}
 }

@@ -8,6 +8,7 @@
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.zoom.css" />
 		<style type="text/css">
 			header {
 				padding-left: 0.346666rem !important;
@@ -28,11 +29,6 @@
 			
 			.mui-content {
 				background-color: white
-			}
-			
-			.mui-content>img {
-				width: 100%;
-				height: 7.466666rem;
 			}
 			
 			.shop_tittle {
@@ -88,6 +84,8 @@
 				width: 2.026666rem;
 				height: 2.026666rem;
 				margin-right: .4rem;
+				background-position: center;
+				background-size: cover;
 			}
 			
 			.business_description {
@@ -99,6 +97,22 @@
 				/*设置header渐变颜色 必须 rgba*/
 				background-color: rgba(255, 255, 255, 0) !important;
 			}
+			/*图片轮播*/
+			
+			.mui-slider-indicator .mui-indicator {
+				background: transparent;
+				margin: 0 1.5px;
+				border: .5px white solid;
+			}
+			
+			#slider .mui-slider-item {
+				width: 100%;
+				height: 7.466666rem !important;
+				padding-top: 50.6666%;
+				background-size: cover;
+				background-position: center;
+			}
+			/*end图片轮播*/
 		</style>
 	</head>
 
@@ -117,7 +131,19 @@
 		</header>
 
 		<div class="mui-content noImmersed">
-			<img :src="data.image1" />
+			<!--<img :src="data.image1" />-->
+
+			<div id="slider" class="mui-slider">
+				<div class="mui-slider-group mui-slider-loop">
+					<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast"></div>
+					<div class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o"></div>
+					<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist"></div>
+				</div>
+				<div class="mui-slider-indicator">
+					<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+				</div>
+			</div>
+
 			<div class="shop_tittle">
 				<img src="../../../image/nearby/business/phone_icon.png" />
 				<div class="shop_name app-font-size-26" v-text="data.name">
@@ -131,8 +157,10 @@
 				商家招牌
 			</div>
 			<div class="signs_icon">
-				<template v-for="o,i in 3">
-					<img :src="data['image' + (i+1)]" />
+				<template v-for="o,i in goodImglist">
+
+					<img class="img" :src="o" :data-preview-src="o.replace('\/100.0\/', '\/500.0\/')" data-preview-group="1" />
+
 				</template>
 			</div>
 			<div class="business_desc app-font-size-26">
@@ -156,8 +184,11 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 
-		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
-		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+		<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -181,8 +212,40 @@
 							"longitude": 113.947885,
 							"latitude": 22.587857,
 							"distance": null
-						}
+						},
+						goodslist: []
 					};
+
+				},
+				computed: {
+					imgList: function() {
+						var arr = [];
+						for(var i = 1; i <= 3; i++) {
+							if(this.data['image' + i]) {
+								arr.push(this.data['image' + i]);
+							}
+						}
+
+						return arr;
+					},
+					imgFrist: function() {
+						return this.imgList[0];
+					},
+					imgLast: function() {
+						return this.imgList[this.imgList.length - 1];
+					},
+
+					goodImglist: function() {
+						var i, temp;
+						return this.goodslist.reduce(function(arr, item) {
+							for(var i = 1; i <= 3; i++) {
+								if(temp = item['image' + i]) {
+									arr.push(temp);
+								}
+							}
+							return arr;
+						}, []);
+					}
 
 				},
 				watch: {
@@ -192,6 +255,13 @@
 				},
 				plusReady: function() {
 					this.id = this.$view.oid;
+
+					// 缓存机制加载图片
+					imagelazyload();
+					// 图片轮播
+					mui('#slider').slider({
+						interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
+					});
 				},
 				methods: {
 					getInfo: function() {
@@ -199,9 +269,19 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							console.log(JSON.stringify(data));
+							// 商家信息
 							this.data = data.store;
+							// 商品信息
+							this.goodslist = data.goodslist;
+							this.$nextTick(function() {
+								imagelazyload();
+								mui.previewImage();
+							});
 						}.bind(this));
+					},
+					onGoodTap: function(o, e) {
+						var el = e.target;
+
 					}
 				}
 			});

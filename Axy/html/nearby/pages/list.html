@@ -55,16 +55,12 @@
 				height: 2.4rem;
 			}
 			
-			.shop_image>img {
-				width: 2.4rem;
-				height: 2.4rem;
-				border: 0.5px solid #F5F5F5;
-			}
-			
 			.shop_image {
 				width: 2.4rem;
 				height: 2.4rem;
 				margin-right: 0.346666rem;
+				background-position: center;
+				background-size: cover;
 			}
 			
 			.shop_info {
@@ -101,7 +97,8 @@
 				vertical-align: middle;
 				margin-right: 0.15rem;
 			}
-			.time>span{
+			
+			.time>span {
 				vertical-align: middle;
 			}
 			
@@ -165,9 +162,9 @@
 				<div>
 					<template v-for="o in shops">
 						<div class="shop">
-							<div class="shop_imgtext box"  @tap="onLookTap(o)">
-								<div class="shop_image">
-									<img :src="o.image1" />
+							<div class="shop_imgtext box" @tap="onLookTap(o)">
+								<div class="shop_image" :style='"background-image: url("+ _getImg(o.image1,o.image2,o.image3) +");"'>
+
 								</div>
 								<div class="shop_info flex1">
 									<div class="distance app-font-size-28">{{_m2km(o.distance)}} km</div>
@@ -251,8 +248,24 @@
 					}.bind(this)).catch(function() {
 						this._down();
 					}.bind(this));
+					
+					// 监听父页手动选取地区
+					new this.$Broadcast().on('city_change', this.updateGeo.bind(this));
+					
+
 				},
 				methods: {
+					// 更新地理位置
+					updateGeo: function(o) {
+						this.longitude = o.longitude;
+						this.latitude = o.latitude;
+						this.city = o.city;
+						this.position = o.position || o.city;
+						// 重新获取店铺信息
+						this._down();
+					},
+
+					// 获取定位
 					getCurrentPosition: function() {
 						return new Promise(function(re, rj) {
 							plus.geolocation.getCurrentPosition(function(p) {
@@ -267,6 +280,7 @@
 						}.bind(this));
 
 					},
+					// 获取商铺列表
 					_getList: function(f) {
 						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
 							if(err) {
@@ -305,7 +319,7 @@
 								}
 							});
 					},
-
+ 
 					// 点击导航
 					onWithMapTap: function(o) {
 						//BD-09 to GCJ-02先将百度坐标转成中国坐标
@@ -351,7 +365,10 @@
 					},
 					_m2km: function(m) {
 						return(m / 1000).toFixed(1);
-					}
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
 				}
 
 			});

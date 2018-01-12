@@ -415,9 +415,7 @@
 
 					// 修复文件路径
 					fixPath: function(path) {
-						if(mui.os.ios) {
-							path = app.ios.getSafeBoxPath() + path;
-						}
+						
 						if(!/^file:/.test(path)) {
 							path = "file://" + path;
 						}

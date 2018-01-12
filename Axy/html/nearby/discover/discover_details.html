@@ -312,6 +312,24 @@
 				padding: 6%;
 			}
 			/*end share*/
+			
+			
+			/*图片轮播*/
+			
+			.mui-slider-indicator .mui-indicator {
+				background: transparent;
+				margin: 0 1.5px;
+				border: .5px white solid;
+			}
+			
+			#slider .mui-slider-item {
+				width: 100%;
+				height: 7.466666rem !important;
+				padding-top: 50.6666%;
+				background-size: cover;
+				background-position: center;
+			}
+			/*end图片轮播*/
 		</style>
 	</head>
 
@@ -365,9 +383,20 @@
 
 			<div class="mui-content noImmersed  mui-scroll-wrapper">
 				<div class="mui-scroll">
-					<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'">
-
+					
+					<div id="slider" class="mui-slider">
+						<div class="mui-slider-group mui-slider-loop">
+							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast"></div>
+							<div class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o"></div>
+							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist"></div>
+						</div>
+						<div class="mui-slider-indicator">
+							<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+						</div>
 					</div>
+					
+					
+					<!--<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'"></div>-->
 					<div class="user_tittle app-font-size-28">
 						<img @tap="onHeadTap(info.account)" class="avastr img-lazy-load" :data-src="info.headimgurl" data-type="avatar" />
 						<div style="display: inline;" v-text="info.nickname"></div>
@@ -461,7 +490,24 @@
 					},
 					focus: function() {
 						return this.isfocus !== 0;
-					}
+					},
+					
+					imgList: function() {
+						var arr = [];
+						for(var i = 1; i <= 3; i++) {
+							if(this.info['image' + i]) {
+								arr.push(this.info['image' + i]);
+							}
+						}
+
+						return arr;
+					},
+					imgFrist: function() {
+						return this.imgList[0];
+					},
+					imgLast: function() {
+						return this.imgList[this.imgList.length - 1];
+					},
 				},
 				mounted: function() {
 					this.$nextTick(function() {
@@ -503,7 +549,8 @@
 							// 获取授权
 							.create(function(ob) {
 								w = plus.nativeUI.showWaiting('获取授权...');
-								new that.$OAuth(type, function(err, info) {
+								var oauthType = type.indexOf('wx') >= 0 ? 'weixin': type;
+								new that.$OAuth(oauthType, function(err, info) { 
 									if(err) {
 										return mui.toast(err.message);
 									}
@@ -605,6 +652,10 @@
 					_loadImage: function() {
 						this.$nextTick(function() {
 							imagelazyload();
+							// 图片轮播
+							mui('#slider').slider({
+								interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
+							}); 
 						});
 					},
 					// 上拉加载更多
