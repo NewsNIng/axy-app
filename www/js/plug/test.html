@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<script src="PlugDevManager.js"></script>
+		<script type="text/javascript" src="../lib/vue-ni.js" ></script>
+		
+		<script>
+			function log(arg){
+				console.log(JSON.stringify(arg)); 
+			}
+			
+			
+			ni.plusReady(function(){
+				
+				
+				
+				var c = new ni.Cache("test", [], {
+					plus: true
+				});
+				
+				var dm = new DevManager(c);
+				
+				
+				return log(dm.get());
+				
+				var o1 = {
+					id: 1,
+					name: 'test22222222'
+				};
+				
+				log(dm.get());
+				
+				dm.updateById(o1, function(n, o){
+					return n.id === o.id;
+				});
+				
+				log(dm.get());
+				
+				dm.set([{
+					id: 5,
+					name: "test55555555555"
+				}]);
+				
+				log(dm.get());
+				
+				dm.updateById({
+					id: 3,
+					name: "test33333"
+				}, function(n, o){
+					return n.id === o.id;
+				});
+				
+				log(dm.get());
+				
+				dm.updateById({
+					id: 3,
+					name: "test33333",
+					age: 23
+				}, function(n, o){
+					return n.id === o.id;
+				});
+				
+				log(dm.get());
+			});
+			
+			
+			
+		</script>
+	</body>
+</html>

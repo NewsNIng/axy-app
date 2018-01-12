@@ -500,28 +500,63 @@
 					// 分享至
 					onShareTo: function(type) {
 						var that = this;
+						var shareImg = that._getImg(that.info.image1, that.info.image2, that.info.image3);
+						var w;			
+						
 						Rx.Observable
-							// 压缩
+							// 获取授权
 							.create(function(ob) {
-								plus.nativeUI.showWaiting("正在处理图片...");
-								new ni.Zip().processImage(that._getImg(that.info.image1, that.info.image2, that.info.image3), 32, function(err, overImgs) {
-									plus.nativeUI.closeWaiting();
+								w = plus.nativeUI.showWaiting('获取授权...');
+								new that.$OAuth(type, function(err, info) {
 									if(err) {
-										return plus.nativeUI.toast(err.message);
+										return mui.toast(err.message);
 									}
-									ob.next(overImgs[0]);
-								});
+									ob.next();
+								}, that);
+							})
+
+							// 处理为本地图片
+							.mergeMap(function(ob) {
+								return Rx.Observable.create(function(ob) {
+									if(shareImg.indexOf('file:') >= 0) {
+										// 本地图片
+										return ob.next(shareImg);
+									}
+									// 下载
+									w.setTitle("处理图片...");
+									
+									new ni.Download(shareImg, {
+										filename: 'share_temp_'+ +new Date, 
+										suffix: '.jpg', 
+									}).onSuccess(function(src){
+										ob.next(src);
+									}).start();
+								})
+
+							})
+							// 压缩
+							.mergeMap(function(_img) {
+								w.setTitle("压缩图片...");
+								return Rx.Observable.create(function(ob) {
+									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
+											return plus.nativeUI.toast(err.message);
+										}
+										ob.next(overImgs[0]);
+									});
+								})
 
 							})
 							// 分享
 							.mergeMap(function(img) {
 								return Rx.Observable.create(function(ob) {
-									plus.nativeUI.showWaiting("正在拉取分享...");
+									w.setTitle("拉取分享...");
 									setTimeout(plus.nativeUI.closeWaiting, 3e3);
 									new ni.Share(type, function(err, data) {
 										plus.nativeUI.closeWaiting();
 										if(err) {
-											if(err.code === -100 || err.code === -2){
+											if(err.code === -100 || err.code === -2) {
 												err.message = "用户取消分享";
 											}
 											return plus.nativeUI.toast(err.message);

@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>操作成功</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+			}
+			
+			
+			.mui-content{
+				text-align: center;
+				background-image: url(../../../image/nearby/business/gift.png);
+				background-size: 4.2rem;
+				background-position: center;
+				background-repeat: no-repeat;
+			}
+			
+			
+			button{
+				margin-top: 8.44rem;
+				width: 3.333333rem;
+				height: 1.04rem;
+				
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back mui-pull-left app-icon-back"></a>
+			<h1 class="mui-title">操作成功</h1>
+		</header>
+		<div class="mui-content">
+			<button type="button" class=" app-font-size-30 mui-btn app-btn-main">预览</button>
+			<button type="button" class=" app-font-size-30 mui-btn app-btn-main-ghost">继续添加商品</button>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		
+		<script type="text/javascript">
+			mui.init({
+				// 处理窗口关闭前的业务
+			    beforeback: function() {
+			    	fnArr[0](true);
+			    	return false;
+			    },
+			});
+			var v = null;
+			var fnArr = [
+				// 预览
+				function(isClose){
+					var _ = function(){
+						// 关闭next
+						v = plus.webview.getWebviewById('signup_next');
+						v && (v.close('none'), v = null);
+						// 关闭signup
+						v = plus.webview.getWebviewById('signup');
+						v && (v.close('none'), v = null);
+						plus.webview.currentWebview().close();
+					}
+					// 打开店铺详情
+					if(!isClose){
+						v = mui.preload({id: "store_details", url:"store_details.html", extras: {
+							oid: storeId
+						}});
+						v.addEventListener('show', function(){
+							_();
+						});
+						v.show("pop-in", 200);
+						
+					}else{
+						_();
+					}
+				},
+				// 添加商品
+				function(){
+					var methodName = 'reload';
+					// 重新刷新signup next
+					v = plus.webview.getWebviewById('signup_next');
+					if(!v){
+						v = plus.webview.create('signup_next.html', 'signup_next', {}, {
+							storeId:　storeId
+						});
+						methodName = 'show';
+					}
+					
+					v.addEventListener('loaded', function(){
+						// 关闭signup
+						v = plus.webview.getWebviewById('signup');
+						v && (v.close('none'), v = null);
+						// 关闭本页
+						plus.webview.currentWebview().close();
+					});
+					v[methodName]();
+					
+				}
+			
+			];
+			
+			 
+			mui.ready(function(){
+				mui(document.body).on('tap','button', function(){
+					fnArr[+!this.classList.contains('app-btn-main')].call(this);
+				});
+			});
+			
+			var storeId = -1;
+			
+			mui.plusReady(function(){
+				storeId = plus.webview.currentWebview().storeId;
+			});
+			
+			
+			
+			
+		</script>
+	</body>
+
+</html>

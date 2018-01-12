@@ -98,7 +98,7 @@
 			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">甲醛探测器</h1>
-				<span class="mui-icon mui-pull-right">
+				<span class="mui-icon mui-pull-right" @tap="onChartTap()">
 					<img src="../../../image/smart/devices/gas/btn_Trendchart@3x.png" />
 				</span>
 			</header>
@@ -278,7 +278,7 @@
 				plusReady: function() {
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
-					getState();
+					this.getState();
 				},
 				methods: {
 					
@@ -331,12 +331,22 @@
 						});
 					},
 					// 获取甲醛探测器状态
-					getState: function() {
-						dal.devaccessory.formaldehydedetector(this.devInfo.accessory.id, this.devInfo.accessory.name, this.devInfo.accessory.devId, this.devInfo.devType, function(err, data) {
+					getState: function() { 
+						dal.devaccessory.formaldehydedetector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {							
 							if(err){
 								return mui.toast(err.message);
 							}
-							console.log(JSON.stringify(data));
+							console.log(JSON.stringify(data)); 
+						});
+					},
+					// 趋势图点击
+					onChartTap: function(){
+						mui.openWindow('dev_chart.html', 'chart', {
+							extras: {
+								info: this.devInfo,
+								methodName: "formaldehyde",
+								typeName: '甲醛浓度',
+							}
 						});
 					}
 				}

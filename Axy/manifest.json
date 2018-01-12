@@ -7,8 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.7.6",/*应用版本名称*/
-		"code": "20180104"
+		"name": "1.7.8",/*应用版本名称*/
+		"code": "20180105"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -272,7 +272,8 @@
 				"resources": [
 					"js/mui.min.js",
 					"css/mui.min.css",
-					"html/home/index.html"
+					"html/home/index.html",
+					"js/app/app-page.js"
 				],
 				"refer": [
 					"html/common/guide.html",
@@ -310,7 +311,9 @@
 					"js/common/rsmanager.js",
 					"js/app/app-page.js",
 					"js/lib/Rx.min.js",
-					"js/app/app.js"
+					"js/app/app.js",
+					"js/common/android-back.js",
+					"js/common/flexible.js"
 				],
 				"refer": [
 					"html/zeus.html",
@@ -793,7 +796,10 @@
 					"html/person/collection/my_camera.html",
 					"html/smart/devices/dev_16711680.html",
 					"html/smart/devices/dev_80.html",
-					"html/smart/devices/dev_21.html"
+					"html/smart/devices/dev_21.html",
+					"html/smart/devices/dev_22.html",
+					"html/smart/devices/dev_160.html",
+					"html/smart/devices/dev_161.html"
 				],
 				"priority": 0
 			},
@@ -999,6 +1005,42 @@
 					"/storage/emulated/0/Tencent/QQfile_recv/1M6KU%0[TC%60H5FMIE%7DW1IZP.png"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"html/person/myself/business.html": {
+				"resources": [],
+				"refer": [
+					"html/person/myself/business_details.html",
+					"html/nearby/business/signup.html"
+				],
+				"priority": 0
+			},
+			"html/person/myself/business_details.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/signup.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/business/upload_store_pic.html": {
+				"resources": [
+					"/storage/emulated/0/Tencent/QQfile_recv/1M6KU%0[TC%60H5FMIE%7DW1IZP.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/smart/devices/dev_80.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_22.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_chart.html"
+				],
 				"priority": 0
 			}
 		},

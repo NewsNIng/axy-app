@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能场景</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.mui-content {
+				overflow: hidden;
+				padding-left: 0.173333rem;
+				margin-bottom: 1.626666rem;
+			}
+			
+			.mui-content>div {
+				float: left;
+				width: 4.48rem;
+				height: 5.386666rem;
+				background-color: #FFFFFF;
+				border-radius: 5px;
+				margin: 0.453333rem 0.173333rem 0 0.173333rem;
+				transition-property: background-color;
+				transition-delay: 25ms;
+				transition-duration: 100ms;
+				box-shadow: 0px 0px 5px #EFEFEF;
+				text-align: center;
+				line-height: 1;
+				color: #333333;
+				position: relative;
+				/*font-weight: bold;*/
+			}
+			
+			.mui-content>div:active {
+				background-color: #EFEFEF;
+			}
+			
+			.mui-content>div>img {
+				width: 1.866666rem;
+				height: 1.866666rem;
+				margin: 1.12rem 1.306666rem 0.8rem 1.306666rem;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.header_right {
+				line-height: 45px;
+				color: white;
+			}
+			
+			.del_icon {
+				position: absolute;
+				right: 0;
+				transform: translate(50%, -50%);
+				-webkit-transform: translate(50%, -50%);
+			}
+			
+			.del_icon>img {
+				width: 0.6rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">智能场景</h1>
+				<span class="header_right mui-pull-right app-font-size-28" @tap="isEdit=!isEdit" v-text="isEdit?'完成':'编辑'"></span>
+			</header>
+			<div class="mui-content">
+				<template v-for="o,i in scenes">
+
+					<div class="app-font-size-30" @tap="onClickTap(o, i)">
+						<span v-if="isEdit" class="del_icon" @tap.stop="onDelTap(i)"><img src="../../../image/smart/scenes/delete_icon.png"/></span>
+						<img :src="o.state?o.img_on:o.img_off" />{{o.title}}</div>
+				</template>
+			</div>
+			<div class="foot app-font-size-34" @tap="onNewTap()">添加新场景</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						isEdit: false, // 是否正在编辑
+
+						scenes: [{
+							title: "回家模式",
+							state: false,
+							img_on: "../../../image/smart/scenes/btn_get home1@3x.png",
+							img_off: "../../../image/smart/scenes/btn_get home@3x.png",
+						}, {
+							title: "离家模式",
+							state: false,
+							img_on: "../../../image/smart/scenes/btn_Be away from home1@3x.png",
+							img_off: "../../../image/smart/scenes/btn_Be away from home@3x.png",
+						}, {
+							title: "回店模式",
+							state: false,
+							img_on: "../../../image/smart/scenes/icon_Back to the shop1@3x.png",
+							img_off: "../../../image/smart/scenes/icon_Back to the shop@3x.png",
+						}, {
+							title: "离店模式",
+							state: false,
+							img_on: "../../../image/smart/scenes/btn_Departure1@3x.png",
+							img_off: "../../../image/smart/scenes/btn_Departure@3x.png",
+						}]
+					};
+				},
+				plusReady: function() {},
+				methods: {
+					onNewTap: function() {
+						// 设定场景名称
+						app.page.getInput(function(data) {
+							data = data.content.trim();
+							if(!data || data.length === 0 || data.length > 12) {
+								return mui.toast('场景名称不能为空或者大于12个字符');
+							}
+							mui.openWindow('edit_scenes.html', 'edit_scenes',{
+								extras: {
+									name: data
+								}
+							});
+						}, {
+							title: "场景名称",
+							tips: "请输入名称..."
+						});
+					},
+
+					onClickTap: function(o, i) {
+						if(this.isEdit) {
+							mui.openWindow('edit_scenes.html', 'edit_scenes');
+						} else {
+							o.state = !o.state;
+							mui.toast(o.title + "已" + (o.state ? "开启" : "关闭"));
+						}
+					},
+					onDelTap: function(i) {
+						this.scenes.splice(i, 1);
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

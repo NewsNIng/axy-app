@@ -71,9 +71,16 @@
 			.imgbg>img {
 				width: 100%;
 			}
+
 			
-			.tip-card-body {
-				overflow-y: scroll !important;
+			.mui-popover .mui-scroll-wrapper{
+				position: relative;
+				margin: 0;
+				border: 0;
+				background-clip: initial;
+			}
+			.mui-scroll-wrapper .mui-scroll{
+				position: relative;
 			}
 		</style>
 	</head>
@@ -135,6 +142,8 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
+			
+			mui('.mui-scroll-wrapper').scroll()
 
 			new Vue({
 				el: '#warpper',

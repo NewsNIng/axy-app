@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>权限认证</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<link rel="stylesheet" href="../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			input {
+				padding-left: 0.613333rem;
+				height: 1.173333rem !important;
+				line-height: 1.173333rem;
+				margin: 0 !important;
+			}
+			
+			input::-webkit-input-placeholder {
+				font-size: 14px !important;
+				color: #9F9FA0 !important;
+			}
+			
+			[data-dpr="2"] input::-webkit-input-placeholder {
+				font-size: 28px !important;
+			}
+			
+			[data-dpr="3"] input::-webkit-input-placeholder {
+				font-size: 52px !important;
+			}
+			
+			.code:active {
+				background-color: #F9F9F9 !important;
+				color: #000000 !important;
+			}
+			
+			.code {
+				height: 1.173333rem;
+				border-radius: 0 !important;
+				border: none !important;
+				border-left: 1px #E5E6E7 solid !important;
+			}
+			
+			.app-btn-main {
+				width: 8.373333rem;
+				margin-left: 0.8rem;
+				height: 1.173333rem;
+				margin-top: 0.906666rem;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">权限认证</h1>
+		</header>
+
+		<div class="mui-content menu-box app-font-size-28">
+			<div style="padding: 0.933333rem 0.346666rem;background-color: #FFFFFF;margin-top: 0.266666rem;">
+				点击 “
+				<span style="color: #F42362;">获取验证码</span> ” ， 系统将自动推送短信验证码至
+				<span class="" v-text="telphone"></span> 手机号上，待验证通过后此手机将拥有该帐号登录权限。
+			</div>
+
+			<div style="padding: 0 0.8rem 0.05rem 0.8rem; background-color: #FFFFFF; border-bottom: 1px #E5E6E7 solid;">
+				<input v-model="code" type="number" placeholder="请在此输入验证码" style="width: 6rem; border: none;" />
+				<button class="code" style="width: 2.2rem; border-color: #E5E6E7 !important;" type="button" class="mui-btn app-btn-main-ghost" :class="{'mui-disabled': codeTime}" @tap="onCodeTap()" v-text="codeText"></button>
+			</div>
+
+			<button @tap="onSubmit()" type="button" class="mui-btn app-btn-main app-font-size-34">完成</button>
+
+		</div>
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../js/dal/protect.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			mui.back = function() {
+				app.page.setResult({
+					result: false
+				}).close();
+			}
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+
+						account: "",
+						tel: "",
+
+						code: "",
+						validcode: "",
+						
+						
+
+						codeT: 90,
+						codeTime: null,
+
+					};
+				},
+
+				plusReady: function() {
+					this.tel = this.$view.tel;
+					this.account = this.$view.account;
+
+					this.$view.setStyle({
+						softinputMode: 'adjustResize'
+					});
+				},
+
+				computed: {
+					codeText: function() {
+						if(this.codeTime !== null) {
+							return this.codeT + "s";
+						}
+						return "发送验证码"
+					},
+					telphone: function() {
+						if(/^1\d{10}$/.test(this.tel)) {
+							var temp = this.tel.split("");
+							temp.splice(3, 4, "*", "*", "*", "*")
+							temp = temp.join("");
+							return temp;
+						} else {
+							return null;
+						}
+					}
+				},
+
+				methods: {
+
+					// 提交申请
+					onSubmit: function() {
+						if(!this.code){
+							return mui.toast("请输入验证码");
+						}
+						if(this.validcode !== this.code) {
+							return mui.toast("输入验证码错误");
+						}
+						plus.nativeUI.showWaiting();
+						// 授权回调
+						dal.protect.validation(this.account, plus.device.uuid, plus.device.model, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								mui.toast(err.message);
+							} else {
+								mui.toast("认证成功！");
+							}
+							app.page.setResult({
+								result: !err
+							}).close();
+						}.bind(this));
+					},
+					// 获取验证码
+					getCode: function() {
+						dal.user.getCode(this.tel, function(err, rs) {
+							if(err) {
+								this.codeT = 90;
+								window.clearTimeout(this.codeTime);
+								this.codeTime = null;
+								return mui.toast(err.message);
+							}
+							this.validcode = rs.validcode;
+						}.bind(this));
+					},
+					// 按钮点击
+					onCodeTap: function() {
+						(function _() {
+							this.codeT--;
+							if(this.codeT <= 0) {
+								this.codeT = 90;
+								window.clearTimeout(this.codeTime);
+								this.codeTime = null;
+								return;
+							}
+							this.codeTime = setTimeout(_.bind(this), 1000);
+						}.bind(this)())
+						this.getCode();
+					},
+				}
+			})
+		</script>
+	</body>
+
+</html>

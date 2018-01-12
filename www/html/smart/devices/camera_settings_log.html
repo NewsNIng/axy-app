@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>摄像机日志</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: white;
+				height: 100%;
+			}
+			
+			#warpper {
+				height: 100%;
+			}
+			
+			.mui-content {
+				/*padding-bottom: 0;*/
+			}
+			
+			.top {
+				height: 1.2rem;
+				border-bottom: 1px solid #CDCDCD;
+				padding: 0 0.346666rem;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-around;
+				line-height: 1.2rem;
+				color: #666666;
+			}
+			
+			.top>div:active {
+				color: #06C1AE;
+			}
+			
+			.top>div>img {
+				height: 0.4rem;
+				width: 0.4rem;
+				vertical-align: middle;
+			}
+			
+			.log_all {
+				padding: 0.346666rem 0.346666rem 0 0.346666rem;
+			}
+			
+			.log {
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-between;
+				padding-top: 0.213333rem;
+				padding-bottom: 0.426666rem;
+				color: #323232;
+				height: 1.813333rem;
+			}
+			
+			.from {
+				color: #8C8C8C;
+			}
+			
+			.date {
+				color: #9F9FA0;
+			}
+			
+			.box {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				/*background-color: blueviolet;*/
+			}
+			
+			.box_1 {
+				margin-top: 0.56rem;
+				flex: 1;
+				/*background-color: red;*/
+				position: relative;
+			}
+			
+			.box_1:after {
+				position: absolute;
+				right: 0.1rem;
+				bottom: 0;
+				top: 0;
+				width: 1px;
+				height: 100%;
+				content: '';
+				background-color: #d9d9d9;
+			}
+			
+			.box_2 {
+				flex: 4;
+				/*background-color: yellow;*/
+			}
+			
+			.point {
+				float: right;
+				width: 0.24rem;
+			}
+			
+			.icon {
+				float: right;
+				width: 42px;
+				position: absolute;
+				top: -9px;
+				left: 55%;
+				transform: translateX()(-50%);
+				-webkit-transform: translateX(-50%);
+			}
+			
+			.img {
+				height: 1.815rem;
+				/*background-color: gray;*/
+				position: relative;
+			}
+			
+			.wrapper {
+				overflow: hidden;
+				height: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">摄像机日志</h1>
+			</header>
+
+			<div class="mui-content app-font-size-32">
+				<div class="top app-font-size-28" ref=tabroom>
+					<div @tap="test()">操作<img src="../../../image/smart/devices/others/down.png" /></div>
+					<div>终端<img src="../../../image/smart/devices/others/down.png" /></div>
+					<div>账号<img src="../../../image/smart/devices/others/down.png" /></div>
+					<div>日期<img src="../../../image/smart/devices/others/down.png" /></div>
+				</div>
+
+				<div class="scroll wrapper" ref="wrapper">
+					<div>
+						<div class="box">
+							<div class="box_1">
+								<template v-for="o,i in logs">
+									<div class="img">
+										<img class="point" src="../../../image/smart/devices/electric/point.png" />
+										<img class="icon" :src="o.eventid == '2'?'../../../image/smart/devices/btn_Deploytroopsfordefence@3x.png':o.eventid == '3'?'../../../image/smart/devices/btn_Disarm@3x.png':'../../../image/smart/devices/restart.png'" />
+									</div>
+								</template>
+							</div>
+							<div class="box_2">
+								<div class="log_all">
+									<template v-for="o,i in logs">
+										<div class="log">
+											<div class="account">{{o.handlers}}<br /><span class="from app-font-size-28">来自：{{hdtypes[o.hdtypeid - 1]}}</span></div>
+											<div class="state app-font-size-32">{{o.eventid == '2'?'布防成功':o.eventid == '3'?'撤防成功':'重启成功'}}</div>
+											<div class="date app-font-size-28">{{o.attime.split(" ")[0]}}<br />{{o.attime.split(" ")[1]}}</div>
+										</div>
+									</template>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
+		<!--<script type="text/javascript" src="../../../js/dal/devaccessory.js" ></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script src="../../../js/lib/better-scroll.min.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						n: 0,
+						isPwdProtection: true, // 是否开启密码保护
+						devInfo: {},
+						hdtypes:["网页","遥控器","APP","PC播放器","联防"],
+						logs: [],
+					};
+				},
+				mounted: function() {
+					var wrapper = this.$refs.wrapper;
+					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
+						this.$refs.tabroom.offsetHeight -
+						immersed -
+						44;
+
+					wrapper.style.height = wrapperHight + 'px';
+
+					this.$nextTick(function() {
+						if(!this.scroll) {
+							this.scroll = new BScroll(wrapper, {
+								pullUpLoad: {
+									threshold: -70, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+								}
+							});
+							this.scroll.on('pullingUp', function() {
+								// 获取更多 TODO
+								this.searchResult();
+							}.bind(this));
+
+						} else {
+							this.scroll.refresh();
+						}
+
+					}.bind(this));
+				},
+				plusReady: function() {
+					this.devInfo = this.$view.info;
+					console.log(JSON.stringify(this.devInfo));
+					this.searchResult();
+				},
+				methods: {
+					// 切换开关
+					toggleSwitch: function() {
+						this.state = !this.state;
+					},
+					// 加载
+					searchResult: function() {
+						this.n++;
+						this.$nextTick(function() {
+							this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
+						}.bind(this));
+//						alert(JSON.stringify(this.devInfo));
+						dal.device.logs.list(this.n,this.devInfo.devid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							console.log(JSON.stringify(data));
+							
+							if(!data.result || !data.result) {
+//								alert(JSON.stringify(data)+"\t"+data+data.length);
+								mui.toast('没有更多啦~~');
+							} else {
+								this.logs.push.apply(this.logs, data.result);
+							}
+						}.bind(this));
+					},
+					// 接口测试
+					test: function() {
+						mui.openWindow('test.html','test');
+						// 获取用户所有配件
+//						dal.devaccessory.allacc(function(data){
+//							alert(JSON.stringify(data));
+//						});
+						// 设置智能灯控
+//						dal.devaccessory.getStatus("14255286","20","VH-104GN-2017061500015","20",function(data){
+//							alert(JSON.stringify(data));
+//						});
+
+//						alert("==接口测试==");
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,307 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>地图</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content,
+			{
+				background-color: #F4F8FB;
+			}
+			
+			#map {
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				left: 0;
+				top: 0;
+				z-index: 99;
+				background-color: #F4F8FB;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left app-color-white"></a>
+			<h1 class="mui-title">地图</h1>
+		</header>
+		<div class="mui-content app-font-size-22">
+			<div id="map">
+			</div>
+		</div>
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+		<script src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						address: "",
+						where: "",
+						point: {},
+						longitud: "",
+						latitude: ""
+					};
+				},
+				watch: {
+					where: function(value) {
+						this.view && this.view.drawText(value, {
+
+							height: "30%",
+							width: "80%",
+							left: "15%",
+							right: "5%",
+
+						}, {
+
+							overflow: "ellipsis",
+							align: "left",
+							size: "18px",
+						}, "where");
+					},
+					address: function(value) {
+						this.view && this.view.drawText(value, {
+							height: "30%",
+							width: "80%",
+							left: "15%",
+							right: "5%",
+							top: "25%"
+						}, {
+
+							overflow: "ellipsis",
+							decoration: 'underline',
+							align: "left",
+							size: "14px",
+							color: "#808080"
+						}, "address");
+					},
+					point: function(value) {
+						plus.maps.Map.reverseGeocode(value, {
+//							coordType: "gcj02"
+						}, function(p) {
+							console.log(JSON.stringify(p));
+							this.address = p.address;
+							this.longitude = p.coord.longitude;
+							this.latitude = p.coord.latitude;
+						}.bind(this), function(err) {
+							mui.toast(JSON.stringify(err));
+						});
+					},
+				},
+				computed: {
+
+				},
+				mounted: function() {
+					document.getElementById("map").style.top = 44 + immersed + "px";
+
+				},
+				plusReady: function() {
+
+					document.getElementById("map").style.height = plus.screen.resolutionHeight - 44 - immersed + "px";
+
+					var ex = {
+						position: 'absolute',
+						zoom: 19
+					};
+					if(this.$view.point) {
+						ex.center = this.$view.point
+					}
+
+					// 新建地图对象
+					this.map = new plus.maps.Map("map", ex);
+
+					this.map.showUserLocation(true);
+
+					var _getLocation = function(n, callback) {
+						if(this.$view.point) {
+							return callback(this.$view.point);
+						}
+						if(n <= 0) {
+							return callback(null);
+						}
+						this.map.getUserLocation(function(code, point) {
+							if(code !== 0) {
+								// 错误
+								return _getLocation(n - 1, callback);
+							}
+							return callback(point);
+						});
+					}.bind(this);
+
+					_getLocation(ex.center ? 0 : 3, function(point) {
+						this.initMap(point);
+						//						this.initSearch(point);
+						this.initMenu();
+						this.initMapEvent();
+					}.bind(this));
+
+				},
+				methods: {
+					initMapEvent: function() {
+						//						this.map.onclick = function(point){ 
+						//							this.point = point;
+						//							this.marker && this.marker.setPoint(point);
+						//						}.bind(this);
+						this.map.onstatuschanged = function(event) {
+							this.point = event.center;
+						}.bind(this);
+					},
+					initMenu: function() {
+						var view = new plus.nativeObj.View('test', {
+							width: "100%",
+							height: "20%",
+							bottom: "0px",
+							backgroundColor: "rgba(0,0,0,0)"
+						});
+
+						// 绘制背景
+						view.drawRect({
+							borderColor: "rgba(0,0,0,0.06)",
+							color: "rgba(255,255,255,0.9)",
+							radius: "3px",
+							borderWidth: "1px"
+						}, {
+							top: "0px",
+							height: "60%",
+							width: "94%",
+							left: "3%"
+						}, 'infobg');
+
+						// 绘制按钮
+						view.drawRect({
+							color: "#2BB8AA",
+							radius: "5px"
+						}, {
+							top: "66%",
+							bottom: "2%",
+							height: "30%",
+							width: "94%",
+							left: "3%"
+						}, 'btnbg');
+
+						// 绘制按钮文字
+						view.drawText("确定", {
+							top: "66%",
+							height: "30%",
+						}, {
+							size: "18px",
+							color: '#FFFFFF'
+						});
+
+						var view2 = new plus.nativeObj.View("qiqiuv", {
+							width: "10%",
+							height: "6%",
+							top: "47%",
+							left: "45%",
+							backgroundColor: "rgba(0,0,0,0)"
+
+						});
+						view2.drawBitmap('../../image/qiqiu.png', {
+
+						}, {
+
+						}, "qiqiu");
+
+						// 设置view点击事件拦截，指定到按钮
+						view.setTouchEventRect({
+							top: "66%",
+							bottom: "2%",
+							height: "30%",
+							width: "94%",
+							left: "3%"
+						});
+						// 添加点击事件
+						view.addEventListener('click', function() {
+							app.page.setResult({
+								address: this.address,
+								longitude: this.longitude,
+								latitude: this.latitude
+							}).close();
+						}.bind(this));
+
+						this.$view.append(view);
+						this.$view.append(view2);
+
+						view.show();
+						view2.show();
+
+						this.view = view;
+						this.view2 = view2;
+
+					},
+					initMap: function(point) {
+						if(point) {
+							this.point = point;
+							this.map.setCenter(point);
+						}
+						// 新建我的位置
+						//var marker = new plus.maps.Marker(point);
+
+						//marker.setIcon("qiqiu.png");
+						//						var bubble = new plus.maps.Bubble("我的位置");
+						//						marker.setBubble(bubble);
+						//this.map.addOverlay(marker);
+						//this.marker = marker;
+						// 新建中心图标位置
+						//						var circle = new plus.maps.Circle(point, 25);
+						//
+						//						circle.setFillColor('#2BB8AA');
+						//						circle.setFillOpacity(0.15);
+						//
+						//						circle.setLineWidth(1);
+						//						circle.setStrokeColor('#2BB8AA')
+						//						circle.setStrokeOpacity(0.25);
+						//
+						//						this.map.addOverlay(circle);
+
+					},
+					initSearch: function(point) {
+						var searchObj = new plus.maps.Search(this.map);
+						searchObj.onPoiSearchComplete = function(state, result) {
+							console.log("onPoiSearchComplete: " + state + " , " + result.currentNumber);
+							if(state == 0) {
+								if(result.currentNumber <= 0) {
+									alert("没有检索到结果");
+								}
+								for(var i = 0; i < result.currentNumber; i++) {
+									var p = result.getPosition(i);
+									//							var marker = new plus.maps.Marker( pos.point );
+									//							marker.setLabel( pos.name );
+									//							map.addOverlay( marker );
+									document.querySelector("#list ul").innerHTML += '<li class="mui-table-view-cell mui-media"><a href="javascript:;"><div class="mui-media-body">' + p.name + '<p class="mui-ellipsis">' + p.address + '</p></div></a></li>';
+								}
+							} else {
+								alert("检索失败");
+							}
+						};
+
+						searchObj.setPageCapacity(20);
+
+//						plus.geolocation.getCurrentPosition(function(p) {
+//							console.log(JSON.stringify(p));
+//							//searchObj.poiSearchNearBy(p.address.street, point, 25);
+//
+//						}, function() {
+//
+//						});
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

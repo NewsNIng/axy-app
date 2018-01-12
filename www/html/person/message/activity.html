@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>活动消息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.card-header {
+				padding: 0.613333rem 0;
+				text-align: center;
+			}
+			
+			.card-header>div {
+				background-color: #d9d9d9;
+				width: 2rem;
+				margin: 0 auto;
+				height: 0.533333rem;
+				line-height: 0.533333rem;
+				color: #FFFFFF;
+				border-radius: 5px;
+			}
+			
+			.card-body {
+				margin: 0 0.346666rem;
+				padding: 0.48rem 0.4rem 0 0.4rem;
+				background-color: #FFFFFF;
+				box-shadow: 0 0 1px #d9d9d9;
+				position: relative;
+			}
+			
+			.card-body:after {
+				content: "";
+				height: 1px;
+				right: 0.4rem;
+				display: block;
+				position: absolute;
+				left: 0.4rem;
+				background-color: #E5E6E7;
+				bottom: 1.2rem;
+				transform: scaleY(0.5);
+				-webkit-transform: scaleY(0.5);
+			}
+			
+			.card-body>.mui-ellipsis-2 {
+				margin-top: 0.666666rem;
+				margin-bottom: 0.533333rem;
+			}
+			
+			.card-body .tips {
+				height: 1.2rem;
+				line-height: 1.2rem;
+				position: relative;
+			}
+			
+			.card-body .tips:before {
+				font-family: Muiicons;
+				font-size: .5rem;
+				line-height: 1;
+				position: absolute;
+				top: 50%;
+				display: inline-block;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+				text-decoration: none;
+				color: #bbb;
+				-webkit-font-smoothing: antialiased;
+				right: 0;
+				content: '\e583';
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">活动消息</h1>
+			<span class="app-font-size-30 app-color-white mui-pull-right" style="line-height: 44px;">清空</span>
+		</header>
+		<div class="mui-content" style="padding-bottom: 1.333333rem;">
+
+			<div class="card" v-for="o,i in list" @tap="onCardTap(o)">
+				<div class="card-header">
+					<div class="app-font-size-20">今天 10:00</div>
+				</div>
+				<div class="card-body">
+					<div class="app-font-size-32" v-text="o.title"></div>
+					<div class="app-font-size-28 app-color-333333 mui-ellipsis-2" v-text="o.summary"></div>
+					<div class="tips app-font-size-28 app-color-9f9fa0">查看详情</div>
+				</div>
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/message.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						n: 1,
+						list: []
+					};
+				},
+
+				mounted: function() {
+					this.getMessageList();
+				},
+
+				methods: {
+					// 获取消息列表
+					getMessageList: function() {
+						var that = this;
+						dal.message.getActivityList(this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							that.list.push.apply(that.list, data);
+						});
+					},
+					// 卡片被点击时
+					onCardTap: function(o) {
+						console.log(JSON.stringify(o));
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

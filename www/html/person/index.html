@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>个人中心</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<link rel="stylesheet" href="../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB !important;
+			}
+			
+			.app-touch:active {
+				/*触摸半透膜*/
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*背景*/
+			
+			.bg-box {
+				height: 5.333333rem;
+				width: 100%;
+				background-image: url(../../image/person/bg@3x.png);
+				background-position: center;
+				background-size: cover;
+				text-align: center;
+			}
+			/*end背景*/
+			/*头像*/
+			
+			.bg-box-avastr {
+				width: 1.813333rem;
+				height: 1.813333rem;
+				border: 1px #FFFFFF solid;
+				border-radius: 50%;
+				margin-top: 1.066666rem;
+			}
+			/*end头像*/
+			/*姓名*/
+			
+			.bg-box-nickname {
+				margin: 0.2rem 0;
+			}
+			/*end姓名*/
+			/*快捷菜单*/
+			
+			.fast-box {
+				background-color: #FFFFFF;
+			}
+			/*end快捷菜单*/
+			/*快捷菜单 item*/
+			
+			.fast-box-card {
+				float: left;
+				width: 25%;
+				text-align: center;
+				background-color: #FFFFFF;
+				padding-bottom: 0.333333rem;
+			}
+			
+			.fast-box-card>img {
+				margin: 0.4rem 0.4rem 0.3rem 0.4rem;
+				width: 0.586666rem;
+				height: 0.613333rem;
+			}
+			
+			.fast-box:after {
+				/*去除浮动*/
+				clear: both;
+				content: "";
+				display: block;
+			}
+			/*end快捷菜单 item*/
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*-left图片文字*/
+			
+			.menu-box a.mui-navigate-right {}
+			
+			.menu-box a.mui-navigate-right>img {
+				width: 0.48rem;
+				margin: 0 0.2rem;
+				vertical-align: middle;
+			}
+			
+			.menu-box a.mui-navigate-right>span {
+				vertical-align: middle;
+			}
+			/*end菜单*/
+		</style>
+
+	</head>
+
+	<body>
+
+		<div class="mui-content noImmersed">
+
+			<div class="bg-box">
+				<img data-href="information.html" class="img-lazy-load img-lazy-forever bg-box-avastr" :data-src="user.headimgurl" data-type="avatar" />
+				<div class="app-font-size-34 app-color-white bg-box-nickname" v-text="user.nickname"></div>
+				<!--<div class="app-font-size-24 app-color-white">也许我会迟到，但我从不会缺席。</div>-->
+			</div>
+
+			<div class="fast-box">
+				<div class="fast-box-card app-touch" data-href="../smart/devices/dev_my_list.html" data-pid="dev_my_list">
+					<img src="../../image/person/btn_Myequipment@3x.png" />
+					<div class="app-font-size-28 app-color-333333">我的设备</div>
+				</div>
+				<div class="fast-box-card app-touch" data-href="devshare/index.html">
+					<img src="../../image/person/btn_Sharedequipment@3x.png" />
+					<div class="app-font-size-28 app-color-333333">共享设备</div>
+				</div>
+				<div class="fast-box-card app-touch">
+					<img src="../../image/person/btn_Collection@3x.png" />
+					<div class="app-font-size-28 app-color-333333">收藏</div>
+				</div>
+				<div class="fast-box-card app-touch" data-href="collection/my_camera.html">
+					<img src="../../image/person/btn_Myalbum@3x.png" />
+					<div class="app-font-size-28 app-color-333333">我的相册</div>
+				</div>
+			</div>
+
+			<div class="menu-box app-font-size-32">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" data-href="collection/my_attention.html">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Myattention@3x.png" />
+							<span class="app-color-333333">我的关注</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" data-href="wallet/index.html">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Mywallet@3x.png" />
+							<span class="app-color-333333">我的钱包</span>
+							<span class="mui-badge">100.00</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Mybusinesscity@3x.png" />
+							<span class="app-color-333333">我的商城</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" data-href="coupon/index.html">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Mycard@3x.png" />
+							<span class="app-color-333333">我的卡券</span>
+							<span class="mui-badge">5</span>
+						</a>
+					</li>
+
+				</ul>
+
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" data-href="myself/business.html">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_personalstores@3x.png" />
+							<span class="app-color-333333">我的店铺</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" data-href="message/index.html">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Messagecenter@3x.png" />
+							<span class="app-color-333333">消息中心</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" data-href="about.html">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_AboutAnXinyun@3x.png" />
+							<span class="app-color-333333">关于安心云</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" data-href="setting/index.html">
+						<a class="mui-navigate-right">
+							<img src="../../image/person/btn_Setup@3x.png" />
+							<span class="app-color-333333">设置</span>
+						</a>
+					</li>
+
+				</ul>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		
+			<script type="text/javascript" src="../../js/lib/md5.min.js" ></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js" ></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			var _B = new ni.Broadcast();
+
+			mui.ready(function() {
+				mui(".mui-content").on('tap', '*[data-href]', function() {
+					var url = this.dataset.href;
+					var id = this.dataset.pid || url;
+					// 所有跳转 需要验证登录
+					app.user.get(function(u) {
+						u && mui.openWindow(url, id);
+					});
+				});
+			});
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						user: {
+							"id": -1,
+							"account": "",
+							"gender": "",
+							"nickname": "",
+							"birthday": "",
+							"province": "",
+							"city": "",
+							"headimgurl": "",
+							"qqopenid": null,
+							"wxopenid": null,
+							"wbopenid": null
+						}
+					};
+				},
+				mounted: function() {
+					this.getUserInfo();
+					// 监听用户信息更新
+					_B.on("userinfo_update", function(data){
+						this.user = data.userInfo;
+						this.updateLazyImage();
+					}.bind(this));
+					
+					// 监听用户登录
+					_B.on("login_success", function(data){
+						this.getUserInfo();
+					}.bind(this));
+					
+				},
+				plusReady: function() {
+					this.$view.setStyle({
+						scrollIndicator: 'none'
+					});
+				},
+				methods: {
+					getUserInfo: function(){
+						// 获取用户信息
+						this.user = app.user.get();
+//						alert(JSON.stringify(this.user));
+						this.updateLazyImage();
+					},
+					
+					updateLazyImage: function(){
+						var that = this;
+						this.$nextTick(function(){
+							imagelazyload();
+						});
+					},
+				}
+			})
+		</script>
+	</body>
+
+</html>

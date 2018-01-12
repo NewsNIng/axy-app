@@ -271,7 +271,24 @@
 	 * @param {Object} callback
 	 */
 	devaccessory.formaldehydedetector = function(id, type, devid, devtype, callback) {
-		return ra("post", "/devaccessory/formaldehydedetector", {
+		return ra("get", "/devaccessory/formaldehydedetector", {
+			id: id,
+			type: type,
+			devid: devid,
+			devtype: devtype
+		}, callback);
+	}
+	
+	/**
+	 * 获取趋势图
+	 * @param {Object} id
+	 * @param {Object} type
+	 * @param {Object} devid
+	 * @param {Object} devtype
+	 * @param {Object} callback
+	 */
+	devaccessory.formaldehydedetector = function(id, type, devid, devtype, callback) {
+		return ra("get", "/devaccessory/formaldehydedetector", {
 			id: id,
 			type: type,
 			devid: devid,
@@ -557,6 +574,22 @@
 	devaccessory.initbyid = function(id, callback){
 		return ra("get", "/devaccessory/initbyid", {
 			id: id
+		}, callback);
+	}
+	
+	
+	/**
+	 * 甲醛趋势图
+	 * @param {Object} devid 设备ID
+	 * @param {Object} areaid 防区ID
+	 * @param {Object} type 1天，2月,3年
+	 * @param {Object} callback
+	 */
+	devaccessory.formaldehydeChart = function(devid, areaid, type, callback){
+		return ra('get', "/alarm/formaldehyde/list", {
+			devid: devid,
+			areaid: areaid,
+			type: type
 		}, callback);
 	}
 

@@ -1,0 +1,404 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>电管家</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.mui-content {
+				padding-bottom: 0;
+			}
+			
+			.cardRoom {
+				padding: 0.346666rem;
+				padding-bottom: 0;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-between;
+				flex-wrap: wrap;
+				text-align: center;
+			}
+			
+			.cardRoom>div {
+				display: inline-block;
+				min-width: 4.48rem;
+				margin-bottom: 0.346666rem;
+				height: 2.4rem;
+				box-shadow: 0 0 1px #f3f3f3;
+				/*border: #F3F3F3 solid 1px;*/
+				background-color: #FFFFFF;
+				border-radius: 3px;
+				padding: 0.373333rem 0 0.506666rem 0;
+			}
+			
+			.cardRoom>div>.app-font-size-52 {
+				line-height: 1rem;
+			}
+			
+			.menuRoom {
+				background-color: #FFFFFF;
+				padding: 1.266666rem 0.8rem;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-between;
+			}
+			
+			.menuRoom>div {
+				text-align: center;
+				width: 1.466666rem;
+				/*background-color: #CCCCCC;*/
+			}
+			
+			header img {
+				width: 0.426666rem;
+				margin-left: 0.333rem;
+			}
+			
+			#popover.mui-popover {
+				width: 100%;
+				border-radius: 0;
+				bottom: 0;
+				left: 0;
+				margin: 0;
+				position: fixed;
+				height: auto;
+			}
+			
+			.mui-popover .mui-table-view {
+				max-height: none;
+				margin-bottom: 0 !important;
+			}
+			
+			#popover.mui-popover .mui-table-view-cell {
+				display: flex;
+				display: -webkit-flex;
+			}
+			
+			#popover.mui-popover .mui-table-view-cell>* {
+				flex: 1;
+				/*float: left;
+				display: inline-block;
+				width: 25%;*/
+				text-align: center;
+			}
+			
+			#popover.mui-popover .mui-table-view-cell>*:nth-child(2) {
+				flex: 2;
+				/*width: 50%;*/
+			}
+			/*#popover.mui-popover .mui-table-view-cell:last-child{
+				position: relative;
+				height: 1.6rem;
+			}
+			#popover.mui-popover .mui-table-view-cell:last-child:before{
+				content: '';
+				width: 100%;
+				height: 0.266666rem;
+				background-color: rgba(0,0,0,0.05);
+				position: absolute;
+				left: 0;
+				top: 0;
+				
+			}*/
+			
+			#popover.mui-popover .mui-table-view-cell:after {
+				left: 0;
+				background-color: #c8c7cc;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="popover" class="mui-popover app-font-size-28 app-color-333333">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell app-color-9f9fa0">
+						<span>参数</span>
+						<span>预警值</span>
+						<span>报警值</span>
+					</li>
+				<template v-for="k,i in stateList">
+
+					<li class="mui-table-view-cell app-color-9f9fa0">
+						<span>{{k.name}}</span>
+						<span>{{w['state' + k.index] + k.company}}</span>
+						<span class="app-color-ff3b30">{{a['state' + k.index] + k.company}}</span>
+					</li>
+				</template>
+				<li class="mui-table-view-cell" style="text-align: center;">
+					<a href="#popover">取消</a>
+				</li>
+
+			</ul>
+		</div>
+
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">电管家</h1>
+				<span class="mui-icon mui-pull-right" @tap="onShareTap()">
+					<img src="../../../image/smart/devices/electric/btn_share@3x.png" />
+				</span>
+				<span class="mui-icon mui-pull-right" @tap="mui('#popover').popover('show');">
+					<img src="../../../image/smart/devices/electric/btn_threshold@3x.png" />
+				</span>
+			</header>
+
+			<div class="mui-content">
+				<div class="cardRoom">
+					<template v-for="k,i in stateList">
+						<div class="app-color-9f9fa0" :class="getStateClass(k.index)">
+							<div class="app-font-size-28">
+								{{k.name}}
+							</div>
+							<div class="app-font-size-52" >
+								{{o['state' + k.index] + k.company}}
+							</div>
+						</div>
+					</template>
+				</div>
+
+				<div class="menuRoom">
+					<template v-for="o,i in menuList">
+						<div class="app-font-size-24 app-color-9f9fa0" @tap="onMenuTap(o)">
+							<img :src="'../../../image/smart/devices/electric/'+ o.img +'@3x.png'" width="100%" />
+							<div>{{o.name}}</div>
+						</div>
+					</template>
+
+				</div>
+
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/extend/Date.js" ></script>
+
+		<img src="" />
+		<script type="text/javascript">
+			mui.init();
+
+			var _stateList = [{
+								name: "剩余电流",
+								index: 9,
+								company: 'mA'
+							},
+							{
+								name: "环境温度",
+								index: 5,
+								company: '℃',
+							},
+							{
+								name: "A相电流",
+								index: 6,
+								company: 'mA'
+							},
+							{
+								name: "A相温度",
+								index: 2,
+								company: '℃',
+							},
+							{
+								name: "B相电流",
+								index: 7,
+								company: 'mA'
+							},
+							{
+								name: "B相温度",
+								index: 3,
+								company: '℃',
+							},
+							{
+								name: "C相电流",
+								index: 8,
+								company: 'mA'
+							},
+							{
+								name: "C相温度",
+								index: 4,
+								company: '℃',
+							},
+
+						];
+
+			var pv = new Vue({
+				el: "#popover",
+				data: function() {
+					return {
+						stateList: _stateList,
+						a: {
+							"intime": null,
+							"state1": null,
+							"state2": 0,
+							"state3": 0,
+							"state4": 0,
+							"state5": 0,
+							"state6": 0,
+							"state7": 0,
+							"state8": 0,
+							"state9": 0
+						},
+						w: {
+							"intime": null,
+							"state1": null,
+							"state2": 0,
+							"state3": 0,
+							"state4": 0,
+							"state5": 0,
+							"state6": 0,
+							"state7": 0,
+							"state8": 0,
+							"state9": 0
+						}
+					}
+				}
+			});
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						stateList: _stateList,
+
+						menuList: [{
+								name: '实时视频',
+								img: 'btn_video'
+							},
+							{
+								name: '保存数据',
+								img: 'btn_Savedata'
+							},
+							{
+								name: '短信转发',
+								img: 'btn_Shortmessage'
+							},
+							{
+								name: '设置',
+								img: 'btn_Setup'
+							},
+						],
+						devInfo: {
+							devid: -1,
+							id: -1,
+						},
+						o: {
+							"state1": 0,
+							"id": 0,
+							"state2": 0,
+							"state3": 0,
+							"state4": 0,
+							"state5": 0,
+							"state6": 0,
+							"devid": 0,
+							"state7": 0,
+							"state8": 0,
+							"state9": 0,
+							"areaid": 0,
+							"intime": 0
+						}
+
+					};
+				},
+				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
+					this.getData();
+				},
+				methods: {
+					
+					// 获取状态数据
+					getData: function() {
+						dal.device.electric.state(this.devInfo.id, function(err, rs) {
+							if(err) {
+								return mui.toast("获取信息失败");
+							}
+							this.o = rs.state;
+							pv.w = rs.warn;
+							pv.a = rs.alarm;
+						}.bind(this));
+					},
+					
+					// 动态计算状态显示颜色
+					getStateClass: function(index){
+						var indexVal = this.o['state' + index];
+						var maxVal = pv.w['state' + index];
+						var noVal = pv.a['state' + index];
+						if(indexVal >= maxVal){
+							return "app-color-ff3b30";
+						}else if(indexVal >= noVal){
+							return "app-color-333333"; 
+						}
+						return "";
+					},
+					
+					// 分享按钮
+					onShareTap: function(){
+						mui.openWindow("../../person/devshare/share.html", 'dev_share', {
+							extras: {
+								devInfo: this.devInfo
+							}
+						});
+					},
+					
+					onMenuTap: function(o){
+						this[o.img + 'Tap']();
+					},
+					
+					// 保存数据
+					btn_SavedataTap: function(){
+						plus.nativeUI.showWaiting("正在保存...");
+						
+						if(!this.SaveDataCache && window.plus){
+							this.SaveDataCache = new ni.Cache("SaveDataCache_" + this.devInfo.id, [], {
+								plus: true
+							});
+						}
+						
+						this.SaveDataCache.push({
+							day: (new Date).toFormatString('yyyy-MM-dd hh:mm:ss'),
+							data: this.o
+						});
+						mui.toast("保存成功");
+						
+						plus.nativeUI.closeWaiting();
+					},
+					
+					// 设置
+					btn_SetupTap: function(){
+						mui.openWindow('dev_AX-903_setting.html', 'dev_AX-903_setting', {
+							extras: {
+								devInfo: this.devInfo	
+							}
+						});
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>趋势图</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.tabsRoom {
+				text-align: center;
+			}
+			
+			.tabsRoom>div {
+				display: inline-block;
+				width: 1.24rem;
+				height: 0.586666rem;
+				line-height: 0.586666rem;
+				text-align: center;
+				margin: 2.4rem 0.2rem 1rem 0.2rem;
+			}
+			
+			.tabsRoom>div.acitve {
+				background-color: #06C1AE;
+				color: #FFFFFF !important;
+				border-radius: 10px;
+			}
+			
+			#popover {
+				bottom: 0;
+				width: 100%;
+				min-height: 29%;
+				padding: 0.266666rem;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="popover" class="mui-popover app-font-size-28 app-color-333333">
+			
+			通风法去除甲醛
+			<br />
+			<br /> 通过室内空气的流通，可以降低室内空气中有害物质的含量，从而减少此类物质对人体的危害。冬天，人们常常紧闭门窗，导致室内外空气不流通，不仅使室内空气中的甲醛含量增加，同时氨气也会不断累积，甚至达到很高的浓度。
+			<br /><br /> 植物除味法
+			<br />
+			<br /> 中低度污染可选择植物去除。一般室内环境处于轻度或中度污染，污染值在国家标准3倍以下，采用植物净化能达到比较好的效果。根据房间的不同作用及面积大小选择并摆放植物。一般情况下，10平方米左右的房间，放置2盆1.5米高的植物较为合适。 （中低度室内污染治理方式：通风 + 活性炭 + 除甲醛植物）
+
+		</div>
+
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">趋势图</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="tabsRoom app-font-size-28 app-color-333333">
+					<template v-for="o,i in tabs">
+						<div @tap="onTabTap(o, i)" :class="tabsIndex === i ? 'acitve':''">{{o}}</div>
+					</template>
+
+				</div>
+
+				<canvas id="myChart" ref='myChart'></canvas>
+			</div>
+			<ul class="mui-table-view app-font-size-28">
+				<li class="mui-table-view-cell" @tap="mui('#popover').popover('show'); ">
+					<a class="mui-navigate-right">
+						<span>优化建议</span>
+						<span class="mui-badge"></span>
+					</a>
+				</li>
+			</ul>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js" ></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/chart.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						tabs: ['日', '周', '月'],
+						tabsIndex: 0,
+					};
+				},
+
+				computed: {},
+				mounted: function() {
+					var ctx = this.$refs.myChart.getContext('2d');
+					this.myChart = new Chart(ctx, {
+						type: 'line',
+						data: {
+							labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange", "Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+							datasets: [{
+								label: '甲醛',
+								data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 12, 19, 3, 5, 2],
+								backgroundColor: 'rgba(255, 99, 132, 0.2)',
+								borderColor: 'rgba(255,99,132,1)',
+								borderWidth: 1
+							}]
+						},
+
+						options: {
+
+							scales: {
+								yAxes: [{
+									ticks: {
+
+									},
+									pointLabels: {
+										fontColor: '#666',
+										callback: function(v) {
+											return v + '%';
+										}
+									}
+								}]
+							}
+						}
+					});
+				},
+
+				plusReady: function() {
+
+				},
+				methods: {
+					onTabTap: function(o, index) {
+						if(this.tabsIndex === index) {
+							return
+						}
+						this.tabsIndex = index;
+					},
+					// 删除设备
+					onDelDevice: function() {
+						console.log("deldevice");
+					},
+					
+					// 获取趋势数据
+					getData: function(){
+						
+					},
+					
+				},
+				watch: {
+					//					tabsIndex: function() {
+					//						console.log(this.tabsIndex);
+					//						this.myChart.update();
+					//					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

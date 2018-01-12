@@ -1,0 +1,391 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>注册</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<style type="text/css">
+			html,
+			body {
+				overflow: hidden;
+			}
+			
+			html,
+			body,
+			.mui-content {
+				background-color: white;
+			}
+			
+			.mui-content {
+				padding-bottom: 2rem;
+			}
+			
+			.mui-bar-nav,
+			.mui-bar {
+				background-color: #FFFFFF;
+				box-shadow: 0 0 0 white !important;
+			}
+			
+			.mui-pull-right {
+				line-height: 44px;
+			}
+			
+			.app-color-main {
+				color: #2bb8aa;
+			}
+			
+			.app-color-gray {
+				color: #666666;
+			}
+			
+			div.mui-input-row>img {
+				display: block;
+				width: 0.64rem;
+				height: 0.64rem;
+				position: absolute;
+				top: 0.46rem;
+				left: 0.106666rem;
+			}
+			
+			div.mui-input-row>input {
+				padding-left: 1.173333rem;
+				height: 100%;
+				border: none;
+				border-radius: 0;
+				border-bottom: 1px solid #CCCCCC;
+			}
+			
+			div.mui-input-row>input::-webkit-input-placeholder {
+				color: #CCCCCC;
+			}
+			
+			.mui-content>div.mui-input-row {
+				display: block;
+				width: 8.4rem;
+				height: 1.6rem;
+				margin: 0 auto;
+				position: relative;
+			}
+			
+			.mui-content>img {
+				display: block;
+				width: 2.186666rem;
+				height: 2.186666rem;
+				margin: 0.4rem auto 0.4rem auto;
+			}
+			/*登录按钮*/
+			
+			button.app-btn-main {
+				width: 8.4rem;
+				height: 1.173333rem;
+				margin: 0.8rem 0.826666rem 0.56rem 0.826666rem;
+			}
+			
+			.forget_pwd {
+				color: #999999;
+				text-align: right;
+				padding-right: 0.826666rem;
+			}
+			
+			.third_party_login {
+				/*background-color: #CCCCCC;*/
+				margin-top: 1.8rem;
+				height: 0.8rem;
+			}
+			
+			.third_party_login {
+				color: #999999;
+				position: relative;
+			}
+			/*第三方登录横线*/
+			
+			.third_party_login:before {
+				content: "";
+				width: 8.4rem;
+				position: absolute;
+				left: 0.826666rem;
+				top: 50%;
+				height: 1px;
+				background-color: #999999;
+				display: block;
+				transform: translateY(-50%) scaleY(0.5);
+				-webkit-transform: translateY(-50%) scaleY(0.5);
+			}
+			/*第三方登录文字*/
+			
+			.third_party_login>div {
+				display: inline-block;
+				text-align: center;
+				padding: 0 0.2rem;
+				position: absolute;
+				background-color: white;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				-webkit-transform: translate(-50%, -50%);
+			}
+			
+			.third_party_login>div.imgRoom {
+				width: 100%;
+				margin: 1.5rem 0.36rem;
+				padding: 0;
+			}
+			
+			.third_party_login>div.imgRoom>img {
+				float: left;
+				width: 0.906666rem;
+				height: 0.906666rem;
+				margin-left: 1.64rem;
+			}
+			/*注册按钮*/
+			
+			button.app-btn-main {}
+			/*发送验证码*/
+			
+			.mui-content .send_code {
+				color: #2BB8AA;
+				position: absolute;
+				top: 0.466666rem;
+				border-color: #2BB8AA;
+				right: 0;
+				width: 1.8rem;
+				padding: 0.133333rem 0.1rem 0.1rem 0.1rem;
+			}
+			/*同意协议*/
+			
+			.mui-content .agree_select {
+				width: 0.3rem;
+				height: 0.3rem;
+				float: left;
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+				/*margin: 0.133333rem;*/
+				border: 1px solid #d3d3d3;
+				border-radius: 4px;
+			}
+			
+			.mui-content .agree_text {
+				float: left;
+				position: relative;
+				top: 50.5%;
+				margin-left: 0.15rem;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+				color: #999999;
+			}
+			
+			/*选中样式*/
+			.red {
+				background-image: url(../../image/common/agree_selected.png);
+				background-position: center;
+				background-size: 100% 100%;
+			}
+			
+			/*未选中样式*/
+			.agree_select {
+				background-color: #c1c1c1;
+			}
+			
+			.user_agree {
+				display: inline-block;
+				/*padding: 0.4rem 0;*/
+				overflow: hidden;
+				position: relative;
+				height: 1.2rem;
+				left: 50%;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+			}
+			
+			.user_service {
+				color: #1abc9c;
+			}
+			
+			.mui-content>button.mui-btn {
+				margin-bottom: 0;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back mui-icon mui-icon-closeempty mui-pull-left app-color-gray">
+			</a>
+			<span class="mui-pull-right app-font-size-30 app-color-main" id="lgn">快速登录</span>
+		</header>
+		<div class="mui-content">
+
+			<img src="../../image/common/login_logo.png" />
+
+			<div class="mui-input-row app-font-size-30">
+				<img src="../../image/common/login_account.png" />
+				<input type="text" class="app-font-size-28" placeholder="请输入手机号码" v-model="username">
+			</div>
+
+			<div class="mui-input-row app-font-size-30">
+				<img src="../../image/common/login_msg.png" />
+				<input type="tel" class="app-font-size-28" placeholder="请输入短信验证码" v-model="verifycode">
+				<button type="button" @tap="getCodeTap()" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined" :class="{'mui-disabled': codeState}" v-text="codeState ? codeTimer: '发送验证码'"></button>
+			</div>
+			<div class="mui-input-row app-font-size-30">
+				<img src="../../image/common/login_pwd.png" />
+				<input type="password" class="app-font-size-28" placeholder="请设置登录密码" v-model="password">
+			</div>
+			<!--登录按钮-->
+			<button :disabled="!user_agree" type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在注册..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">立即注册</button>
+
+			<div class="user_agree">
+				<div class="agree_select" :class="{'red': user_agree}" @tap="user_agree = !user_agree"></div>
+				<div class="agree_text app-font-size-26" @tap.self="user_agree = !user_agree">已阅读并同意<span @tap.self="onProtocol()" class="user_service">《用户服务协议》</span></div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+
+		<script src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
+
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/user.js"></script>
+
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
+		<script type="text/javascript">
+			mui.init()
+
+			mui.ready(function() {
+				document.getElementById("lgn").addEventListener('tap', function() {
+					var loginView = plus.webview.getWebviewById('login');
+
+					if(loginView) {
+						plus.webview.currentWebview().close();
+					} else {
+						loginView = plus.webview.create('login.html', 'login');
+						loginView.show(type, 250, function() {
+							plus.webview.currentWebview().close();
+						});
+					}
+				});
+			});
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						username: '',
+						verifycode: '',
+						password: '',
+						loading: false,
+						user_agree: true, // 用户协议
+						codeState: false,
+						codeTimer: 60,
+						codeT: null, 
+						codeNumber: "", // 验证码
+					};
+				},
+
+				methods: {
+					getCodeTap: function(){
+						if(this.codeT){return}
+						
+						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误");
+						if(errorMessage){
+							return mui.toast(errorMessage);
+						}
+						// 发送获取验证码的请求
+						dal.user.getCode(this.username, function(err, data){
+							if(err){
+								return mui.toast(JSON.stringify(err));
+							}
+							this.codeNumber = data.validcode;
+						}.bind(this));
+						
+						(function t(c){
+							c.codeT = setTimeout(function(){
+								if(c.codeTimer <= 0){
+									c.codeT = null;
+									c.codeState = false;
+									c.codeTimer = 60;
+									return;
+								}
+								c.codeTimer--;
+								t(c);
+							}, 1000);
+						}(this)); 
+						this.codeState = true;
+					},
+					onLoginTap: function(e) {
+						// 如果正在注册，就直接返回
+						if(this.loading) {
+							return;
+						}
+
+						var that = this;
+						
+						
+						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确") ||
+								 		   app.rules.test("pwd", this.password, "密码长度需6-20位") || 
+								 		   app.rules.test("code", this.verifycode, "验证码格式错误");
+						
+						if(errorMessage){
+							return mui.toast(errorMessage);
+						}
+						
+						// 验证验证码
+						if(this.verifycode !== this.codeNumber){
+							return mui.toast('验证码错误');
+						}
+						
+						// 更新注册状态
+						this.loading = true;
+						
+						
+						dal.user.reg(this.username, this.password, this.verifycode, function(err, data) {
+							that.loading = false;
+							
+							if(err){
+								return mui.toast(err.code + ": " +err.message);
+							}
+							
+							
+							mui.toast("注册成功，请登录");
+							console.log(JSON.stringify(data));
+							
+							// 发出一个通知
+							//new that.$Broadcast().emit("login_success", {
+							//	say: 'Hello'
+							//});
+							
+							that.$view.close();
+							
+							
+							
+						});
+
+					},
+					onProtocol: function(){
+						mui.openWindow('user_protocol.html','user_protocol');
+					}
+				},
+				watch: {
+					loading: function(newVal, oldVal) {
+						mui('#loginBtn').button(newVal ? "loading" : "reset");
+					},
+					username: function(){
+						this.codeNumber = "";
+					}
+				}
+
+			});
+		</script>
+	</body>
+
+</html>

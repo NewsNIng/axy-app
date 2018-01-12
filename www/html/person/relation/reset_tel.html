@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>修改手机</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*-left图片文字*/
+			
+			.menu-box a>img {
+				width: 0.8rem;
+				/*margin: 0 0.2rem;*/
+				vertical-align: middle;
+			}
+			
+			.menu-box a>span {
+				vertical-align: middle;
+			}
+			/*end菜单*/
+			
+			ul:not(.mui-pciker-list) li {
+				padding: 11px 15px !important;
+			}
+			
+			input {
+				height: 1.333333rem;
+				margin: 0 !important;
+				border: none !important;
+			}
+			
+			.mui-btn.app-btn-main {
+				width: 9.28rem;
+				margin: 0.906666rem 0.36rem;
+				height: 1.173333rem;
+			}
+			.app-btn-main-ghost{
+				display: inline-block;
+				width: 2.133333rem;
+				text-align: center !important;	
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="box">
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">修改手机</h1>
+			</header>
+			<div class="mui-content menu-box app-font-size-32">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="">
+							<img src="../../../image/person/info/tel2@3x.png" />
+							<input type="tel" v-model="tel" placeholder="请输入新手机号码" />
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<img src="../../../image/person/info/safe@3x.png" />
+							<input v-model="code" type="number" placeholder="请输入原手机验证码" />
+							<button type="button" class="mui-btn app-btn-main-ghost app-font-size-24 " :class="{'mui-disabled': codeTime}" @tap="onCodeTap()" v-text="codeText"></button>
+						</a>
+					</li>
+					
+				</ul>
+				<div style="margin-left: 0.36rem;" class="app-font-size-26 app-color-9f9fa0">
+					手机号码修改成功后需要使用新的手机号码进行登录。
+				</div>
+				<button type="button" class="mui-btn app-btn-main" @tap="onSubmitTap()">确定</button>
+
+			</div>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/user.js" ></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: "#box",
+				data: function() {
+					return {
+						
+						tel: "",
+						
+						otel: "",
+						
+						code: "",
+						validcode: "",
+						
+						codeT: 90,
+						codeTime: null,
+					};
+				},
+
+				computed: {
+					codeText: function(){
+						if(this.codeTime!==null){
+							return this.codeT + "s";
+						}
+						return "发送验证码"
+					},
+					isTel: function(){
+						return /\d{11}/.test(this.tel);
+					}
+				},
+
+				plusReady: function() {
+					this.otel = this.$view.tel;
+				},
+				methods: {
+					getCode: function(){
+						dal.user.getCode(this.otel, function(err, rs){
+							if(err){
+								this.codeT = 90;
+								window.clearTimeout(this.codeTime);
+								this.codeTime = null;
+								return mui.toast(err.message);
+							}
+							this.validcode = rs.validcode;
+						}.bind(this));
+					},
+					onCodeTap: function(){
+						if(!this.isTel){
+							return mui.toast("请输入正确的手机号");
+						}
+						
+						(function _(){
+							this.codeT--;
+							if(this.codeT <= 0){
+								this.codeT = 90;
+								window.clearTimeout(this.codeTime);
+								this.codeTime = null;
+								return;
+							}
+							this.codeTime = setTimeout(_.bind(this), 1000);
+						}.bind(this)())
+						this.getCode();
+					},
+					
+					// 提交
+					onSubmitTap: function(){
+						
+						if(!this.isTel){
+							return mui.toast("请输入正确的手机号");
+						}
+						if(!this.code){
+							return mui.toast("请输入验证码");
+						}
+						if(this.validcode !== this.code){
+							return mui.toast("输入验证码错误");
+						}
+						// TODO 调用接口
+						plus.nativeUI.showWaiting();
+						dal.user.bindphone(this.tel, function(err, data){
+							plus.nativeUI.closeWaiting();
+							if(err){
+								return mui.toast(err.message);
+							}
+							mui.toast("绑定手机成功");
+							app.page.setResult({
+								tel: this.tel
+							}).close();
+						}.bind(this));
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>
