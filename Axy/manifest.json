@@ -16,8 +16,8 @@
 	},
 	"launch_path": "index.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
 	"developer": {
-		"name": "NewsNing",/*开发者名称*/
-		"email": "nxw1995@qq.com",/*开发者邮箱地址*/
+		"name": "",/*开发者名称*/
+		"email": "",/*开发者邮箱地址*/
 		"url": "http://www.vihivision.com/"
 	},
 	"permissions": {
@@ -832,7 +832,8 @@
 					"html/public/input.html",
 					"html/person/relation/bind.html",
 					"html/person/relation/reset_pwd.html",
-					"html/person/myself/discover.html"
+					"html/person/myself/discover.html",
+					"html/person/myself/discover_details.html"
 				],
 				"priority": 0
 			},
@@ -1018,7 +1019,8 @@
 			"html/person/myself/business_details.html": {
 				"resources": [],
 				"refer": [
-					"html/nearby/business/signup.html"
+					"html/nearby/business/signup.html",
+					"html/nearby/business/signup_next.html"
 				],
 				"priority": 0
 			},

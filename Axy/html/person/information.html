@@ -127,7 +127,7 @@
 							</a>
 						</li>
 						<div class="album">
-							<div v-for="o,i in articleList" class="img-lazy-load" :data-src="o.image1||o.image2||o.image3"></div>
+							<div v-for="o,i in articleList" @tap="onAlbumImgTap(o)" class="img-lazy-load" :data-src="o.image1||o.image2||o.image3"></div>
 							<div v-for="o,i in albumNullLen"></div>
 						</div>
 					</ul>
@@ -236,7 +236,7 @@
 				
 				computed: {
 					albumNullLen: function(){
-						var l = 4 - this.articleList.length;
+						var l = 4 - (this.articleList && this.articleList.length) || 0;
 						l = l < 0 ? 0 : l;
 						return l;
 					}
@@ -343,6 +343,18 @@
 							extras: {
 								uid: this.user.account
 							}
+						});
+					},
+					
+					// 个人专辑快捷点击
+					onAlbumImgTap: function(o){
+						var that = this;
+						app.page.openForResultBy('myself/discover_details.html', 'discover_details_edit', function(data){
+							if(data.del){
+								that.items.splice(index, 1);
+							}
+						},{
+							oid: o.id
 						});
 					},
 					

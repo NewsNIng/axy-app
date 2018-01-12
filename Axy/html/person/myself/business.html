@@ -56,16 +56,12 @@
 				height: 2.4rem;
 			}
 			
-			.shop_image>img {
-				width: 2.4rem;
-				height: 2.4rem;
-				border: 0.5px solid #F5F5F5;
-			}
-			
 			.shop_image {
 				width: 2.4rem;
 				height: 2.4rem;
 				margin-right: 0.346666rem;
+				background-position: center;
+				background-size: cover;
 			}
 			
 			.shop_info {
@@ -163,8 +159,8 @@
 					<template v-for="o in shops">
 						<div class="shop">
 							<div class="shop_imgtext box">
-								<div class="shop_image">
-									<img :src="o.image1" />
+								<div class="shop_image" :style='"background-image: url("+ _getImg(o.image1,o.image2,o.image3) +");"'>
+									
 								</div>
 								<div class="shop_info flex1" @tap="onLookTap(o)">
 									<!--<div class="distance app-font-size-28">{{_m2km(o.distance)}} km</div>-->
@@ -292,7 +288,9 @@
 					_m2km: function(m) {
 						return(m / 1000).toFixed(1);
 					},
-
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
 				}
 
 			});

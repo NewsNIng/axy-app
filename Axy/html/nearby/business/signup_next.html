@@ -94,7 +94,6 @@
 			
 			.room{
 				padding: 0.346666rem;
-				
 				background-color: #FFFFFF;
 				position: relative;
 				margin-bottom: 0.266666rem;
@@ -299,7 +298,7 @@
 							.then(function() {
 								w.close();
 								mui.toast("发布成功");
-								mui.back();
+								app.page.setResult({}).close();
 
 							})
 							.catch(function(err) {

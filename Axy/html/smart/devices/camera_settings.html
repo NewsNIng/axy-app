@@ -206,7 +206,7 @@
 					<li class="mui-table-view-cell" @tap="onDevNameTap()">
 						<a class="mui-navigate-right">
 							<span>摄像机名称</span>
-							<span class="mui-badge" v-text="devInfo.location"></span>
+							<span class="mui-badge" v-text="fixName(devInfo.location)"></span>
 						</a>
 					</li>
 					<!--<li class="mui-table-view-cell">
@@ -302,6 +302,7 @@
 		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="js/app/app-dev.js" ></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -580,6 +581,9 @@
 								info: this.devInfo
 							}
 						});
+					},
+					fixName: function(str) {
+						return app.dev.fixName(str);
 					}
 
 				}

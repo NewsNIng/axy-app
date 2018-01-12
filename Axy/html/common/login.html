@@ -249,6 +249,8 @@
 				plusReady: function() {
 					// 获取到创建者 (webview)
 					var opener = this.$view.opener();
+					// 初始化第三方登录
+					this.initOAuth();
 
 				},
 				methods: {
@@ -276,7 +278,7 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							
+
 							data = fixUserData(data);
 
 							Rx.Observable.create(function(ob) {
@@ -387,7 +389,7 @@
 									new that.$Broadcast().emit("login_success", {
 										userInfo: data
 									});
-									
+
 									plus.navigator.setStatusBarStyle('light');
 								});
 
@@ -397,6 +399,15 @@
 								mui.toast(JSON.stringify(err));
 							});
 
+					},
+
+					// 初始化第三方登录（iOS系统限制）
+					initOAuth: function() {
+//						plus.share.getServices(function(services) {
+//							services.forEach(function(oa){
+//								
+//							});
+//						}, function(e) {});
 					}
 				},
 				watch: {

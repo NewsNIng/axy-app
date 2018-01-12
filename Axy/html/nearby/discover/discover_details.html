@@ -312,6 +312,24 @@
 				padding: 6%;
 			}
 			/*end share*/
+			
+			
+			/*图片轮播*/
+			
+			.mui-slider-indicator .mui-indicator {
+				background: transparent;
+				margin: 0 1.5px;
+				border: .5px white solid;
+			}
+			
+			#slider .mui-slider-item {
+				width: 100%;
+				height: 7.466666rem !important;
+				padding-top: 50.6666%;
+				background-size: cover;
+				background-position: center;
+			}
+			/*end图片轮播*/
 		</style>
 	</head>
 
@@ -327,7 +345,7 @@
 				<a class="mui-icon mui-pull-right" @tap="mui('#popover-share').popover('show')">
 					<img src="../../../image/nearby/business/share.png" />
 				</a>
-				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
+				<a class="mui-icon mui-pull-right" style="margin-right: -4px;">
 					<img src="../../../image/nearby/business/collect.png" />
 				</a>
 			</header>
@@ -365,13 +383,24 @@
 
 			<div class="mui-content noImmersed  mui-scroll-wrapper">
 				<div class="mui-scroll">
-					<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'">
-
+					
+					<div id="slider" class="mui-slider">
+						<div class="mui-slider-group mui-slider-loop">
+							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast"></div>
+							<div class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o"></div>
+							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist"></div>
+						</div>
+						<div class="mui-slider-indicator">
+							<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+						</div>
 					</div>
+					
+					
+					<!--<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'"></div>-->
 					<div class="user_tittle app-font-size-28">
 						<img @tap="onHeadTap(info.account)" class="avastr img-lazy-load" :data-src="info.headimgurl" data-type="avatar" />
 						<div style="display: inline;" v-text="info.nickname"></div>
-						<div class="attention" :class="focus?'active':''" v-if="from !== info.account" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
+						<div class="attention" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
 					</div>
 					<div class="label app-font-size-34" v-text="'#' + info.title"></div>
 					<div class="description app-font-size-32" v-text="info.content"></div>
@@ -448,8 +477,7 @@
 						inputFoucs: false,
 						isAttention: false,
 						total: 0,
-						
-						iscollection: 0,
+
 						isfocus: 0,
 						focuscount: "",
 						userInfo: null,
@@ -465,7 +493,24 @@
 					},
 					collection: function(){
 						return this.iscollection !== 0;
-					}
+					},
+					
+					imgList: function() {
+						var arr = [];
+						for(var i = 1; i <= 3; i++) {
+							if(this.info['image' + i]) {
+								arr.push(this.info['image' + i]);
+							}
+						}
+
+						return arr;
+					},
+					imgFrist: function() {
+						return this.imgList[0];
+					},
+					imgLast: function() {
+						return this.imgList[this.imgList.length - 1];
+					},
 				},
 				mounted: function() {
 					this.$nextTick(function() {
@@ -475,7 +520,7 @@
 							pullRefresh: {
 								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
 								down: {
-									
+
 								},
 								up: {
 									callback: this._up
@@ -507,7 +552,8 @@
 							// 获取授权
 							.create(function(ob) {
 								w = plus.nativeUI.showWaiting('获取授权...');
-								new that.$OAuth(type, function(err, info) {
+								var oauthType = type.indexOf('wx') >= 0 ? 'weixin': type;
+								new that.$OAuth(oauthType, function(err, info) { 
 									if(err) {
 										return mui.toast(err.message);
 									}
@@ -609,6 +655,10 @@
 					_loadImage: function() {
 						this.$nextTick(function() {
 							imagelazyload();
+							// 图片轮播
+							mui('#slider').slider({
+								interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
+							}); 
 						});
 					},
 					// 上拉加载更多
@@ -652,29 +702,12 @@
 					onAttention: function() {
 
 					},
-					onCollection: function(){
-//						alert(this.aid);
-						this.changeCollection();
-					},
 					onFocusTap: function() {
-//						if(this.from === this.info.account) {
-//							return mui.toast("您不能关注自己！");
-//						}
+						if(this.from === this.info.account) {
+							return mui.toast("您不能关注自己！");
+						}
 						this.isfocus = +!this.isfocus;
 						this.changeFocus();
-					},
-					changeCollection: function() {
-						var methodName = 'add';
-						if(!this.collection) {
-							methodName = 'delete';
-						}
-						dal.user.collection_talk[methodName](this.aid, function(err, data) {
-							if(err) {
-								return mui.toast(err.message)
-							}
-							alert(JSON.stringify(data));
-							this.iscollection = +!this.iscollection;
-						});
 					},
 					changeFocus: function() {
 						var methodName = 'add';
@@ -682,7 +715,7 @@
 							methodName = 'delete';
 						}
 						dal.user.focus[methodName](this.info.account, function(err, data) {
-							
+
 						});
 					},
 					_getInfo: function() {
@@ -690,7 +723,6 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							this.iscollection = data.iscollection;
 							this.isfocus = data.isfocus;
 							this.focuscount = data.focuscount;
 							this.userInfo = data.user;
@@ -698,7 +730,6 @@
 							plus.nativeUI.closeWaiting();
 						}.bind(this));
 					},
-					
 				}
 			});
 		</script>
