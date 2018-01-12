@@ -342,7 +342,8 @@
 					"html/person/collection/my_camera.html",
 					"html/person/collection/my_attention.html",
 					"html/person/about.html",
-					"html/person/myself/business.html"
+					"html/person/myself/business.html",
+					"html/person/collection/my_collection.html"
 				],
 				"priority": 0
 			},
@@ -401,7 +402,8 @@
 					"html/smart/scenes/index.html",
 					"html/common/login.html",
 					"html/person/message/index.html",
-					"html/person/devshare/share.html"
+					"html/person/devshare/share.html",
+					"html/smart/scenes/index2.html"
 				],
 				"priority": 0
 			},

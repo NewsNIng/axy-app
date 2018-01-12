@@ -70,6 +70,7 @@
 			}
 			
 			.info {
+				width: 6.85rem;
 				height: 100%;
 				display: inline-block;
 				padding-left: 0.346666rem;
@@ -86,8 +87,15 @@
 				float: left;
 			}
 			
-			.shop .address {
+			.name,
+			.address,
+			.praise,
+			.desc {
+				display: block;
 				color: #9F9FA0;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 			
 			.shop .name {
@@ -134,6 +142,19 @@
 				width: 4.773333rem;
 				margin: 2.986666rem 2.613333rem 1.413333rem 2.613333rem;
 			}
+			
+			.shop_bg {
+				height: 100%;
+			}
+			
+			.praise>img {
+				width: 0.36rem;
+				display: inline-block;
+				margin-right: 0.16rem;
+				vertical-align: middle;
+			}
+			
+			
 		</style>
 	</head>
 
@@ -147,7 +168,7 @@
 				</h1>
 			</header>
 
-			<div class="mui-content">
+			<div class="mui-content mui-scroll-wrapper">
 
 				<template v-for="o,i in shops" v-if="active === 0">
 					<div class="shop mui-table-view-cell">
@@ -156,9 +177,9 @@
 						</div>
 						<div class="shop_bg mui-slider-handle">
 							<div class="mui-slider-handle shop_img">
-								<img :src="o.img" />
+								<img :src="o.image" />
 							</div>
-							<div class="info app-font-size-28"><span class="name">{{o.name}}</span><br /><span class="address">{{o.address}}</span></div>
+							<div class="info app-font-size-28"><span class="name">{{o.name}}</span><span class="address">{{o.address}}</span></div>
 						</div>
 					</div>
 				</template>
@@ -167,11 +188,11 @@
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red">删除</a>
 						</div>
-						<div class="discovery_bg mui-slider-handle" @tap="alert(1);">
+						<div class="discovery_bg mui-slider-handle" @tap="">
 							<div class="mui-slider-handle discovery_img">
-								<img :src="o.img" />
+								<img :src="o.image" />
 							</div>
-							<div class="info app-font-size-28"><span class="name app-font-size-28">{{o.name}}</span><br /><span class="desc app-font-size-24">{{o.desc}}</span><br /><span class="praise 24">{{o.praise}}</span></div>
+							<div class="info app-font-size-28"><span class="name app-font-size-28">{{o.name}}</span><span class="desc app-font-size-24">{{o.desc}}</span><span class="praise 24"><img src="../../../image/person/collection/icon_Alovedone@3x.png"/>{{o.praise}}</span></div>
 						</div>
 					</div>
 				</template>
@@ -189,6 +210,9 @@
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -201,44 +225,46 @@
 			mui.init();
 			var devManager, runManager;
 
-			
-
 			new Vue({
 				el: '#box',
 				data: function() {
 					return {
 						active: 0,
 
-						shops: [{
-							name: "adidas官方旗舰店",
-							address: "深圳市南山区世界之窗塘头六坊",
-							img: "../../../image/home/gohome.png",
-						}, {
-							name: "adidas官方旗舰店",
-							address: "深圳市南山区世界之窗塘头六坊",
-							img: "../../../image/home/gohome.png",
-						}, {
-							name: "adidas官方旗舰店",
-							address: "深圳市南山区世界之窗塘头六坊",
-							img: "../../../image/home/gohome.png",
-						}, {
-							name: "adidas官方旗舰店",
-							address: "深圳市南山区世界之窗塘头六坊",
-							img: "../../../image/home/gohome.png",
-						}],
-						discoverys: [
+						shops: [
 							//						{
-							//							name: "发现主题发现主题",
-							//							desc: "描述",
-							//							praise: "52021",
-							//							img: "../../../image/home/gohome.png",
+							//							name: "跨界空间健身玩乐综合体（休闲娱乐）",
+							//							address: "南山区龙珠四路88号（龙井B出口、维也纳酒店、龙井村、金谷产业园、车管所）",
+							//							image: "http://p0.meituan.net/dpmerchantalbum/a4aa2cbe25502cc20da67a35bc934bac4978960.jpg@220w_126h",
 							//						}, {
-							//							name: "发现主题",
-							//							desc: "描述",
-							//							praise: "52021",
-							//							img: "../../../image/home/gohome.png",
+							//							name: "adidas官方旗舰店",
+							//							address: "深圳市南山区世界之窗塘头六坊",
+							//							image: "../../../image/home/gohome.png",
+							//						}, {
+							//							name: "adidas官方旗舰店",
+							//							address: "深圳市南山区世界之窗塘头六坊",
+							//							image: "../../../image/home/gohome.png",
+							//						}, {
+							//							name: "adidas官方旗舰店",
+							//							address: "深圳市南山区世界之窗塘头六坊",
+							//							image: "../../../image/home/gohome.png",
 							//						}
 						],
+						discoverys: [
+													{
+															name: "发现主题发现主题",
+															desc: "描述",
+															praise: "52021",
+															image: "../../../image/home/gohome.png",
+														}, {
+															name: "发现主题",
+															desc: "描述",
+															praise: "52021",
+															image: "../../../image/home/gohome.png",
+														}
+						],
+						m: 0,
+						n: 0,
 					};
 				},
 
@@ -246,15 +272,86 @@
 					this.$nextTick(function() {
 						mui.init();
 					});
+					that = this;
+					this.$pullRefresh = mui(".mui-scroll-wrapper");
+					//										this._getList(function(data) {
+					//											console.log(JSON.stringify(data));
+					//											that.attentions = data;
+					//										});
+					mui.init({
+						pullRefresh: {
+							container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+							up: {
+								callback: this._up,
+							}
+						}
+					});
+					this._up();
 				},
 
 				plusReady: function() {
-
+					this._getTalkList(function(data) {
+						data = data.filter(function(item) {
+							return item !== null;
+						});
+						if(!data || !data.length) {
+							return;
+						}
+						this.discoverys.push.apply(this.discoverys, data);
+					}.bind(this));
 				},
 				methods: {
 					// 标签切换
 					onActive: function(index) {
 						this.active = index;
+					},
+
+					_getList: function(f) {
+						if(this.active === 0) {
+							this._getShopList(f);
+						} else {
+							this._getTalkList(f);
+						}
+					},
+					_getShopList: function(f) {
+						this.m++;
+						dal.user.collection_shop.list(this.m, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							f(data);
+						});
+					},
+					_getTalkList: function(f) {
+						this.n++;
+						dal.user.collection_talk.list(this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							f(data);
+						});
+					},
+					_up: function() {
+						console.log("up");
+						//						this.n++;
+						this._getList(function(data) {
+							console.log(JSON.stringify(data));
+							data = data.filter(function(item) {
+//								console.log(item !== null);
+								return item !== null;
+							});
+							if(!data || !data.length) {
+								mui.toast('没有更多啦~~');
+							} else {
+								if(this.active === 0) {
+									this.shops.push.apply(this.shops, data);
+								} else {
+									this.discoverys.push.apply(this.discoverys, data);
+								}
+							}
+							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+//							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+						}.bind(this));
 					},
 
 				}

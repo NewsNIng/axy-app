@@ -327,7 +327,7 @@
 				<a class="mui-icon mui-pull-right" @tap="mui('#popover-share').popover('show')">
 					<img src="../../../image/nearby/business/share.png" />
 				</a>
-				<a class="mui-icon mui-pull-right" style="margin-right: -4px;">
+				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
 					<img src="../../../image/nearby/business/collect.png" />
 				</a>
 			</header>
@@ -371,7 +371,7 @@
 					<div class="user_tittle app-font-size-28">
 						<img @tap="onHeadTap(info.account)" class="avastr img-lazy-load" :data-src="info.headimgurl" data-type="avatar" />
 						<div style="display: inline;" v-text="info.nickname"></div>
-						<div class="attention" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
+						<div class="attention" :class="focus?'active':''" v-if="from !== info.account" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
 					</div>
 					<div class="label app-font-size-34" v-text="'#' + info.title"></div>
 					<div class="description app-font-size-32" v-text="info.content"></div>
@@ -448,7 +448,8 @@
 						inputFoucs: false,
 						isAttention: false,
 						total: 0,
-
+						
+						iscollection: 0,
 						isfocus: 0,
 						focuscount: "",
 						userInfo: null,
@@ -461,6 +462,9 @@
 					},
 					focus: function() {
 						return this.isfocus !== 0;
+					},
+					collection: function(){
+						return this.iscollection !== 0;
 					}
 				},
 				mounted: function() {
@@ -471,7 +475,7 @@
 							pullRefresh: {
 								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
 								down: {
-
+									
 								},
 								up: {
 									callback: this._up
@@ -613,12 +617,29 @@
 					onAttention: function() {
 
 					},
+					onCollection: function(){
+//						alert(this.aid);
+						this.changeCollection();
+					},
 					onFocusTap: function() {
-						if(this.from === this.info.account) {
-							return mui.toast("您不能关注自己！");
-						}
+//						if(this.from === this.info.account) {
+//							return mui.toast("您不能关注自己！");
+//						}
 						this.isfocus = +!this.isfocus;
 						this.changeFocus();
+					},
+					changeCollection: function() {
+						var methodName = 'add';
+						if(!this.collection) {
+							methodName = 'delete';
+						}
+						dal.user.collection_talk[methodName](this.aid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							alert(JSON.stringify(data));
+							this.iscollection = +!this.iscollection;
+						});
 					},
 					changeFocus: function() {
 						var methodName = 'add';
@@ -626,7 +647,7 @@
 							methodName = 'delete';
 						}
 						dal.user.focus[methodName](this.info.account, function(err, data) {
-
+							
 						});
 					},
 					_getInfo: function() {
@@ -634,6 +655,7 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
+							this.iscollection = data.iscollection;
 							this.isfocus = data.isfocus;
 							this.focuscount = data.focuscount;
 							this.userInfo = data.user;
@@ -641,6 +663,7 @@
 							plus.nativeUI.closeWaiting();
 						}.bind(this));
 					},
+					
 				}
 			});
 		</script>

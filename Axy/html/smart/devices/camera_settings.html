@@ -379,12 +379,12 @@
 				},
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
+					console.log(JSON.stringify(this.devInfo));
 					if(this.devInfo.type === 32) {
 						this._getOpenled();
 					}
 				},
 				methods: {
-
 					// 取消
 					onCancel: function() {
 						this.mask = false;
@@ -468,13 +468,15 @@
 					// 告警时间跳转
 					onAlarmParam: function() {
 						var that = this;
+						
 						app.page.getAlarmParam(function(data) {
-							// 发送更改请求
 							//data.intervalTime
 							//data.continuedTime
 						}, {
-							intervalTime: 0,
-							continuedTime: 0,
+//							intervalTime: 0,
+//							continuedTime: 0,
+							type: that.devInfo.type,
+							devid: that.devInfo.devid,
 						});
 					},
 

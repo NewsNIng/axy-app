@@ -111,7 +111,7 @@
 			<a class="mui-icon mui-pull-right">
 				<img src="../../../image/nearby/business/share.png" />
 			</a>
-			<a class="mui-icon mui-pull-right" style="margin-right: -4px;">
+			<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
 				<img src="../../../image/nearby/business/collect.png" />
 			</a>
 		</header>
@@ -181,7 +181,8 @@
 							"longitude": 113.947885,
 							"latitude": 22.587857,
 							"distance": null
-						}
+						},
+						iscollection: 0,
 					};
 
 				},
@@ -189,6 +190,11 @@
 					id: function() {
 						this.getInfo();
 					},
+				},
+				computed: {
+					collection: function(){
+						return this.iscollection !== 0;
+					}
 				},
 				plusReady: function() {
 					this.id = this.$view.oid;
@@ -201,8 +207,25 @@
 							}
 							console.log(JSON.stringify(data));
 							this.data = data.store;
+							this.iscollection = data.iscollection;
 						}.bind(this));
-					}
+					},
+					onCollection: function(){
+						this.changeCollection();
+					},
+					changeCollection: function() {
+						var methodName = 'add';
+						if(!this.collection) {
+							methodName = 'delete';
+						}
+						dal.user.collection_shop[methodName](this.aid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							alert(JSON.stringify(data));
+							this.iscollection = +!this.iscollection;
+						});
+					},
 				}
 			});
 		</script>
