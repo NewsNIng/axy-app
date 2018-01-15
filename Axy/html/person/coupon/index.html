@@ -147,6 +147,20 @@
 				overflow: hidden;
 				height: 100%;
 			}
+			
+			/*兼容5s屏幕*/
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				
+				.menu-nav {
+				  font-size: 12px !important;
+				}
+				[data-dpr="2"] .menu-nav {
+				  font-size: 24px !important;
+				}
+				[data-dpr="3"] .menu-nav {
+				  font-size: 36px !important;
+				}
+			}
 		</style>
 
 	</head>

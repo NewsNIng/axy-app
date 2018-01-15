@@ -410,7 +410,7 @@
 
 					// 是否为视频
 					isVideo: function(path) {
-						return /.mp4$/.test(path);
+						return /[.mp4|.3gp]$/.test(path);
 					},
 
 					// 修复文件路径

@@ -657,7 +657,10 @@
 					},
 					// 点击消息按钮
 					onMessageTap: function() {
-						mui.openWindow('../person/message/index.html');
+						app.user.get(function(u) {
+							u && mui.openWindow('../person/message/index.html');
+						});
+						
 					},
 
 					// 点击搜索按钮
@@ -670,7 +673,10 @@
 					},
 					// 点击添加按钮
 					onPlusTap: function() {
-						mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
+						app.user.get(function(u) {
+							u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
+						});
+						
 					},
 
 					// 当点击模式时

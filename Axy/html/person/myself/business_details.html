@@ -427,7 +427,7 @@
 					// 分享至
 					onShareTo: function(type) {
 						var that = this;
-						var shareImg = that._getImg(that.info.image1, that.info.image2, that.info.image3);
+						var shareImg = that._getImg(that.data.image1, that.data.image2, that.data.image3);
 						var w;
 
 						Rx.Observable
@@ -493,8 +493,8 @@
 									}, {
 										img: img, //图片地址 暂不支持网络地址 
 										href: 'http://www.vihivision.com/', //分享的超链接
-										title: that.info.title, //当且仅当href存在时有效
-										content: that.info.content //当且仅当href存在时有效
+										title: that.data.name, //当且仅当href存在时有效
+										content: that.data.introduction //当且仅当href存在时有效
 									});
 								});
 							})
@@ -521,7 +521,10 @@
 					onGoodTap: function(o, e) {
 						var el = e.target;
 
-					}
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
 				}
 			});
 		</script>

@@ -561,7 +561,8 @@
 	 * @param {Object} callback
 	 */
 	devaccessory.devDelete = function(accessory, devType, callback) {
-		accessory.devType = devType;
+		
+		accessory.devtype = devType;
 		return ra("post", "/devaccessory/delete", accessory, callback);
 	}
 	
