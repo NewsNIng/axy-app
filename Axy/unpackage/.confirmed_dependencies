@@ -11,7 +11,8 @@
 			"html/person/message/index.html",
 			"html/person/collection/my_camera.html",
 			"html/person/devshare/index.html",
-			"html/person/collection/my_attention.html"
+			"html/person/collection/my_attention.html",
+			"html/person/collection/my_collection.html"
 		]
 	},
 	"html/person/setting/index.html": {
@@ -139,7 +140,8 @@
 			"html/smart/devices/dev_22.html",
 			"html/smart/devices/dev_65.html",
 			"html/smart/devices/dev_160.html",
-			"html/smart/devices/dev_161.html"
+			"html/smart/devices/dev_161.html",
+			"html/smart/devices/camera_settings.html"
 		]
 	},
 	"html/smart/devices/dev_80.html": {
@@ -156,7 +158,8 @@
 	"html/home/index.html": {
 		"refer": [
 			"html/search/index.html",
-			"html/smart/add/add_device.html"
+			"html/smart/add/add_device.html",
+			"html/smart/scenes/index2.html"
 		]
 	},
 	"html/search/index.html": {
@@ -195,6 +198,11 @@
 	"html/public/position.html": {
 		"refer": [
 			"html/public/city.html"
+		]
+	},
+	"html/smart/scenes/index2.html": {
+		"refer": [
+			"html/smart/scenes/edit_scenes.html"
 		]
 	}
 }
