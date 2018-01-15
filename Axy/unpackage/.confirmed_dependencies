@@ -156,7 +156,8 @@
 	"html/home/index.html": {
 		"refer": [
 			"html/search/index.html",
-			"html/smart/add/add_device.html"
+			"html/smart/add/add_device.html",
+			"html/smart/scenes/index.html"
 		]
 	},
 	"html/search/index.html": {
@@ -172,7 +173,8 @@
 	},
 	"html/smart/add/add_device.html": {
 		"refer": [
-			"html/smart/add/family_menu.html"
+			"html/smart/add/family_menu.html",
+			"html/smart/add/connect_wifi.html"
 		]
 	},
 	"html/nearby/pages/theme.html": {

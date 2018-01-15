@@ -154,7 +154,7 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						//wifiname: '',
+						wifiname: '',
 						wifipwd: '',
 
 						wifinameCache: null,
@@ -176,13 +176,14 @@
 				},
 
 				computed: {
-					wifiname: function() {
-						return this.selected || this.connWifi.ssid;
-					}
+//					wifiname: function() {
+//						return this.selected || this.connWifi.ssid;
+//					}
 				},
 
 				watch: {
-					selected: function() {
+					selected: function(v) {
+						this.wifiname = v;
 						this.getWifiPwd();
 					}
 				},
@@ -228,6 +229,7 @@
 							rs = JSON.parse(rs);
 							that.connWifi = rs.connWifi;
 							that.wifiList = rs.wifiList;
+							that.wifiname = rs.connWifi.ssid || "";
 							that.getWifiPwd();
 						});
 						

@@ -248,10 +248,9 @@
 					}.bind(this)).catch(function() {
 						this._down();
 					}.bind(this));
-					
+
 					// 监听父页手动选取地区
 					new this.$Broadcast().on('city_change', this.updateGeo.bind(this));
-					
 
 				},
 				methods: {
@@ -294,6 +293,7 @@
 					// 点击查看
 					onLookTap: function(o) {
 						mui.openWindow('../business/store_details.html', 'store_details', {
+							createNew: true,
 							extras: {
 								oid: o.id
 							}
@@ -319,7 +319,7 @@
 								}
 							});
 					},
- 
+
 					// 点击导航
 					onWithMapTap: function(o) {
 						//BD-09 to GCJ-02先将百度坐标转成中国坐标

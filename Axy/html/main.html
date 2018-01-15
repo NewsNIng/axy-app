@@ -15,6 +15,7 @@
 				-webkit-box-shadow: 0px 0px 0px #ccc !important;
 				background: white !important;
 				padding-top: 5px !important;
+				
 			}
 			
 			.mui-tab-item img {
@@ -43,10 +44,10 @@
 			<nav class="mui-bar mui-bar-tab">
 				<template v-for="o,i in items">
 					<a class="mui-tab-item" :class="{'app-color-active': i === index}" @tap="onTap(o, i)">
-						<span class="mui-icon">
+						<!--<span class="mui-icon">-->
 							<img :src="'../image/main/'+ o.id + (i === index ? '_active' : '') +'.png'"/>
-						</span>
-						<span class="mui-tab-label app-font-size-20">{{o.name}}</span>
+						<!--</span>-->
+						<div class="mui-tab-label app-font-size-20">{{o.name}}</div>
 					</a>
 				</template>
 

@@ -21,13 +21,13 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-		//return;
+		return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		//return;
+		return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
@@ -396,8 +396,8 @@
 	/**
 	 * 获取手机附近的wifi列表
 	 */
-	pgn.GetPhoneWifiListSyn = function(){
-		return pg.syncExec(N, 'GetPhoneWifiListSyn', []);
+	pgn.GetPhoneWifiListAsyn  = function(sf, ff){
+		return pg.asyncExec(N, 'GetPhoneWifiListAsyn', [], sf, ff);
 	};
 
 
