@@ -281,10 +281,11 @@
 					
 					// 主机
 					onItemTap1: function(o){
+//						alert(JSON.stringify(o));
 						if(o.type === 0){
 							this._voiceDevLine();
 						}else if(o.type === 1){
-							this._hostNetLine(o.img);
+							this._hostNetLine(o);
 						}else{
 							this._scanCodeLine(true);
 						}
@@ -321,12 +322,14 @@
 					},
 					
 					// 内网连接设备
-					_hostNetLine: function(img){
+					_hostNetLine: function(o){
 						if(!this.isWifi){
 							return mui.toast('请连接WIFI');
 						}
 						// 保存当前设备img地址
-						window.localStorage.setItem('Lan_add_camera_img', img);
+						window.localStorage.setItem('Lan_add_camera_img', o.img);
+						// 保存这个设备的type
+						window.localStorage.setItem('Lan_add_camera_type', o.type);
 						mui.openWindow('Lan_add_camera.html');
 					},
 					

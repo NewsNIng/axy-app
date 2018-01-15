@@ -76,18 +76,18 @@
 				/*width: 100%;*/
 				margin: 0.8rem 1.5rem 0 1.5rem;
 				position: relative;
+				text-align: center;
 			}
 			
 			.imgbg > img{
-				width: 100%;
+				width: 1.973333rem;
+				margin-top: 2.9rem;
 			}
 			
 			.text {
-				position: absolute;
-				bottom: 0.8rem;
-				left: 50%;
-				transform: translateX(-50%);
-				-webkit-transform: translateX(-50%);
+				text-align: center;
+				margin-top: 1rem;
+				margin-bottom: 0.9rem;
 			}
 			
 			.btn_bind,.examine {
@@ -117,8 +117,8 @@
 					<img :src="bgp"/>
 					<div class="text app-font-size-28 app-color-9f9fa0">设备连接成功!</div>
 				</div>
-				<button type="button" class=" examine mui-btn app-btn-main-ghost app-font-size-34">查看设备</button>
-				<button type="button" class="btn_bind mui-btn app-btn-main app-font-size-34">去绑定摄像机</button>
+				<button type="button" class="examine app-color-333333 mui-btn app-btn-main-ghost app-font-size-34" @tap="show()">查看设备</button>
+				<button type="button" v-if="needConn" class="btn_bind mui-btn app-btn-main app-font-size-34" @tap="bind()">去绑定摄像机</button>
 			</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -150,17 +150,25 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png'
+						bgp: '../../../image/smart/devices/others/complete@3x.png',
+						devid: '',
+						needConn: true,
 					};
 				},
 				mounted: function() {
-					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '4.png';
+//					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '4.png';
 				},
 				plusReady: function() {
-					
+					this.needConn = this.$view.needConn;
+					this.devid = this.$view.devid;
 				},
 				methods: {
-					
+					show: function(){
+						alert(this.devid);
+					},
+					bind: function(){
+						alert("bind");
+					}
 				}
 			});
 		</script>

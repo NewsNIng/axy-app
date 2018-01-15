@@ -52,7 +52,7 @@ Vue && Vue.component('dev-footer', {
 				this.$emit('del', {});
 			});
 			// 通知
-			this.$emit('unbind', {});
+//			this.$emit('unbind', {});
 		}
 
 	},

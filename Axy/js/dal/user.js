@@ -2,11 +2,11 @@
 (function(_, ra) {
 
 	var IMEI = "";
-	
-	function initImei(){
+
+	function initImei() {
 		IMEI = plus.device.uuid;
 	}
-	
+
 	if(window.plus) {
 		initImei();
 	} else {
@@ -99,6 +99,66 @@
 		},
 		list: function(pageNumber, callback, pageSize) {
 			return ra('get', '/user/focus/list', {
+				pageNumber: pageNumber,
+				pageSize: pageSize || 10,
+			}, callback);
+		}
+	}
+
+	/**
+	 * 店铺收藏相关
+	 */
+	user.collection_shop = {
+		/**
+		 * 收藏店铺
+		 * @param {Object} fid 目标id
+		 */
+		add: function(fid, callback) {
+			return ra('post', '/favorites/store/add', {
+				fid: fid,
+			}, callback);
+		},
+		/**
+		 * 取消收藏店铺
+		 * @param {Object} fid 目标id
+		 */
+		delete: function(fid, callback) {
+			return ra('post', '/favorites/store/delete', {
+				fid: fid,
+			}, callback);
+		},
+		list: function(pageNumber, callback, pageSize) {
+			return ra('get', '/favorites/store/list', {
+				pageNumber: pageNumber,
+				pageSize: pageSize || 10,
+			}, callback);
+		}
+	}
+	
+	/**
+	 * 说说收藏相关
+	 */
+	user.collection_talk = {
+		/**
+		 * 收藏说说
+		 * @param {Object} fid 目标id
+		 */
+		add: function(fid, callback) {
+			return ra('post', '/favorites/article/add', {
+				fid: fid,
+			}, callback);
+		},
+		/**
+		 * 取消收藏说说
+		 * @param {Object} fid 目标id
+		 */
+		delete: function(fid, callback) {
+			return ra('post', '/favorites/article/delete', {
+				fid: fid,
+			}, callback);
+		},
+		list: function(pageNumber, callback, pageSize) {
+			return ra('get', '/favorites/article/list', {
 				pageNumber: pageNumber,
 				pageSize: pageSize || 10,
 			}, callback);
