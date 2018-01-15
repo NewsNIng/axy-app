@@ -44,7 +44,6 @@
 				/*margin: 0.24rem 0;*/
 				width: 0.853333rem;
 				height: 0.853333rem;
-				
 				position: absolute;
 				transform: translateY(-50%);
 				-webkit-transform: translateY(-50%);
@@ -126,61 +125,98 @@
 				background-position: center;
 			}
 			/*end图片轮播*/
+			/*share*/
+			
+			#popover-share {
+				bottom: 0 !important;
+				width: 100%;
+				padding: 1rem .75rem;
+				border-radius: 0;
+			}
+			
+			#popover-share .share-title {
+				text-align: center;
+				color: #a1a1a1;
+			}
+			
+			#popover-share .share-body {}
+			
+			#popover-share .share-body>img {
+				float: left;
+				margin-top: .8rem;
+				width: 25%;
+				padding: 6%;
+			}
+			/*end share*/
 		</style>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
-			<a class="mui-action-back mui-icon mui-pull-left">
-				<img src="../../../image/nearby/business/back.png" />
-			</a>
-			<h1 class="mui-title"></h1>
-			<a class="mui-icon mui-pull-right">
-				<img src="../../../image/nearby/business/share.png" />
-			</a>
-			<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
-				<img src="../../../image/nearby/business/collect.png" />
-			</a>
-		</header>
+		<div class="root">
+			<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back mui-icon mui-pull-left">
+					<img src="../../../image/nearby/business/back.png" />
+				</a>
+				<h1 class="mui-title"></h1>
+				<a class="mui-icon mui-pull-right" @tap="mui('#popover-share').popover('show')">
+					<img src="../../../image/nearby/business/share.png" />
+				</a>
+				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
+					<img src="../../../image/nearby/business/collect.png" />
+				</a>
+			</header>
 
-		<div class="mui-content noImmersed">
-			<!--<img :src="data.image1" />-->
-
-			<div id="slider" class="mui-slider">
-				<div class="mui-slider-group mui-slider-loop">
-					<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast"></div>
-					<div class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o"></div>
-					<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist"></div>
+			<div id="popover-share" class="mui-popover app-font-size-30">
+				<div class="share-title">
+					快把商家分享给朋友，获取更多赞~
 				</div>
-				<div class="mui-slider-indicator">
-					<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
-				</div>
-			</div>
-
-			<div class="shop_tittle">
-				<img src="../../../image/nearby/business/phone_icon.png" />
-				<div class="shop_name app-font-size-34" v-text="data.name">
-				</div>
-				<div class="shop_position app-font-size-26">
-					<img src="../../../image/nearby/map.png" />
-					<div style="display: inline;" v-text="data.address"></div>
+				<div class="share-body">
+					<img @tap="onShareTo('qq')" src="../../../image/common/login_qq.png" />
+					<img @tap="onShareTo('wxhy')" src="../../../image/common/login_wechat.png" />
+					<img @tap="onShareTo('wxpyq')" src="../../../image/common/pyq@3x.png" />
+					<img @tap="onShareTo('sinaweibo')" src="../../../image/common/login_weibo.png" />
 				</div>
 			</div>
-			<div class="business_signs app-font-size-28">
-				商家招牌
-			</div>
-			<div class="signs_icon">
-				<template v-for="o,i in goodImglist">
 
-					<img class="img" :src="o" :data-preview-src="o.replace('\/100.0\/', '\/500.0\/')" data-preview-group="1" />
+			<div class="mui-content noImmersed">
+				<!--<img :src="data.image1" />-->
 
-				</template>
-			</div>
-			<div class="business_desc app-font-size-28">
-				商家介绍
-			</div>
-			<div class="business_description app-font-size-30">{{data.introduction}}</div>
+				<div id="slider" class="mui-slider">
+					<div class="mui-slider-group mui-slider-loop">
+						<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast"></div>
+						<div class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o"></div>
+						<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist"></div>
+					</div>
+					<div class="mui-slider-indicator">
+						<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+					</div>
+				</div>
 
+				<div class="shop_tittle">
+					<img src="../../../image/nearby/business/phone_icon.png" />
+					<div class="shop_name app-font-size-34" v-text="data.name">
+					</div>
+					<div class="shop_position app-font-size-26">
+						<img src="../../../image/nearby/map.png" />
+						<div style="display: inline;" v-text="data.address"></div>
+					</div>
+				</div>
+				<div class="business_signs app-font-size-28">
+					商家招牌
+				</div>
+				<div class="signs_icon">
+					<template v-for="o,i in goodImglist">
+
+						<img class="img" :src="o" :data-preview-src="o.replace('\/100.0\/', '\/500.0\/')" data-preview-group="1" />
+
+					</template>
+				</div>
+				<div class="business_desc app-font-size-28">
+					商家介绍
+				</div>
+				<div class="business_description app-font-size-30">{{data.introduction}}</div>
+
+			</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -196,10 +232,12 @@
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-
+		
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+		
 		<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>
 		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
-
+	
 		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
 
@@ -207,7 +245,7 @@
 			mui.init();
 
 			new Vue({
-				el: '.mui-content',
+				el: '.root',
 				data: function() {
 					return {
 						id: -1,
@@ -260,7 +298,7 @@
 							return arr;
 						}, []);
 					},
-					collection: function(){
+					collection: function() {
 						return this.iscollection !== 0;
 					}
 
@@ -297,7 +335,7 @@
 							});
 						}.bind(this));
 					},
-					onCollection: function(){
+					onCollection: function() {
 						this.changeCollection();
 					},
 					changeCollection: function() {
@@ -316,7 +354,89 @@
 					onGoodTap: function(o, e) {
 						var el = e.target;
 
-					}
+					},
+					// 分享至
+					onShareTo: function(type) {
+						var that = this;
+						var shareImg = that._getImg(that.data.image1, that.data.image2, that.data.image3);
+						var w;
+
+						Rx.Observable
+							// 获取授权
+							.create(function(ob) {
+								w = plus.nativeUI.showWaiting('获取授权...');
+								var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
+								new that.$OAuth(oauthType, function(err, info) {
+									if(err) {
+										return mui.toast(err.message);
+									}
+									ob.next();
+								}, that);
+							})
+
+							// 处理为本地图片
+							.mergeMap(function(ob) {
+								return Rx.Observable.create(function(ob) {
+									if(shareImg.indexOf('file:') >= 0) {
+										// 本地图片
+										return ob.next(shareImg);
+									}
+									// 下载
+									w.setTitle("处理图片...");
+
+									new ni.Download(shareImg, {
+										filename: 'share_temp_' + +new Date,
+										suffix: '.jpg',
+									}).onSuccess(function(src) {
+										ob.next(src);
+									}).start();
+								})
+
+							})
+							// 压缩
+							.mergeMap(function(_img) {
+								w.setTitle("压缩图片...");
+								return Rx.Observable.create(function(ob) {
+									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
+											return plus.nativeUI.toast(err.message);
+										}
+										ob.next(overImgs[0]);
+									});
+								})
+
+							})
+							// 分享
+							.mergeMap(function(img) {
+								return Rx.Observable.create(function(ob) {
+									w.setTitle("拉取分享...");
+									setTimeout(plus.nativeUI.closeWaiting, 3e3);
+									new ni.Share(type, function(err, data) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
+											if(err.code === -100 || err.code === -2) {
+												err.message = "用户取消分享";
+											}
+											return plus.nativeUI.toast(err.message);
+										}
+										ob.next(data);
+									}, {
+										img: img, //图片地址 暂不支持网络地址 
+										href: 'http://www.vihivision.com/', //分享的超链接
+										title: that.data.name, //当且仅当href存在时有效
+										content: that.data.introduction //当且仅当href存在时有效
+									});
+								});
+							})
+							// 回调
+							.subscribe(function(data) {
+								console.log(JSON.stringify(data));
+							});
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
 				}
 			});
 		</script>

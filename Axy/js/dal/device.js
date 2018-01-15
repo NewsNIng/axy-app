@@ -28,7 +28,7 @@
 	 * 设备删除
 	 */
 	device.delete = function(devid, callback) {
-		return ra('get', '/device/delete/' + devid, {}, callback);
+		return ra('post', '/device/delete/' + devid, {}, callback);
 	}
 
 	/**
@@ -36,7 +36,7 @@
 	 */
 	device.deleteshare = function(devid, callback) {
 		var account = window.localStorage.getItem("_account_");
-		return ra('get', '/device/delete/share/' + devid + '/user/' + account, {}, callback);
+		return ra('post', '/device/delete/share/' + devid + '/user/' + account, {}, callback);
 	}
 	device.logs = {
 		/**
