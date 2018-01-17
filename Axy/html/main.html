@@ -6,7 +6,7 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<!--mui css-->
-		<script type="text/javascript" src="../js/common/flexible.js" ></script>
+		<script type="text/javascript" src="../js/common/flexible.js"></script>
 		<link rel="stylesheet" href="../css/lib/mui.min.css" />
 		<link rel="stylesheet" href="../css/app/app.css" />
 		<style type="text/css">
@@ -15,7 +15,6 @@
 				-webkit-box-shadow: 0px 0px 0px #ccc !important;
 				background: white !important;
 				padding-top: 5px !important;
-				
 			}
 			
 			.mui-tab-item img {
@@ -31,10 +30,9 @@
 				opacity: 1;
 			}
 			
-			.mui-tab-item.mui-active{
+			.mui-tab-item.mui-active {
 				color: #929292 !important;
 			}
-			
 		</style>
 	</head>
 
@@ -45,7 +43,7 @@
 				<template v-for="o,i in items">
 					<a class="mui-tab-item" :class="{'app-color-active': i === index}" @tap="onTap(o, i)">
 						<!--<span class="mui-icon">-->
-							<img :src="'../image/main/'+ o.id + (i === index ? '_active' : '') +'.png'"/>
+						<img :src="'../image/main/'+ o.id + (i === index ? '_active' : '') +'.png'" />
 						<!--</span>-->
 						<div class="mui-tab-label app-font-size-20">{{o.name}}</div>
 					</a>
@@ -69,8 +67,8 @@
 		<script type="text/javascript" src="../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
-		
-		<script type="text/javascript" src="../js/common/android-back.js" ></script>
+
+		<script type="text/javascript" src="../js/common/android-back.js"></script>
 
 		<script>
 			// 4个子webview统一样式
@@ -124,7 +122,7 @@
 				},
 				plusReady: function() {
 					_B = new ni.Broadcast();
-					
+
 					plus.webview.create('zeus.html', 'zeus');
 					// plus ready !
 					// 这时候才能调用 plus 相关 API
@@ -164,8 +162,6 @@
 							// 吐司
 							//mui.toast(o.name);
 						}.bind(this));
-						
-						
 
 					},
 					// 页面切换时
@@ -211,7 +207,7 @@
 					}
 				}
 
-			});
+			}); 
 
 			setTimeout(function() {
 				mui.plusReady(function() {
@@ -233,12 +229,21 @@
 							var newAppVersion = version2number(data.version);
 
 							if(newAppVersion > appVersion) {
-								var filePath = data.path;
-								// 判断是否是更新资源文件
-								if(!rsmanager.isHotRresource(filePath)) {
-									return mui.alert("非更新资源文件\n" + filePath);
+								// 需要隐藏升级？
+								if(data.hide) {
+									rsmanager._install(data.path, function(succ) {}, true);
+									return;
 								}
+								// 弹出升级提示框
+								app.page.openUpdate(function(rs) {}, {
+									path: data.path, // 更新包地址
+									enforce: data.enforce, // 强制更新 不能关闭提示框
+									// title: "", // 更新提示框的标题内容 
+									version: data.version, // 版本号
+									message: data.message, // 更新内容
+								});
 
+								/**
 								rsmanager.install(filePath, function(succ) {
 									if(mui.os.ios){
 										plus.nativeUI.toast('您可能需要手动关闭应用并重启');
@@ -248,12 +253,12 @@
 								}, {
 									hide: data.hide, // 是否隐藏更新
 									show: data.show, // 是否弹出提示框
-									force: data.force, // 强制更新 不能关闭提示框
+									enforce: data.enforce, // 强制更新 不能关闭提示框
 									title: data.title, // 更新提示框的标题内容 可以设置为app的版本号
 									message: data.message // 提示框显示内容，可以设置为app新版内容功能讲解  \n换行
-								});
+								});**/
 							} else {
-								//console.log("无需更新");
+								//console.log("无需更新"); 
 							}
 
 						});
@@ -263,9 +268,7 @@
 				});
 
 				//plus.webview.create('zeus.html');
-			}, 1000); //1s 后检查更新
-			
-			
+			}, 0); //1s 后检查更新
 		</script>
 	</body>
 

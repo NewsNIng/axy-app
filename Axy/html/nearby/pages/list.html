@@ -270,7 +270,7 @@
 							plus.geolocation.getCurrentPosition(function(p) {
 								this.longitude = p.coords.longitude;
 								this.latitude = p.coords.latitude;
-								this.city = p.address.city.replace('市', '');
+								this.city = p.address && p.address.city && p.address.city.replace('市', '');
 								this.position = p.address.poiName || p.addresses;
 								re();
 							}.bind(this), rj, {

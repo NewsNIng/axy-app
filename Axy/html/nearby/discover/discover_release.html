@@ -264,6 +264,8 @@
 						adress: "深圳",
 						longitude: 0,
 						latitude: 0,
+						
+						discover: null, // 发现页面
 					};
 				},
 				computed: {
@@ -281,14 +283,7 @@
 					}
 				},
 				plusReady: function() {
-					//					plus.geolocation.getCurrentPosition(function(){
-					//						
-					//					});
-					new ni.Broadcast().emit("discover_update", {
-									
-								}, {
-									views: ['discover'],
-								});
+					this.discover = plus.webview.getWebviewById('discover');
 				},
 				mounted: function() {
 
@@ -394,9 +389,7 @@
 							.then(function() {
 								w.close();
 								mui.toast("发布成功");
-								new ni.Broadcast().emit("discover_update", {
-									
-								}, {
+								that.discover && new ni.Broadcast().emit("discover_update", {}, {
 									views: ['discover'],
 								});
 								mui.back();

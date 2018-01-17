@@ -69,7 +69,7 @@
 	 * @param {Function} callback 回调函数
 	 */
 	user.resetpwd = function(account, passwd, callback) {
-		return ra("post", "/user/resetpwd/", {
+		return ra("post", "/user/resetpwd", {
 			account: account,
 			passwd: passwd
 		}, callback);

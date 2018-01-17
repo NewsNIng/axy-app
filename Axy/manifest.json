@@ -318,7 +318,8 @@
 				"refer": [
 					"html/zeus.html",
 					"html/smart/index2.html",
-					"html/common/login.html"
+					"html/common/login.html",
+					"html/public/updateWindow.html"
 				],
 				"priority": 0
 			},
@@ -893,7 +894,9 @@
 				"priority": 0
 			},
 			"html/zeus.html": {
-				"resources": [],
+				"resources": [
+					"html/smart/devices/dev_error.html"
+				],
 				"refer": [
 					"html/common/login.html",
 					"html/common/authorized.html"
@@ -974,7 +977,8 @@
 			"html/nearby/pages/theme.html": {
 				"resources": [],
 				"refer": [
-					"html/public/browser.html"
+					"html/public/browser.html",
+					"html/public/share.html"
 				],
 				"priority": 0
 			},
@@ -1042,6 +1046,13 @@
 				"resources": [],
 				"refer": [
 					"html/smart/devices/dev_chart.html"
+				],
+				"priority": 0
+			},
+			"html/person/about.html": {
+				"resources": [],
+				"refer": [
+					"html/public/updateWindow.html"
 				],
 				"priority": 0
 			}

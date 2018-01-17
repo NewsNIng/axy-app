@@ -332,7 +332,8 @@
 					},
 					// 获取甲醛探测器状态
 					getState: function() { 
-						dal.devaccessory.formaldehydedetector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {							
+						dal.devaccessory.formaldehydedetector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {
+							alert(JSON.stringify(err));
 							if(err){
 								return mui.toast(err.message);
 							}

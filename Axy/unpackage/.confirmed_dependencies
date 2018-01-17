@@ -39,7 +39,8 @@
       "html/person/index.html",
       "html/smart/index.html",
       "html/nearby/index.html",
-      "html/common/login.html"
+      "html/common/login.html",
+      "html/public/updateWindow.html"
     ],
     "resources": [
       "html/home/index.html",
@@ -54,7 +55,11 @@
       "js/dal/base.js",
       "js/common/rsmanager.js",
       "js/lib/vue-ni.js",
-      "html/nearby/index.html"
+      "html/nearby/index.html",
+      "image/main/person.png",
+      "image/main/smart.png",
+      "image/main/nearby.png",
+      "image/main/home_active.png"
     ]
   },
   "html/person/myself/business.html": {
@@ -85,7 +90,8 @@
   },
   "html/nearby/pages/discover.html": {
     "refer": [
-      "html/nearby/discover/discover_details.html"
+      "html/nearby/discover/discover_details.html",
+      "html/nearby/discover/discover_release.html"
     ],
     "resources": []
   },
@@ -157,7 +163,8 @@
       "html/smart/devices/dev_161.html",
       "html/smart/devices/camera_settings.html",
       "html/smart/devices/dev_48.html",
-      "html/person/devshare/share.html"
+      "html/person/devshare/share.html",
+      "html/smart/add/add_device.html"
     ],
     "resources": []
   },
@@ -170,7 +177,8 @@
   "html/smart/index.html": {
     "refer": [
       "html/smart/devices/dev_my_list.html",
-      "html/smart/scenes/index2.html"
+      "html/smart/scenes/index2.html",
+      "html/common/login.html"
     ],
     "resources": []
   },
@@ -179,7 +187,10 @@
       "html/search/index.html",
       "html/smart/add/add_device.html",
       "html/smart/scenes/index.html",
-      "html/nearby/business/store_details.html"
+      "html/nearby/business/store_details.html",
+      "html/common/login.html",
+      "html/person/message/index.html",
+      "html/smart/devices/dev_my_list.html"
     ],
     "resources": [
       "image/home/dev_camera.png",
@@ -210,7 +221,8 @@
   },
   "html/nearby/pages/theme.html": {
     "refer": [
-      "html/public/browser.html"
+      "html/public/browser.html",
+      "html/public/share.html"
     ],
     "resources": []
   },
@@ -238,6 +250,45 @@
     "refer": [
       "html/public/input.html",
       "html/smart/devices/dev_select_id.html"
+    ],
+    "resources": []
+  },
+  "html/zeus.html": {
+    "refer": [
+      "html/common/login.html"
+    ],
+    "resources": [
+      "html/smart/devices/dev_error.html"
+    ]
+  },
+  "html/person/relation/bind.html": {
+    "refer": [
+      "html/person/relation/reset_tel.html"
+    ],
+    "resources": []
+  },
+  "html/smart/devices/dev_error.html": {
+    "resources": [
+      "js/common/immersed.js"
+    ],
+    "refer": []
+  },
+  "html/common/login.html": {
+    "refer": [
+      "html/common/reset.html"
+    ],
+    "resources": []
+  },
+  "html/common/reset.html": {
+    "refer": [
+      "html/common/reset2.html",
+      "html/common/login.html"
+    ],
+    "resources": []
+  },
+  "html/person/about.html": {
+    "refer": [
+      "html/public/updateWindow.html"
     ],
     "resources": []
   }

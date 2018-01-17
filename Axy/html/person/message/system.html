@@ -81,24 +81,24 @@
 	</head>
 
 	<body>
+		<div class="root">
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">系统消息</h1>
+				<span @tap="onClearTap()" class="app-font-size-30 app-color-white mui-pull-right" style="line-height: 44px;">清空</span>
+			</header>
+			<div class="mui-content" style="padding-bottom: 1.333333rem;">
 
-		<header class="mui-bar mui-bar-nav app-header">
-			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">系统消息</h1>
-			<span class="app-font-size-30 app-color-white mui-pull-right" style="line-height: 44px;">清空</span>
-		</header>
-		<div class="mui-content" style="padding-bottom: 1.333333rem;">
-
-			<div class="card" v-for="o,i in list" @tap="onCardTap(o)">
-				<div class="card-header">
-					<div class="app-font-size-20" v-text="o.time"></div>
-				</div>
-				<div class="card-body">
-					<div class="app-font-size-32" v-text="o.title"></div>
-					<div class="tips app-font-size-28 app-color-9f9fa0" v-text="o.summary"></div>
+				<div class="card" v-for="o,i in list" @tap="onCardTap(o)">
+					<div class="card-header">
+						<div class="app-font-size-20" v-text="o.time"></div>
+					</div>
+					<div class="card-body">
+						<div class="app-font-size-32" v-text="o.title"></div>
+						<div class="tips app-font-size-28 app-color-9f9fa0" v-text="o.summary"></div>
+					</div>
 				</div>
 			</div>
-
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
@@ -111,7 +111,7 @@
 			mui.init();
 
 			new Vue({
-				el: ".mui-content",
+				el: ".root",
 				data: function() {
 					return {
 						n: 1,
@@ -138,6 +138,29 @@
 					// 卡片被点击时
 					onCardTap: function(o) {
 						console.log(JSON.stringify(o));
+					},
+
+					// 清空消息列表
+					onClearTap: function() {
+						var that = this;
+
+						new Promise(function(reslove, reject) {
+							mui.confirm("是否清空所有消息", "", ["确认清空", "取消"], function(e) {
+								if(e.index === 0) {
+									reslove();
+								}
+							});
+						}).then(function() {
+							dal.message.delSystemAll(function(err, data) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("消息已清空");
+								that.list.length = 0;
+								that.n = 1;
+							});
+						});
+
 					}
 				}
 			})

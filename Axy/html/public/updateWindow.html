@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>通知弹窗</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			body {
+				background-color: transparent;
+			}
+			
+			.root {
+				position: fixed;
+				background-color: rgba(63, 63, 63, 0.6);
+				width: 100%;
+				height: 100%;
+			}
+			
+			.card {
+				width: 6.933333rem;
+				background-image: url(../../image/public/BG_Popup@3x.png);
+				background-size: 100%;
+				background-repeat: no-repeat;
+				position: absolute;
+				left: 50%;
+				top: 48%;
+				transform: translate3d(-50%, -50%, 0);
+				-webkit-transform: translate3d(-50%, -50%, 0);
+				border-radius: 0 0 10px 10px;
+			}
+			
+			.card-head {
+				padding: 1.1rem 0.56rem 0.533333rem 0.56rem;
+			}
+			
+			.version {
+				margin-top: 0.293333rem;
+			}
+			
+			.card-body {
+				padding: 0.5rem 0.56rem 0.2rem 0.56rem;
+				max-height: 3.8rem;
+				overflow-y: scroll;
+			}
+			
+			.card-body>div {
+				color: #333333;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: flex-start;
+				align-items: flex-start;
+				margin: 0.18rem 0;
+			}
+			
+			.card-foot {
+				position: relative;
+			}
+			
+			.card-foot:before {
+				content: "";
+				background-color: #e9e9e9;
+				position: absolute;
+				width: 100%;
+				height: 1px;
+				/*transform: scaleY(0.5);
+				 * 
+				-webkit-transform: scaleY(0.5);*/
+			}
+			
+			.card-foot:after {
+				content: "";
+				background-color: #e9e9e9;
+				position: absolute;
+				left: 50%;
+				width: 1px;
+				height: 1.173333rem;
+				/*transform: scaleX(0.5) translateX(-50%);
+				-webkit-transform: scaleX(0.5) translateX(-50%);*/
+			}
+			
+			.card-foot>div {
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				float: left;
+				text-align: center;
+				width: 50%;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="root">
+			<div class="card">
+				<div class="card-head app-font-size-42 app-color-white">
+					发现新版本
+					<div class="version" v-text="'v'+version">...</div>
+				</div>
+				<div class="card-body app-font-size-28">
+					<template v-for="o,i in list">
+						<div>
+							<span>{{i+1}}：</span>
+							<div>{{o}}</div>
+						</div>
+					</template>
+
+				</div>
+				<div class="card-foot app-font-size-30">
+					<div @tap="onClose()" class="app-touch" style="color: #1364FF;">残忍关闭</div>
+					<div @tap="onUpdate()" class="app-touch" style="color: #FF0000;">立即升级</div>
+				</div>
+			</div>
+		</div>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/common/rsmanager.js"></script>
+		<!--<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>-->
+
+		<script type="text/javascript">
+			mui.back = function(){};
+			new Vue({
+				el: '.root',
+				data: function() {
+					return {
+						path: "", // 更新包地址
+						enforce: false, // 强制更新 不能关闭提示框
+						//title: "发现新版本", // 更新提示框的标题内容 
+						version: "...", // 版本号
+						message: "", // "全面支持智能设备，无限连接可远程操控。|支持查看更多精彩评论；|智慧生活新增“体验馆”板块", // 更新内容
+					};
+				},
+				computed: {
+					list: function() {
+						return this.message.split("|");
+					}
+				},
+				mounted: function(){
+					mui.plusReady(function(){
+						var $view = plus.webview.currentWebview();
+						
+						this.path = $view.path;
+						this.enforce = $view.enforce;
+						//this.title = $view.title;
+						this.version = $view.version;
+						this.message = $view.message;
+						
+						this.$view = $view;
+					}.bind(this));
+				},
+				methods: {
+					// 关闭
+					onClose: function() {
+						if(this.enforce) {
+							return mui.toast("当前版本过低，请立即升级。")
+						}
+						this.$view && this.$view.close();
+					},
+					// 更新
+					onUpdate: function() {
+						// 判断是否是更新资源文件
+						if(!rsmanager.isHotRresource(this.path)) {
+							// 如果是iOS系统，则可能要跳转 app stroe
+							return mui.os.ios && 　plus.runtime.openURL(this.path);
+						}
+
+						//　下载更新  
+						rsmanager._install(this.path, function(succ) {
+							if(mui.os.ios) {
+								plus.nativeUI.toast('您可能需要手动关闭应用并重启');
+							} else {
+								plus.runtime.restart();
+							}
+						}, false);
+
+					}
+				}
+
+			})
+		</script>
+	</body>
+
+</html>
