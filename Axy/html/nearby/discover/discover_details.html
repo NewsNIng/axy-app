@@ -312,8 +312,6 @@
 				padding: 6%;
 			}
 			/*end share*/
-			
-			
 			/*图片轮播*/
 			
 			.mui-slider-indicator .mui-indicator {
@@ -345,7 +343,8 @@
 				<a class="mui-icon mui-pull-right" @tap="mui('#popover-share').popover('show')">
 					<img src="../../../image/nearby/business/share.png" />
 				</a>
-				<a class="mui-icon mui-pull-right" style="margin-right: -4px;">
+				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
+					<!--<template v-if></template>-->
 					<img src="../../../image/nearby/business/collect.png" />
 				</a>
 			</header>
@@ -383,7 +382,7 @@
 
 			<div class="mui-content noImmersed  mui-scroll-wrapper">
 				<div class="mui-scroll">
-					
+
 					<div id="slider" class="mui-slider">
 						<div class="mui-slider-group mui-slider-loop">
 							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast"></div>
@@ -394,8 +393,7 @@
 							<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
 						</div>
 					</div>
-					
-					
+
 					<!--<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'"></div>-->
 					<div class="user_tittle app-font-size-28">
 						<img @tap="onHeadTap(info.account)" class="avastr img-lazy-load" :data-src="info.headimgurl" data-type="avatar" />
@@ -467,7 +465,8 @@
 							"senddate": "",
 							"likecount": 0,
 							"nickname": null,
-							"headimgurl": null
+							"headimgurl": null,
+							"iscollection": 0
 						},
 
 						clist: [],
@@ -491,17 +490,18 @@
 					focus: function() {
 						return this.isfocus !== 0;
 					},
-					collection: function(){
-						return this.iscollection !== 0;
+					collection: function() {
+						console.log("computed"+ this.info.iscollection); 
+						return this.info.iscollection !== 0;
 					},
-					
+
 					imgList: function() {
 						var arr = [];
 						for(var i = 1; i <= 3; i++) {
 							if(this.info['image' + i]) {
 								arr.push(this.info['image' + i]);
 							}
-						}
+						} 
 
 						return arr;
 					},
@@ -546,14 +546,14 @@
 					onShareTo: function(type) {
 						var that = this;
 						var shareImg = that._getImg(that.info.image1, that.info.image2, that.info.image3);
-						var w;			
-						
+						var w;
+
 						Rx.Observable
 							// 获取授权
 							.create(function(ob) {
 								w = plus.nativeUI.showWaiting('获取授权...');
-								var oauthType = type.indexOf('wx') >= 0 ? 'weixin': type;
-								new that.$OAuth(oauthType, function(err, info) { 
+								var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
+								new that.$OAuth(oauthType, function(err, info) {
 									if(err) {
 										return mui.toast(err.message);
 									}
@@ -570,11 +570,11 @@
 									}
 									// 下载
 									w.setTitle("处理图片...");
-									
+
 									new ni.Download(shareImg, {
-										filename: 'share_temp_'+ +new Date, 
-										suffix: '.jpg', 
-									}).onSuccess(function(src){
+										filename: 'share_temp_' + +new Date,
+										suffix: '.jpg',
+									}).onSuccess(function(src) {
 										ob.next(src);
 									}).start();
 								})
@@ -658,7 +658,7 @@
 							// 图片轮播
 							mui('#slider').slider({
 								interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
-							}); 
+							});
 						});
 					},
 					// 上拉加载更多
@@ -673,6 +673,7 @@
 								return mui.toast(err.message)
 							}
 							console.log(JSON.stringify(data));
+							data.iscollection = data.iscollection ? 1 : 0; 
 							this.info = data;
 							this._loadImage();
 							this._getInfo();
@@ -701,6 +702,24 @@
 					},
 					onAttention: function() {
 
+					},
+					onCollection: function() {
+						this.changeCollection();
+					},
+					changeCollection: function() {
+						var methodName = 'add';
+						
+						if(this.collection) {
+							methodName = 'delete';
+						}
+						dal.user.collection_talk[methodName](this.aid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							mui.toast((this.collection? "取消": "") + "收藏成功");
+							this.info.iscollection = +!this.info.iscollection;
+							
+						}.bind(this));
 					},
 					onFocusTap: function() {
 						if(this.from === this.info.account) {

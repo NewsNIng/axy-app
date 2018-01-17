@@ -318,8 +318,7 @@
 				"refer": [
 					"html/zeus.html",
 					"html/smart/index2.html",
-					"html/common/login.html",
-					"html/public/updateWindow.html"
+					"html/common/login.html"
 				],
 				"priority": 0
 			},
@@ -894,9 +893,7 @@
 				"priority": 0
 			},
 			"html/zeus.html": {
-				"resources": [
-					"html/smart/devices/dev_error.html"
-				],
+				"resources": [],
 				"refer": [
 					"html/common/login.html",
 					"html/common/authorized.html"
@@ -907,7 +904,9 @@
 				"resources": [
 					"image/smart/devices/gateway/btn_Setup@3x.png"
 				],
-				"refer": [],
+				"refer": [
+					"html/smart/devices/camera_settings_arming.html"
+				],
 				"priority": 0
 			},
 			"html/smart/devices/camera_settings_log.html": {
@@ -977,8 +976,7 @@
 			"html/nearby/pages/theme.html": {
 				"resources": [],
 				"refer": [
-					"html/public/browser.html",
-					"html/public/share.html"
+					"html/public/browser.html"
 				],
 				"priority": 0
 			},
@@ -1049,10 +1047,10 @@
 				],
 				"priority": 0
 			},
-			"html/person/about.html": {
+			"html/smart/devices/dev_16711680.html": {
 				"resources": [],
 				"refer": [
-					"html/public/updateWindow.html"
+					"html/public/input.html"
 				],
 				"priority": 0
 			}
