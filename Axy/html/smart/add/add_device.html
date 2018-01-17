@@ -189,7 +189,8 @@
 							}, {
 								img: "../../../image/smart/devices/dev_icon/VH104D-N-MG@3x.png",
 								name: "VH104D/N/MG",
-								type: 1
+								type: 1,
+								noWifi: true
 							}, ]
 						},
 						ctrl_fit: {
@@ -330,7 +331,13 @@
 						window.localStorage.setItem('Lan_add_camera_img', o.img);
 						// 保存这个设备的type
 						window.localStorage.setItem('Lan_add_camera_type', o.type);
-						mui.openWindow('Lan_add_camera.html');
+						mui.openWindow('Lan_add_camera.html','Lan_add_camera', {
+							extras: {
+								ex : {
+									noWifi: !!o.noWifi
+								}
+							}
+						});
 					},
 					
 					// 扫码获取设备ID

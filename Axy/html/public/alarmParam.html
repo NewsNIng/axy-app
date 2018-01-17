@@ -147,7 +147,10 @@
 						layer: 1,
 						more: false,
 					});
-					pick_data[1].push({"text":"60秒","value":60})
+					pick_data[1].push({
+						"text": "60秒",
+						"value": 60
+					})
 					this.pick.setData(pick_data[1]);
 				},
 				plusReady: function() {
@@ -191,11 +194,12 @@
 						plus.nativeUI.showWaiting();
 						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.interval, this.durationTime, function(err, data) {
 							plus.nativeUI.closeWaiting();
-							console.log(JSON.stringify(data));
-							console.log(JSON.stringify(err));
+							console.log("data==>"+JSON.stringify(data));
+							console.log("err==>"+JSON.stringify(err));
 							if(err) {
 								return mui.toast(err.message);
 							}
+//							alert("err==>" + err + "\tdata==>" + data);
 							app.page.setResult({
 								//								intervalTime: this.intervalTime,
 								//								continuedTime: this.continuedTime

@@ -904,7 +904,9 @@
 				"resources": [
 					"image/smart/devices/gateway/btn_Setup@3x.png"
 				],
-				"refer": [],
+				"refer": [
+					"html/smart/devices/camera_settings_arming.html"
+				],
 				"priority": 0
 			},
 			"html/smart/devices/camera_settings_log.html": {
@@ -1042,6 +1044,13 @@
 				"resources": [],
 				"refer": [
 					"html/smart/devices/dev_chart.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_16711680.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
 				],
 				"priority": 0
 			}

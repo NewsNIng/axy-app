@@ -227,10 +227,10 @@
 
 					// 通过设备ID进行添加 且 验证
 					addDeviceByHostLine: function() {
-						alert(this.devid);
+						//						alert(this.devid);
 						dal.device.add(this.devid, function(err, data) {
 							if(err) {
-								//								return this.over(err.message || "连接失败，请重试");***
+								return this.over(err.message || "连接失败，请重试");
 							}
 
 							// 判断是否需要配置WIFI
@@ -258,14 +258,14 @@
 							return;
 						}
 						// 跳转
-						mui.openWindow('add_completed.html','add_completed',{
+						mui.openWindow('add_completed.html', 'add_completed', {
 							extras: {
-								needConn:this.needConn,
-								devid:this.devid,
+								needConn: this.needConn,
+								devid: this.devid,
 							}
 						});
 						return;
-//						this.$view.close();
+						//						this.$view.close();
 					},
 					over: function(msg, close) {
 						if(this.timer >= 0) {

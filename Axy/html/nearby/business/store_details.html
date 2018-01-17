@@ -229,15 +229,16 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		
+
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
-		
+
 		<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>
 		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
-	
+
 		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
 
@@ -301,7 +302,6 @@
 					collection: function() {
 						return this.iscollection !== 0;
 					}
-
 				},
 				watch: {
 					id: function() {
@@ -310,7 +310,6 @@
 				},
 				plusReady: function() {
 					this.id = this.$view.oid;
-
 					// 缓存机制加载图片
 					imagelazyload();
 					// 图片轮播
@@ -326,7 +325,8 @@
 							}
 							// 商家信息
 							this.data = data.store;
-							this.iscollection = data.iscollection;
+							this.iscollection = !data.iscollection ? 0 : 1;
+							//console.log(this.iscollection);
 							// 商品信息
 							this.goodslist = data.goodslist;
 							this.$nextTick(function() {
@@ -340,16 +340,18 @@
 					},
 					changeCollection: function() {
 						var methodName = 'add';
-						if(!this.collection) {
+//						console.log(this.collection);
+						if(this.collection) {
 							methodName = 'delete';
 						}
 						dal.user.collection_shop[methodName](this.aid, function(err, data) {
 							if(err) {
 								return mui.toast(err.message)
 							}
-							alert(JSON.stringify(data));
 							this.iscollection = +!this.iscollection;
-						});
+							mui.toast("收藏成功");
+//							alert(JSON.stringify(data));
+						}.bind(this));
 					},
 					onGoodTap: function(o, e) {
 						var el = e.target;

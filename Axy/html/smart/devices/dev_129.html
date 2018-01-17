@@ -83,7 +83,7 @@
 					<li class="mui-table-view-cell">
 						<a>
 							<span>绑定主机</span>
-							<span class="mui-badge" v-text="devInfo.devName"></span>
+							<span class="mui-badge" v-text="devInfo.devName || devInfo.accessory.devid"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -297,7 +297,7 @@
 							});
 						}, {
 							title: "设备名称",
-							tips: that.devInfo.accessory.name,
+							content: that.devInfo.accessory.name,
 						});
 					},
 				}
