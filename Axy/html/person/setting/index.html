@@ -49,7 +49,6 @@
 			.center {
 				text-align: center !important;
 			}
-			
 			/*end菜单*/
 		</style>
 
@@ -106,74 +105,88 @@
 
 		<script type="text/javascript">
 			mui.init();
-			
+
 			var lockterminal;
-			
+
 			mui.ready(function() {
 				mui('.mui-content').on('tap', '*[data-href]', function() {
 					mui.openWindow(this.dataset.href);
 				});
 				document.getElementById("exit").addEventListener('tap', onExit);
-				
+
 				lockterminal = document.querySelector(".lockterminal");
-				app.user.get(function(u){
+				app.user.get(function(u) {
 					user = u;
-					if(u && u.lockterminal === 1){ 
-						lockterminal.innerHTML = "已开启"; 
+					if(u && u.lockterminal === 1) {
+						lockterminal.innerHTML = "已开启";
 						lockterminal.classList.add("app-color-main");
 					}
 				});
-				
-				document.getElementById("safe").addEventListener('tap',function(){
-					
-					if(!user || !user.bindmobile){
+
+				document.getElementById("safe").addEventListener('tap', function() {
+
+					if(!user || !user.bindmobile) {
 						mui.toast("请先绑定手机！");
-						app.page.openForResultBy('../relation/bind.html', 'bind', function(data){
+						app.page.openForResultBy('../relation/bind.html', 'bind', function(data) {
 							user.bindmobile = data.tel;
 						});
 						return;
 					}
-					
-					
-					
-					app.page.openForResultBy('safe.html', 'safe', function(data){
-						if(data.result){ 
-							lockterminal.innerHTML = "已开启"; 
+
+					app.page.openForResultBy('safe.html', 'safe', function(data) {
+						if(data.result) {
+							lockterminal.innerHTML = "已开启";
 							lockterminal.classList.add("app-color-main");
-						}else{
-							lockterminal.innerHTML = "已关闭"; 
+						} else {
+							lockterminal.innerHTML = "已关闭";
 							lockterminal.classList.remove("app-color-main");
 						}
 					});
 				})
 			});
-			
-			
 
 			function onExit() {
 				mui.confirm("您确定退出帐号吗？", "", ["退出帐号", "取消"], function(e) {
 					if(e.index === 0) {
+						// 获取所有webview页面
 						var all = plus.webview.all();
+						// 获取当前webview页面
 						var index = plus.webview.currentWebview();
+						// 获取app启动页
 						var first = plus.webview.getLaunchWebview() || plus.webview.getWebviewById('main');
 						var id;
 						plus.nativeUI.showWaiting();
+						// 关闭除了当前和首页的 其它全部页面
 						for(var i = 0, l = all.length; i < l; i++) {
 							id = all[i].id;
-							
 							if(id !== index.id && id !== first.id) {
 								plus.webview.close(all[i]);
 							}
 						}
+						// 清除本地用户数据
 						app.user.logout();
 						window.localStorage.setItem('_pwd_', "");
+						// 清除第三方登录信息
+						plus.oauth.getServices(function(auths) {
+							// 逐个注销
+							(auths || []).forEach(function(item) {
+								
+								if(item && item.authResult){
+									console.log(item.id + '------out');
+									item.logout(function(){});
+								}
+							});
+						});
+
+						// 监听首页的加载完成，关闭本页面
 						first.addEventListener('loaded', function() {
 							plus.nativeUI.closeWaiting();
 							index.close('none');
 						});
+						// 首页重新运行
 						first.reload();
+						// 显示首页
 						first.show("slide-in-bottom", 250);
-						//plus.nativeUI.closeWaiting();
 					}
 				});
 			}

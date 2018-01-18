@@ -279,22 +279,7 @@
 		}, callback);
 	}
 	
-	/**
-	 * 获取趋势图
-	 * @param {Object} id
-	 * @param {Object} type
-	 * @param {Object} devid
-	 * @param {Object} devtype
-	 * @param {Object} callback
-	 */
-	devaccessory.formaldehydedetector = function(id, type, devid, devtype, callback) {
-		return ra("get", "/devaccessory/formaldehydedetector", {
-			id: id,
-			type: type,
-			devid: devid,
-			devtype: devtype
-		}, callback);
-	}
+	
 
 	/**
 	 * 配件绑定到设备

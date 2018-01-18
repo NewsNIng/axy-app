@@ -26,6 +26,9 @@
 				pageNumber:　pageNumber,
 				pageSize:　pageSize　|| 10
 			}, callback);
+		},
+		tap: function(id, callback){
+			return ra('get', '/home/theme/'+ id, {}, callback);
 		}
 	}
 	

@@ -34,18 +34,27 @@
 			}
 			/*-left图片文字*/
 			
-			.menu-box a.mui-navigate-right {}
+			.menu-box a {}
 			
-			.menu-box a.mui-navigate-right>img {
+			.menu-box a>img {
 				width: 0.6rem;
 				margin: 0 0.2rem;
 				vertical-align: middle;
 			}
 			
-			.menu-box a.mui-navigate-right>span {
+			.menu-box a>span {
 				vertical-align: middle;
 			}
+			
 			/*end菜单*/
+			
+			
+			
+			
+			/*隐藏手机号码的箭头*/
+			li:first-child .mui-navigate-right:after{
+				color: transparent;
+			}
 		</style>
 
 	</head>
@@ -58,32 +67,32 @@
 		</header>
 		<div class="mui-content menu-box app-font-size-32">
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell" data-href="push.html" @tap="onTelphoneTap()">
+				<li class="mui-table-view-cell" >
 					<a class="mui-navigate-right">
 						<img src="../../../image/person/info/tel@3x.png" />
 						<span class="app-color-333333">手机号码</span>
-						<span class="mui-badge">{{telphone || "未绑定"}}</span>
+						<span class="mui-badge" v-text='telphone || "未绑定"'>...</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell" data-href="safe.html" @tap="onOAuthItemTap('weixin')">
+				<li class="mui-table-view-cell" @tap="onOAuthItemTap('weixin')">
 					<a class="mui-navigate-right">
 						<img src="../../../image/person/info/wx@3x.png" />
 						<span class="app-color-333333">微信帐号</span>
-						<span class="mui-badge">{{weixin.userInfo.nickname}}</span>
+						<span class="mui-badge" v-text="weixin.userInfo.nickname">...</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell" data-href="safe.html" @tap="onOAuthItemTap('qq')">
+				<li class="mui-table-view-cell"  @tap="onOAuthItemTap('qq')">
 					<a class="mui-navigate-right">
 						<img src="../../../image/person/info/qq@3x.png" />
 						<span class="app-color-333333">QQ帐号</span>
-						<span class="mui-badge">{{qq.userInfo.nickname}}</span>
+						<span class="mui-badge" v-text="qq.userInfo.nickname">...</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell" data-href="safe.html" @tap="onOAuthItemTap('sinaweibo')">
+				<li class="mui-table-view-cell"  @tap="onOAuthItemTap('sinaweibo')">
 					<a class="mui-navigate-right">
 						<img src="../../../image/person/info/weibo@3x.png" />
 						<span class="app-color-333333">新浪微博</span>
-						<span class="mui-badge">{{sinaweibo.userInfo.nickname}}</span>
+						<span class="mui-badge" v-text="sinaweibo.userInfo.nickname">...</span>
 					</a>
 				</li>
 			</ul>
@@ -101,13 +110,6 @@
 		<script type="text/javascript">
 			mui.init();
 
-			mui.ready(function() {
-				mui('.mui-content').on('tap', '*[data-href]', function() {
-					//mui.openWindow(this.dataset.href);
-				});
-			});
-
-			//			var aouth;
 
 			new Vue({
 				el: ".mui-content",
@@ -211,6 +213,7 @@
 											return mui.toast(err.message);
 										}
 										mui.toast("解绑成功");
+										
 										that[type].logout(function() {
 											that[type].userInfo = {
 												nickname: "已解除"

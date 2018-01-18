@@ -85,7 +85,7 @@
 			var size = 0;
 			task.addEventListener('statechanged', function(d, status) {
 				size = +(d.downloadedSize / d.totalSize * 100);
-				size = size.toFixed(0);
+				size = size.toFixed(2);
 				size = isNaN(size) ? 0: size;
 				w.setTitle('正在下载...\n' + size + '%');
 			});
@@ -95,6 +95,8 @@
 		task.start();
 		return task;
 	}
+	
+	m._install = _install;
 	
 	/**
 	 * 安装新资源
@@ -112,7 +114,7 @@
 		}({
 			hide: false, // 是否隐藏更新
 			show: true, // 是否提示
-			force: false, // 强制更新 关不了提示框
+			enforce: false, // 强制更新 关不了提示框
 			title: "", // 更新提示框的标题内容 可以设置为app的版本号
 			message: "是否现在更新", // 提示框显示内容，可以设置为app新版内容功能讲解  \n换行
 		}, options));
@@ -131,7 +133,7 @@
 				// 点击了取消更新
 				if(!succ){
 					// 如果是强制更新
-					if(options.force){
+					if(options.enforce){
 						// 递归调用再次提示
 						plus.nativeUI.toast("应用旧版本将无法使用，请立即更新。");
 						return _showUpdatePrompt(options.title, options.message, _showUpdatePromptCallback);

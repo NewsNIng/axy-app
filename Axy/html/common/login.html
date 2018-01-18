@@ -332,16 +332,10 @@
 						new Promise(function(resolve, reject) {
 								new that.$OAuth(type, function(err, info) {
 									if(err) {
-										return reject(err);
+										return reject("请确保您有安装该应用且授权");
 									}
 									return resolve(info);
-
-									w && w.close();
-									if(err) {
-										return mui.toast(JSON.stringify(err));
-									}
-									info = authInfoAdapter(info);
-
+									 
 								}, that);
 							})
 							.then(authInfoAdapter)
@@ -401,7 +395,7 @@
 
 					},
 
-					// 初始化第三方登录（iOS系统限制）
+					// 初始化第三方登录（iOS系统限制 ??????）
 					initOAuth: function() {
 //						plus.share.getServices(function(services) {
 //							services.forEach(function(oa){

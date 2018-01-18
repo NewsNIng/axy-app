@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=auto">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<link rel="stylesheet" href="../../css/lib/mui.min.css" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
@@ -21,7 +21,7 @@
 				background-color: #5C75EE;
 				background: transparent !important;
 			}
-			 
+			  
 			.item-logo {
 				width: 100%;
 				height: 100%;
@@ -80,7 +80,7 @@
 			<div class="mui-slider-group">
 				<div v-for='o,i in list' class="mui-slider-item" :itemIndex='i'>
 					<div class="item-logo" :style="{backgroundImage: 'url('+o.img+')'}">
-						<div @tap="onCloseTap()" class="out2">
+						<div @tap="onCloseTap()" v-if="i === list.length - 1" class="out2">
 							<button type="button" class="mui-btn app-btn-main-ghost">立即体验</button>
 						</div>
 					</div>

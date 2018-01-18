@@ -249,7 +249,7 @@
 
 		<script type="text/javascript">
 			mui.init();
-
+			
 			new Vue({
 				el: '.root',
 				data: function() {
@@ -375,6 +375,7 @@
 								var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
 								new that.$OAuth(oauthType, function(err, info) {
 									if(err) {
+										w.close();
 										return mui.toast(err.message);
 									}
 									ob.next();

@@ -218,12 +218,14 @@
 
 		<script src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
 
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 		
 		<script type="text/javascript">
 			mui.init()
@@ -240,7 +242,6 @@
 				
 				plusReady: function(){
 					this.uname = this.$view.account;
-					console.log(this.uname);
 				},
 
 				methods: {
@@ -253,7 +254,7 @@
 
 						
 						// 验证 规范
-						var errorMessage = app.rules.test("pwd", this.pwd, "密码输入错误");
+						var errorMessage = app.rules.test("pwd", this.pwd, "密码格式输入错误");
 						if(errorMessage){
 							return mui.toast(errorMessage);
 						}
@@ -265,6 +266,7 @@
 								return mui.toast(JSON.stringify(err));
 							}
 							mui.toast("密码设置成功！");
+							app.page.setResult({result: true}).close();
 						});
 
 					}

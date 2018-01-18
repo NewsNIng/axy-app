@@ -21,7 +21,37 @@
 			image_cropper: '_www/html/public/image_cropper.html',
 			alarmParam: '_www/html/public/alarmParam.html',
 			authorized: "_www/html/common/authorized.html",
+			share: "_www/html/public/share.html",
+			update: "_www/html/public/updateWindow.html"
 		},cw = null;
+		
+	function openMaskWindow(url, id, callback, options){
+		_tempSrc = '_APP_PAGE_RESULT_FUN_SHARE_' + _id++;
+		options = options || {};
+		w[_tempSrc] = function(data){
+			w[_tempSrc] = null;
+			callback(data);
+		};
+		options.callbackName = _tempSrc;
+		pg = plus.webview.create(url, id, {background: "transparent"}, options);
+		
+		pg.addEventListener('titleUpdate', function(){
+			cw && (cw.close(),cw = null);
+			pg.show('none');
+		});
+		
+		return pg;
+	}
+	
+	// 弹出升级页面
+	page.openUpdate = function(callback, options){
+		return openMaskWindow(pageDir.update, 'openUpdate', callback, options);
+	}
+	
+	// 打开分享页面
+	page.sendShare = function(callback, options){
+		return openMaskWindow(pageDir.share, 'sendShare', callback, options);
+	}
 	
 	// 打开城市选择
 	page.getPosition = function(callback){
