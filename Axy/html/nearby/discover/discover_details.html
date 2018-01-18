@@ -344,8 +344,12 @@
 					<img src="../../../image/nearby/business/share.png" />
 				</a>
 				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
-					<!--<template v-if></template>-->
-					<img src="../../../image/nearby/business/collect.png" />
+					<template v-if="collection">
+						<img src="../../../image/nearby/business/collection_3@3x.png"/>
+					</template>
+					<template v-else>
+						<img src="../../../image/nearby/business/collect.png" />
+					</template>
 				</a>
 			</header>
 
@@ -491,7 +495,7 @@
 						return this.isfocus !== 0;
 					},
 					collection: function() {
-						console.log("computed"+ this.info.iscollection); 
+						console.log("computed" + this.info.iscollection);
 						return this.info.iscollection !== 0;
 					},
 
@@ -501,7 +505,7 @@
 							if(this.info['image' + i]) {
 								arr.push(this.info['image' + i]);
 							}
-						} 
+						}
 
 						return arr;
 					},
@@ -673,7 +677,7 @@
 								return mui.toast(err.message)
 							}
 							console.log(JSON.stringify(data));
-							data.iscollection = data.iscollection ? 1 : 0; 
+							data.iscollection = data.isFavorites ? 1 : 0;
 							this.info = data;
 							this._loadImage();
 							this._getInfo();
@@ -708,7 +712,7 @@
 					},
 					changeCollection: function() {
 						var methodName = 'add';
-						
+
 						if(this.collection) {
 							methodName = 'delete';
 						}
@@ -716,9 +720,9 @@
 							if(err) {
 								return mui.toast(err.message)
 							}
-							mui.toast((this.collection? "取消": "") + "收藏成功");
+							mui.toast((this.collection ? "取消" : "") + "收藏成功");
 							this.info.iscollection = +!this.info.iscollection;
-							
+
 						}.bind(this));
 					},
 					onFocusTap: function() {

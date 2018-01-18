@@ -85,7 +85,8 @@
 	},
 	"html/nearby/pages/discover.html": {
 		"refer": [
-			"html/nearby/discover/discover_details.html"
+			"html/nearby/discover/discover_details.html",
+			"html/person/other.html"
 		],
 		"resources": []
 	},
@@ -302,6 +303,11 @@
 	"html/smart/devices/dev_WG-100.html": {
 		"refer": [
 			"html/smart/devices/camera_settings_arming.html"
+		]
+	},
+	"html/zeus.html": {
+		"refer": [
+			"html/common/login.html"
 		]
 	}
 }
