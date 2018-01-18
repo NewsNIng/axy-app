@@ -36,7 +36,7 @@
 			
 			
 			.dev_text {
-
+				white-space: nowrap;
 				width: 100%;
 				padding: 0 25%;
 				text-align: left;
@@ -152,6 +152,7 @@
 				methods: {
 					onNext: function() {
 						var url = "sonic_connect_camera2.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd;
+						
 						this.$view.loadURL(url, 'voice2');
 					}
 				}

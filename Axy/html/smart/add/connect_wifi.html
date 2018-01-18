@@ -222,7 +222,7 @@
 						}
 
 						app.page.setResult({
-							name: this.wifiname,
+							name: encodeURI(encodeURI(this.wifiname)),
 							pwd: this.wifipwd,
 						}).close();
 					},

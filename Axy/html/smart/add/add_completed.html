@@ -161,8 +161,7 @@
 				plusReady: function() {
 					this.needConn = this.$view.needConn;
 					this.devid = this.$view.devid;
-					
-					// 通知其他页面设备列表更新
+					this.updateDeviceList();
 				},
 				methods: {
 					show: function(){
@@ -173,7 +172,9 @@
 					},
 					// 通知其他页面设备列表更新
 					updateDeviceList: function(){
-						new this.$Broadcast().emit('device_update', {});
+						new this.$Broadcast().emit('device_update', {}, {
+							views: ["main", "dev_my_list"]
+						});
 					},
 					
 				}

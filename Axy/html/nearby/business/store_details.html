@@ -193,10 +193,10 @@
 				</div>
 
 				<div class="shop_tittle">
-					<img src="../../../image/nearby/business/phone_icon.png" />
+					<img @tap="onCallTap()" src="../../../image/nearby/business/phone_icon.png" />
 					<div class="shop_name app-font-size-34" v-text="data.name">
 					</div>
-					<div class="shop_position app-font-size-26">
+					<div class="shop_position app-font-size-26" @tap="onWithMapTap()">
 						<img src="../../../image/nearby/map.png" />
 						<div style="display: inline;" v-text="data.address"></div>
 					</div>
@@ -241,6 +241,8 @@
 
 		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
+		
+		<script type="text/javascript" src="../../../js/lib/gps.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -439,6 +441,44 @@
 					},
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
+					},
+					
+					// 点击打电话
+					onCallTap: function() {
+						var o = this.data;
+						var buttons = o.telphone.split("/").map(function(item) {
+							return {
+								color: "rgb(0,0,255)",
+								style: "default",
+								title: item
+							}
+						});
+						plus.nativeUI.actionSheet({
+								cancel: "取消",
+								buttons: buttons
+							},
+							function(e) {
+								if(e.index > 0) {
+									plus.device.dial(buttons[e.index - 1].title);
+								}
+							});
+					},
+					
+					// 点击导航
+					onWithMapTap: function() {
+						var o = this.data;
+						//BD-09 to GCJ-02先将百度坐标转成中国坐标
+						var tmp = GPS.bd_decrypt(parseFloat(o.latitude), parseFloat(o.longitude));
+						//GCJ-02 to WGS-84再将中国坐标转成GPS坐标
+						var dstarr = GPS.gcj_decrypt_exact(tmp['lat'], tmp['lon']);
+						//目的地
+						var dst = new plus.maps.Point(dstarr['lon'], dstarr['lat']);
+						//目的地描述
+						var shop = o.address + " - " + o.name;
+						//起始地   
+						var src = new plus.maps.Point(this.longitude, this.latitude);
+						//调用导航 
+						plus.maps.openSysMap(dst, shop, src);
 					},
 				}
 			});

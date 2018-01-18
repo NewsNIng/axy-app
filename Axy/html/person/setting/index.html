@@ -170,9 +170,7 @@
 						plus.oauth.getServices(function(auths) {
 							// 逐个注销
 							(auths || []).forEach(function(item) {
-								
 								if(item && item.authResult){
-									console.log(item.id + '------out');
 									item.logout(function(){});
 								}
 							});
