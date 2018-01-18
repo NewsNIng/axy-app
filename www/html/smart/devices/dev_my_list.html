@@ -536,7 +536,7 @@
 							devType: o.devtype,
 							statusCode: o.statuscode
 						};
-						
+						console.log(JSON.stringify(o));
 						app.page.openForResultBy('dev_' + o.type + '.html', 'dev_' + o.type, function(data) {
 							actionDir[data.action](data.info);
 						}, {

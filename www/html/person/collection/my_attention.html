@@ -21,9 +21,11 @@
 				padding-bottom: 0;
 				overflow: hidden;
 			}
+			
 			.mui-content {
 				padding-bottom: 0.586666rem;
 			}
+			
 			#box {
 				height: 100%;
 			}
@@ -158,10 +160,10 @@
 				mounted: function() {
 					that = this;
 					this.$pullRefresh = mui(".mui-scroll-wrapper");
-//										this._getList(function(data) {
-//											console.log(JSON.stringify(data));
-//											that.attentions = data;
-//										});
+					//										this._getList(function(data) {
+					//											console.log(JSON.stringify(data));
+					//											that.attentions = data;
+					//										});
 					mui.init({
 						pullRefresh: {
 							container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
@@ -170,7 +172,7 @@
 							}
 						}
 					});
-					this._up(); 
+					this._up();
 				},
 				plusReady: function() {},
 				methods: {
@@ -182,20 +184,22 @@
 							f(data);
 						});
 					},
-					_unfollow: function(account,f) {
-						dal.user.focus.delete(account,function(err, data){
-							if(err){
+					_unfollow: function(account, f) {
+						dal.user.focus.delete(account, function(err, data) {
+							if(err) {
 								return mui.toast(err.massage);
 							}
 							f(data);
 						});
 					},
-					unBindTap: function(account,index) {
+					unBindTap: function(account, index) {
 						var that = this;
-						this._unfollow(account, function(data){
-							// 提示确认是否被删除
-							that.attentions.splice(index,1);
-							
+						mui.confirm("取关后你将无法实时了解TA的动态，是否取消关注？", "温馨提示", ['确认', '取消'], function(e) {
+							if(!e.index){
+								that._unfollow(account, function(data) {
+									that.attentions.splice(index, 1);
+								});
+							}
 						});
 					},
 					_up: function() {

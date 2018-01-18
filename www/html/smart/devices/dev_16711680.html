@@ -77,7 +77,7 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>绑定主机</span>
-							<span class="mui-badge" v-text="devInfo.devName"></span>
+							<span class="mui-badge" v-text="devInfo.devName||devInfo.accessory.devid"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -88,7 +88,7 @@
 					</li>
 					<li class="mui-table-view-cell">
 						<a>
-							<span>启用此设备</span>
+							<span>启用此配件</span>
 							<span class="mui-badge">
 								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': devInfo.accessory.enable}" ref="switch1">
 									<div class="mui-switch-handle"></div>
@@ -104,9 +104,9 @@
 				<div class="app-color-main-dark">删除设备</div>
 				<div>解绑主机</div>
 			</footer>-->
-			<dev-footer :accessory="devInfo.accessory" :devtype="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind">
+			<!--<dev-footer :accessory="devInfo.accessory" :devtype="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind">
 
-			</dev-footer>
+			</dev-footer>-->
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -255,7 +255,7 @@
 							});
 						}, {
 							title: "设备名称",
-							tips: that.devInfo.accessory.name,
+							content: that.devInfo.accessory.name,
 						});
 					},
 				}

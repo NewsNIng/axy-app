@@ -24,6 +24,15 @@
 		return ra('post', '/activitymsg/delete/' + id, {}, callback);
 	};
 	
+	/**
+	 * 删除全部活动消息
+	 * @param {Object} callback
+	 */
+	message.delActivityAll = function(callback){
+		var account = window.localStorage.getItem('_account_');
+		return ra('post', '/activitymsg/deleteAll/' + account, {}, callback);
+	};
+	
 	
 	
 	/**
@@ -40,12 +49,21 @@
 	};
 	
 	/**
-	 * 删除活动消息
+	 * 删除系统消息
 	 * @param {Object} id 系统消息id
 	 * @param {Object} callback
 	 */
 	message.delSystem = function(id, callback){
 		return ra('post', '/systemmsg/delete/' + id, {}, callback);
+	};
+	
+	/**
+	 * 删除全部系统消息
+	 * @param {Object} callback
+	 */
+	message.delSystemAll = function(callback){
+		var account = window.localStorage.getItem('_account_');
+		return ra('post', '/systemmsg/deleteAll/' + account, {}, callback);
 	};
 	
 	/**

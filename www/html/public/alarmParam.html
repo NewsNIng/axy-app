@@ -98,10 +98,11 @@
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/devparam.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 
 		<!--<script type="text/javascript" src="../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>-->
@@ -122,9 +123,13 @@
 						index: -1, // 设置项下标
 						pick: null,
 
+						recTime: -1,
+						en: -1,
 						intervalTime: 0,
 						continuedTime: 0,
 
+						type: -1,
+						devid: "",
 					};
 				},
 
@@ -142,12 +147,29 @@
 						layer: 1,
 						more: false,
 					});
+					pick_data[1].push({
+						"text": "60秒",
+						"value": 60
+					})
 					this.pick.setData(pick_data[1]);
 				},
 				plusReady: function() {
+					plus.nativeUI.showWaiting();
 					var v = this.$view;
-					this.intervalTime = v.intervalTime;
-					this.continuedTime = v.continuedTime;
+					this.type = v.type;
+					this.devid = v.devid;
+					dal.devparam.getAlarm(this.devid, this.type, function(err, data) {
+						console.log(JSON.stringify(data));
+						plus.nativeUI.closeWaiting();
+						if(err) {
+							return mui.toast(err.message);
+						}
+						this.en = data.en;
+						this.recTime = data.recTime;
+						this.intervalTime = data.interval;
+						this.continuedTime = data.durationTime;
+					}.bind(this)); //					this.intervalTime = v.intervalTime;
+					//					this.continuedTime = v.continuedTime;
 				},
 				methods: {
 					onPickTap: function(i) {
@@ -156,7 +178,6 @@
 						if(i === 1) {
 							p = 'continuedTime';
 						}
-
 						this.pick.pickers[0].setSelectedValue(that[p]);
 
 						var fn = function(s) {
@@ -169,12 +190,24 @@
 
 						});
 					},
-					onSaveTap: function(){
-						app.page.setResult({
-							intervalTime: this.intervalTime,
-							continuedTime: this.continuedTime
-						}).close();
+					onSaveTap: function() {
+						plus.nativeUI.showWaiting();
+						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.interval, this.durationTime, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log("data==>"+JSON.stringify(data));
+							console.log("err==>"+JSON.stringify(err));
+							if(err) {
+								return mui.toast(err.message);
+							}
+//							alert("err==>" + err + "\tdata==>" + data);
+							app.page.setResult({
+								//								intervalTime: this.intervalTime,
+								//								continuedTime: this.continuedTime
+							}).close();
+						});
+
 					},
+
 				}
 			});
 		</script>

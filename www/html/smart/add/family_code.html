@@ -87,7 +87,12 @@
 					};
 				},
 				watch: {
-
+					code: function(n){
+						if(n.length > 8){
+							this.code = n.substr(0, 8);
+							mui.toast("最大输入8位数字")
+						}
+					}
 				},
 				mounted: function() {
 					

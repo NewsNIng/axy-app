@@ -154,7 +154,7 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						//wifiname: '',
+						wifiname: '',
 						wifipwd: '',
 
 						wifinameCache: null,
@@ -176,13 +176,14 @@
 				},
 
 				computed: {
-					wifiname: function() {
-						return this.selected || this.connWifi.ssid;
-					}
+//					wifiname: function() {
+//						return this.selected || this.connWifi.ssid;
+//					}
 				},
 
 				watch: {
-					selected: function() {
+					selected: function(v) {
+						this.wifiname = v;
 						this.getWifiPwd();
 					}
 				},
@@ -207,7 +208,10 @@
 					},
 					onNextTap: function() {
 						// 验证 
-
+						if(!this.wifiname){
+//							alert(this.wifiname);
+							return mui.toast("WiFi名称不能为空");
+						}
 						// 是否记住密码
 						if(this.isRemember) {
 							// 保存
@@ -218,7 +222,7 @@
 						}
 
 						app.page.setResult({
-							name: this.wifiname,
+							name: encodeURI(encodeURI(this.wifiname)),
 							pwd: this.wifipwd,
 						}).close();
 					},
@@ -228,6 +232,7 @@
 							rs = JSON.parse(rs);
 							that.connWifi = rs.connWifi;
 							that.wifiList = rs.wifiList;
+							that.wifiname = rs.connWifi.ssid || "";
 							that.getWifiPwd();
 						});
 						

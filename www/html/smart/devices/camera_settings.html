@@ -206,7 +206,7 @@
 					<li class="mui-table-view-cell" @tap="onDevNameTap()">
 						<a class="mui-navigate-right">
 							<span>摄像机名称</span>
-							<span class="mui-badge" v-text="devInfo.location"></span>
+							<span class="mui-badge" v-text="fixName(devInfo.location)"></span>
 						</a>
 					</li>
 					<!--<li class="mui-table-view-cell">
@@ -302,6 +302,7 @@
 		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -379,12 +380,12 @@
 				},
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
+					console.log(JSON.stringify(this.devInfo));
 					if(this.devInfo.type === 32) {
 						this._getOpenled();
 					}
 				},
 				methods: {
-
 					// 取消
 					onCancel: function() {
 						this.mask = false;
@@ -468,13 +469,15 @@
 					// 告警时间跳转
 					onAlarmParam: function() {
 						var that = this;
+						
 						app.page.getAlarmParam(function(data) {
-							// 发送更改请求
 							//data.intervalTime
 							//data.continuedTime
 						}, {
-							intervalTime: 0,
-							continuedTime: 0,
+//							intervalTime: 0,
+//							continuedTime: 0,
+							type: that.devInfo.type,
+							devid: that.devInfo.devid,
 						});
 					},
 
@@ -578,6 +581,9 @@
 								info: this.devInfo
 							}
 						});
+					},
+					fixName: function(str) {
+						return app.dev.fixName(str);
 					}
 
 				}

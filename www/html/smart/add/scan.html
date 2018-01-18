@@ -77,14 +77,12 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		
 
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
-			
 			mui.init();
-			
+
 			var _B = new ni.Broadcast();
 
 			new Vue({
@@ -142,7 +140,9 @@
 							dal.device.add(id, function(err, data) {
 								w && (w.close(), w = null);
 								if(err) {
-									app.page.setResult({result: false}).close();
+									app.page.setResult({
+										result: false
+									}).close();
 									return mui.toast(err.message || '添加失败')
 								}
 								// 通知设备更新 TODO
@@ -150,68 +150,69 @@
 									views: ['zeus', 'dev_my_list']
 								});
 								mui.alert('添加成功');
-								app.page.setResult({result: true}).close();
+								app.page.setResult({
+									result: true
+								}).close();
 							});
 						}
 						// 配件添加
 						else {
 
 							Rx.Observable
-							// 获取配件的初始化信息
-							.create(function(observer) {
-								
-								dal.devaccessory.initbyid(id, function(err, data) {
-									if(err) {
-										return mui.toast(err.message);
-									}
-									observer.next(data);
-								});
-							})
-							// 打开选择主机设备
-							.mergeMap(function(data1) {
-								
-								return Rx.Observable.create(function(observer) {
-									app.page.openForResultBy('../devices/dev_select_id.html', 'dev_select_id', function(data) {
-										observer.next({
-											acc: data1,
-											dev: data
-										});
-										/*app.page.setResult({
-											devid: data.devid,
-											devtype: data.type,
-											id: id
-										}).close();*/
-
-									}, {
-										result: true
-									});
-								});
-							})
-							// 新增配件
-							.mergeMap(function(rs) {
-								return Rx.Observable.create(function(ob){
-									dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, function(err, data){
-										if(err){
-											ob.next(false);
+								// 获取配件的初始化信息
+								.create(function(observer) {
+									plus.nativeUI.showWaiting("获取配件的初始化信息");
+									dal.devaccessory.initbyid(id, function(err, data) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
 											return mui.toast(err.message);
 										}
-										ob.next(true);
-										console.log(JSON.stringify(data));
+										observer.next(data);
 									});
+								})
+								// 打开选择主机设备
+								.mergeMap(function(data1) {
+
+									return Rx.Observable.create(function(observer) {
+
+										app.page.openForResultBy('../devices/dev_select_id.html', 'dev_select_id', function(data) {
+											observer.next({
+												acc: data1,
+												dev: data
+											});
+										}, {
+											result: true
+										});
+									});
+
+								})
+								// 新增配件
+								.mergeMap(function(rs) {
+									plus.nativeUI.showWaiting("正在添加配件");
+									return Rx.Observable.create(function(ob) {
+										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, function(err, data) {
+											plus.nativeUI.closeWaiting();
+											if(err) {
+												ob.next(false);
+												return mui.toast(err.message);
+											}
+											ob.next(true);
+											console.log(JSON.stringify(data));
+										});
+									});
+								})
+								// 添加配件结果
+								.subscribe(function(result) {
+									if(result) {
+										// 通知配件更新 TODO
+										_B.emit('acc_update', {}, {
+											views: ['zeus', 'dev_my_list']
+										});
+									}
+									app.page.setResult({
+										result: result
+									}).close();
 								});
-							})
-							// 添加配件结果
-							.subscribe(function(result){
-								if(result){
-									// 通知配件更新 TODO
-									_B.emit('acc_update', {}, {
-										views: ['zeus', 'dev_my_list']
-									});
-								}
-								app.page.setResult({
-									result: result
-								}).close();
-							});
 
 						}
 
@@ -230,7 +231,7 @@
 
 					},
 					initScan: function() {
-//						var _arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+						//						var _arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 						var _arr = [0, 10];
 						var scan = new plus.barcode.Barcode('axy', _arr, {
 							frameColor: '#06C1AE',

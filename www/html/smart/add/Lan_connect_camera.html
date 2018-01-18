@@ -72,19 +72,18 @@
 				color: white;
 			}
 			
-			.imgbg{
+			.imgbg {
 				width: 100%;
 				padding: 1.5rem;
 			}
 			
-			.imgbg > img{
+			.imgbg>img {
 				width: 100%;
 			}
 			
 			.unavailable {
 				background: #7FD4CC;
 			}
-			
 		</style>
 	</head>
 
@@ -98,7 +97,7 @@
 
 			<div class="mui-content">
 				<div class="imgbg">
-					<img :src="bgp"/>
+					<img :src="bgp" />
 				</div>
 				<div class="dev_icon app-font-size-30">
 					<div class="dev_text app-font-size-34">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
@@ -122,6 +121,7 @@
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -139,6 +139,8 @@
 				el: '#warpper',
 				data: function() {
 					return {
+						needConnDevNameArr: ["AX-903", "WG-100", "AX-904", "VH-104MG", "VH-104DG", "VH-104GN"],
+
 						t: 100,
 						timer: -1,
 
@@ -147,15 +149,17 @@
 						wifipwd: "",
 
 						setid: "",
-						
+
 						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png',
-						
+						type: -1,
+
 						isConnected: false,
 					};
 				},
 				mounted: function() {
-					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '.png';
-					
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '4.png';
+					this.type = +window.localStorage.getItem('Lan_add_camera_type');
+
 					// get prev url params
 					function GetQueryString(name) {
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -172,6 +176,16 @@
 					// start timer
 					this.startTimer();
 				},
+				computed: {
+					// 是否需要提示连接摄像头
+					needConn: function() {
+						var rs = this.needConnDevNameArr.indexOf(app.dev.findName(this.type));
+						if(rs >= 0) {
+							return true;
+						}
+						return false;
+					}
+				},
 				plusReady: function() {
 
 					if(this.setid) {
@@ -181,7 +195,7 @@
 						// 内网 
 						this.addDeviceByHostLine();
 					} else {
-						this.autoOver();
+						//this.autoOver();
 					}
 
 				},
@@ -213,11 +227,12 @@
 
 					// 通过设备ID进行添加 且 验证
 					addDeviceByHostLine: function() {
+						//						alert(this.devid);
 						dal.device.add(this.devid, function(err, data) {
 							if(err) {
 								return this.over(err.message || "连接失败，请重试");
 							}
-							
+
 							// 判断是否需要配置WIFI
 							if(!this.setid && this.wifiname && this.wifipwd) {
 								this.nativeSetWIFI(this.wifiname, this.wifipwd);
@@ -238,10 +253,19 @@
 						}());
 					},
 					onNext: function() {
-						if(!this.isConnected){
+						if(!this.isConnected) {
+
 							return;
 						}
-						this.$view.close();
+						// 跳转
+						mui.openWindow('add_completed.html', 'add_completed', {
+							extras: {
+								needConn: this.needConn,
+								devid: this.devid,
+							}
+						});
+						return;
+						//						this.$view.close();
 					},
 					over: function(msg, close) {
 						if(this.timer >= 0) {
@@ -251,9 +275,10 @@
 						mui.toast(msg);
 						if(close) {
 							// 连接成功
-							isConnected = true;
+							this.isConnected = true;
 							mui.toast("添加成功，请点击完成！");
-							return this.$view.close();
+							return;
+							// return this.$view.close();***
 						}
 						this.$view.back();
 					},
@@ -268,7 +293,7 @@
 						// 参数配置WIFI 可选, 无论成功失败
 						setTimeout(function() {
 							this.over("设备添加成功", true);
-						}.bind(this), 3000);
+						}.bind(this), 1000);
 					},
 				}
 			});

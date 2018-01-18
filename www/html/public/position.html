@@ -124,7 +124,7 @@
 			}
 			/*3城市列表end*/
 			
-			.mui-search{
+			.mui-search {
 				pointer-events: none;
 			}
 		</style>
@@ -137,11 +137,11 @@
 		</header>
 		<div class="mui-content app-font-size-22">
 			<div @tap="onSearchTap()">
-			<div class="mui-input-row mui-search app-font-size-28" >
-				<input type="search" placeholder="输入城市名或拼音查询">
-			</div>	
+				<div class="mui-input-row mui-search app-font-size-28">
+					<input type="search" placeholder="输入城市名或拼音查询">
+				</div>
 			</div>
-			
+
 			<div class="positionInfo app-font-size-26">
 				<span class="color808080" v-text="positionState"></span>
 				<span class="mui-pull-right">
@@ -153,13 +153,13 @@
 				<h5 class="app-font-size-26 color808080 tips">定位/最近访问</h5>
 				<div class="cardRoom color808080">
 
-					<div v-show="indexCityName !=='未知' " @tap="onCityTap(indexCityName)">
+					<div v-show="indexCityName !=='未知' " @tap="onCityTap(indexCityName,positionLongitude,positionLatitude)">
 						<img src="../../image/main/nearby.png" width="12px" />
 						<span v-text="indexCityName"></span>
 					</div>
 
 					<template v-for="o,i in preList">
-						<div v-text="o" @tap="onCityTap(o)"></div>
+						<div v-text="o.name" @tap="onCityTap(o.name, o.longitude, o.latitude)"></div>
 					</template>
 
 				</div>
@@ -168,7 +168,7 @@
 				<div class="cardRoom color808080">
 
 					<template v-for="o,i in hotList">
-						<div v-text="o" @tap="onCityTap(o)"></div>
+						<div v-text="o.name" @tap="onCityTap(o.name, o.longitude, o.latitude)"></div>
 					</template>
 
 				</div>
@@ -183,13 +183,20 @@
 		<script type="text/javascript">
 			mui.init();
 
-			var preCache = new ni.Cache("position_pre_list", ["广州",
-				"东莞",
-				"长沙",
-			]);
-			
-			
-			
+			var preCache = new ni.Cache("position_geo_list_179", [{
+				name: "广州",
+				longitude: 23.2196,
+				latitude: 113.5107,
+			}, {
+				name: "东莞",
+				longitude: 22.901,
+				latitude: 113.8953,
+			}, {
+				name: "长沙",
+				longitude: 28.2568,
+				latitude: 113.0823,
+			}, ]);
+
 			console.log(JSON.stringify(preCache.data));
 
 			new Vue({
@@ -198,17 +205,52 @@
 					return {
 						positionState: "正在定位..",
 						positionCityName: "未知",
-						hotList: [
-							"广州",
-							"东莞",
-							"长沙",
-							"惠州",
-							"佛山",
-							"武汉",
-							"北京",
-							"上海",
-							"汕尾",
-							"南宁",
+						positionLongitude: 0,
+						positionLatitude: 0,
+						
+						hotList: [{
+								name: "广州",
+								longitude: 23.2196,
+								latitude: 113.5107,
+							}, {
+								name: "东莞",
+								longitude: 22.901,
+								latitude: 113.8953,
+							}, {
+								name: "长沙",
+								longitude: 28.2568,
+								latitude: 113.0823,
+							},
+							{
+								name: "惠州",
+								longitude: 23.1647,
+								latitude: 114.6204,
+							}, {
+								name: "佛山",
+								longitude: 23.1097,
+								latitude: 112.8955,
+							}, {
+								name: "武汉",
+								longitude: 30.6628,
+								latitude: 114.3896,
+							}, {
+								name: "北京",
+								longitude: 39.911,
+								latitude: 116.4136,
+							},
+							{
+								name: "上海",
+								longitude: 31.2363,
+								latitude: 121.4803,
+							}, {
+								name: "汕尾",
+								longitude: 23.0438,
+								latitude: 115.5762,
+							}, {
+								name: "南宁",
+								longitude: 23.1152,
+								latitude: 108.479,
+							}
 						],
 						preList: preCache.data
 					};
@@ -218,8 +260,7 @@
 						return this.positionCityName.replace(/市$/, '');
 					}
 				},
-				mounted: function() {
-				},
+				mounted: function() {},
 				plusReady: function() {
 					// 获取定位
 					this._getPosition();
@@ -236,36 +277,49 @@
 							}
 							this.positionState = "当前";
 							this.positionCityName = city;
+							this.positionLongitude = p.coords.longitude;
+							this.positionLatitude = p.coords.latitude;
 						}.bind(this), function() {
 							this.positionState = "定位失败";
 						}.bind(this));
 					},
-					_hotCitySort: function(newCityName){
-						var cityIndex = this.preList.indexOf(newCityName);
-						if(cityIndex >= 0){
+					_hotCitySort: function(o) {
+						var cityIndex = -1;
+						for(var i = 0; i < this.preList.length; i++) {
+							if(this.preList[i].name === o.name) {
+								cityIndex = i;
+								break;
+							}
+						}
+						if(cityIndex >= 0) {
 							this.preList.splice(cityIndex, 1);
 						}
-						this.preList.unshift(newCityName);
+						this.preList.unshift(o);
 						this.preList.length >= 5 && (this.preList.splice(4));
 					},
-					onSearchTap: function(){
-						app.page.getCity(function(data){
-							data && data.city && this.onCityTap(data.city);
+					onSearchTap: function() {
+						app.page.getCity(function(data) {
+							data && data.city && this.onCityTap(data.city, data.longitude, data.latitude);
 						}.bind(this));
 					},
 					// 城市点击事件
-					onCityTap: function(cityName) {
-						this._hotCitySort(cityName);
-						console.log(JSON.stringify(this.preList));
+					onCityTap: function(cityName, longitude, latitude) {
+						this._hotCitySort({
+							name: cityName,
+							longitude: longitude,
+							latitude: latitude
+						});
 						// 保存到本地缓存
 						preCache.data = this.preList;
 						// 返回结果到调用者
-						this.$nextTick(function(){
+						this.$nextTick(function() {
 							app.page.setResult({
-								city: cityName
+								city: cityName,
+								longitude: longitude,
+								latitude: latitude,
 							}).close();
 						});
-						
+
 					}
 				}
 			});
