@@ -162,7 +162,12 @@
 					<img src="../../../image/nearby/business/share.png" />
 				</a>
 				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
-					<img src="../../../image/nearby/business/collect.png" />
+					<template v-if="collection">
+						<img src="../../../image/nearby/business/collection_3@3x.png"/>
+					</template>
+					<template v-else>
+						<img src="../../../image/nearby/business/collect.png" />
+					</template>
 				</a>
 			</header>
 
@@ -327,8 +332,8 @@
 							}
 							// 商家信息
 							this.data = data.store;
-							this.iscollection = !data.iscollection ? 0 : 1;
-							//console.log(this.iscollection);
+							this.iscollection = !data.isFavorites ? 0 : 1;
+							console.log(JSON.stringify(this.data));
 							// 商品信息
 							this.goodslist = data.goodslist;
 							this.$nextTick(function() {
@@ -350,8 +355,8 @@
 							if(err) {
 								return mui.toast(err.message)
 							}
+							mui.toast((this.collection ? "取消" : "") + "收藏成功");
 							this.iscollection = +!this.iscollection;
-							mui.toast("收藏成功");
 //							alert(JSON.stringify(data));
 						}.bind(this));
 					},

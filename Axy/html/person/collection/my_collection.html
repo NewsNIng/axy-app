@@ -173,7 +173,7 @@
 				<template v-for="o,i in shops" v-if="active === 0">
 					<div class="shop mui-table-view-cell">
 						<div class="mui-slider-right mui-disabled">
-							<a class="mui-btn mui-btn-red">删除</a>
+							<a class="mui-btn mui-btn-red" @tap="onDeleteShopTap(o.id,i)">删除</a>
 						</div>
 						<div class="shop_bg mui-slider-handle">
 							<div class="mui-slider-handle shop_img">
@@ -186,7 +186,7 @@
 				<template v-for="o,i in discoverys" v-if="active === 1">
 					<div class="discovery mui-table-view-cell">
 						<div class="mui-slider-right mui-disabled">
-							<a class="mui-btn mui-btn-red">删除</a>
+							<a class="mui-btn mui-btn-red" @tap="onDeleteDisTap(o.id,i)">删除</a>
 						</div>
 						<div class="discovery_bg mui-slider-handle" @tap="">
 							<div class="mui-slider-handle discovery_img">
@@ -232,23 +232,23 @@
 						active: 0,
 
 						shops: [
-							//						{
-							//							name: "跨界空间健身玩乐综合体（休闲娱乐）",
-							//							address: "南山区龙珠四路88号（龙井B出口、维也纳酒店、龙井村、金谷产业园、车管所）",
-							//							image: "http://p0.meituan.net/dpmerchantalbum/a4aa2cbe25502cc20da67a35bc934bac4978960.jpg@220w_126h",
-							//						}, {
-							//							name: "adidas官方旗舰店",
-							//							address: "深圳市南山区世界之窗塘头六坊",
-							//							image: "../../../image/home/gohome.png",
-							//						}, {
-							//							name: "adidas官方旗舰店",
-							//							address: "深圳市南山区世界之窗塘头六坊",
-							//							image: "../../../image/home/gohome.png",
-							//						}, {
-							//							name: "adidas官方旗舰店",
-							//							address: "深圳市南山区世界之窗塘头六坊",
-							//							image: "../../../image/home/gohome.png",
-							//						}
+//													{
+//														name: "跨界空间健身玩乐综合体（休闲娱乐）",
+//														address: "南山区龙珠四路88号（龙井B出口、维也纳酒店、龙井村、金谷产业园、车管所）",
+//														image: "http://p0.meituan.net/dpmerchantalbum/a4aa2cbe25502cc20da67a35bc934bac4978960.jpg@220w_126h",
+//													}, {
+//														name: "adidas官方旗舰店",
+//														address: "深圳市南山区世界之窗塘头六坊",
+//														image: "../../../image/home/gohome.png",
+//													}, {
+//														name: "adidas官方旗舰店",
+//														address: "深圳市南山区世界之窗塘头六坊",
+//														image: "../../../image/home/gohome.png",
+//													}, {
+//														name: "adidas官方旗舰店",
+//														address: "深圳市南山区世界之窗塘头六坊",
+//														image: "../../../image/home/gohome.png",
+//													}
 						],
 						discoverys: [
 //													{
@@ -266,8 +266,7 @@
 						m: 0,
 						n: 0,
 					};
-				},
-
+			},
 				mounted: function() {
 					this.$nextTick(function() {
 						mui.init();
@@ -353,6 +352,24 @@
 //							this.$pullRefresh.pullRefresh().endPullupToRefresh();
 						}.bind(this));
 					},
+					onDeleteShopTap: function(fid,i){
+						dal.user.collection_shop.delete(fid,function(err,data){
+							if(err) {
+								return mui.toast(err.message)
+							}
+							mui.toast("取消收藏成功");
+							this.shops.splice(i,1);
+						}.bind(this));
+					},
+					onDeleteDisTap: function(fid,i){
+						dal.user.collection_talk.delete(fid,function(err,data){
+							if(err) {
+								return mui.toast(err.message)
+							}
+							mui.toast("取消收藏成功");
+							this.discoverys.splice(i,1);
+						}.bind(this));
+					}
 
 				}
 			});
