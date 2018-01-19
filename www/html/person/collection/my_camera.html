@@ -110,34 +110,30 @@
 				height: 100%;
 			}
 			
-			
-			.video-root{
+			.video-root {
 				position: fixed;
 				left: 0;
 				top: 0;
 				z-index: 66;
 				width: 100%;
 				height: 100%;
-				background-color: rgba(0,0,0,0.75);
+				background-color: rgba(0, 0, 0, 0.75);
 			}
 			
-			.video-root .video-room{
+			.video-root .video-room {
 				position: fixed;
 				left: 0;
 				top: 50%;
 				transform: translateY(-50%);
 				-webkit-transform: translateY(-50%);
-				
-				
 				width: 10rem;
 				height: 5.625rem;
 			}
 			
-				.video-root .video-room video{
+			.video-root .video-room video {
 				width: 100%;
 				height: 100%;
 			}
-			
 		</style>
 
 	</head>
@@ -161,10 +157,10 @@
 				</div>
 
 			</div>
-			
+
 			<div class="video-root" v-if="videoplay" @tap.self="videoplay=false">
-				<div class="video-room"> 
-					<video :src="videosrc" controls="controls" autoplay="autoplay" playsinline webkit-playsinline></video>	
+				<div class="video-room">
+					<video :src="videosrc" controls="controls" autoplay="autoplay" playsinline webkit-playsinline></video>
 				</div>
 			</div>
 
@@ -202,22 +198,21 @@
 		<script type="text/javascript" src="../../../js/lib/mui.dtpicker.js"></script>
 
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
 
 		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
-		
-		<script type="text/javascript" src="../../../js/extend/Date.js" ></script>
+
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
 
 			var P = plug.H5NativeBridge;
-			
-			
+
 			var dtPick, devPick;
 
 			new Vue({
@@ -229,9 +224,8 @@
 						devId: "",
 
 						record_: [
-						
 						],
-						
+
 						videoplay: false,
 						videosrc: "",
 					};
@@ -239,16 +233,17 @@
 
 				computed: {
 					dateText: function() {
-						if(this.dateTime===""){
+						if(this.dateTime === "") {
 							return "所有";
 						}
-						return (this.dateTime.getMonth() + 1) + "/" + this.dateTime.getDate();
+						return(this.dateTime.getMonth() + 1) + "/" + this.dateTime.getDate();
 					},
 					record: function() {
 						var dir = [],
 							temp, arr = [];
 						this.record_.forEach(function(item) {
-							temp = (new Date(item.time.replace(/-/g, '/'))).toFormatString('yyyy-MM-dd');
+							temp = (new Date(item.time.replace(/-/g, '/')));
+							temp = temp.toFormatString('yyyy-MM-dd');
 							if(!dir[temp]) {
 								dir[temp] = [];
 							}
@@ -261,11 +256,14 @@
 								list: dir[i]
 							});
 						}
+
+						arr = arr.sort(function(a, b) {
+							return a.day < b.day;
+						});
+
 						return arr;
 					}
 				},
-				
-				
 
 				mounted: function() {
 					var wrapper = this.$refs.wrapper;
@@ -292,16 +290,11 @@
 					devPick = new mui.PopPicker({
 						layer: 1
 					});
-					
-					
-					
-					
-					
-					
+
 				},
 
 				plusReady: function() {
-					
+
 					this.$view.setStyle({
 						kernel: 'WKWebview'
 					});
@@ -309,29 +302,27 @@
 					var D = new this.$Cache("dev_list", [], {
 						plus: true
 					});
-					
-					
+
 					var devPickData = D.data;
-					devPickData = devPickData.map(function(item){
+					devPickData = devPickData.map(function(item) {
 						return {
 							text: item.location || item.devid,
 							value: item.devid
 						};
 					});
-					
+
 					devPick.setData(devPickData);
-					
+
 					var devInfo = this.$view.devInfo;
-					if(devInfo){
-						
+					if(devInfo) {
+
 						this.devId = devInfo.devid;
 						this.devName = devInfo.location || this.devId;
 					}
-					
-					
+
 					this.$watch('devId', this.getRecord);
 					this.$watch('dateTime', this.getRecord);
-					
+
 					this.getRecord();
 				},
 
@@ -358,11 +349,11 @@
 							endMonth: d.getMonth() + 1,
 							endDay: d.getDate(),
 						};
-						
-						if(this.dateTime!==""){
-							options.value =  this.dateTime.toFormatString('yyyy-MM-dd');
+
+						if(this.dateTime !== "") {
+							options.value = this.dateTime.toFormatString('yyyy-MM-dd');
 						}
-						
+
 						dtPick = new mui.DtPicker(options);
 						dtPick.show(function(rs) {
 							/*
@@ -393,7 +384,7 @@
 
 					// 获取本地 录像/图片列表
 					getRecord: function() {
-						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd'): "");
+						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "");
 						rs = JSON.parse(rs);
 						this.record_ = rs.data.record;
 						this.$nextTick(function() {
@@ -410,14 +401,12 @@
 
 					// 是否为视频
 					isVideo: function(path) {
-						return /.mp4$/.test(path);
+						return /[.mp4|.3gp]$/.test(path);
 					},
 
 					// 修复文件路径
 					fixPath: function(path) {
-						if(mui.os.ios) {
-							path = app.ios.getSafeBoxPath() + path;
-						}
+
 						if(!/^file:/.test(path)) {
 							path = "file://" + path;
 						}

@@ -125,6 +125,18 @@
 			.nickname {
 				color: #333333;
 			}
+			
+			#releaseBtn {
+				position: fixed;
+				bottom: 0.666666rem;
+				right: 0.213333rem;
+				width: 1.173333rem;
+				height: 1.173333rem;
+				z-index: 99;
+				background-image: url(../../../image/nearby/release.png);
+				background-size: 100%;
+			}
+			
 		</style>
 
 	</head>
@@ -132,9 +144,9 @@
 	<body>
 
 		<div class="mui-content wrapper mui-scroll-wrapper app-font-size-26" ref='wrapper'>
-			<!--<div id="releaseBtn" @tap="onReleaseTap()">
-
-			</div>-->
+			<div id="releaseBtn" @tap="onReleaseTap()">
+				
+			</div>
 
 			<div class="mui-scroll">
 				<waterfall :grow="grow" :watch="items" @reflowed="reflowed" ref="waterfall">
@@ -154,7 +166,6 @@
 										<img class="icon" :src='"../../../image/nearby/discover/" + (item.like?"":"no") + "like.png"' />
 										<span class="app-font-size-28" v-text="item.likecount || 0"></span>
 									</div>
-
 								</div>
 							</div>
 						</div>
@@ -208,7 +219,7 @@
 							}
 						});
 					}.bind(this));
-					
+					 
 					new ni.Broadcast().on('discover_update', function() {
 						this._down();
 					}.bind(this));

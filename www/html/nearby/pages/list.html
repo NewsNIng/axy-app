@@ -55,16 +55,12 @@
 				height: 2.4rem;
 			}
 			
-			.shop_image>img {
-				width: 2.4rem;
-				height: 2.4rem;
-				border: 0.5px solid #F5F5F5;
-			}
-			
 			.shop_image {
 				width: 2.4rem;
 				height: 2.4rem;
 				margin-right: 0.346666rem;
+				background-position: center;
+				background-size: cover;
 			}
 			
 			.shop_info {
@@ -95,13 +91,28 @@
 				color: #2E2E2E;
 			}
 			
+			/*兼容5s屏幕*/
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				
+				.name {
+				  font-size: 13px !important;
+				}
+				[data-dpr="2"] .name {
+				  font-size: 26px !important;
+				}
+				[data-dpr="3"] .name {
+				  font-size: 39px !important;
+				}
+			}
+			
 			.time>img {
 				width: 0.4rem;
 				height: 0.4rem;
 				vertical-align: middle;
 				margin-right: 0.15rem;
 			}
-			.time>span{
+			
+			.time>span {
 				vertical-align: middle;
 			}
 			
@@ -165,9 +176,9 @@
 				<div>
 					<template v-for="o in shops">
 						<div class="shop">
-							<div class="shop_imgtext box"  @tap="onLookTap(o)">
-								<div class="shop_image">
-									<img :src="o.image1" />
+							<div class="shop_imgtext box" @tap="onLookTap(o)">
+								<div class="shop_image" :style='"background-image: url("+ _getImg(o.image1,o.image2,o.image3) +");"'>
+
 								</div>
 								<div class="shop_info flex1">
 									<div class="distance app-font-size-28">{{_m2km(o.distance)}} km</div>
@@ -180,8 +191,11 @@
 										<span v-if="i!==0"> | </span>{{type}}
 									</div>-->
 									<!--{{JSON.stringify(o)}}-->
-									<div class="types app-font-size-26" v-for="(type,i) in ['自助烧烤','自助烧烤','自助烧烤']">
+									<!--<div class="types app-font-size-26" v-for="(type,i) in ['自助烧烤','自助烧烤','自助烧烤']">
 										<span v-if="i!==0"> | </span>{{type}}
+									</div>-->
+									<div class="types app-font-size-26">
+										{{o.type}}
 									</div>
 									<div class="activity app-font-size-26 mui-ellipsis">{{o.introduction}}</div>
 								</div>
@@ -189,11 +203,11 @@
 							<div class="address app-font-size-28">
 								{{o.address}}
 							</div>
-							<div class="shop_menu app-font-size-28">
+							<!--<div class="shop_menu app-font-size-28">
 								<div @tap.stop="onCallTap(o)" class="flex1"><img src="../../../image/nearby/phone.png" />电话</div>
 								<div @tap.stop="onWithMapTap(o)" class="flex1"><img src="../../../image/nearby/navigation.png" />导航</div>
 								<div @tap.stop="onLookTap(o)" class="flex1"><img style="vertical-align: middle; padding-top: 0.05rem;" src="../../../image/nearby/show.png" /><span style="vertical-align: middle;">查看</span></div>
-							</div>
+							</div>-->
 						</div>
 					</template>
 				</div>
@@ -211,7 +225,7 @@
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
 
-		<script type="text/javascript" src="../../../js/lib/gps.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/gps.js"></script>-->
 
 		<script type="text/javascript">
 			new Vue({
@@ -251,14 +265,29 @@
 					}.bind(this)).catch(function() {
 						this._down();
 					}.bind(this));
+
+					// 监听父页手动选取地区
+					new this.$Broadcast().on('city_change', this.updateGeo.bind(this));
+
 				},
 				methods: {
+					// 更新地理位置
+					updateGeo: function(o) {
+						this.longitude = o.longitude;
+						this.latitude = o.latitude;
+						this.city = o.city;
+						this.position = o.position || o.city;
+						// 重新获取店铺信息
+						this._down();
+					},
+
+					// 获取定位
 					getCurrentPosition: function() {
 						return new Promise(function(re, rj) {
 							plus.geolocation.getCurrentPosition(function(p) {
 								this.longitude = p.coords.longitude;
 								this.latitude = p.coords.latitude;
-								this.city = p.address.city.replace('市', '');
+								this.city = p.address && p.address.city && p.address.city.replace('市', '');
 								this.position = p.address.poiName || p.addresses;
 								re();
 							}.bind(this), rj, {
@@ -267,6 +296,7 @@
 						}.bind(this));
 
 					},
+					// 获取商铺列表
 					_getList: function(f) {
 						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
 							if(err) {
@@ -280,6 +310,7 @@
 					// 点击查看
 					onLookTap: function(o) {
 						mui.openWindow('../business/store_details.html', 'store_details', {
+							createNew: true,
 							extras: {
 								oid: o.id
 							}
@@ -287,40 +318,40 @@
 					},
 
 					// 点击打电话
-					onCallTap: function(o) {
-						var buttons = o.telphone.split("/").map(function(item) {
-							return {
-								color: "rgb(0,0,255)",
-								style: "default",
-								title: item
-							}
-						});
-						plus.nativeUI.actionSheet({
-								cancel: "取消",
-								buttons: buttons
-							},
-							function(e) {
-								if(e.index > 0) {
-									plus.device.dial(buttons[e.index - 1].title);
-								}
-							});
-					},
+//					onCallTap: function(o) {
+//						var buttons = o.telphone.split("/").map(function(item) {
+//							return {
+//								color: "rgb(0,0,255)",
+//								style: "default",
+//								title: item
+//							}
+//						});
+//						plus.nativeUI.actionSheet({
+//								cancel: "取消",
+//								buttons: buttons
+//							},
+//							function(e) {
+//								if(e.index > 0) {
+//									plus.device.dial(buttons[e.index - 1].title);
+//								}
+//							});
+//					},
 
 					// 点击导航
-					onWithMapTap: function(o) {
-						//BD-09 to GCJ-02先将百度坐标转成中国坐标
-						var tmp = GPS.bd_decrypt(parseFloat(o.latitude), parseFloat(o.longitude));
-						//GCJ-02 to WGS-84再将中国坐标转成GPS坐标
-						var dstarr = GPS.gcj_decrypt_exact(tmp['lat'], tmp['lon']);
-						//目的地
-						var dst = new plus.maps.Point(dstarr['lon'], dstarr['lat']);
-						//目的地描述
-						var shop = o.address + " - " + o.name;
-						//起始地   
-						var src = new plus.maps.Point(this.longitude, this.latitude);
-						//调用导航 
-						plus.maps.openSysMap(dst, shop, src);
-					},
+//					onWithMapTap: function(o) {
+//						//BD-09 to GCJ-02先将百度坐标转成中国坐标
+//						var tmp = GPS.bd_decrypt(parseFloat(o.latitude), parseFloat(o.longitude));
+//						//GCJ-02 to WGS-84再将中国坐标转成GPS坐标
+//						var dstarr = GPS.gcj_decrypt_exact(tmp['lat'], tmp['lon']);
+//						//目的地
+//						var dst = new plus.maps.Point(dstarr['lon'], dstarr['lat']);
+//						//目的地描述
+//						var shop = o.address + " - " + o.name;
+//						//起始地   
+//						var src = new plus.maps.Point(this.longitude, this.latitude);
+//						//调用导航 
+//						plus.maps.openSysMap(dst, shop, src);
+//					},
 
 					_down: function() {
 						console.log("down");
@@ -351,7 +382,10 @@
 					},
 					_m2km: function(m) {
 						return(m / 1000).toFixed(1);
-					}
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
 				}
 
 			});

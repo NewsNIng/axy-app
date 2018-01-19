@@ -26,7 +26,7 @@ Vue && Vue.component('dev-footer', {
 				}
 				mui.toast("操作成功！");
 				this.$emit('del', {});
-			});
+			}.bind(this));
 			//			plug.H5NativeBridge.DelSmartDeviceAsyn(1, 1, function(rs) {
 			//				this.w.close();
 			//				rs = JSON.parse(rs);
@@ -50,9 +50,9 @@ Vue && Vue.component('dev-footer', {
 				}
 				mui.toast("操作成功！");
 				this.$emit('del', {});
-			});
+			}.bind(this));
 			// 通知
-			this.$emit('unbind', {});
+//			this.$emit('unbind', {});
 		}
 
 	},

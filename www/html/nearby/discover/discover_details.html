@@ -312,6 +312,22 @@
 				padding: 6%;
 			}
 			/*end share*/
+			/*图片轮播*/
+			
+			.mui-slider-indicator .mui-indicator {
+				background: transparent;
+				margin: 0 1.5px;
+				border: .5px white solid;
+			}
+			
+			#slider .mui-slider-item {
+				width: 100%;
+				height: 7.466666rem !important;
+				padding-top: 50.6666%;
+				background-size: cover;
+				background-position: center;
+			}
+			/*end图片轮播*/
 		</style>
 	</head>
 
@@ -327,8 +343,13 @@
 				<a class="mui-icon mui-pull-right" @tap="mui('#popover-share').popover('show')">
 					<img src="../../../image/nearby/business/share.png" />
 				</a>
-				<a class="mui-icon mui-pull-right" style="margin-right: -4px;">
-					<img src="../../../image/nearby/business/collect.png" />
+				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
+					<template v-if="collection">
+						<img src="../../../image/nearby/business/collection_3@3x.png"/>
+					</template>
+					<template v-else>
+						<img src="../../../image/nearby/business/collect.png" />
+					</template>
 				</a>
 			</header>
 
@@ -365,9 +386,19 @@
 
 			<div class="mui-content noImmersed  mui-scroll-wrapper">
 				<div class="mui-scroll">
-					<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'">
 
+					<div id="slider" class="mui-slider">
+						<div class="mui-slider-group mui-slider-loop">
+							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast"></div>
+							<div class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o"></div>
+							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist"></div>
+						</div>
+						<div class="mui-slider-indicator">
+							<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+						</div>
 					</div>
+
+					<!--<div class="bgimage" :style="'background-image: url('+ _getImg(info.image1,info.image2,info.image3) +');'"></div>-->
 					<div class="user_tittle app-font-size-28">
 						<img @tap="onHeadTap(info.account)" class="avastr img-lazy-load" :data-src="info.headimgurl" data-type="avatar" />
 						<div style="display: inline;" v-text="info.nickname"></div>
@@ -438,7 +469,8 @@
 							"senddate": "",
 							"likecount": 0,
 							"nickname": null,
-							"headimgurl": null
+							"headimgurl": null,
+							"iscollection": 0
 						},
 
 						clist: [],
@@ -461,7 +493,28 @@
 					},
 					focus: function() {
 						return this.isfocus !== 0;
-					}
+					},
+					collection: function() {
+						console.log("computed" + this.info.iscollection);
+						return this.info.iscollection !== 0;
+					},
+
+					imgList: function() {
+						var arr = [];
+						for(var i = 1; i <= 3; i++) {
+							if(this.info['image' + i]) {
+								arr.push(this.info['image' + i]);
+							}
+						}
+
+						return arr;
+					},
+					imgFrist: function() {
+						return this.imgList[0];
+					},
+					imgLast: function() {
+						return this.imgList[this.imgList.length - 1];
+					},
 				},
 				mounted: function() {
 					this.$nextTick(function() {
@@ -496,28 +549,64 @@
 					// 分享至
 					onShareTo: function(type) {
 						var that = this;
+						var shareImg = that._getImg(that.info.image1, that.info.image2, that.info.image3);
+						var w;
+
 						Rx.Observable
-							// 压缩
+							// 获取授权
 							.create(function(ob) {
-								plus.nativeUI.showWaiting("正在处理图片...");
-								new ni.Zip().processImage(that._getImg(that.info.image1, that.info.image2, that.info.image3), 32, function(err, overImgs) {
-									plus.nativeUI.closeWaiting();
+								w = plus.nativeUI.showWaiting('获取授权...');
+								var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
+								new that.$OAuth(oauthType, function(err, info) {
 									if(err) {
-										return plus.nativeUI.toast(err.message);
+										return mui.toast(err.message);
 									}
-									ob.next(overImgs[0]);
-								});
+									ob.next();
+								}, that);
+							})
+
+							// 处理为本地图片
+							.mergeMap(function(ob) {
+								return Rx.Observable.create(function(ob) {
+									if(shareImg.indexOf('file:') >= 0) {
+										// 本地图片
+										return ob.next(shareImg);
+									}
+									// 下载
+									w.setTitle("处理图片...");
+
+									new ni.Download(shareImg, {
+										filename: 'share_temp_' + +new Date,
+										suffix: '.jpg',
+									}).onSuccess(function(src) {
+										ob.next(src);
+									}).start();
+								})
+
+							})
+							// 压缩
+							.mergeMap(function(_img) {
+								w.setTitle("压缩图片...");
+								return Rx.Observable.create(function(ob) {
+									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
+											return plus.nativeUI.toast(err.message);
+										}
+										ob.next(overImgs[0]);
+									});
+								})
 
 							})
 							// 分享
 							.mergeMap(function(img) {
 								return Rx.Observable.create(function(ob) {
-									plus.nativeUI.showWaiting("正在拉取分享...");
+									w.setTitle("拉取分享...");
 									setTimeout(plus.nativeUI.closeWaiting, 3e3);
 									new ni.Share(type, function(err, data) {
 										plus.nativeUI.closeWaiting();
 										if(err) {
-											if(err.code === -100 || err.code === -2){
+											if(err.code === -100 || err.code === -2) {
 												err.message = "用户取消分享";
 											}
 											return plus.nativeUI.toast(err.message);
@@ -570,6 +659,10 @@
 					_loadImage: function() {
 						this.$nextTick(function() {
 							imagelazyload();
+							// 图片轮播
+							mui('#slider').slider({
+								interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
+							});
 						});
 					},
 					// 上拉加载更多
@@ -584,6 +677,7 @@
 								return mui.toast(err.message)
 							}
 							console.log(JSON.stringify(data));
+							data.iscollection = data.isFavorites ? 1 : 0;
 							this.info = data;
 							this._loadImage();
 							this._getInfo();
@@ -612,6 +706,24 @@
 					},
 					onAttention: function() {
 
+					},
+					onCollection: function() {
+						this.changeCollection();
+					},
+					changeCollection: function() {
+						var methodName = 'add';
+
+						if(this.collection) {
+							methodName = 'delete';
+						}
+						dal.user.collection_talk[methodName](this.aid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							mui.toast((this.collection ? "取消" : "") + "收藏成功");
+							this.info.iscollection = +!this.info.iscollection;
+
+						}.bind(this));
 					},
 					onFocusTap: function() {
 						if(this.from === this.info.account) {

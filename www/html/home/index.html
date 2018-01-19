@@ -85,7 +85,7 @@
 			}
 			
 			.dev_menu .d1 {
-				min-width: 50%;
+				width: 50%;
 				overflow: hidden;
 			}
 			
@@ -93,15 +93,18 @@
 				width: 80%;
 				white-space: nowrap;
 				display: inline-block;
+				
 			}
 			
 			.dev_menu .d2 {
 				width: 20%;
+				overflow: hidden;
 			}
 			
 			.dev_menu .d3 {
 				width: 24%;
 				text-align: right;
+				
 			}
 			
 			.card {
@@ -119,12 +122,14 @@
 				line-height: 0.986666rem;
 			}
 			
-			.card_head .mui-icon>* {
+			.card_head > * {
 				line-height: 0.986666rem;
-				vertical-align: middle;
 				color: #A8A8A9;
+				
 			}
-			
+			.card_head>div>*{
+				vertical-align: middle;
+			}
 			.card_head img {
 				width: .17rem;
 			}
@@ -367,7 +372,7 @@
 							<!--<div class="app-font-size-22">
 								{{dev.devimg}}	
 							</div>-->
-							
+
 							<div class="img imgdiv" :class="_getDevName(dev.type)" :style="{backgroundImage: 'url('+dev.devimg+')'}" @tap="openCamListWindow()">
 
 							</div>
@@ -404,10 +409,8 @@
 						<span class="app-font-size-30">猜你喜欢</span>
 						<div @tap="onStoreMore()" class="app-font-size-24 mui-pull-right">
 
-							<span class="mui-icon">
-								<span class="app-font-size-24">查看更多</span>
+							<span class="app-font-size-24">查看更多</span>
 							<img src="../../image/home/see_more.png" />
-							</span>
 						</div>
 					</div>
 
@@ -445,10 +448,9 @@
 						<span class="app-font-size-30">附近的店</span>
 						<div @tap="onNearbyMore()" class="app-font-size-24 mui-pull-right">
 
-							<span class="mui-icon">
-								<span class="app-font-size-24">查看更多</span>
+							<span class="app-font-size-24">查看更多</span>
 							<img src="../../image/home/see_more.png" />
-							</span>
+
 						</div>
 					</div>
 					<div class="shop_image">
@@ -657,7 +659,10 @@
 					},
 					// 点击消息按钮
 					onMessageTap: function() {
-						mui.openWindow('../person/message/index.html');
+						app.user.get(function(u) {
+							u && mui.openWindow('../person/message/index.html');
+						});
+
 					},
 
 					// 点击搜索按钮
@@ -670,14 +675,17 @@
 					},
 					// 点击添加按钮
 					onPlusTap: function() {
-						mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
+						app.user.get(function(u) {
+							u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
+						});
+
 					},
 
 					// 当点击模式时
 					onModelTap: function(o, index) {
 						// console.log(JSON.stringify(o));
 						app.user.get(function(u) {
-							u && mui.openWindow('../smart/scenes/index.html');
+							u && mui.openWindow('../smart/scenes/index2.html');
 						});
 					},
 
@@ -753,9 +761,9 @@
 					// 轮播点击
 					onAdvertTap: function(o) {
 						// 打开内部浏览器
-//						app.page.openBrowser({
-//							url: o.adlink
-//						});
+						//						app.page.openBrowser({
+						//							url: o.adlink
+						//						});
 					},
 					// 获取一个设备
 					getDeviceOne: function() {

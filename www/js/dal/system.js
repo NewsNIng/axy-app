@@ -1,23 +1,12 @@
 // 系统相关
-(function(_, ra){
+(function(_, ra, $){
 	var system = {};
 	
 	system.update = function(version, callback){
-		 
-//		mui.getJSON("http://192.168.1.193:8360/api/update", {
-//			version: version
-//		}, function(rs){
-//			
-//			if(rs.code !== 1000){
-//				callback(rs);
-//			}else{
-//				callback(null, rs.data);
-//			}
-//		});
-//		
 		
 		return ra('get', '/app/appversion', {
-			version: version
+			version: version,
+			type: +!$.os.ios
 		}, callback);
 
 	}
@@ -32,7 +21,7 @@
 			timeout: 8000
 		}, function(up, status){
 			if ( up.state == 4 && status == 200 ) {
-				var data = JSON.parse(up.responseText);
+				var data = JSON.parse(up.responseText); 
 				if(data.code !== '0000'){
 					return callback({message: data.message}, null);
 				}
@@ -56,4 +45,4 @@
 	
 	_.system = system;
 	
-}(window.dal, window.requestAdapter));
+}(window.dal, window.requestAdapter, mui));

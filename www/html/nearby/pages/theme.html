@@ -60,7 +60,7 @@
 				<template v-for="o in items">
 					<div class="theme_item" @tap="onClickTap(o)">
 						<img :src="o.img" />
-						<div class="share">
+						<div class="share" @tap.stop="onShareTap(o)">
 							<img src="../../../image/nearby/share_icon.png" />
 							<span>分享给好友</span>
 
@@ -110,11 +110,35 @@
 					}.bind(this));
 				},
 				methods: {
-					onClickTap: function(e) {
+					onClickTap: function(o) {
 						app.page.openBrowser({
-							url: e.link
+							url: o.link
+						});
+						// 增加点击数量
+						dal.home.theme.tap(o.id, function(err, data){
+							if(err){
+								return console.log(JSON.stringify(err))
+							}
+							// 延迟显示点击数量变化
+							setTimeout(function(){
+								o.clickcount = data.clickcount || (o.clickcount + 1);	
+							}, 1000);
+							
 						});
 					},
+					onShareTap: function(o){
+						console.log(JSON.stringify(o));
+						app.page.sendShare(function(){
+							
+						},{
+							tips: "分享主题",
+							title: o.title,
+							img: o.img,
+							href: o.link,
+							content: "我分享了一个主题，快来看看吧~",
+						})
+					},
+					
 					_down: function() {
 						this.n = 1;
 						this.$pullRefresh.pullRefresh().endPulldownToRefresh();

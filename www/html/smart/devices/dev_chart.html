@@ -52,7 +52,7 @@
 	<body>
 
 		<div id="popover" class="mui-popover app-font-size-28 app-color-333333">
-			
+
 			通风法去除甲醛
 			<br />
 			<br /> 通过室内空气的流通，可以降低室内空气中有害物质的含量，从而减少此类物质对人体的危害。冬天，人们常常紧闭门窗，导致室内外空气不流通，不仅使室内空气中的甲醛含量增加，同时氨气也会不断累积，甚至达到很高的浓度。
@@ -98,7 +98,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../../js/dal/devaccessory.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -110,21 +110,36 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						tabs: ['日', '周', '月'],
+						tabs: ['日', '月', '年'],
 						tabsIndex: 0,
+
+						info: {
+
+						},
+						cacheData: [],
+						methodName: "",
+						typeName: "",
 					};
 				},
 
 				computed: {},
 				mounted: function() {
+					
+				},
+
+				plusReady: function() {
+					this.info = this.$view.info;
+					this.methodName = this.$view.methodName;
+					this.typeName = this.$view.typeName;
+
 					var ctx = this.$refs.myChart.getContext('2d');
 					this.myChart = new Chart(ctx, {
 						type: 'line',
 						data: {
-							labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange", "Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+							labels: [],
 							datasets: [{
-								label: '甲醛',
-								data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 12, 19, 3, 5, 2],
+								label: this.typeName,
+								data: [],
 								backgroundColor: 'rgba(255, 99, 132, 0.2)',
 								borderColor: 'rgba(255,99,132,1)',
 								borderWidth: 1
@@ -148,10 +163,8 @@
 							}
 						}
 					});
-				},
 
-				plusReady: function() {
-
+					this.getData();
 				},
 				methods: {
 					onTabTap: function(o, index) {
@@ -164,18 +177,43 @@
 					onDelDevice: function() {
 						console.log("deldevice");
 					},
-					
+
 					// 获取趋势数据
-					getData: function(){
+					getData: function() {
+						var chart = this.myChart;
+						var that = this;
+						new Promise(function(re, rj){
+							var data_ = that.cacheData[that.tabsIndex];
+							if(data_){
+								return re(data_);
+							}
+							dal.devaccessory[that.methodName + 'Chart'](that.info.accessory.devid, that.info.accessory.aid, that.tabsIndex + 1, function(err, data) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.cacheData[that.tabsIndex] = data;
+								re(data);
+							});
+						}).then(function(data){
+							chart.data.labels = [];
+							chart.data.datasets.data = [];
+							data.forEach(function(item) {
+								chart.data.labels.push(item.atime);
+								chart.data.datasets.forEach(function(dataset) {
+									dataset.data.push(item.state);
+								});
+							});
+							chart.update();
+						});
+						
 						
 					},
-					
+
 				},
 				watch: {
-					//					tabsIndex: function() {
-					//						console.log(this.tabsIndex);
-					//						this.myChart.update();
-					//					}
+					tabsIndex: function() {
+						this.getData();
+					}
 				}
 			});
 		</script>
