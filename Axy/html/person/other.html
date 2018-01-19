@@ -23,7 +23,8 @@
 			}
 			
 			.mui-content {
-				background-color: white position: relative;
+				background-color: white;
+				position: relative;
 			}
 			
 			.mui-content>img {
@@ -129,7 +130,7 @@
 				<div class="TA app-font-size-26">TA的动态</div>
 				<div class="dynamic">
 					<template v-for="o in dynamic">
-						<div class="dynamic_item app-font-size-28">
+						<div class="dynamic_item app-font-size-28" @tap="onClickTap(o.id)">
 							<img :src="_getImg(o.image1,o.image2,o.image3)" /> {{o.title}}
 						</div>
 					</template>
@@ -218,6 +219,7 @@
 								return mui.toast(JSON.stringify(err));
 							}
 							this.dynamic = data;
+							console.log(JSON.stringify(this.dynamic));
 						}.bind(this), 6);
 					},
 					onFocusTap: function() {
@@ -241,6 +243,13 @@
 					},
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
+					},
+					onClickTap: function(oid){
+						mui.openWindow('../nearby/discover/discover_details.html', 'discover_details', {
+							extras: {
+								oid: oid
+							}
+						});
 					},
 				}
 			});

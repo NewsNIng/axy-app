@@ -720,6 +720,8 @@
 							if(err) {
 								return mui.toast(err.message)
 							}
+							console.log("err==>"+err);
+							console.log("data==>"+data);
 							mui.toast((this.collection ? "取消" : "") + "收藏成功");
 							this.info.iscollection = +!this.info.iscollection;
 

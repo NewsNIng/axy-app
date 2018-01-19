@@ -1053,6 +1053,13 @@
 					"html/public/input.html"
 				],
 				"priority": 0
+			},
+			"html/person/other.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {
