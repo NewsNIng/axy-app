@@ -79,7 +79,8 @@
   },
   "html/nearby/pages/list.html": {
     "refer": [
-      "html/nearby/business/store_details.html"
+      "html/nearby/business/store_details.html",
+      "html/public/maps.html"
     ],
     "resources": []
   },
@@ -183,7 +184,8 @@
       "html/search/index.html",
       "html/smart/add/add_device.html",
       "html/smart/scenes/index.html",
-      "html/nearby/business/store_details.html"
+      "html/nearby/business/store_details.html",
+      "html/person/message/index.html"
     ],
     "resources": [
       "image/home/dev_camera.png",
@@ -222,7 +224,8 @@
   },
   "html/nearby/pages/theme.html": {
     "refer": [
-      "html/public/browser.html"
+      "html/public/browser.html",
+      "html/public/share.html"
     ],
     "resources": []
   },
@@ -308,6 +311,11 @@
   "html/zeus.html": {
     "refer": [
       "html/common/login.html"
+    ]
+  },
+  "html/public/maps.html": {
+    "refer": [
+      "html/public/mapList.html"
     ]
   }
 }
