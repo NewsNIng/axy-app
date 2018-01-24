@@ -46,6 +46,10 @@
 				vertical-align: middle;
 			}
 			/*end菜单*/
+			
+			.mui-switch.mui-disabled {
+				opacity: 1;
+			}
 		</style>
 
 	</head>
@@ -63,7 +67,7 @@
 					<a>
 						<span class="app-color-333333">全部推送</span>
 						<span class="mui-badge">
-								<div @tap="" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active': all}">
+								<div  @tap="onAllTap()" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': all}">
 								  <div class="mui-switch-handle"></div>
 								</div>
 							</span>
@@ -73,29 +77,30 @@
 
 			<ul class="mui-table-view">
 				<template v-for="o,i in list">
-					
+
 					<li class="mui-table-view-cell">
 						<a>
-							<span class="app-color-333333">{{o.location}}</span>
+							<span class="app-color-333333">{{_fixName(o.location) || o.devid}}</span>
 							<span class="mui-badge">
-									<div @toggle="onToggle(o, $event)" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active': o.state === 1}" >
+									<div @tap="onToggle(o, $event)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': o.state}" >
 									  <div class="mui-switch-handle"></div>
 									</div>
 								</span>
 						</a>
 					</li>
 				</template>
-				
+
 			</ul>
-			
+
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell">
 					<a>
 						<span class="app-color-333333">活动通知</span>
 						<span class="mui-badge">
-								<div @tap="" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active': active}">
-								  <div class="mui-switch-handle"></div>
-								</div>
+							<div @tap="onActivityToggle()" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': active}" >
+									  <div class="mui-switch-handle"></div>
+									</div>
+									
 							</span>
 					</a>
 				</li>
@@ -103,9 +108,10 @@
 					<a>
 						<span class="app-color-333333">系统通知</span>
 						<span class="mui-badge">
-								<div @tap="" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active': system}">
-								  <div class="mui-switch-handle"></div>
-								</div>
+									<div @tap="onSystemToggle()" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': system}" >
+									  <div class="mui-switch-handle"></div>
+									</div>
+									
 							</span>
 					</a>
 				</li>
@@ -114,53 +120,111 @@
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/push.js" ></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/push.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
 
+			var PUSHID;
 			new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
-						all: false, 
+						all: true,
 						active: true,
-						system: false,
-						
+						system: true,
+
 						list: []
 					};
 				},
-				
-				mounted: function(){
-					this.getStatesByList();
+
+				mounted: function() {
+
 				},
-				
+				plusReady: function() {
+					// 获取本地推送id缓存实例
+					PUSHID = new ni.Cache("push_key", "", {
+						plus: true
+					});
+					alert(PUSHID.data);
+					var that = this;
+					new Promise(function(resolve, reject) {
+						that.getStatesByList(resolve);
+					}).then(function() {
+
+						that.all = (function() {
+							return this.list.every(function(item) {
+								return item.state === 1;
+							}) && this.active && this.system;
+						}.call(that));
+						
+						that.$watch("all", function(n) {
+							dal.push.updateAll(PUSHID.data, +n, function(err, rs) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("设置成功");
+							});
+						});
+					});
+				},
+
 				methods: {
-					onToggle: function(o, e){
-						o.state = +e.detail.isActive;
+					onToggle: function(o) {
+						o.state = +!o.state;
+						dal.push.update(PUSHID.data, o.devid, +o.state, function(err, rs) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							mui.toast("设置成功");
+						});
 					},
-					
+					onActivityToggle: function() {
+						this.active = !this.active;
+					},
+					onSystemToggle: function() {
+						this.system = !this.system;
+					},
+					onAllTap: function() {
+						var wantv = !this.all;
+						var l = this.list.length;
+						for(var i = 0; i < l; i++) {
+							this.list[i].state = +wantv;
+						}
+						//this.active = wantv;
+						//this.system = wantv;
+						this.all = wantv;
+					},
+
 					// 获取运行状态
-					getStatesByList: function(){
+					getStatesByList: function(fn) {
 						var that = this;
-						dal.push.list(function(err, data){
-							console.log(JSON.stringify(data));
-							if(err){
+						dal.push.list(PUSHID.data, function(err, data) {
+							if(err) {
 								return mui.toast(err.message);
 							}
 							that.active = !!data.activitypush;
 							that.system = !!data.syspush;
 							that.list = data.devpush;
+							that.$nextTick(function() {
+								mui(".mui-switch").switch();
+								fn();
+							});
 						});
 					},
-					
-					getStateByAll: function(){
-						
+
+					getStateByAll: function() {
+
+					},
+					_fixName: function(s) {
+						return app.dev.fixName(s);
 					}
 				}
-			})
+			});
 		</script>
 	</body>
 

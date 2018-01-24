@@ -127,9 +127,16 @@
 
 					if(!user || !user.bindmobile) {
 						mui.toast("请先绑定手机！");
-						app.page.openForResultBy('../relation/bind.html', 'bind', function(data) {
-							user.bindmobile = data.tel;
+						
+						app.page.openForResultBy("../relation/bind_tel.html", "bind_tel", function(data) {
+							if(data.tel) {
+								// 更改成功后修改页面中的tel
+								user.bindmobile = data.tel;
+							}
+						}, {
+							tel: ""
 						});
+						
 						return;
 					}
 

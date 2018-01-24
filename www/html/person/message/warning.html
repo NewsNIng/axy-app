@@ -262,6 +262,7 @@
 			mui.init();
 
 			var P = plug.H5NativeBridge;
+			var D;
 
 			var TYPEDIR = {
 				16: "image",
@@ -342,7 +343,7 @@
 						kernel: 'WKWebview'
 					});
 
-					var D = new this.$Cache("dev_list", [], {
+					D = new this.$Cache("dev_list", [], {
 						plus: true
 					});
 
@@ -429,11 +430,12 @@
 						// TODO 需要获取到通道信息
 						var w1 = 0;
 						// 遍历获取 设备的 在线状态 so stupid
+						var devData = D.data;
 						var tmep;
-						for(var i = 0, l = this.devPickData.length; i < l; i++){
-							temp = this.devPickData[i];
+						for(var i = 0, l = devData.length; i < l; i++){
+							temp = devData[i];
 							if(temp.devid === o.devid && temp.online === 1){
-								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, temp.type === 0x1046 ? 1 : 0, function() {});
+								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, temp.type === 0x1046 ? 1 : 0, this.fixName(o.location),  function() {});
 								return;
 							}
 						}

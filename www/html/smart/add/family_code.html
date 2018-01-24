@@ -60,7 +60,7 @@
 
 			<div class="mui-content app-font-size-28">
 				<div class="tips app-font-size-24 app-color-dark">与家人一起share生活中的点滴吧</div>
-				<input type="number" v-model='code' placeholder="请输入家人邀请码" />
+				<input type="text" v-model='code' placeholder="请输入家人邀请码" />
 			</div>
 
 		</div>
@@ -92,6 +92,7 @@
 							this.code = n.substr(0, 8);
 							mui.toast("最大输入8位数字")
 						}
+						this.code = this.code.toString().toUpperCase();
 					}
 				},
 				mounted: function() {
@@ -100,7 +101,7 @@
 				methods: {
 					onSaveTap: function() {
 						var code = this.code.trim();
-						var emsg = app.rules.testBy(/^\d{8}$/, code, "邀请码格式错误");
+						var emsg = app.rules.testBy(/^[A-Z|\d]{8}$/, code, "邀请码格式错误");
 						if(emsg){
 							return mui.toast(emsg);
 						}

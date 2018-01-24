@@ -551,6 +551,7 @@
 						var that = this;
 						var shareImg = that._getImg(that.info.image1, that.info.image2, that.info.image3);
 						var w;
+						setTimeout(plus.nativeUI.closeWaiting, 8e3);
 
 						Rx.Observable
 							// 获取授权
@@ -720,6 +721,8 @@
 							if(err) {
 								return mui.toast(err.message)
 							}
+							console.log("err==>"+err);
+							console.log("data==>"+data);
 							mui.toast((this.collection ? "取消" : "") + "收藏成功");
 							this.info.iscollection = +!this.info.iscollection;
 

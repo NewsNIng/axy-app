@@ -195,7 +195,7 @@
 						wifipwd: "",
 						active: false,
 
-						volume: 0.5,
+						//volume: 0.5,
 						setid: '',
 						isSend: false,
 					};
@@ -218,7 +218,7 @@
 				},
 				plusReady: function() {
 					// 获取设备当前音量
-					this.volume = plus.device.getVolume();
+					//this.volume = plus.device.getVolume();
 
 				},
 				methods: {
@@ -271,7 +271,7 @@
 					},
 					// 取消
 					_cancel: function() {
-						plus.device.setVolume(this.volume);
+						//plus.device.setVolume(this.volume);
 						P.StopVoiceSetWifi();
 					},
 

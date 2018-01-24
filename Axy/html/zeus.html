@@ -18,6 +18,7 @@
 		<script type="text/javascript" src="../js/dal/base.js"></script>
 		<script type="text/javascript" src="../js/dal/device.js"></script>
 		<script type="text/javascript" src="../js/dal/user.js"></script>
+		<script type="text/javascript" src="../js/dal/push.js" ></script>
 
 		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
 
@@ -30,7 +31,7 @@
 			 * H5Native 控制中心 
 			 */
 
-			var D, P = plug.H5NativeBridge;
+			var D, P = plug.H5NativeBridge, PUSHID;
 			var _B = new ni.Broadcast();
 
 			var domain = "www.isee110.com";
@@ -52,6 +53,20 @@
 				return window.localStorage.getItem('_pwd_');
 			}
 
+
+			// 设备推送同步
+			Rx.Observable.create(function(ob){
+				_B.on('device_push_update', function(){
+					ob.next();
+				});
+				_B.on('login_success', function(){
+					ob.next();
+				});
+			}).subscribe(function(){
+				dal.push.synchronous(PUSHID.data, ni.os.ios ? 67: 36, function(){});
+			});
+
+
 			Rx.Observable
 				// plusReady
 				.create(function(ob) {
@@ -65,6 +80,9 @@
 				})
 				// 是否登录
 				.mergeMap(function() {
+					PUSHID = new ni.Cache('push_key', "", {
+						plus: true
+					});
 
 					return Rx.Observable.create(function(ob) {
 						// 监听登录成功事件
@@ -89,6 +107,11 @@
 								if(data.lockterminal === 0 || data.validation === 1) {
 									// 验证通过
 									updateUserInfo(data);
+									// 做一次设备同步
+									_B.emit('device_push_update', {}, {
+										self: true,
+										views: []
+									});
 									ob.next(u.account);
 								} else {
 									// 跳转页面认证
@@ -284,6 +307,9 @@
 				return data;
 
 			}
+			
+			
+			
 		</script>
 	</body>
 

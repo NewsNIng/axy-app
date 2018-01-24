@@ -53,7 +53,7 @@
 
 			<div class="mui-content">
 				<div class="scanRoom app-font-size-38 app-color-main" id="axy" @tap="resetScan()">
-					<span v-show="!frist">点击重试</span>
+					<span v-show="!frist">正在载入...</span>
 				</div>
 
 				<div class="tips app-font-size-28">
@@ -81,7 +81,15 @@
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				//处理窗口关闭前的业务
+				beforeback: function() {
+					app.page.setResult({}).close();
+					return false;
+				},
+			});
+			
+			var barcodeid = 0;
 
 			var _B = new ni.Broadcast();
 
@@ -119,15 +127,20 @@
 						this.flash = false;
 						this.closeScan();
 						// 手动输入序列号 
-						app.page.getInput(function(data) {
-							this._addDevice(data.content);
-							// 验证
-							// 
-
+						app.page.openForResultBy('scan_code.html','scan_code',function(data) {
+							if(data.code){
+								// 验证
+								this._addDevice(data.code);	
+							}else{
+								// 重置扫码
+								setTimeout(function() {
+									this.resetScan();
+								}.bind(this), 200);
+							}
 						}.bind(this), {
-							tips: '请输入设备序列号',
-							title: '手动输入',
-							content: '',
+//							//tips: '请输入设备序列号',
+//							//title: '手动输入',
+							//content: '8100120D',
 							// r: '',
 						});
 
@@ -176,6 +189,7 @@
 									return Rx.Observable.create(function(observer) {
 
 										app.page.openForResultBy('../devices/dev_select_id.html', 'dev_select_id', function(data) {
+											
 											observer.next({
 												acc: data1,
 												dev: data
@@ -188,6 +202,7 @@
 								})
 								// 新增配件
 								.mergeMap(function(rs) {
+									console.log("=============="+JSON.stringify(rs))
 									plus.nativeUI.showWaiting("正在添加配件");
 									return Rx.Observable.create(function(ob) {
 										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, function(err, data) {
@@ -197,7 +212,6 @@
 												return mui.toast(err.message);
 											}
 											ob.next(true);
-											console.log(JSON.stringify(data));
 										});
 									});
 								})
@@ -217,7 +231,7 @@
 						}
 
 					},
-					resetScan: function() {
+					resetScan: function(frist) {
 						if(this.t && this.t >= 0) {
 							return;
 						}
@@ -237,7 +251,7 @@
 							frameColor: '#06C1AE',
 							scanbarColor: '#06C1AE',
 						});
-						scan.onmarked = this.onMarked.bind(this);
+						scan.onmarked = this.onMarked.bind(this); 
 						this.scan = scan;
 					},
 					onMarked: function(type, result, file) {

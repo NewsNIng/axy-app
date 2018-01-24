@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>输入邀请码</title>
+		<title>输入设备码</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
@@ -29,7 +29,6 @@
 			}
 			
 			.input::-webkit-input-placeholder {
-				
 				font-size: 14px !important;
 			}
 			
@@ -41,7 +40,7 @@
 				font-size: 42px !important;
 			}
 			
-			.tips{
+			.tips {
 				padding: 0.15rem 0.3rem;
 			}
 		</style>
@@ -52,15 +51,14 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">输入邀请码</h1>
-				<span class="mui-icon mui-pull-right" @tap="onSaveTap()">
-					<img src="../../../image/smart/add/btn_Preservation@3x.png"/>
+				<h1 class="mui-title">输入设备码</h1>
+				<span class="mui-pull-right app-color-white app-font-size-28" style="line-height: 45px;" @tap="onSaveTap()">
+					确定
 				</span>
 			</header>
 
 			<div class="mui-content app-font-size-28">
-				<div class="tips app-font-size-24 app-color-dark">与家人一起share生活中的点滴吧</div>
-				<input type="text" v-model='code' placeholder="请输入家人邀请码" />
+				<input type="text" v-model='code' placeholder="请输入设备码" />
 			</div>
 
 		</div>
@@ -74,10 +72,16 @@
 		<!--请求相关-->
 		<!--App相关业务逻辑-->
 		<!--<script type="text/javascript" src="../../../js/app/app.js"></script>-->
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-		<script type="text/javascript" src="../../../js/app/app-rules.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				//处理窗口关闭前的业务
+				beforeback: function() {
+					app.page.setResult({}).close();
+					return false;
+				},
+			});
 
 			new Vue({
 				el: '#warpper',
@@ -87,22 +91,22 @@
 					};
 				},
 				watch: {
-					code: function(n){
-						if(n.length > 8){
+					code: function(n) {
+						if(n.length > 8) {
 							this.code = n.substr(0, 8);
-							mui.toast("最大输入8位数字")
+							mui.toast("最大输入8位")
 						}
 						this.code = this.code.toString().toUpperCase();
 					}
 				},
 				mounted: function() {
-					
+
 				},
 				methods: {
 					onSaveTap: function() {
 						var code = this.code.trim();
-						var emsg = app.rules.testBy(/^[A-Z|\d]{8}$/, code, "邀请码格式错误");
-						if(emsg){
+						var emsg = app.rules.testBy(/^[A-Z|\d]{8}$/, code, "设备码格式错误");
+						if(emsg) {
 							return mui.toast(emsg);
 						}
 						app.page.setResult({

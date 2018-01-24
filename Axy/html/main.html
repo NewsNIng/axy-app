@@ -220,7 +220,7 @@
 						var appVersion = version2number(info.version);
 						dal.system.update(info.version, function(err, data) {
 							if(err) {
-								return mui.toast(err.message);
+								return ;// mui.toast(err.message);
 							}
 
 							if(!data) {

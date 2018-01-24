@@ -98,7 +98,6 @@
 				width: 100%;
 				height: 100%;
 				z-index: 9999;
-				
 				zoom: 0.5;
 			}
 			
@@ -176,7 +175,7 @@
 		<div id="box">
 			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title app-color-white" v-text="devInfo.location || devInfo.devid"></h1>
+				<h1 class="mui-title app-color-white" v-text="_fixName(devInfo.location) || devInfo.devid"></h1>
 			</header>
 
 			<div class="mui-content noImmersed">
@@ -203,7 +202,6 @@
 			</div>
 
 			<div class="mask" v-show="mask" @tap.self="mask = false">
-
 				<canvas ref="canvas" id="code" width="1000px" height="1000px"></canvas>
 				<div id="qrcode" ref="qrcode"></div>
 			</div>
@@ -220,6 +218,8 @@
 
 		<script type="text/javascript">
 			mui.init();
+
+			var sharecodeid = +new Date();
 
 			new Vue({
 				el: "#box",
@@ -299,7 +299,7 @@
 					this.canvasWidth = window.innerWidth / 1.5 * 2;
 					this.$refs.canvas.width = this.canvasWidth;
 					this.$refs.canvas.height = window.innerWidth * 2;
-					
+
 				},
 
 				plusReady: function() {
@@ -388,9 +388,11 @@
 						var context = this.$refs.canvas.getContext('2d');
 						var that = this;
 						var src = document.querySelector("#qrcode img").src;
-						
 						//context.scale(2, 2);
-						
+						context.fillStyle = "#FFF";
+						context.fillRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
+
+
 						// 绘制二维码
 						var img = new Image();
 						var iconImg = new Image();
@@ -442,7 +444,7 @@
 
 						// 绘制code
 						context.fillStyle = "#06C1AE";
-						
+
 						context.fillRect(40, that.canvasWidth + 60, that.canvasWidth - 80, 90);
 
 						context.font = "40px 黑体";
@@ -458,14 +460,14 @@
 					},
 					// 保存二维码到本地
 					saveCanvasCode: function() {
-						var path = "_documents/share/code.png";
+						var path = "_documents/share/sharecode_" + (sharecodeid++) + ".jpeg";
 						var codeBitmap = new plus.nativeObj.Bitmap("code");
-						var data64 = this.$refs.canvas.toDataURL("image/png");
+						var data64 = this.$refs.canvas.toDataURL("image/jpeg", 1.0);
 						codeBitmap.loadBase64Data(data64, function() {
 							codeBitmap.save(path, {
 								overwrite: true,
 								quality: 100,
-								format: 'png'
+								format: 'jpeg'
 							}, function(e) {
 								plus.gallery.save(e.target, function() {
 									mui.toast("已保存二维码在本地");
@@ -478,6 +480,10 @@
 					_getDevName: function(type) {
 						return app.dev.findName(type);
 					},
+
+					_fixName: function(s) {
+						return app.dev.fixName(s);
+					}
 
 				}
 			})

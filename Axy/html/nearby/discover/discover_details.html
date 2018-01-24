@@ -551,6 +551,7 @@
 						var that = this;
 						var shareImg = that._getImg(that.info.image1, that.info.image2, that.info.image3);
 						var w;
+						setTimeout(plus.nativeUI.closeWaiting, 8e3);
 
 						Rx.Observable
 							// 获取授权

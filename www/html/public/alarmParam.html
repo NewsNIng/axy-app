@@ -168,8 +168,7 @@
 						this.recTime = data.recTime;
 						this.intervalTime = data.interval;
 						this.continuedTime = data.durationTime;
-					}.bind(this)); //					this.intervalTime = v.intervalTime;
-					//					this.continuedTime = v.continuedTime;
+					}.bind(this));
 				},
 				methods: {
 					onPickTap: function(i) {
@@ -192,10 +191,8 @@
 					},
 					onSaveTap: function() {
 						plus.nativeUI.showWaiting();
-						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.interval, this.durationTime, function(err, data) {
+						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.intervalTime, this.continuedTime, function(err, data) {
 							plus.nativeUI.closeWaiting();
-							console.log("data==>"+JSON.stringify(data));
-							console.log("err==>"+JSON.stringify(err));
 							if(err) {
 								return mui.toast(err.message);
 							}
@@ -204,6 +201,7 @@
 								//								intervalTime: this.intervalTime,
 								//								continuedTime: this.continuedTime
 							}).close();
+							
 						});
 
 					},

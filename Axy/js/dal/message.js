@@ -91,6 +91,14 @@
 	};
 	
 	
+	/**
+	 * 获取最新消息预览
+	 * @param {Object} callback
+	 */
+	message.center = function(callback){
+		return ra('get', '/app/msgcenter', {}, callback);
+	}
+	
 	
 	_.message = message;
 	

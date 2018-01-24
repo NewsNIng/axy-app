@@ -242,7 +242,7 @@
 						var dir = [],
 							temp, arr = [];
 						this.record_.forEach(function(item) {
-							temp = (new Date(item.time.replace(/-/g, '/')));
+							temp = new Date(item.time.replace(/-/g, '/'));
 							temp = temp.toFormatString('yyyy-MM-dd');
 							if(!dir[temp]) {
 								dir[temp] = [];
@@ -401,7 +401,7 @@
 
 					// 是否为视频
 					isVideo: function(path) {
-						return /[.mp4|.3gp]$/.test(path);
+						return /\.(?:mp4|3gp)$/i.test(path);
 					},
 
 					// 修复文件路径

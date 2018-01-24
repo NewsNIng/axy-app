@@ -45,16 +45,11 @@
 			.menu-box a>span {
 				vertical-align: middle;
 			}
-			
 			/*end菜单*/
-			
-			
-			
-			
 			/*隐藏手机号码的箭头*/
-			li:first-child .mui-navigate-right:after{
+			/*li:first-child .mui-navigate-right:after{
 				color: transparent;
-			}
+			}*/
 		</style>
 
 	</head>
@@ -67,13 +62,13 @@
 		</header>
 		<div class="mui-content menu-box app-font-size-32">
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell" >
+				<!--<li class="mui-table-view-cell" >
 					<a class="mui-navigate-right">
 						<img src="../../../image/person/info/tel@3x.png" />
 						<span class="app-color-333333">手机号码</span>
 						<span class="mui-badge" v-text='telphone || "未绑定"'>...</span>
 					</a>
-				</li>
+				</li>-->
 				<li class="mui-table-view-cell" @tap="onOAuthItemTap('weixin')">
 					<a class="mui-navigate-right">
 						<img src="../../../image/person/info/wx@3x.png" />
@@ -81,14 +76,14 @@
 						<span class="mui-badge" v-text="weixin.userInfo.nickname">...</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell"  @tap="onOAuthItemTap('qq')">
+				<li class="mui-table-view-cell" @tap="onOAuthItemTap('qq')">
 					<a class="mui-navigate-right">
 						<img src="../../../image/person/info/qq@3x.png" />
 						<span class="app-color-333333">QQ帐号</span>
 						<span class="mui-badge" v-text="qq.userInfo.nickname">...</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell"  @tap="onOAuthItemTap('sinaweibo')">
+				<li class="mui-table-view-cell" @tap="onOAuthItemTap('sinaweibo')">
 					<a class="mui-navigate-right">
 						<img src="../../../image/person/info/weibo@3x.png" />
 						<span class="app-color-333333">新浪微博</span>
@@ -102,14 +97,13 @@
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		<script type="text/javascript" src="../../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/user.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
-
 
 			new Vue({
 				el: ".mui-content",
@@ -155,12 +149,11 @@
 				},
 				methods: {
 					// 获取本地用户绑定手机
-					getBindTel: function(){
+					getBindTel: function() {
 						var u = app.user.get();
-						this.tel = u.bindmobile; 
+						this.tel = u.bindmobile;
 					},
 
-					
 					// 获取本地绑定信息
 					getBindData: function() {
 						var that = this;
@@ -190,40 +183,45 @@
 									return mui.toast("授权失败");
 								}
 								that[type] = auth;
-								dal.user.bindother(type, auth.userInfo.unionid || auth.authResult.openid, function(err, data){
-									if(err){
+								dal.user.bindother(type, auth.userInfo.unionid || auth.authResult.openid, function(err, data) {
+									if(err) {
 										that[type].logout(function() {});
+										that[type] = {
+											userInfo: {
+												nickname: "未绑定"
+											}
+										};
 										return mui.toast(err.message);
 									}
 									return mui.toast("绑定成功！");
 								});
 							});
 						} else {
-							
-							if(!this.telphone){
+
+							if(!this.telphone &&
+							   !this.weixin.authResult &&
+							   !this.qq.authResult && 
+							   !this.sinaweibo.authResult) {
 								mui.toast("您需要先绑定手机号");
 								return this.onTelphoneTap();
 							}
-							
+
 							mui.confirm("您确定要注销该绑定吗？\n以后将不能用改方式登录您的帐号。", "", ["解除绑定", "取消"], function(e) {
 								if(e.index === 0) {
-									
-									dal.user.deletebind(type, function(err, data){
-										if(err){
+
+									dal.user.deletebind(type, function(err, data) {
+										if(err) {
 											return mui.toast(err.message);
 										}
 										mui.toast("解绑成功");
-										
+
 										that[type].logout(function() {
 											that[type].userInfo = {
 												nickname: "已解除"
 											};
 										});
 									});
-									
-									
-									
-									
+
 								}
 							});
 
@@ -231,23 +229,25 @@
 					},
 					// 手机号点击
 					onTelphoneTap: function() {
-					
+
 						var that = this;
 						var page;
-						if(this.telphone){
+						if(this.telphone) {
 							page = "reset_tel";
-						}else{
+						} else {
 							page = "bind_tel";
 						}
-						
+
 						app.page.openForResultBy(page + ".html", page, function(data) {
-							if(data.tel){
+							if(data.tel) {
 								// 更改成功后修改页面中的tel
 								that.tel = data.tel;
 								// 继续通知上层
-								app.page.setResult({tel: data.tel});
+								app.page.setResult({
+									tel: data.tel
+								});
 							}
-						},{
+						}, {
 							tel: this.tel
 						});
 					},

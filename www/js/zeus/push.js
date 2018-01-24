@@ -22,8 +22,8 @@
 				plus: true
 			});
 
-			// 最多尝试5次 每次间隔3s
-			var timer = OB.interval(3e3).take(5);
+			// 最多尝试8次 每次间隔2s
+			var timer = OB.interval(2e3).take(8);
 			// 获取原生推送信息
 			var getCid = OB.create(function(ob) {
 				var rs = P.GetPushInfoSyn();
@@ -34,16 +34,20 @@
 				if(!rs || rs["code"] !== 0) {
 					return
 				}
-				ob.next(rs);
+				if(!rs.data || !rs.data.clientId){
+					return
+				}
+				
+				ob.next(rs.data.clientId);
 			});
 			return timer.mergeMap(function() {
 				return getCid
 			}).first();
 
 		})
-		.subscribe(function(obj) {
+		.subscribe(function(id) {
 			// 保存到本地
-			D.data = obj.data.clientId;
+			D.data = id;
 		});
 
 }());

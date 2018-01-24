@@ -156,7 +156,7 @@
 									return mui.toast(err.message);
 								}
 								mui.toast("消息已清空");
-								that.list.length = 0;
+								that.list = []; 
 								that.n = 1;
 							});
 						});

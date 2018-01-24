@@ -262,6 +262,7 @@
 			mui.init();
 
 			var P = plug.H5NativeBridge;
+			var D;
 
 			var TYPEDIR = {
 				16: "image",
@@ -342,7 +343,7 @@
 						kernel: 'WKWebview'
 					});
 
-					var D = new this.$Cache("dev_list", [], {
+					D = new this.$Cache("dev_list", [], {
 						plus: true
 					});
 

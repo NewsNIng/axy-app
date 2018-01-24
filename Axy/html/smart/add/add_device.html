@@ -344,7 +344,9 @@
 					_scanCodeLine: function(isDev){
 						app.page.openForResultBy('scan.html', 'scan', function(data){
 							// 获取扫码结果
-							console.log(data.result);
+							if(data.result){
+								mui.toast("添加成功");
+							}
 						}, {
 							isDev: isDev
 						});
