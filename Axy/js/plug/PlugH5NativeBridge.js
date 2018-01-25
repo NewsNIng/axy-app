@@ -177,10 +177,10 @@
 	 * @param {Number} way 播放通道，如果是单通道默认为0
 	 * @param {Number} way2  内部通道或者外部通道 0 -- 内部通道 1-- 外部通道 通道号从0开始 除104GN外其他的都默认为内部通道
 	 */
-	pgn.StartDevicePlay = function(deviceid, way, way1, sf, ff) {
+	pgn.StartDevicePlay = function(deviceid, way, way1, devName, sf, ff) {
 		typeof way === 'undefined' && (way = 0);
 		typeof way1 === 'undefined' && (way1 = 1);
-		return pg.asyncExec(N, 'StartDevicePlay', [deviceid, way, way1], sf, ff);
+		return pg.asyncExec(N, 'StartDevicePlay', [deviceid, way, way1, devName], sf, ff);
 	};
 
 	/**

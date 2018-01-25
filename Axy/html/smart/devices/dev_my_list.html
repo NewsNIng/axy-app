@@ -320,6 +320,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 
@@ -335,6 +336,7 @@
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -415,32 +417,56 @@
 				},
 
 				plusReady: function() {
-					
+					var that = this;
 					this.$view.setStyle({
 						scrollIndicator: "none"
 					});
-					
 					var DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
 
-					var that = this;
+					Rx.Observable
+						// 入口
+						.create(function(ob) {
+							// 获取到数据更新通知时
+							_B.on('device_update', function() {
+								ob.next();
+							});
+							ob.next();
+						})
+						// 获取数据
+						.mergeMap(function() {
+							return Rx.Observable
+								.create(function(ob) {
+									if(!DEVD.data || !DEVD.data.length) {
+										// 网络获取
+										dal.device.list(1, function(err, data) {
+											if(err) {
+												return;
+											}
+											// 数据不为空时 向原生发送数据
+											if(data && data.length > 0) {
+												DEVD.data = data;
+												P.InitNativeDevList(data);
+												ob.next(data);
+											}
+										}, 1000);
+									} else {
+										// 本地获取
+										ob.next(DEVD.data);
+									}
 
-					function getDevData() {
-						var devData = DEVD.data;
-						that.isGeted = true;
-						that.netDivList = devData.map(function(item) {
-							item.devimg = that._getDevImg(item.devid);
-							//item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
-							return item;
+								});
+						})
+						// 数据处理
+						.subscribe(function(devData) {
+							that.isGeted = true;
+							that.netDivList = devData.map(function(item) {
+								item.devimg = that._getDevImg(item.devid);
+								//item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
+								return item;
+							});
 						});
-					}
-
-					getDevData();
-
-					_B.on('device_update', function() {
-						getDevData();
-					});
 
 					this.$nextTick(function() {
 						mui('.mui-switch')['switch']();
@@ -502,7 +528,7 @@
 						}).subscribe(function(data) {
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
-							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, function() {
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
 								o.devimg = that._getDevImg(o.devid);
 							});
 						});
@@ -539,12 +565,12 @@
 								that.devaccessroyList.splice(i, 1);
 							}
 						}
-						
+
 						// TODO 修复数据结构问题
 						o.id = o.aid;
 						var info = {
 							accessory: o,
-							devName: this._fixDevLocation(o.devname), 
+							devName: this._fixDevLocation(o.devname),
 							devType: o.devtype,
 							statusCode: o.statuscode
 						};
@@ -559,10 +585,9 @@
 					_getDevName: function(type) {
 						return app.dev.findName(type);
 					},
-					_fixDevLocation: function(name){
+					_fixDevLocation: function(name) {
 						return app.dev.fixName(name);
 					},
-					
 
 					// 设备设置
 					onSettingTap: function(o, i) {

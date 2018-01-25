@@ -392,7 +392,7 @@
 							<div class="dev_menu">
 								<div class="mui-icon d1">
 									<img src="../../image/home/dev_camera.png" />
-									<span class="app-font-size-24 app-color-main">{{dev.devid}}</span>
+									<span class="app-font-size-24 app-color-main">{{_fixName(dev.location) || dev.devid}}</span>
 								</div>
 								<div class="mui-icon d2" @tap="onShareTap()">
 									<img src="../../image/home/dev_share.png" />
@@ -749,7 +749,7 @@
 						}).subscribe(function(data) {
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
-							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, function() {
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, o.location, function() {
 								that.dev.devimg = that._getDevImg(o.devid);
 							});
 						});
@@ -928,6 +928,10 @@
 					_getDevName: function(type) {
 						return app.dev.findName(type);
 					},
+					
+					_fixName: function(s){
+						return app.dev.fixName(s);
+					}
 
 				}
 			});

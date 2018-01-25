@@ -38,6 +38,7 @@
 			
 			.position {
 				height: 1.04rem;
+				background-color: #f5f5f9;
 				/*margin-bottom: 0.266666rem;*/
 				/*background-color: white;*/
 			}
@@ -169,7 +170,7 @@
 		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
 			<div class="mui-scroll">
 
-				<div class="position app-font-size-28">
+				<div @tap="onPositionTap()" class="position app-font-size-28 mui-ellipsis">
 					<img src="../../../image/nearby/map.png" />
 					<span v-text="position"></span>
 				</div>
@@ -224,6 +225,8 @@
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/gps.js"></script>-->
 
@@ -271,6 +274,19 @@
 
 				},
 				methods: {
+					// 点击地理位置
+					onPositionTap: function(){
+						var that = this;
+						app.page.getMaps(function(p){
+							that.position = p.address;
+							that.longitude = p.longitude;
+							that.latitude = p.latitude;
+							// 重新获取附近的商家列表
+							that._down();
+						});
+					},
+					
+					
 					// 更新地理位置
 					updateGeo: function(o) {
 						this.longitude = o.longitude;
@@ -298,7 +314,9 @@
 					},
 					// 获取商铺列表
 					_getList: function(f) {
+						var w = plus ? plus.nativeUI.showWaiting(): null;
 						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
+							w && w.close();
 							if(err) {
 								return mui.toast(err.message);
 							}
