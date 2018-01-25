@@ -24,7 +24,8 @@ Vue.component('dev-mask', {
 // 操作菜单容器组件
 Vue.component('dev-btns', {
 	//template: '<div class="com-dev-btns"><div></div><button @tap.stop="save()">保存</button><button @tap="cancel()">取消</button></div>',
-	template: '<ul class="mui-table-view ul_bottom app-font-size-28"><li class="mui-table-view-cell" @tap.stop="save()">保存</li><li class="mui-table-view-cell" @tap="cancel()">取消</li></ul>',
+	template: '<ul class="mui-table-view ul_bottom app-font-size-28"><li v-if="!noSave" class="mui-table-view-cell" @tap.stop="save()">保存</li><li class="mui-table-view-cell" @tap="cancel()">取消</li></ul>',
+	props: ["noSave"],
 	methods: {
 		save: function() {
 			this.$emit('action', true);
@@ -37,7 +38,7 @@ Vue.component('dev-btns', {
 
 // AX-360摄像机弹框设置
 Vue.component('dev-360', {
-	template: '<div v-show="show"  class="com-dev com-dev-360 app-font-size-30"><ul class="mui-table-view app-font-size-28"><li class="mui-table-view-cell pop_title">请选择摄像机状态</li><li class="mui-table-view-cell" :class="{\'app-color-main\': isSelect === 0}" @tap="isSelect = 0">撤防</li><li class="mui-table-view-cell" :class="{\'app-color-main\': isSelect === 1}" @tap="isSelect = 1">布防</li></ul><dev-btns @action="onAction"></dev-btns></div>',
+	template: '<div v-show="show"  class="com-dev com-dev-360 app-font-size-30"><ul class="mui-table-view app-font-size-28"><li class="mui-table-view-cell pop_title">请选择摄像机状态</li><li class="mui-table-view-cell" :class="{\'app-color-main\': isSelect === 0}" @tap="isSelectTap(0)">撤防</li><li class="mui-table-view-cell" :class="{\'app-color-main\': isSelect === 1}" @tap="isSelectTap(1)">布防</li></ul><dev-btns @action="onAction" :noSave="true"></dev-btns></div>',
 	data: function() {
 		return {
 			isSelect: -1,
@@ -80,6 +81,10 @@ Vue.component('dev-360', {
 			this.$emit(save ? 'save' : 'cancel', {
 				isSelect: this.isSelect,
 			});
+		},
+		isSelectTap: function(i){
+			this.isSelect = i;
+			this.onAction(true);
 		}
 	}
 });

@@ -98,7 +98,18 @@
 						content: "",
 						regexpType: "",
 						isIconSave: false,
+						maxLength: -1,
+						mLengthMsg: "长度超出限制",
 					};
+				},
+				watch: {
+					content(curVal, oldVal) {　　　　　　　　　　
+					console.log(curVal.length+","+curVal.length > this.maxLength);
+						if(this.maxLength > 0 && curVal.length > this.maxLength) {
+							this.content = oldVal;
+							mui.toast(this.mLengthMsg);
+						}
+					},
 				},
 				plusReady: function() {
 					var v = this.$view;
@@ -108,7 +119,10 @@
 					this.regexpType = v.r;
 					this.regexpErrorMessage = v.rmsg || "请输入正确格式的内容";
 					this.isIconSave = v.isIconSave || false;
-					//this.type = v.type || 'text';
+					this.maxLength = v.maxLength || 18;
+					this.mLengthMsg = v.mLengthMsg || "长度超出限制";
+//					alert(this.content.length);
+//					this.type = v.type || 'text';
 				},
 				methods: {
 					onOkTap: function() {

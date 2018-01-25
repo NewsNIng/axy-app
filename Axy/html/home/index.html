@@ -71,7 +71,7 @@
 			/*3end*/
 			
 			.dev_menu>div {
-				padding: 0.2rem 0;
+				padding: 0.4rem 0;
 				vertical-align: middle;
 				display: inline-block;
 			}
@@ -304,6 +304,18 @@
 				pointer-events: none;
 			}
 			/*设备背景图fix--------*/
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
 		</style>
 
 	</head>
@@ -337,7 +349,7 @@
 						<div @tap="onAdvertTap(imgFrist)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.adimg"></div>
 					</div>
 					<div class="mui-slider-indicator">
-						<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+						<div v-if="imgList.length !== 1" v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
 					</div>
 				</div>
 				<template v-else>
@@ -753,6 +765,9 @@
 							}
 							this.imgList = data;
 							advert_cache.data = data;
+							if(this.imgList.length === 1){
+								mui('.mui-slider').slider().setStopped(true);
+							}
 							this.$nextTick(function() {
 								imagelazyload();
 							});

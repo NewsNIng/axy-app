@@ -14,7 +14,18 @@
 			"html/person/collection/my_attention.html",
 			"html/person/collection/my_collection.html"
 		],
-		"resources": []
+		"resources": [
+			"js/common/immersed.js",
+			"js/app/app-page.js",
+			"js/common/imagelazyload.js",
+			"js/lib/md5.min.js",
+			"js/lib/vue.min.js",
+			"js/lib/mui.min.js",
+			"js/common/flexible.js",
+			"js/app/app.js",
+			"js/lib/vue-ni.js",
+			"js/config.js"
+		]
 	},
 	"html/person/setting/index.html": {
 		"refer": [
@@ -39,7 +50,8 @@
 			"html/person/index.html",
 			"html/smart/index.html",
 			"html/nearby/index.html",
-			"html/common/login.html"
+			"html/common/login.html",
+			"html/public/updateWindow.html"
 		],
 		"resources": [
 			"html/home/index.html",
@@ -54,7 +66,8 @@
 			"js/dal/base.js",
 			"js/common/rsmanager.js",
 			"js/lib/vue-ni.js",
-			"html/nearby/index.html"
+			"html/nearby/index.html",
+			"html/person/index.html"
 		]
 	},
 	"html/person/myself/business.html": {
@@ -86,7 +99,8 @@
 	"html/nearby/pages/discover.html": {
 		"refer": [
 			"html/nearby/discover/discover_details.html",
-			"html/person/other.html"
+			"html/person/other.html",
+			"html/nearby/discover/discover_release.html"
 		],
 		"resources": []
 	},
@@ -174,7 +188,8 @@
 	"html/smart/index.html": {
 		"refer": [
 			"html/smart/devices/dev_my_list.html",
-			"html/smart/scenes/index2.html"
+			"html/smart/scenes/index2.html",
+			"html/public/browser.html"
 		],
 		"resources": []
 	},
@@ -183,7 +198,9 @@
 			"html/search/index.html",
 			"html/smart/add/add_device.html",
 			"html/smart/scenes/index.html",
-			"html/nearby/business/store_details.html"
+			"html/nearby/business/store_details.html",
+			"html/public/browser.html",
+			"html/person/devshare/share.html"
 		],
 		"resources": [
 			"image/home/dev_camera.png",
@@ -297,7 +314,8 @@
 	"html/smart/devices/camera_settings.html": {
 		"refer": [
 			"html/public/input.html",
-			"html/public/alarmParam.html"
+			"html/public/alarmParam.html",
+			"html/smart/devices/camera_settings_info.html"
 		]
 	},
 	"html/smart/devices/dev_WG-100.html": {
@@ -318,6 +336,34 @@
 	"html/person/other.html": {
 		"refer": [
 			"html/nearby/discover/discover_details.html"
+		]
+	},
+	"html/common/login.html": {
+		"refer": [
+			"html/common/register.html",
+			"html/common/reset.html"
+		]
+	},
+	"html/common/reset.html": {
+		"refer": [
+			"html/common/login.html"
+		]
+	},
+	"html/smart/scenes/index2.html": {
+		"refer": [
+			"html/smart/scenes/edit_scenes.html",
+			"html/public/input.html"
+		]
+	},
+	"html/smart/scenes/edit_scenes.html": {
+		"refer": [
+			"html/smart/scenes/trigger_conditions.html",
+			"html/smart/scenes/perform_actions.html"
+		]
+	},
+	"html/smart/scenes/perform_actions.html": {
+		"refer": [
+			"html/smart/scenes/select_device.html"
 		]
 	}
 }

@@ -20,6 +20,12 @@
 				return false;
 			}
 			return true;
+		},
+		userName: function(value){
+			if(value.length > 18){
+				return false;
+			}
+			return true;
 		}
 	};
 

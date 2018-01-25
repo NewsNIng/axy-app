@@ -116,7 +116,7 @@
 				margin: 0 .16rem .16rem 0;
 				border-radius: 5px;
 				background-color: #e5e6e7;
-				line-height: 0.666666rem;
+				line-height: 0.66666rem;
 			}
 			
 			.cardRoom>div>* {
@@ -142,7 +142,7 @@
 				</div>
 			</div>
 
-			<div class="positionInfo app-font-size-26">
+			<div class="positionInfo app-font-size-28">
 				<span class="color808080" v-text="positionState"></span>
 				<span class="mui-pull-right">
 		    		<img src="../../image/main/nearby_active.png"/>
@@ -150,8 +150,8 @@
 				</span>
 			</div>
 			<div class="cityRoom">
-				<h5 class="app-font-size-26 color808080 tips">定位/最近访问</h5>
-				<div class="cardRoom color808080">
+				<h5 class="app-font-size-28 color808080 tips">定位/最近访问</h5>
+				<div class="cardRoom color808080 app-font-size-28">
 
 					<div v-show="indexCityName !=='未知' " @tap="onCityTap(indexCityName,positionLongitude,positionLatitude)">
 						<img src="../../image/main/nearby.png" width="12px" />
@@ -164,8 +164,8 @@
 
 				</div>
 
-				<h5 class="app-font-size-26 color808080 tips" style="margin: 0.346666rem 0 0.213333rem 0;">热门城市</h5>
-				<div class="cardRoom color808080">
+				<h5 class="app-font-size-28 color808080 tips" style="margin: 0.346666rem 0 0.213333rem 0;">热门城市</h5>
+				<div class="cardRoom color808080 app-font-size-28">
 
 					<template v-for="o,i in hotList">
 						<div v-text="o.name" @tap="onCityTap(o.name, o.longitude, o.latitude)"></div>

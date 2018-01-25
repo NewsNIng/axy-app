@@ -149,10 +149,10 @@
 					onNewTap: function() {
 						// 设定场景名称
 						app.page.getInput(function(data) {
-							data = data.content.trim();
-							if(!data || data.length === 0 || data.length > 12) {
-								return mui.toast('场景名称不能为空或者大于12个字符');
-							}
+//							data = data.content.trim();
+//							if(!data || data.length === 0 || data.length > 12) {
+//								return mui.toast('场景名称不能为空或者大于12个字符');
+//							}
 							mui.openWindow('edit_scenes.html', 'edit_scenes',{
 								extras: {
 									name: data
@@ -160,7 +160,9 @@
 							});
 						}, {
 							title: "场景名称",
-							tips: "请输入名称..."
+							tips: "请输入名称...",
+							maxLength: 12,
+							mLengthMsg: "场景名称不能大于12个字符"
 						});
 					},
 

@@ -438,8 +438,9 @@
 						}, {
 							title: "摄像机名称",
 							content: that.devInfo.location,
-							r: "devName",
-							rmsg: "最长不超过15个字符！"
+//							r: "devName",
+							maxLength: 15,
+							mLengthMsg: "最长不超过15个字符！"
 						});
 					},
 					// 基本信息跳转
