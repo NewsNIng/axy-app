@@ -35,9 +35,7 @@
 			}
 		}
 		if(type === "[object Function]") {
-			if(rex(value)){
-				return null;
-			}
+			return rex(value);
 		}
 		return message;
 	}
@@ -58,7 +56,8 @@
 			message = "";
 		while(i < l) {
 			message = rules.testBy(arr[i].type, arr[i].value, arr[i].message);
-			if(message !== null) {
+			
+			if(message != null) {
 				return message;
 			}
 			i++;

@@ -20,7 +20,8 @@
 				return false;
 			}
 			return true;
-		}
+		},
+		nickname: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,18}$/, 
 	};
 
 	rules.testBy = function(rex, value, message) {
@@ -35,9 +36,7 @@
 			}
 		}
 		if(type === "[object Function]") {
-			if(rex(value)){
-				return null;
-			}
+			return rex(value);
 		}
 		return message;
 	}
@@ -58,7 +57,8 @@
 			message = "";
 		while(i < l) {
 			message = rules.testBy(arr[i].type, arr[i].value, arr[i].message);
-			if(message !== null) {
+			
+			if(message != null) {
 				return message;
 			}
 			i++;

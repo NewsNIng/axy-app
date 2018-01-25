@@ -516,8 +516,8 @@
 						}).subscribe(function(data) {
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
-							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
-								o.devimg = that._getDevImg(o.devid);
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function(iospath) {
+								o.devimg = that._getDevImg(o.devid, iospath);
 							});
 						});
 
@@ -541,33 +541,48 @@
 					},
 					// 智能配件点击
 					onZoneTap: function(o, i) {
-						var that = this;
-						var actionDir = {
-							del: function() {
-								that.devaccessroyList.splice(i, 1);
-							},
-							update: function(info) {
-								that.$set(that.devaccessroyList, i, info);
-							},
-							unbind: function() {
-								that.devaccessroyList.splice(i, 1);
-							}
-						}
 
-						// TODO 修复数据结构问题
-						o.id = o.aid;
-						var info = {
-							accessory: o,
-							devName: this._fixDevLocation(o.devname),
-							devType: o.devtype,
-							statusCode: o.statuscode
-						};
-						console.log(JSON.stringify(o));
-						app.page.openForResultBy('dev_' + o.type + '.html', 'dev_' + o.type, function(data) {
-							actionDir[data.action](data.info);
-						}, {
-							info: info
+						var that = this;
+
+						Rx.Observable.create(function(ob) {
+							// 检查本地是否有相关配件页面
+							var pageUrl = 'dev_' + o.type + '.html';
+							plus.io.resolveLocalFileSystemURL(pageUrl, function() {
+								ob.next(pageUrl);
+							}, function() {
+								// 页面不存在
+								mui.toast('尚未支持该配件');
+							});
+						}).subscribe(function(pageUrl) {
+
+							var actionDir = {
+								del: function() {
+									that.devaccessroyList.splice(i, 1);
+								},
+								update: function(info) {
+									that.$set(that.devaccessroyList, i, info);
+								},
+								unbind: function() {
+									that.devaccessroyList.splice(i, 1);
+								}
+							}
+
+							// TODO 修复数据结构问题
+							o.id = o.aid;
+							var info = {
+								accessory: o,
+								devName: that._fixDevLocation(o.devname),
+								devType: o.devtype,
+								statusCode: o.statuscode
+							};
+
+							app.page.openForResultBy(pageUrl, 'dev_' + o.type, function(data) {
+								actionDir[data.action](data.info);
+							}, {
+								info: info
+							});
 						});
+
 					},
 
 					_getDevName: function(type) {
@@ -665,11 +680,11 @@
 						console.log(JSON.stringify(e));
 					},
 
-					_getDevImg: function(devid) {
+					_getDevImg: function(devid, iospath) {
 						if(this.$os.android) {
 							return app.android.getScreenshotByDevId(devid);
 						} else if(this.$os.ios) {
-							return app.ios.getScreenshotByDevId(devid);
+							return "file://" + iospath + "/" + devid + ".png";
 						}
 					},
 

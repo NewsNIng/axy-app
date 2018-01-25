@@ -345,7 +345,7 @@
 				</a>
 				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
 					<template v-if="collection">
-						<img src="../../../image/nearby/business/collection_3@3x.png"/>
+						<img src="../../../image/nearby/business/collection_3@3x.png" />
 					</template>
 					<template v-else>
 						<img src="../../../image/nearby/business/collect.png" />
@@ -534,15 +534,21 @@
 					}.bind(this));
 				},
 				plusReady: function() {
+					this.$view.setStyle({
+						top: "0px",
+						bottom: '0px',
+						softinputMode:"adjustResize",  
+					});
+					
 					plus.nativeUI.showWaiting();
 					this.from = app.user.get().account || "null";
 					// 获取传过来的id值
 					this.aid = this.$view.oid;
 					this.getInfo();
 					this.getComments();
-					this.$view.setStyle({
-						softinputMode: 'adjustResize'
-					});
+					
+					
+
 				},
 				methods: {
 
@@ -721,8 +727,8 @@
 							if(err) {
 								return mui.toast(err.message)
 							}
-							console.log("err==>"+err);
-							console.log("data==>"+data);
+							console.log("err==>" + err);
+							console.log("data==>" + data);
 							mui.toast((this.collection ? "取消" : "") + "收藏成功");
 							this.info.iscollection = +!this.info.iscollection;
 

@@ -188,9 +188,8 @@
 	 * @param {UserInfo} data 用户信息
 	 * @param {Object} callback
 	 */
-	user.updatepwd = function(account, updatepwd, newpsswd, callback) {
+	user.updatepwd = function(updatepwd, newpsswd, callback) {
 		return ra('post', '/user/updatepwd', {
-			account: account,
 			updatepwd: updatepwd,
 			newpsswd: newpsswd
 		}, callback);

@@ -560,8 +560,8 @@
 						var geo = this.dataset.geo.split(',');
 						app.page.setResult({
 							city: this.getAttribute('data-value'),
-							longitude: geo[0],
-							latitude: geo[1]
+							longitude: +geo[1],
+							latitude: +geo[0]
 						}).close();
 					});
 				});

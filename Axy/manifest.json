@@ -7,7 +7,7 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.8.2",/*应用版本名称*/
+		"name": "1.8.3",/*应用版本名称*/
 		"code": "20180105"
 	},
 	"description": "",/*应用描述信息*/
@@ -318,7 +318,8 @@
 				"refer": [
 					"html/zeus.html",
 					"html/smart/index2.html",
-					"html/common/login.html"
+					"html/common/login.html",
+					"html/public/updateWindow.html"
 				],
 				"priority": 0
 			},
@@ -606,7 +607,9 @@
 					"image/nearby/navigation.png"
 				],
 				"refer": [
-					"html/nearby/business/store_details.html"
+					"html/nearby/business/store_details.html",
+					"html/public/position.html",
+					"html/public/maps.html"
 				],
 				"priority": 0
 			},
@@ -800,7 +803,8 @@
 					"html/smart/devices/dev_21.html",
 					"html/smart/devices/dev_22.html",
 					"html/smart/devices/dev_160.html",
-					"html/smart/devices/dev_161.html"
+					"html/smart/devices/dev_161.html",
+					"html/smart/devices/dev_35.html"
 				],
 				"priority": 0
 			},
@@ -1061,6 +1065,13 @@
 				"resources": [],
 				"refer": [
 					"html/nearby/discover/discover_details.html"
+				],
+				"priority": 0
+			},
+			"html/public/maps.html": {
+				"resources": [],
+				"refer": [
+					"html/public/mapList.html"
 				],
 				"priority": 0
 			}

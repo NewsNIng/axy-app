@@ -256,9 +256,7 @@
 
 					// 发送
 					_send: function() {
-						plus.device.setVolume(0.3);
 						this.setid = this._getRandomChar();
-
 						// 保证设置设备音量后再同一声音大小上发送声波
 						setTimeout(function() {
 							var rs = P.StartVoiceSetWifi(this.wifiname, this.wifipwd, this.setid);

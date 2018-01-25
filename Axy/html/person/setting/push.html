@@ -150,7 +150,6 @@
 					PUSHID = new ni.Cache("push_key", "", {
 						plus: true
 					});
-					alert(PUSHID.data);
 					var that = this;
 					new Promise(function(resolve, reject) {
 						that.getStatesByList(resolve);
@@ -184,10 +183,30 @@
 						});
 					},
 					onActivityToggle: function() {
+						var that = this;
 						this.active = !this.active;
+						plus.nativeUI.showWaiting();
+						dal.push.updateActivity(PUSHID.data, this.active, function(err, data){
+							plus.nativeUI.closeWaiting();
+							if(err){
+								that.active = !that.active;
+								return mui.toast(err.message);
+							}
+							mui.toast("设置成功");
+						});
 					},
 					onSystemToggle: function() {
+						var that = this;
 						this.system = !this.system;
+						plus.nativeUI.showWaiting();
+						dal.push.updateActivity(PUSHID.data, this.active, function(err, data){
+							plus.nativeUI.closeWaiting();
+							if(err){
+								that.system = !that.system;
+								return mui.toast(err.message);
+							}
+							mui.toast("设置成功");
+						});
 					},
 					onAllTap: function() {
 						var wantv = !this.all;

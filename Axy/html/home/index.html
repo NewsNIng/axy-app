@@ -93,7 +93,6 @@
 				width: 80%;
 				white-space: nowrap;
 				display: inline-block;
-				
 			}
 			
 			.dev_menu .d2 {
@@ -104,7 +103,6 @@
 			.dev_menu .d3 {
 				width: 24%;
 				text-align: right;
-				
 			}
 			
 			.card {
@@ -122,14 +120,15 @@
 				line-height: 0.986666rem;
 			}
 			
-			.card_head > * {
+			.card_head>* {
 				line-height: 0.986666rem;
 				color: #A8A8A9;
-				
 			}
-			.card_head>div>*{
+			
+			.card_head>div>* {
 				vertical-align: middle;
 			}
+			
 			.card_head img {
 				width: .17rem;
 			}
@@ -737,8 +736,8 @@
 						}).subscribe(function(data) {
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
-							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, o.location, function() {
-								that.dev.devimg = that._getDevImg(o.devid);
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, o.location, function(iospath) {
+								that.dev.devimg = that._getDevImg(o.devid, iospath);
 							});
 						});
 
@@ -903,18 +902,18 @@
 						});
 					},
 
-					_getDevImg: function(devid) {
+					_getDevImg: function(devid, iospath) {
 						if(this.$os.android) {
 							return app.android.getScreenshotByDevId(devid);
 						} else if(this.$os.ios) {
-							return app.ios.getScreenshotByDevId(devid);
+							return "file://" + iospath + "/" + devid + ".png";
 						}
 					},
 					_getDevName: function(type) {
 						return app.dev.findName(type);
 					},
-					
-					_fixName: function(s){
+
+					_fixName: function(s) {
 						return app.dev.fixName(s);
 					}
 

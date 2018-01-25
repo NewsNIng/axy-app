@@ -327,6 +327,10 @@
 						new ni.Broadcast().on('tabar', function(data) {
 							this.onTabTap(this.tab.items[data.nindex], data.nindex);
 						}.bind(this));
+						
+						new ni.Broadcast().on('city_change_sub', function(data) {
+							this.city = data.city;
+						}.bind(this));
 					}
 				}
 			});

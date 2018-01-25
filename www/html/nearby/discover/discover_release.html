@@ -256,7 +256,7 @@
 						t1: "",
 						imgs: ["", "", ""],
 						hotList: [
-							"广州",
+							"广州", 
 							"东莞",
 							"长沙",
 							"惠州",
@@ -329,7 +329,7 @@
 												return '心得不能为空';
 											}
 											if(v.length > 300) {
-												return '心得不能超过30个字'
+												return '心得不能超过300个字'
 											}
 										},
 										value: that.t1
@@ -344,7 +344,7 @@
 										value: that.imgs
 									},
 								]);
-
+								
 								if(errMessage) {
 									rj(new Error(errMessage));
 								}

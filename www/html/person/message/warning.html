@@ -218,7 +218,7 @@
 									<img :src="'../../../image/person/message/screenshots'+ (o.info && o.info.image ? '' : '_1') +'@3x.png'" />
 									<div class="app-font-size-28" :class="o.info && o.info.image ? 'app-color-main': 'app-color-9f9fa0'">抓拍截图</div>
 									 
-									 <div ref="preimgs" v-if="o.info && o.info.image"  :data-preview-src="fixPath(o.info.image.fname)" :data-preview-group="i"></div>
+									 <div ref="preimgs" v-if="o.info && o.info.image"  :data-preview-src="o.info.image.fname" :data-preview-group="i"></div>
 								</div>
 
 								<div @tap.stop="onViewTap(o, i)">
@@ -415,7 +415,7 @@
 						if(!o.info || !o.info.video) {
 							return;
 						}
-						this.videosrc = this.fixPath(o.info.video.fname);
+						this.videosrc = o.info.video.fname;
 						this.videoplay = true;
 
 					},
@@ -505,7 +505,7 @@
 
 					// 是否为视频
 					isVideo: function(path) {
-						return /.mp4$/.test(path);
+						return /\.(?:mp4|3gp)$/i.test(path);
 					},
 
 					// 修复文件路径

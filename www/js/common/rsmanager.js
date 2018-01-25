@@ -59,8 +59,6 @@
 				}, function(){
 					// 安装成功
 					result(true, path);
-					isHide || plus.nativeUI.alert("资源更新完成");
-					
 				},function(e){
 					log(e, true);
 					// 安装失败

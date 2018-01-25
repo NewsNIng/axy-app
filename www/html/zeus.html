@@ -18,20 +18,21 @@
 		<script type="text/javascript" src="../js/dal/base.js"></script>
 		<script type="text/javascript" src="../js/dal/device.js"></script>
 		<script type="text/javascript" src="../js/dal/user.js"></script>
-		<script type="text/javascript" src="../js/dal/push.js" ></script>
+		<script type="text/javascript" src="../js/dal/push.js"></script>
 
 		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript" src="../js/plug/PlugDevManager.js"></script>
-		
-		<script type="text/javascript" src="../js/zeus/push.js" ></script>
+
+		<script type="text/javascript" src="../js/zeus/push.js"></script>
 
 		<script type="text/javascript">
 			/**
 			 * H5Native 控制中心 
 			 */
 
-			var D, P = plug.H5NativeBridge, PUSHID;
+			var D, P = plug.H5NativeBridge,
+				PUSHID;
 			var _B = new ni.Broadcast();
 
 			var domain = "www.isee110.com";
@@ -53,19 +54,15 @@
 				return window.localStorage.getItem('_pwd_');
 			}
 
-
 			// 设备推送同步
-			Rx.Observable.create(function(ob){
-				_B.on('device_push_update', function(){
+			var $synchronous = Rx.Observable.create(function(ob) {
+				_B.on('device_push_update', function() {
 					ob.next();
 				});
-				_B.on('login_success', function(){
+				_B.on('login_success', function() {
 					ob.next();
 				});
-			}).subscribe(function(){
-				dal.push.synchronous(PUSHID.data, ni.os.ios ? 67: 36, function(){});
 			});
-
 
 			Rx.Observable
 				// plusReady
@@ -82,6 +79,16 @@
 				.mergeMap(function() {
 					PUSHID = new ni.Cache('push_key', "", {
 						plus: true
+					});
+					
+					// 设备推送同步
+					$synchronous.subscribe(function() {
+						dal.push.synchronous(PUSHID.data, ni.os.ios ? 67 : 36, function(err, data) {
+							if(err){
+								return mui.toast(err.message);
+							}
+							mui.toast(PUSHID.data + '同步成功');
+						});
 					});
 
 					return Rx.Observable.create(function(ob) {
@@ -117,11 +124,11 @@
 									// 跳转页面认证
 									// TODO
 									mui.toast("帐号已保护，您需要权限认证");
-									app.page.openAuthorized(data.account, data.bindmobile, function(rs){
-										if(rs.result){
+									app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
+										if(rs.result) {
 											updateUserInfo(data);
 											ob.next(u.account);
-										}else{
+										} else {
 											// 清除用户信息
 											appLoginFail();
 										}
@@ -307,9 +314,6 @@
 				return data;
 
 			}
-			
-			
-			
 		</script>
 	</body>
 

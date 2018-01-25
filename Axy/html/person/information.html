@@ -366,7 +366,10 @@
 							that.updateUser.nickname = data.content;
 						}, {
 							title: '昵称',
-							content: that.user.nickname
+							content: that.user.nickname,
+							r: "nickname", 
+							rmsg: "昵称必须为中英文、数字和下划线 最多长度18" 
+							
 						});
 					},
 
