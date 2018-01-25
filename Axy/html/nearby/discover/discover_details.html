@@ -343,7 +343,7 @@
 				<a class="mui-icon mui-pull-right" @tap="mui('#popover-share').popover('show')">
 					<img src="../../../image/nearby/business/share.png" />
 				</a>
-				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
+				<a v-if="from !== info.account" class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
 					<template v-if="collection">
 						<img src="../../../image/nearby/business/collection_3@3x.png" />
 					</template>
@@ -402,7 +402,7 @@
 					<div class="user_tittle app-font-size-28">
 						<img @tap="onHeadTap(info.account)" class="avastr img-lazy-load" :data-src="info.headimgurl" data-type="avatar" />
 						<div style="display: inline;" v-text="info.nickname"></div>
-						<div class="attention" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
+						<div v-if="from !== info.account" class="attention" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
 					</div>
 					<div class="label app-font-size-34" v-text="'#' + info.title"></div>
 					<div class="description app-font-size-32" v-text="info.content"></div>

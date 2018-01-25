@@ -22,6 +22,12 @@
 			return true;
 		},
 		nickname: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,18}$/, 
+		userName: function(value){
+			if(value.length > 18){
+				return false;
+			}
+			return true;
+		}
 	};
 
 	rules.testBy = function(rex, value, message) {

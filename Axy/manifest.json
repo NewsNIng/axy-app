@@ -329,7 +329,15 @@
 					"css/lib/mui.min.css",
 					"css/app/app.css",
 					"js/common/immersed.js",
-					"js/lib/mui.min.js"
+					"js/lib/mui.min.js",
+					"js/app/app-page.js",
+					"js/common/imagelazyload.js",
+					"js/lib/md5.min.js",
+					"js/lib/vue.min.js",
+					"js/common/flexible.js",
+					"js/app/app.js",
+					"js/lib/vue-ni.js",
+					"js/config.js"
 				],
 				"refer": [
 					"html/common/login.html",

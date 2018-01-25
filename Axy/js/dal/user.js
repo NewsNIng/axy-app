@@ -114,6 +114,7 @@
 		 * @param {Object} fid 目标id
 		 */
 		add: function(fid, callback) {
+			console.log("222"+fid);
 			return ra('post', '/favorites/store/add', {
 				fid: fid,
 			}, callback);

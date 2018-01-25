@@ -351,7 +351,7 @@
 						if(this.collection) {
 							methodName = 'delete';
 						}
-						dal.user.collection_shop[methodName](this.aid, function(err, data) {
+						dal.user.collection_shop[methodName](this.id, function(err, data) {
 							if(err) {
 								return mui.toast(err.message)
 							}
