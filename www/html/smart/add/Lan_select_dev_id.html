@@ -161,17 +161,34 @@
 				data: function() {
 					return {
 						devActive: 0,
-						devs: [
+						devs_: [
 						
 						],
 						wifiname: "",
 						wifipwd: "",
 						noWifi: true,
+						
+						// 过滤显示某些主机设备 存类型名称
+						filter: [
+							"VS-360",
+							"AX-904",
+							"AX-903"
+						]
 					};
 				},
 				computed: {
 					indexDev: function() {
 						return this.devs[this.devActive];
+					},
+					devs: function() {
+						var tempName;
+						return this.devs_.filter(function(item) {
+							tempName = app.dev.findName(item.type)
+							if(this.filter.indexOf(tempName) >= 0) {
+								return false;
+							}
+							return true;
+						}.bind(this));
 					}
 				},
 
@@ -199,6 +216,8 @@
 					}.bind(this));
 				},
 				plusReady: function() {
+					//this.filter = this.$view.filter || [];
+					
 					this.result = !!this.$view.result;
 					this.getLanDevHostList();
 					this.noWifi = this.$view.ex.noWifi;
@@ -228,7 +247,7 @@
 					getLanDevHostList: function() {
 						var rs = P.GetLanDevHostList();
 						if(rs) {
-							this.devs = JSON.parse(rs).devlist || [];
+							this.devs_ = JSON.parse(rs).devlist || [];
 						}
 
 					},

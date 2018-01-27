@@ -348,7 +348,7 @@
 						var indexVal = this.o['state' + index];
 						var maxVal = pv.w['state' + index];
 						var noVal = pv.a['state' + index];
-						if(indexVal >= maxVal){
+						if(indexVal > maxVal){
 							return "app-color-ff3b30";
 						}else if(indexVal >= noVal){
 							return "app-color-333333"; 
@@ -369,6 +369,13 @@
 						this[o.img + 'Tap']();
 					},
 					
+					// 实时视频
+					btn_videoTap: function(){
+						var devid = this.devInfo.binding;
+						// 打开视频播放页面
+						
+					},
+					
 					// 保存数据
 					btn_SavedataTap: function(){
 						plus.nativeUI.showWaiting("正在保存...");
@@ -386,6 +393,11 @@
 						mui.toast("保存成功");
 						
 						plus.nativeUI.closeWaiting();
+					},
+					
+					//短信转发
+					btn_ShortmessageTap: function(){
+						
 					},
 					
 					// 设置

@@ -145,6 +145,12 @@
 				height: 0.906666rem;
 				margin-left: 1.64rem;
 			}
+			
+			.mui-icon {
+				font-size: 32px !important;
+				font-weight: bold;
+				color: #666666 !important;
+			}
 		</style>
 	</head>
 
@@ -157,7 +163,7 @@
 		</header>
 		<div class="mui-content">
 
-			<img src="../../image/common/login_logo.png" />
+			<img src="../../image/common/login_logo.png" @tap="test()" />
 
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_account.png" />
@@ -241,8 +247,8 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						username: '18718690160',
-						password: '123456',
+						username: '',
+						password: '',
 						loading: false
 					};
 				},
@@ -251,9 +257,19 @@
 					var opener = this.$view.opener();
 					// 初始化第三方登录
 					this.initOAuth();
+					// 获取本地记录帐号 
+					this.loadLocalHostAccount();
 
 				},
 				methods: {
+					loadLocalHostAccount: function(){
+						var last_account = window.localStorage.getItem('last_account');
+						last_account && (this.username = last_account);
+					},
+					test: function(){
+						this.username = '18718690160';
+						this.password = '123456';
+					},
 					onLoginTap: function(e) {
 						// 如果正在登录，就直接返回
 						if(this.loading) {
@@ -337,6 +353,17 @@
 									return resolve(info);
 									 
 								}, that);
+							})
+							// 单次注销
+							.then(function(auth){
+								var o = {};
+								for(var i in auth){
+									if(typeof auth[i] !== 'function'){
+										o[i] = auth[i];
+									}
+								}
+								auth.logout();
+								return o;
 							})
 							.then(authInfoAdapter)
 							.then(function(info) {

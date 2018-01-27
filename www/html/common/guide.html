@@ -73,7 +73,7 @@
 	<body>
 		<div id="slider" class="mui-slider mui-fullscreen" style="background-color: white;">
 
-			<div class="out app-font-size-32 app-color-9f9fa0" @tap="onCloseTap()">
+			<div v-show="!isLast" class="out app-font-size-32 app-color-9f9fa0" @tap="onCloseTap()">
 				跳过
 			</div>
 			<!-- v-if="i === list.length - 1" -->
@@ -107,14 +107,28 @@
 							"img": "../../image/common/guide3.png"
 						}, {
 							"img": "../../image/common/guide4.png"
-						}]
+						}],
+						
+						isLast: false
 					};
 				},
+				
+				mounted: function(){
+					var that = this;
+					
+					document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+					  that.isLast = event.detail.slideNumber === 3; 
+					});
+				},
+				
 				plusReady: function() {
 					// 延迟2s后进入app
 					setTimeout(function() {
 						this.onCloseTap();
 					}.bind(this), 2e3);
+					
+					
+					
 				},
 				methods: {
 					onCloseTap: function() {

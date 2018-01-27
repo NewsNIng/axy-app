@@ -84,6 +84,7 @@
 					// 设备推送同步
 					$synchronous.subscribe(function() {
 						dal.push.synchronous(PUSHID.data, ni.os.ios ? 67 : 36, function(err, data) {
+							return; 
 							if(err){
 								return mui.toast(err.message);
 							}
@@ -117,7 +118,7 @@
 									// 做一次设备同步
 									_B.emit('device_push_update', {}, {
 										self: true,
-										views: []
+										views: ['zeus']
 									});
 									ob.next(u.account);
 								} else {

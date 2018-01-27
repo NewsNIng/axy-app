@@ -134,6 +134,14 @@
 				display: flex;
 				display: -webkit-flex;
 			}
+			
+			.arrowdown>.mui-icon {
+				/*line-height: 40px;*/
+				padding: 15px 15px 0 15px !important;
+				font-weight: bold;
+				height: 100%;
+			}
+			
 		</style>
 	</head>
 
@@ -141,9 +149,9 @@
 
 		<div class="warp">
 			<header class="mui-bar mui-bar-nav app-header">
-				<div>
+				<div class="arrowdown">
 					<span class="app-color-white app-font-size-28 mui-pull-left" v-text="city" style="line-height: 45px;" @tap="onHeaderCityTap()"></span>
-					<a class="mui-icon mui-icon-arrowdown app-color-white" @tap="onHeaderCityTap()" style="font-size: 20px; padding-top: 12px;"></a>
+					<a class="mui-icon mui-icon-arrowdown app-font-size-26 app-color-white" @tap="onHeaderCityTap()" style="font-size: 20px; padding-top: 12px;"></a>
 				</div>
 
 				<div class="app-input-room" style="flex: 1;">
@@ -326,6 +334,10 @@
 					_listenMore: function() {
 						new ni.Broadcast().on('tabar', function(data) {
 							this.onTabTap(this.tab.items[data.nindex], data.nindex);
+						}.bind(this));
+						
+						new ni.Broadcast().on('city_change_sub', function(data) {
+							this.city = data.city;
 						}.bind(this));
 					}
 				}

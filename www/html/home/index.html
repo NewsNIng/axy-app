@@ -71,7 +71,7 @@
 			/*3end*/
 			
 			.dev_menu>div {
-				padding: 0.2rem 0;
+				padding: 0.4rem 0;
 				vertical-align: middle;
 				display: inline-block;
 			}
@@ -93,7 +93,6 @@
 				width: 80%;
 				white-space: nowrap;
 				display: inline-block;
-				
 			}
 			
 			.dev_menu .d2 {
@@ -104,7 +103,6 @@
 			.dev_menu .d3 {
 				width: 24%;
 				text-align: right;
-				
 			}
 			
 			.card {
@@ -122,14 +120,15 @@
 				line-height: 0.986666rem;
 			}
 			
-			.card_head > * {
+			.card_head>* {
 				line-height: 0.986666rem;
 				color: #A8A8A9;
-				
 			}
-			.card_head>div>*{
+			
+			.card_head>div>* {
 				vertical-align: middle;
 			}
+			
 			.card_head img {
 				width: .17rem;
 			}
@@ -304,6 +303,18 @@
 				pointer-events: none;
 			}
 			/*设备背景图fix--------*/
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
 		</style>
 
 	</head>
@@ -337,7 +348,7 @@
 						<div @tap="onAdvertTap(imgFrist)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.adimg"></div>
 					</div>
 					<div class="mui-slider-indicator">
-						<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+						<div v-if="imgList.length !== 1" v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
 					</div>
 				</div>
 				<template v-else>
@@ -479,6 +490,7 @@
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 		<script type="text/javascript" src="../../js/dal/home.js"></script>
 		<script type="text/javascript" src="../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../js/dal/devparam.js" ></script>
 		<script type="text/javascript" src="../../js/dal/store.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
@@ -701,33 +713,36 @@
 
 						Rx.Observable.create(function(ob) {
 							if(o.type >= 0x1040 && o.type <= 0x1080) {
-								// 动态设置设备通道
-								wayPick.setData([{
-										text: '通道一',
-										value: 0
-									},
-									{
-										text: '通道二',
-										value: 1
-									},
-									{
-										text: '通道三',
-										value: 2
-									},
-									{
-										text: '通道四',
-										value: 3
+								// 获取设备的通道信息
+								plus.nativeUI.showWaiting("获取通道信息中...");
+								dal.devparam.chlist(o.devid, o.type, function(err, data){
+									plus.nativeUI.closeWaiting();
+									if(err){
+										return mui.toast(err.message);
 									}
-								]);
-								// 重置弹出层到第一个通道位置
-								wayPick.pickers[0].setSelectedValue(1);
-								// 显示通道选择器
-								wayPick.show(function(items) {
-									ob.next({
-										b: items[0].value
+									
+									if(!data || !data.length){
+										return mui.toast("暂无通道信息");
+									}
+									
+									data = data.map(function(item){
+										return {
+											text: item.name,
+											value: item.no
+										}
 									});
-								}, function(items) {
-									// 取消 或者 隐藏
+									// 动态设置设备通道
+									wayPick.setData(data);
+									// 重置弹出层到第一个通道位置
+									wayPick.pickers[0].setSelectedIndex(0);
+									// 显示通道选择器
+									wayPick.show(function(items) {
+										ob.next({
+											b: items[0].value
+										});
+									}, function(items) {
+										// 取消 或者 隐藏
+									});
 								});
 							} else {
 								ob.next({
@@ -738,12 +753,7 @@
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, o.location, function(iospath) {
-								if(mui.os.ios && iospath){
-									that.dev.devimg = "file://" + iospath + "/" + o.devid + "jpg");
-								}else{
-									that.dev.devimg = that._getDevImg(o.devid);	
-								}
-								
+								that.dev.devimg = that._getDevImg(o.devid, iospath);
 							});
 						});
 
@@ -758,6 +768,9 @@
 							}
 							this.imgList = data;
 							advert_cache.data = data;
+							if(this.imgList.length === 1){
+								mui('.mui-slider').slider().setStopped(true);
+							}
 							this.$nextTick(function() {
 								imagelazyload();
 							});
@@ -908,18 +921,18 @@
 						});
 					},
 
-					_getDevImg: function(devid) {
+					_getDevImg: function(devid, iospath) {
 						if(this.$os.android) {
 							return app.android.getScreenshotByDevId(devid);
 						} else if(this.$os.ios) {
-							return app.ios.getScreenshotByDevId(devid);
+							return "file://" + iospath + "/" + devid + ".png";
 						}
 					},
 					_getDevName: function(type) {
 						return app.dev.findName(type);
 					},
-					
-					_fixName: function(s){
+
+					_fixName: function(s) {
 						return app.dev.fixName(s);
 					}
 

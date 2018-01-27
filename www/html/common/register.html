@@ -179,15 +179,15 @@
 				-webkit-transform: translateY(-50%);
 				color: #999999;
 			}
-			
 			/*选中样式*/
+			
 			.red {
 				background-image: url(../../image/common/agree_selected.png);
 				background-position: center;
 				background-size: 100% 100%;
 			}
-			
 			/*未选中样式*/
+			
 			.agree_select {
 				background-color: #c1c1c1;
 			}
@@ -211,6 +211,11 @@
 				margin-bottom: 0;
 			}
 			
+			.mui-icon {
+				font-size: 32px !important;
+				font-weight: bold;
+				color: #666666 !important;
+			}
 		</style>
 	</head>
 
@@ -230,7 +235,7 @@
 			</div>
 
 			<div class="mui-input-row app-font-size-30">
-				<img src="../../image/common/login_msg.png" />
+				<img src="../../image/common/message@3x.png" />
 				<input type="tel" class="app-font-size-28" placeholder="请输入短信验证码" v-model="verifycode">
 				<button type="button" @tap="getCodeTap()" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined" :class="{'mui-disabled': codeState}" v-text="codeState ? codeTimer: '发送验证码'"></button>
 			</div>
@@ -251,13 +256,13 @@
 
 		<script src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
 
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../js/app/app-rules.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
 		<script type="text/javascript">
 			mui.init()
 
@@ -287,30 +292,32 @@
 						user_agree: true, // 用户协议
 						codeState: false,
 						codeTimer: 60,
-						codeT: null, 
+						codeT: null,
 						codeNumber: "", // 验证码
 					};
 				},
 
 				methods: {
-					getCodeTap: function(){
-						if(this.codeT){return}
-						
-						var errorMessage = app.rules.test("tel", this.username, "手机号输入错误");
-						if(errorMessage){
+					getCodeTap: function() {
+						if(this.codeT) {
+							return
+						}
+
+						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确");
+						if(errorMessage) {
 							return mui.toast(errorMessage);
 						}
 						// 发送获取验证码的请求
-						dal.user.getCode(this.username, function(err, data){
-							if(err){
+						dal.user.getCode(this.username, function(err, data) {
+							if(err) {
 								return mui.toast(JSON.stringify(err));
 							}
 							this.codeNumber = data.validcode;
 						}.bind(this));
-						
-						(function t(c){
-							c.codeT = setTimeout(function(){
-								if(c.codeTimer <= 0){
+
+						(function t(c) {
+							c.codeT = setTimeout(function() {
+								if(c.codeTimer <= 0) {
 									c.codeT = null;
 									c.codeState = false;
 									c.codeTimer = 60;
@@ -319,7 +326,7 @@
 								c.codeTimer--;
 								t(c);
 							}, 1000);
-						}(this)); 
+						}(this));
 						this.codeState = true;
 					},
 					onLoginTap: function(e) {
@@ -329,57 +336,52 @@
 						}
 
 						var that = this;
-						
-						
+
 						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确") ||
-								 		   app.rules.test("pwd", this.password, "密码长度需6-20位") || 
-								 		   app.rules.test("code", this.verifycode, "验证码格式错误");
-						
-						if(errorMessage){
+							app.rules.test("pwd", this.password, "密码长度需6-20位") ||
+							app.rules.test("code", this.verifycode, "验证码格式错误");
+
+						if(errorMessage) {
 							return mui.toast(errorMessage);
 						}
-						
+
 						// 验证验证码
-						if(this.verifycode !== this.codeNumber){
+						if(this.verifycode !== this.codeNumber) {
 							return mui.toast('验证码错误');
 						}
-						
+
 						// 更新注册状态
 						this.loading = true;
-						
-						
+
 						dal.user.reg(this.username, this.password, this.verifycode, function(err, data) {
 							that.loading = false;
-							
-							if(err){
-								return mui.toast(err.code + ": " +err.message);
+
+							if(err) {
+								return mui.toast(err.code + ": " + err.message);
 							}
-							
-							
+
 							mui.toast("注册成功，请登录");
 							console.log(JSON.stringify(data));
-							
+
 							// 发出一个通知
 							//new that.$Broadcast().emit("login_success", {
 							//	say: 'Hello'
 							//});
-							
+
 							that.$view.close();
-							
-							
-							
+
 						});
 
 					},
-					onProtocol: function(){
-						mui.openWindow('user_protocol.html','user_protocol');
+					onProtocol: function() {
+						mui.openWindow('user_protocol.html', 'user_protocol');
 					}
 				},
 				watch: {
 					loading: function(newVal, oldVal) {
 						mui('#loginBtn').button(newVal ? "loading" : "reset");
 					},
-					username: function(){
+					username: function() {
 						this.codeNumber = "";
 					}
 				}

@@ -97,16 +97,7 @@
 						}, "address");
 					},
 					point: function(value) {
-						plus.maps.Map.reverseGeocode(value, {
-							//coordType: "gcj02"
-						}, function(p) {
-							//this.address = p.address;
-							this.longitude = p.coord.longitude;
-							this.latitude = p.coord.latitude;
-							this.searchObj.poiSearchNearBy(p.address, value, 25);
-						}.bind(this), function(err) {
-							mui.toast(err.message);
-						});
+						this.reverseGeocode(value);
 					},
 				},
 				computed: {
@@ -114,7 +105,7 @@
 				},
 				mounted: function() {
 					document.getElementById("map").style.top = 44 + immersed + "px";
-
+					
 				},
 				plusReady: function() {
 
@@ -122,7 +113,7 @@
 
 					var ex = {
 						position: 'absolute',
-						zoom: 19
+						zoom: this.$view.room || 19
 					};
 					if(this.$view.point) {
 						ex.center = this.$view.point
@@ -137,6 +128,11 @@
 						if(this.$view.point) {
 							return callback(this.$view.point);
 						}
+						if(this.$view.longitude && this.$view.latitude) {
+
+							console.log(this.$view.longitude + ',' + this.$view.latitude)
+							return callback(new plus.maps.Point(this.$view.longitude, this.$view.latitude));
+						}
 						if(n <= 0) {
 							return callback(null);
 						}
@@ -148,24 +144,46 @@
 							return callback(point);
 						});
 					}.bind(this);
+					
+					
+					
 
 					_getLocation(ex.center ? 0 : 3, function(point) {
 						this.initMap(point);
 						this.initSearch(point);
-						this.initMenu();
+						setTimeout(function() {
+							this.initMenu();
+							this.address = this.where = "正在获取...";
+							this.reverseGeocode(point);
+						}.bind(this), 2000);
 						this.initMapEvent();
+						
+						
 					}.bind(this));
 
 				},
 				methods: {
+					reverseGeocode: function(value){
+						plus.maps.Map.reverseGeocode(value, {
+							//coordType: "gcj02"
+						}, function(p) {
+							//this.address = p.address;
+							this.longitude = p.coord.longitude;
+							this.latitude = p.coord.latitude;
+							this.searchObj.poiSearchNearBy(p.address, value, 25);
+						}.bind(this), function(err) {
+							mui.toast(err.message);
+						});
+					},
+					
 					// 选择附近
-					onSelectTap: function(){
-						app.page.openForResultBy('mapList.html', 'mapList', function(p){
+					onSelectTap: function() {
+						app.page.openForResultBy('mapList.html', 'mapList', function(p) {
 							p = p.p;
 							app.page.setResult({
 								address: p.address,
 								longitude: p.point.longitude,
-								latitude: p.point.latitude 
+								latitude: p.point.latitude
 							}).close();
 						}, {
 							plist: this.plist
@@ -222,28 +240,6 @@
 							color: '#FFFFFF'
 						});
 
-						var view2 = new plus.nativeObj.View("qiqiuv", {
-							width: "10%",
-							height: "6%",
-							top: "47%",
-							left: "45%",
-							backgroundColor: "rgba(0,0,0,0)"
-
-						});
-						view2.drawBitmap('../../image/qiqiu.png', {
-
-						}, {
-
-						}, "qiqiu");
-
-						// 设置view点击事件拦截，指定到按钮
-						view.setTouchEventRect({
-							top: "66%",
-							bottom: "2%",
-							height: "30%",
-							width: "94%",
-							left: "3%"
-						});
 						// 添加点击事件
 						view.addEventListener('click', function() {
 							app.page.setResult({
@@ -253,20 +249,48 @@
 							}).close();
 						}.bind(this));
 
-						this.$view.append(view);
-						
+						// 设置view点击事件拦截，指定到按钮
+						view.setTouchEventRect({
+							top: "66%",
+							bottom: "2%",
+							height: "30%",
+							width: "94%",
+							left: "3%"
+						});
 
+						this.$view.append(view);
 						view.show();
-						
 						this.view = view;
 						
-						 
-						setTimeout(function(){
-							this.$view.append(view2);
-							view2.show();
-							this.view2 = view2;
-						}.bind(this), 100);
 						
+						
+						// bitmap 载入图片 离线打包会崩溃， 曲线救国， 用webview暂时代替
+						var qiqiuw = plus.webview.create('qiqiu.html', 'qiqiu', {
+							width: "10%",
+							height: "6%",
+							top: "47%",
+							left: "45%",
+							
+							background: 'transparent'
+						});
+						qiqiuw.show();
+						this.$view.append(qiqiuw);
+
+						//						var view2 = new plus.nativeObj.View("qiqiuv", {
+						//							width: "10%",
+						//							height: "6%",
+						//							top: "47%",
+						//							left: "45%",
+						//							backgroundColor: "rgba(255,0,0,.5)",
+						//						}, [{
+						//							id: 'qiqiuimg',
+						//							src: '_www/image/qiqiu.png',
+						//							tag: 'img'
+						//						}]);
+						//
+						//						this.$view.append(view2);
+						//						view2.show();
+						//						this.view2 = view2;
 
 					},
 					initMap: function(point) {
@@ -282,7 +306,7 @@
 						this.searchObj.onPoiSearchComplete = function(state, result) {
 							if(state == 0) {
 								if(result.currentNumber <= 0) {
-									return mui.toast("检索附近列表失败，请重试");
+									return mui.toast("没有搜索到相关地址");
 								}
 								var fristPostion = result.getPosition(0);
 								that.address = fristPostion.address;

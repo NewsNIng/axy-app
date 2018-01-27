@@ -45,7 +45,7 @@
 			
 			.shop .shop_img {
 				width: 2.453333rem;
-				height: 100%;
+				height: 2.453333rem;
 				display: block;
 			}
 			
@@ -58,7 +58,7 @@
 			
 			.discovery .discovery_img {
 				width: 2.453333rem;
-				height: 100%;
+				height: 2.453333rem;
 				display: block;
 			}
 			
@@ -153,8 +153,6 @@
 				margin-right: 0.16rem;
 				vertical-align: middle;
 			}
-			
-			
 		</style>
 	</head>
 
@@ -232,41 +230,41 @@
 						active: 0,
 
 						shops: [
-//													{
-//														name: "跨界空间健身玩乐综合体（休闲娱乐）",
-//														address: "南山区龙珠四路88号（龙井B出口、维也纳酒店、龙井村、金谷产业园、车管所）",
-//														image: "http://p0.meituan.net/dpmerchantalbum/a4aa2cbe25502cc20da67a35bc934bac4978960.jpg@220w_126h",
-//													}, {
-//														name: "adidas官方旗舰店",
-//														address: "深圳市南山区世界之窗塘头六坊",
-//														image: "../../../image/home/gohome.png",
-//													}, {
-//														name: "adidas官方旗舰店",
-//														address: "深圳市南山区世界之窗塘头六坊",
-//														image: "../../../image/home/gohome.png",
-//													}, {
-//														name: "adidas官方旗舰店",
-//														address: "深圳市南山区世界之窗塘头六坊",
-//														image: "../../../image/home/gohome.png",
-//													}
+//						{
+//							name: "跨界空间健身玩乐综合体（休闲娱乐）",
+//							address: "南山区龙珠四路88号（龙井B出口、维也纳酒店、龙井村、金谷产业园、车管所）",
+//							image: "http://vihiapp.oss-cn-shenzhen.aliyuncs.com/9ce030ac-d4d1-47c2-b3f9-d4cfd3862292.jpg",
+//						}, {
+//							name: "adidas官方旗舰店",
+//							address: "深圳市南山区世界之窗塘头六坊",
+//							image: "../../../image/home/gohome.png",
+//						}, {
+//							name: "adidas官方旗舰店",
+//							address: "深圳市南山区世界之窗塘头六坊",
+//							image: "../../../image/home/gohome.png",
+//						}, {
+//							name: "adidas官方旗舰店",
+//							address: "深圳市南山区世界之窗塘头六坊",
+//							image: "../../../image/home/gohome.png",
+//						}
 						],
 						discoverys: [
-//													{
-//															title: "发现主题发现主题",
-//															desc: "描述",
-//															praise: "52021",
-//															image: "../../../image/home/gohome.png",
-//														}, {
-//															title: "发现主题",
-//															desc: "描述",
-//															praise: "52021",
-//															image: "../../../image/home/gohome.png",
-//														}
+//						{
+//							title: "发现主题发现主题",
+//							desc: "描述",
+//							praise: "52021",
+//							image: "http://vihiapp.oss-cn-shenzhen.aliyuncs.com/9ce030ac-d4d1-47c2-b3f9-d4cfd3862292.jpg",
+//						}, {
+//							title: "发现主题",
+//							desc: "描述",
+//							praise: "52021",
+//							image: "../../../image/home/gohome.png",
+//						}
 						],
 						m: 0,
 						n: 0,
 					};
-			},
+				},
 				mounted: function() {
 					this.$nextTick(function() {
 						mui.init();
@@ -336,7 +334,7 @@
 						this._getList(function(data) {
 							console.log(JSON.stringify(data));
 							data = data.filter(function(item) {
-//								console.log(item !== null);
+								//								console.log(item !== null);
 								return item !== null;
 							});
 							if(!data || !data.length) {
@@ -349,25 +347,25 @@
 								}
 							}
 							this.$pullRefresh.pullRefresh().endPullupToRefresh();
-//							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+							//							this.$pullRefresh.pullRefresh().endPullupToRefresh();
 						}.bind(this));
 					},
-					onDeleteShopTap: function(fid,i){
-						dal.user.collection_shop.delete(fid,function(err,data){
+					onDeleteShopTap: function(fid, i) {
+						dal.user.collection_shop.delete(fid, function(err, data) {
 							if(err) {
 								return mui.toast(err.message)
 							}
 							mui.toast("取消收藏成功");
-							this.shops.splice(i,1);
+							this.shops.splice(i, 1);
 						}.bind(this));
 					},
-					onDeleteDisTap: function(fid,i){
-						dal.user.collection_talk.delete(fid,function(err,data){
+					onDeleteDisTap: function(fid, i) {
+						dal.user.collection_talk.delete(fid, function(err, data) {
 							if(err) {
 								return mui.toast(err.message)
 							}
 							mui.toast("取消收藏成功");
-							this.discoverys.splice(i,1);
+							this.discoverys.splice(i, 1);
 						}.bind(this));
 					}
 
