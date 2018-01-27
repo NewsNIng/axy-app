@@ -166,9 +166,9 @@
 						}
 						this.en = data.en;
 						this.recTime = data.recTime;
-						this.intervalTime = data.interval && data.interval > 60 ? data.intervalTime : 60;
+						this.intervalTime = data.interval && data.interval > 60 ? data.interval : 60;
 						this.continuedTime = data.durationTime && data.durationTime > 10 ? data.durationTime : 10;
-						console.log(data.interval + "," + data.durationTime);
+//						console.log(data.interval + "," + data.durationTime);
 					}.bind(this)); //					this.intervalTime = v.intervalTime;
 					//					this.continuedTime = v.continuedTime;
 				},
@@ -195,7 +195,7 @@
 					},
 					onSaveTap: function() {
 						plus.nativeUI.showWaiting();
-						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.interval, this.durationTime, function(err, data) {
+						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.intervalTime, this.continuedTime, function(err, data) {
 							plus.nativeUI.closeWaiting();
 							console.log("data==>" + JSON.stringify(data));
 							console.log("err==>" + JSON.stringify(err));

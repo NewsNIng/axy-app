@@ -175,7 +175,8 @@
 			"html/person/devshare/share.html",
 			"html/smart/devices/dev_20.html",
 			"html/smart/devices/dev_WG-100.html",
-			"html/smart/add/add_device.html"
+			"html/smart/add/add_device.html",
+			"html/smart/devices/dev_35.html"
 		],
 		"resources": []
 	},
@@ -384,6 +385,11 @@
 	"html/smart/scenes/perform_actions.html": {
 		"refer": [
 			"html/smart/scenes/select_device.html"
+		]
+	},
+	"html/smart/devices/dev_35.html": {
+		"refer": [
+			"html/public/input.html"
 		]
 	}
 }
