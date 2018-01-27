@@ -203,7 +203,9 @@
 								// 更新本地用户信息
 								new ni.Broadcast().emit('userinfo_update', {
 									userInfo: that.user
-								}, {views: ['zeus']});
+								}, {
+									views: ['zeus']
+								});
 
 							});
 					},
@@ -226,15 +228,22 @@
 					// T掉
 					outImei: function(id, index) {
 						var that = this;
-						plus.nativeUI.showWaiting();
-						dal.protect.delete(id, function(err, rs) {
-							plus.nativeUI.closeWaiting();
-							if(err) {
-								return mui.toast(err.message);
-							}
-							that.authList.splice(index, 1);
-							mui.toast("删除成功！");
+						new Promise(function(resolve, reject) {
+							mui.confirm("确定移除该设备的登录权限么？", "温馨提示", ['确定移除', '取消'], function(e) {
+								!e.index && resolve();
+							});
+						}).then(function(){
+							plus.nativeUI.showWaiting();
+							dal.protect.delete(id, function(err, rs) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.authList.splice(index, 1);
+								mui.toast("删除成功！");
+							});
 						});
+						
 					},
 
 					_toTimeString: function(x) {

@@ -257,10 +257,15 @@
 					var opener = this.$view.opener();
 					// 初始化第三方登录
 					this.initOAuth();
+					// 获取本地记录帐号 
+					this.loadLocalHostAccount();
 
 				},
 				methods: {
-					
+					loadLocalHostAccount: function(){
+						var last_account = window.localStorage.getItem('last_account');
+						last_account && (this.username = last_account);
+					},
 					test: function(){
 						this.username = '18718690160';
 						this.password = '123456';
@@ -348,6 +353,17 @@
 									return resolve(info);
 									 
 								}, that);
+							})
+							// 单次注销
+							.then(function(auth){
+								var o = {};
+								for(var i in auth){
+									if(typeof auth[i] !== 'function'){
+										o[i] = auth[i];
+									}
+								}
+								auth.logout();
+								return o;
 							})
 							.then(authInfoAdapter)
 							.then(function(info) {

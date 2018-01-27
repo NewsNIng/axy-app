@@ -170,9 +170,21 @@
 								plus.webview.close(all[i]);
 							}
 						}
+						
+						// 记录最后一次登录的帐号
+						var login_type = window.localStorage.getItem('login_type');
+						// 只记录手动输入登录的帐号
+						if(login_type === 'pwd'){
+							window.localStorage.setItem('last_account', app.user.get().account || "");
+						}else{
+							window.localStorage.setItem('last_account', "");
+						}
+						
+						
 						// 清除本地用户数据
 						app.user.logout();
 						window.localStorage.setItem('_pwd_', "");
+						
 						// 清除第三方登录信息
 						plus.oauth.getServices(function(auths) {
 							// 逐个注销

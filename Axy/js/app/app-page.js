@@ -22,7 +22,8 @@
 			image_cropper: '_www/html/public/image_cropper.html',
 			alarmParam: '_www/html/public/alarmParam.html',
 			authorized: "_www/html/common/authorized.html",
-			share: "_www/html/public/share.html",
+//			share: "_www/html/public/share.html",
+share: "http://192.168.1.147:8020/Axy/html/public/share.html",
 			update: "_www/html/public/updateWindow.html"
 		},cw = null;
 		

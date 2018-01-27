@@ -132,7 +132,7 @@
 			.imgdiv.WG-100,
 			.imgdiv.AX-903,
 			.imgdiv.AX-904 {
-				pointer-events: none;
+				/*pointer-events: none;*/
 			}
 			
 			.imgdiv>span {
@@ -263,7 +263,7 @@
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
 						<div class="card" v-for="o,i in netDivList">
-							<div class="imgdiv" :class="_getDevName(o.type)" @tap="onCmTap(o)" :style="{backgroundImage: 'url('+o.devimg+')'}">
+							<div class="imgdiv" :class="_getDevName(o.type)" @tap="onCmTap(o, i)" :style="{backgroundImage: 'url('+o.devimg+')'}">
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
@@ -343,6 +343,8 @@
 			var devManager, runManager;
 
 			var _B = new ni.Broadcast();
+			
+			var P = plug.H5NativeBridge;
 
 			var wayPick;
 
@@ -483,12 +485,55 @@
 				},
 				methods: {
 					// 摄像机点击
-					onCmTap: function(o) {
+					onCmTap: function(o, i) {
 						var that = this;
-
+						
 						if(o.online !== 1) {
 							return mui.toast("设备不在线");
 						}
+
+						this.tapIndex = i;
+
+						var name = app.dev.findName(o.type);
+
+						var url;
+						switch(name) {
+							case "WG-100":
+								{
+									url = "dev_WG-100.html";
+									break;
+								}
+
+							case "AX-903":
+								{
+									url = "dev_AX-903.html";
+									break;
+								}
+
+							case "AX-904":
+								{
+									url = "dev_AX-904.html";
+									break;
+								}
+
+							default:
+								{
+									url = "";
+									break;
+								}
+
+						}
+
+						if(url) {
+							mui.openWindow(url, url, {
+								extras: {
+									devInfo: o
+								}
+							});
+							return;
+						}
+
+						
 
 						Rx.Observable.create(function(ob) {
 							if(o.type >= 0x1040 && o.type <= 0x1080) {
@@ -614,13 +659,13 @@
 						switch(name) {
 							case "WG-100":
 								{
-									url = "dev_WG-100.html";
+									url = "dev_WG-100_setting.html";
 									break;
 								}
 
 							case "AX-903":
 								{
-									url = "dev_AX-903.html";
+									url = "dev_AX-903_setting.html";
 									break;
 								}
 
@@ -638,7 +683,7 @@
 
 						}
 
-						mui.openWindow(url, url, {
+						url && mui.openWindow(url, url, {
 							extras: {
 								devInfo: o
 							}

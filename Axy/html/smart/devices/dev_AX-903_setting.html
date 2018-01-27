@@ -72,13 +72,15 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-		<script type="text/javascript" src="../../js/app/app-dev.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
 		<script type="text/javascript">
 			mui.init();
+			
+			var _B = new ni.Broadcast();
 
 			new Vue({
 				el: '.mui-content',
@@ -132,7 +134,7 @@
 								_B.emit("update", {
 									info: that.devInfo
 								}, {
-									views: [that.$view.opener().opener()]
+									views: ['dev_my_list']
 								});
 							});
 						}, {
@@ -153,6 +155,12 @@
 								}
 								mui.toast("修改绑定成功！");
 								that.devInfo.binding = data.devid;
+								// 通知上层的上层
+								_B.emit("update", {
+									info: that.devInfo
+								}, {
+									views: ['dev_my_list']
+								});
 							});
 							
 						}, {

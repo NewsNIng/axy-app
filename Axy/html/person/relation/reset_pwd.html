@@ -94,11 +94,11 @@
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		
-		<script type="text/javascript" src="../../../js/app/app-rules.js" ></script>
-		
-		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/user.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -109,7 +109,7 @@
 					return {
 						oldPwd: "",
 						newPwd: "",
-						newPwd2: "", 
+						newPwd2: "",
 					};
 				},
 
@@ -126,13 +126,12 @@
 				},
 
 				plusReady: function() {
-
+					
 				},
 				methods: {
-					onSubmitTap: function(){
+					onSubmitTap: function() {
 						// 验证密码格式
-						var errMessage = app.rules.testListBy([
-							{
+						var errMessage = app.rules.testListBy([{
 								type: "pwd",
 								value: this.oldPwd,
 								message: "旧密码格式错误"
@@ -148,34 +147,36 @@
 								message: "新密码第二个格式错误"
 							}
 						]);
-						if(errMessage){
+						if(errMessage) {
 							return mui.toast(errMessage);
 						}
 						// 验证逻辑错误
-						if(!this.isEqual){
+						if(!this.isEqual) {
 							return mui.toast("新密码两次输入的不同");
 						}
-						if(this.isOld){
+						if(this.isOld) {
 							return mui.toast("新密码不能与旧密码相同");
 						}
-						
+
 						// 通过 ，提交服务器
 						this._submitpwd();
 					},
-					_submitpwd: function(){
+					_submitpwd: function() {
 						var that = this;
 						mui.confirm("您确定修改密码吗？\n修改密码成功将需要重新登录", "", ["确定修改", "取消"], function(e) {
 							if(e.index === 0) {
 								plus.nativeUI.showWaiting();
-								dal.user.updatepwd(that.oldPwd, that.newPwd, function(err, rs){
+								dal.user.updatepwd(that.oldPwd, that.newPwd, function(err, rs) {
 									plus.nativeUI.closeWaiting();
-									if(err){
+									if(err) {
 										return mui.toast(err.message);
 									}
 									
+									
 									var all = plus.webview.all();
 									var index = plus.webview.currentWebview();
-									var first = plus.webview.getLaunchWebview();
+									var first = plus.webview.getWebviewById('main');
+
 									var id;
 									plus.nativeUI.showWaiting();
 									for(var i = 0, l = all.length; i < l; i++) {
@@ -186,6 +187,9 @@
 									}
 									app.user.logout();
 									window.localStorage.setItem('_pwd_', "");
+									
+									mui.toast("密码修改成功，需要重新登录");
+									
 									first.addEventListener('loaded', function() {
 										plus.nativeUI.closeWaiting();
 										index.close('none');
@@ -193,15 +197,12 @@
 									first.reload();
 									first.show("slide-in-bottom", 250);
 									
+									
 								});
-								
-								
-								
+
 							}
 						});
-						
-						
-						
+
 					}
 				}
 			})
