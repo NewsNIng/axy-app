@@ -492,7 +492,9 @@
 					"image/common/login_qq.png",
 					"js/lib/vue-ni.js",
 					"html/common/reset.html",
-					"js/app/app-rules.js"
+					"js/app/app-rules.js",
+					"js/lib/Rx.min.js",
+					"js/app/app-page.js"
 				],
 				"refer": [
 					"html/common/register.html",
@@ -661,7 +663,9 @@
 				"priority": 0
 			},
 			"html/nearby/discover/discover_details.html": {
-				"resources": [],
+				"resources": [
+					"image/nearby/business/收藏2@3x.png"
+				],
 				"refer": [
 					"html/person/other.html"
 				],
@@ -708,7 +712,8 @@
 					"html/smart/add/sonic_connect_camera1.html",
 					"html/smart/add/sonic_connect_camera2.html",
 					"html/smart/add/sonic_connect_dev1.html",
-					"html/smart/add/sonic_connect_dev2.html"
+					"html/smart/add/sonic_connect_dev2.html",
+					"html/smart/add/add_completed.html"
 				],
 				"priority": 0
 			},
