@@ -200,7 +200,8 @@
 			"html/smart/scenes/index.html",
 			"html/nearby/business/store_details.html",
 			"html/public/browser.html",
-			"html/person/devshare/share.html"
+			"html/person/devshare/share.html",
+			"html/smart/devices/camera_settings.html"
 		],
 		"resources": [
 			"image/home/dev_camera.png",
@@ -233,7 +234,8 @@
 			"html/smart/add/sonic_connect_camera2.html",
 			"html/smart/add/sonic_connect_dev1.html",
 			"html/smart/add/sonic_connect_dev2.html",
-			"html/smart/add/Lan_connect_camera.html"
+			"html/smart/add/Lan_connect_camera.html",
+			"html/smart/add/add_completed.html"
 		],
 		"resources": []
 	},
@@ -247,7 +249,9 @@
 		"refer": [
 			"html/person/other.html"
 		],
-		"resources": []
+		"resources": [
+			"image/nearby/business/收藏2@3x.png"
+		]
 	},
 	"html/person/message/index.html": {
 		"refer": [
@@ -342,6 +346,22 @@
 		"refer": [
 			"html/common/register.html",
 			"html/common/reset.html"
+		],
+		"resources": [
+			"js/lib/Rx.min.js",
+			"js/common/flexible.js",
+			"js/lib/mui.min.js",
+			"js/app/app-rules.js",
+			"image/common/login_account.png",
+			"js/lib/vue-ni.js",
+			"js/common/immersed.js",
+			"image/common/login_logo.png",
+			"js/dal/user.js",
+			"js/app/app-page.js",
+			"js/lib/vue.min.js",
+			"js/dal/base.js",
+			"js/app/app.js",
+			"image/common/login_pwd.png"
 		]
 	},
 	"html/common/reset.html": {

@@ -112,7 +112,7 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript" src="../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../js/lib/mui.poppicker.js"></script>
-		<script type="text/javascript" src="../../js/data/time_hm.js"></script>
+		<script type="text/javascript" src="../../js/data/time_ms_1-6.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -125,8 +125,8 @@
 
 						recTime: -1,
 						en: -1,
-						intervalTime: 0,
-						continuedTime: 0,
+						intervalTime: -1,
+						continuedTime: -1,
 
 						type: -1,
 						devid: "",
@@ -135,10 +135,10 @@
 
 				computed: {
 					intervalTimeText: function() {
-						return this.intervalTime + 's';
+						return this.intervalTime === -1 ? "-- s" : this.intervalTime + 's';
 					},
 					continuedTimeText: function() {
-						return this.continuedTime + 's';
+						return this.continuedTime === -1 ? "-- s" : this.continuedTime + 's';
 					}
 				},
 
@@ -147,11 +147,11 @@
 						layer: 1,
 						more: false,
 					});
-					pick_data[1].push({
-						"text": "60秒",
-						"value": 60
-					})
-					this.pick.setData(pick_data[1]);
+					//					pick_data[1].push({
+					//						"text": "60秒",
+					//						"value": 60
+					//					})
+					this.pick.setData(pick_data[0]);
 				},
 				plusReady: function() {
 					plus.nativeUI.showWaiting();
@@ -166,8 +166,9 @@
 						}
 						this.en = data.en;
 						this.recTime = data.recTime;
-						this.intervalTime = data.interval;
-						this.continuedTime = data.durationTime;
+						this.intervalTime = data.interval && data.interval > 60 ? data.intervalTime : 60;
+						this.continuedTime = data.durationTime && data.durationTime > 10 ? data.durationTime : 10;
+						console.log(data.interval + "," + data.durationTime);
 					}.bind(this)); //					this.intervalTime = v.intervalTime;
 					//					this.continuedTime = v.continuedTime;
 				},
@@ -178,6 +179,8 @@
 						if(i === 1) {
 							p = 'continuedTime';
 						}
+						this.pick.setData(pick_data[i]);
+						//						alert(this.intervalTime+","+this.continuedTime);
 						this.pick.pickers[0].setSelectedValue(that[p]);
 
 						var fn = function(s) {
@@ -194,12 +197,12 @@
 						plus.nativeUI.showWaiting();
 						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.interval, this.durationTime, function(err, data) {
 							plus.nativeUI.closeWaiting();
-							console.log("data==>"+JSON.stringify(data));
-							console.log("err==>"+JSON.stringify(err));
+							console.log("data==>" + JSON.stringify(data));
+							console.log("err==>" + JSON.stringify(err));
 							if(err) {
 								return mui.toast(err.message);
 							}
-//							alert("err==>" + err + "\tdata==>" + data);
+							//							alert("err==>" + err + "\tdata==>" + data);
 							app.page.setResult({
 								//								intervalTime: this.intervalTime,
 								//								continuedTime: this.continuedTime

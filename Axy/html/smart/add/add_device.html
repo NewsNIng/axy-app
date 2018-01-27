@@ -77,7 +77,7 @@
 
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
 					<template v-for="o,i in hostDevs.devs">
-						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4"  @tap="onItemTap1(o)">
+						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap1(o)">
 							<a>
 								<img :src="o.img" />
 								<div class="mui-media-body app-font-size-26">{{o.name}}</div>
@@ -90,7 +90,7 @@
 
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
 					<template v-for="o,i in ctrl_fit.devs">
-						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4"  @tap="onItemTap2(o)">
+						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap2(o)">
 							<a>
 								<img :src="o.img" />
 								<div class="mui-media-body app-font-size-26">{{o.name}}</div>
@@ -103,7 +103,7 @@
 				<ul class="mui-table-view mui-grid-view mui-grid-9">
 
 					<template v-for="o,i in safe_fit.devs">
-						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4"  @tap="onItemTap3(o)">
+						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap3(o)">
 							<a>
 								<img :src="o.img" />
 								<div class="mui-media-body app-font-size-26">{{o.name}}</div>
@@ -126,7 +126,7 @@
 		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -135,7 +135,7 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
-			
+
 			/**
 			 * type 0 声波
 			 * type 1内网
@@ -148,7 +148,7 @@
 					return {
 						hostDevs: {
 							isWifi: false, // 是否是WIFI环境
-							
+
 							title: "智能主机",
 							devs: [{
 								img: "../../../image/smart/devices/dev_icon/AX-360@3x.png",
@@ -196,29 +196,30 @@
 						ctrl_fit: {
 							title: "智能控制配件",
 							devs: [{
-								img: "../../../image/smart/devices/dev_icon/znms@3x.png",
-								name: "智能门锁",
-							}, {
-								img: "../../../image/smart/devices/dev_icon/zncz@3x.png",
-								name: "智能插座",
-							}, {
-								img: "../../../image/smart/devices/dev_icon/zndk@3x.png",
-								name: "智能灯控",
-							}, {
-								img: "../../../image/smart/devices/dev_icon/clkzq@3x.png",
-								name: "窗帘控制器",
-							}, 
-//							{
-//								img: "../../../image/smart/devices/dev_icon/clsjq@3x.png",
-//								name: "窗帘升降器",
-//							},
-							{
-								img: "../../../image/smart/devices/dev_icon/mjzj@3x.png",
-								name: "门禁主机",
-							}, {
-								img: "../../../image/smart/devices/dev_icon/hwyk@3x.png",
-								name: "红外遥控模块",
-							}, ],
+									img: "../../../image/smart/devices/dev_icon/znms@3x.png",
+									name: "智能门锁",
+								}, {
+									img: "../../../image/smart/devices/dev_icon/zncz@3x.png",
+									name: "智能插座",
+								}, {
+									img: "../../../image/smart/devices/dev_icon/zndk@3x.png",
+									name: "智能灯控",
+								}, {
+									img: "../../../image/smart/devices/dev_icon/clkzq@3x.png",
+									name: "窗帘控制器",
+								},
+								//							{
+								//								img: "../../../image/smart/devices/dev_icon/clsjq@3x.png",
+								//								name: "窗帘升降器",
+								//							},
+								{
+									img: "../../../image/smart/devices/dev_icon/mjzj@3x.png",
+									name: "门禁主机",
+								}, {
+									img: "../../../image/smart/devices/dev_icon/hwyk@3x.png",
+									name: "红外遥控模块",
+								},
+							],
 						},
 						safe_fit: {
 							title: "智能安全配件",
@@ -253,98 +254,109 @@
 								img: "../../../image/smart/devices/dev_icon/ybq@3x.png",
 								name: "迎宾器",
 							}, ],
-							
-							
+
 							devCache: null
 						},
 					};
 				},
 				mounted: function() {
-					
+
 				},
-				plusReady: function() { 
+				plusReady: function() {
 					this.isWifi = app.net.getType() === 'wifi';
 					// 监听网络变化
-					app.net.listen(function(type){
+					app.net.listen(function(type) {
 						this.isWifi = type === 'wifi';
 					}.bind(this));
-					
+
 					this.devCache = new ni.Cache("dev_list", [], {
 						plus: true
 					});
 				},
 				methods: {
-					
+
 					// 点击连接家人的摄像机
 					onFamilyTap: function() {
 						mui.openWindow('family_menu.html');
 					},
-					
+
 					// 主机
-					onItemTap1: function(o){
-//						alert(JSON.stringify(o));
-						if(o.type === 0){
+					onItemTap1: function(o) {
+						//						alert(JSON.stringify(o));
+						if(o.type === 0) {
 							this._voiceDevLine();
-						}else if(o.type === 1){
+						} else if(o.type === 1) {
 							this._hostNetLine(o);
-						}else{
+						} else {
 							this._scanCodeLine(true);
 						}
 					},
 					// 控制配件
-					onItemTap2: function(o){
-						var l = this.devCache.data.length; 
-						if(!l || l === 0){
+					onItemTap2: function(o) {
+						var l = this.devCache.data.length;
+						if(!l || l === 0) {
 							return mui.toast('请先添加主机');
 						}
-						
+
 						this._scanCodeLine();
 					},
 					// 安全配件
-					onItemTap3: function(o){
-						var l = this.devCache.data.length; 
-						if(!l || l === 0){
+					onItemTap3: function(o) {
+						var l = this.devCache.data.length;
+						if(!l || l === 0) {
 							return mui.toast('请先添加主机');
 						}
 						this._scanCodeLine();
 					},
-					
-					
-					
+
 					// 声波连接设备
-					_voiceDevLine: function(){
-						if(!this.isWifi){
+					_voiceDevLine: function() {
+						if(!this.isWifi) {
 							return mui.toast('请连接WIFI');
 						}
-						app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data){
+						app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
 							var url = "sonic_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
 							mui.openWindow(url, 'voice1');
 						});
 					},
-					
+
 					// 内网连接设备
-					_hostNetLine: function(o){
-						if(!this.isWifi){
+					_hostNetLine: function(o) {
+						if(!this.isWifi) {
 							return mui.toast('请连接WIFI');
 						}
 						// 保存当前设备img地址
 						window.localStorage.setItem('Lan_add_camera_img', o.img);
 						// 保存这个设备的type
 						window.localStorage.setItem('Lan_add_camera_type', o.type);
-						mui.openWindow('Lan_add_camera.html','Lan_add_camera', {
+						mui.openWindow('Lan_add_camera.html', 'Lan_add_camera', {
 							extras: {
-								ex : {
+								ex: {
 									noWifi: !!o.noWifi
 								}
 							}
 						});
 					},
-					
+
 					// 扫码获取设备ID
-					_scanCodeLine: function(isDev){
-						app.page.openForResultBy('scan.html', 'scan', function(data){
+					_scanCodeLine: function(isDev) {
+						app.page.openForResultBy('scan.html', 'scan', function(data) {
 							// 获取扫码结果
 							console.log(data.result);
+							
+							if(data.result) {
+								//获取配件信息
+								
+								// 跳转
+								mui.openWindow('add_completed.html', 'add_completed', {
+									extras: {
+										needConn: false,
+										//配件id
+										devid: this.devid,
+										isFitting: true,
+									}
+								});
+							}
 						}, {
 							isDev: isDev
 						});
