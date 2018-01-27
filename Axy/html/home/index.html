@@ -490,6 +490,7 @@
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 		<script type="text/javascript" src="../../js/dal/home.js"></script>
 		<script type="text/javascript" src="../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../js/dal/devparam.js" ></script>
 		<script type="text/javascript" src="../../js/dal/store.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
@@ -712,33 +713,36 @@
 
 						Rx.Observable.create(function(ob) {
 							if(o.type >= 0x1040 && o.type <= 0x1080) {
-								// 动态设置设备通道
-								wayPick.setData([{
-										text: '通道一',
-										value: 0
-									},
-									{
-										text: '通道二',
-										value: 1
-									},
-									{
-										text: '通道三',
-										value: 2
-									},
-									{
-										text: '通道四',
-										value: 3
+								// 获取设备的通道信息
+								plus.nativeUI.showWaiting("获取通道信息中...");
+								dal.devparam.chlist(o.devid, o.type, function(err, data){
+									plus.nativeUI.closeWaiting();
+									if(err){
+										return mui.toast(err.message);
 									}
-								]);
-								// 重置弹出层到第一个通道位置
-								wayPick.pickers[0].setSelectedValue(1);
-								// 显示通道选择器
-								wayPick.show(function(items) {
-									ob.next({
-										b: items[0].value
+									
+									if(!data || !data.length){
+										return mui.toast("暂无通道信息");
+									}
+									
+									data = data.map(function(item){
+										return {
+											text: item.name,
+											value: item.no
+										}
 									});
-								}, function(items) {
-									// 取消 或者 隐藏
+									// 动态设置设备通道
+									wayPick.setData(data);
+									// 重置弹出层到第一个通道位置
+									wayPick.pickers[0].setSelectedIndex(0);
+									// 显示通道选择器
+									wayPick.show(function(items) {
+										ob.next({
+											b: items[0].value
+										});
+									}, function(items) {
+										// 取消 或者 隐藏
+									});
 								});
 							} else {
 								ob.next({
