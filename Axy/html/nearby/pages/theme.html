@@ -49,6 +49,10 @@
 			.see {
 				float: right;
 			}
+			
+			.mui-pull-bottom-pocket {
+				position: absolute !important;
+			}
 		</style>
 
 	</head>
@@ -127,7 +131,6 @@
 						});
 					},
 					onShareTap: function(o){
-						console.log(JSON.stringify(o));
 						app.page.sendShare(function(){
 							
 						},{

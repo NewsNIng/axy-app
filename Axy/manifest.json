@@ -799,7 +799,10 @@
 				"priority": 0
 			},
 			"html/smart/devices/dev_my_list.html": {
-				"resources": [],
+				"resources": [
+					"image/smart/devices/bg/903@3xweb.png",
+					"image/smart/devices/bg/wg_100@3xweb.png"
+				],
 				"refer": [
 					"html/smart/add/add_device.html",
 					"html/smart/devices/camera_settings.html",
@@ -1000,7 +1003,8 @@
 			"html/nearby/pages/theme.html": {
 				"resources": [],
 				"refer": [
-					"html/public/browser.html"
+					"html/public/browser.html",
+					"html/public/share.html"
 				],
 				"priority": 0
 			},

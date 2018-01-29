@@ -298,26 +298,54 @@
 				},
 
 				methods: {
+
+					clearCodeTimer: function() {
+						if(this.codeT){
+							window.clearTimeout(this.codeT);
+							this.codeT = null;	
+						}
+						this.codeState = false;
+						this.codeTimer = 60;
+					},
+
 					getCodeTap: function() {
 						if(this.codeT) {
 							return
 						}
+						
+						var that = this;
 
 						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确");
 						if(errorMessage) {
 							return mui.toast(errorMessage);
 						}
-						// 发送获取验证码的请求
-						dal.user.getCode(this.username, function(err, data) {
-							if(err) {
-								return mui.toast(JSON.stringify(err));
-							}
-							this.codeNumber = data.validcode;
-						}.bind(this));
+
+						new Promise(function(resolve, reject) {
+							// 是否可以注册
+							dal.user.checkuser(that.username, function(err, data) {
+								if(err) {
+									that.clearCodeTimer();
+									return mui.toast(err.message);
+								}
+								resolve();
+								
+							});
+						}).then(function(){
+							// 发送验证码
+							dal.user.getCode(that.username, function(err, data) {
+								if(err){
+									that.clearCodeTimer();
+									return mui.toast(err.message);
+								}
+								that.codeNumber = data.validcode;
+								mui.toast('验证发送成功，请注意查收');
+							});
+						});
 
 						(function t(c) {
 							c.codeT = setTimeout(function() {
 								if(c.codeTimer <= 0) {
+									window.clearTimeout(this.codeT);
 									c.codeT = null;
 									c.codeState = false;
 									c.codeTimer = 60;
