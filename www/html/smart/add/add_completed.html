@@ -115,9 +115,9 @@
 			<div class="mui-content">
 				<div class="imgbg">
 					<img :src="bgp"/>
-					<div class="text app-font-size-28 app-color-9f9fa0">设备连接成功!</div>
+					<div class="text app-font-size-28 app-color-9f9fa0" v-text="isFitting?'配件':'设备'+'连接成功!'"></div>
 				</div>
-				<button type="button" class="examine app-color-333333 mui-btn app-btn-main-ghost app-font-size-34" @tap="show()">查看设备</button>
+				<button type="button" class="examine app-color-333333 mui-btn app-btn-main-ghost app-font-size-34" @tap="show()" v-text="isFitting?'查看配件':'查看设备'"></button>
 				<button type="button" v-if="needConn" class="btn_bind mui-btn app-btn-main app-font-size-34" @tap="bind()">去绑定摄像机</button>
 			</div>
 		</div>
@@ -153,6 +153,7 @@
 						bgp: '../../../image/smart/devices/others/complete@3x.png',
 						devid: '',
 						needConn: true,
+						isFitting: false,
 					};
 				},
 				mounted: function() {
@@ -161,6 +162,7 @@
 				plusReady: function() {
 					this.needConn = this.$view.needConn;
 					this.devid = this.$view.devid;
+					this.isFitting = this.$view.isFitting;
 					this.updateDeviceList();
 				},
 				methods: {
@@ -173,7 +175,7 @@
 					// 通知其他页面设备列表更新
 					updateDeviceList: function(){
 						new this.$Broadcast().emit('device_update', {}, {
-							views: ["main", "dev_my_list"]
+							views: ["zeus", "dev_my_list"]
 						});
 					},
 					

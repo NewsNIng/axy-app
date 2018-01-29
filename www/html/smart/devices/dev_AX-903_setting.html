@@ -72,12 +72,15 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
 		<script type="text/javascript">
 			mui.init();
+			
+			var _B = new ni.Broadcast();
 
 			new Vue({
 				el: '.mui-content',
@@ -131,12 +134,12 @@
 								_B.emit("update", {
 									info: that.devInfo
 								}, {
-									views: [that.$view.opener().opener()]
+									views: ['dev_my_list']
 								});
 							});
 						}, {
 							title: "摄像机名称",
-							tips: that.devInfo.location,
+							tips: that._fixName(that.devInfo.location),
 						});
 					},
 					
@@ -152,15 +155,27 @@
 								}
 								mui.toast("修改绑定成功！");
 								that.devInfo.binding = data.devid;
+								// 通知上层的上层
+								_B.emit("update", {
+									info: that.devInfo
+								}, {
+									views: ['dev_my_list']
+								});
 							});
 							
 						}, {
 							// 过滤设备 电管家 和 智能网管
 							filter: [
 								"WG-100",
-								"AX-903"
+								"AX-903",
+								"AX-904",
+								"VH-104GN"
 							]
 						});
+					},
+					
+					_fixName: function(s){
+						return app.dev.fixName(s);
 					}
 				}
 			});

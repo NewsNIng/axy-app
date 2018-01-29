@@ -16,12 +16,14 @@
 			mailltype: '_www/html/public/mailltype.html',
 			city: '_www/html/public/city.html',
 			maps: '_www/html/public/maps.html',
+
 			login: '_www/html/common/login.html',
 			browser: '_www/html/public/browser.html',
 			image_cropper: '_www/html/public/image_cropper.html',
 			alarmParam: '_www/html/public/alarmParam.html',
 			authorized: "_www/html/common/authorized.html",
-			share: "_www/html/public/share.html",
+//			share: "_www/html/public/share.html",
+share: "http://192.168.1.147:8020/Axy/html/public/share.html",
 			update: "_www/html/public/updateWindow.html"
 		},cw = null;
 		
@@ -73,8 +75,8 @@
 		this.openForResult('mailltype', callback, {});
 	}
 	// 打开地图
-	page.getMaps = function(callback){
-		this.openForResult('maps', callback, {});
+	page.getMaps = function(callback, ex){
+		this.openForResult('maps', callback, ex);
 	}
 	
 	// 打开图片剪裁

@@ -396,7 +396,7 @@
 						arr[0][0].value = info.city;
 						arr[0][1].value = info.name;
 						arr[0][2].value = info.address;
-						arr[0][3].oid = info.type;
+						arr[0][3].value = info.type;
 
 						arr[1][0].value = info.telphone;
 						arr[1][1].startweek = info.startweek;
@@ -413,11 +413,25 @@
 						//image1: arr[2][0]['imgList'][0],
 						//image2: arr[2][0]['imgList'][1],
 						//image3: arr[2][0]['imgList'][2],
-
+						
+						
 						for(var i = 0; i < 3; i++) {
-							// 重置图片
-							arr[2][0]['imgList'][i] = "";//info['image' + (i + 1)];
+							arr[2][0]['imgList'][i] = info['image' + (i + 1)];
 						}
+						
+						var imgList = arr[2][0]['imgList'];
+						var imgLen = imgList.filter(function(item) {
+							return !!item;
+						}).length || 0;
+						
+						arr[2][0].value = imgLen + "张";
+						
+						if(info.introduction){
+							arr[3][0].t1 = info.introduction;
+							arr[3][0].value = "已填写信息";	
+						}
+						
+						
 
 					}
 				}

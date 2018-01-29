@@ -168,6 +168,19 @@
 			durationTime: durationTime
 		}, callback);
 	};
+	
+	/**
+	 * 多路设备通道
+	 * @param {String} devid
+	 * @param {Number} devtype
+	 * @param {Function} callback
+	 */
+	devparam.chlist = function(devid, type, callback){
+		return ra("get", "/devparam/chlist", {
+			devid: devid,
+			type: type
+		}, callback);
+	};
 
 	_.devparam = devparam;
 

@@ -3,31 +3,14 @@
 
 	var _rslesObj = {
 		tel: /^1\d{10}$/,
-		number: function(value){
-			console.log(value);
-			if(!_rslesObj.tel.test(value) && !/^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/.test(value)){
-				return false;
-			}
-			return true;
-		},
+		number: /^((0\d{2,3}-\d{7,8})|(1\d{10}))$/,
 		pwd: /^\w{6,18}$/,
 		pwd620: /^\w{6,18}$/,
 		code: /^\d{6}$/,
-		//devName: /^\w{1,10}$/,
 		lockpassword: /^\d{4,8}$/, // 智能门锁密码
-		devName: function(value){
-			if(value.length > 15){
-				return false;
-			}
-			return true;
-		},
+		devName: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,15}$/, 
 		nickname: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,18}$/, 
-		userName: function(value){
-			if(value.length > 18){
-				return false;
-			}
-			return true;
-		}
+		userName: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,18}$/
 	};
 
 	rules.testBy = function(rex, value, message) {

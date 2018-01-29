@@ -91,12 +91,18 @@
 					};
 				},
 				watch: {
-					code: function(n) {
-						if(n.length > 8) {
-							this.code = n.substr(0, 8);
-							mui.toast("最大输入8位")
+					code: function(n, old) {
+						// 先全部转为大写
+						n = n.toUpperCase();
+						// 验证
+						if(!/^[A-F|\d]{0,8}$/.test(n)){
+							// 失败就使用旧值
+							this.code = old;
+							// 提示
+							return mui.toast("设备码格式为16进制字符");
 						}
-						this.code = this.code.toString().toUpperCase();
+						// 赋新值
+						this.code = n;
 					}
 				},
 				mounted: function() {
@@ -105,7 +111,7 @@
 				methods: {
 					onSaveTap: function() {
 						var code = this.code.trim();
-						var emsg = app.rules.testBy(/^[A-Z|\d]{8}$/, code, "设备码格式错误");
+						var emsg = app.rules.testBy(/^[A-F|\d]{8}$/, code, "设备码长度为8位");
 						if(emsg) {
 							return mui.toast(emsg);
 						}

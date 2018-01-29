@@ -41,7 +41,22 @@
 		}, callback);
 	};
 	
+	// 系统,活动开关* type 1 系统 2 活动
+	push.updatesys = function(target, type, state, callback){
+		return ra('post', '/push/updatesys', {
+			target: target,
+			type: type,
+			state: +state
+		}, callback);
+	};
 	
+	push.updateSystem = function(target, state, callback){
+		return push.updatesys(target, 1, state, callback);
+	};
+	
+	push.updateActivity = function(target, state, callback){
+		return push.updatesys(target, 2, state, callback);
+	};
 	
 	
 	

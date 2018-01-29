@@ -91,18 +91,17 @@
 				font-weight: bold;
 				color: #2E2E2E;
 			}
-			
 			/*兼容5s屏幕*/
+			
 			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
-				
 				.name {
-				  font-size: 13px !important;
+					font-size: 13px !important;
 				}
 				[data-dpr="2"] .name {
-				  font-size: 26px !important;
+					font-size: 26px !important;
 				}
 				[data-dpr="3"] .name {
-				  font-size: 39px !important;
+					font-size: 39px !important;
 				}
 			}
 			
@@ -225,8 +224,8 @@
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
-		
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/gps.js"></script>-->
 
@@ -275,18 +274,59 @@
 				},
 				methods: {
 					// 点击地理位置
-					onPositionTap: function(){
+					onPositionTap: function() {
 						var that = this;
-						app.page.getMaps(function(p){
-							that.position = p.address;
-							that.longitude = p.longitude;
-							that.latitude = p.latitude;
-							// 重新获取附近的商家列表
-							that._down();
+						// 是否切换地址
+						
+						new Promise(function(resolve, reject) {
+							mui.confirm("是否重新选择城市？", "城市选择", ['选择城市', that.city || '当前城市'], function(e) {
+								if(!e.index) {
+									// 选择城市
+									app.page.getPosition(function(data) {
+										that.city = data.city;
+										// 通知上层 城市变化
+										new ni.Broadcast().emit('city_change_sub', {
+											city: data.city
+										},{
+											views: [that.$view.parent()]
+										})
+										
+										
+										resolve({
+											longitude: data.longitude,
+											latitude: data.latitude,
+											
+										});
+										
+										
+										// 通知经纬度变化
+//										new this.$Broadcast().emit("city_change", {
+//											longitude: data.longitude,
+//											latitude: data.latitude,
+//											city: data.city
+//										}, {
+//											views: ['nearby_pages_list']
+//										});
+									});
+								}else{
+									// 当前城市
+									resolve({});
+								}
+							});
+						}).then(function(rs){
+							rs.room = 13; 
+							// 打开地图选择
+							app.page.getMaps(function(p) {
+								that.position = p.address;
+								that.longitude = p.longitude;
+								that.latitude = p.latitude;
+								// 重新获取附近的商家列表
+								that._down();
+							}, rs);
 						});
+						
 					},
-					
-					
+
 					// 更新地理位置
 					updateGeo: function(o) {
 						this.longitude = o.longitude;
@@ -314,7 +354,7 @@
 					},
 					// 获取商铺列表
 					_getList: function(f) {
-						var w = plus ? plus.nativeUI.showWaiting(): null;
+						var w = plus ? plus.nativeUI.showWaiting() : null;
 						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
 							w && w.close();
 							if(err) {
@@ -336,40 +376,40 @@
 					},
 
 					// 点击打电话
-//					onCallTap: function(o) {
-//						var buttons = o.telphone.split("/").map(function(item) {
-//							return {
-//								color: "rgb(0,0,255)",
-//								style: "default",
-//								title: item
-//							}
-//						});
-//						plus.nativeUI.actionSheet({
-//								cancel: "取消",
-//								buttons: buttons
-//							},
-//							function(e) {
-//								if(e.index > 0) {
-//									plus.device.dial(buttons[e.index - 1].title);
-//								}
-//							});
-//					},
+					//					onCallTap: function(o) {
+					//						var buttons = o.telphone.split("/").map(function(item) {
+					//							return {
+					//								color: "rgb(0,0,255)",
+					//								style: "default",
+					//								title: item
+					//							}
+					//						});
+					//						plus.nativeUI.actionSheet({
+					//								cancel: "取消",
+					//								buttons: buttons
+					//							},
+					//							function(e) {
+					//								if(e.index > 0) {
+					//									plus.device.dial(buttons[e.index - 1].title);
+					//								}
+					//							});
+					//					},
 
 					// 点击导航
-//					onWithMapTap: function(o) {
-//						//BD-09 to GCJ-02先将百度坐标转成中国坐标
-//						var tmp = GPS.bd_decrypt(parseFloat(o.latitude), parseFloat(o.longitude));
-//						//GCJ-02 to WGS-84再将中国坐标转成GPS坐标
-//						var dstarr = GPS.gcj_decrypt_exact(tmp['lat'], tmp['lon']);
-//						//目的地
-//						var dst = new plus.maps.Point(dstarr['lon'], dstarr['lat']);
-//						//目的地描述
-//						var shop = o.address + " - " + o.name;
-//						//起始地   
-//						var src = new plus.maps.Point(this.longitude, this.latitude);
-//						//调用导航 
-//						plus.maps.openSysMap(dst, shop, src);
-//					},
+					//					onWithMapTap: function(o) {
+					//						//BD-09 to GCJ-02先将百度坐标转成中国坐标
+					//						var tmp = GPS.bd_decrypt(parseFloat(o.latitude), parseFloat(o.longitude));
+					//						//GCJ-02 to WGS-84再将中国坐标转成GPS坐标
+					//						var dstarr = GPS.gcj_decrypt_exact(tmp['lat'], tmp['lon']);
+					//						//目的地
+					//						var dst = new plus.maps.Point(dstarr['lon'], dstarr['lat']);
+					//						//目的地描述
+					//						var shop = o.address + " - " + o.name;
+					//						//起始地   
+					//						var src = new plus.maps.Point(this.longitude, this.latitude);
+					//						//调用导航 
+					//						plus.maps.openSysMap(dst, shop, src);
+					//					},
 
 					_down: function() {
 						console.log("down");

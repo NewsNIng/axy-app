@@ -306,7 +306,7 @@
 							return
 						}
 
-						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确！00000                             ");
+						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确");
 						if(errorMessage) {
 							return mui.toast(errorMessage);
 						}

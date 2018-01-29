@@ -132,7 +132,7 @@
 			.imgdiv.WG-100,
 			.imgdiv.AX-903,
 			.imgdiv.AX-904 {
-				pointer-events: none;
+				/*pointer-events: none;*/
 			}
 			
 			.imgdiv>span {
@@ -200,6 +200,18 @@
 				width: 1.466666rem;
 				margin-bottom: 0.3rem;
 			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
 		</style>
 	</head>
 
@@ -251,7 +263,7 @@
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
 						<div class="card" v-for="o,i in netDivList">
-							<div class="imgdiv" :class="_getDevName(o.type)" @tap="onCmTap(o)" :style="{backgroundImage: 'url('+o.devimg+')'}">
+							<div class="imgdiv" :class="_getDevName(o.type)" @tap="onCmTap(o, i)" :style="{backgroundImage: 'url('+o.devimg+')'}">
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
@@ -331,6 +343,8 @@
 			var devManager, runManager;
 
 			var _B = new ni.Broadcast();
+			
+			var P = plug.H5NativeBridge;
 
 			var wayPick;
 
@@ -471,114 +485,13 @@
 				},
 				methods: {
 					// 摄像机点击
-					onCmTap: function(o) {
+					onCmTap: function(o, i) {
 						var that = this;
-
+						
 						if(o.online !== 1) {
 							return mui.toast("设备不在线");
 						}
 
-						Rx.Observable.create(function(ob) {
-							if(o.type >= 0x1040 && o.type <= 0x1080) {
-								// 动态设置设备通道
-								wayPick.setData([{
-										text: '通道一',
-										value: 0
-									},
-									{
-										text: '通道二',
-										value: 1
-									},
-									{
-										text: '通道三',
-										value: 2
-									},
-									{
-										text: '通道四',
-										value: 3
-									}
-								]);
-								// 重置弹出层到第一个通道位置
-								wayPick.pickers[0].setSelectedValue(1);
-								// 显示通道选择器
-								wayPick.show(function(items) {
-									ob.next({
-										b: items[0].value
-									});
-								}, function(items) {
-									// 取消 或者 隐藏
-								});
-							} else {
-								ob.next({
-									b: 0
-								});
-							}
-						}).subscribe(function(data) {
-							var w1 = data.b;
-							var w2 = o.type === 0x1046 ? 1 : 0;
-							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
-								o.devimg = that._getDevImg(o.devid);
-							});
-						});
-
-					},
-
-					// 空空如也 
-					onGoShop: function() {
-
-					},
-					// 标签切换
-					onActive: function(index) {
-						this.active = index;
-						if(index === 1 && this.devaccessroyList.length === 0) {
-							// 获取配件列表
-							this.getDevaccessroyData();
-						}
-					},
-					// 添加配件点击
-					onAddTap: function() {
-						mui.openWindow('../add/add_device.html');
-					},
-					// 智能配件点击
-					onZoneTap: function(o, i) {
-						var that = this;
-						var actionDir = {
-							del: function() {
-								that.devaccessroyList.splice(i, 1);
-							},
-							update: function(info) {
-								that.$set(that.devaccessroyList, i, info);
-							},
-							unbind: function() {
-								that.devaccessroyList.splice(i, 1);
-							}
-						}
-
-						// TODO 修复数据结构问题
-						o.id = o.aid;
-						var info = {
-							accessory: o,
-							devName: this._fixDevLocation(o.devname),
-							devType: o.devtype,
-							statusCode: o.statuscode
-						};
-						console.log(JSON.stringify(o));
-						app.page.openForResultBy('dev_' + o.type + '.html', 'dev_' + o.type, function(data) {
-							actionDir[data.action](data.info);
-						}, {
-							info: info
-						});
-					},
-
-					_getDevName: function(type) {
-						return app.dev.findName(type);
-					},
-					_fixDevLocation: function(name) {
-						return app.dev.fixName(name);
-					},
-
-					// 设备设置
-					onSettingTap: function(o, i) {
 						this.tapIndex = i;
 
 						var name = app.dev.findName(o.type);
@@ -605,13 +518,175 @@
 
 							default:
 								{
+									url = "";
+									break;
+								}
+
+						}
+
+						if(url) {
+							mui.openWindow(url, url, {
+								extras: {
+									devInfo: o
+								}
+							});
+							return;
+						}
+
+						
+
+						Rx.Observable.create(function(ob) {
+							if(o.type >= 0x1040 && o.type <= 0x1080) {
+								// 获取设备的通道信息
+								plus.nativeUI.showWaiting("获取通道信息中...");
+								dal.devparam.chlist(o.devid, o.type, function(err, data){
+									plus.nativeUI.closeWaiting();
+									if(err){
+										return mui.toast(err.message);
+									}
+									
+									if(!data || !data.length){
+										return mui.toast("暂无通道信息");
+									}
+									
+									data = data.map(function(item){
+										return {
+											text: item.name,
+											value: item.no
+										}
+									});
+									// 动态设置设备通道
+									wayPick.setData(data);
+									// 重置弹出层到第一个通道位置
+									wayPick.pickers[0].setSelectedIndex(0);
+									// 显示通道选择器
+									wayPick.show(function(items) {
+										ob.next({
+											b: items[0].value
+										});
+									}, function(items) {
+										// 取消 或者 隐藏
+									});
+								});
+							} else {
+								ob.next({
+									b: 0
+								});
+							}
+						}).subscribe(function(data) {
+							var w1 = data.b;
+							var w2 = o.type === 0x1046 ? 1 : 0;
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function(iospath) {
+								o.devimg = that._getDevImg(o.devid, iospath);
+							});
+						});
+
+					},
+
+					// 空空如也 
+					onGoShop: function() {
+
+					},
+					// 标签切换
+					onActive: function(index) {
+						this.active = index;
+						if(index === 1 && this.devaccessroyList.length === 0) {
+							// 获取配件列表
+							this.getDevaccessroyData();
+						}
+					},
+					// 添加配件点击
+					onAddTap: function() {
+						mui.openWindow('../add/add_device.html');
+					},
+					// 智能配件点击
+					onZoneTap: function(o, i) {
+
+						var that = this;
+
+						Rx.Observable.create(function(ob) {
+							// 检查本地是否有相关配件页面
+							var pageUrl = 'dev_' + o.type + '.html';
+							plus.io.resolveLocalFileSystemURL(pageUrl, function() {
+								ob.next(pageUrl);
+							}, function() {
+								// 页面不存在
+								mui.toast('尚未支持该配件');
+							});
+						}).subscribe(function(pageUrl) {
+
+							var actionDir = {
+								del: function() {
+									that.devaccessroyList.splice(i, 1);
+								},
+								update: function(info) {
+									that.$set(that.devaccessroyList, i, info);
+								},
+								unbind: function() {
+									that.devaccessroyList.splice(i, 1);
+								}
+							}
+
+							// TODO 修复数据结构问题
+							o.id = o.aid;
+							var info = {
+								accessory: o,
+								devName: that._fixDevLocation(o.devname),
+								devType: o.devtype,
+								statusCode: o.statuscode
+							};
+
+							app.page.openForResultBy(pageUrl, 'dev_' + o.type, function(data) {
+								actionDir[data.action](data.info);
+							}, {
+								info: info
+							});
+						});
+
+					},
+
+					_getDevName: function(type) {
+						return app.dev.findName(type);
+					},
+					_fixDevLocation: function(name) {
+						return app.dev.fixName(name);
+					},
+
+					// 设备设置
+					onSettingTap: function(o, i) {
+						this.tapIndex = i;
+
+						var name = app.dev.findName(o.type);
+
+						var url;
+						switch(name) {
+							case "WG-100":
+								{
+									url = "dev_WG-100_setting.html";
+									break;
+								}
+
+							case "AX-903":
+								{
+									url = "dev_AX-903_setting.html";
+									break;
+								}
+
+							case "AX-904":
+								{
+									url = "dev_AX-904.html";
+									break;
+								}
+
+							default:
+								{
 									url = "camera_settings.html";
 									break;
 								}
 
 						}
 
-						mui.openWindow(url, url, {
+						url && mui.openWindow(url, url, {
 							extras: {
 								devInfo: o
 							}
@@ -665,11 +740,11 @@
 						console.log(JSON.stringify(e));
 					},
 
-					_getDevImg: function(devid) {
+					_getDevImg: function(devid, iospath) {
 						if(this.$os.android) {
 							return app.android.getScreenshotByDevId(devid);
 						} else if(this.$os.ios) {
-							return app.ios.getScreenshotByDevId(devid);
+							return "file://" + iospath + "/" + devid + ".png";
 						}
 					},
 

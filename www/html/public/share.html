@@ -85,7 +85,7 @@
 		<!--基础库-->
 		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="http://192.168.1.147:8020/Axy/js/lib/vue-ni.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 
@@ -139,6 +139,7 @@
 
 							// 处理为本地图片
 							.mergeMap(function(ob) {
+								
 								return Rx.Observable.create(function(ob) {
 									if(shareImg.indexOf('file:') >= 0) {
 										// 本地图片
@@ -161,7 +162,7 @@
 								w.setTitle("压缩图片...");
 								return Rx.Observable.create(function(ob) {
 									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
-										plus.nativeUI.closeWaiting();
+										
 										if(err) {
 											return plus.nativeUI.toast(err.message);
 										}
@@ -174,7 +175,7 @@
 							.mergeMap(function(img) {
 								return Rx.Observable.create(function(ob) {
 									w.setTitle("拉取分享...");
-									setTimeout(plus.nativeUI.closeWaiting, 3e3);
+									alert(type);
 									new ni.Share(type, function(err, data) {
 										plus.nativeUI.closeWaiting();
 										if(err) {

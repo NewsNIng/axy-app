@@ -194,7 +194,7 @@
 					// 通知其他页面设备列表更新
 					updateDeviceList: function() {
 						new this.$Broadcast().emit('device_update', {}, {
-							views: ["main", "dev_my_list"]
+							views: ["zeus", "dev_my_list"]
 						});
 					},
 

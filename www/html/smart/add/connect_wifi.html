@@ -108,7 +108,7 @@
 
 					<select v-model="selected">
 
-						<option v-for="o in wifiList" :value="o.ssid">{{o.ssid}}</option>
+						<option v-for="o in wifiList" v-if="o.ssid" :value="o.ssid">{{o.ssid}}</option>
 
 					</select>
 
@@ -234,6 +234,12 @@
 							rs = JSON.parse(rs);
 							that.connWifi = rs.connWifi;
 							that.wifiList = rs.wifiList;
+//							that.wifiList.push({
+//								"capabilities":"[WPA-PSK-CCMP][WPA2-PSK-CCMP][ESS]",
+//								"ip":0,
+//								"level":-43,
+//								"ssid":""
+//							});
 							that.wifiname = rs.connWifi.ssid || "";
 							that.getWifiPwd();
 						});

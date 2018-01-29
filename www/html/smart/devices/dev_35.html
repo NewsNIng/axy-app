@@ -204,6 +204,7 @@
 						this.devInfo.accessory.enable = event.detail.isActive;
 						dal.devaccessory.enable(this.devInfo.accessory, this.devInfo.devType, function(err, data) {
 							plus.nativeUI.closeWaiting();
+							console.log(err+","+data);
 							if(err) {
 								that.isErr = true;
 								mui(that.$refs.switch1).switch().toggle();
