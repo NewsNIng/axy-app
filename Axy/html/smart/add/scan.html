@@ -88,7 +88,7 @@
 					return false;
 				},
 			});
-			
+
 			var barcodeid = 0;
 
 			var _B = new ni.Broadcast();
@@ -127,19 +127,19 @@
 						this.flash = false;
 						this.closeScan();
 						// 手动输入序列号 
-						app.page.openForResultBy('scan_code.html','scan_code',function(data) {
-							if(data.code){
+						app.page.openForResultBy('scan_code.html', 'scan_code', function(data) {
+							if(data.code) {
 								// 验证
-								this._addDevice(data.code);	
-							}else{
+								this._addDevice(data.code);
+							} else {
 								// 重置扫码
 								setTimeout(function() {
 									this.resetScan();
 								}.bind(this), 200);
 							}
 						}.bind(this), {
-//							//tips: '请输入设备序列号',
-//							//title: '手动输入',
+							//							//tips: '请输入设备序列号',
+							//							//title: '手动输入',
 							//content: '8100120D',
 							// r: '',
 						});
@@ -189,7 +189,7 @@
 									return Rx.Observable.create(function(observer) {
 
 										app.page.openForResultBy('../devices/dev_select_id.html', 'dev_select_id', function(data) {
-											
+
 											observer.next({
 												acc: data1,
 												dev: data
@@ -202,29 +202,38 @@
 								})
 								// 新增配件
 								.mergeMap(function(rs) {
-									console.log("=============="+JSON.stringify(rs))
+									console.log("==============" + JSON.stringify(rs))
 									plus.nativeUI.showWaiting("正在添加配件");
 									return Rx.Observable.create(function(ob) {
 										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, function(err, data) {
 											plus.nativeUI.closeWaiting();
 											if(err) {
-												ob.next(false);
+												ob.next({result:false});
 												return mui.toast(err.message);
 											}
-											ob.next(true);
+											
+											ob.next({
+												result:true,
+												acc:rs.acc,
+												dev:{
+													devid:rs.dev.devid,
+													type:rs.dev.type
+												}
+											});
 										});
 									});
 								})
 								// 添加配件结果
-								.subscribe(function(result) {
-									if(result) {
+								.subscribe(function(data) {
+//									console.log(JSON.stringify(data));
+									if(data.result) {
 										// 通知配件更新 TODO
 										_B.emit('acc_update', {}, {
 											views: ['zeus', 'dev_my_list']
 										});
 									}
 									app.page.setResult({
-										result: result
+										data:data
 									}).close();
 								});
 
@@ -251,7 +260,7 @@
 							frameColor: '#06C1AE',
 							scanbarColor: '#06C1AE',
 						});
-						scan.onmarked = this.onMarked.bind(this); 
+						scan.onmarked = this.onMarked.bind(this);
 						this.scan = scan;
 					},
 					onMarked: function(type, result, file) {

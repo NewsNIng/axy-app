@@ -342,9 +342,9 @@
 					_scanCodeLine: function(isDev) {
 						app.page.openForResultBy('scan.html', 'scan', function(data) {
 							// 获取扫码结果
-							console.log(data.result);
+//							console.log(JSON.stringify(data));
 							
-							if(data.result) {
+							if(data.data.result) {
 								//获取配件信息
 								
 								// 跳转
@@ -352,8 +352,9 @@
 									extras: {
 										needConn: false,
 										//配件id
-										devid: this.devid,
+//										devid: this.devid,
 										isFitting: true,
+										info:data,
 									}
 								});
 							}
