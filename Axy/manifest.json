@@ -1072,7 +1072,18 @@
 				"priority": 0
 			},
 			"html/smart/devices/dev_16711680.html": {
-				"resources": [],
+				"resources": [
+					"js/common/immersed.js",
+					"js/app/app-page.js",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js",
+					"js/common/flexible.js",
+					"js/components/devices/footer.js",
+					"js/app/app.js",
+					"js/dal/devaccessory.js",
+					"js/dal/base.js",
+					"js/lib/vue-ni.js"
+				],
 				"refer": [
 					"html/public/input.html"
 				],
@@ -1122,6 +1133,13 @@
 				"resources": [],
 				"refer": [
 					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/add_completed.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_35.html"
 				],
 				"priority": 0
 			}
