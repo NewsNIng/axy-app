@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<script type="text/javascript" src="../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript" src="../js/plug/PlugH5NativeBridge.js"></script>
+
+		<script type="text/javascript" src="../js/app/app.js"></script>
+		<script type="text/javascript" src="../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../js/dal/base.js"></script>
+		<script type="text/javascript" src="../js/dal/device.js"></script>
+		<script type="text/javascript" src="../js/dal/user.js"></script>
+		<script type="text/javascript" src="../js/dal/push.js"></script>
+
+		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript" src="../js/plug/PlugDevManager.js"></script>
+
+		<script type="text/javascript" src="../js/zeus/push.js"></script>
+
+		<script type="text/javascript">
+			/**
+			 * H5Native 控制中心 
+			 */
+
+			var D, P = plug.H5NativeBridge,
+				PUSHID;
+			var _B = new ni.Broadcast();
+
+			var domain = "www.isee110.com";
+
+			var T = -1;
+			var TD = 60e3;
+
+			var devManager, runManager, ALLD, ALLR;
+
+			// 原生通知前端执行动作
+			var NotifyAction = {
+				// 设备状态更新 
+				RunstateNotify: function(data) {},
+				// 设备信息更新
+				DeviceInfoNotify: function(data) {},
+			};
+
+			var getPwd = function() {
+				return window.localStorage.getItem('_pwd_');
+			}
+
+			// 设备推送同步
+			var $synchronous = Rx.Observable.create(function(ob) {
+				_B.on('device_push_update', function() {
+					ob.next();
+				});
+				_B.on('login_success', function() {
+					ob.next();
+				});
+			});
+
+			Rx.Observable
+				// plusReady
+				.create(function(ob) {
+					if(window.plus) {
+						ob.next();
+					} else {
+						document.addEventListener('plusready', function() {
+							ob.next();
+						});
+					}
+				})
+				// 是否登录
+				.mergeMap(function() {
+					PUSHID = new ni.Cache('push_key', "", {
+						plus: true
+					});
+					
+					// 设备推送同步
+					$synchronous.subscribe(function() {
+						dal.push.synchronous(PUSHID.data, ni.os.ios ? 67 : 36, function(err, data) {
+							return; 
+							if(err){
+								return mui.toast(err.message);
+							}
+							mui.toast(PUSHID.data + '同步成功');
+						});
+					});
+
+					return Rx.Observable.create(function(ob) {
+						// 监听登录成功事件
+						_B.on('login_success', function(data) {
+							// next
+							ob.next(data.userInfo.account);
+						});
+
+						// 是否登录
+						if(app.user.has()) {
+							var u = app.user.get();
+							var type = window.localStorage.getItem('login_type');
+
+							var ajaxResult = function(err, data) {
+								if(err) {
+									// 清除用户信息
+									appLoginFail();
+									return;
+								}
+								//updateUserInfo(data);
+								//ob.next(u.account);
+								if(data.lockterminal === 0 || data.validation === 1) {
+									// 验证通过
+									updateUserInfo(data);
+									// 做一次设备同步
+									_B.emit('device_push_update', {}, {
+										self: true,
+										views: ['zeus']
+									});
+									ob.next(u.account);
+								} else {
+									// 跳转页面认证
+									// TODO
+									mui.toast("帐号已保护，您需要权限认证");
+									app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
+										if(rs.result) {
+											updateUserInfo(data);
+											ob.next(u.account);
+										} else {
+											// 清除用户信息
+											appLoginFail();
+										}
+									});
+								}
+							};
+
+							if(type === 'pwd') {
+								// 验证用户信息
+								dal.user.login(u.account, getPwd(), ajaxResult);
+							} else {
+								var o = {
+									type: type,
+								};
+								o[type + "openid"] = u[type + "openid"];
+								// 自动第三方登录
+								dal.user.ologin(o, ajaxResult);
+							}
+						} else {
+							// 未登录状态 
+						}
+					});
+				})
+				// 获取顶级域名 初始化变量
+				.mergeMap(function(account) {
+					var pwd = getPwd();
+
+					D = new ni.Cache('dev_list', [], {
+						plus: true
+					});
+
+					return Rx.Observable
+						.create(function(ob) {
+							// 有缓存就直接取用
+							if(domain) {
+								// next
+								ob.next({
+									account: account,
+									pwd: pwd,
+									domain: domain
+								});
+							} else {
+								// 暂时模拟延迟获取
+								setTimeout(function() {
+									domain = '';
+									// next
+									ob.next({
+										account: account,
+										pwd: pwd,
+										domain: domain
+									});
+								}, 0);
+							}
+						});
+				})
+				// 初始化原生插件
+				.mergeMap(function(o) {
+					var account = o.account,
+						pwd = o.pwd,
+						domain = o.domain;
+					D.data = [];
+
+					var getDevFun = listenDevListUpdate();
+					getDevFun();
+
+					return Rx.Observable
+						.create(function(o3) {
+							// 向原生注册 控制中心 处理函数回调
+							P.InitNativeSystem(account, pwd, domain, function(arg) {
+								// next
+								o3.next(arg);
+							});
+						});
+				})
+				// 消息中心事件
+				.subscribe(function(rs) {
+					try {
+						rs = JSON.parse(rs);
+						if(rs.code !== 0) {
+							throw Error(JSON.stringify(rs));
+							// 错误
+							return;
+						}
+						var methodsName = rs['function'] || rs['functoin'];
+						// 执行相关动作
+						methodsName && NotifyAction[methodsName](rs.data);
+					} catch(e) {
+						//TODO handle the exception
+						alert("code读取错误" + e.message);
+					}
+
+				});
+
+			function appLoginFail() {
+				app.user.clear();
+				window.localStorage.setItem('_pwd_', '');
+				plus.storage.removeItem('dev_list');
+				plus.storage.removeItem('AllDeviceInfo');
+				plus.storage.removeItem('AllDeviceRun');
+				mui.toast("帐号存在异常，请重新登录");
+				app.user.get(function() {});
+			}
+
+			// 更新本地用户信息
+			function updateUserInfo(data) {
+				data = fixUserData(data);
+				// 更新用户信息
+				app.user.set(data);
+				window.localStorage.setItem('_account_', data.account);
+			}
+
+			Rx.Observable.create(function(ob) {
+				// 监听用户登录成功消息
+				_B.on('login_success', function(data) {
+					ob.next(data.userInfo);
+				});
+				// 监听用户资料更改信息
+				_B.on('userinfo_update', function(data) {
+					ob.next(data.userInfo);
+				});
+
+			}).subscribe(function(userinfo) {
+				updateUserInfo(userinfo);
+			});
+
+			// 不断获取设备信息
+			function listenDevListUpdate() {
+				var rx_time, rx_listen;
+
+				function getDevListSaveLocal() {
+					// 请求服务端数据 TODO 取消分页
+					dal.device.list(1, function(err, data) {
+						if(err) {
+							return;
+						}
+						// 数据不为空时 向原生发送数据
+						if(data && data.length > 0) {
+							D.data = data;
+							// 通知其它页面
+							data = JSON.stringify(data);
+							console.log(data);
+							P.InitNativeDevList(data);
+						}
+					}, 1000);
+				}
+				return function() {
+					if(rx_time) {
+						return
+					}
+					rx_time = Rx.Observable.interval(30e3);
+					rx_listen = Rx.Observable.create(function(ob) {
+						_B.on('device_update', function() {
+							ob.next();
+						});
+					});
+					rx_time.subscribe(getDevListSaveLocal);
+					rx_listen.subscribe(getDevListSaveLocal);
+					getDevListSaveLocal();
+				}
+			}
+
+			// 用户资料整合
+			function fixUserData(data) {
+				if(!data.vihiuser) {
+					return data;
+				}
+				// 绑定手机号
+				var bindmobile = data.bindmobile;
+				// 是否开启权限验证
+				var lockterminal = data.lockterminal;
+				// 是否需要登录验证
+				var validation = data.validation;
+				// 是否是主帐号
+				var ismaster = data.ismaster;
+
+				data = data.vihiuser;
+
+				data.bindmobile = bindmobile;
+				data.lockterminal = lockterminal;
+				data.validation = validation;
+				data.ismaster = ismaster;
+
+				return data;
+
+			}
+		</script>
+	</body>
+
+</html>

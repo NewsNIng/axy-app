@@ -12,7 +12,8 @@
       "html/person/collection/my_camera.html",
       "html/person/devshare/index.html",
       "html/person/collection/my_attention.html",
-      "html/person/collection/my_collection.html"
+      "html/person/collection/my_collection.html",
+      "html/common/login.html"
     ],
     "resources": [
       "js/common/immersed.js",
@@ -177,7 +178,8 @@
       "html/smart/devices/dev_WG-100.html",
       "html/smart/add/add_device.html",
       "html/smart/devices/dev_35.html",
-      "html/smart/devices/dev_AX-903_setting.html"
+      "html/smart/devices/dev_AX-903_setting.html",
+      "html/smart/devices/dev_41.html"
     ],
     "resources": [
       "image/smart/devices/bg/903@3xweb.png",
@@ -208,7 +210,8 @@
       "html/person/devshare/share.html",
       "html/smart/devices/camera_settings.html",
       "html/person/message/index.html",
-      "html/smart/devices/dev_my_list.html"
+      "html/smart/devices/dev_my_list.html",
+      "html/common/login.html"
     ],
     "resources": [
       "image/home/dev_camera.png",

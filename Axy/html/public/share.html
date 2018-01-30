@@ -175,7 +175,6 @@
 							.mergeMap(function(img) {
 								return Rx.Observable.create(function(ob) {
 									w.setTitle("拉取分享...");
-									alert(type);
 									new ni.Share(type, function(err, data) {
 										plus.nativeUI.closeWaiting();
 										if(err) {

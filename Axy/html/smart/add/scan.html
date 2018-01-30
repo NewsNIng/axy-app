@@ -83,10 +83,10 @@
 		<script type="text/javascript">
 			mui.init({
 				//处理窗口关闭前的业务
-				beforeback: function() {
-					app.page.setResult({}).close();
-					return false;
-				},
+//				beforeback: function() {
+//					app.page.setResult({}).close();
+//					return false;
+//				},
 			});
 
 			var barcodeid = 0;
@@ -200,12 +200,12 @@
 										}, {
 											result: true,
 											// 过滤设备 电管家 和 智能网管
-											filter: that.isSmart ? [
+											filter: that.isSmart ? []: [
 												"WG-100",
 												"AX-903",
 												"AX-904",
 												"VH-104GN"
-											] : []
+											]
 										});
 									});
 
