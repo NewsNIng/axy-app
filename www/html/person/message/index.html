@@ -97,16 +97,16 @@
 			<h1 class="mui-title">消息中心</h1>
 		</header>
 		<div class="mui-content">
-			<div class="app-touch" style="margin-top: 0.266666rem;" data-href="warning.html">
+			<div class="app-touch" style="margin-top: 0.266666rem;" data-href="warning.html" data-tag="alarmMsg">
 				<img src="../../../image/person/message/btn_Alarmnews@3x.png" />
 				<div class="name">
 					<div class="app-font-size-30 app-color-333333">告警消息</div>
-					<div class="app-font-size-26 app-color-9f9fa0" v-text="alarmMsg.location + ' ' + alarmMsg.areaname">...</div>
+					<div class="app-font-size-26 app-color-9f9fa0" v-text="(_fixName(alarmMsg.location) || alarmMsg.devid) + ' ' + alarmMsg.areaname">...</div>
 					<!--<span class="app-badge app-font-size-20">99+</span>-->
 				</div>
 			</div>
 
-			<div class="app-touch" data-href="system.html">
+			<div class="app-touch" data-href="system.html" data-tag="sysMsg">
 				<img src="../../../image/person/message/btn_Systemmessage@3x.png" />
 				<div class="name">
 					<div class="app-font-size-30 app-color-333333">系统消息</div>
@@ -114,7 +114,7 @@
 				</div>
 			</div>
 
-			<div class="app-touch" data-href="activity.html">
+			<div class="app-touch" data-href="activity.html" data-tag="activityMsg">
 				<img src="../../../image/person/message/btn_Activitymessage@3x.png" />
 				<div class="name">
 					<div class="app-font-size-30 app-color-333333">活动消息</div> 
@@ -130,26 +130,22 @@
 
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
 			mui.ready(function() {
 				mui(".mui-content").on('tap', '*[data-href]', function() {
-					var url = this.dataset.href;
-					mui.openWindow(url);
-					//					if(url === "warning.html"){
-					//						app.user.get(function(){
-					//							mui.openWindow(url);
-					//						});
-					//					}else{
-					//mui.openWindow(url);
-					//					}
+					var tag = this.dataset.tag;
+					if(vm[tag].id !== 0){
+						mui.openWindow(this.dataset.href);	
+					}
 
 				});
 			});
 
-			new Vue({
+			var vm = new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
@@ -189,6 +185,9 @@
 							data.sysMsg && (this.sysMsg = data.sysMsg);
 							data.activityMsg && (this.activityMsg = data.activityMsg); 
 						}.bind(this));
+					},
+					_fixName: function(s){
+						return app.dev.fixName(s);
 					}
 				}
 			})

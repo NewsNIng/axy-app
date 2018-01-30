@@ -218,23 +218,32 @@
 										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, function(err, data) {
 											plus.nativeUI.closeWaiting();
 											if(err) {
-												ob.next(false);
+												ob.next({result:false});
 												return mui.toast(err.message);
 											}
-											ob.next(true);
+											
+											ob.next({
+												result:true,
+												acc:rs.acc,
+												dev:{
+													devid:rs.dev.devid,
+													type:rs.dev.type
+												}
+											});
 										});
 									});
 								})
 								// 添加配件结果
-								.subscribe(function(result) {
-									if(result) {
+								.subscribe(function(data) {
+//									console.log(JSON.stringify(data));
+									if(data.result) {
 										// 通知配件更新 TODO
 										_B.emit('acc_update', {}, {
 											views: ['zeus', 'dev_my_list']
 										});
 									}
 									app.page.setResult({
-										result: result
+										data:data
 									}).close();
 								});
 

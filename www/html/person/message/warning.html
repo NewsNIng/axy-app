@@ -124,32 +124,29 @@
 					opacity: 1;
 				}
 			}
-			
 			/*video*/
 			
-			.video-root{
+			.video-root {
 				position: fixed;
 				left: 0;
 				top: 0;
 				z-index: 66;
 				width: 100%;
 				height: 100%;
-				background-color: rgba(0,0,0,0.75);
+				background-color: rgba(0, 0, 0, 0.75);
 			}
 			
-			.video-root .video-room{
+			.video-root .video-room {
 				position: fixed;
 				left: 0;
 				top: 50%;
 				transform: translateY(-50%);
 				-webkit-transform: translateY(-50%);
-				
-				
 				width: 10rem;
 				height: 5.625rem;
 			}
 			
-				.video-root .video-room video{
+			.video-root .video-room video {
 				width: 100%;
 				height: 100%;
 			}
@@ -192,7 +189,7 @@
 
 			<div class="video-root" v-if="videoplay" @tap.self="videoplay=false">
 				<div class="video-room">
-					<video :src="videosrc" controls="controls" autoplay="autoplay" playsinline webkit-playsinline></video>
+					<video :src="videosrc" controls autoplay playsinline webkit-playsinline></video>
 				</div>
 			</div>
 
@@ -227,8 +224,8 @@
 								<div @tap.stop="onImageTap(o, i)">
 									<img :src="'../../../image/person/message/screenshots'+ (o.info && o.info.image ? '' : '_1') +'@3x.png'" />
 									<div class="app-font-size-28" :class="o.info && o.info.image ? 'app-color-main': 'app-color-9f9fa0'">抓拍截图</div>
-									 
-									 <div ref="preimgs" v-if="o.info && o.info.image"  :data-preview-src="o.info.image.fname" :data-preview-group="i"></div>
+
+									<div ref="preimgs" v-if="o.info && o.info.image" :data-preview-src="o.info.image.fname" :data-preview-group="i"></div>
 								</div>
 
 								<div @tap.stop="onViewTap(o, i)">
@@ -358,7 +355,7 @@
 					});
 
 					var devPickData = D.data;
-					
+
 					devPickData = devPickData.map(function(item) {
 						return {
 							text: item.location || item.devid,
@@ -380,18 +377,18 @@
 					this.$watch('dateTime', this.getMessageList.bind(this, true));
 
 					this.getMessageList();
-					
-					mui.back = function(){
-						if(this.videoplay){
+
+					mui.back = function() {
+						if(this.videoplay) {
 							this.videoplay = false;
-						}else if(this.pimg.isShown()){
+						} else if(this.pimg.isShown()) {
 							this.pimg.close();
-						}else{
+						} else {
 							this.$view.close();
 						}
 						return false;
 					}.bind(this)
-					
+
 				},
 
 				methods: {
@@ -425,8 +422,19 @@
 						if(!o.info || !o.info.video) {
 							return;
 						}
-						this.videosrc = o.info.video.fname;
-						this.videoplay = true;
+						var url = o.info.video.fname;
+						if(mui.os.ios) {
+							this.videosrc = url;
+							this.videoplay = true;
+						} else {
+							this.Intent = this.Intent || plus.android.importClass("android.content.Intent");
+							this.Uri = this.Uri || plus.android.importClass("android.net.Uri");
+							this.main = this.main || plus.android.runtimeMainActivity();
+							var intent = new this.Intent(this.Intent.ACTION_VIEW);
+							var uri = this.Uri.parse(url);
+							intent.setDataAndType(uri, "video/*"); 
+							this.main.startActivity(intent);
+						}
 
 					},
 
@@ -442,10 +450,10 @@
 						// 遍历获取 设备的 在线状态 so stupid
 						var devData = D.data;
 						var tmep;
-						for(var i = 0, l = devData.length; i < l; i++){
+						for(var i = 0, l = devData.length; i < l; i++) {
 							temp = devData[i];
-							if(temp.devid === o.devid && temp.online === 1){
-								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, temp.type === 0x1046 ? 1 : 0, this.fixName(o.location),  function() {});
+							if(temp.devid === o.devid && temp.online === 1) {
+								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, temp.type === 0x1046 ? 1 : 0, this.fixName(o.location), function() {});
 								return;
 							}
 						}
@@ -502,7 +510,7 @@
 								item.showMenu = false;
 								item.info = null;
 								return item;
-							});
+							}); 
 							console.log(JSON.stringify(data));
 							that.list.push.apply(that.list, data || []);
 							that.$nextTick(function() {

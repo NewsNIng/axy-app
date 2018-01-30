@@ -61,6 +61,17 @@
 	user.getCode = function(account, callback) {
 		return ra("get", "/user/validcode/" + account, {}, callback);
 	}
+	
+	/**
+	 * 检查用户名是否可以注册
+	 * @param {Object} account
+	 * @param {Object} callback
+	 */
+	user.checkuser = function(account, callback) {
+		return ra("get", '/user/checkuser', {
+			account: account
+		}, callback);
+	}
 
 	/**
 	 * 重置密码
@@ -114,7 +125,7 @@
 		 * @param {Object} fid 目标id
 		 */
 		add: function(fid, callback) {
-			console.log("222"+fid);
+			console.log("222" + fid);
 			return ra('post', '/favorites/store/add', {
 				fid: fid,
 			}, callback);
@@ -135,7 +146,7 @@
 			}, callback);
 		}
 	}
-	
+
 	/**
 	 * 说说收藏相关
 	 */
