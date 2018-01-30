@@ -764,7 +764,7 @@
 
 						dal.home.advert(function(err, data) {
 							if(err) {
-								return
+								return mui.toast(err.message);
 							}
 							this.imgList = data;
 							advert_cache.data = data;

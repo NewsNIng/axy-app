@@ -34,10 +34,8 @@
 				display: flex;
 				display: -webkit-flex;
 				height: 2.853333rem;
-				
 				justify-content: space-between;
 			}
-			
 			
 			.battery_status {
 				color: #333333 !important;
@@ -54,7 +52,6 @@
 				top: 4.2rem;
 				text-align: center;
 				width: 100%;
-				
 			}
 			
 			.state_show>span {
@@ -71,7 +68,7 @@
 				margin-right: 0 !important;
 				padding-right: 0 !important;
 			}
-		
+			
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
@@ -99,7 +96,7 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div class="state_show"> 
+				<div class="state_show">
 					<span class="app-font-size-30" v-text="devInfo.density+'%LEL'"></span>
 					<span class="app-font-size-44">正常</span>
 					<span class="app-font-size-24">当前浓度值</span>
@@ -172,8 +169,8 @@
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-        <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -206,8 +203,8 @@
 							"Off Line",
 							"Lost AC",
 							"24H"
-						], 
-						
+						],
+
 						// 设备信息
 						devInfo: {
 							"accessory": {
@@ -252,9 +249,10 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
+							that._updataUi();
 						})
 					}.bind(this));
-					
+
 					this.pick = new mui.PopPicker({
 						layer: 1,
 						more: false,
@@ -262,21 +260,20 @@
 					this.pick.setData(pick_data[1]);
 				},
 				plusReady: function() {
+					plus.navigator.setStatusBarStyle('dark');
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+
+						var view = plus.webview.currentWebview();
+						plus.navigator.setStatusBarStyle('light');
+						view.close();
+					}.bind(this);
 				},
 				methods: {
-					
-					// 设备名称
-					onNameTap: function(name) {
-						var that = this;
-						app.page.getInput(function(data) {
-							that.dev.basicInfo.devName = data.content;
-						}, {
-							title: "设备名称",
-							tips: that.dev.basicInfo.devName,
-						});
-					},
+
 					// 删除配件
 					onDelDevice: function() {
 						app.page.setResult({
@@ -307,6 +304,7 @@
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.delay = s;
+								that._updataUi();
 							});
 						};
 
@@ -328,14 +326,19 @@
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.name = data1.content;
-								app.page.setResult({
-									action: "update",
-									info: that.devInfo
-								});
+								that._updataUi();
 							});
 						}, {
 							title: "设备名称",
 							content: that.devInfo.accessory.name,
+						});
+					},
+					// 更新缓存数据
+					_updataUi: function() {
+						that = this;
+						app.page.setResult({
+							action: "update",
+							info: that.devInfo
 						});
 					},
 				}
