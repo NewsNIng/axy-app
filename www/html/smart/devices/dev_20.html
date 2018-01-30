@@ -36,7 +36,7 @@
 			.menu-warp {
 				height: 3.066666rem;
 			}
-		
+			
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
@@ -126,7 +126,7 @@
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
-		<!--App相关业务逻辑--> 
+		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
@@ -148,7 +148,7 @@
 				data: function() {
 					return {
 						state: true, // 当前状态
- 
+
 						// 防区类型
 						zonetypes: ["Normal Zones",
 							"Activity Zones",
@@ -162,8 +162,8 @@
 							"Off Line",
 							"Lost AC",
 							"24H"
-						], 
-						
+						],
+
 						// 设备信息
 						devInfo: {
 							"accessory": {
@@ -210,9 +210,10 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
+							that._updataUi();
 						})
 					}.bind(this));
-					
+
 					this.pick = new mui.PopPicker({
 						layer: 1,
 						more: false,
@@ -220,15 +221,17 @@
 					this.pick.setData(pick_data[1]);
 				},
 				plusReady: function() {
+					plus.navigator.setStatusBarStyle('dark');
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
-					//					获取状态
-					//					dal.devaccessory.getStatus("14255286", 20, "VH-104GN-2017061500015", 4166, function(err,data) {
-					//							if(err) {
-					//								return mui.toast(err.message);
-					//							}
-					//							alert(JSON.stringify(data));
-					//						});
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+
+						var view = plus.webview.currentWebview();
+						plus.navigator.setStatusBarStyle('light');
+						view.close();
+					}.bind(this);
 
 				},
 				methods: {
@@ -260,12 +263,15 @@
 
 						var fn = function(s) {
 							// 发起请求
+							plus.nativeUI.showWaiting();
 							dal.devaccessory.delay(that.devInfo.accessory, that.devInfo.devType, s, function(err, data) {
+								plus.nativeUI.closeWaiting();
 								if(err) {
 									return mui.toast(err.message);
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.delay = s;
+								that._updataUi();
 							});
 						};
 
@@ -275,7 +281,7 @@
 
 						});
 					},
-					//修改名称
+					// 修改名称
 					onNameTap: function() {
 						var that = this;
 						app.page.getInput(function(data1) {
@@ -287,14 +293,19 @@
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.name = data1.content;
-								app.page.setResult({
-									action: "update",
-									info: that.devInfo
-								});
+								that._updataUi();
 							});
 						}, {
 							title: "设备名称",
 							content: that.devInfo.accessory.name,
+						});
+					},
+					// 更新缓存数据
+					_updataUi: function() {
+						that = this;
+						app.page.setResult({
+							action: "update",
+							info: that.devInfo
 						});
 					},
 				}

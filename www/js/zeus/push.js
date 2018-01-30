@@ -4,7 +4,7 @@
 	var OB = Rx.Observable;
 	var P = plug.H5NativeBridge;
 	var D;
-
+return;
 	OB
 		// plus ready
 		.create(function(ob) {
@@ -22,8 +22,8 @@
 				plus: true
 			});
 
-			// 最多尝试8次 每次间隔2s
-			var timer = OB.interval(2e3).take(8);
+			// 最多尝试5次 每次间隔3s
+			var timer = OB.interval(3e3).take(5);
 			// 获取原生推送信息
 			var getCid = OB.create(function(ob) {
 				var rs = P.GetPushInfoSyn();

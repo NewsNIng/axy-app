@@ -343,7 +343,7 @@
 			var devManager, runManager;
 
 			var _B = new ni.Broadcast();
-			
+
 			var P = plug.H5NativeBridge;
 
 			var wayPick;
@@ -487,7 +487,7 @@
 					// 摄像机点击
 					onCmTap: function(o, i) {
 						var that = this;
-						
+
 						if(o.online !== 1) {
 							return mui.toast("设备不在线");
 						}
@@ -533,23 +533,21 @@
 							return;
 						}
 
-						
-
 						Rx.Observable.create(function(ob) {
 							if(o.type >= 0x1040 && o.type <= 0x1080) {
 								// 获取设备的通道信息
 								plus.nativeUI.showWaiting("获取通道信息中...");
-								dal.devparam.chlist(o.devid, o.type, function(err, data){
+								dal.devparam.chlist(o.devid, o.type, function(err, data) {
 									plus.nativeUI.closeWaiting();
-									if(err){
+									if(err) {
 										return mui.toast(err.message);
 									}
-									
-									if(!data || !data.length){
+
+									if(!data || !data.length) {
 										return mui.toast("暂无通道信息");
 									}
-									
-									data = data.map(function(item){
+
+									data = data.map(function(item) {
 										return {
 											text: item.name,
 											value: item.no
@@ -597,7 +595,7 @@
 					},
 					// 添加配件点击
 					onAddTap: function() {
-						mui.openWindow('../add/add_device.html');
+						mui.openWindow('../add/add_device.html','add/add_device.html');
 					},
 					// 智能配件点击
 					onZoneTap: function(o, i) {
@@ -606,10 +604,14 @@
 
 						Rx.Observable.create(function(ob) {
 							// 检查本地是否有相关配件页面
-							var pageUrl = 'dev_' + o.type + '.html';
+							var pageUrl = '_www/html/smart/devices/dev_' + o.type + '.html';
+							pageUrl = plus.io.convertLocalFileSystemURL(pageUrl);
+							if(mui.os.ios) {
+								pageUrl = 'file://' + pageUrl;
+							}
 							plus.io.resolveLocalFileSystemURL(pageUrl, function() {
 								ob.next(pageUrl);
-							}, function() {
+							}, function(err) {
 								// 页面不存在
 								mui.toast('尚未支持该配件');
 							});

@@ -33,7 +33,7 @@
 			.menu-warp {
 				padding: 1.5rem 1.433333rem 0.7rem 1.433333rem;
 			}
-		
+			
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
@@ -141,18 +141,18 @@
 
 		<img src="" />
 		<script type="text/javascript">
-			mui.init({
-				beforeback: function() {
-					plus.navigator.setStatusBarStyle('light');
-				}
-			});
+			//			mui.init({
+			//				beforeback: function() {
+			//					plus.navigator.setStatusBarStyle('light');
+			//				}
+			//			});
 
 			new Vue({
 				el: '#warpper',
 				data: function() {
 					return {
 						// 告警延迟时间
-//						alarmDelayTime: 0,
+						//						alarmDelayTime: 0,
 						isErr: false,
 						// 弹框
 						pick: null,
@@ -217,6 +217,7 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
+							that._updataUi();
 						})
 					}.bind(this));
 
@@ -233,6 +234,14 @@
 					plus.navigator.setStatusBarStyle('dark');
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+
+						var view = plus.webview.currentWebview();
+						plus.navigator.setStatusBarStyle('light');
+						view.close();
+					}.bind(this)
 				},
 				methods: {
 					// 切换开关
@@ -263,12 +272,15 @@
 
 						var fn = function(s) {
 							// 发起请求
+							plus.nativeUI.showWaiting();
 							dal.devaccessory.delay(that.devInfo.accessory, that.devInfo.devType, s, function(err, data) {
+								plus.nativeUI.closeWaiting();
 								if(err) {
 									return mui.toast(err.message);
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.delay = s;
+								that._updataUi();
 							});
 						};
 
@@ -290,14 +302,19 @@
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.name = data1.content;
-								app.page.setResult({
-									action: "update",
-									info: that.devInfo
-								});
+								that._updataUi();
 							});
 						}, {
 							title: "设备名称",
 							content: that.devInfo.accessory.name,
+						});
+					},
+					// 更新缓存数据
+					_updataUi: function() {
+						that = this;
+						app.page.setResult({
+							action: "update",
+							info: that.devInfo
 						});
 					},
 				}

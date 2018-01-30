@@ -34,7 +34,6 @@
 				display: flex;
 				display: -webkit-flex;
 				padding: 1.52rem 0.346666rem 0.826666rem 0.346666rem;
-				
 				justify-content: space-between;
 			}
 			
@@ -45,10 +44,10 @@
 				/*width: rem;*/
 				text-align: center;
 			}
+			
 			.menu-warp>div>div {
 				color: #333333;
 			}
-			
 			/*.menu-warp>div>img {
 				width: 1.4rem;
 			}*/
@@ -68,7 +67,6 @@
 				top: 4.45rem;
 				text-align: center;
 				width: 100%;
-				
 			}
 			
 			.state_show>span {
@@ -85,7 +83,7 @@
 				margin-right: 0 !important;
 				padding-right: 0 !important;
 			}
-		
+			
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
@@ -104,7 +102,7 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div class="state_show"> 
+				<div class="state_show">
 					<span class="app-font-size-30">0.08mg/m³</span>
 					<span class="app-font-size-44">舒适</span>
 					<span class="app-font-size-24">当前状态</span>
@@ -195,8 +193,8 @@
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-        <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -224,8 +222,8 @@
 							"Off Line",
 							"Lost AC",
 							"24H"
-						], 
-						
+						],
+
 						// 设备信息
 						devInfo: {
 							"accessory": {
@@ -270,28 +268,27 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
+							that._updataUi();
 						})
 					}.bind(this));
-					
-					
+
 				},
 				plusReady: function() {
+					plus.navigator.setStatusBarStyle('dark');
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+
+						var view = plus.webview.currentWebview();
+						plus.navigator.setStatusBarStyle('light');
+						view.close();
+					}.bind(this);
 					this.getState();
 				},
 				methods: {
-					
-					// 设备名称
-					onNameTap: function(name) {
-						var that = this;
-						app.page.getInput(function(data) {
-							that.dev.basicInfo.devName = data.content;
-						}, {
-							title: "设备名称",
-							tips: that.dev.basicInfo.devName,
-						});
-					},
+
 					// 删除配件
 					onDelDevice: function() {
 						app.page.setResult({
@@ -320,10 +317,7 @@
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.name = data1.content;
-								app.page.setResult({
-									action: "update",
-									info: that.devInfo
-								});
+								that._updataUi();
 							});
 						}, {
 							title: "设备名称",
@@ -331,17 +325,17 @@
 						});
 					},
 					// 获取甲醛探测器状态
-					getState: function() { 
+					getState: function() {
 						dal.devaccessory.formaldehydedetector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {
 							alert(JSON.stringify(err));
-							if(err){
+							if(err) {
 								return mui.toast(err.message);
 							}
-							console.log(JSON.stringify(data)); 
+							console.log(JSON.stringify(data));
 						});
 					},
 					// 趋势图点击
-					onChartTap: function(){
+					onChartTap: function() {
 						mui.openWindow('dev_chart.html', 'chart', {
 							extras: {
 								info: this.devInfo,
@@ -349,7 +343,15 @@
 								typeName: '甲醛浓度',
 							}
 						});
-					}
+					},
+					// 更新缓存数据
+					_updataUi: function() {
+						that = this;
+						app.page.setResult({
+							action: "update",
+							info: that.devInfo
+						});
+					},
 				}
 			});
 		</script>
