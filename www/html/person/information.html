@@ -113,6 +113,15 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
+			
+			.nick {
+				display: inline-block;
+				width: 7rem;
+				text-align: right;
+			}
+			.mui-badge.nick{
+				border-radius: 0;
+			}
 		</style>
 
 	</head>
@@ -154,7 +163,7 @@
 						<li class="mui-table-view-cell" @tap="onNickNameTap()">
 							<a class="mui-navigate-right">
 								<span class="app-color-333333">昵称</span>
-								<span class="mui-badge" v-text="user.nickname"></span>
+								<span class="mui-badge nick mui-ellipsis" v-text="user.nickname"></span>
 							</a>
 						</li>
 						<li class="mui-table-view-cell" @tap="onGenderTap()">
@@ -271,6 +280,7 @@
 						value: 1,
 					}]);
 					this.user = app.user.get();
+//					this.user.nickname = "哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦";
 					this.updateUserInit();
 					this.$watch('user', function() {
 						// 用户信息更改后提交信息更新
@@ -376,6 +386,7 @@
 						app.page.getInput(function(data) {
 							that.user.nickname = data.content;
 							that.updateUser.nickname = data.content;
+							
 						}, {
 							title: '昵称',
 							content: that.user.nickname,

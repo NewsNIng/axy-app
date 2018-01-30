@@ -72,14 +72,14 @@
 				color: white;
 			}
 			
-			.imgbg{
+			.imgbg {
 				/*width: 100%;*/
 				margin: 0.8rem 1.5rem 0 1.5rem;
 				position: relative;
 				text-align: center;
 			}
 			
-			.imgbg > img{
+			.imgbg>img {
 				width: 1.973333rem;
 				margin-top: 2.9rem;
 			}
@@ -90,7 +90,8 @@
 				margin-bottom: 0.9rem;
 			}
 			
-			.btn_bind,.examine {
+			.btn_bind,
+			.examine {
 				height: 1.2rem;
 				line-height: 1.2rem;
 				padding: 0;
@@ -99,8 +100,6 @@
 				width: 8.293333rem;
 				margin-bottom: 0.266666rem;
 			}
-			
-			
 		</style>
 	</head>
 
@@ -114,7 +113,7 @@
 
 			<div class="mui-content">
 				<div class="imgbg">
-					<img :src="bgp"/>
+					<img :src="bgp" />
 					<div class="text app-font-size-28 app-color-9f9fa0" v-text="isFitting?'配件':'设备'+'连接成功!'"></div>
 				</div>
 				<button type="button" class="examine app-color-333333 mui-btn app-btn-main-ghost app-font-size-34" @tap="show()" v-text="isFitting?'查看配件':'查看设备'"></button>
@@ -132,7 +131,8 @@
 		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 
@@ -154,31 +154,50 @@
 						devid: '',
 						needConn: true,
 						isFitting: false,
+						info: null,
 					};
 				},
 				mounted: function() {
-//					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '4.png';
+					//					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '4.png';
 				},
 				plusReady: function() {
 					this.needConn = this.$view.needConn;
 					this.devid = this.$view.devid;
 					this.isFitting = this.$view.isFitting;
 					this.updateDeviceList();
+					this.info = this.$view.info;
 				},
 				methods: {
-					show: function(){
-						alert(this.devid);
+					show: function() {
+						if(this.isFitting) {
+							//配件
+							this.info.data.acc.devid = this.info.data.dev.devid;
+							this.info.data.accessory = this.info.data.acc;
+							this.info.data.devName = "";
+							this.info.data.devType = this.info.data.dev.type;
+							console.log(JSON.stringify(this.info));
+							var page = 'dev_' + this.info.data.acc.type;
+							var pageUrl = '../devices/' + page + '.html';
+							mui.openWindow(pageUrl, page, {
+								extras: {
+									info: this.info.data
+								}
+							});
+						} else {
+							//设备
+							alert(this.devid);
+						}
 					},
-					bind: function(){
+					bind: function() {
 						alert("bind");
 					},
 					// 通知其他页面设备列表更新
-					updateDeviceList: function(){
+					updateDeviceList: function() {
 						new this.$Broadcast().emit('device_update', {}, {
 							views: ["zeus", "dev_my_list"]
 						});
 					},
-					
+
 				}
 			});
 		</script>

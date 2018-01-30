@@ -288,7 +288,7 @@
 						} else if(o.type === 1) {
 							this._hostNetLine(o);
 						} else {
-							this._scanCodeLine(true);
+							this._scanCodeLine(true, false);
 						}
 					},
 					// 控制配件
@@ -298,7 +298,7 @@
 							return mui.toast('请先添加主机');
 						}
 
-						this._scanCodeLine();
+						this._scanCodeLine(false, true);
 					},
 					// 安全配件
 					onItemTap3: function(o) {
@@ -306,7 +306,7 @@
 						if(!l || l === 0) {
 							return mui.toast('请先添加主机');
 						}
-						this._scanCodeLine();
+						this._scanCodeLine(false, false);
 					},
 
 					// 声波连接设备
@@ -339,7 +339,7 @@
 					},
 
 					// 扫码获取设备ID
-					_scanCodeLine: function(isDev) {
+					_scanCodeLine: function(isDev, isSmart) {
 						app.page.openForResultBy('scan.html', 'scan', function(data) {
 							// 获取扫码结果
 //							console.log(JSON.stringify(data));
@@ -359,7 +359,8 @@
 								});
 							}
 						}, {
-							isDev: isDev
+							isDev: isDev,
+							isSmart: isSmart,
 						});
 					}
 				}

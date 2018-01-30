@@ -134,7 +134,7 @@
 				-webkit-animation-direction: normal;
 				/*定义动画方式*/
 			}
-		
+			
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
@@ -158,14 +158,11 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">智能网关设置</h1>
-				<span class="mui-icon mui-pull-right" @tap="onShareTap()">
-					<img src="../../../image/smart/devices/electric/btn_share@3x.png" />
-				</span>
+				<h1 class="mui-title">设置</h1>
+
 			</header>
 
 			<div class="mui-content">
-				
 
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell" @tap="onNameTap()">
@@ -182,7 +179,7 @@
 					</li>
 					<li v-show="otherInfo.on !== null" class="mui-table-view-cell">
 						<a class="">
-							<span>状态指示灯</span> 
+							<span>状态指示灯</span>
 							<span class="mui-badge">
 								<div @toggle="onOnToggle($event)" ref="onSwitch" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': otherInfo.on}" >
 									<div class="mui-switch-handle"></div>
@@ -215,8 +212,7 @@
 				<div @tap="onDel()" class="app-color-main-dark">删除设备</div>
 				<div @tap="onReboot()">重启设备</div>
 			</footer>
-			
-			
+
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -237,7 +233,6 @@
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
-
 
 		<script type="text/javascript">
 			mui.init();
@@ -266,7 +261,7 @@
 							"signalfwd": "vh.anxin-net.com",
 							"signalfwdport": 0,
 							"online": 0,
-							
+
 						},
 						otherInfo: {
 							on: null,
@@ -285,36 +280,33 @@
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
 					this.devid = this.$view.devInfo.devid;
-					
+
 					this._getOpenled();
-					
+
 					var oldback = mui.back;
-					
 
 				},
 				methods: {
-					// 分享按钮
-					onShareTap: function(){
-						mui.openWindow("../../person/devshare/share.html", 'dev_share', {
-							extras: {
-								devInfo: this.devInfo
-							}
-						});
-					},
-					
-					
+
 					// 设备名称
 					onNameTap: function(name) {
 						var that = this;
 						app.page.getInput(function(data) {
-							that.dev.basicInfo.devName = data.content;
+							that.devInfo.location = data.content;
+							mui.toast('名称更新成功');
+							// 通知上层的上层
+							_B.emit("update", {
+								info: that.devInfo
+							}, {
+								views: ['dev_my_list', 'home']
+							});
 						}, {
 							title: "设备名称",
-							tips: that.dev.basicInfo.devName,
+							tips: that.devInfo.location,
 						});
 					},
 					// 自动布防计划
-					onAutoArm: function(){
+					onAutoArm: function() {
 						mui.openWindow('camera_settings_arming.html', 'arming', {
 							extras: {
 								info: this.devInfo
@@ -329,17 +321,17 @@
 						});
 					},
 					// 状态指示灯
-					onOnToggle: function(e){
+					onOnToggle: function(e) {
 						var isActive = e.detail.isActive;
 						var that = this;
 						dal.devparam.openled(this.devInfo.devid, this.devInfo.type, !isActive, function(err, rs) {
-							if(err) { 
-								return mui.toast(err.message); 
+							if(err) {
+								return mui.toast(err.message);
 							}
 							that.otherInfo.on = !isActive;
 						});
 					},
-					
+
 					// 删除设备
 					onDelDevice: function() {
 						console.log("deldevice");
@@ -361,9 +353,6 @@
 						});
 					},
 
-					
-
-					
 					// 删除设备
 					onDel: function() {
 						plus.nativeUI.showWaiting();
@@ -385,19 +374,19 @@
 									mui.toast('删除成功，设备将会重启');
 									dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
 										if(err) {
-											mui.toast('重启失败，请手动重启设备');	
-										}else{
+											mui.toast('重启失败，请手动重启设备');
+										} else {
 											mui.toast("操作成功！设备状态更新会有一定的延迟")
 										}
 										_B.emit("delete", {}, {
 											views: [that.$view.opener()]
 										});
 										that.$view.close();
-										
+
 									});
-									
+
 								});
-								
+
 							} else {
 								plus.nativeUI.closeWaiting();
 							}

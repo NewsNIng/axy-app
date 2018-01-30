@@ -490,7 +490,7 @@
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
 		<script type="text/javascript" src="../../js/dal/home.js"></script>
 		<script type="text/javascript" src="../../js/dal/device.js"></script>
-		<script type="text/javascript" src="../../js/dal/devparam.js" ></script>
+		<script type="text/javascript" src="../../js/dal/devparam.js"></script>
 		<script type="text/javascript" src="../../js/dal/store.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
@@ -612,28 +612,19 @@
 				plusReady: function() {
 					var that = this;
 
-					// 本地 所有设备的信息
-					//						var ALLD = new ni.Cache('AllDeviceInfo', [], {
-					//							plus: true
-					//						});
-					//
-					//						// 本地 所有设备的运行状态
-					//						var ALLR = new ni.Cache('AllDeviceRun', [], {
-					//							plus: true
-					//						});
-					//
-					//						devManager = new DevManager(ALLD);
-					//						runManager = new DevManager(ALLR);
+					Rx.Observable.create(function(ob) {
+						//如果用户登录了 则  获取第一个设备
+						if(app.user.has()) {
+							ob.next();
+						}
 
-					//如果用户登录了 则  获取第一个设备
-					if(app.user.has()) {
-						this.getDeviceOne();
-					}
-					// 同时监听登录成功事件
-					new this.$Broadcast().on('login_success', function() {
-						// 更新获取设备
-						this.getDeviceOne();
-					}.bind(this));
+						_B.on('login_success', function() {
+							ob.next()
+						});
+
+					}).subscribe(function() {
+						that.getDeviceOne();
+					});
 
 					// plus ready ! 现在可以使用plus相关api
 					// 设置本页面无滚动条显示
@@ -695,6 +686,7 @@
 
 					// 当点击模式时
 					onModelTap: function(o, index) {
+						return mui.toast("该功能尚未开放...");
 						// console.log(JSON.stringify(o));
 						app.user.get(function(u) {
 							u && mui.openWindow('../smart/scenes/index2.html');
@@ -715,17 +707,17 @@
 							if(o.type >= 0x1040 && o.type <= 0x1080) {
 								// 获取设备的通道信息
 								plus.nativeUI.showWaiting("获取通道信息中...");
-								dal.devparam.chlist(o.devid, o.type, function(err, data){
+								dal.devparam.chlist(o.devid, o.type, function(err, data) {
 									plus.nativeUI.closeWaiting();
-									if(err){
+									if(err) {
 										return mui.toast(err.message);
 									}
-									
-									if(!data || !data.length){
+
+									if(!data || !data.length) {
 										return mui.toast("暂无通道信息");
 									}
-									
-									data = data.map(function(item){
+
+									data = data.map(function(item) {
 										return {
 											text: item.name,
 											value: item.no
@@ -768,20 +760,21 @@
 							}
 							this.imgList = data;
 							advert_cache.data = data;
-							if(this.imgList.length === 1){
-								mui('.mui-slider').slider().setStopped(true);
-							}
+
 							this.$nextTick(function() {
 								imagelazyload();
-							});
+								if(this.imgList.length === 1) {
+									mui('.mui-slider').slider().setStopped(true);
+								}
+							}.bind(this));
 						}.bind(this));
 					},
 					// 轮播点击
 					onAdvertTap: function(o) {
 						// 打开内部浏览器
-						//						app.page.openBrowser({
-						//							url: o.adlink
-						//						});
+						/*app.page.openBrowser({
+							url: o.adlink
+						});*/
 					},
 					// 获取一个设备
 					getDeviceOne: function() {
@@ -790,21 +783,7 @@
 								return
 							}
 							if(data) {
-								this.dev = data[0]
-								//								this.dev = {
-								//									"id": 3528,
-								//									"streamfwdport": 17600,
-								//									"location": "test",
-								//									"devid": "AX-403A-2018070500013",
-								//									"relation": 0,
-								//									"binding": "",
-								//									"streamfwd": "vh.anxin-net.com",
-								//									"workmode": 0,
-								//									"type": 48,
-								//									"signalfwd": "vh.anxin-net.com",
-								//									"signalfwdport": 17700,
-								//									"online": 1
-								//								};
+								this.dev = data[0];
 								this.dev.devimg = this._getDevImg(this.dev.devid);
 								this.dev.location = this.dev.location ? this.dev.location.replace(/<[^<]*>/gi, "") : "";
 							}
@@ -813,12 +792,25 @@
 					},
 					// 监听设备变化
 					listenDev: function() {
-						_B.on('RunstateNotify', function(data) {
-							// if(data.add)
-							if(data.info.devid === this.dev.devid) {
-								this.dev = data.info;
-							}
-						}.bind(this));
+						var that = this;
+						Rx.Observable.create(function(ob) {
+								_B.on('RunstateNotify', function(data) {
+									if(data.info.devid === that.dev.devid) {
+										ob.next(data.info);
+									}
+								});
+								_B.on('update', function(data) {
+									if(data.info.devid === that.dev.devid) {
+										ob.next(data.info); 
+									}
+								});
+							})
+							.subscribe(function(data) {
+								that.dev = data;
+								that.dev.devimg = that._getDevImg(that.dev.devid);
+								that.dev.location = that.dev.location ? that.dev.location.replace(/<[^<]*>/gi, "") : "";
+							})
+
 					},
 
 					// 获取喜欢列表
@@ -861,20 +853,42 @@
 					onDeviceSetTap: function() {
 						var id = this.dev.devid;
 
-						//							var localInfo = devManager.selectByWhere(function(o) {
-						//									return o.basicInfo && o.basicInfo.devid === id;
-						//								}),
-						//								runInfo = runManager.selectByWhere(function(o) {
-						//									return o.devid = id
-						//								});
+						var name = app.dev.findName(this.dev.type);
 
-						mui.openWindow('../smart/devices/camera_settings.html', 'camera_settings', {
-							extras: {
-								//									localInfo: localInfo,
-								//									runInfo: runInfo,
-								devInfo: this.dev
-							}
+						var url;
+						switch(name) {
+							case "WG-100":
+								{
+									url = "../smart/devices/dev_WG-100_setting.html";
+									break;
+								}
+
+							case "AX-903":
+								{
+									url = "../smart/devices/dev_AX-903_setting.html";
+									break;
+								}
+
+							case "AX-904":
+								{
+									url = "../smart/devices/dev_AX-904.html";
+									break;
+								}
+
+							default:
+								{
+									url = "../smart/devices/camera_settings.html";
+									break;
+								}
+
+						}
+
+						url && app.page.openForResultBy(url, "devsetting", function() {
+
+						}, {
+							devInfo: this.dev
 						});
+
 					},
 					// 设备分享
 					onShareTap: function() {
@@ -925,7 +939,7 @@
 						if(this.$os.android) {
 							return app.android.getScreenshotByDevId(devid);
 						} else if(this.$os.ios) {
-							return "file://" + iospath + "/" + devid + ".png";
+							return "file://" + iospath;
 						}
 					},
 					_getDevName: function(type) {

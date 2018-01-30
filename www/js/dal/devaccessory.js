@@ -209,9 +209,9 @@
 	 * @param {Object} ptzset
 	 * @param {Object} callback
 	 */
-	devaccessory.name = function(id, type, devid, devtype, newName, name, action, delay, zonetype, chnID, externChn, x, y, ptzset, callback) {
+	devaccessory.name = function(aid, type, devid, devtype, newName, name, action, delay, zonetype, chnID, externChn, x, y, ptzset, callback) {
 		return ra("post", "/devaccessory/name", {
-			id: id,
+			aid: aid,
 			type: type,
 			devid: devid,
 			devtype: devtype,
@@ -578,7 +578,19 @@
 			type: type
 		}, callback);
 	}
-
+	
+	/**
+	 * 根据配件及设备id获取配件详情
+	 * @param {Object} devid 设备id
+	 * @param {Object} aid 配件id
+	 * @param {Object} callback
+	 */
+	devaccessory.getinfo = function(devid,aid,callback){
+		return ra('get', "/devaccessory/getinfo", {
+			devid:devid,
+			aid:aid
+		}, callback);
+	}
 	
 
 	_.devaccessory = devaccessory;

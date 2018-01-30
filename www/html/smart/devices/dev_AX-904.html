@@ -95,7 +95,7 @@
 					</li>
 				</ul>
 			</div>
-			
+
 			<footer class="app-font-size-28">
 				<div @tap="onDel()" class="app-color-main-dark">删除设备</div>
 			</footer>
@@ -114,8 +114,8 @@
 		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-        <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -158,10 +158,17 @@
 					onNameTap: function(name) {
 						var that = this;
 						app.page.getInput(function(data) {
-							that.dev.basicInfo.devName = data.content;
+							that.devInfo.location = data.content;
+							mui.toast('名称更新成功');
+							// 通知上层的上层
+							_B.emit("update", {
+								info: that.devInfo
+							}, {
+								views: ['dev_my_list', 'home']
+							});
 						}, {
 							title: "设备名称",
-							tips: that.dev.basicInfo.devName,
+							tips: that.devInfo.location,
 						});
 					},
 					// 删除设备
@@ -185,17 +192,17 @@
 									mui.toast('删除成功，设备将会重启');
 									dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
 										if(err) {
-											mui.toast('重启失败，请手动重启设备');	
-										}else{
+											mui.toast('重启失败，请手动重启设备');
+										} else {
 											mui.toast("操作成功！设备状态更新会有一定的延迟")
 										}
 										_B.emit("delete", {}, {
 											views: [that.$view.opener()]
 										});
 										that.$view.close();
-										
+
 									});
-									
+
 								});
 							} else {
 								plus.nativeUI.closeWaiting();

@@ -195,6 +195,7 @@
 					},
 					onSaveTap: function() {
 						plus.nativeUI.showWaiting();
+//						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.intervalTime, this.continuedTime, function(err, data) {
 						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.intervalTime, this.continuedTime, function(err, data) {
 							plus.nativeUI.closeWaiting();
 							console.log("data==>" + JSON.stringify(data));
@@ -202,6 +203,7 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
+							mui.toast("修改成功！");
 							//							alert("err==>" + err + "\tdata==>" + data);
 							app.page.setResult({
 								//								intervalTime: this.intervalTime,

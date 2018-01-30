@@ -18,6 +18,8 @@ Vue && Vue.component('dev-footer', {
 		},
 
 		_delDevice: function() {
+			//			alert(this.devType);
+			//			return;
 			plus.nativeUI.showWaiting();
 			dal.devaccessory.devDelete(this.accessory, this.devtype, function(err, data) {
 				plus.nativeUI.closeWaiting();
@@ -40,10 +42,10 @@ Vue && Vue.component('dev-footer', {
 		},
 
 		_unBind: function() {
-			// 解绑
-			this.w = plus.nativeUI.showWaiting();
+//			alert(this.devType);
+//			return;
 			plus.nativeUI.showWaiting();
-			dal.devaccessory.devDelete(this.accessory, this.devType, function(err, data) {
+			dal.devaccessory.devDelete(this.accessory, this.devtype, function(err, data) {
 				plus.nativeUI.closeWaiting();
 				if(err) {
 					return mui.toast(err.message);
@@ -52,7 +54,7 @@ Vue && Vue.component('dev-footer', {
 				this.$emit('del', {});
 			}.bind(this));
 			// 通知
-//			this.$emit('unbind', {});
+			//			this.$emit('unbind', {});
 		}
 
 	},

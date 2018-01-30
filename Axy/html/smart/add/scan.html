@@ -102,6 +102,7 @@
 						scan: null,
 						t: -1,
 						isDev: false,
+						isSmart: false,
 					};
 				},
 				watch: {
@@ -116,6 +117,7 @@
 				plusReady: function() {
 
 					this.isDev = this.$view.isDev;
+					this.isSmart = this.$view.isSmart;
 
 					setTimeout(function() {
 						this.resetScan();
@@ -147,6 +149,7 @@
 					},
 					// 发送添加设备请求
 					_addDevice: function(id) {
+						var that = this;
 						// 如果当前不是配件添加，是主机添加
 						if(this.isDev) {
 							var w = plus.nativeUI.showWaiting();
@@ -197,12 +200,12 @@
 										}, {
 											result: true,
 											// 过滤设备 电管家 和 智能网管
-											filter: [
+											filter: that.isSmart ? [
 												"WG-100",
 												"AX-903",
 												"AX-904",
 												"VH-104GN"
-											]
+											] : []
 										});
 									});
 

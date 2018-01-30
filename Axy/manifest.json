@@ -7,8 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.8.4",/*应用版本名称*/
-		"code": "20180127"
+		"name": "1.8.5",/*应用版本名称*/
+		"code": "20180129"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -799,7 +799,10 @@
 				"priority": 0
 			},
 			"html/smart/devices/dev_my_list.html": {
-				"resources": [],
+				"resources": [
+					"image/smart/devices/bg/903@3xweb.png",
+					"image/smart/devices/bg/wg_100@3xweb.png"
+				],
 				"refer": [
 					"html/smart/add/add_device.html",
 					"html/smart/devices/camera_settings.html",
@@ -820,10 +823,7 @@
 					"html/smart/devices/dev_35.html",
 					"html/smart/devices/dev_AX-903.html",
 					"html/smart/devices/dev_AX-903_setting.html",
-					"html/smart/devices/dev_WG-100_setting.html",
-					"html/smart/devices/dev_41.html",
-					"html/smart/devices/dev_32.html",
-					"html/smart/devices/dev_145.html"
+					"html/smart/devices/dev_WG-100_setting.html"
 				],
 				"priority": 0
 			},
@@ -1003,7 +1003,8 @@
 			"html/nearby/pages/theme.html": {
 				"resources": [],
 				"refer": [
-					"html/public/browser.html"
+					"html/public/browser.html",
+					"html/public/share.html"
 				],
 				"priority": 0
 			},
@@ -1075,18 +1076,7 @@
 				"priority": 0
 			},
 			"html/smart/devices/dev_16711680.html": {
-				"resources": [
-					"js/common/immersed.js",
-					"js/app/app-page.js",
-					"js/lib/vue.min.js",
-					"js/lib/mui.min.js",
-					"js/common/flexible.js",
-					"js/components/devices/footer.js",
-					"js/app/app.js",
-					"js/dal/devaccessory.js",
-					"js/dal/base.js",
-					"js/lib/vue-ni.js"
-				],
+				"resources": [],
 				"refer": [
 					"html/public/input.html"
 				],
@@ -1133,35 +1123,6 @@
 				"priority": 0
 			},
 			"html/smart/devices/dev_35.html": {
-				"resources": [],
-				"refer": [
-					"html/public/input.html"
-				],
-				"priority": 0
-			},
-			"html/smart/add/add_completed.html": {
-				"resources": [],
-				"refer": [
-					"html/smart/devices/dev_35.html",
-					"html/smart/devices/dev_32.html"
-				],
-				"priority": 0
-			},
-			"html/smart/devices/dev_41.html": {
-				"resources": [],
-				"refer": [
-					"html/public/input.html"
-				],
-				"priority": 0
-			},
-			"html/smart/devices/dev_145.html": {
-				"resources": [],
-				"refer": [
-					"html/public/input.html"
-				],
-				"priority": 0
-			},
-			"html/smart/devices/dev_32.html": {
 				"resources": [],
 				"refer": [
 					"html/public/input.html"
