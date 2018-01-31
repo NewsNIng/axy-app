@@ -125,10 +125,10 @@
 		<div id="popover" class="mui-popover app-font-size-28 app-color-333333">
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell app-color-9f9fa0">
-						<span>参数</span>
-						<span>预警值</span>
-						<span>报警值</span>
-					</li>
+					<span>参数</span>
+					<span>预警值</span>
+					<span>报警值</span>
+				</li>
 				<template v-for="k,i in stateList">
 
 					<li class="mui-table-view-cell app-color-9f9fa0">
@@ -164,7 +164,7 @@
 							<div class="app-font-size-28">
 								{{k.name}}
 							</div>
-							<div class="app-font-size-52" >
+							<div class="app-font-size-52">
 								{{o['state' + k.index] + k.company}}
 							</div>
 						</div>
@@ -198,54 +198,56 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
-		<script type="text/javascript" src="../../../js/extend/Date.js" ></script>
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
+		
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
 
 		<img src="" />
 		<script type="text/javascript">
 			mui.init();
 
 			var _stateList = [{
-								name: "剩余电流",
-								index: 9,
-								company: 'mA'
-							},
-							{
-								name: "环境温度",
-								index: 5,
-								company: '℃',
-							},
-							{
-								name: "A相电流",
-								index: 6,
-								company: 'mA'
-							},
-							{
-								name: "A相温度",
-								index: 2,
-								company: '℃',
-							},
-							{
-								name: "B相电流",
-								index: 7,
-								company: 'mA'
-							},
-							{
-								name: "B相温度",
-								index: 3,
-								company: '℃',
-							},
-							{
-								name: "C相电流",
-								index: 8,
-								company: 'mA'
-							},
-							{
-								name: "C相温度",
-								index: 4,
-								company: '℃',
-							},
+					name: "剩余电流",
+					index: 9,
+					company: 'mA'
+				},
+				{
+					name: "环境温度",
+					index: 5,
+					company: '℃',
+				},
+				{
+					name: "A相电流",
+					index: 6,
+					company: 'A'
+				},
+				{
+					name: "A相温度",
+					index: 2,
+					company: '℃',
+				},
+				{
+					name: "B相电流",
+					index: 7,
+					company: 'A'
+				},
+				{
+					name: "B相温度",
+					index: 3,
+					company: '℃',
+				},
+				{
+					name: "C相电流",
+					index: 8,
+					company: 'A'
+				},
+				{
+					name: "C相温度",
+					index: 4,
+					company: '℃',
+				},
 
-						];
+			];
 
 			var pv = new Vue({
 				el: "#popover",
@@ -330,7 +332,7 @@
 					this.getData();
 				},
 				methods: {
-					
+
 					// 获取状态数据
 					getData: function() {
 						dal.device.electric.state(this.devInfo.id, function(err, rs) {
@@ -342,69 +344,90 @@
 							pv.a = rs.alarm;
 						}.bind(this));
 					},
-					
+
 					// 动态计算状态显示颜色
-					getStateClass: function(index){
+					getStateClass: function(index) {
 						var indexVal = this.o['state' + index];
 						var maxVal = pv.w['state' + index];
 						var noVal = pv.a['state' + index];
-						if(indexVal > maxVal){
+						if(indexVal > maxVal) {
 							return "app-color-ff3b30";
-						}else if(indexVal >= noVal){
-							return "app-color-333333"; 
+						} else if(indexVal >= noVal) {
+							return "app-color-333333";
 						}
 						return "";
 					},
-					
+
 					// 分享按钮
-					onShareTap: function(){
+					onShareTap: function() {
 						mui.openWindow("../../person/devshare/share.html", 'dev_share', {
 							extras: {
 								devInfo: this.devInfo
 							}
 						});
 					},
-					
-					onMenuTap: function(o){
+
+					onMenuTap: function(o) {
 						this[o.img + 'Tap']();
 					},
-					
+
 					// 实时视频
-					btn_videoTap: function(){
+					btn_videoTap: function() {
+						if(this.devInfo.online !== 1){
+							return mui.toast('绑定设备离线');
+						}
 						var devid = this.devInfo.binding;
 						// 打开视频播放页面
-						
+						plug.H5NativeBridge.StartDevicePlay(devid, 0, 0, devid, function() {});
 					},
-					
+
 					// 保存数据
-					btn_SavedataTap: function(){
+					btn_SavedataTap: function() {
 						plus.nativeUI.showWaiting("正在保存...");
-						
-						if(!this.SaveDataCache && window.plus){
+
+						if(!this.SaveDataCache && window.plus) {
 							this.SaveDataCache = new ni.Cache("SaveDataCache_" + this.devInfo.id, [], {
 								plus: true
 							});
 						}
-						
+
 						this.SaveDataCache.push({
 							day: (new Date).toFormatString('yyyy-MM-dd hh:mm:ss'),
 							data: this.o
 						});
 						mui.toast("保存成功");
-						
+
 						plus.nativeUI.closeWaiting();
 					},
-					
+
 					//短信转发
-					btn_ShortmessageTap: function(){
+					btn_ShortmessageTap: function() {
+						var text = document.querySelector(".cardRoom").innerText;
+						text = text.split(/\n/)
+						var i = 0;
+						var str = "\n";
+						while(i < 16){
+							str += text[i++];
+							str += "：";
+							str += text[i++];
+							str += "\n";
+						}
+						str = "设备ID：" + this.devInfo.devid + "\n" + str;
+						// str += "\n" + new Date().toFormatString('yyyy年MM月dd日 hh点mm分ss秒');
+						
+						// 发送短信
+						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
+						msg.to = [];
+						msg.body = str;
+						plus.messaging.sendMessage(msg);
 						
 					},
-					
+
 					// 设置
-					btn_SetupTap: function(){
+					btn_SetupTap: function() {
 						mui.openWindow('dev_AX-903_setting.html', 'dev_AX-903_setting', {
 							extras: {
-								devInfo: this.devInfo	
+								devInfo: this.devInfo
 							}
 						});
 					},

@@ -201,7 +201,7 @@
 						var that = this;
 						this.system = !this.system;
 						plus.nativeUI.showWaiting();
-						dal.push.updateActivity(PUSHID.data, this.active, function(err, data){
+						dal.push.updateSystem(PUSHID.data, this.active, function(err, data){
 							plus.nativeUI.closeWaiting();
 							if(err){
 								that.system = !that.system;

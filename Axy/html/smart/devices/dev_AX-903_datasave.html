@@ -66,7 +66,7 @@
 			</header>
 			<div class="mui-content app-font-size-28">
 				<ul v-for="o,i in list" :data-time="o.day">
-					<li v-for="oo,ii in stateList">{{oo.name + "：" + (o.data['state' + (oo.index+1)] || 0) + oo.company}}</li>
+					<li v-for="oo,ii in stateList">{{oo.name + "：" + (o.data['state' + oo.index] || 0) + oo.company}}</li>
 				</ul>
 			</div>
 			
@@ -108,7 +108,7 @@
 							{
 								name: "A相电流",
 								index: 6,
-								company: 'mA'
+								company: 'A'
 							},
 							{
 								name: "A相温度",
@@ -118,7 +118,7 @@
 							{
 								name: "B相电流",
 								index: 7,
-								company: 'mA'
+								company: 'A'
 							},
 							{
 								name: "B相温度",
@@ -128,7 +128,7 @@
 							{
 								name: "C相电流",
 								index: 8,
-								company: 'mA'
+								company: 'A'
 							},
 							{
 								name: "C相温度",

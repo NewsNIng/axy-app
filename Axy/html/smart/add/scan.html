@@ -83,10 +83,10 @@
 		<script type="text/javascript">
 			mui.init({
 				//处理窗口关闭前的业务
-//				beforeback: function() {
-//					app.page.setResult({}).close();
-//					return false;
-//				},
+				beforeback: function() {
+					app.page.setResult({}).close();
+					return false;
+				},
 			});
 
 			var barcodeid = 0;
@@ -127,7 +127,8 @@
 					// 手动添加设备号
 					onAddTap: function() {
 						this.flash = false;
-						this.closeScan();
+						//this.closeScan();
+						//this.stopScan();
 						// 手动输入序列号 
 						app.page.openForResultBy('scan_code.html', 'scan_code', function(data) {
 							if(data.code) {
@@ -136,7 +137,7 @@
 							} else {
 								// 重置扫码
 								setTimeout(function() {
-									this.resetScan();
+									this.startScan();
 								}.bind(this), 200);
 							}
 						}.bind(this), {

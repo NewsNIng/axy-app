@@ -342,8 +342,7 @@
 					_scanCodeLine: function(isDev, isSmart) {
 						app.page.openForResultBy('scan.html', 'scan', function(data) {
 							// 获取扫码结果
-//							console.log(JSON.stringify(data));
-							
+							if(!data.data){return;}
 							if(data.data.result) {
 								//获取配件信息
 								

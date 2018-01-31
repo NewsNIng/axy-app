@@ -92,7 +92,6 @@
 			}
 			
 			.imgroom>div.video {
-				background-size: 0;
 				background-color: #FFFFFF;
 			}
 			
@@ -101,7 +100,7 @@
 				position: absolute;
 				left: 0;
 				top: 0;
-				background-color: rgba(0, 0, 0, 0.35);
+				background-color:  rgba(0, 0, 0, 0.35);;
 				background-image: url(../../../image/person/devshare/1_1.png);
 				background-size: 50%;
 				background-repeat: no-repeat;
@@ -184,11 +183,11 @@
 						<div class="app-font-size-24 app-color-333333 tips">{{o.day}}</div>
 						<div class="imgroom app-font-size-24 app-color-white">
 							<template v-for="oo,ii in o.list">
-								<template v-if="isVideo(oo.fileName)">
-									<div class="video" @tap="onVideoTap(oo)"></div>
+								<template v-if="oo.fileType === 2">
+									<div :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" class="video" @tap="onVideoTap(oo)"></div>
 								</template>
 								<template v-else>
-									<div :style="{backgroundImage: 'url('+ fixPath(oo.fileName) +')'}" :data-preview-src="fixPath(oo.fileName)" data-preview-group="1"></div>
+									<div :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" :data-preview-src="fixPath(oo.fileName)" data-preview-group="1"></div>
 								</template>
 							</template>
 
@@ -235,9 +234,7 @@
 						devName: "",
 						devId: "",
 
-						record_: [
-						
-						],
+						record_: [],
 
 						videoplay: false,
 						videosrc: "",
@@ -407,9 +404,20 @@
 
 					// 视频被点击时
 					onVideoTap: function(o) {
-						//this.videosrc = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8";
-						this.videosrc = this.fixPath(o.fileName);
-						this.videoplay = true;
+						var url = o.fileName;
+						if(mui.os.ios) {
+							this.videosrc = url;
+							this.videoplay = true;
+						} else {
+							this.Intent = this.Intent || plus.android.importClass("android.content.Intent");
+							this.Uri = this.Uri || plus.android.importClass("android.net.Uri");
+							this.main = this.main || plus.android.runtimeMainActivity();
+							var intent = new this.Intent(this.Intent.ACTION_VIEW);
+							var uri = this.Uri.parse(url);
+							intent.setDataAndType(uri, "video/*"); 
+							this.main.startActivity(intent);
+						}
+						
 					},
 
 					// 是否为视频
@@ -420,7 +428,7 @@
 					// 修复文件路径
 					fixPath: function(path) {
 
-						if(!/^file:/.test(path)) {
+						if(!/^http/.test(path) && !/^file:/.test(path)) {
 							path = "file://" + path;
 						}
 						return path;

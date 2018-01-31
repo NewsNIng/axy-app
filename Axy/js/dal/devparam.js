@@ -69,13 +69,19 @@
 			type: type,
 		}, callback);
 	};
-
-	//	devparam.wifi = function(devid, type, callback) {
-	//		return ra('post', '/devparam/wifi', {
-	//			devid: devid,
-	//			type: type,
-	//		}, callback);
-	//	};
+	
+	
+	devparam.wifi = function(devid, type, ssid, passw, callback) {
+		return ra('post', '/devparam/wifi', {
+			devid: devid,
+			type: type,
+			ssid: ssid,
+			passw: passw,
+			en: 1, // 使能
+			securitytype: 1, // 0open1pwa2wep
+			ishex: 1, // 1 16进制 0 ascii
+		}, callback);
+	};
 
 	/**
 	 * 更改设备名称
@@ -149,7 +155,7 @@
 			type: type
 		}, callback);
 	};
-	
+
 	/**
 	 * 设置设备告警参数
 	 * @param {Object} devid 设备id
@@ -162,20 +168,20 @@
 		return ra("post", "/devparam/alarm", {
 			devid: devid,
 			type: type,
-			en:en,
+			en: en,
 			recTime: recTime,
 			interval: interval,
 			durationTime: durationTime
 		}, callback);
 	};
-	
+
 	/**
 	 * 多路设备通道
 	 * @param {String} devid
 	 * @param {Number} devtype
 	 * @param {Function} callback
 	 */
-	devparam.chlist = function(devid, type, callback){
+	devparam.chlist = function(devid, type, callback) {
 		return ra("get", "/devparam/chlist", {
 			devid: devid,
 			type: type
