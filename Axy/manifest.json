@@ -7,8 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.8.6",/*应用版本名称*/
-		"code": "20180130"
+		"name": "1.8.8",/*应用版本名称*/
+		"code": "20180131"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -801,7 +801,19 @@
 			"html/smart/devices/dev_my_list.html": {
 				"resources": [
 					"image/smart/devices/bg/903@3xweb.png",
-					"image/smart/devices/bg/wg_100@3xweb.png"
+					"image/smart/devices/bg/wg_100@3xweb.png",
+					"image/smart/camera/share.png",
+					"css/app/module/poppicker.css",
+					"image/smart/devices/bg/104gn@3x.png",
+					"css/lib/mui.poppicker.css",
+					"image/smart/devices/bg/camera@3x.png",
+					"image/smart/camera/history.png",
+					"image/smart/camera/setting.png",
+					"css/app/app.css",
+					"image/smart/camera/controller.png",
+					"css/lib/mui.min.css",
+					"css/app/devices.css",
+					"css/lib/mui.picker.css"
 				],
 				"refer": [
 					"html/smart/add/add_device.html",
@@ -824,7 +836,9 @@
 					"html/smart/devices/dev_AX-903.html",
 					"html/smart/devices/dev_AX-903_setting.html",
 					"html/smart/devices/dev_WG-100_setting.html",
-					"html/smart/devices/dev_41.html"
+					"html/smart/devices/dev_41.html",
+					"html/smart/devices/dev_33.html",
+					"html/smart/devices/dev_40.html"
 				],
 				"priority": 0
 			},
@@ -1112,7 +1126,8 @@
 				"refer": [
 					"html/public/input.html",
 					"html/smart/devices/dev_AX-903_alarmlog.html",
-					"html/smart/devices/dev_select_id.html"
+					"html/smart/devices/dev_select_id.html",
+					"html/smart/devices/dev_AX-903_datasave.html"
 				],
 				"priority": 0
 			},

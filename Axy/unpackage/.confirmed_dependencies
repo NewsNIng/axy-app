@@ -1,411 +1,429 @@
 {
-  "html/person/index.html": {
-    "refer": [
-      "html/smart/devices/dev_my_list.html",
-      "html/person/setting/index.html",
-      "html/person/myself/business.html",
-      "html/person/coupon/index.html",
-      "html/person/wallet/index.html",
-      "html/person/about.html",
-      "html/person/information.html",
-      "html/person/message/index.html",
-      "html/person/collection/my_camera.html",
-      "html/person/devshare/index.html",
-      "html/person/collection/my_attention.html",
-      "html/person/collection/my_collection.html",
-      "html/common/login.html"
-    ],
-    "resources": [
-      "js/common/immersed.js",
-      "js/app/app-page.js",
-      "js/common/imagelazyload.js",
-      "js/lib/md5.min.js",
-      "js/lib/vue.min.js",
-      "js/lib/mui.min.js",
-      "js/common/flexible.js",
-      "js/app/app.js",
-      "js/lib/vue-ni.js",
-      "js/config.js"
-    ]
-  },
-  "html/person/setting/index.html": {
-    "refer": [
-      "html/person/setting/push.html",
-      "html/person/setting/safe.html"
-    ],
-    "resources": []
-  },
-  "index.html": {
-    "refer": [
-      "html/main.html",
-      "html/common/guide.html"
-    ],
-    "resources": [
-      "js/app/app-page.js"
-    ]
-  },
-  "html/main.html": {
-    "refer": [
-      "html/home/index.html",
-      "html/zeus.html",
-      "html/person/index.html",
-      "html/smart/index.html",
-      "html/nearby/index.html",
-      "html/common/login.html",
-      "html/public/updateWindow.html"
-    ],
-    "resources": [
-      "html/home/index.html",
-      "js/app/app-page.js",
-      "js/lib/Rx.min.js",
-      "js/common/android-back.js",
-      "js/lib/vue.min.js",
-      "js/lib/mui.min.js",
-      "js/common/flexible.js",
-      "js/dal/system.js",
-      "js/app/app.js",
-      "js/dal/base.js",
-      "js/common/rsmanager.js",
-      "js/lib/vue-ni.js",
-      "html/nearby/index.html",
-      "html/person/index.html"
-    ]
-  },
-  "html/person/myself/business.html": {
-    "refer": [
-      "html/person/myself/business_details.html",
-      "html/nearby/business/signup.html"
-    ],
-    "resources": []
-  },
-  "html/nearby/index.html": {
-    "resources": [
-      "html/nearby/pages/list.html"
-    ],
-    "refer": [
-      "html/nearby/menu.html",
-      "html/nearby/pages/list.html",
-      "html/nearby/pages/discover.html",
-      "html/nearby/pages/theme.html",
-      "html/public/position.html",
-      "html/search/index.html"
-    ]
-  },
-  "html/nearby/pages/list.html": {
-    "refer": [
-      "html/nearby/business/store_details.html"
-    ],
-    "resources": []
-  },
-  "html/nearby/pages/discover.html": {
-    "refer": [
-      "html/nearby/discover/discover_details.html",
-      "html/person/other.html",
-      "html/nearby/discover/discover_release.html"
-    ],
-    "resources": []
-  },
-  "html/nearby/menu.html": {
-    "refer": [
-      "html/nearby/discover/discover_release.html",
-      "html/nearby/business/signup.html"
-    ],
-    "resources": []
-  },
-  "html/person/myself/business_details.html": {
-    "refer": [
-      "html/nearby/business/signup.html",
-      "html/nearby/business/signup_next.html"
-    ],
-    "resources": []
-  },
-  "html/nearby/business/signup.html": {
-    "refer": [
-      "html/nearby/business/upload_store_time.html",
-      "html/nearby/business/upload_store_pic.html",
-      "html/nearby/business/upload_store_info.html",
-      "html/public/position.html",
-      "html/public/maps.html",
-      "html/public/input.html",
-      "html/public/mailltype.html",
-      "html/nearby/business/signup_success.html"
-    ],
-    "resources": []
-  },
-  "html/nearby/business/upload_store_pic.html": {
-    "resources": [
-      "/storage/emulated/0/Tencent/QQfile_recv/1M6KU%0[TC%60H5FMIE%7DW1IZP.png"
-    ],
-    "refer": []
-  },
-  "html/nearby/business/signup_success.html": {
-    "refer": [
-      "html/nearby/business/store_details.html"
-    ],
-    "resources": []
-  },
-  "html/person/information.html": {
-    "refer": [
-      "html/person/myself/discover.html",
-      "html/public/input.html",
-      "html/person/relation/reset_pwd.html",
-      "html/person/relation/bind.html",
-      "html/person/myself/discover_details.html",
-      "html/public/image_cropper.html"
-    ],
-    "resources": []
-  },
-  "html/person/myself/discover.html": {
-    "refer": [
-      "html/person/myself/discover_details.html"
-    ],
-    "resources": []
-  },
-  "html/smart/devices/dev_my_list.html": {
-    "refer": [
-      "html/smart/devices/dev_129.html",
-      "html/smart/devices/dev_21.html",
-      "html/smart/devices/dev_80.html",
-      "html/smart/devices/dev_16711680.html",
-      "html/smart/devices/dev_22.html",
-      "html/smart/devices/dev_65.html",
-      "html/smart/devices/dev_160.html",
-      "html/smart/devices/dev_161.html",
-      "html/smart/devices/camera_settings.html",
-      "html/smart/devices/dev_48.html",
-      "html/person/devshare/share.html",
-      "html/smart/devices/dev_20.html",
-      "html/smart/devices/dev_WG-100.html",
-      "html/smart/add/add_device.html",
-      "html/smart/devices/dev_35.html",
-      "html/smart/devices/dev_AX-903_setting.html",
-      "html/smart/devices/dev_41.html"
-    ],
-    "resources": [
-      "image/smart/devices/bg/903@3xweb.png",
-      "image/smart/devices/bg/wg_100@3xweb.png"
-    ]
-  },
-  "html/smart/devices/dev_80.html": {
-    "refer": [
-      "html/public/input.html"
-    ],
-    "resources": []
-  },
-  "html/smart/index.html": {
-    "refer": [
-      "html/smart/devices/dev_my_list.html",
-      "html/smart/scenes/index2.html",
-      "html/public/browser.html"
-    ],
-    "resources": []
-  },
-  "html/home/index.html": {
-    "refer": [
-      "html/search/index.html",
-      "html/smart/add/add_device.html",
-      "html/smart/scenes/index.html",
-      "html/nearby/business/store_details.html",
-      "html/public/browser.html",
-      "html/person/devshare/share.html",
-      "html/smart/devices/camera_settings.html",
-      "html/person/message/index.html",
-      "html/smart/devices/dev_my_list.html",
-      "html/common/login.html"
-    ],
-    "resources": [
-      "image/home/dev_camera.png",
-      "image/home/dev_share.png",
-      "image/home/dev_setting.png"
-    ]
-  },
-  "html/search/index.html": {
-    "refer": [
-      "html/nearby/business/store_details.html",
-      "html/nearby/discover/discover_details.html"
-    ],
-    "resources": []
-  },
-  "html/smart/devices/dev_22.html": {
-    "refer": [
-      "html/smart/devices/dev_chart.html"
-    ],
-    "resources": []
-  },
-  "html/smart/add/add_device.html": {
-    "refer": [
-      "html/smart/add/family_menu.html",
-      "html/smart/add/connect_wifi.html",
-      "html/smart/add/scan.html",
-      "html/smart/add/Lan_select_dev_id.html",
-      "html/smart/add/Lan_add_camera.html",
-      "html/smart/add/Lan_connect_dev.html",
-      "html/smart/add/sonic_connect_camera1.html",
-      "html/smart/add/sonic_connect_camera2.html",
-      "html/smart/add/sonic_connect_dev1.html",
-      "html/smart/add/sonic_connect_dev2.html",
-      "html/smart/add/Lan_connect_camera.html",
-      "html/smart/add/add_completed.html"
-    ],
-    "resources": []
-  },
-  "html/nearby/pages/theme.html": {
-    "refer": [
-      "html/public/browser.html",
-      "html/public/share.html"
-    ],
-    "resources": []
-  },
-  "html/nearby/discover/discover_details.html": {
-    "refer": [
-      "html/person/other.html"
-    ],
-    "resources": [
-      "image/nearby/business/6?@3x.png"
-    ]
-  },
-  "html/person/message/index.html": {
-    "refer": [
-      "html/person/message/warning.html",
-      "html/person/message/system.html",
-      "html/person/message/activity.html"
-    ],
-    "resources": []
-  },
-  "html/public/position.html": {
-    "refer": [
-      "html/public/city.html"
-    ],
-    "resources": []
-  },
-  "html/smart/add/scan.html": {
-    "refer": [
-      "html/public/input.html",
-      "html/smart/devices/dev_select_id.html"
-    ],
-    "resources": []
-  },
-  "html/smart/add/Lan_select_dev_id.html": {
-    "refer": [
-      "html/smart/add/Lan_connect_dev.html",
-      "html/smart/add/connect_wifi.html"
-    ]
-  },
-  "html/smart/add/Lan_connect_dev.html": {
-    "refer": [
-      "html/smart/add/Lan_add_camera.html"
-    ]
-  },
-  "html/smart/add/sonic_connect_camera2.html": {
-    "refer": [
-      "html/smart/add/sonic_connect_camera1.html"
-    ]
-  },
-  "html/smart/add/sonic_connect_dev1.html": {
-    "refer": [
-      "html/smart/add/sonic_connect_camera2.html"
-    ]
-  },
-  "html/smart/add/sonic_connect_dev2.html": {
-    "refer": [
-      "html/smart/add/sonic_connect_dev1.html"
-    ]
-  },
-  "html/smart/add/Lan_connect_camera.html": {
-    "refer": [
-      "html/smart/add/sonic_connect_dev2.html"
-    ]
-  },
-  "html/smart/devices/dev_16711680.html": {
-    "refer": [
-      "html/public/input.html"
-    ]
-  },
-  "html/smart/devices/dev_20.html": {
-    "refer": [
-      "html/public/input.html"
-    ]
-  },
-  "html/smart/devices/camera_settings.html": {
-    "refer": [
-      "html/public/input.html",
-      "html/public/alarmParam.html",
-      "html/smart/devices/camera_settings_info.html"
-    ]
-  },
-  "html/smart/devices/dev_WG-100.html": {
-    "refer": [
-      "html/smart/devices/camera_settings_arming.html"
-    ]
-  },
-  "html/zeus.html": {
-    "refer": [
-      "html/common/login.html"
-    ]
-  },
-  "html/person/myself/discover_details.html": {
-    "refer": [
-      "html/person/other.html"
-    ]
-  },
-  "html/person/other.html": {
-    "refer": [
-      "html/nearby/discover/discover_details.html"
-    ]
-  },
-  "html/common/login.html": {
-    "refer": [
-      "html/common/register.html",
-      "html/common/reset.html"
-    ],
-    "resources": [
-      "js/lib/Rx.min.js",
-      "js/common/flexible.js",
-      "js/lib/mui.min.js",
-      "js/app/app-rules.js",
-      "image/common/login_account.png",
-      "js/lib/vue-ni.js",
-      "js/common/immersed.js",
-      "image/common/login_logo.png",
-      "js/dal/user.js",
-      "js/app/app-page.js",
-      "js/lib/vue.min.js",
-      "js/dal/base.js",
-      "js/app/app.js",
-      "image/common/login_pwd.png"
-    ]
-  },
-  "html/common/reset.html": {
-    "refer": [
-      "html/common/login.html"
-    ]
-  },
-  "html/smart/scenes/index2.html": {
-    "refer": [
-      "html/smart/scenes/edit_scenes.html",
-      "html/public/input.html"
-    ]
-  },
-  "html/smart/scenes/edit_scenes.html": {
-    "refer": [
-      "html/smart/scenes/trigger_conditions.html",
-      "html/smart/scenes/perform_actions.html"
-    ]
-  },
-  "html/smart/scenes/perform_actions.html": {
-    "refer": [
-      "html/smart/scenes/select_device.html"
-    ]
-  },
-  "html/smart/devices/dev_35.html": {
-    "refer": [
-      "html/public/input.html"
-    ]
-  },
-  "html/smart/devices/dev_AX-903_setting.html": {
-    "refer": [
-      "html/smart/devices/dev_select_id.html",
-      "html/public/input.html"
-    ]
-  }
+	"html/person/index.html": {
+		"refer": [
+			"html/smart/devices/dev_my_list.html",
+			"html/person/setting/index.html",
+			"html/person/myself/business.html",
+			"html/person/coupon/index.html",
+			"html/person/wallet/index.html",
+			"html/person/about.html",
+			"html/person/information.html",
+			"html/person/message/index.html",
+			"html/person/collection/my_camera.html",
+			"html/person/devshare/index.html",
+			"html/person/collection/my_attention.html",
+			"html/person/collection/my_collection.html",
+			"html/common/login.html"
+		],
+		"resources": [
+			"js/common/immersed.js",
+			"js/app/app-page.js",
+			"js/common/imagelazyload.js",
+			"js/lib/md5.min.js",
+			"js/lib/vue.min.js",
+			"js/lib/mui.min.js",
+			"js/common/flexible.js",
+			"js/app/app.js",
+			"js/lib/vue-ni.js",
+			"js/config.js"
+		]
+	},
+	"html/person/setting/index.html": {
+		"refer": [
+			"html/person/setting/push.html",
+			"html/person/setting/safe.html"
+		],
+		"resources": []
+	},
+	"index.html": {
+		"refer": [
+			"html/main.html",
+			"html/common/guide.html"
+		],
+		"resources": [
+			"js/app/app-page.js"
+		]
+	},
+	"html/main.html": {
+		"refer": [
+			"html/home/index.html",
+			"html/zeus.html",
+			"html/person/index.html",
+			"html/smart/index.html",
+			"html/nearby/index.html",
+			"html/common/login.html",
+			"html/public/updateWindow.html"
+		],
+		"resources": [
+			"html/home/index.html",
+			"js/app/app-page.js",
+			"js/lib/Rx.min.js",
+			"js/common/android-back.js",
+			"js/lib/vue.min.js",
+			"js/lib/mui.min.js",
+			"js/common/flexible.js",
+			"js/dal/system.js",
+			"js/app/app.js",
+			"js/dal/base.js",
+			"js/common/rsmanager.js",
+			"js/lib/vue-ni.js",
+			"html/nearby/index.html",
+			"html/person/index.html"
+		]
+	},
+	"html/person/myself/business.html": {
+		"refer": [
+			"html/person/myself/business_details.html",
+			"html/nearby/business/signup.html"
+		],
+		"resources": []
+	},
+	"html/nearby/index.html": {
+		"resources": [
+			"html/nearby/pages/list.html"
+		],
+		"refer": [
+			"html/nearby/menu.html",
+			"html/nearby/pages/list.html",
+			"html/nearby/pages/discover.html",
+			"html/nearby/pages/theme.html",
+			"html/public/position.html",
+			"html/search/index.html"
+		]
+	},
+	"html/nearby/pages/list.html": {
+		"refer": [
+			"html/nearby/business/store_details.html"
+		],
+		"resources": []
+	},
+	"html/nearby/pages/discover.html": {
+		"refer": [
+			"html/nearby/discover/discover_details.html",
+			"html/person/other.html",
+			"html/nearby/discover/discover_release.html"
+		],
+		"resources": []
+	},
+	"html/nearby/menu.html": {
+		"refer": [
+			"html/nearby/discover/discover_release.html",
+			"html/nearby/business/signup.html"
+		],
+		"resources": []
+	},
+	"html/person/myself/business_details.html": {
+		"refer": [
+			"html/nearby/business/signup.html",
+			"html/nearby/business/signup_next.html"
+		],
+		"resources": []
+	},
+	"html/nearby/business/signup.html": {
+		"refer": [
+			"html/nearby/business/upload_store_time.html",
+			"html/nearby/business/upload_store_pic.html",
+			"html/nearby/business/upload_store_info.html",
+			"html/public/position.html",
+			"html/public/maps.html",
+			"html/public/input.html",
+			"html/public/mailltype.html",
+			"html/nearby/business/signup_success.html"
+		],
+		"resources": []
+	},
+	"html/nearby/business/upload_store_pic.html": {
+		"resources": [
+			"/storage/emulated/0/Tencent/QQfile_recv/1M6KU%0[TC%60H5FMIE%7DW1IZP.png"
+		],
+		"refer": []
+	},
+	"html/nearby/business/signup_success.html": {
+		"refer": [
+			"html/nearby/business/store_details.html"
+		],
+		"resources": []
+	},
+	"html/person/information.html": {
+		"refer": [
+			"html/person/myself/discover.html",
+			"html/public/input.html",
+			"html/person/relation/reset_pwd.html",
+			"html/person/relation/bind.html",
+			"html/person/myself/discover_details.html",
+			"html/public/image_cropper.html"
+		],
+		"resources": []
+	},
+	"html/person/myself/discover.html": {
+		"refer": [
+			"html/person/myself/discover_details.html"
+		],
+		"resources": []
+	},
+	"html/smart/devices/dev_my_list.html": {
+		"refer": [
+			"html/smart/devices/dev_129.html",
+			"html/smart/devices/dev_21.html",
+			"html/smart/devices/dev_80.html",
+			"html/smart/devices/dev_16711680.html",
+			"html/smart/devices/dev_22.html",
+			"html/smart/devices/dev_65.html",
+			"html/smart/devices/dev_160.html",
+			"html/smart/devices/dev_161.html",
+			"html/smart/devices/camera_settings.html",
+			"html/smart/devices/dev_48.html",
+			"html/person/devshare/share.html",
+			"html/smart/devices/dev_20.html",
+			"html/smart/devices/dev_WG-100.html",
+			"html/smart/add/add_device.html",
+			"html/smart/devices/dev_35.html",
+			"html/smart/devices/dev_AX-903_setting.html",
+			"html/smart/devices/dev_41.html",
+			"html/smart/devices/dev_33.html",
+			"html/smart/devices/dev_40.html"
+		],
+		"resources": [
+			"image/smart/devices/bg/903@3xweb.png",
+			"image/smart/devices/bg/wg_100@3xweb.png",
+			"image/smart/camera/share.png",
+			"css/app/module/poppicker.css",
+			"image/smart/devices/bg/104gn@3x.png",
+			"css/lib/mui.poppicker.css",
+			"image/smart/devices/bg/camera@3x.png",
+			"image/smart/camera/history.png",
+			"image/smart/camera/setting.png",
+			"css/app/app.css",
+			"image/smart/camera/controller.png",
+			"css/lib/mui.min.css",
+			"css/app/devices.css",
+			"css/lib/mui.picker.css"
+		]
+	},
+	"html/smart/devices/dev_80.html": {
+		"refer": [
+			"html/public/input.html"
+		],
+		"resources": []
+	},
+	"html/smart/index.html": {
+		"refer": [
+			"html/smart/devices/dev_my_list.html",
+			"html/smart/scenes/index2.html",
+			"html/public/browser.html"
+		],
+		"resources": []
+	},
+	"html/home/index.html": {
+		"refer": [
+			"html/search/index.html",
+			"html/smart/add/add_device.html",
+			"html/smart/scenes/index.html",
+			"html/nearby/business/store_details.html",
+			"html/public/browser.html",
+			"html/person/devshare/share.html",
+			"html/smart/devices/camera_settings.html",
+			"html/person/message/index.html",
+			"html/smart/devices/dev_my_list.html",
+			"html/common/login.html"
+		],
+		"resources": [
+			"image/home/dev_camera.png",
+			"image/home/dev_share.png",
+			"image/home/dev_setting.png"
+		]
+	},
+	"html/search/index.html": {
+		"refer": [
+			"html/nearby/business/store_details.html",
+			"html/nearby/discover/discover_details.html"
+		],
+		"resources": []
+	},
+	"html/smart/devices/dev_22.html": {
+		"refer": [
+			"html/smart/devices/dev_chart.html"
+		],
+		"resources": []
+	},
+	"html/smart/add/add_device.html": {
+		"refer": [
+			"html/smart/add/family_menu.html",
+			"html/smart/add/connect_wifi.html",
+			"html/smart/add/scan.html",
+			"html/smart/add/Lan_select_dev_id.html",
+			"html/smart/add/Lan_add_camera.html",
+			"html/smart/add/Lan_connect_dev.html",
+			"html/smart/add/sonic_connect_camera1.html",
+			"html/smart/add/sonic_connect_camera2.html",
+			"html/smart/add/sonic_connect_dev1.html",
+			"html/smart/add/sonic_connect_dev2.html",
+			"html/smart/add/Lan_connect_camera.html",
+			"html/smart/add/add_completed.html"
+		],
+		"resources": []
+	},
+	"html/nearby/pages/theme.html": {
+		"refer": [
+			"html/public/browser.html",
+			"html/public/share.html"
+		],
+		"resources": []
+	},
+	"html/nearby/discover/discover_details.html": {
+		"refer": [
+			"html/person/other.html"
+		],
+		"resources": [
+			"image/nearby/business/6?@3x.png"
+		]
+	},
+	"html/person/message/index.html": {
+		"refer": [
+			"html/person/message/warning.html",
+			"html/person/message/system.html",
+			"html/person/message/activity.html"
+		],
+		"resources": []
+	},
+	"html/public/position.html": {
+		"refer": [
+			"html/public/city.html"
+		],
+		"resources": []
+	},
+	"html/smart/add/scan.html": {
+		"refer": [
+			"html/public/input.html",
+			"html/smart/devices/dev_select_id.html",
+			"html/smart/add/scan_code.html"
+		],
+		"resources": []
+	},
+	"html/smart/add/Lan_select_dev_id.html": {
+		"refer": [
+			"html/smart/add/Lan_connect_dev.html",
+			"html/smart/add/connect_wifi.html"
+		]
+	},
+	"html/smart/add/Lan_connect_dev.html": {
+		"refer": [
+			"html/smart/add/Lan_add_camera.html"
+		]
+	},
+	"html/smart/add/sonic_connect_camera2.html": {
+		"refer": [
+			"html/smart/add/sonic_connect_camera1.html"
+		]
+	},
+	"html/smart/add/sonic_connect_dev1.html": {
+		"refer": [
+			"html/smart/add/sonic_connect_camera2.html"
+		]
+	},
+	"html/smart/add/sonic_connect_dev2.html": {
+		"refer": [
+			"html/smart/add/sonic_connect_dev1.html"
+		]
+	},
+	"html/smart/add/Lan_connect_camera.html": {
+		"refer": [
+			"html/smart/add/sonic_connect_dev2.html"
+		]
+	},
+	"html/smart/devices/dev_16711680.html": {
+		"refer": [
+			"html/public/input.html"
+		]
+	},
+	"html/smart/devices/dev_20.html": {
+		"refer": [
+			"html/public/input.html"
+		]
+	},
+	"html/smart/devices/camera_settings.html": {
+		"refer": [
+			"html/public/input.html",
+			"html/public/alarmParam.html",
+			"html/smart/devices/camera_settings_info.html",
+			"html/smart/add/connect_wifi.html"
+		]
+	},
+	"html/smart/devices/dev_WG-100.html": {
+		"refer": [
+			"html/smart/devices/camera_settings_arming.html"
+		]
+	},
+	"html/zeus.html": {
+		"refer": [
+			"html/common/login.html"
+		]
+	},
+	"html/person/myself/discover_details.html": {
+		"refer": [
+			"html/person/other.html"
+		]
+	},
+	"html/person/other.html": {
+		"refer": [
+			"html/nearby/discover/discover_details.html"
+		]
+	},
+	"html/common/login.html": {
+		"refer": [
+			"html/common/register.html",
+			"html/common/reset.html"
+		],
+		"resources": [
+			"js/lib/Rx.min.js",
+			"js/common/flexible.js",
+			"js/lib/mui.min.js",
+			"js/app/app-rules.js",
+			"image/common/login_account.png",
+			"js/lib/vue-ni.js",
+			"js/common/immersed.js",
+			"image/common/login_logo.png",
+			"js/dal/user.js",
+			"js/app/app-page.js",
+			"js/lib/vue.min.js",
+			"js/dal/base.js",
+			"js/app/app.js",
+			"image/common/login_pwd.png"
+		]
+	},
+	"html/common/reset.html": {
+		"refer": [
+			"html/common/login.html"
+		]
+	},
+	"html/smart/scenes/index2.html": {
+		"refer": [
+			"html/smart/scenes/edit_scenes.html",
+			"html/public/input.html"
+		]
+	},
+	"html/smart/scenes/edit_scenes.html": {
+		"refer": [
+			"html/smart/scenes/trigger_conditions.html",
+			"html/smart/scenes/perform_actions.html"
+		]
+	},
+	"html/smart/scenes/perform_actions.html": {
+		"refer": [
+			"html/smart/scenes/select_device.html"
+		]
+	},
+	"html/smart/devices/dev_35.html": {
+		"refer": [
+			"html/public/input.html"
+		]
+	},
+	"html/smart/devices/dev_AX-903_setting.html": {
+		"refer": [
+			"html/smart/devices/dev_select_id.html",
+			"html/public/input.html",
+			"html/smart/devices/dev_AX-903_datasave.html",
+			"html/smart/devices/dev_AX-903_alarmlog.html"
+		]
+	}
 }
