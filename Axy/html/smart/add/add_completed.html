@@ -166,9 +166,9 @@
 					this.isFitting = this.$view.isFitting;
 					this.updateDeviceList();
 					this.info = this.$view.info;
-					mui.back = function(){
-						plus.webview.getWebviewById('add/add_device.html')&&plus.webview.getWebviewById('add/add_device.html').close();
-						
+					mui.back = function() {
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+
 						var view = plus.webview.currentWebview();
 						view.close();
 					}.bind(this)
@@ -177,6 +177,7 @@
 					show: function() {
 						if(this.isFitting) {
 							//配件
+							var that = this;
 							this.info.data.acc.devid = this.info.data.dev.devid;
 							this.info.data.accessory = this.info.data.acc;
 							this.info.data.devName = "";
@@ -184,11 +185,17 @@
 							console.log(JSON.stringify(this.info));
 							var page = 'dev_' + this.info.data.acc.type;
 							var pageUrl = '../devices/' + page + '.html';
-							mui.openWindow(pageUrl, page, {
-								extras: {
-									info: this.info.data
-								}
+							plus.io.resolveLocalFileSystemURL(pageUrl, function() {
+								mui.openWindow(pageUrl, page, {
+									extras: {
+										info: that.info.data
+									}
+								});
+							}, function() {
+								// 页面不存在
+								mui.toast('尚未支持该配件');
 							});
+
 						} else {
 							//设备
 							alert(this.devid);
