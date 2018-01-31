@@ -133,8 +133,8 @@
 
 					<li class="mui-table-view-cell app-color-9f9fa0">
 						<span>{{k.name}}</span>
-						<span>{{w['state' + k.index] + k.company}}</span>
-						<span class="app-color-ff3b30">{{a['state' + k.index] + k.company}}</span>
+						<span>{{w['state' + k.index] / k.divisor + k.company}}</span> 
+						<span class="app-color-ff3b30">{{a['state' + k.index] / k.divisor + k.company}}</span>
 					</li>
 				</template>
 				<li class="mui-table-view-cell" style="text-align: center;">
@@ -165,7 +165,7 @@
 								{{k.name}}
 							</div>
 							<div class="app-font-size-52">
-								{{o['state' + k.index] + k.company}}
+								{{o['state' + k.index] / k.divisor + k.company}}
 							</div>
 						</div>
 					</template>
@@ -209,41 +209,49 @@
 			var _stateList = [{
 					name: "剩余电流",
 					index: 9,
+					divisor: 1,
 					company: 'mA'
 				},
 				{
 					name: "环境温度",
 					index: 5,
+					divisor: 10,
 					company: '℃',
 				},
 				{
 					name: "A相电流",
 					index: 6,
+					divisor: 1,
 					company: 'A'
 				},
 				{
 					name: "A相温度",
 					index: 2,
+					divisor: 10,
 					company: '℃',
 				},
 				{
 					name: "B相电流",
 					index: 7,
+					divisor: 1,
 					company: 'A'
 				},
 				{
 					name: "B相温度",
 					index: 3,
+					divisor: 10,
 					company: '℃',
 				},
 				{
 					name: "C相电流",
 					index: 8,
+					divisor: 1,
 					company: 'A'
 				},
 				{
 					name: "C相温度",
 					index: 4,
+					divisor: 10,
 					company: '℃',
 				},
 

@@ -178,7 +178,9 @@
 			"html/smart/devices/dev_WG-100.html",
 			"html/smart/add/add_device.html",
 			"html/smart/devices/dev_35.html",
-			"html/smart/devices/dev_AX-903_setting.html"
+			"html/smart/devices/dev_AX-903_setting.html",
+			"html/smart/devices/dev_40.html",
+			"html/smart/devices/dev_AX-903.html"
 		],
 		"resources": [
 			"image/smart/devices/bg/903@3xweb.png",
@@ -209,7 +211,8 @@
 			"html/person/devshare/share.html",
 			"html/smart/devices/camera_settings.html",
 			"html/person/message/index.html",
-			"html/smart/devices/dev_my_list.html"
+			"html/smart/devices/dev_my_list.html",
+			"html/smart/devices/dev_AX-903.html"
 		],
 		"resources": [
 			"image/home/dev_camera.png",
@@ -406,7 +409,9 @@
 		"refer": [
 			"html/smart/devices/dev_select_id.html",
 			"html/public/input.html",
-			"html/smart/devices/dev_AX-903_bind.html"
+			"html/smart/devices/dev_AX-903_bind.html",
+			"html/smart/devices/dev_AX-903_datasave.html",
+			"html/smart/devices/dev_AX-903_alarmlog.html"
 		]
 	},
 	"html/smart/add/add_completed.html": {
@@ -435,6 +440,16 @@
 			"js/dal/base.js",
 			"js/lib/vue-ni.js",
 			"js/config.js"
+		]
+	},
+	"html/smart/devices/dev_40.html": {
+		"refer": [
+			"html/public/input.html"
+		]
+	},
+	"html/smart/devices/dev_AX-903.html": {
+		"refer": [
+			"html/smart/devices/dev_AX-903_setting.html"
 		]
 	}
 }

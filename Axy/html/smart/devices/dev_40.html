@@ -248,7 +248,10 @@
 						this.isPwdProtection = event.detail.isActive;
 					}.bind(this));
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					// 获取传值数据
+					this.devInfo = this.$view.info; 
+				},
 				methods: {
 					// 切换开关
 					toggleSwitch: function() {
