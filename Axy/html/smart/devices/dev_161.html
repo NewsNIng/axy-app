@@ -273,7 +273,6 @@
 					this.getCoState();
 				},
 				methods: {
-
 					// 删除配件
 					onDelDevice: function() {
 						app.page.setResult({
@@ -337,7 +336,7 @@
 					},
 					// 获取一氧化碳状态
 					getCoState: function() {
-						dal.devaccessory.codectector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devId, this.devInfo.devType, function(err, data) {
+						dal.devaccessory.codectector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {
 							if(err) {
 								return mui.toast(err.message);
 							}

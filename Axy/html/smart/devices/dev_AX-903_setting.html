@@ -54,6 +54,10 @@
 					</a>
 				</li>
 			</ul>
+			<footer class="app-font-size-28">
+				<div @tap="onDel()" class="app-color-main-dark">删除设备</div>
+				<div @tap="onReboot()">重启设备</div>
+			</footer>
 		</div>
 
 		<!--沉浸式动态处理-->
@@ -67,19 +71,20 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
-			
+
 			var _B = new ni.Broadcast();
 
 			new Vue({
@@ -97,31 +102,33 @@
 							"signalfwd": "",
 							"signalfwdport": 0,
 							"online": 0,
-							"binding" : "",
+							"binding": "",
+							
 						},
 					};
 				},
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
+					console.log(JSON.stringify(this.devInfo));
 				},
 				methods: {
-					onArarmlogTap: function(){
+					onArarmlogTap: function() {
 						mui.openWindow("dev_AX-903_alarmlog.html", "dev_AX-903_alarmlog", {
 							extras: {
-								_id: this.devInfo.id	
+								_id: this.devInfo.id
 							}
 						});
 					},
-					onDataSaveTap: function(){
+					onDataSaveTap: function() {
 						mui.openWindow("dev_AX-903_datasave.html", "dev_AX-903_datasave", {
 							extras: {
-								_id: this.devInfo.id	 
+								_id: this.devInfo.id
 							}
 						});
 					},
-					
+
 					// 设备名称点击
-					onNameTap: function(){
+					onNameTap: function() {
 						var that = this;
 						app.page.getInput(function(data) {
 							dal.devparam.devname(that.devInfo.devid, that.devInfo.type, data.content, function(err, rs) {
@@ -142,44 +149,109 @@
 							tips: that._fixName(that.devInfo.location),
 						});
 					},
-					
+
 					// 设备绑定点击
-					onBindTap: function(){
+					onBindTap: function() {
 						var that = this;
-						app.page.openForResultBy('dev_select_id.html', 'dev_select_id', function(data){
-							plus.nativeUI.showWaiting();
-							dal.device.electric.binding(that.devInfo.devid, data.devid, function(err, rs){
-								plus.nativeUI.closeWaiting();
-								if(err){
-									return mui.toast(err.message);
+//						alert(this.devInfo.binding);
+						if(this.devInfo.binding) {
+
+							mui.openWindow('dev_AX-903_bind.html', 'dev_AX-903_bind', {
+								extras: {
+									devInfo: this.devInfo,
 								}
-								mui.toast("修改绑定成功！");
-								that.devInfo.binding = data.devid;
-								// 通知上层的上层
-								_B.emit("update", {
-									info: that.devInfo
-								}, {
-									views: ['dev_my_list']
-								});
 							});
-							
-						}, {
-							// 过滤设备 电管家 和 智能网管
-							filter: [
-								"WG-100",
-								"AX-903",
-								"AX-904",
-								"VH-104MG",
-								"VH-104DG",
-								"VH-104GN",
-								"none"
-							]
+						} else {
+							app.page.openForResultBy('dev_select_id.html', 'dev_select_id', function(data) {
+								plus.nativeUI.showWaiting();
+								dal.device.electric.binding(that.devInfo.devid, data.devid, function(err, rs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast(err.message);
+									}
+									mui.toast("修改绑定成功！");
+									that.devInfo.binding = data.devid;
+									// 通知上层的上层
+									_B.emit("update", {
+										info: that.devInfo
+									}, {
+										views: ['dev_my_list']
+									});
+								});
+
+							}, {
+								// 过滤设备 电管家 和 智能网管
+								filter: [
+									"WG-100",
+									"AX-903",
+									"AX-904",
+									"VH-104MG",
+									"VH-104DG",
+									"VH-104GN",
+									"none"
+								]
+							});
+						}
+
+					},
+
+					_fixName: function(s) {
+						return app.dev.fixName(s);
+					},
+					
+					// 重启设备
+					onReboot: function() {
+						var dev = this.devInfo;
+						mui.confirm("确定要重启设备吗？", "", ["重启", "取消"], function(e) {
+							if(e.index === 0) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									if(err) {
+										return mui.toast('重启设备失败');
+									}
+									return mui.toast('重启设备成功');
+								});
+							}
 						});
 					},
 					
-					_fixName: function(s){
-						return app.dev.fixName(s);
-					}
+					// 删除设备
+					onDel: function() {
+						plus.nativeUI.showWaiting();
+
+						var dev = this.devInfo;
+						var methodName = 'delete';
+						var that = this;
+						if(dev.relation === 2) {
+							methodName += 'share';
+						}
+						mui.confirm("确定要删除设备吗？", "", ["删除", "取消"], function(e) {
+							if(e.index === 0) {
+
+								dal.device[methodName](dev.devid, function(err, rs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast('删除设备失败');
+									}
+									mui.toast('删除成功，设备将会重启');
+									dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+										if(err) {
+											mui.toast('重启失败，请手动重启设备');	
+										}else{
+											mui.toast("操作成功！设备状态更新会有一定的延迟")
+										}
+										_B.emit("delete", {}, {
+											views: [that.$view.opener()]
+										});
+										that.$view.close();
+										
+									});
+									
+								});
+							} else {
+								plus.nativeUI.closeWaiting();
+							}
+						});
+					},
 				}
 			});
 		</script>
