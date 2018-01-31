@@ -57,7 +57,7 @@
 				color: white;
 				padding-bottom: 0.133333rem;
 			}
-		
+			
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
@@ -167,7 +167,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../../js/dal/devaccessory.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
@@ -248,6 +248,7 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
+							that._updataUi();
 						})
 					}.bind(this));
 
@@ -258,22 +259,21 @@
 					this.pick.setData(pick_data[1]);
 				},
 				plusReady: function() {
+					plus.navigator.setStatusBarStyle('dark');
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+
+						var view = plus.webview.currentWebview();
+						plus.navigator.setStatusBarStyle('light');
+						view.close();
+					}.bind(this);
 					this.getCoState();
 				},
 				methods: {
 
-					// 设备名称
-					onNameTap: function(name) {
-						var that = this;
-						app.page.getInput(function(data) {
-							that.dev.basicInfo.devName = data.content;
-						}, {
-							title: "设备名称",
-							tips: that.dev.basicInfo.devName,
-						});
-					},
 					// 删除配件
 					onDelDevice: function() {
 						app.page.setResult({
@@ -298,12 +298,15 @@
 
 						var fn = function(s) {
 							// 发起请求
+							plus.nativeUI.showWaiting();
 							dal.devaccessory.delay(that.devInfo.accessory, that.devInfo.devType, s, function(err, data) {
+								plus.nativeUI.closeWaiting();
 								if(err) {
 									return mui.toast(err.message);
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.delay = s;
+								that._updataUi();
 							});
 						};
 
@@ -325,10 +328,7 @@
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.name = data1.content;
-								app.page.setResult({
-									action: "update",
-									info: that.devInfo
-								});
+								that._updataUi();
 							});
 						}, {
 							title: "设备名称",
@@ -338,12 +338,21 @@
 					// 获取一氧化碳状态
 					getCoState: function() {
 						dal.devaccessory.codectector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devId, this.devInfo.devType, function(err, data) {
-							if(err){
+							if(err) {
 								return mui.toast(err.message);
 							}
 							console.log(JSON.stringify(data));
 						});
-					}
+					},
+					// 更新缓存数据
+					_updataUi: function() {
+						that = this;
+						app.page.setResult({
+							action: "update",
+							info: that.devInfo
+						});
+					},
+
 				}
 			});
 		</script>

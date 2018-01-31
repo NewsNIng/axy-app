@@ -149,12 +149,16 @@
 							// 个人中心登录拦截
 							if(index === 3) {
 								app.user.get(function(u) {
-									u && ob.next();
+									u && setTimeout(function(){
+										ob.next();	
+									}, 200)
+									
 								})
 							} else {
 								ob.next();
 							}
-						}).subscribe(function() {
+						})
+						.subscribe(function() {
 							// 更新index下标
 							this.index = index;
 							// 控制webview切换

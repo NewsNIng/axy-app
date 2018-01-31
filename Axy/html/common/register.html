@@ -295,7 +295,7 @@
 						codeTimer: 60,
 						codeT: null,
 						codeNumber: "", // 验证码
-						
+
 						isRepeat: false, // 是否发送过验证码
 					};
 				},
@@ -303,9 +303,9 @@
 				methods: {
 
 					clearCodeTimer: function() {
-						if(this.codeT){
+						if(this.codeT) {
 							window.clearTimeout(this.codeT);
-							this.codeT = null;	
+							this.codeT = null;
 						}
 						this.codeState = false;
 						this.codeTimer = 60;
@@ -315,7 +315,7 @@
 						if(this.codeT) {
 							return
 						}
-						
+
 						var that = this;
 
 						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确");
@@ -324,19 +324,37 @@
 						}
 
 						new Promise(function(resolve, reject) {
+							plus.nativeUI.showWaiting();
 							// 是否可以注册
 							dal.user.checkuser(that.username, function(err, data) {
+								plus.nativeUI.closeWaiting();
 								if(err) {
 									that.clearCodeTimer();
 									return mui.toast(err.message);
 								}
 								resolve();
-								
+
 							});
-						}).then(function(){
+						}).then(function() {
+							(function t(c) {
+								c.codeT = setTimeout(function() {
+									if(c.codeTimer <= 0) {
+										window.clearTimeout(c.codeT);
+										c.codeT = null;
+										c.codeState = false;
+										c.isRepeat = true;
+										c.codeTimer = 60;
+										return;
+									}
+									c.codeTimer--;
+									t(c);
+								}, 1000);
+							}(that));
+							that.codeState = true;
+
 							// 发送验证码
 							dal.user.getCode(that.username, function(err, data) {
-								if(err){
+								if(err) {
 									that.clearCodeTimer();
 									return mui.toast(err.message);
 								}
@@ -345,21 +363,6 @@
 							});
 						});
 
-						(function t(c) {
-							c.codeT = setTimeout(function() {
-								if(c.codeTimer <= 0) {
-									window.clearTimeout(this.codeT);
-									c.codeT = null;
-									c.codeState = false;
-									c.isRepeat = true;
-									c.codeTimer = 60;
-									return;
-								}
-								c.codeTimer--;
-								t(c);
-							}, 1000);
-						}(this));
-						this.codeState = true;
 					},
 					onLoginTap: function(e) {
 						// 如果正在注册，就直接返回

@@ -377,7 +377,7 @@
 											</div>
 											<div class="app-color-9f9fa0 tips mui-ellipsis">
 												<span v-if="o.distance">
-													距离您的位置 {{o.distance}}m
+													距离您的位置  {{_m2km(o.distance)}}
 												</span>
 												<span v-else>
 													{{o.likecount}}人表示很喜欢
@@ -692,11 +692,12 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
+							
 							var article = data.article || [];
 							var store = data.store || [];
 							if(this.n > 1) {
-								article.length && this.articleList.push.call(this.articleList, article);
-								store.length && this.storeList.push.call(this.storeList, store);
+								article.length && this.articleList.push.apply(this.articleList, article);
+								store.length && this.storeList.push.apply(this.storeList, store);
 							} else {
 								this.articleList = article;
 								this.storeList = store;
@@ -727,6 +728,12 @@
 					},
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
+					},
+					_m2km: function(m) {
+						if(m < 1000){
+							return m + ' m';
+						}
+						return (m / 1000).toFixed(1) + " km";
 					},
 				}
 			});

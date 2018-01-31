@@ -10,8 +10,9 @@
 	};
 
 	// 设备推送同步
-	push.synchronous = function(target, sendmode, callback) {
+	push.synchronous = function(account, target, sendmode, callback) {
 		return ra("post", "/push/synchronous", {
+			account: account,
 			target: target,
 			sendmode: sendmode,
 		}, callback);

@@ -181,7 +181,7 @@
 
 								</div>
 								<div class="shop_info flex1">
-									<div class="distance app-font-size-28">{{_m2km(o.distance)}} km</div>
+									<div class="distance app-font-size-28">{{_m2km(o.distance)}}</div>
 									<div class="name app-font-size-28 mui-ellipsis">{{o.name}}</div>
 									<div class="time app-font-size-28">
 										<img src="../../../image/nearby/time.png" />
@@ -439,7 +439,10 @@
 						return(n < 10 ? '0' : '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00' : '30');
 					},
 					_m2km: function(m) {
-						return(m / 1000).toFixed(1);
+						if(m < 1000){
+							return m + ' m';
+						}
+						return (m / 1000).toFixed(1) + " km";
 					},
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;

@@ -139,6 +139,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
@@ -151,6 +152,8 @@
 
 		<script type="text/javascript" src="../../../js/lib/better-scroll.min.js"></script>
 
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 
@@ -161,18 +164,19 @@
 				data: function() {
 					return {
 						devActive: 0,
-						devs_: [
-						
-						],
+						devs_: [],
 						wifiname: "",
 						wifipwd: "",
 						noWifi: true,
-						
+
 						// 过滤显示某些主机设备 存类型名称
 						filter: [
 							"VS-360",
 							"AX-904",
-							"AX-903"
+							"AX-903",
+							"VH-104MG",
+							"VH-104DG",
+							"VH-104GN"
 						]
 					};
 				},
@@ -217,7 +221,7 @@
 				},
 				plusReady: function() {
 					//this.filter = this.$view.filter || [];
-					
+
 					this.result = !!this.$view.result;
 					this.getLanDevHostList();
 					this.noWifi = this.$view.ex.noWifi;
@@ -245,10 +249,25 @@
 					},
 					// 内网主机列表
 					getLanDevHostList: function() {
-						var rs = P.GetLanDevHostList();
-						if(rs) {
-							this.devs_ = JSON.parse(rs).devlist || [];
-						}
+						var that = this;
+
+						// 5s 定时器
+						var $timer = Rx.Observable.interval(5e3);
+						var $start = Rx.Observable.create(function(_) {
+							_.next()
+						});
+
+						$start.merge($timer)
+							.map(P.GetLanDevHostList)
+							.filter(function(rs) {
+								return !!rs;
+							})
+							.subscribe(function(rs) {
+								rs = JSON.parse(rs).devlist;
+								if(rs && rs.length) {
+									that.devs_ = rs;
+								}
+							});
 
 					},
 					// 配置WIFI

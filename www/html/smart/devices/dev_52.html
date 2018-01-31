@@ -21,24 +21,23 @@
 				background-color: #F4F8FB;
 			}
 			
-			.img-wrap{
+			.img-wrap {
 				height: 0;
 				padding-bottom: 7.333333rem;
 				/*background-image: url(../../../image/smart/devices/curtain/btn_Acoustoopticalarm@3x.png);*/
 				background-repeat: no-repeat;
 				background-size: 50%;
 				background-position: bottom;
-				
 			}
 			
-			.menu-warp{
+			.menu-warp {
 				display: flex;
 				display: -webkit-flex;
 				padding: 1.5rem 1.433333rem 0.7rem 1.433333rem;
 				justify-content: space-between;
 			}
 			
-			.menu-warp>div{
+			.menu-warp>div {
 				/*border: 1px solid #ccc;*/
 				flex: 1;
 				height: 100px;
@@ -46,12 +45,10 @@
 				text-align: center;
 			}
 			
-			.menu-warp>div>img{
-				
+			.menu-warp>div>img {
 				width: 50%;
 			}
 			
-		
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
@@ -71,16 +68,16 @@
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_Openthecurtains@3x.png" @tap="onOpenTap()"/>
+						<img src="../../../image/smart/devices/curtain/btn_Openthecurtains@3x.png" @tap="onOpenTap()" />
 						<div>打开窗帘</div>
 					</div>
-					
+
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_suspend@3x.png" @tap="onStartTap()"/>
+						<img src="../../../image/smart/devices/curtain/btn_suspend@3x.png" @tap="onStartTap()" />
 						<div>暂停.开始.关闭</div>
 					</div>
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_Closecurtain@3x.png" @tap="onCloseTap()"/>
+						<img src="../../../image/smart/devices/curtain/btn_Closecurtain@3x.png" @tap="onCloseTap()" />
 						<div>关闭窗帘</div>
 					</div>
 				</div>
@@ -138,18 +135,17 @@
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-		
-		
-		<script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
-		
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
+
 		<script type="text/javascript">
-			mui.init({
-				beforeback:function(){
-					plus.navigator.setStatusBarStyle('light');
-				}
-			});
-			
+//			mui.init({
+//				beforeback: function() {
+//					plus.navigator.setStatusBarStyle('light');
+//				}
+//			});
+
 			var _stateImgs = [];
 
 			new Vue({
@@ -171,8 +167,8 @@
 							"Off Line",
 							"Lost AC",
 							"24H"
-						], 
-						
+						],
+
 						// 设备信息
 						devInfo: {
 							"accessory": {
@@ -196,13 +192,13 @@
 							"devType": 4166,
 							"statusCode": 0
 						},
-						
+
 					};
 				},
-				
+
 				computed: {
-					stateImg: function(){
-						return 
+					stateImg: function() {
+						return
 					}
 				},
 				mounted: function() {
@@ -224,19 +220,27 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
+							that._updataUi();
 						})
 					}.bind(this));
-					
-					
+
 				},
 				plusReady: function() {
 					plus.navigator.setStatusBarStyle('dark');
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+
+						var view = plus.webview.currentWebview();
+						plus.navigator.setStatusBarStyle('light');
+						view.close();
+					}.bind(this);
 				},
 				methods: {
 					// 切换开关
-					toggleSwitch: function(){
+					toggleSwitch: function() {
 						this.state = !this.state;
 					},
 					// 删除配件
@@ -255,26 +259,16 @@
 						// TODO 可能需要重新选择主机
 						console.log("editdevice");
 					},
-					// 设备名称
-					onNameTap: function(name) {
-						var that = this;
-						app.page.getInput(function(data) {
-							that.dev.basicInfo.devName = data.content;
-						}, {
-							title: "设备名称",
-							tips: that.dev.basicInfo.devName,
-						});
-					},
 					// 打开窗帘
-					onOpenTap: function(){
+					onOpenTap: function() {
 						mui.toast("已打开！");
 					},
 					// 暂停 开始 关闭
-					onStartTap: function(){
-						
+					onStartTap: function() {
+
 					},
 					// 关闭窗帘
-					onCloseTap: function(){
+					onCloseTap: function() {
 						mui.toast("已关闭！");
 					},
 					//修改名称
@@ -289,14 +283,19 @@
 								}
 								mui.toast("修改成功！");
 								that.devInfo.accessory.name = data1.content;
-								app.page.setResult({
-									action: "update",
-									info: that.devInfo
-								});
+								that._updataUi();
 							});
 						}, {
 							title: "设备名称",
 							content: that.devInfo.accessory.name,
+						});
+					},
+					// 更新缓存数据
+					_updataUi: function() {
+						that = this;
+						app.page.setResult({
+							action: "update",
+							info: that.devInfo
 						});
 					},
 				}

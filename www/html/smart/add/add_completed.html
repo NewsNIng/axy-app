@@ -166,6 +166,12 @@
 					this.isFitting = this.$view.isFitting;
 					this.updateDeviceList();
 					this.info = this.$view.info;
+					mui.back = function(){
+						plus.webview.getWebviewById('add/add_device.html')&&plus.webview.getWebviewById('add/add_device.html').close();
+						
+						var view = plus.webview.currentWebview();
+						view.close();
+					}.bind(this)
 				},
 				methods: {
 					show: function() {

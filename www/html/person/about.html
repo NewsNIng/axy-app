@@ -107,17 +107,28 @@
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				gestureConfig: {
+					longtap: true
+				}
+			});
 
 			mui.plusReady(function() {
 				var version = document.getElementById("version");
-				// 获取设备号
+				// 获取前端版本号
 				app.device.getVersion(function(data) {
 					version.innerText = "当前版本：V " + data;
 				});
+				
 				// 点击检查更新
 				version.addEventListener('tap', function() {
 					checkUpdate();
+				});
+				
+				// 长按发现彩蛋
+				version.addEventListener('longtap', function() {
+					var nativeVersion = plus.runtime.version;
+					mui.toast(nativeVersion);
 				});
 
 			});
