@@ -278,8 +278,6 @@
 			devtype: devtype
 		}, callback);
 	}
-	
-	
 
 	/**
 	 * 配件绑定到设备
@@ -539,31 +537,29 @@
 		accessory.devType = devType;
 		return ra("post", "/devaccessory/enable", accessory, callback);
 	}
-	
+
 	/**
 	 * 删除配件
 	 * @param {Object} accessory
 	 * @param {Object} callback
 	 */
 	devaccessory.devDelete = function(accessory, devType, callback) {
-		
+
 		accessory.devtype = devType;
 		return ra("post", "/devaccessory/delete", accessory, callback);
 	}
-	
-	
+
 	/**
 	 * 通过配件ID获取配件初始化信息
 	 * @param {Object} id 配件id
 	 * @param {Object} callback
 	 */
-	devaccessory.initbyid = function(id, callback){
+	devaccessory.initbyid = function(id, callback) {
 		return ra("get", "/devaccessory/initbyid", {
 			id: id
 		}, callback);
 	}
-	
-	
+
 	/**
 	 * 甲醛趋势图
 	 * @param {Object} devid 设备ID
@@ -571,27 +567,27 @@
 	 * @param {Object} type 1天，2月,3年
 	 * @param {Object} callback
 	 */
-	devaccessory.formaldehydeChart = function(devid, areaid, type, callback){
+	devaccessory.formaldehydeChart = function(devid, areaid, type, callback) {
 		return ra('get', "/alarm/formaldehyde/list", {
 			devid: devid,
 			areaid: areaid,
 			type: type
 		}, callback);
 	}
-	
+
 	/**
 	 * 根据配件及设备id获取配件详情
 	 * @param {Object} devid 设备id
 	 * @param {Object} aid 配件id
 	 * @param {Object} callback
 	 */
-	devaccessory.getinfo = function(devid,aid,callback){
+	devaccessory.getinfo = function(devid, aid, callback) {
 		return ra('get', "/devaccessory/getinfo", {
-			devid:devid,
-			aid:aid
+			devid: devid,
+			aid: aid
 		}, callback);
 	}
-	
+
 	/**
 	 * 获取V2门锁状态
 	 * @param {Object} devid
@@ -600,7 +596,7 @@
 	 * @param {Object} type
 	 * @param {Object} callback
 	 */
-	devaccessory.getLockv2 = function(devid, devtype, id, type, callback){
+	devaccessory.getLockv2 = function(devid, devtype, id, type, callback) {
 		return ra("get", "/devaccessory/lockv2", {
 			devid: devid,
 			devtype: devtype,
@@ -608,7 +604,7 @@
 			type: type
 		}, callback);
 	}
-	
+
 	/**
 	 * 设置V2门锁状态
 	 * @param {Object} devid
@@ -617,7 +613,7 @@
 	 * @param {Object} type
 	 * @param {Object} callback
 	 */
-	devaccessory.setLockv2 = function(devid, devtype, id, type, open, password,  callback){
+	devaccessory.setLockv2 = function(devid, devtype, id, type, open, password, callback) {
 		return ra("post", "/devaccessory/lockv2", {
 			devid: devid,
 			devtype: devtype,
@@ -627,7 +623,6 @@
 			password
 		}, callback);
 	}
-	
 
 	_.devaccessory = devaccessory;
 

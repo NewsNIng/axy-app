@@ -119,11 +119,11 @@
 						<div @tap.slef="closeMask()" class="mask-close-btn"></div>
 					</div>
 					<div class="mask-card-body app-font-size-28 app-color-333333">
-						1. 请确认智能门锁已装入电池，并开机完成；
+						1.请确认智能门锁已装入电池，并初始化完成（语音播报完毕）；
 						<div style="height: 10px;"></div>
-						2.轻触摸键盘或指纹，划开门锁背面的电池盖，轻按一下“-”键，请确认听到滴的一声；
+						2.按住门锁板背面的“+”键5秒以上（直到电池背后的红灯闪烁一次）；
 						<div style="height: 10px;"></div>
-						3.听到“滴”声后，智能门锁将自动发送入网请求，请耐心等待结果（大约10~30s）。
+						3.松开按键后，智能门锁将自动发送入网请求，请耐心等待结果（大约需要10~30s）。
 					</div>
 					<div class="mask-card-footer">
 
@@ -260,7 +260,7 @@
 								"ptzset": 0,
 								"xmlDescrition": "",
 								"enableDelete": true,
-								"enable": true
+								"enable": false
 							},
 							"devName": "",
 							"devType": 0,
@@ -322,7 +322,7 @@
 						});
 
 					},
-					// 获取v2门锁数据
+					// 获取门锁数据
 					getLockState: function() {
 						var devid = this.devInfo.accessory.devid,
 							devtype = this.devInfo.devType,
@@ -338,7 +338,7 @@
 						});
 					},
 
-					// 获取v2门锁数据
+					// 设置门锁数据
 					setLockState: function(open, password) {
 						var devid = this.devInfo.accessory.devid,
 							devtype = this.devInfo.devType,
@@ -358,27 +358,16 @@
 					onNetWorkApply: function(apply) {
 						var that = this;
 
-						// 获取最新门锁状态
-						var $getLockState = function() {
-							return Rx.Observable.fromPromise(that.getLockState());
+						// 获取最新门锁基础信息
+						var $getBaseState = function() {
+							return Rx.Observable.fromPromise(that.getBaseState());
 						};
 
 						// 结果验证流
-						var $lockDataVaild = function(lockData) {
+						var $baseDataVaild = function(baseData) {
 							return Rx.Observable.create(function(ob) {
-								console.log(JSON.stringify(lockData));
-								if(lockData.networkApplyOKValid) {
-									if(lockData.networkApplyOK) {
-										ob.next("入网成功");
-									} else {
-										ob.error("申请入网失败");
-									}
-								} else if(lockData.networkQuitOKValid) {
-									if(lockData.networkQuitOK) {
-										ob.next("退网成功");
-									} else {
-										ob.error("申请退网失败");
-									}
+								if(baseData.enable){
+									ob.next("入网成功");
 								}
 							});
 						}; 
@@ -392,9 +381,9 @@
 						// 开启轮询
 						this.applyThread = Rx.Observable.interval(3e3)
 							// 获取状态
-							.mergeMap($getLockState)
+							.mergeMap($getBaseState)
 							// 验证结果
-							.mergeMap($lockDataVaild)
+							.mergeMap($baseDataVaild)
 							// 取第一次正确结果
 							.first()
 							// 设置超时时间
@@ -439,6 +428,7 @@
 							return Rx.Observable.fromPromise(that.setLockState(isOpen, pwd));
 						};
 						
+
 						// 30s超时
 						var $getLockStateTimerOut = Rx.Observable.timer(30e3);
 
@@ -461,7 +451,7 @@
 							});
 						};
 
-
+						
 						// 获取设置的密码
 						var $getPwd = Rx.Observable.create(function(ob) {
 							var pwd = LOCKPWD.data;

@@ -827,7 +827,8 @@
 					"html/smart/devices/dev_AX-903_setting.html",
 					"html/smart/devices/dev_WG-100_setting.html",
 					"html/smart/devices/dev_41.html",
-					"html/smart/devices/dev_40.html"
+					"html/smart/devices/dev_40.html",
+					"html/smart/devices/dev_39.html"
 				],
 				"priority": 0
 			},
@@ -1168,7 +1169,15 @@
 				"resources": [],
 				"refer": [
 					"html/public/input.html",
-					"html/smart/devices/dev_40_set_pwd.html"
+					"html/smart/devices/dev_40_set_pwd.html",
+					"html/smart/devices/dev_40_log.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_39.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_40_log.html"
 				],
 				"priority": 0
 			}

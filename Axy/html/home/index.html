@@ -360,7 +360,7 @@
 								{{dev.devimg}}	
 							</div>-->
 
-							<div class="img imgdiv" :class="_getDevName(dev.type)" v-devbg :class="_getDevName(o.type)" :data-devid="dev.devid" v-devbg  @tap="openCamListWindow($event)">
+							<div class="img imgdiv" :class="_getDevName(dev.type)" v-devbg  :data-devid="dev.devid"   @tap="openCamListWindow($event)">
 
 							</div>
 							<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
@@ -497,8 +497,14 @@
 					getScrrenHotBgFn(devid).then(function(path){
 						el.style.backgroundImage = "url(" + path + ")";
 					})
-				}
-			})
+				},
+				updated: function(el) {
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid).then(function(path){
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				},
+			});
 
 			
 			

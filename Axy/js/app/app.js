@@ -223,16 +223,14 @@ function addMethod(obj, name, fn) {
 	}
 
 	ios.getScreenshotByDevId = function(devid) {
-
 		return new Promise(function(resolve, reject) {
 			app.plusReady(function() {
 				var s = ios.getSafeBoxPath();
-				s = s + "Library/Caches/device" + devid + "/thumbnail.png";
-
+				s = s + "Library/Caches/device_" + devid + "/thumbnail.png";
 				plus.io.resolveLocalFileSystemURL(s, function() {
 					s = s + "?t" + new Date().getTime();
 					resolve(s);
-				}, reject);
+				});
 			})
 		});
 	}
@@ -250,11 +248,9 @@ function addMethod(obj, name, fn) {
 				plus.io.resolveLocalFileSystemURL(s, function() {
 					s = s + "?t" + new Date().getTime();
 					resolve(s);
-				}, reject);
+				});
 			})
 		});
-
-		return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
 	}
 
 	app.android = android;

@@ -326,7 +326,13 @@
 					getScrrenHotBgFn(devid).then(function(path){
 						el.style.backgroundImage = "url(" + path + ")";
 					})
-				}
+				},
+				updated: function(el) {
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid).then(function(path){
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				},
 			})
 
 			mui.init();
