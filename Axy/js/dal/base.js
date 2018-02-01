@@ -15,7 +15,7 @@ function requestAdapter(type, url, params, callback) {
 	if(BASE_URL) {
 		delete params.BASE_URL;
 	} else {
-		BASE_URL = dal.BASE_URL_DEV;
+		BASE_URL = dal.BASE_URL;
 	}
 	url = BASE_URL + url;
 
