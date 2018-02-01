@@ -76,6 +76,12 @@
 				devid: devid,
 				binding: binding
 			}, callback);
+		},
+		// 绑定摄像头主机
+		unbinding: function(devid, callback){
+			return ra('post', '/device/electric/clearbinding', {
+				devid: devid,
+			}, callback);
 		}
 	};
 

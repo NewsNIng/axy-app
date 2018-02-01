@@ -85,7 +85,7 @@
 				size = +(d.downloadedSize / d.totalSize * 100);
 				size = size.toFixed(2);
 				size = isNaN(size) ? 0: size;
-				w.setTitle('正在下载...\n' + size + '%');
+				w.setTitle('正在更新资源...\n' + size + '%');
 			});
 		}
 		this.tasker = task;

@@ -15,13 +15,14 @@
 				background-color: #F4F8FB;
 			}
 			
-			.tips2{
+			.tips2 {
 				padding: 0.346666rem;
 				background-color: #FFFFFF;
 				color: #333333;
 				position: relative;
 			}
-			.tips2:after{
+			
+			.tips2:after {
 				content: "";
 				position: absolute;
 				height: 1px;
@@ -33,36 +34,35 @@
 				-webkit-transform: scaleY(0.5);
 			}
 			
-			.imgRoom{
+			.imgRoom {
 				background-color: #FFFFFF;
 				padding: 0.346666rem;
 				display: flex;
 				display: -webkit-flex;
-				justify-content: space-between;
+				justify-content: flex-start;
 				flex-wrap: wrap;
 			}
 			
-			.imgRoom>div{
+			.imgRoom>div {
 				width: 2.88rem;
 				height: 2.88rem;
 				background-color: #F4F8FB;
-				margin: 0.173333rem 0;
+				margin: 0.173333rem 0.11rem;
 				background-size: cover;
 				background-position: center;
 			}
 			
-			
-			
-			.imgRoom>div{
-				pointer-events: none;
+			.imgRoom>div {
+				/*pointer-events: none;*/ 
 			}
-			.imgRoom>div.last,.imgRoom>div.over{
+			
+			.imgRoom>div.last,
+			.imgRoom>div.over {
 				pointer-events: all;
 				position: relative;
 			}
 			
-			
-			.imgRoom>div.last:after{
+			.imgRoom>div.last:after {
 				content: '';
 				z-index: 20;
 				position: absolute;
@@ -77,29 +77,27 @@
 				-webkit-transform: translate(-50%, -50%);
 			}
 			
-			
-			textarea{
+			textarea {
 				border: none;
 				padding: 0;
 				margin-bottom: 0.346666rem;
 				font-size: 13px;
 				height: 2.5rem;
-				
 			}
 			
-			textarea::-webkit-input-placeholder{
+			textarea::-webkit-input-placeholder {
 				font-size: 13px;
 				color: #A2A6B1;
 			}
 			
-			.room{
+			.room {
 				padding: 0.346666rem;
 				background-color: #FFFFFF;
 				position: relative;
 				margin-bottom: 0.266666rem;
 			}
 			
-			.room:after{
+			.room:after {
 				position: absolute;
 				content: attr(data-ts);
 				color: #a2a6b1;
@@ -119,103 +117,109 @@
 				商品名称
 				<!--<span style="color: #9F9FA0;">(33字以内)</span>-->
 			</div>
-			<div class="app-font-size-26 room" :data-ts="t1.length + '/33'" >
-				<textarea  maxlength="33" rows="1" style="height: auto !important;"   v-model="t1" placeholder="请输入商品名称"></textarea>
+			<div class="app-font-size-26 room" :data-ts="t1.length + '/33'">
+				<textarea maxlength="33" rows="1" style="height: auto !important;" v-model="t1" placeholder="请输入商品名称"></textarea>
 			</div>
-			
-			
-			
+
 			<div class="tips2 app-font-size-26">
 				添加商品图片
-				<span style="color: #a2a6b1;">(无限制)</span>
+				<span style="color: #a2a6b1;">(最多{{maxLen}}张)</span>
 			</div>
-		
-				
+
 			<div class="imgRoom app-font-size-26">
-				<template v-for="o,i in imgs">
-					<div :class="{'last': i === firstNullIndex, 'over': o !== ''}" :style="'background-image: url('+ o +')'" @tap="onImgTap(i)"></div>	
+				<template v-for="o,i in imgList"> 
+					<div :style="'background-image: url('+ o +')'" @tap="onImgTap(i)"></div>
 				</template>
+				<template v-if="remainLen">
+					<div class="last" @tap="onImgTap()"></div>	
+				</template>
+				
 			</div>
-			
-			
+
 			<div class="tips2 app-font-size-26">
 				介绍商品
 			</div>
-			<div class="app-font-size-26 room" :data-ts="t2.length + '/100'" >
-				<textarea  maxlength="100" v-model="t2"  placeholder="商品描述"></textarea>
+			<div class="app-font-size-26 room" :data-ts="t2.length + '/100'">
+				<textarea maxlength="100" v-model="t2" placeholder="商品描述"></textarea>
 			</div>
-			
+
 			<button type="button" @tap="onSuccessTap()" class="mui-btn app-btn-main" style="width: 9.293333rem; margin:0.506666rem 0.346666rem;height: 1.173333rem;font-size: 17px;">提交</button>
-			
+
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-rules.js" ></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/system.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/store.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/system.js"></script>
+		<script type="text/javascript" src="../../../js/dal/store.js"></script>
 		<script type="text/javascript">
 			mui.init({
 				//处理窗口关闭前的业务
-			    beforeback: function() {
-			       mui.confirm("操作将清除您已输入的信息，确认返回到上一页么？", "温馨提示",['确认返回', '取消'],function(e){
-			       	!e.index && plus.webview.currentWebview().close(); 
-			       });
-			       return false;
-			    },
+				beforeback: function() {
+					mui.confirm("操作将清除您已输入的信息，确认返回到上一页么？", "温馨提示", ['确认返回', '取消'], function(e) {
+						!e.index && plus.webview.currentWebview().close();
+					});
+					return false;
+				},
 			});
-			
+
 			var vm = new Vue({
 				el: '.mui-content',
-				data: function(){
+				data: function() {
 					return {
 						t1: "",
 						t2: "",
 						imgs: ["", "", ""],
-						storeId:　-1,
+						storeId: 　-1,
+						maxLen: 3,
+
+						imgList: [],
+
 					};
 				},
-				computed: {
-					firstNullIndex: function(){
-						var i;
-						for(i = 0; i < this.len; i++){
-							if(this.imgs[i] === ""){
-								return i;
-							}
-						}
-						return -1;
-					},
-					len: function(){
-						return this.imgs.length;
+				computed: { 
+					remainLen: function() {
+						var l = this.maxLen - this.imgList.length;
+						return l < 0 ? 0 : l;
 					}
 				},
-				plusReady: function(){
+				plusReady: function() {
 					var info = this.$view.info;
 					this.storeId = this.$view.storeId;
 				},
-				methods:{
-					onImgTap: function(index){
+				methods: {
+					onImgTap: function(index) {
 						var that = this;
-						this.$gallery(function(err, imgArr){
-							if(err){
+
+						var l = index === undefined ? that.remainLen : 1;
+						
+						this.$gallery(function(err, imgArr) {
+							if(err) {
 								return mui.toast("图片选取失败");
 							}
-							if(imgArr.length > that.len){
-								mui.toast("您最多只能选择"+ that.len + "张");
-								imgArr = imgArr.splice(0, that.len);	
+							if(imgArr.length > l) {  
+								mui.toast("您最多只能选择" + l + "张");
+								imgArr = imgArr.splice(0, l); 
+							}
+							// 先bind固定参数，再apply不定数量参数
+							//that.imgs.splice.bind(that.imgs, index, imgArr.length).apply(that.imgs, imgArr);
+							if(index === undefined){
+								// 追加
+								that.imgList.push.apply(that.imgList, imgArr);	
+							}else{
+								// 替换
+								that.$set(that.imgList, index, imgArr[0]);
 							}
 							
-							// 先bind固定参数，再apply不定数量参数
-							that.imgs.splice.bind(that.imgs, index, imgArr.length).apply(that.imgs, imgArr);
-							
-						},this.len - index);
+
+						}, l);
 					},
-					onSuccessTap: function(){
+					onSuccessTap: function() {
 						var w = plus.nativeUI.showWaiting("正在提交资料...");
-						
+
 						var that = this;
 
 						new Promise(function(re, rj) {
@@ -245,12 +249,15 @@
 									},
 									{
 										type: function(arr) {
-											for(var i in arr){
-												if(arr[i] !== ''){return};
-											}
+//											for(var i in arr) {
+//												if(arr[i] !== '') {
+//													return
+//												};
+//											}
+											if(arr.length){return;}
 											return '您至少上传一张图片';
 										},
-										value: that.imgs
+										value: that.imgList
 									},
 								]);
 
@@ -259,7 +266,7 @@
 								}
 
 								// 压缩图片
-								new that.$Zip().processImage(that.imgs, 500, function(err, data) {
+								new that.$Zip().processImage(that.imgList, 500, function(err, data) {
 									if(err) {
 										return rj(err);
 									}
@@ -267,11 +274,11 @@
 								});
 							})
 							.then(function(imgs) {
-								that.imgs = [];
-								that.imgs.push.apply(that.imgs, imgs);
+								//that.imgList = [];
+								//that.imgList.push.apply(that.imgList, imgs);
 								// 提交服务器
 								return new Promise(function(re, rj) {
-									dal.system.uploadImg(that.imgs, function(err, imgList) {
+									dal.system.uploadImg(that.imgList, function(err, imgList) {
 										if(err) {
 											return rj(err);
 										}

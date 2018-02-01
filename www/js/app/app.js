@@ -208,43 +208,52 @@ function addMethod(obj, name, fn) {
 	var ios = {};
 
 	var __iosSafeBoxPath = "";
-	
+
 	var _account_;
-	
+
 	// 获取ios沙盒地址
 	ios.getSafeBoxPath = function() {
 		if(!__iosSafeBoxPath) {
 			__iosSafeBoxPath = plus.io.convertLocalFileSystemURL("../../../../../../../") + '/';
-		}
-		if(__iosSafeBoxPath.indexOf('file://') < 0){
-			__iosSafeBoxPath = 'file://' + __iosSafeBoxPath;
+			if(__iosSafeBoxPath.indexOf('file://') < 0) {
+				__iosSafeBoxPath = 'file://' + __iosSafeBoxPath;
+			}
 		}
 		return __iosSafeBoxPath;
 	}
-	
-	ios.getScreenshotByDevId = function(devid){
-		if(!_account_){
-			_account_ = window.localStorage.getItem('_account_');
-		}
-		if(!__iosSafeBoxPath) {
-			__iosSafeBoxPath = plus.io.convertLocalFileSystemURL("../../../../../../../") + '/';
-		}
-		if(__iosSafeBoxPath.indexOf('file://') < 0){
-			__iosSafeBoxPath = 'file://' + __iosSafeBoxPath;
-		}
-		__iosSafeBoxPath = __iosSafeBoxPath + "Documents/account_"+ _account_ +"/assets/" + devid + '.jpeg?t=' + new Date().getTime();
-		return __iosSafeBoxPath;
+
+	ios.getScreenshotByDevId = function(devid) {
+
+		return new Promise(function(resolve, reject) {
+			app.plusReady(function() {
+				var s = ios.getSafeBoxPath();
+				s = s + "Library/Caches/device" + devid + "/thumbnail.png";
+
+				plus.io.resolveLocalFileSystemURL(s, function() {
+					s = s + "?t" + new Date().getTime();
+					resolve(s);
+				}, reject);
+			})
+		});
 	}
 
 	app.ios = ios;
 }(window.app));
 
-
 (function(app) {
 	var android = {};
 
-	// 获取ios沙盒地址
 	android.getScreenshotByDevId = function(devid) {
+		var s = "file:///storage/emulated/0/CameraFamily/Thumbnail/" + devid + ".jpeg";
+		return new Promise(function(resolve, reject) {
+			app.plusReady(function() {
+				plus.io.resolveLocalFileSystemURL(s, function() {
+					s = s + "?t" + new Date().getTime();
+					resolve(s);
+				}, reject);
+			})
+		});
+
 		return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
 	}
 

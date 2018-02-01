@@ -262,11 +262,11 @@
 
 				},
 				methods: {
-					loadLocalHostAccount: function(){
+					loadLocalHostAccount: function() {
 						var last_account = window.localStorage.getItem('last_account');
 						last_account && (this.username = last_account);
 					},
-					test: function(){
+					test: function() {
 						this.username = '18718690160';
 						this.password = '123456';
 					},
@@ -351,22 +351,28 @@
 										return reject("请确保您有安装该应用且授权");
 									}
 									return resolve(info);
-									 
+
 								}, that);
 							})
 							// 单次注销
-							.then(function(auth){
+							.then(function(auth) {
+								plus.nativeUI.showWaiting("获取授权信息...");
 								var o = {};
-								for(var i in auth){
-									if(typeof auth[i] !== 'function'){
+								for(var i in auth) {
+									if(typeof auth[i] !== 'function') {
 										o[i] = auth[i];
 									}
-								}
-								auth.logout();
-								return o;
+								} 
+								return new Promise(function(re, rj) {
+									auth.logout(function(){
+										re(o);
+									}, rj);
+								});
+
 							})
 							.then(authInfoAdapter)
 							.then(function(info) {
+								plus.nativeUI.showWaiting("正在登录...");
 								return new Promise(function(resolve, reject) {
 									dal.user.ologin(info, function(err, data) {
 										if(err) {
@@ -377,7 +383,7 @@
 								});
 							})
 							.then(function(data) {
-								w && w.close();
+								plus.nativeUI.closeWaiting();
 
 								Rx.Observable.create(function(ob) {
 									if(data.lockterminal === 0 || data.validation === 1) {
@@ -398,7 +404,7 @@
 									mui.toast('登录成功');
 
 									data = fixUserData(data);
-
+									window.localStorage.setItem('_pwd_', '123456');
 									window.localStorage.setItem('login_type', ({
 										qq: 'qq',
 										sinaweibo: 'wb',
@@ -416,7 +422,7 @@
 
 							})
 							.catch(function(err) {
-								w && w.close();
+								plus.nativeUI.closeWaiting();
 								mui.toast(JSON.stringify(err));
 							});
 
@@ -424,11 +430,11 @@
 
 					// 初始化第三方登录（iOS系统限制 ??????）
 					initOAuth: function() {
-//						plus.share.getServices(function(services) {
-//							services.forEach(function(oa){
-//								
-//							});
-//						}, function(e) {});
+						//						plus.share.getServices(function(services) {
+						//							services.forEach(function(oa){
+						//								
+						//							});
+						//						}, function(e) {});
 					}
 				},
 				watch: {

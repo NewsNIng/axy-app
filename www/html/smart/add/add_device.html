@@ -188,7 +188,7 @@
 								type: 2
 							}, {
 								img: "../../../image/smart/devices/dev_icon/VH104D-N-MG@3x.png",
-								name: "VH104D/N/MG",
+								name: "VH-104GN",
 								type: 1,
 								noWifi: true
 							}, ]
@@ -247,6 +247,9 @@
 							}, {
 								img: "../../../image/smart/devices/dev_icon/yyht@3x.png",
 								name: "一氧化碳探测器",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/jqtcq@3x.png",
+								name: "甲醛探测器",
 							}, {
 								img: "../../../image/smart/devices/dev_icon/yxfd@3x.png",
 								name: "隐形防盗探测器",
@@ -342,19 +345,18 @@
 					_scanCodeLine: function(isDev, isSmart) {
 						app.page.openForResultBy('scan.html', 'scan', function(data) {
 							// 获取扫码结果
-//							console.log(JSON.stringify(data));
-							
+							if(!data.data){return;}
 							if(data.data.result) {
 								//获取配件信息
-								
+
 								// 跳转
 								mui.openWindow('add_completed.html', 'add_completed', {
 									extras: {
 										needConn: false,
 										//配件id
-//										devid: this.devid,
+										//										devid: this.devid,
 										isFitting: true,
-										info:data,
+										info: data,
 									}
 								});
 							}

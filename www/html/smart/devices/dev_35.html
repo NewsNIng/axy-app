@@ -212,7 +212,7 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
-
+							that._updataActionByEnable(that.devInfo.accessory.enable);
 							that._updataUi();
 						})
 					}.bind(this));
@@ -310,6 +310,19 @@
 							info: that.devInfo
 						});
 					},
+					_updataActionByEnable: function(isOn) {
+						var action = this.devInfo.accessory.action;
+						var enable = 0x80000000;
+						if(isOn){
+							action = action|enable;
+						}else{
+							action = action&~enable;
+						}
+						this.devInfo.accessory.action = action;
+							
+//						this.devInfo.accessory.action = this.devInfo.accessory.action & (isOn ? 0xffffffff : 0x7fffffff);
+						
+					}
 				}
 			});
 		</script>

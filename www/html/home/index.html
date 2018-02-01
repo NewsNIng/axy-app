@@ -147,13 +147,7 @@
 			}
 			/*设备预览图*/
 			
-			.device_show>.img {
-				width: 100%;
-				padding-top: 50%;
-				background-size: cover;
-				background-position: center;
-				background-color: #CCCCCC;
-			}
+			
 			/*设备状态*/
 			
 			.device_show .dev_status {
@@ -254,53 +248,35 @@
 			/*设备背景图fix*/
 			
 			.imgdiv {
+				height: 4.666666rem;
+				width: 9.306666rem;
+				background-image: url(../../image/smart/devices/bg/camera@3x.png);
+				background-size: cover;
+				/*background-position: center;*/
+				background-repeat: no-repeat;
 				position: relative;
 			}
 			
-			.imgdiv.WG-100:after {
-				content: "";
-				top: 0;
-				position: absolute;
-				width: 100%;
-				height: 100%;
+			.imgdiv.WG-100 {
 				background-image: url(../../image/smart/devices/bg/wg_100@3xweb.png);
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				z-index: 8;
 			}
-			/*TODO 修复*/
 			
-			.imgdiv.AX-903:after {
-				content: "";
-				top: 0;
-				position: absolute;
-				width: 100%;
-				height: 100%;
+			.imgdiv.AX-903 {
 				background-image: url(../../image/smart/devices/bg/903@3xweb.png);
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				z-index: 8;
 			}
 			
-			.imgdiv.AX-904:after {
-				content: "";
-				top: 0;
-				position: absolute;
-				width: 100%;
-				height: 100%;
+			.imgdiv.AX-904 {
 				background-image: url(../../image/smart/devices/bg/904@3xweb.png);
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				z-index: 8;
+			}
+			
+			.imgdiv.VH-104GN {
+				background-image: url(../../image/smart/devices/bg/104gn@3x.png);
 			}
 			
 			.imgdiv.WG-100,
 			.imgdiv.AX-903,
 			.imgdiv.AX-904 {
-				pointer-events: none;
+				/*pointer-events: none;*/
 			}
 			/*设备背景图fix--------*/
 			
@@ -384,14 +360,14 @@
 								{{dev.devimg}}	
 							</div>-->
 
-							<div class="img imgdiv" :class="_getDevName(dev.type)" :style="{backgroundImage: 'url('+dev.devimg+')'}" @tap="openCamListWindow()">
+							<div class="img imgdiv" :class="_getDevName(dev.type)" v-devbg :class="_getDevName(o.type)" :data-devid="dev.devid" v-devbg  @tap="openCamListWindow($event)">
 
 							</div>
 							<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
 							<div class="dev_menu">
 								<div class="mui-icon d1">
 									<img src="../../image/home/dev_camera.png" />
-									<span class="app-font-size-24 app-color-main">{{_fixName(dev.location) || dev.devid}}</span>
+									<span class="app-font-size-24 app-color-main">{{_fixDevLocation(dev.location) || dev.devid}}</span>
 								</div>
 								<div class="mui-icon d2" @tap="onShareTap()">
 									<img src="../../image/home/dev_share.png" />
@@ -512,6 +488,20 @@
 		<script type="text/javascript" src="temp_like_json.js"></script>
 
 		<script type="text/javascript">
+			
+			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
+			
+			Vue.directive('devbg', {
+				inserted: function(el) {
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid).then(function(path){
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				}
+			})
+
+			
+			
 			var advert_cache = new ni.Cache('advert_cache', []);
 
 			var _B = new ni.Broadcast();
@@ -693,14 +683,56 @@
 						});
 					},
 
-					openCamListWindow: function() {
+					openCamListWindow: function($event) {
 
 						var that = this;
 
 						var o = this.dev;
 
+						var that = this;
+
 						if(o.online !== 1) {
 							return mui.toast("设备不在线");
+						}
+
+
+						var name = app.dev.findName(o.type);
+
+						var url;
+						switch(name) {
+							case "WG-100":
+								{
+									url = "../smart/devices/dev_WG-100.html";
+									break;
+								}
+
+							case "AX-903":
+								{
+									url = "../smart/devices/dev_AX-903.html";
+									break;
+								}
+
+							case "AX-904":
+								{
+									url = "../smart/devices/dev_AX-904.html";
+									break;
+								}
+
+							default:
+								{
+									url = "";
+									break;
+								}
+
+						}
+
+						if(url) {
+							mui.openWindow(url, url, {
+								extras: {
+									devInfo: o
+								}
+							});
+							return;
 						}
 
 						Rx.Observable.create(function(ob) {
@@ -744,8 +776,10 @@
 						}).subscribe(function(data) {
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
-							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, o.location, function(iospath) {
-								that.dev.devimg = that._getDevImg(o.devid, iospath);
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
+								getScrrenHotBgFn(o.devid).then(function(path){
+									el.style.backgroundImage = "url(" + path + ")";
+								})
 							});
 						});
 
@@ -784,7 +818,7 @@
 							}
 							if(data) {
 								this.dev = data[0];
-								this.dev.devimg = this._getDevImg(this.dev.devid);
+								//this.dev.devimg = this._getDevImg(this.dev.devid);
 								this.dev.location = this.dev.location ? this.dev.location.replace(/<[^<]*>/gi, "") : "";
 							}
 
@@ -807,7 +841,7 @@
 							})
 							.subscribe(function(data) {
 								that.dev = data;
-								that.dev.devimg = that._getDevImg(that.dev.devid);
+								//that.dev.devimg = that._getDevImg(that.dev.devid);
 								that.dev.location = that.dev.location ? that.dev.location.replace(/<[^<]*>/gi, "") : "";
 							})
 
@@ -946,7 +980,7 @@
 						return app.dev.findName(type);
 					},
 
-					_fixName: function(s) {
+					_fixDevLocation: function(s) {
 						return app.dev.fixName(s);
 					}
 
