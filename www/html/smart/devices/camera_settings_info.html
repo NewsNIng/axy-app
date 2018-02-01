@@ -55,7 +55,7 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>摄像机型号</span>
-							<span class="mui-badge" v-text="o.devtype"></span>
+							<span class="mui-badge" v-text="_findName(o.devtype)"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -103,6 +103,8 @@
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -144,6 +146,9 @@
 							}
 							this.o = rs;
 						}.bind(this));
+					},
+					_findName: function(type){
+						return app.dev.findName(type);
 					}
 				}
 			});

@@ -201,11 +201,14 @@
 										}, {
 											result: true,
 											// 过滤设备 电管家 和 智能网管
-											filter: that.isSmart ? []: [
-												"WG-100",
+											filter: that.isSmart ? [
 												"AX-903",
 												"AX-904",
 												"VH-104GN"
+											]: [
+												"WG-100",
+												"AX-903",
+												"AX-904"
 											]
 										});
 									});

@@ -591,6 +591,42 @@
 		}, callback);
 	}
 	
+	/**
+	 * 获取V2门锁状态
+	 * @param {Object} devid
+	 * @param {Object} devtype
+	 * @param {Object} id
+	 * @param {Object} type
+	 * @param {Object} callback
+	 */
+	devaccessory.getLockv2 = function(devid, devtype, id, type, callback){
+		return ra("get", "/devaccessory/lockv2", {
+			devid: devid,
+			devtype: devtype,
+			id: id,
+			type: type
+		}, callback);
+	}
+	
+	/**
+	 * 设置V2门锁状态
+	 * @param {Object} devid
+	 * @param {Object} devtype
+	 * @param {Object} id
+	 * @param {Object} type
+	 * @param {Object} callback
+	 */
+	devaccessory.setLockv2 = function(devid, devtype, id, type, open, password,  callback){
+		return ra("post", "/devaccessory/lockv2", {
+			devid: devid,
+			devtype: devtype,
+			id: id,
+			type: type,
+			open,
+			password
+		}, callback);
+	}
+	
 
 	_.devaccessory = devaccessory;
 

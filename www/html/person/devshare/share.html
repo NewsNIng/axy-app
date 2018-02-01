@@ -20,13 +20,6 @@
 				padding-top: 0;
 			}
 			
-			.imgdiv {
-				height: 6.16rem;
-				background-color: #9F9FA0;
-				background-position: center;
-				background-size: cover;
-				background-repeat: no-repeat;
-			}
 			
 			.menu:before {
 				content: '';
@@ -117,53 +110,35 @@
 			/*设备背景图fix*/
 			
 			.imgdiv {
+				height: 6.16rem;
+				width: 100%;
+				background-image: url(../../../image/smart/devices/bg/camera@3x.png);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
 				position: relative;
 			}
 			
-			.imgdiv.WG-100:after {
-				content: "";
-				top: 0;
-				position: absolute;
-				width: 100%;
-				height: 100%;
+			.imgdiv.WG-100 {
 				background-image: url(../../../image/smart/devices/bg/wg_100@3xweb.png);
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				z-index: 8;
 			}
-			/*TODO 修复*/
 			
-			.imgdiv.AX-903:after {
-				content: "";
-				top: 0;
-				position: absolute;
-				width: 100%;
-				height: 100%;
+			.imgdiv.AX-903 {
 				background-image: url(../../../image/smart/devices/bg/903@3xweb.png);
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				z-index: 8;
 			}
 			
-			.imgdiv.AX-904:after {
-				content: "";
-				top: 0;
-				position: absolute;
-				width: 100%;
-				height: 100%;
+			.imgdiv.AX-904 {
 				background-image: url(../../../image/smart/devices/bg/904@3xweb.png);
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				z-index: 8;
+			}
+			
+			.imgdiv.VH-104GN {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
 			}
 			
 			.imgdiv.WG-100,
 			.imgdiv.AX-903,
 			.imgdiv.AX-904 {
-				pointer-events: none;
+				/*pointer-events: none;*/
 			}
 			/*设备背景图fix--------*/
 		</style>
@@ -179,7 +154,9 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div class="imgdiv" :class="_getDevName(devInfo.type)" :style="{backgroundImage: 'url('+'file:////storage/emulated/0/CameraFamily/Thumbnail/'+devInfo.devid+'.jpeg'+')'}"></div>
+				
+				<div class="imgdiv" :class="_getDevName(devInfo.type)" v-devbg :data-devid="devInfo.devid" v-devbg >	</div>
+				
 				<div class="menu app-font-size-28">
 					<div class="tips">
 						<span class="app-color-333333">请选择权限：</span>
@@ -214,9 +191,24 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/lib/qrcode.min.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js" ></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		
 
 		<script type="text/javascript">
+			
+			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
+			
+			Vue.directive('devbg', {
+				update: function(el){
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid).then(function(path){
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				}
+			})
+			
+			
 			mui.init();
 
 			var sharecodeid = +new Date();
@@ -299,12 +291,18 @@
 					this.canvasWidth = window.innerWidth / 1.5 * 2;
 					this.$refs.canvas.width = this.canvasWidth;
 					this.$refs.canvas.height = window.innerWidth * 2;
-
+					var that = this;
+					mui.back = function(){
+						if(that.mask){
+							that.mask = false;
+							return false;
+						}
+						plus.webview.currentWebview().close();
+					}
 				},
 
 				plusReady: function() {
-					this.devInfo = this.$view.devInfo;
-					// console.log(JSON.stringify(this.devInfo));
+					this.devInfo = this.$view.devInfo; 
 				},
 				methods: {
 					getCode: function() {

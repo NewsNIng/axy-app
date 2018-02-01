@@ -89,24 +89,31 @@
 				line-height: 0.906666rem;
 				margin-bottom: -0.266666rem;
 			}
-			
 		</style>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav app-header">
-			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">设置开锁密码</h1>
-			<a class="mui-icon mui-pull-right">
-				<img src="../../../image/smart/scenes/complete_icon.png" />
-			</a>
-		</header>
-		<div class="mui-content">
-			<div class="point app-font-size-24">手动开锁或远程开锁时的密码</div>
-			<div class="set_pwd app-font-size-28">
-				<input type="text" placeholder="设置开锁密码">
-			</div>
+		<div class="root">
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">设置开锁密码</h1>
+				<a class="mui-icon mui-pull-right" @tap="onSave()">
+					<img src="../../../image/smart/scenes/complete_icon.png" />
+				</a>
+			</header>
+			<div class="mui-content">
+				<div class="point app-font-size-24">远程开锁时的密码</div>
+				<div class="set_pwd app-font-size-28">
+					<input type="number" v-model="pwd" placeholder="设置4到6位开锁密码">
+				</div>
+				<div class="mui-input-row ">
+					<label class="app-font-size-26 app-color-9f9fa0">是否记住密码</label>
+					<div @toggle="onToggle()" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': remember}">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div> 
 
+			</div>
 		</div>
 
 		<!--沉浸式动态处理-->
@@ -118,25 +125,37 @@
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		<!--请求相关-->
-		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
 
 			new Vue({
-				el: '.mui-content',
+				el: '.root',
 				data: function() {
 					return {
-
+						pwd: "123456",
+						remember: true
 					};
 				},
-				plusReady: function() {},
+				plusReady: function() {
+
+				},
+
 				methods: {
+					onToggle: function(){
+						this.remember = !this.remember;
+					},
 					
+					onSave: function() {
+						app.page.setResult({
+							pwd: this.pwd,
+							remember: this.remember
+						}).close();
+					}
 				}
 			});
 		</script>

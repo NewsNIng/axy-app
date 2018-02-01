@@ -103,7 +103,7 @@
 
 			<div class="mui-content noImmersed">
 				<div class="state_show">
-					<span class="app-font-size-30">0.08mg/m³</span>
+					<span class="app-font-size-30" v-text="state.concentrationValid?state.concentration:0+'mg/m³'"></span>
 					<span class="app-font-size-44">舒适</span>
 					<span class="app-font-size-24">当前状态</span>
 				</div>
@@ -113,13 +113,13 @@
 					<div class="app-font-size-26">
 						温度
 						<!--<img src="../../../image/smart/devices/lock/btn_Settingpassword@3x.png" />-->
-						<div class="app-font-size-34">12°C</div>
+						<div class="app-font-size-34" v-text="state.temperatureValid?state.temperature:0+'°C'"></div>
 					</div>
 
 					<div class="app-font-size-26">
 						湿度
 						<!--<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />-->
-						<div class="app-font-size-34">10%</div>
+						<div class="app-font-size-34" v-text="state.humidityValid?state.humidity:0+'%'"></div>
 					</div>
 				</div>
 
@@ -145,13 +145,13 @@
 					<li class="mui-table-view-cell">
 						<a class="battery_status">
 							<span>电池状态</span>
-							<span class="mui-badge battery_status">正常</span>
+							<span class="mui-badge battery_status" v-text="state.underVoltage?'欠压':'正常'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="battery_status">
 							<span>通讯状态</span>
-							<span class="mui-badge battery_status">正常</span>
+							<span class="mui-badge battery_status" v-text="state.lost?'失联':'正常'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -247,6 +247,17 @@
 							"devType": 4166,
 							"statusCode": 0
 						},
+
+						state: {
+							"lost": true,
+							"underVoltage": false,
+							"concentrationValid": false,
+							"concentration": 0,
+							"temperatureValid": false,
+							"temperature": 0,
+							"humidityValid": false,
+							"humidity": 0
+						}
 					};
 				},
 				mounted: function() {
@@ -326,12 +337,13 @@
 					},
 					// 获取甲醛探测器状态
 					getState: function() {
+						var that = this;
 						dal.devaccessory.formaldehydedetector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {
-							alert(JSON.stringify(err));
+							console.log("state==>" + JSON.stringify(data));
 							if(err) {
 								return mui.toast(err.message);
 							}
-							console.log(JSON.stringify(data));
+							that.state = data;
 						});
 					},
 					// 趋势图点击

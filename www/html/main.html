@@ -151,7 +151,7 @@
 								app.user.get(function(u) {
 									u && setTimeout(function(){
 										ob.next();	
-									}, 200)
+									}, mui.os.ios ? 200 : 50);
 									
 								})
 							} else {

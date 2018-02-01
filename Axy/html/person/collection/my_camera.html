@@ -100,7 +100,8 @@
 				position: absolute;
 				left: 0;
 				top: 0;
-				background-color:  rgba(0, 0, 0, 0.35);;
+				background-color: rgba(0, 0, 0, 0.35);
+				;
 				background-image: url(../../../image/person/devshare/1_1.png);
 				background-size: 50%;
 				background-repeat: no-repeat;
@@ -414,10 +415,10 @@
 							this.main = this.main || plus.android.runtimeMainActivity();
 							var intent = new this.Intent(this.Intent.ACTION_VIEW);
 							var uri = this.Uri.parse(url);
-							intent.setDataAndType(uri, "video/*"); 
+							intent.setDataAndType(uri, "video/*");
 							this.main.startActivity(intent);
 						}
-						
+
 					},
 
 					// 是否为视频

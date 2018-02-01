@@ -286,8 +286,9 @@
 						dal.device.electric.alarmlist(this.did, this.n, function(err, data) {
 							plus.nativeUI.closeWaiting();
 							if(err) {
-								return mui.toast("获取日志失败");
+								return mui.toast(err.message);
 							}
+							console.log(JSON.stringify(data));
 							this.logs_.push.apply(this.logs_, data);
 							this.$nextTick(function() {
 								this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());

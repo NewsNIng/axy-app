@@ -19,15 +19,14 @@
 				/*padding: 0.4rem 15px 0.4rem 0 !important;*/
 				margin: 0.2rem;
 				list-style: none;
-				
 			}
 			
-			ul{
+			ul {
 				box-shadow: 0px 0px 2px #CCCCCC;
 				padding: 0.5rem;
 			}
 			
-			ul:before{
+			ul:before {
 				padding: 0.1rem 0.2rem;
 				margin: 0;
 				content: attr(data-time);
@@ -35,8 +34,6 @@
 				background-color: #9F9FA0;
 				color: #FFFFFF;
 			}
-			
-			
 			
 			.null {
 				position: fixed;
@@ -52,8 +49,6 @@
 				width: 4.773333rem;
 				margin: 2.986666rem 2.613333rem 1.413333rem 2.613333rem;
 			}
-			
-			
 		</style>
 	</head>
 
@@ -66,13 +61,13 @@
 			</header>
 			<div class="mui-content app-font-size-28">
 				<ul v-for="o,i in list" :data-time="o.day">
-					<li v-for="oo,ii in stateList">{{oo.name + "：" + (o.data['state' + oo.index] || 0) + oo.company}}</li>
+					<li v-for="oo,ii in stateList">{{oo.name + "：" + (o.data['state' + oo.index] || 0) / oo.divisor + oo.company}}</li>
 				</ul>
 			</div>
-			
+
 			<div class="null app-font-size-30" v-show="list.length === 0">
-					<img src="../../../image/smart/devices/lock/icon_Nolocklog@3x.png" /> 亲，您还没有任何记录哦
-				</div>
+				<img src="../../../image/smart/devices/lock/icon_Nolocklog@3x.png" /> 亲，您还没有任何记录哦
+			</div>
 		</div>
 
 		<!--沉浸式动态处理-->
@@ -94,49 +89,57 @@
 
 		<script type="text/javascript">
 			mui.init();
-			
-			var _stateList = [{
-								name: "剩余电流",
-								index: 9,
-								company: 'mA'
-							},
-							{
-								name: "环境温度",
-								index: 5,
-								company: '℃',
-							},
-							{
-								name: "A相电流",
-								index: 6,
-								company: 'A'
-							},
-							{
-								name: "A相温度",
-								index: 2,
-								company: '℃',
-							},
-							{
-								name: "B相电流",
-								index: 7,
-								company: 'A'
-							},
-							{
-								name: "B相温度",
-								index: 3,
-								company: '℃',
-							},
-							{
-								name: "C相电流",
-								index: 8,
-								company: 'A'
-							},
-							{
-								name: "C相温度",
-								index: 4,
-								company: '℃',
-							},
 
-						];
+			var _stateList = [{
+					name: "剩余电流",
+					index: 9,
+					divisor: 1,
+					company: 'mA'
+				},
+				{
+					name: "环境温度",
+					index: 5,
+					divisor: 10,
+					company: '℃',
+				},
+				{
+					name: "A相电流",
+					index: 6,
+					divisor: 1,
+					company: 'A'
+				},
+				{
+					name: "A相温度",
+					index: 2,
+					divisor: 10,
+					company: '℃',
+				},
+				{
+					name: "B相电流",
+					index: 7,
+					divisor: 1,
+					company: 'A'
+				},
+				{
+					name: "B相温度",
+					index: 3,
+					divisor: 10,
+					company: '℃',
+				},
+				{
+					name: "C相电流",
+					index: 8,
+					divisor: 1,
+					company: 'A'
+				},
+				{
+					name: "C相温度",
+					index: 4,
+					divisor: 10,
+					company: '℃',
+				},
+
+			];
 
 			new Vue({
 				el: '#box',
@@ -159,7 +162,7 @@
 
 					getData: function() {
 						this.c && (this.list = this.c.data);
-						
+
 					},
 
 					clearData: function() {

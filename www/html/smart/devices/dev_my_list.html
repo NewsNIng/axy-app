@@ -85,48 +85,27 @@
 			.imgdiv {
 				height: 4.666666rem;
 				width: 9.306666rem;
-				background-color: #CCCCCC;
+				background-image: url(../../../image/smart/devices/bg/camera@3x.png);
 				background-size: cover;
-				background-position: center;
+				/*background-position: center;*/
 				background-repeat: no-repeat;
 				position: relative;
 			}
 			
-			.imgdiv.WG-100:after {
-				content: "";
-				position: absolute;
-				width: 100%;
-				height: 100%;
+			.imgdiv.WG-100 {
 				background-image: url(../../../image/smart/devices/bg/wg_100@3xweb.png);
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				z-index: 8;
 			}
-			/*TODO 修复*/
 			
-			.imgdiv.AX-903:after {
-				content: "";
-				position: absolute;
-				width: 100%;
-				height: 100%;
+			.imgdiv.AX-903 {
 				background-image: url(../../../image/smart/devices/bg/903@3xweb.png);
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				z-index: 8;
 			}
 			
-			.imgdiv.AX-904:after {
-				content: "";
-				position: absolute;
-				width: 100%;
-				height: 100%;
+			.imgdiv.AX-904 {
 				background-image: url(../../../image/smart/devices/bg/904@3xweb.png);
-				background-size: cover;
-				background-position: center;
-				background-repeat: no-repeat;
-				z-index: 8;
+			}
+			
+			.imgdiv.VH-104GN {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
 			}
 			
 			.imgdiv.WG-100,
@@ -263,7 +242,7 @@
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
 						<div class="card" v-for="o,i in netDivList">
-							<div class="imgdiv" :class="_getDevName(o.type)" @tap="onCmTap(o, i)" :style="{backgroundImage: 'url('+o.devimg+')'}">
+							<div class="imgdiv" v-devbg :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)" >
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
@@ -339,6 +318,17 @@
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
 		<script type="text/javascript">
+			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
+			
+			Vue.directive('devbg', {
+				inserted: function(el) {
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid).then(function(path){
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				}
+			})
+
 			mui.init();
 			var devManager, runManager;
 
@@ -463,11 +453,7 @@
 						// 数据处理
 						.subscribe(function(devData) {
 							that.isGeted = true;
-							that.netDivList = devData.map(function(item) {
-								item.devimg = that._getDevImg(item.devid);
-								//item.location = item.location ? item.location.replace(/<[^<]*>/gi, "") : "";
-								return item;
-							});
+							that.netDivList = devData; 
 						});
 
 					this.$nextTick(function() {
@@ -485,8 +471,10 @@
 				},
 				methods: {
 					// 摄像机点击
-					onCmTap: function(o, i) {
+					onCmTap: function(o, i, e) {
 						var that = this;
+						var el = e.target;
+						
 
 						if(o.online !== 1) {
 							return mui.toast("设备不在线");
@@ -574,8 +562,10 @@
 						}).subscribe(function(data) {
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
-							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function(iospath) {
-								o.devimg = that._getDevImg(o.devid, iospath);
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
+								getScrrenHotBgFn(o.devid).then(function(path){
+									el.style.backgroundImage = "url(" + path + ")";
+								})
 							});
 						});
 
@@ -595,13 +585,13 @@
 					},
 					// 添加配件点击
 					onAddTap: function() {
-						mui.openWindow('../add/add_device.html','add/add_device.html');
+						mui.openWindow('../add/add_device.html', 'add/add_device.html');
 					},
 					// 智能配件点击
 					onZoneTap: function(o, i) {
+						console.log(o.type);
 
 						var that = this;
-
 						Rx.Observable.create(function(ob) {
 							// 检查本地是否有相关配件页面
 							var pageUrl = '_www/html/smart/devices/dev_' + o.type + '.html';
