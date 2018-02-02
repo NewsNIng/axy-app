@@ -242,7 +242,7 @@
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
 						<div class="card" v-for="o,i in netDivList">
-							<div class="imgdiv" v-devbg :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)" >
+							<div class="imgdiv" v-devbg :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)">
 								<span class="app-font-size-20" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 							</div>
 							<div class="menudiv">
@@ -319,17 +319,17 @@
 
 		<script type="text/javascript">
 			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
-			
+
 			Vue.directive('devbg', {
 				inserted: function(el) {
 					var devid = el.dataset.devid;
-					getScrrenHotBgFn(devid).then(function(path){
+					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
 				updated: function(el) {
 					var devid = el.dataset.devid;
-					getScrrenHotBgFn(devid).then(function(path){
+					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
@@ -459,7 +459,7 @@
 						// 数据处理
 						.subscribe(function(devData) {
 							that.isGeted = true;
-							that.netDivList = devData; 
+							that.netDivList = devData;
 						});
 
 					this.$nextTick(function() {
@@ -474,13 +474,27 @@
 						this.$set(this.netDivList, this.tapIndex, data.info);
 					}.bind(this));
 
+					Rx.Observable.create(function(ob) {
+						that.$watch("active", function(index) {
+							if(index === 1 && that.devaccessroyList.length === 0) {
+								ob.next(false);
+							}
+						})
+					}).merge(Rx.Observable.create(function(ob) {
+						_B.on('zone_update', function() {
+							ob.next(true);
+						});
+					})).subscribe(function(hidewatting) {
+						// 获取配件列表
+						that.getDevaccessroyData(hidewatting);
+					});
+
 				},
 				methods: {
 					// 摄像机点击
 					onCmTap: function(o, i, e) {
 						var that = this;
 						var el = e.target;
-						
 
 						if(o.online !== 1) {
 							return mui.toast("设备不在线");
@@ -569,7 +583,7 @@
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
-								getScrrenHotBgFn(o.devid).then(function(path){
+								getScrrenHotBgFn(o.devid).then(function(path) {
 									el.style.backgroundImage = "url(" + path + ")";
 								})
 							});
@@ -584,10 +598,7 @@
 					// 标签切换
 					onActive: function(index) {
 						this.active = index;
-						if(index === 1 && this.devaccessroyList.length === 0) {
-							// 获取配件列表
-							this.getDevaccessroyData();
-						}
+
 					},
 					// 添加配件点击
 					onAddTap: function() {
@@ -719,9 +730,11 @@
 					},
 
 					// 获取配件列表数据
-					getDevaccessroyData: function() {
-
-						plus.nativeUI.showWaiting("正在获取配件...");
+					getDevaccessroyData: function(hide) {
+						var waitTitle = hide ? "正在更新配件信息..." : "正在获取配件...";
+						plus.nativeUI.showWaiting(waitTitle, {
+							back: 'transmit'
+						});
 
 						dal.devaccessory.allacc(function(err, data) {
 							plus.nativeUI.closeWaiting();

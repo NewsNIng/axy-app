@@ -51,14 +51,14 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">输入设备码</h1>
+				<h1 class="mui-title">添加 新设备/配件</h1>
 				<span class="mui-pull-right app-color-white app-font-size-28" style="line-height: 45px;" @tap="onSaveTap()">
 					确定
 				</span>
 			</header>
 
 			<div class="mui-content app-font-size-28">
-				<input type="text" v-model='code' placeholder="请输入设备码" />
+				<input ref="input" type="text" v-model='code' placeholder="请输入设备或配件的后8位条码编号" />
 			</div>
 
 		</div>
@@ -92,6 +92,8 @@
 				},
 				watch: {
 					code: function(n, old) {
+						
+						this.$refs.input.focus();
 						// 先全部转为大写
 						n = n.toUpperCase();
 						// 验证
