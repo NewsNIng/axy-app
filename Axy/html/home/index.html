@@ -146,8 +146,6 @@
 				position: relative;
 			}
 			/*设备预览图*/
-			
-			
 			/*设备状态*/
 			
 			.device_show .dev_status {
@@ -360,7 +358,7 @@
 								{{dev.devimg}}	
 							</div>-->
 
-							<div class="img imgdiv" :class="_getDevName(dev.type)" v-devbg  :data-devid="dev.devid"   @tap="openCamListWindow($event)">
+							<div class="img imgdiv" :class="_getDevName(dev.type)" v-devbg :data-devid="dev.devid" @tap="openCamListWindow($event)">
 
 							</div>
 							<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
@@ -488,27 +486,26 @@
 		<script type="text/javascript" src="temp_like_json.js"></script>
 
 		<script type="text/javascript">
-			
 			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
-			
+
 			Vue.directive('devbg', {
 				inserted: function(el) {
 					var devid = el.dataset.devid;
-					getScrrenHotBgFn(devid).then(function(path){
+					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
 				updated: function(el) {
 					var devid = el.dataset.devid;
-					getScrrenHotBgFn(devid).then(function(path){
+					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
 			});
 
-			
-			
 			var advert_cache = new ni.Cache('advert_cache', []);
+			
+			var POSITION = new ni.Cache('position_cache', null);
 
 			var _B = new ni.Broadcast();
 
@@ -608,34 +605,71 @@
 				plusReady: function() {
 					var that = this;
 
-					Rx.Observable.create(function(ob) {
-						//如果用户登录了 则  获取第一个设备
-						if(app.user.has()) {
-							ob.next();
-						}
-
-						_B.on('login_success', function() {
-							ob.next()
-						});
-
-					}).subscribe(function() {
-						that.getDeviceOne();
-					});
-
-					// plus ready ! 现在可以使用plus相关api
 					// 设置本页面无滚动条显示
 					this.$view.setStyle({
 						scrollIndicator: "none", // 隐藏滚动条
 						render: "always", // 始终进行渲染
 					});
+					
+					// 是否登录判断
+					var $isLogin = Rx.Observable.create(function(ob) {
+						//如果用户已经登录了 则  获取第一个设备
+						if(app.user.has()) {
+							ob.next();
+						}
+					});
+					
+					// 当登录时
+					var $onLogin = Rx.Observable.create(function(ob) {
+							//如果用户重新了 则  获取第一个设备
+							_B.on('login_success', function() {
+								ob.next()
+							});
+						})
+						// 延迟200ms
+						.delay(200);
+					
+					$isLogin.merge($onLogin).subscribe(function() {
+						// 获取第一个设备
+						that.getDeviceOne();
+					});
+
+					// 上一次地理定位
+					var $prePosition = Rx.Observable.create(function(ob){
+						var p = POSITION.data;	
+						// console.log("最近地理位置："+JSON.stringify(p)); 
+						if(p){
+							ob.next(p);
+						}
+					});
+					// 
+					// 地理定位流
+					var $position = Rx.Observable.fromPromise(that.getCurrentPosition());
+
+					// 地理定位最大延迟 30s
+					var $time30out = Rx.Observable.timer(3e3);
 
 					// 获取定位信息
-					this.getCurrentPosition().then(function() {
-						// 附近的店
-						this.getNearShops();
-					}.bind(this)).catch(function() {
-						this.getNearShops();
-					}.bind(this));
+					$prePosition
+					.merge($position)
+					// 定位最多30s
+						.takeUntil($time30out)
+						// 拿到数据
+						.subscribe(function(p) {
+							// 保存最近地理位置
+							POSITION.data = p; 
+							that.longitude = p.coords.longitude;
+							that.latitude = p.coords.latitude;
+							that.city = p.address.city.replace('市', '');
+							that.position = p.address.poiName;
+							// 加载附近的店
+							that.getNearShops();
+						}, function(err){
+							// 加载附近的店
+							that.getNearShops();
+						});
+
+					
 
 					// 监听设备变化
 					this.listenDev();
@@ -643,18 +677,11 @@
 				},
 				methods: {
 					getCurrentPosition: function() {
-
 						return new Promise(function(re, rj) {
 							plus.geolocation.getCurrentPosition(function(p) {
-								this.longitude = p.coords.longitude;
-								this.latitude = p.coords.latitude;
-								this.city = p.address.city.replace('市', '');
-								this.position = p.address.poiName;
-								re();
-							}.bind(this), function() {
-								rj();
-							});
-						}.bind(this));
+								re(p);
+							}, rj);
+						});
 					},
 					// 点击消息按钮
 					onMessageTap: function() {
@@ -700,7 +727,6 @@
 						if(o.online !== 1) {
 							return mui.toast("设备不在线");
 						}
-
 
 						var name = app.dev.findName(o.type);
 
@@ -783,7 +809,7 @@
 							var w1 = data.b;
 							var w2 = o.type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
-								getScrrenHotBgFn(o.devid).then(function(path){
+								getScrrenHotBgFn(o.devid).then(function(path) {
 									el.style.backgroundImage = "url(" + path + ")";
 								})
 							});
@@ -841,7 +867,7 @@
 								});
 								_B.on('update', function(data) {
 									if(data.info.devid === that.dev.devid) {
-										ob.next(data.info); 
+										ob.next(data.info);
 									}
 								});
 							})
