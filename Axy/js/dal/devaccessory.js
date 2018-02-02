@@ -34,10 +34,9 @@
 	 * @param {Object} on
 	 * @param {Object} callback
 	 */
-	devaccessory.light = function(id, type, devid, devtype, position, on, callback) {
+	devaccessory.light = function(id, devid, devtype, position, on, callback) {
 		return ra("post", "/devaccessory/light", {
 			id: id,
-			type: type,
 			devid: devid,
 			devtype: devtype,
 			position: position,

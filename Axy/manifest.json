@@ -8,7 +8,7 @@
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "1.8.9",/*应用版本名称*/
-		"code": "20180201"
+		"code": "20180202"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -415,9 +415,7 @@
 					"html/common/login.html",
 					"html/person/message/index.html",
 					"html/person/devshare/share.html",
-					"html/smart/scenes/index2.html",
-					"html/smart/devices/dev_AX-903.html",
-					"html/smart/devices/dev_WG-100.html"
+					"html/smart/scenes/index2.html"
 				],
 				"priority": 0
 			},
@@ -827,8 +825,9 @@
 					"html/smart/devices/dev_AX-903_setting.html",
 					"html/smart/devices/dev_WG-100_setting.html",
 					"html/smart/devices/dev_41.html",
-					"html/smart/devices/dev_40.html",
-					"html/smart/devices/dev_39.html"
+					"html/smart/devices/dev_25.html",
+					"html/smart/devices/dev_145.html",
+					"html/smart/devices/dev_33.html"
 				],
 				"priority": 0
 			},
@@ -1117,15 +1116,15 @@
 					"html/public/input.html",
 					"html/smart/devices/dev_AX-903_alarmlog.html",
 					"html/smart/devices/dev_select_id.html",
-					"html/smart/devices/dev_AX-903_bind.html",
-					"html/smart/devices/dev_AX-903_datasave.html"
+					"html/smart/devices/dev_AX-903_bind.html"
 				],
 				"priority": 0
 			},
 			"html/smart/devices/dev_WG-100_setting.html": {
 				"resources": [],
 				"refer": [
-					"html/person/devshare/share.html"
+					"html/person/devshare/share.html",
+					"html/smart/devices/camera_settings_arming.html"
 				],
 				"priority": 0
 			},
@@ -1140,7 +1139,8 @@
 				"resources": [],
 				"refer": [
 					"html/smart/devices/dev_35.html",
-					"html/smart/devices/dev_161.html"
+					"html/smart/devices/dev_161.html",
+					"html/smart/devices/dev_25.html"
 				],
 				"priority": 0
 			},
@@ -1165,19 +1165,17 @@
 				"refer": [],
 				"priority": 0
 			},
-			"html/smart/devices/dev_40.html": {
+			"html/smart/devices/dev_25.html": {
 				"resources": [],
 				"refer": [
-					"html/public/input.html",
-					"html/smart/devices/dev_40_set_pwd.html",
-					"html/smart/devices/dev_40_log.html"
+					"html/public/input.html"
 				],
 				"priority": 0
 			},
-			"html/smart/devices/dev_39.html": {
+			"html/smart/devices/dev_41.html": {
 				"resources": [],
 				"refer": [
-					"html/smart/devices/dev_40_log.html"
+					"html/public/input.html"
 				],
 				"priority": 0
 			}
