@@ -417,7 +417,9 @@
 					"html/person/message/index.html",
 					"html/person/devshare/share.html",
 					"html/smart/scenes/index2.html",
-					"html/smart/devices/dev_AX-903.html"
+					"html/smart/devices/dev_AX-903.html",
+					"html/smart/devices/dev_WG-100_setting.html",
+					"html/smart/devices/dev_WG-100.html"
 				],
 				"priority": 0
 			},
@@ -1131,7 +1133,9 @@
 				"resources": [],
 				"refer": [
 					"html/person/devshare/share.html",
-					"html/smart/devices/camera_settings_arming.html"
+					"html/smart/devices/camera_settings_arming.html",
+					"html/smart/add/connect_wifi.html",
+					"html/smart/devices/camera_settings_log.html"
 				],
 				"priority": 0
 			},

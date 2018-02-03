@@ -222,7 +222,9 @@
 			"html/smart/devices/camera_settings.html",
 			"html/person/message/index.html",
 			"html/smart/devices/dev_my_list.html",
-			"html/smart/devices/dev_AX-903.html"
+			"html/smart/devices/dev_AX-903.html",
+			"html/smart/devices/dev_WG-100_setting.html",
+			"html/smart/devices/dev_WG-100.html"
 		],
 		"resources": [
 			"image/home/dev_camera.png",
@@ -457,7 +459,9 @@
 	},
 	"html/smart/devices/dev_WG-100_setting.html": {
 		"refer": [
-			"html/smart/devices/camera_settings_arming.html"
+			"html/smart/devices/camera_settings_arming.html",
+			"html/smart/add/connect_wifi.html",
+			"html/smart/devices/camera_settings_log.html"
 		]
 	},
 	"html/smart/devices/dev_25.html": {
