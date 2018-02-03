@@ -183,7 +183,9 @@
 			"html/smart/devices/dev_25.html",
 			"html/smart/devices/dev_145.html",
 			"html/smart/devices/dev_33.html",
-			"html/smart/devices/dev_41.html"
+			"html/smart/devices/dev_41.html",
+			"html/smart/devices/dev_40.html",
+			"html/smart/devices/dev_AX-903.html"
 		],
 		"resources": [
 			"image/smart/devices/bg/903@3xweb.png",
@@ -214,7 +216,8 @@
 			"html/person/devshare/share.html",
 			"html/smart/devices/camera_settings.html",
 			"html/person/message/index.html",
-			"html/smart/devices/dev_my_list.html"
+			"html/smart/devices/dev_my_list.html",
+			"html/common/login.html"
 		],
 		"resources": [
 			"image/home/dev_camera.png",
@@ -418,7 +421,9 @@
 		"refer": [
 			"html/smart/devices/dev_35.html",
 			"html/smart/devices/dev_161.html",
-			"html/smart/devices/dev_25.html"
+			"html/smart/devices/dev_25.html",
+			"html/smart/devices/dev_33.html",
+			"html/smart/devices/dev_my_list.html"
 		]
 	},
 	"html/smart/devices/dev_129.html": {
@@ -445,7 +450,8 @@
 	},
 	"html/smart/devices/dev_WG-100_setting.html": {
 		"refer": [
-			"html/smart/devices/camera_settings_arming.html"
+			"html/smart/devices/camera_settings_arming.html",
+			"html/public/input.html"
 		]
 	},
 	"html/smart/devices/dev_25.html": {
@@ -456,6 +462,12 @@
 	"html/smart/devices/dev_41.html": {
 		"refer": [
 			"html/public/input.html"
+		]
+	},
+	"html/person/collection/my_collection.html": {
+		"refer": [
+			"html/nearby/discover/discover_details.html",
+			"html/nearby/business/store_details.html"
 		]
 	}
 }

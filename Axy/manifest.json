@@ -827,7 +827,8 @@
 					"html/smart/devices/dev_41.html",
 					"html/smart/devices/dev_25.html",
 					"html/smart/devices/dev_145.html",
-					"html/smart/devices/dev_33.html"
+					"html/smart/devices/dev_33.html",
+					"html/smart/devices/dev_40.html"
 				],
 				"priority": 0
 			},
@@ -1124,7 +1125,8 @@
 				"resources": [],
 				"refer": [
 					"html/person/devshare/share.html",
-					"html/smart/devices/camera_settings_arming.html"
+					"html/smart/devices/camera_settings_arming.html",
+					"html/public/input.html"
 				],
 				"priority": 0
 			},
@@ -1140,7 +1142,9 @@
 				"refer": [
 					"html/smart/devices/dev_35.html",
 					"html/smart/devices/dev_161.html",
-					"html/smart/devices/dev_25.html"
+					"html/smart/devices/dev_25.html",
+					"html/smart/devices/dev_33.html",
+					"html/smart/devices/dev_my_list.html"
 				],
 				"priority": 0
 			},
@@ -1176,6 +1180,14 @@
 				"resources": [],
 				"refer": [
 					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/person/collection/my_collection.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html",
+					"html/nearby/business/store_details.html"
 				],
 				"priority": 0
 			}

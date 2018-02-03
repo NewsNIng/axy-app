@@ -168,7 +168,6 @@
 					this.info = this.$view.info;
 					mui.back = function() {
 						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
-
 						var view = plus.webview.currentWebview();
 						view.close();
 					}.bind(this)
@@ -195,10 +194,10 @@
 								// 页面不存在
 								mui.toast('尚未支持该配件');
 							});
-
 						} else {
 							//设备
-							alert(this.devid);
+							mui.openWindow('../devices/dev_my_list.html', 'dev_my_list');
+							mui.back();
 						}
 					},
 					bind: function() {
