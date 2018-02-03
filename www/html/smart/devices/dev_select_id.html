@@ -88,7 +88,7 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">选择主机设备</h1>
+				<h1 class="mui-title">选择设备</h1>
 			</header>
 
 			<div class="mui-content">
@@ -143,6 +143,9 @@
 					devs: function() {
 						var tempName;
 						return this.devs_.filter(function(item) {
+							if(item.online !== 1){
+								return false;
+							}
 							tempName = app.dev.findName(item.type)
 							if(this.filter.indexOf(tempName) >= 0) {
 								return false;

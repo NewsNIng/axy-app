@@ -15,6 +15,7 @@
 			body,
 			.mui-content {
 				background-color: #F4F8FB;
+				padding-bottom: 0;
 			}
 			
 			header img {
@@ -51,14 +52,18 @@
 
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">添加 新设备/配件</h1>
+				<h1 class="mui-title">添加新设备</h1>
 				<span class="mui-pull-right app-color-white app-font-size-28" style="line-height: 45px;" @tap="onSaveTap()">
 					确定
 				</span>
 			</header>
 
 			<div class="mui-content app-font-size-28">
-				<input ref="input" type="text" v-model='code' placeholder="请输入设备或配件的后8位条码编号" />
+				<input ref="input" type="text" v-model='code' placeholder="请输入GPRS报警主机的ID编号" />
+			</div>
+			
+			<div class="app-font-size-24 app-color-9f9fa0" style="margin: 0 0.3rem;">
+				GPRS的报警主机ID编号通常贴在背面，以AX-904开头
 			</div>
 
 		</div>
@@ -87,21 +92,21 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						code: '',
+						code: 'AX-904-',
 					};
 				},
 				watch: {
 					code: function(n, old) {
-
+						
 						this.$refs.input.focus();
 						// 先全部转为大写
 						n = n.toUpperCase();
 						// 验证
-						if(!/^[A-F|\d]{0,8}$/.test(n)) {
+						if(!/^AX-904-/.test(n)){
 							// 失败就使用旧值
 							this.code = old;
 							// 提示
-							return mui.toast("设备码格式为长度为8的十六进制字符");
+							return mui.toast("设备必须AX-904-开头");
 						}
 						// 赋新值
 						this.code = n;
@@ -113,8 +118,7 @@
 				methods: {
 					onSaveTap: function() {
 						var code = this.code.trim();
-						var emsg = app.rules.testBy(/^[A-F|\d]{8}$/, code, "设备码长度为8位");
-						
+						var emsg = app.rules.testBy(/^AX-904-/, code, "设备必须AX-904-开头");
 						if(emsg) {
 							return mui.toast(emsg);
 						}

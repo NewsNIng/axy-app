@@ -223,16 +223,16 @@ function addMethod(obj, name, fn) {
 	}
 
 	ios.getScreenshotByDevId = function(devid) {
-
+		_account_ = window.localStorage.getItem('_account_');
 		return new Promise(function(resolve, reject) {
 			app.plusReady(function() {
-				var s = ios.getSafeBoxPath();
-				s = s + "Library/Caches/device" + devid + "/thumbnail.png";
-
+				var s = plus.io.convertLocalFileSystemURL("_documents");
+				s = "file://" + s + "/account_" + _account_ + "/device_" + devid + "/thumbnail.png";
 				plus.io.resolveLocalFileSystemURL(s, function() {
 					s = s + "?t" + new Date().getTime();
 					resolve(s);
-				}, reject);
+				});
+				
 			})
 		});
 	}
@@ -250,11 +250,9 @@ function addMethod(obj, name, fn) {
 				plus.io.resolveLocalFileSystemURL(s, function() {
 					s = s + "?t" + new Date().getTime();
 					resolve(s);
-				}, reject);
+				});
 			})
 		});
-
-		return 'file:///storage/emulated/0/CameraFamily/Thumbnail/' + devid + '.jpeg?t=' + new Date().getTime();
 	}
 
 	app.android = android;

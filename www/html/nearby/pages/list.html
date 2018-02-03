@@ -161,7 +161,31 @@
 				width: 0.373333rem;
 			}
 			/*店铺详情end*/
+			
+			
+			
+			.nolog {
+				text-align: center;
+			}
+			
+			.nolog>.nolog_divimg {
+				background-image: url(../../../image/other/icon_Nolog@3x.png);
+				background-size: cover;
+				background-position: center;
+				width: 4rem;
+				height: 3.12rem;
+				margin: 2.986666rem auto 1.413333rem auto;
+			}
+			
+			.nolog .app-btn-main {
+				padding: 0;
+				width: 8.373333rem;
+				margin: 1.226666rem auto;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+			}
 		</style>
+		
 	</head>
 
 	<body>
@@ -174,8 +198,8 @@
 					<span v-text="position"></span>
 				</div>
 				<div>
-					<template v-for="o in shops">
-						<div class="shop">
+					<template v-if="shops.length">
+						<div v-for="o in shops" class="shop">
 							<div class="shop_imgtext box" @tap="onLookTap(o)">
 								<div class="shop_image" :style='"background-image: url("+ _getImg(o.image1,o.image2,o.image3) +");"'>
 
@@ -210,6 +234,15 @@
 							</div>-->
 						</div>
 					</template>
+					<template v-else-if="isGeted">
+						<div class="nolog">
+							<div class="nolog_divimg"></div>
+							<div class="app-font-size-30 app-color-9f9fa0">
+								该城市暂无商家入驻，快来加入吧~
+							</div>
+							<button type="button" class="mui-btn app-btn-main app-font-size-34" @tap="onSignIn()">申请入驻</button>
+						</div>
+					</template>
 				</div>
 
 			</div>
@@ -224,7 +257,7 @@
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
-
+		<script type="text/javascript" src="../../../js/app/app.js" ></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/gps.js"></script>-->
@@ -240,6 +273,9 @@
 						latitude: 0,
 						city: '深圳',
 						shops: [],
+
+						// 是否获取过数据
+						isGeted: false,
 					};
 				},
 				mounted: function() {
@@ -277,9 +313,9 @@
 					onPositionTap: function() {
 						var that = this;
 						// 是否切换地址
-						
+
 						new Promise(function(resolve, reject) {
-							mui.confirm("是否重新选择城市？", "城市选择", ['选择城市', that.city || '当前城市'], function(e) {
+							mui.confirm("是否重新选择城市？", "城市选择", ['选择城市', '取消'], function(e) {
 								if(!e.index) {
 									// 选择城市
 									app.page.getPosition(function(data) {
@@ -287,34 +323,32 @@
 										// 通知上层 城市变化
 										new ni.Broadcast().emit('city_change_sub', {
 											city: data.city
-										},{
+										}, {
 											views: [that.$view.parent()]
 										})
-										
-										
+
 										resolve({
 											longitude: data.longitude,
 											latitude: data.latitude,
-											
+
 										});
-										
-										
+
 										// 通知经纬度变化
-//										new this.$Broadcast().emit("city_change", {
-//											longitude: data.longitude,
-//											latitude: data.latitude,
-//											city: data.city
-//										}, {
-//											views: ['nearby_pages_list']
-//										});
+										//										new this.$Broadcast().emit("city_change", {
+										//											longitude: data.longitude,
+										//											latitude: data.latitude,
+										//											city: data.city
+										//										}, {
+										//											views: ['nearby_pages_list']
+										//										});
 									});
-								}else{
+								} else {
 									// 当前城市
 									resolve({});
 								}
 							});
-						}).then(function(rs){
-							rs.room = 13; 
+						}).then(function(rs) {
+							rs.room = 13;
 							// 打开地图选择
 							app.page.getMaps(function(p) {
 								that.position = p.address;
@@ -324,7 +358,7 @@
 								that._down();
 							}, rs);
 						});
-						
+
 					},
 
 					// 更新地理位置
@@ -354,13 +388,12 @@
 					},
 					// 获取商铺列表
 					_getList: function(f) {
-						var w = plus ? plus.nativeUI.showWaiting() : null;
+						//var w = plus ? plus.nativeUI.showWaiting() : null;
 						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
-							w && w.close();
+							//w && w.close();
 							if(err) {
 								return mui.toast(err.message);
 							}
-
 							f(data);
 						}, this.n);
 					},
@@ -416,6 +449,7 @@
 						this.n = 1;
 						this.shops = [];
 						this._getList(function(data) {
+							this.isGeted = true;
 							console.log(JSON.stringify(data));
 							this.shops.unshift.apply(this.shops, data);
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
@@ -439,14 +473,21 @@
 						return(n < 10 ? '0' : '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00' : '30');
 					},
 					_m2km: function(m) {
-						if(m < 1000){
+						if(m < 1000) {
 							return m + ' m';
 						}
-						return (m / 1000).toFixed(1) + " km";
+						return(m / 1000).toFixed(1) + " km";
 					},
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
 					},
+					
+					// 申请入驻
+					onSignIn: function(){
+						app.user.get(function(u){
+							u && mui.openWindow('../business/signup.html', 'signup');
+						});
+					}
 				}
 
 			});

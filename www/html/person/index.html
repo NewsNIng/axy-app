@@ -115,10 +115,9 @@
 	<body>
 
 		<div class="mui-content noImmersed">
-
 			<div class="bg-box">
 				<img data-href="information.html" class="img-lazy-load img-lazy-forever bg-box-avastr" :data-src="user.headimgurl" data-type="avatar" />
-				<div class="app-font-size-34 app-color-white bg-box-nickname" v-text="user.nickname"></div>
+				<div class="app-font-size-34 app-color-white bg-box-nickname" v-text="user.nickname || user.account"></div>
 				<!--<div class="app-font-size-24 app-color-white">也许我会迟到，但我从不会缺席。</div>-->
 			</div>
 
@@ -274,7 +273,6 @@
 					getUserInfo: function(){
 						// 获取用户信息
 						this.user = app.user.get();
-//						alert(JSON.stringify(this.user));
 						this.updateLazyImage();
 					},
 					

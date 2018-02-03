@@ -60,7 +60,7 @@
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">窗帘遥控器</h1>
+				<h1 class="mui-title" v-text="devInfo.accessory.name"></h1>
 			</header>
 
 			<div class="mui-content noImmersed">
@@ -154,19 +154,20 @@
 					return {
 						state: true, // 当前状态
 						stateCode: 1, // 状态码 0 关闭 1 打开 2暂停
+						
 						// 防区类型
-						zonetypes: ["Normal Zones",
-							"Activity Zones",
-							"Periphery Zones",
-							"SOS Zones",
-							"Fires Zones",
-							"Gas Zones",
-							"Tamper Zones",
-							"Hostage Zones",
-							"Low Power",
-							"Off Line",
-							"Lost AC",
-							"24H"
+						zonetypes: ["出入防区",
+							"活动防区",
+							"周边防区",
+							"求助防区",
+							"火警防区",
+							"煤气防区",
+							"系统防区",
+							"挟持防区",
+							"欠压防区",
+							"掉线防区",
+							"交流掉线",
+							"24小时防区"
 						],
 
 						// 设备信息
@@ -174,7 +175,7 @@
 							"accessory": {
 								"id": "14255286",
 								"devid": "VH-104GN-2017061500015",
-								"name": "123",
+								"name": "",
 								"action": 41990,
 								"type": 20,
 								"delay": 0,

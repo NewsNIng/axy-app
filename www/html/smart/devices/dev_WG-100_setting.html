@@ -369,22 +369,22 @@
 								dal.device[methodName](dev.devid, function(err, rs) {
 									plus.nativeUI.closeWaiting();
 									if(err) {
-										return mui.toast('删除设备失败');
+										return mui.toast(err.message);
 									}
 									mui.toast('删除成功，设备将会重启');
 									dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
 										if(err) {
-											mui.toast('重启失败，请手动重启设备');
-										} else {
+											mui.toast(err.message);	
+										}else{
 											mui.toast("操作成功！设备状态更新会有一定的延迟")
 										}
 										_B.emit("delete", {}, {
 											views: [that.$view.opener()]
 										});
 										that.$view.close();
-
+										
 									});
-
+									
 								});
 
 							} else {
@@ -406,6 +406,21 @@
 							}
 						});
 					},
+					// 打开wifi设置
+					onWifiSetTap: function() {
+						var that = this;
+						app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data) {
+							dal.devparam.wifi(that.devInfo.devid, that.devInfo.type, data.name,data.pwd,function(err, data){
+								if(err){
+									return mui.toast(err.message);
+								}
+								mui.toast('配置WIFI成功');
+								console.log(JSON.stringify(data));
+							});
+						}.bind(this));
+					},
+					
+					
 				}
 			});
 		</script>
