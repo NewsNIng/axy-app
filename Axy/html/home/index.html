@@ -86,6 +86,7 @@
 			
 			.dev_menu .d1 {
 				width: 50%;
+				
 				overflow: hidden;
 			}
 			
@@ -96,13 +97,15 @@
 			}
 			
 			.dev_menu .d2 {
-				width: 20%;
 				overflow: hidden;
+				float: right;
+				margin-right: 1rem;
 			}
 			
 			.dev_menu .d3 {
-				width: 24%;
 				text-align: right;
+				float: right;
+				margin-right: 0.15rem;
 			}
 			
 			.card {
@@ -367,14 +370,17 @@
 									<img src="../../image/home/dev_camera.png" />
 									<span class="app-font-size-24 app-color-main">{{_fixDevLocation(dev.location) || dev.devid}}</span>
 								</div>
-								<div class="mui-icon d2" @tap="onShareTap()">
-									<img src="../../image/home/dev_share.png" />
-									<span class="app-font-size-24" style="color: #696969;">分享</span>
-								</div>
+								
 								<div class="mui-icon d3" @tap="onDeviceSetTap()">
 									<img src="../../image/home/dev_setting.png" />
 									<span class="app-font-size-24" style="color: #696969;">设置</span>
 								</div>
+								
+								<div class="mui-icon d2" @tap="onShareTap()">
+									<img src="../../image/home/dev_share.png" />
+									<span class="app-font-size-24" style="color: #696969;">分享</span>
+								</div>
+								
 
 							</div>
 						</div>
@@ -495,7 +501,7 @@
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
-				updated: function(el) {
+				update: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";

@@ -180,15 +180,20 @@
 			}
 			
 			#controll .qmenu {
-				padding: 1.253333rem 0.826666rem;
+				padding: 1.253333rem 0.5rem;
 				background-color: #FFFFFF;
 				text-align: center;
+				display: flex;
+				display: -webkit-flex;
 			}
 			
 			#controll div.qmenu>div {
 				text-align: center;
+				margin: 0;
+				padding: 0;
 				display: inline-block;
-				/*width: 22.5%;*/
+				flex: 1;
+				/*width: 25%;*/
 				/*float: left;*/
 			}
 			
@@ -214,14 +219,14 @@
 
 	<body>
 
-		<div id="controll" class="mui-popover"> 
+		<div id="controll" class="mui-popover">
 			<div class="qmenu">
 
 				<div @tap="onTap(1)">
 					<img src="../../../image/smart/devices/btn_sos@3x.png" />
 					<h5 class="app-font-size-24">求救</h5>
 				</div>
-				<div @tap="onTap(8)"> 
+				<div @tap="onTap(8)">
 					<img src="../../../image/smart/devices/others/btn_protection@3x.png" />
 					<h5 class="app-font-size-24">布防</h5>
 				</div>
@@ -355,7 +360,7 @@
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
-				updated: function(el) {
+				update: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
@@ -655,7 +660,7 @@
 					},
 					// 智能配件点击
 					onZoneTap: function(o, i) {
-//						console.log(o.type);
+						//						console.log(o.type);
 
 						var that = this;
 						Rx.Observable.create(function(ob) {
@@ -716,7 +721,7 @@
 
 						var name = app.dev.findName(o.type);
 
-						var url,pageid;
+						var url, pageid;
 						switch(name) {
 							case "WG-100":
 								{
@@ -786,7 +791,7 @@
 					getDevaccessroyData: function(hide) {
 						var waitTitle = hide ? "正在更新配件信息..." : "正在获取配件...";
 						plus.nativeUI.showWaiting(waitTitle, {
-							back: hide ? 'transmit': 'close'
+							back: hide ? 'transmit' : 'close'
 						});
 
 						dal.devaccessory.allacc(function(err, data) {

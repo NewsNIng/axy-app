@@ -232,7 +232,7 @@
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
-		<script type="text/javascript" src="../../js/app/app-page.js" ></script> 
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 
 		<script type="text/javascript">
 			mui.init()
@@ -241,7 +241,7 @@
 				el: ".mui-content",
 				data: function() {
 					return {
-						username: '18718690160',
+						username: '',
 						verifycode: '',
 						loading: false,
 						user_agree: false, // 用户协议
@@ -250,6 +250,18 @@
 						codeT: null,
 						codeNumber: "", // 验证码
 					};
+				},
+
+				mounted: function() {
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					// 拿到上个页面填入的帐号
+					var tel = GetQueryString('tel');
+					this.username = tel;
 				},
 
 				methods: {
@@ -295,31 +307,31 @@
 						var that = this;
 
 						//this.loading = true;
-						if(this.username.trim().length === 0){
+						if(this.username.trim().length === 0) {
 							return mui.toast('手机号不能为空');
 						}
-						
-						if(this.codeNumber.trim().length === 0){
+
+						if(this.codeNumber.trim().length === 0) {
 							return mui.toast('验证码不能为空');
 						}
-						
+
 						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确");
 						if(errorMessage) {
 							return mui.toast(errorMessage);
 						}
-						
+
 						// 验证验证码
 						if(this.verifycode !== this.codeNumber) {
 							//this.loading = false;
 							return mui.toast('短信验证码不正确');
 						}
 
-						app.page.openForResultBy('reset2.html', 'reset2', function(data){
-							if(data.result){
+						app.page.openForResultBy('reset2.html', 'reset2', function(data) {
+							if(data.result) {
 								mui.back();
 								//app.page.setResult({}).close();
 							}
-						},{
+						}, {
 							account: this.username
 						});
 

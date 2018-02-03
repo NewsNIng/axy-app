@@ -20,7 +20,6 @@
 				padding-top: 0;
 			}
 			
-			
 			.menu:before {
 				content: '';
 				display: block;
@@ -154,9 +153,11 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				
-				<div class="imgdiv" :class="_getDevName(devInfo.type)" v-devbg :data-devid="devInfo.devid" v-devbg >	</div>
-				
+
+				<div class="imgdiv" :class="_getDevName(devInfo.type)" v-devbg :data-devid="devInfo.devid">
+
+				</div>
+
 				<div class="menu app-font-size-28">
 					<div class="tips">
 						<span class="app-color-333333">请选择权限：</span>
@@ -191,30 +192,28 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/lib/qrcode.min.js"></script>
-		<script type="text/javascript" src="../../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
-		
 
 		<script type="text/javascript">
-			
 			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
-			
+
 			Vue.directive('devbg', {
 				inserted: function(el) {
 					var devid = el.dataset.devid;
-					getScrrenHotBgFn(devid).then(function(path){
+					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
-				updated: function(el) {
+				update: function(el) {
 					var devid = el.dataset.devid;
-					getScrrenHotBgFn(devid).then(function(path){
+					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
 					})
+
 				},
 			})
-			
-			
+
 			mui.init();
 
 			var sharecodeid = +new Date();
@@ -298,8 +297,8 @@
 					this.$refs.canvas.width = this.canvasWidth;
 					this.$refs.canvas.height = window.innerWidth * 2;
 					var that = this;
-					mui.back = function(){
-						if(that.mask){
+					mui.back = function() {
+						if(that.mask) {
 							that.mask = false;
 							return false;
 						}
@@ -308,7 +307,8 @@
 				},
 
 				plusReady: function() {
-					this.devInfo = this.$view.devInfo; 
+					this.devInfo = this.$view.devInfo;
+					console.log(JSON.stringify(this.devInfo));
 				},
 				methods: {
 					getCode: function() {
@@ -395,7 +395,6 @@
 						//context.scale(2, 2);
 						context.fillStyle = "#FFF";
 						context.fillRect(0, 0, this.$refs.canvas.width, this.$refs.canvas.height);
-
 
 						// 绘制二维码
 						var img = new Image();

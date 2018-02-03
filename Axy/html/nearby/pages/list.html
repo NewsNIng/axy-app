@@ -445,12 +445,15 @@
 					//					},
 
 					_down: function() {
+						this.isGeted = false;
 						console.log("down");
 						this.n = 1;
 						this.shops = [];
 						this._getList(function(data) {
-							this.isGeted = true;
 							console.log(JSON.stringify(data));
+							if(!data || !data.length){
+								this.isGeted = true; 
+							}
 							this.shops.unshift.apply(this.shops, data);
 							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
 						}.bind(this));
