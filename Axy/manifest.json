@@ -402,7 +402,8 @@
 					"html/home/picture_2@3x.png",
 					"html/home/picture_1@3x.png",
 					"image/home/btn_Adddevice@3x.png",
-					"html/home/picture_3@3x.png"
+					"html/home/picture_3@3x.png",
+					"image/smart/devices/bg/903@3xweb.png"
 				],
 				"refer": [
 					"html/search/index.html",
@@ -415,7 +416,8 @@
 					"html/common/login.html",
 					"html/person/message/index.html",
 					"html/person/devshare/share.html",
-					"html/smart/scenes/index2.html"
+					"html/smart/scenes/index2.html",
+					"html/smart/devices/dev_AX-903.html"
 				],
 				"priority": 0
 			},
@@ -619,7 +621,8 @@
 				"refer": [
 					"html/nearby/business/store_details.html",
 					"html/public/position.html",
-					"html/public/maps.html"
+					"html/public/maps.html",
+					"html/nearby/business/signup.html"
 				],
 				"priority": 0
 			},
@@ -676,7 +679,8 @@
 				"refer": [
 					"html/public/input.html",
 					"html/smart/devices/dev_select_id.html",
-					"html/smart/add/scan_code.html"
+					"html/smart/add/scan_code.html",
+					"html/smart/add/scan_code_904.html"
 				],
 				"priority": 0
 			},
@@ -801,7 +805,9 @@
 			"html/smart/devices/dev_my_list.html": {
 				"resources": [
 					"image/smart/devices/bg/903@3xweb.png",
-					"image/smart/devices/bg/wg_100@3xweb.png"
+					"image/smart/devices/bg/wg_100@3xweb.png",
+					"image/smart/scenes/dev_icons/btn_Acousto-opticalarm@3x.png",
+					"image/smart/scenes/dev_icons/btn_Infrareddetector@3x (2).png"
 				],
 				"refer": [
 					"html/smart/add/add_device.html",
@@ -827,7 +833,8 @@
 					"html/smart/devices/dev_41.html",
 					"html/smart/devices/dev_25.html",
 					"html/smart/devices/dev_145.html",
-					"html/smart/devices/dev_33.html"
+					"html/smart/devices/dev_33.html",
+					"html/smart/devices/dev_40.html"
 				],
 				"priority": 0
 			},
@@ -1140,7 +1147,8 @@
 				"refer": [
 					"html/smart/devices/dev_35.html",
 					"html/smart/devices/dev_161.html",
-					"html/smart/devices/dev_25.html"
+					"html/smart/devices/dev_25.html",
+					"html/smart/devices/dev_40.html"
 				],
 				"priority": 0
 			},
@@ -1176,6 +1184,14 @@
 				"resources": [],
 				"refer": [
 					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_40.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_40_set_pwd.html",
+					"html/smart/devices/dev_40_log.html"
 				],
 				"priority": 0
 			}

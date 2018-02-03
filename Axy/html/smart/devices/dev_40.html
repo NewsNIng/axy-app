@@ -371,21 +371,21 @@
 									if(lockData.networkApplyOK) {
 										ob.next("入网成功");
 									} else {
-										ob.error("申请入网失败");
+										ob.error(new Error("申请入网失败"));
 									}
 								} else if(lockData.networkQuitOKValid) {
 									if(lockData.networkQuitOK) {
 										ob.next("退网成功");
 									} else {
-										ob.error("申请退网失败");
+										ob.error(new Error("申请退网失败"));
 									}
 								}
 							});
-						}; 
+						};
 
-						var $time100out = Rx.Observable.timer(100e3).mergeMap(function(ob){
+						var $time60out = Rx.Observable.timer(60e3).mergeMapTo(Rx.Observable.create(function(ob) {
 							ob.error(new Error("连接超时"));
-						});
+						}));
 
 						// 打开提示框
 						this.mask = true;
@@ -398,7 +398,7 @@
 							// 取第一次正确结果
 							.first()
 							// 设置超时时间
-							.takeUntil($time100out);
+							.takeUntil($time60out);
 
 						// 订阅
 						this.applyThread.subscribe(function(msg) {
@@ -424,11 +424,10 @@
 					toggleSwitch: function(isOpen) {
 
 						var that = this;
-						
-						if(!this.devInfo.accessory.enable){
+
+						if(!this.devInfo.accessory.enable) {
 							return mui.toast("操作门锁前请进行入网");
 						}
-						
 
 						//var isOpen = !this.lockInfo.locked;
 						// 显示菊花
@@ -438,7 +437,7 @@
 						var $setLockState = function(pwd) {
 							return Rx.Observable.fromPromise(that.setLockState(isOpen, pwd));
 						};
-						
+
 						// 30s超时
 						var $getLockStateTimerOut = Rx.Observable.timer(30e3);
 
@@ -460,7 +459,6 @@
 								}
 							});
 						};
-
 
 						// 获取设置的密码
 						var $getPwd = Rx.Observable.create(function(ob) {
@@ -565,10 +563,10 @@
 						});
 					},
 					// 开锁日志
-					onLogTap: function(){
+					onLogTap: function() {
 						mui.openWindow("dev_40_log.html", 'dev_lock_log', {
 							extras: {
-								did: this.devInfo.accessory.id || this.devInfo.accessory.aid 
+								did: this.devInfo.accessory.id || this.devInfo.accessory.aid
 							}
 						});
 					}

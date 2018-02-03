@@ -406,6 +406,21 @@
 							}
 						});
 					},
+					// 打开wifi设置
+					onWifiSetTap: function() {
+						var that = this;
+						app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data) {
+							dal.devparam.wifi(that.devInfo.devid, that.devInfo.type, data.name,data.pwd,function(err, data){
+								if(err){
+									return mui.toast(err.message);
+								}
+								mui.toast('配置WIFI成功');
+								console.log(JSON.stringify(data));
+							});
+						}.bind(this));
+					},
+					
+					
 				}
 			});
 		</script>

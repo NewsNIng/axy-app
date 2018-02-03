@@ -372,9 +372,9 @@
 							});
 						}; 
 
-						var $time100out = Rx.Observable.timer(100e3).mergeMap(function(ob){
+						var $time60out = Rx.Observable.timer(60e3).mergeMapTo(Rx.Observable.create(function(ob) {
 							ob.error(new Error("连接超时"));
-						});
+						}));
 
 						// 打开提示框
 						this.mask = true;
@@ -387,7 +387,7 @@
 							// 取第一次正确结果
 							.first()
 							// 设置超时时间
-							.takeUntil($time100out);
+							.takeUntil($time60out);
 
 						// 订阅
 						this.applyThread.subscribe(function(msg) {

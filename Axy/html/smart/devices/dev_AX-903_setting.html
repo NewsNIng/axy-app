@@ -153,13 +153,19 @@
 					// 设备绑定点击
 					onBindTap: function() {
 						var that = this;
-//						alert(this.devInfo.binding);
+						
 						if(this.devInfo.binding) {
-
-							mui.openWindow('dev_AX-903_bind.html', 'dev_AX-903_bind', {
-								extras: {
-									devInfo: this.devInfo,
+							app.page.openForResultBy('dev_AX-903_bind.html', 'dev_AX-903_bind', function(data){
+								if(data.chage){
+									that.devInfo.binding = data.bindid;
+									_B.emit('chageBind', {
+										bindid: data.bindid
+									},{
+										views: ['dev_my_list','dev_AX-903']
+									});
 								}
+							},{
+								devInfo: this.devInfo
 							});
 						} else {
 							app.page.openForResultBy('dev_select_id.html', 'dev_select_id', function(data) {
@@ -177,6 +183,12 @@
 									}, {
 										views: ['dev_my_list']
 									});
+									_B.emit('chageBind', {
+										bindid: data.devid 
+									},{
+										views: ['dev_my_list','dev_AX-903'] 
+									});
+									
 								});
 
 							}, {

@@ -65,9 +65,12 @@
 		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
+
+			var _B = new ni.Broadcast();
 
 			new Vue({
 				el: '.mui-content',
@@ -98,6 +101,10 @@
 							}, {
 								views: ['dev_my_list']
 							});
+							app.page.setResult({
+								bindid: "",
+								chage: true,
+							}).close();
 						});
 					},
 				}

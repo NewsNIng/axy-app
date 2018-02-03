@@ -118,6 +118,7 @@
 
 					this.isDev = this.$view.isDev;
 					this.isSmart = this.$view.isSmart;
+					this.name = this.$view.name;
 
 					setTimeout(function() {
 						this.resetScan();
@@ -127,11 +128,22 @@
 					// 手动添加设备号
 					onAddTap: function() {
 						this.flash = false;
+						
+						var url = 'scan_code.html';
+						if(this.name === 'AX-904'){
+							// GPRS 特殊处理
+							url = 'scan_code_904.html';
+						}
+						
 						//this.closeScan();
 						//this.stopScan();
 						// 手动输入序列号 
-						app.page.openForResultBy('scan_code.html', 'scan_code', function(data) {
+						app.page.openForResultBy(url, 'scan_code', function(data) {
 							if(data.code) {
+								var errmsg = app.rules.testBy(/^(?!25)/, data.code, "非配件设备码");
+								if(errmsg){
+									return mui.toast(errmsg);
+								}
 								// 验证
 								this._addDevice(data.code);
 							} else {

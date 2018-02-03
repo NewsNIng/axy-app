@@ -504,7 +504,7 @@
 			});
 
 			var advert_cache = new ni.Cache('advert_cache', []);
-			
+
 			var POSITION = new ni.Cache('position_cache', null);
 
 			var _B = new ni.Broadcast();
@@ -610,7 +610,7 @@
 						scrollIndicator: "none", // 隐藏滚动条
 						render: "always", // 始终进行渲染
 					});
-					
+
 					// 是否登录判断
 					var $isLogin = Rx.Observable.create(function(ob) {
 						//如果用户已经登录了 则  获取第一个设备
@@ -618,7 +618,7 @@
 							ob.next();
 						}
 					});
-					
+
 					// 当登录时
 					var $onLogin = Rx.Observable.create(function(ob) {
 							//如果用户重新了 则  获取第一个设备
@@ -628,17 +628,17 @@
 						})
 						// 延迟200ms
 						.delay(200);
-					
+
 					$isLogin.merge($onLogin).subscribe(function() {
 						// 获取第一个设备
 						that.getDeviceOne();
 					});
 
 					// 上一次地理定位
-					var $prePosition = Rx.Observable.create(function(ob){
-						var p = POSITION.data;	
+					var $prePosition = Rx.Observable.create(function(ob) {
+						var p = POSITION.data;
 						// console.log("最近地理位置："+JSON.stringify(p)); 
-						if(p){
+						if(p) {
 							ob.next(p);
 						}
 					});
@@ -651,25 +651,23 @@
 
 					// 获取定位信息
 					$prePosition
-					.merge($position)
-					// 定位最多30s
+						.merge($position)
+						// 定位最多30s
 						.takeUntil($time30out)
 						// 拿到数据
 						.subscribe(function(p) {
 							// 保存最近地理位置
-							POSITION.data = p; 
+							POSITION.data = p;
 							that.longitude = p.coords.longitude;
 							that.latitude = p.coords.latitude;
 							that.city = p.address.city.replace('市', '');
 							that.position = p.address.poiName;
 							// 加载附近的店
 							that.getNearShops();
-						}, function(err){
+						}, function(err) {
 							// 加载附近的店
 							that.getNearShops();
 						});
-
-					
 
 					// 监听设备变化
 					this.listenDev();
@@ -730,23 +728,26 @@
 
 						var name = app.dev.findName(o.type);
 
-						var url;
+						var url, pageid;
 						switch(name) {
 							case "WG-100":
 								{
 									url = "../smart/devices/dev_WG-100.html";
+									pageid = "dev_WG-100";
 									break;
 								}
 
 							case "AX-903":
 								{
 									url = "../smart/devices/dev_AX-903.html";
+									pageid = "dev_AX-903";
 									break;
 								}
 
 							case "AX-904":
 								{
 									url = "../smart/devices/dev_AX-904.html";
+									pageid = "dev_AX-904";
 									break;
 								}
 
@@ -759,16 +760,16 @@
 						}
 
 						if(url) {
-							mui.openWindow(url, url, {
+							mui.openWindow(url, pageid, {
 								extras: {
 									devInfo: o
 								}
 							});
 							return;
 						}
-
+						var type = app.dev.fixType(o.type);
 						Rx.Observable.create(function(ob) {
-							if(o.type >= 0x1040 && o.type <= 0x1080) {
+							if(type >= 0x1040 && type <= 0x1080) {
 								// 获取设备的通道信息
 								plus.nativeUI.showWaiting("获取通道信息中...");
 								dal.devparam.chlist(o.devid, o.type, function(err, data) {
@@ -807,7 +808,7 @@
 							}
 						}).subscribe(function(data) {
 							var w1 = data.b;
-							var w2 = o.type === 0x1046 ? 1 : 0;
+							var w2 = type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
 								getScrrenHotBgFn(o.devid).then(function(path) {
 									el.style.backgroundImage = "url(" + path + ")";
@@ -921,35 +922,40 @@
 
 						var name = app.dev.findName(this.dev.type);
 
-						var url;
+						var url, pageid;
+						
 						switch(name) {
 							case "WG-100":
 								{
 									url = "../smart/devices/dev_WG-100_setting.html";
+									pageid = "dev_WG-100_setting";
 									break;
 								}
 
 							case "AX-903":
 								{
 									url = "../smart/devices/dev_AX-903_setting.html";
+									pageid = "dev_AX-903_setting";
 									break;
 								}
 
 							case "AX-904":
 								{
 									url = "../smart/devices/dev_AX-904.html";
+									pageid = "dev_AX-904";
 									break;
 								}
 
 							default:
 								{
 									url = "../smart/devices/camera_settings.html";
+									pageid = "camera_settings";
 									break;
 								}
 
 						}
 
-						url && app.page.openForResultBy(url, "devsetting", function() {
+						url && app.page.openForResultBy(url, pageid, function() {
 
 						}, {
 							devInfo: this.dev

@@ -412,7 +412,19 @@
 								}
 								mui.toast('配置WIFI成功');
 								console.log(JSON.stringify(data));
-							});
+							})
+							
+							
+							// 生成xml字符串
+//							var xml = xmlFactory.CreatAnxinWifi(data.name, data.pwd);
+//							// 调用原生 设备参数配置通道 WIFI
+//							P.SetDeviceParamAsyn(this.basicInfo.devid, xml, function(rs) {
+//								rs = JSON.parse(rs);
+//								if(!rs || rs.code !== 0) {
+//									return mui.toast('配置WIFI失败');
+//								}
+//								return mui.toast('配置WIFI成功');
+//							});
 						}.bind(this));
 					},
 
