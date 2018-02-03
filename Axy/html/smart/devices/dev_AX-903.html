@@ -133,8 +133,8 @@
 
 					<li class="mui-table-view-cell app-color-9f9fa0">
 						<span>{{k.name}}</span>
-						<span>{{w['state' + k.index] / k.divisor + k.company}}</span> 
-						<span class="app-color-ff3b30">{{a['state' + k.index] / k.divisor + k.company}}</span>
+						<span>{{w['state' + k.index]  + k.company}}</span>
+						<span class="app-color-ff3b30">{{a['state' + k.index]+ k.company}}</span>
 					</li>
 				</template>
 				<li class="mui-table-view-cell" style="text-align: center;">
@@ -165,7 +165,7 @@
 								{{k.name}}
 							</div>
 							<div class="app-font-size-52">
-								{{o['state' + k.index] / k.divisor + k.company}}
+								{{o['state' + k.index] / 10 + k.company}}
 							</div>
 						</div>
 					</template>
@@ -199,8 +199,8 @@
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
-		
-		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
+
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
 		<img src="" />
 		<script type="text/javascript">
@@ -209,49 +209,41 @@
 			var _stateList = [{
 					name: "剩余电流",
 					index: 9,
-					divisor: 1,
 					company: 'mA'
 				},
 				{
 					name: "环境温度",
 					index: 5,
-					divisor: 10,
 					company: '℃',
 				},
 				{
 					name: "A相电流",
 					index: 6,
-					divisor: 1,
 					company: 'A'
 				},
 				{
 					name: "A相温度",
 					index: 2,
-					divisor: 10,
 					company: '℃',
 				},
 				{
 					name: "B相电流",
 					index: 7,
-					divisor: 1,
 					company: 'A'
 				},
 				{
 					name: "B相温度",
 					index: 3,
-					divisor: 10,
 					company: '℃',
 				},
 				{
 					name: "C相电流",
 					index: 8,
-					divisor: 1,
 					company: 'A'
 				},
 				{
 					name: "C相温度",
 					index: 4,
-					divisor: 10,
 					company: '℃',
 				},
 
@@ -336,9 +328,14 @@
 					};
 				},
 				plusReady: function() {
+					var that = this;
 					this.devInfo = this.$view.devInfo;
 					this.getData();
-				},
+					
+					new ni.Broadcast().on('chageBind', function(data){
+						that.devInfo.binding = data.bindid;
+					});
+				}, 
 				methods: {
 
 					// 获取状态数据
@@ -347,15 +344,18 @@
 							if(err) {
 								return mui.toast("获取信息失败");
 							}
-							this.o = rs.state;
-							pv.w = rs.warn;
-							pv.a = rs.alarm;
+							console.log(JSON.stringify(rs));
+							rs.state && (this.o = rs.state);
+							rs.warn && (pv.w = rs.warn);
+							rs.alarm && (pv.a = rs.alarm);
 						}.bind(this));
 					},
 
 					// 动态计算状态显示颜色
 					getStateClass: function(index) {
 						var indexVal = this.o['state' + index];
+						indexVal = indexVal / 10;
+
 						var maxVal = pv.w['state' + index];
 						var noVal = pv.a['state' + index];
 						if(indexVal > maxVal) {
@@ -381,10 +381,13 @@
 
 					// 实时视频
 					btn_videoTap: function() {
-						if(this.devInfo.online !== 1){
+						var devid = this.devInfo.binding;
+						if(!devid) {
+							return mui.toast('暂未绑定摄像机');
+						}
+						if(this.devInfo.online !== 1) {
 							return mui.toast('绑定设备离线');
 						}
-						var devid = this.devInfo.binding;
 						// 打开视频播放页面
 						plug.H5NativeBridge.StartDevicePlay(devid, 0, 0, devid, function() {});
 					},
@@ -414,7 +417,7 @@
 						text = text.split(/\n/)
 						var i = 0;
 						var str = "\n";
-						while(i < 16){
+						while(i < 16) {
 							str += text[i++];
 							str += "：";
 							str += text[i++];
@@ -422,21 +425,22 @@
 						}
 						str = "设备ID：" + this.devInfo.devid + "\n" + str;
 						// str += "\n" + new Date().toFormatString('yyyy年MM月dd日 hh点mm分ss秒');
-						
+
 						// 发送短信
 						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
 						msg.to = [];
 						msg.body = str;
 						plus.messaging.sendMessage(msg);
-						
+
 					},
 
 					// 设置
 					btn_SetupTap: function() {
-						mui.openWindow('dev_AX-903_setting.html', 'dev_AX-903_setting', {
-							extras: {
-								devInfo: this.devInfo
-							}
+						var that = this;
+						app.page.openForResultBy('dev_AX-903_setting.html', 'dev_AX-903_setting', function(data) {
+							
+						}, {
+							devInfo: this.devInfo
 						});
 					},
 				}

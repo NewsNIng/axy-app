@@ -194,20 +194,20 @@
 								that.active = !that.active;
 								return mui.toast(err.message);
 							}
-							mui.toast("设置成功");
+							mui.toast("活动推送开关设置成功");
 						});
 					},
 					onSystemToggle: function() {
 						var that = this;
 						this.system = !this.system;
 						plus.nativeUI.showWaiting();
-						dal.push.updateSystem(PUSHID.data, this.active, function(err, data){
+						dal.push.updateSystem(PUSHID.data, this.system, function(err, data){
 							plus.nativeUI.closeWaiting();
 							if(err){
 								that.system = !that.system;
 								return mui.toast(err.message);
 							}
-							mui.toast("设置成功");
+							mui.toast("系统推送开关设置成功");
 						});
 					},
 					onAllTap: function() {

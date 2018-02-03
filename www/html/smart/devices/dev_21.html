@@ -45,6 +45,16 @@
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
+			
+			.menu-warp>img {
+				width: 1.493333rem;
+			}
+			
+			.menu-warp {
+				text-align: center;
+				margin-top: 0.746666rem;
+				line-height: 0.746666rem;
+			}
 		</style>
 	</head>
 
@@ -53,13 +63,15 @@
 
 			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">智能插座</h1>
+				<h1 class="mui-title" v-text="devInfo.accessory.name"></h1>
 			</header>
 
 			<div class="mui-content noImmersed">
 				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/icon/btn_Intelligentsocket@3x.png' : '../../../image/smart/devices/icon/btn_Intelligentsocket1@3x.png') + ')'">
 				</div>
-				<div class="menu-warp app-font-size-24 app-color-dark"></div>
+				<div class="menu-warp app-font-size-28 app-color-dark">
+					<img @tap="openLight()" :src="'../../../image/smart/devices/others/'+(state.on?'btn_open@3x.png':'btn_Close@3x.png')" /><br /><span v-text="state.on?'关闭':'打开'"></span>
+				</div>
 
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell">
@@ -131,19 +143,20 @@
 				data: function() {
 					return {
 						state: true, // 当前状态
+
 						// 防区类型
-						zonetypes: ["Normal Zones",
-							"Activity Zones",
-							"Periphery Zones",
-							"SOS Zones",
-							"Fires Zones",
-							"Gas Zones",
-							"Tamper Zones",
-							"Hostage Zones",
-							"Low Power",
-							"Off Line",
-							"Lost AC",
-							"24H"
+						zonetypes: ["出入防区",
+							"活动防区",
+							"周边防区",
+							"求助防区",
+							"火警防区",
+							"煤气防区",
+							"系统防区",
+							"挟持防区",
+							"欠压防区",
+							"掉线防区",
+							"交流掉线",
+							"24小时防区"
 						],
 
 						// 设备信息
@@ -151,7 +164,7 @@
 							"accessory": {
 								"id": "14255286",
 								"devid": "VH-104GN-2017061500015",
-								"name": "123",
+								"name": "",
 								"action": 41990,
 								"type": 20,
 								"delay": 0,
@@ -169,6 +182,12 @@
 							"devType": 4166,
 							"statusCode": 0
 						},
+						state: {
+							"lost": false,
+							"underVoltage": false,
+							"onValid": false,
+							"on": false
+						}
 					};
 				},
 				mounted: function() {
@@ -207,6 +226,7 @@
 						plus.navigator.setStatusBarStyle('light');
 						view.close();
 					}.bind(this);
+					this._getInfo();
 				},
 				methods: {
 					// 切换开关
@@ -257,6 +277,31 @@
 							info: that.devInfo
 						});
 					},
+					_getInfo: function() {
+						var that = this;
+						plus.nativeUI.showWaiting();
+						dal.devaccessory.socket_data(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log("err==>"+err+",data==>"+data);
+							if(err){
+								return mui.toast(err.message);
+							}
+							that.state = data;
+						});
+					},
+					openLight: function(){
+						var that = this;
+						plus.nativeUI.showWaiting();
+						dal.devaccessory.socket(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, !this.state.on, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log("err==>"+err+",data==>"+data);
+							if(err){
+								return mui.toast(err.message);
+							}
+							mui.toast("操作成功！");
+							that.state.on = !that.state.on;
+						});
+					}
 				}
 			});
 		</script>

@@ -111,7 +111,7 @@
 					<div @toggle="onToggle()" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': remember}">
 						<div class="mui-switch-handle"></div>
 					</div>
-				</div> 
+				</div>
 
 			</div>
 		</div>
@@ -137,20 +137,34 @@
 				el: '.root',
 				data: function() {
 					return {
-						pwd: "123456",
+						pwd: "",
 						remember: true
 					};
 				},
+
+				watch: {
+					pwd: function(newValue, oldValue) {
+						if(!/^\d{0,6}$/.test(newValue)) {
+							mui.toast("密码必须是4到6位的数字")
+							return this.pwd = oldValue;
+						}
+					}
+				},
+
 				plusReady: function() {
 
 				},
 
 				methods: {
-					onToggle: function(){
+					onToggle: function() {
 						this.remember = !this.remember;
 					},
-					
+
 					onSave: function() {
+						if(!/^\d{4,6}$/.test(this.pwd)) {
+							return mui.toast("密码必须是4到6位的数字");
+						}
+
 						app.page.setResult({
 							pwd: this.pwd,
 							remember: this.remember

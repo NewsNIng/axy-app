@@ -107,7 +107,7 @@
 	page.openForResultBy = function(url, id, callback, ex){
 		id = id || url;
 		ex = ex || {};
-		_tempSrc = '_APP_PAGE_RESULT_FUN_' + id + '_' + _id;
+		_tempSrc = '_APP_PAGE_RESULT_FUN_' + _id;
 		_id++;
 		
 		w[_tempSrc] = function(data){

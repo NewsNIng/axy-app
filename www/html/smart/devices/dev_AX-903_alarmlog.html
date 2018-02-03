@@ -180,23 +180,52 @@
 
 			var dtPick;
 
-			var stateDir = (function(arr) {
-				var dir = {};
-				for(var i = 0, l = arr.length; i < l; i++) {
-					dir['state' + (i + 1)] = arr[i];
-				}
-				return dir;
-			}([
-				"",
-				"A相温度",
-				"B相温度",
-				"C相温度",
-				"环境温度",
-				"A相电流",
-				"B相电流",
-				"C相电流",
-				"剩余电流",
-			]));
+
+			
+			
+			var _stateList = [{
+					name: "剩余电流",
+					index: 9,
+					company: 'mA'
+				},
+				{
+					name: "环境温度",
+					index: 5,
+					company: '℃',
+				},
+				{
+					name: "A相电流",
+					index: 6,
+					company: 'A'
+				},
+				{
+					name: "A相温度",
+					index: 2,
+					company: '℃',
+				},
+				{
+					name: "B相电流",
+					index: 7,
+					company: 'A'
+				},
+				{
+					name: "B相温度",
+					index: 3,
+					company: '℃',
+				},
+				{
+					name: "C相电流",
+					index: 8,
+					company: 'A'
+				},
+				{
+					name: "C相温度",
+					index: 4,
+					company: '℃',
+				},
+
+			];
+			
 
 			new Vue({
 				el: '#box',
@@ -206,6 +235,8 @@
 
 						did: -1,
 						n: 1,
+						
+						stateList: _stateList
 					};
 				},
 
@@ -224,7 +255,8 @@
 								if(!!item.alarmValue[i]) {
 									o[day].push({
 										key: i,
-										time: d.toFormatString("hh:mm:ss")
+										time: d.toFormatString("hh:mm:ss"),
+										value: item.stateValue[i]
 									});
 								}
 							}
@@ -259,7 +291,7 @@
 								click: true,
 								scrollY: true,
 								pullUpLoad: {
-									threshold: -70, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+									threshold: -30, // 负值是当上拉到超过低部 30px；正值是距离底部距离 时，                    
 								}
 							});
 							this.scroll.on('pullingUp', function() {
@@ -287,16 +319,27 @@
 							plus.nativeUI.closeWaiting();
 							if(err) {
 								return mui.toast(err.message);
-							}
+							}  
 							console.log(JSON.stringify(data));
 							this.logs_.push.apply(this.logs_, data);
 							this.$nextTick(function() {
 								this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
 							}.bind(this));
-						}.bind(this), 23);
+						}.bind(this), 10);  
 					},
-					getState: function(state) { 
-						return stateDir[state] + "发生警告";
+					getState: function(index) {
+						index = +(index.replace('state', ''));
+						var name = "";
+						var len = this.stateList.length;
+						 
+						for(var i = 0; i < len; i++){
+							if(this.stateList[i].index - 1 === index){
+								name = this.stateList[i].name;
+								break;
+							}
+						}
+						
+						return name + "发生警告";
 					},
 
 					// 时间选择

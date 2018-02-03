@@ -423,6 +423,7 @@
 							return;
 						}
 						var url = o.info.video.fname;
+						url = url.replace(/\\/g, "/");
 						if(mui.os.ios) {
 							this.videosrc = url;
 							this.videoplay = true;

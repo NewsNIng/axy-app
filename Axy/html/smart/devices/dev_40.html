@@ -119,11 +119,11 @@
 						<div @tap.slef="closeMask()" class="mask-close-btn"></div>
 					</div>
 					<div class="mask-card-body app-font-size-28 app-color-333333">
-						1.请确认智能门锁已装入电池，并初始化完成（语音播报完毕）
+						1. 请确认智能门锁已装入电池，并开机完成；
 						<div style="height: 10px;"></div>
-						2.按住门锁板背面的“+”键5秒以上（知道电池背后的红灯闪烁一次）
+						2.轻触摸键盘或指纹，划开门锁背面的电池盖，轻按一下“-”键，请确认听到滴的一声；
 						<div style="height: 10px;"></div>
-						3.松开按键后，智能门锁将自动发送入网请求，请耐心等待结果（大约需要10-30s.）
+						3.听到“滴”声后，智能门锁将自动发送入网请求，请耐心等待结果（大约10~30s）。
 					</div>
 					<div class="mask-card-footer">
 
@@ -138,31 +138,18 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (lockInfo.locked? '../../../image/smart/devices/lock/btn_Intelligentdoorlock@3x.png' : '../../../image/smart/devices/lock/btn_Intelligentdoorlock1@3x.png') + ')'">
+				<div class="img-wrap" :style="'background-image: url(' + (lockInfo.locked? '../../../image/smart/devices/lock/btn_Intelligentdoorlock@3x.png' : '../../../image/smart/devices/lock/btn_Intelligentdoorlock1@3x.png') + ')'">
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
-					<!--<div @tap="onSetPassword()">
-						<img src="../../../image/smart/devices/lock/btn_Settingpassword@3x.png" />
-						<div>设置密码</div>
-					</div>-->
 
-					<!--<div @tap="onOncePassword()">
-						<img src="../../../image/smart/devices/lock/btn_Onetimeunlocking@3x.png" />
-						<div>一次性开锁密码</div>
-					</div>-->
-
-					<template v-if="lockInfo.locked">
-						<div>
-							<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />
-							<div>闭锁状态</div>
-						</div>
-					</template>
-					<template v-else>
-						<div>
-							<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />
-							<div>开锁状态</div>
-						</div>
-					</template>
+					<div @tap="toggleSwitch(true)">
+						<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />
+						<div>开锁</div>
+					</div>
+					<div @tap="toggleSwitch(false)">
+						<img src="../../../image/smart/devices/lock/btn_Latchstate@3x.png" />
+						<div>闭锁</div>
+					</div>
 
 				</div>
 
@@ -195,12 +182,12 @@
 
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onLogTap()">
 						<a class="mui-navigate-right">
 							<span>开锁记录</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell" @tap="onNetWorkApply(!lockInfo.networkApplyOK)">
+					<li class="mui-table-view-cell" @tap="onNetWorkApply(!devInfo.accessory.enable)">
 						<a class="mui-navigate-right">
 							<span>入网状态</span>
 							<span class="mui-badge">{{devInfo.accessory.enable?"已入网":"未入网"}}</span>
@@ -279,7 +266,7 @@
 							"devType": 0,
 							"statusCode": 0
 						},
-						lockInfo: { 
+						lockInfo: {
 							"lost": false,
 							"underVoltage": false,
 							"locked": false,
@@ -295,7 +282,7 @@
 
 					};
 				},
-				
+
 				plusReady: function() {
 					var that = this;
 
@@ -307,16 +294,13 @@
 					});
 
 					var $getBaseState = Rx.Observable.fromPromise(this.getBaseState());
-					var $getLockState = Rx.Observable.fromPromise(this.getLockState()); 
+					var $getLockState = Rx.Observable.fromPromise(this.getLockState());
+
 					$getBaseState.mergeMap(function(baseData) {
-						console.log("baseData"); 
-						console.log(JSON.stringify(baseData)); 
 						baseData.id = baseData.aid;
 						mui.extend(that.devInfo.accessory, baseData);
 						return $getLockState;
 					}).subscribe(function(lockData) {
-						console.log("lockData");
-						console.log(JSON.stringify(lockData)); 
 						mui.extend(that.lockInfo, lockData);
 					}, function(err) {
 						mui.toast(err.message);
@@ -387,19 +371,21 @@
 									if(lockData.networkApplyOK) {
 										ob.next("入网成功");
 									} else {
-										ob.error("申请入网失败");
+										ob.error(new Error("申请入网失败"));
 									}
 								} else if(lockData.networkQuitOKValid) {
 									if(lockData.networkQuitOK) {
 										ob.next("退网成功");
 									} else {
-										ob.error("申请退网失败");
+										ob.error(new Error("申请退网失败"));
 									}
 								}
 							});
 						};
 
-						var $time30out = Rx.Observable.timer(60e3);
+						var $time60out = Rx.Observable.timer(60e3).mergeMapTo(Rx.Observable.create(function(ob) {
+							ob.error(new Error("连接超时"));
+						}));
 
 						// 打开提示框
 						this.mask = true;
@@ -412,10 +398,12 @@
 							// 取第一次正确结果
 							.first()
 							// 设置超时时间
-							.takeUntil($time30out);
+							.takeUntil($time60out);
 
 						// 订阅
 						this.applyThread.subscribe(function(msg) {
+							//that.lockInfo.networkApplyOK = apply;
+							that.devInfo.accessory.enable = apply;
 							// 关闭遮罩
 							that.closeMask();
 							// 显示提示
@@ -428,27 +416,26 @@
 						}, function() {
 							// 关闭遮罩
 							that.closeMask();
-							mui.toast("超时");
-							console.log("======applyThread complete======");
 						});
- 
+
 					},
 
 					// 切换开关
-					toggleSwitch: function() {
+					toggleSwitch: function(isOpen) {
+
 						var that = this;
 
-						var isOpen = !this.lockInfo.locked;
+						if(!this.devInfo.accessory.enable) {
+							return mui.toast("操作门锁前请进行入网");
+						}
+
+						//var isOpen = !this.lockInfo.locked;
 						// 显示菊花
 						// plus.nativeUI.showWaiting();
 
 						// 设置门锁状态流
 						var $setLockState = function(pwd) {
 							return Rx.Observable.fromPromise(that.setLockState(isOpen, pwd));
-						};
-						// 获取最新门锁状态
-						var $getLockState = function() {
-							return Rx.Observable.fromPromise(that.getLockState());
 						};
 
 						// 30s超时
@@ -473,13 +460,6 @@
 							});
 						};
 
-						// 轮询获取设备的状态信息
-						var $getLockStateTimer = Rx.Observable.interval(3e3)
-							.mergeMap($getLockState)
-							.mergeMap($lockDataVaild)
-							.first()
-							.takeUntil($getLockStateTimerOut);
-
 						// 获取设置的密码
 						var $getPwd = Rx.Observable.create(function(ob) {
 							var pwd = LOCKPWD.data;
@@ -500,22 +480,25 @@
 							}
 						});
 
-						this.lockThread = $getPwd
+						this.lockThread = $getPwd.map(function(s) {
+								// 振动 半秒
+								plus.device.vibrate(500);
+								plus.nativeUI.showWaiting();
+								return s;
+							})
 							.mergeMap($setLockState)
-							.mapTo($getLockStateTimer)
-						this.lockThread.subscribe(function() {
-							// 关闭遮罩
-							that.closeMask();
+						//.mapTo($getLockStateTimer)
+						this.lockThread.subscribe(function(data) {
+							plus.nativeUI.closeWaiting();
+							that.lockInfo.locked = isOpen;
 							// 显示提示
-							mui.toast(msg);
+							mui.toast(isOpen ? "锁已打开" : "锁已关闭");
+
 						}, function(err) {
 							// 关闭遮罩
+							plus.nativeUI.closeWaiting();
 							// 显示提示
-							// plus.nativeUI.closeWaiting();
-							console.log("========error=========");
 							mui.toast(err.message);
-						}, function() {
-							console.log("=======complete=========");
 						});
 
 					},
@@ -579,23 +562,12 @@
 							content: that.devInfo.accessory.name,
 						});
 					},
-
-					// 设置密码
-					onSetPassword: function() {
-						app.page.getInput(function(rs) {
-
-						}, {
-							title: '密码',
-							tips: '请输入门锁密码',
-							r: 'loc4kpassword',
-							// type: 'tel',
-							rmsg: '门锁密码格式为4到8位数字'
-						});
-					},
-					// 一次性密码
-					onOncePassword: function() {
-						app.page.openForResultBy('dev_generation_password.html', 'dev_generation_password', function(data) {
-							console.log(data.pwd);
+					// 开锁日志
+					onLogTap: function() {
+						mui.openWindow("dev_40_log.html", 'dev_lock_log', {
+							extras: {
+								did: this.devInfo.accessory.id || this.devInfo.accessory.aid
+							}
 						});
 					}
 

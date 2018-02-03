@@ -104,7 +104,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
@@ -157,6 +157,16 @@
 			});
 
 			function onExit() {
+				var $plusready = Rx.Observable.create(function(ob) {
+					if(window.plus) {
+						ob.next();
+					} else {
+						document.addEventListener('plusready', function() {
+							ob.next();
+						}, false);
+					}
+				});
+
 				mui.confirm("您确定退出帐号吗？", "", ["退出帐号", "取消"], function(e) {
 					if(e.index === 0) {
 						// 获取所有webview页面
@@ -174,7 +184,7 @@
 								plus.webview.close(all[i]);
 							}
 						}
-						
+
 						var account = app.user.get().account;
 
 						// 记录最后一次登录的帐号
@@ -185,10 +195,17 @@
 						} else {
 							window.localStorage.setItem('last_account', "");
 						}
-						
+
 						// 清除本地用户数据
 						app.user.logout();
 						window.localStorage.setItem('_pwd_', "");
+
+						// 清除设备列表数据
+						$plusready.subscribe(function() {
+							new ni.Cache('dev_list', "", {
+								plus: true
+							}).clear();
+						});
 
 						// 清除第三方登录信息
 						plus.oauth.getServices(function(auths) {
@@ -200,15 +217,7 @@
 							});
 						});
 
-						Rx.Observable.create(function(ob) {
-								if(window.plus) {
-									ob.next();
-								} else {
-									document.addEventListener('plusready', function() {
-										ob.next();
-									}, false);
-								}
-							})
+						$plusready
 							.mergeMap(function() {
 								// 拿取到本机pushid
 								var D = new ni.Cache("push_key", "", {
@@ -216,7 +225,7 @@
 								});
 								return Rx.Observable.create(function(ob) {
 									// 清除pushid
-									dal.push.clearpush(D.data,account, function(err, data) {
+									dal.push.clearpush(D.data, account, function(err, data) {
 										ob.next();
 									});
 								});

@@ -120,9 +120,11 @@ var imagelazyload = (function(doc) {
 			isStartTask = false;
 			return;
 		}
+		
 		//从任务集合中取一个任务
 		var obj = taskArr.shift();
 		var image_url = obj.src;
+		
 		var hb_path = obj.hb_path;
 		var sd_path = obj.sd_path;
 		//检查是否已经下载过,避免downloader文件存在时无回调,手机发烫;
@@ -190,6 +192,8 @@ var imagelazyload = (function(doc) {
 			Array.prototype.forEach.call(imgs, function(temp){
 				if(tempImgSrc = domAttr(temp, "data-src")) {
 					onLoad.call(temp, temp, tempImgSrc);
+				}else{
+					setFailed.call(temp, temp);
 				}
 			});
 		}

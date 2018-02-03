@@ -278,7 +278,7 @@
 
 						var that = this;
 
-						var errorMessage = app.rules.testBy(/^\w{6,20}$/, this.username, "账号格式不正确") ||
+						var errorMessage = app.rules.testBy(/^\w{6,32}$/, this.username, "账号格式不正确") ||
 							app.rules.testBy(/^\w{6,20}$/, this.password, "密码长度需6-20位");
 
 						if(errorMessage) {

@@ -200,12 +200,18 @@
 			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
 			
 			Vue.directive('devbg', {
-				update: function(el){
+				inserted: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path){
 						el.style.backgroundImage = "url(" + path + ")";
 					})
-				}
+				},
+				updated: function(el) {
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid).then(function(path){
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				},
 			})
 			
 			
