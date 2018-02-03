@@ -207,15 +207,19 @@
 						// 发送更改请求
 						plus.nativeUI.showWaiting();
 						this.devInfo.accessory.enable = event.detail.isActive;
+						that._updataActionByEnable(that.devInfo.accessory.enable);
 						dal.devaccessory.enable(this.devInfo.accessory, this.devInfo.devType, function(err, data) {
 							plus.nativeUI.closeWaiting();
+							console.log(err + "," + data);
 							if(err) {
 								that.isErr = true;
 								mui(that.$refs.switch1).switch().toggle();
 								that.devInfo.accessory.enable = !that.devInfo.accessory.enable;
+								that._updataActionByEnable(that.devInfo.accessory.enable);
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
+//							that._updataActionByEnable(that.devInfo.accessory.enable);
 							that._updataUi();
 						})
 					}.bind(this));
@@ -312,6 +316,18 @@
 							action: "update",
 							info: that.devInfo
 						});
+					},
+					// 根据Enable更新Action的值
+					_updataActionByEnable: function(isOn) {
+						var action = this.devInfo.accessory.action;
+						console.log(action);
+						if(isOn) {
+							action = action | ((0x00000001 << 15));
+						} else {
+							action = action & (~(1 << 15));
+						}
+						this.devInfo.accessory.action = (action>>>0);
+						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
 					},
 				}
 			});

@@ -187,7 +187,7 @@
 							</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onWifiSetTap()">
 						<a class="mui-navigate-right">
 							<span>WIFI配置</span>
 							<span class="mui-badge "></span>
@@ -199,7 +199,7 @@
 							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
 						</a>
 					</li>-->
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onLogTap()">
 						<a class="mui-navigate-right">
 							<span>布撤防日志</span>
 						</a>
@@ -302,7 +302,7 @@
 							});
 						}, {
 							title: "设备名称",
-							tips: that.devInfo.location,
+							content: that.devInfo.location,
 						});
 					},
 					// 自动布防计划
@@ -418,6 +418,14 @@
 								console.log(JSON.stringify(data));
 							});
 						}.bind(this));
+					},
+					// 布撤防日志
+					onLogTap: function(){
+						mui.openWindow('camera_settings_log.html','camera_settings_log',{
+							extras: {
+								info: this.devInfo
+							}
+						});
 					},
 					
 					
