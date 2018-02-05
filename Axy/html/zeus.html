@@ -21,6 +21,7 @@
 		<script type="text/javascript" src="../js/dal/devaccessory.js"></script>
 		<script type="text/javascript" src="../js/dal/user.js"></script>
 		<script type="text/javascript" src="../js/dal/push.js"></script>
+		<script type="text/javascript" src="../js/dal/system.js"></script>
 
 		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
 		<script type="text/javascript" src="../js/plug/PlugDevManager.js"></script>
@@ -118,13 +119,24 @@
 			// 获取顶级域名
 			var $getTopDomain = function(account) {
 				return Rx.Observable.create(function(ob) {
-					ob.next({
-						account: account,
-						pwd: getPwd(),
-						domain: "www.isee110.com"
+					dal.system.getTopMain(account, function(err, data) {
+						if(err) {
+							return ob.error();
+						}
+						ob.next({
+							account: account,
+							pwd: getPwd(),
+							domain: data
+						});
 					});
 				});
 
+			};
+			// 保存顶级域名
+			var $SaveDomain = function(data){
+				console.log(data.domain);
+				window.localStorage.setItem('_domain_', data.domain);
+				return data;
 			};
 
 			// 获取设备推送id流
@@ -204,6 +216,8 @@
 						// -》获取 顶级 域名
 						Rx.Observable.of(account)
 							.mergeMap($getTopDomain)
+							// 保存domin
+							.map($SaveDomain)
 							// 初始化 原生 插件
 							.subscribe(InitNativeSystem);
 

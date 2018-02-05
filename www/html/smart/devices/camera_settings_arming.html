@@ -292,7 +292,7 @@
 								<div class="mui-slider-handle">
 										<span>{{_fixTime(o.start)}} - {{_fixTime(o.end)}}</span>
 										<br />
-										<span class="sign" v-for="p,i in _two2bool(o.recycle).splice(1)" v-if="p">周{{_number2string(i)}}</span>
+										<span class="sign" v-for="p,i in _two2bool(o.recycle).splice(1).reverse()" v-if="p">周{{_number2string(i)}}</span>
 										<span class="mui-badge" @tap.stop="">
 									<div @toggle="switchToggle(o, $event)" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': _two2bool(o.recycle)[0]}" ref="pwd_protection">
 										<div class="mui-switch-handle"></div>
@@ -304,7 +304,7 @@
 
 					</ul>
 				</template>
-				<template v-else>
+				<template v-else-if="isGet">
 					<div class="nolog">
 						<div class="nolog_divimg"></div>
 						<div class="app-font-size-30 app-color-9f9fa0">
@@ -361,20 +361,10 @@
 						mask: false, // 遮罩控制
 						index: -1, //是否弹框
 						//isRepeat: true,
-						plans: [{
-							"action": 2,
-							"start": "00:00:00",
-							"end": "23:59:00",
-							"recycle": 64
-						}, {
-							"action": 2,
-							"start": "00:00:00",
-							"end": "23:59:00",
-							"recycle": 64
-						}],
+						plans: [],
 						actionType: -1,
 						
-						
+						isGet: false, // 是否拉取数据过
 					};
 				},
 				computed: {
@@ -425,8 +415,7 @@
 						dal.devparam.alarmplan(this.devid, this.type, function(err, rs) {
 							plus.nativeUI.closeWaiting();
 							this.plans = rs || [];
-							console.log(JSON.stringify(this.plans));
-
+							this.isGet = true;
 							this.$nextTick(function() {
 								mui('.mui-switch')['switch']();
 							});
@@ -470,7 +459,7 @@
 
 						var o = {
 							"end": this.endTime + ":00",
-							"recycle": this._bool2two([true].concat(this.weeks)),
+							"recycle": this._bool2two([true].concat(this.weeks.reverse())),
 							"start": this.startTime + 　":00"
 						};
 
@@ -514,7 +503,7 @@
 						this.index = 1;
 						this.actionType = i;
 
-						this.weeks = this._two2bool(o.recycle).slice(1);
+						this.weeks = this._two2bool(o.recycle).slice(1).reverse();
 						this.startTime = o.start.substr(0, 5);
 						this.endTime = o.end.substr(0, 5);
 

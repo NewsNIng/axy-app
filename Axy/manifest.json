@@ -7,8 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.9.0",/*应用版本名称*/
-		"code": "20180204"
+		"name": "1.9.1",/*应用版本名称*/
+		"code": "20180205"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -1199,6 +1199,20 @@
 				"refer": [
 					"html/smart/devices/dev_40_set_pwd.html",
 					"html/smart/devices/dev_40_log.html"
+				],
+				"priority": 0
+			},
+			"html/person/collection/my_collection.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-904.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/camera_settings_log.html"
 				],
 				"priority": 0
 			}

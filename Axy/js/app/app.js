@@ -209,6 +209,8 @@ function addMethod(obj, name, fn) {
 
 	var __iosSafeBoxPath = "";
 
+	var __Documents = "";
+
 	var _account_;
 
 	// 获取ios沙盒地址
@@ -226,13 +228,15 @@ function addMethod(obj, name, fn) {
 		_account_ = window.localStorage.getItem('_account_');
 		return new Promise(function(resolve, reject) {
 			app.plusReady(function() {
-				var s = plus.io.convertLocalFileSystemURL("_documents");
-				s = "file://" + s + "/account_" + _account_ + "/device_" + devid + "/thumbnail.png";
+				if(!__Documents) {
+					__Documents = plus.io.convertLocalFileSystemURL("_documents");
+				}
+				var s = "file://" + __Documents + "/account_" + _account_ + "/device_" + devid + "/thumbnail.png";
 				plus.io.resolveLocalFileSystemURL(s, function() {
-					s = s + "?t" + new Date().getTime();
+					s = s + "?t=" + new Date().getTime();
 					resolve(s);
 				});
-				
+
 			})
 		});
 	}
@@ -248,7 +252,7 @@ function addMethod(obj, name, fn) {
 		return new Promise(function(resolve, reject) {
 			app.plusReady(function() {
 				plus.io.resolveLocalFileSystemURL(s, function() {
-					s = s + "?t" + new Date().getTime();
+					s = s + "?t=" + new Date().getTime();
 					resolve(s);
 				});
 			})

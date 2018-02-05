@@ -19,6 +19,7 @@
 			body,
 			.mui-content {
 				background-color: #F4F8FB !important;
+				padding-bottom: 0;
 			}
 			
 			header>h1>span {
@@ -113,6 +114,13 @@
 			.imgdiv.AX-904 {
 				/*pointer-events: none;*/
 			}
+			
+			.menudiv.AX-903 .menudiv-controller{
+				opacity: 0;
+				pointer-events: none;
+			}
+			
+			
 			/*是否在线*/
 			
 			.imgdiv>span.imgdiv-line {
@@ -278,9 +286,9 @@
 									
 								</span>
 							</div>
-							<div class="menudiv">
+							<div class="menudiv" :class="_getDevName(o.type)">
 								<span class="app-color-main">{{_fixDevLocation(o.location) || o.devid}}</span>
-								<img @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
+								<img class="menudiv-controller" @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
 								<img @tap="onAlbmTap(o,i)" src="../../../image/smart/camera/history.png" />
 								<img @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
 								<img @tap="onSettingTap(o, i)" src="../../../image/smart/camera/setting.png" />
@@ -823,7 +831,7 @@
 					},
 					_isArm: function(mode) {
 						return app.dev.isArm(mode);
-					}
+					},
 				}
 			});
 		</script>

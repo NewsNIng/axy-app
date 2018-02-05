@@ -22,12 +22,16 @@
 	 * @param {String} passwd 密码
 	 * @param {Function} callback 请求回调函数
 	 */
-	user.login = function(account, passwd, callback) {
-		return ra("post", "/user/login", {
+	user.login = function(account, passwd, callback, domain) {
+		var o = {
 			account: account,
 			passwd: passwd,
-			imei: IMEI,
-		}, callback);
+			imei: IMEI
+		};
+		if(domain){
+			o.BASE_URL = domain;
+		}
+		return ra("post", "/user/login", o, callback);
 	}
 
 	user.ologin = function(info, callback) {

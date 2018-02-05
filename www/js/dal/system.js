@@ -41,8 +41,11 @@
 	}
 	
 	// 获取顶级域名
-	system.getTopMain = function(account){
-		
+	system.getTopMain = function(account, callback){
+		return ra('get', '/getserver.do', {
+			account: account,
+			BASE_URL: _.BASE_URL_TOP
+		}, callback);
 	}
 	
 	

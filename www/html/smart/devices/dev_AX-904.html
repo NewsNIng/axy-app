@@ -58,7 +58,7 @@
 							<span class="mui-badge" v-text="devInfo.location"></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onLogTap()">
 						<a class="mui-navigate-right">
 							<span>摄像机日志</span>
 						</a>
@@ -66,31 +66,31 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>GPRS模块</span>
-							<span class="mui-badge">存在</span>
+							<span class="mui-badge" v-text="baseInfo.gprsExist ? '存在':'不存在'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>GPRS模式</span>
-							<span class="mui-badge">是</span>
+							<span class="mui-badge" v-text="baseInfo.gprsMode ? '是':'否'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>GPRS信号强度</span>
-							<span class="mui-badge">0%</span>
+							<span class="mui-badge" v-text="baseInfo.gprfSignal + '%'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>应用程序版本</span>
-							<span class="mui-badge">AX-904 V1.0</span>
+							<span class="mui-badge" v-text="baseInfo.appVersion"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>硬件版本</span>
-							<span class="mui-badge">AX-360 V1.0</span>
+							<span class="mui-badge" v-text="baseInfo.hdVersion"></span>
 						</a>
 					</li>
 				</ul>
@@ -143,6 +143,9 @@
 							"signalfwdport": 0,
 							"online": 0
 						},
+						baseInfo: {
+							
+						},
 					};
 				},
 				mounted: function() {
@@ -150,8 +153,30 @@
 				},
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
+					this.getBaseInfo();
 				},
 				methods: {
+					getBaseInfo: function(){
+						plus.nativeUI.showWaiting();
+						dal.devparam.basicinfo(this.devInfo.devid, this.devInfo.type, function(err, rs) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.baseInfo = rs;
+							console.log(JSON.stringify(this.baseInfo))
+						}.bind(this));
+					},
+					
+					onLogTap: function(){
+						mui.openWindow('camera_settings_log.html','camera_settings_log',{
+							extras: {
+								info: this.devInfo
+							}
+						});
+					},
+					
+					
 					// 切换开关
 					toggleSwitch: function() {
 						this.state = !this.state;

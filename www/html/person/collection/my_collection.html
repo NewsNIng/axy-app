@@ -149,6 +149,7 @@
 			
 			.praise>img {
 				width: 0.36rem;
+				height: auto;
 				display: inline-block;
 				margin-right: 0.16rem;
 				vertical-align: middle;
@@ -190,7 +191,14 @@
 							<div class="mui-slider-handle discovery_img">
 								<img :src="o.image" />
 							</div>
-							<div class="info app-font-size-28"><span class="name app-font-size-28">{{o.title}}</span><span class="desc app-font-size-24">{{o.content}}</span><span class="praise 24"><img src="../../../image/person/collection/icon_Alovedone@3x.png"/>{{o.likecount}}</span></div>
+							<div class="info app-font-size-28">
+								<span class="name app-font-size-28">{{o.title}}</span>
+								<span class="desc app-font-size-24">{{o.content}}</span>
+								<span class="praise 24">
+									<img src="../../../image/person/collection/icon_Alovedone@3x.png"/>
+									<span>{{o.likecount}}</span>
+								</span>
+							</div>
 						</div>
 					</div>
 				</template>
@@ -266,24 +274,20 @@
 					};
 				},
 				mounted: function() {
-					this.$nextTick(function() {
-						mui.init();
-					});
 					that = this;
-					this.$pullRefresh = mui(".mui-scroll-wrapper");
-					//										this._getList(function(data) {
-					//											console.log(JSON.stringify(data));
-					//											that.attentions = data;
-					//										});
-					mui.init({
-						pullRefresh: {
-							container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
-							up: {
-								callback: this._up,
+					this.$nextTick(function() {
+						that.$pullRefresh = mui(".mui-scroll-wrapper");
+						mui.init({
+							pullRefresh: {
+								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+								up: {
+									callback: that._up,
+								}
 							}
-						}
+						});
+						that._up();
 					});
-					this._up();
+
 				},
 
 				plusReady: function() {
@@ -333,7 +337,7 @@
 						//						this.n++;
 						this._getList(function(data) {
 							console.log(JSON.stringify(data));
-							data = data&&data.filter(function(item) {
+							data = data && data.filter(function(item) {
 								//								console.log(item !== null);
 								return item !== null;
 							});
@@ -370,7 +374,7 @@
 					},
 					onClickTap: function(oid) {
 						var pages = ["business/store_details.html", "discover/discover_details.html"];
-//						alert(pages[this.active]);
+						//						alert(pages[this.active]);
 						mui.openWindow('../../nearby/' + pages[this.active], pages[this.active], {
 							extras: {
 								oid: oid

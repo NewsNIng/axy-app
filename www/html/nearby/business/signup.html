@@ -74,6 +74,11 @@
 			.mui-table-view .mui-badge {
 				color: #9F9FA0 !important;
 			}
+			
+			.mui-badge.mui-ellipsis{
+				display: inline-block;
+				max-width: 70%;
+			}
 		</style>
 	</head>
 
@@ -89,7 +94,7 @@
 				<ul class="mui-table-view group">
 					<li class="mui-table-view-cell" v-for="o,i in g" @tap="onItemTap(gi, i, o)">
 						<a class="mui-navigate-right">
-							<span class="app-font-size-28 mui-badge">{{o.value || o.tips}}</span>
+							<span class="app-font-size-28 mui-badge mui-ellipsis">{{o.value || o.tips}}</span>
 							<span class="app-font-size-30 leftname">{{o.name}}</span>
 						</a>
 					</li>
