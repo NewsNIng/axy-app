@@ -56,7 +56,7 @@
 			</ul>
 			<footer class="app-font-size-28">
 				<div @tap="onDel()" class="app-color-main-dark">删除设备</div>
-				<div @tap="onReboot()">重启设备</div>
+				<!--<div @tap="onReboot()">重启设备</div>-->
 			</footer>
 		</div>
 
@@ -81,6 +81,8 @@
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
+		
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -236,33 +238,57 @@
 						if(dev.relation === 2) {
 							methodName += 'share';
 						}
-						mui.confirm("确定要删除设备吗？", "", ["删除", "取消"], function(e) {
-							if(e.index === 0) {
 
-								dal.device[methodName](dev.devid, function(err, rs) {
-									plus.nativeUI.closeWaiting();
-									if(err) {
-										return mui.toast(err.message);
-									}
-									mui.toast('删除成功，设备将会重启');
-									dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
-										if(err) {
-											mui.toast(err.message);	
-										}else{
-											mui.toast("操作成功！设备状态更新会有一定的延迟")
-										}
-										_B.emit("delete", {}, {
-											views: [that.$view.opener()]
-										});
-										that.$view.close();
-										
-									});
-									
-								});
-							} else {
-								plus.nativeUI.closeWaiting();
-							}
+						// 弹窗确认
+						var $alert = Rx.Observable.create(function(ob) {
+							mui.confirm("确定要删除设备吗？\n删除前设备将会重启", "", ["删除", "取消"], function(e) {
+								if(e.index === 0) {
+									ob.next(dev);
+								} else {
+									ob.error(new Error("您取消了删除"));
+								}
+							});
 						});
+						// 重启设备
+						var $rebootFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									dev.methodName = methodName;
+									ob.next(dev);
+								});
+							})
+						}
+
+						// 删除设备
+						var $deleteFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.device[dev.methodName](dev.devid, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(dev);
+								});
+							})
+						}
+
+						$alert
+							.mergeMap($rebootFn)
+							.mergeMap($deleteFn)
+							.subscribe(function(dev) {
+								mui.toast("设备删除成功");
+								plus.nativeUI.closeWaiting();
+								_B.emit("delete", {}, {
+									views: [that.$view.opener()]
+								});
+								that.$view.close();
+							}, function(err) {
+								plus.nativeUI.closeWaiting();
+								mui.toast(err.message);
+							});
+
 					},
 				}
 			});

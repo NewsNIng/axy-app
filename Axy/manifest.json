@@ -8,7 +8,7 @@
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "1.9.0",/*应用版本名称*/
-		"code": "20180203"
+		"code": "20180204"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -837,7 +837,8 @@
 					"html/smart/devices/dev_25.html",
 					"html/smart/devices/dev_145.html",
 					"html/smart/devices/dev_33.html",
-					"html/smart/devices/dev_40.html"
+					"html/smart/devices/dev_40.html",
+					"html/smart/devices/dev_AX-904.html"
 				],
 				"priority": 0
 			},
@@ -1136,7 +1137,8 @@
 					"html/person/devshare/share.html",
 					"html/smart/devices/camera_settings_arming.html",
 					"html/smart/add/connect_wifi.html",
-					"html/smart/devices/camera_settings_log.html"
+					"html/smart/devices/camera_settings_log.html",
+					"html/public/input.html"
 				],
 				"priority": 0
 			},

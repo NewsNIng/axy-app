@@ -180,15 +180,20 @@
 			}
 			
 			#controll .qmenu {
-				padding: 1.253333rem 0.826666rem;
+				padding: 1.253333rem 0.5rem;
 				background-color: #FFFFFF;
 				text-align: center;
+				display: flex;
+				display: -webkit-flex;
 			}
 			
 			#controll div.qmenu>div {
 				text-align: center;
+				margin: 0;
+				padding: 0;
 				display: inline-block;
-				/*width: 22.5%;*/
+				flex: 1;
+				/*width: 25%;*/
 				/*float: left;*/
 			}
 			
@@ -214,22 +219,22 @@
 
 	<body>
 
-		<div id="controll" class="mui-popover"> 
+		<div id="controll" class="mui-popover">
 			<div class="qmenu">
 
-				<div @tap="onTap(1)">
+				<div @tap="onTap(1,$event)">
 					<img src="../../../image/smart/devices/btn_sos@3x.png" />
 					<h5 class="app-font-size-24">求救</h5>
 				</div>
-				<div @tap="onTap(8)"> 
+				<div @tap="onTap(8,$event)">
 					<img src="../../../image/smart/devices/others/btn_protection@3x.png" />
 					<h5 class="app-font-size-24">布防</h5>
 				</div>
-				<div @tap="onTap(4)">
+				<div @tap="onTap(4,$event)">
 					<img src="../../../image/smart/devices/others/btn_Disarm@3x.png" />
 					<h5 class="app-font-size-24">撤防</h5>
 				</div>
-				<div @tap="onTap(2)">
+				<div @tap="onTap(2,$event)">
 					<img src="../../../image/smart/devices/btn_Mute@3x.png" />
 					<h5 class="app-font-size-24">静音</h5>
 				</div>
@@ -260,7 +265,7 @@
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
 						<div class="card" v-for="o,i in netDivList">
-							<div class="imgdiv" v-devbg :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)">
+							<div class="imgdiv" ref="devimgel" v-devbg :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)">
 								<span class="app-font-size-20 imgdiv-line" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 								<!--{{o.workmode}}-->
 								<span class="imgdiv-state">
@@ -355,7 +360,7 @@
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
-				updated: function(el) {
+				update: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
@@ -377,18 +382,19 @@
 			var menuV = new Vue({
 				el: '#controll',
 				methods: {
-					onTap: function(state) {
+					onTap: function(state, e) {
 						plus.nativeUI.showWaiting();
 						var dev = listV.controlDev;
+						var text = e.target.innerText;
 
 						Rx.Observable.create(function(ob) {
 							dal.devparam.remotecontrol(dev.devid, dev.type, state, function(err, rs) {
 								plus.nativeUI.closeWaiting();
 								if(err) {
 									console.log(JSON.stringify(err));
-									return mui.toast("操作失败, 请检查设备");
+									return mui.toast(text + "失败, 请检查设备");
 								}
-								mui.toast("操作成功");
+								mui.toast(text + "成功");
 								mui('#controll').popover('hide');
 								ob.next(state);
 							});
@@ -633,7 +639,7 @@
 							var w2 = type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
 								getScrrenHotBgFn(o.devid).then(function(path) {
-									el.style.backgroundImage = "url(" + path + ")";
+									that.$refs.devimgel[that.tapIndex].style.backgroundImage = "url(" + path + ")";
 								})
 							});
 						});
@@ -655,7 +661,7 @@
 					},
 					// 智能配件点击
 					onZoneTap: function(o, i) {
-//						console.log(o.type);
+						//						console.log(o.type);
 
 						var that = this;
 						Rx.Observable.create(function(ob) {
@@ -716,7 +722,7 @@
 
 						var name = app.dev.findName(o.type);
 
-						var url,pageid;
+						var url, pageid;
 						switch(name) {
 							case "WG-100":
 								{
@@ -786,7 +792,7 @@
 					getDevaccessroyData: function(hide) {
 						var waitTitle = hide ? "正在更新配件信息..." : "正在获取配件...";
 						plus.nativeUI.showWaiting(waitTitle, {
-							back: hide ? 'transmit': 'close'
+							//back: hide ? 'transmit' : 'close',
 						});
 
 						dal.devaccessory.allacc(function(err, data) {

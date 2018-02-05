@@ -40,6 +40,11 @@
 		
 	}
 	
+	// 获取顶级域名
+	system.getTopMain = function(account){
+		
+	}
+	
 	
 	
 	

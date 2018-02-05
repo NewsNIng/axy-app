@@ -96,13 +96,15 @@
 			}
 			
 			.dev_menu .d2 {
-				width: 20%;
 				overflow: hidden;
+				float: right;
+				margin-right: 1rem;
 			}
 			
 			.dev_menu .d3 {
-				width: 24%;
 				text-align: right;
+				float: right;
+				margin-right: 0.15rem;
 			}
 			
 			.card {
@@ -358,7 +360,7 @@
 								{{dev.devimg}}	
 							</div>-->
 
-							<div class="img imgdiv" :class="_getDevName(dev.type)" v-devbg :data-devid="dev.devid" @tap="openCamListWindow($event)">
+							<div class="img imgdiv" ref="devimgel" :class="_getDevName(dev.type)" v-devbg :data-devid="dev.devid" @tap="openCamListWindow($event)">
 
 							</div>
 							<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
@@ -367,13 +369,15 @@
 									<img src="../../image/home/dev_camera.png" />
 									<span class="app-font-size-24 app-color-main">{{_fixDevLocation(dev.location) || dev.devid}}</span>
 								</div>
-								<div class="mui-icon d2" @tap="onShareTap()">
-									<img src="../../image/home/dev_share.png" />
-									<span class="app-font-size-24" style="color: #696969;">分享</span>
-								</div>
+
 								<div class="mui-icon d3" @tap="onDeviceSetTap()">
 									<img src="../../image/home/dev_setting.png" />
 									<span class="app-font-size-24" style="color: #696969;">设置</span>
+								</div>
+
+								<div class="mui-icon d2" @tap="onShareTap()">
+									<img src="../../image/home/dev_share.png" />
+									<span class="app-font-size-24" style="color: #696969;">分享</span>
 								</div>
 
 							</div>
@@ -495,7 +499,7 @@
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
-				updated: function(el) {
+				update: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
@@ -646,15 +650,12 @@
 					// 地理定位流
 					var $position = Rx.Observable.fromPromise(that.getCurrentPosition());
 
-					// 地理定位最大延迟 30s
-					var $time30out = Rx.Observable.timer(3e3);
-
-					// 获取定位信息
-					$prePosition
-						.merge($position)
-						// 定位最多30s
-						.takeUntil($time30out)
-						// 拿到数据
+					// 地理定位最大延迟 5s
+					var $time5out = Rx.Observable.timer(5e3);
+ 
+					$position
+						.merge($time5out.mergeMapTo($prePosition))
+						.first()
 						.subscribe(function(p) {
 							// 保存最近地理位置
 							POSITION.data = p;
@@ -811,7 +812,7 @@
 							var w2 = type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
 								getScrrenHotBgFn(o.devid).then(function(path) {
-									el.style.backgroundImage = "url(" + path + ")";
+									that.$refs.devimgel.style.backgroundImage = "url(" + path + ")";
 								})
 							});
 						});
@@ -923,7 +924,7 @@
 						var name = app.dev.findName(this.dev.type);
 
 						var url, pageid;
-						
+
 						switch(name) {
 							case "WG-100":
 								{
