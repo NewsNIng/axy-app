@@ -76,7 +76,9 @@
 				border-radius: 6px;
 			}
 			
-			.mui-ios select{display: none;}
+			.mui-ios select {
+				display: none;
+			}
 			
 			select {
 				position: absolute;
@@ -178,9 +180,9 @@
 				},
 
 				computed: {
-//					wifiname: function() {
-//						return this.selected || this.connWifi.ssid;
-//					}
+					//					wifiname: function() {
+					//						return this.selected || this.connWifi.ssid;
+					//					}
 				},
 
 				watch: {
@@ -202,7 +204,7 @@
 					setWifiPwd: function(newPwd) {
 						this.pwddir[this.wifiname] = newPwd === undefined ? this.wifipwd : newPwd;
 						wifipwdCache.data = this.pwddir;
-						
+
 					},
 
 					onSelectTap: function(i) {
@@ -210,15 +212,15 @@
 					},
 					onNextTap: function() {
 						// 验证 
-						if(!this.wifiname){
-//							alert(this.wifiname);
+						if(!this.wifiname) {
+							//							alert(this.wifiname);
 							return mui.toast("WiFi名称不能为空");
 						}
-						
-						if(!this.wifipwd){
+
+						if(!this.wifipwd) {
 							return mui.toast("WiFi密码不能为空");
 						}
-						
+
 						// 是否记住密码
 						if(this.isRemember) {
 							// 保存
@@ -235,20 +237,24 @@
 					},
 					GetPhoneWifiListAsyn: function() {
 						var that = this;
-						plug.H5NativeBridge.GetPhoneWifiListAsyn(function(rs){
+						plug.H5NativeBridge.GetPhoneWifiListAsyn(function(rs) {
 							rs = JSON.parse(rs);
 							that.connWifi = rs.connWifi;
 							that.wifiList = rs.wifiList;
-//							that.wifiList.push({
-//								"capabilities":"[WPA-PSK-CCMP][WPA2-PSK-CCMP][ESS]",
-//								"ip":0,
-//								"level":-43,
-//								"ssid":""
-//							});
+							//							that.wifiList.push({
+							//								"capabilities":"[WPA-PSK-CCMP][WPA2-PSK-CCMP][ESS]",
+							//								"ip":0,
+							//								"level":-43,
+							//								"ssid":""
+							//							});
 							that.wifiname = rs.connWifi.ssid || "";
 							that.getWifiPwd();
 						});
-						
+						mui.os.ios || setTimeout(function() {
+							if(!this.wifiList.length) {
+								mui.toast('请检查手机是否开启GPS定位位置信息');
+							}
+						}.bind(this), 2e3);
 
 					}
 				}

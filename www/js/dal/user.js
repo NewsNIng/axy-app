@@ -34,12 +34,16 @@
 		return ra("post", "/user/login", o, callback);
 	}
 
-	user.ologin = function(info, callback) {
-		return ra('post', '/user/ologin', {
+	user.ologin = function(info, callback, domain) {
+		var o = {
 			openid: info.openid,
 			type: info.type,
 			info: info
-		}, callback)
+		}
+		if(domain){
+			o.BASE_URL = domain;
+		}
+		return ra('post', '/user/ologin', o, callback)
 	}
 
 	/**

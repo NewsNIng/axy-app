@@ -92,11 +92,12 @@
 			
 			.right_text {
 				position: absolute;
-				top: 0.09rem;
+				top: 0.22rem;
 				right: 0.64rem;
-				float: right;
 				color: #9F9FA0;
 			}
+			
+			.mui-icon-arrowdown {}
 			
 			.null {
 				position: fixed;
@@ -112,9 +113,123 @@
 				margin: 2.986666rem 2.613333rem 1.413333rem 2.613333rem;
 			}
 		</style>
+
+		<style type="text/css">
+			#alarm_popover {
+				position: fixed;
+				width: 8.133333rem;
+				height: 11.2rem;
+				left: 50%;
+				top: 50%;
+				transform: translate3d(-50%, -50%, 0);
+				-webkit-transform: translate3d(-50%, -50%, 0);
+				border-radius: 0 !important;
+				padding: 0.4rem 0.56rem;
+				background-color: #FFFFFF;
+			}
+			
+			#alarm_popover ul.alarm_popover_info {
+				padding: 0;
+			}
+			
+			#alarm_popover ul.alarm_popover_info li {
+				list-style: none;
+				padding: 0 !important;
+				height: initial;
+				margin: 0.066666rem 0;
+			}
+			
+			#alarm_popover ul.alarm_popover_list {
+				padding: 0;
+				display: flex;
+				display: -webkit-flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+			}
+			
+			#alarm_popover ul.alarm_popover_list>li {
+				border: 1px solid #cfcfcf;
+				border-radius: 4px;
+				flex: 0 0 3.333333rem;
+				list-style: none;
+				padding: 0 !important;
+				height: 1.466666rem;
+				margin: 0.253333rem 0;
+				text-align: center;
+				position: relative;
+			}
+			
+			#alarm_popover ul.alarm_popover_list>li:nth-child(1),#alarm_popover ul.alarm_popover_list>li:nth-child(2) {
+				background-color: #f4f4f4;
+			}
+			
+			#alarm_popover ul.alarm_popover_list>li>div {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				width: 100%;
+				transform: translate3d(-50%, -50%, 0);
+				-webkit-transform: translate3d(-50%, -50%, 0);
+			}
+			
+			#alarm_popover .alarm-border {
+				border-color: #FF3B30 !important;
+			}
+			
+			
+			#alarm_popover .alarm-border>div {
+				border-color: #FF3B30 !important;
+			}
+			
+			#alarm_popover .alarm_popover_close {
+				background-image: url(../../../image/smart/devices/lock/guanbi@2x@3x.png);
+				width: 1.146666rem;
+				height: 1.146666rem;
+				position: absolute;
+				right: 0;
+				top: 0;
+				background-size: 0.293333rem;
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+		</style>
 	</head>
 
 	<body>
+
+		<div id="alarm_popover" class="mui-popover app-font-size-28">
+			<div @tap.self="onClose()" class="alarm_popover_close"></div>
+			<ul class="alarm_popover_info">
+				<li>
+					<span class="app-color-9f9fa0">报警时间：</span>
+					<span class="app-color-333333" v-text="time"></span>
+				</li>
+				<li>
+					<span class="app-color-9f9fa0">主机名称：</span>
+					<span class="app-color-333333" v-text="location || devid"></span>
+				</li>
+				<li>
+					<span class="app-color-9f9fa0">主机编号：</span>
+					<span class="app-color-333333" v-text="devid"></span>
+				</li>
+			</ul>
+
+			<span class="app-color-ff3b30 app-font-size-24" v-text="alarmName"></span>
+
+			<ul class="alarm_popover_list">
+				<template v-for="o,i in stateList">
+					<li :class="{'alarm-border': alarmValue['state' + o.index]}">
+						<div>
+							<div class="app-color-9f9fa0 app-font-size-24">{{getName(o.index - 1)}}</div>
+							<span class="app-font-size-36" >{{stateValue['state' + o.index] / 10 + o.company}}</span>
+							<span class="app-font-size-22">{{alarmValue['state' + o.index]?"(告警)":"(正常)"}}</span>
+						</div>
+					</li>
+				</template>
+				
+			</ul>
+
+		</div>
 
 		<div id="box">
 
@@ -125,20 +240,25 @@
 					<img src="../../../image/smart/devices/electric/btn_calendar@3x.png" />
 			</span>-->
 			</header>
+
 			<div class="mui-content">
 
 				<div class="wrapper" ref="wrapper">
 
 					<div>
 						<template v-for="o,i in logs" v-if="o.list.length">
+
 							<div class="date app-font-size-24" v-text="o.day"></div>
 							<div class="items">
-								<div class="item" v-for="oo,i in o.list">
+								<div class="item" v-for="oo,i in o.list" @tap="onLogItemTap(o.day + ' ' +oo.time, oo)">
 									<div class="img">
 										<img src="../../../image/smart/devices/electric/point.png" />
 									</div>
-									<div class="text app-font-size-28" v-text="getState(oo.key)"></div>
-									<div class="right_text app-font-size-24" v-text="oo.time"></div>
+									<div class="text app-font-size-28" v-text="getState(oo.trigvar)"></div>
+									<div class="right_text app-font-size-24">
+										<span v-text="oo.time"></span>
+										<span class="mui-icon mui-icon-arrowdown app-font-size-28"></span>
+									</div>
 								</div>
 							</div>
 						</template>
@@ -179,10 +299,6 @@
 			mui.init();
 
 			var dtPick;
-
-
-			
-			
 			var _stateList = [{
 					name: "剩余电流",
 					index: 9,
@@ -225,7 +341,76 @@
 				},
 
 			];
-			
+
+			var alarmDir = [
+				"未知", "A相温度", "B相温度", "C相温度", "环境温度", "A相电流", "B相电流", "C相电流", "漏电流", "三相电不平衡", "开关量1", "开关量2"
+			];
+
+			var stateVm = new Vue({
+				el: "#alarm_popover",
+				data: function() {
+					return {
+						time: "",
+						location: "",
+						devid: "",
+						alarmIndex: 0,
+						stateList: _stateList,
+						stateValue: {
+							"intime": null,
+							"state1": 0,
+							"state2": 0,
+							"state3": 0,
+							"state4": 0,
+							"state5": 0,
+							"state6": 0,
+							"state7": 0,
+							"state8": 0,
+							"state9": null
+						},
+						alarmValue: {
+							"intime": null,
+							"state1": 0,
+							"state2": 0,
+							"state3": 0,
+							"state4": 0,
+							"state5": 0,
+							"state6": 0,
+							"state7": 0,
+							"state8": 0,
+							"state9": null
+						}
+					}
+				},
+				computed: {
+					alarmName: function() {
+						return alarmDir[this.alarmIndex];
+					}
+				},
+				plusReady: function() {
+					var info = this.$view.devInfo;
+					this.location = info.location;
+					this.devid = info.devid;
+				},
+				methods: {
+					onClose: function() {
+						mui('#alarm_popover').popover('hide');
+					},
+					getName: function(index) {
+						var name = "";
+						var len = this.stateList.length;
+
+						for(var i = 0; i < len; i++) {
+							if(this.stateList[i].index - 1 === index) {
+								name = this.stateList[i].name;
+								break;
+							}
+						}
+
+						return name;
+					},
+				}
+
+			});
 
 			new Vue({
 				el: '#box',
@@ -235,8 +420,7 @@
 
 						did: -1,
 						n: 1,
-						
-						stateList: _stateList
+
 					};
 				},
 
@@ -250,15 +434,12 @@
 							if(!o[day]) {
 								o[day] = [];
 							}
-
-							for(var i in item.alarmValue) {
-								if(!!item.alarmValue[i]) {
-									o[day].push({
-										key: i,
-										time: d.toFormatString("hh:mm:ss"),
-										value: item.stateValue[i]
-									});
-								}
+							if(item.trigvar > 0) {
+								o[day].push({
+									time: d.toFormatString("hh:mm:ss"),
+									value: item,
+									trigvar: item.trigvar
+								});
 							}
 							return o;
 						}, {});
@@ -313,33 +494,33 @@
 					this.getData();
 				},
 				methods: {
+					// 点击单条时
+					onLogItemTap: function(time, obj) {
+						stateVm.time = time;
+						stateVm.alarmIndex = obj.trigvar;
+						stateVm.stateValue = obj.value.stateValue;
+						stateVm.alarmValue = obj.value.alarmValue;
+
+						mui('#alarm_popover').popover('show');
+					},
+					// 获取数据
 					getData: function() {
 						plus.nativeUI.showWaiting("正在获取...");
 						dal.device.electric.alarmlist(this.did, this.n, function(err, data) {
 							plus.nativeUI.closeWaiting();
 							if(err) {
 								return mui.toast(err.message);
-							}  
+							}
 							console.log(JSON.stringify(data));
 							this.logs_.push.apply(this.logs_, data);
 							this.$nextTick(function() {
 								this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
 							}.bind(this));
-						}.bind(this), 10);  
+						}.bind(this), 10);
 					},
-					getState: function(index) {
-						index = +(index.replace('state', ''));
-						var name = "";
-						var len = this.stateList.length;
-						 
-						for(var i = 0; i < len; i++){
-							if(this.stateList[i].index - 1 === index){
-								name = this.stateList[i].name;
-								break;
-							}
-						}
-						
-						return name + "发生警告";
+					getState: function(trigvar) {
+
+						return alarmDir[trigvar] + " 发生警告";
 					},
 
 					// 时间选择

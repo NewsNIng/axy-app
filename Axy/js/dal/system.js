@@ -48,6 +48,15 @@
 		}, callback);
 	}
 	
+	// 获取第三方登录所关联的账户
+	system.getAccount = function(type, openid, callback){
+		return ra('post', '/user/getAccount', {
+			type: type,
+			openid: openid,
+			BASE_URL: _.BASE_URL
+		}, callback);
+	}
+	
 	
 	
 	

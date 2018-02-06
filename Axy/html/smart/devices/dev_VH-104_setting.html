@@ -224,11 +224,7 @@
 							<span>基本信息</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell" @tap="onCalibration()">
-						<a class="mui-navigate-right">
-							<span>摄像机校准</span>
-						</a>
-					</li>
+					
 				</ul>
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell" @tap="onLogTap()">
@@ -246,36 +242,7 @@
 							<span>自动录像计划</span>
 						</a>
 					</li>
-					<!--<li class="mui-table-view-cell">
-						<a class="">
-							<span>接收告警消息</span>
-							<span class="mui-badge">
-								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isPwdProtection}" ref="pwd_protection">
-									<div class="mui-switch-handle"></div>
-								</div>
-							</span>
-						</a>
-					</li><li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
-							<span>摄像机报警提示音</span>
-						</a>
-					</li>-->
-					<li v-show="otherInfo.on !== null" class="mui-table-view-cell">
-						<a class="">
-							<span>指示灯</span>
-							<span class="mui-badge">
-								<div @toggle="onOnToggle($event)" ref="onSwitch" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': otherInfo.on}" >
-									<div class="mui-switch-handle"></div>
-								</div>
-							</span>
-						</a>
-					</li>
 
-					<li class="mui-table-view-cell" @tap="onWifiSetTap()">
-						<a class="mui-navigate-right">
-							<span>WIFI配置</span>
-						</a>
-					</li>
 					<li class="mui-table-view-cell" @tap="onAlarmParam()">
 						<a class="mui-navigate-right">
 							<span>告警时间设置 </span>
@@ -380,10 +347,7 @@
 				},
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
-					console.log(JSON.stringify(this.devInfo));
-					if(this.devInfo.type === 32) {
-						this._getOpenled();
-					}
+					
 				},
 				methods: {
 					// 取消
@@ -575,16 +539,7 @@
 							}
 						});
 					},
-					// 获取指示灯 
-					_getOpenled: function() {
-						var that = this;
-						dal.devparam.getOpenled(this.devInfo.devid, this.devInfo.type, function(err, rs) {
-							if(err) {
-								//return mui.toast(err.message);
-							}
-							that.otherInfo.on = !rs.on;
-						});
-					},
+					
 					onOnToggle: function(e){
 						var isActive = e.detail.isActive;
 						var that = this;

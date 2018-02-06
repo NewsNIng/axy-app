@@ -65,7 +65,7 @@
 			}
 			
 			.shop_info {
-				line-height: 0.426666rem;
+				/*line-height: 0.426666rem;*/
 				padding-right: 0.346666rem;
 			}
 			
@@ -90,6 +90,7 @@
 			.name {
 				font-weight: bold;
 				color: #2E2E2E;
+			
 			}
 			/*兼容5s屏幕*/
 			
@@ -302,8 +303,7 @@
 
 					// 上一次地理定位
 					var $prePosition = Rx.Observable.create(function(ob) {
-						var p = POSITION.data;
-						// console.log("最近地理位置："+JSON.stringify(p)); 
+						var p = POSITION.data; 
 						if(p) {
 							ob.next(p);
 						}
@@ -324,7 +324,7 @@
 							that.longitude = p.coords.longitude;
 							that.latitude = p.coords.latitude;
 							that.city = p.address.city.replace('市', '');
-							that.position = p.address.poiName;
+							that.position = p.addresses;
 							that._down();
 						}, function(err) {
 							that._down();

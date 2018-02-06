@@ -97,6 +97,23 @@
 			location: location
 		}, callback);
 	};
+	
+	/**
+	 * 更改设备名称 location
+	 * @param {String} devid
+	 * @param {String} location 设备新名称
+	 * @param {Object} callback
+	 */
+	devparam.location = function(devid, location, callback) {
+		return ra('post', '/devparam/location', {
+			devid: devid,
+			location: location
+		}, callback);
+	};
+	
+	
+	
+	
 
 	/**
 	 *  设备布撤防,SOS，静音

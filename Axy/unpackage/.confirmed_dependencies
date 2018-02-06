@@ -191,7 +191,8 @@
       "html/smart/devices/dev_AX-903.html",
       "html/person/collection/my_camera.html",
       "html/smart/devices/dev_40.html",
-      "html/smart/devices/dev_AX-904.html"
+      "html/smart/devices/dev_AX-904.html",
+      "html/smart/devices/dev_VH-104_setting.html"
     ],
     "resources": [
       "image/smart/devices/bg/903@3xweb.png",
@@ -228,7 +229,8 @@
       "html/smart/devices/dev_my_list.html",
       "html/smart/devices/dev_AX-903.html",
       "html/smart/devices/dev_WG-100_setting.html",
-      "html/smart/devices/dev_WG-100.html"
+      "html/smart/devices/dev_WG-100.html",
+      "html/smart/devices/dev_AX-903_setting.html"
     ],
     "resources": [
       "image/home/dev_camera.png",
@@ -430,7 +432,8 @@
       "html/smart/devices/dev_select_id.html",
       "html/public/input.html",
       "html/smart/devices/dev_AX-903_bind.html",
-      "html/smart/devices/dev_AX-903_alarmlog.html"
+      "html/smart/devices/dev_AX-903_alarmlog.html",
+      "html/smart/devices/dev_AX-903_datasave.html"
     ]
   },
   "html/smart/add/add_completed.html": {
@@ -510,6 +513,12 @@
   "html/smart/devices/dev_AX-904.html": {
     "refer": [
       "html/smart/devices/camera_settings_log.html"
+    ]
+  },
+  "html/smart/devices/dev_VH-104_setting.html": {
+    "refer": [
+      "html/smart/devices/camera_settings_record.html",
+      "html/smart/devices/camera_settings_arming.html"
     ]
   }
 }

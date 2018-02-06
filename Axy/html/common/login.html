@@ -203,7 +203,7 @@
 		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../js/dal/user.js"></script>
-		<script type="text/javascript" src="../../js/dal/system.js" ></script>
+		<script type="text/javascript" src="../../js/dal/system.js"></script>
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
@@ -316,10 +316,144 @@
 								}, o.domain);
 							});
 						};
-						
+
 						// 登录权限验证
-						var $loginLockCheck = function(data){
-							return Rx.Observable.create(function(ob){
+						var $loginLockCheck = function(data) {
+							return Rx.Observable.create(function(ob) {
+								if(data.lockterminal === 0 || data.validation === 1) {
+									// 验证通过
+									ob.next(data);
+								} else {
+									// 跳转页面认证
+									// TODO
+									mui.toast("帐号已保护，您需要权限认证");
+									app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
+										if(rs.result) {
+											ob.next(data);
+										}
+									});
+								}
+							});
+						}
+
+						// 本地验证帐号密码
+						$loginStateCheck
+							// 打开loading
+							.map($getStateFn(true))
+							// 获取登录帐号的domain
+							.mergeMap($getTopDomain)
+							// 通过domain进行登录
+							.mergeMap($login)
+							// 修复用户数据
+							.map(fixUserData)
+							// 关闭loading
+							.map($getStateFn(false))
+							// 登录权限验证
+							.mergeMap($loginLockCheck)
+							// 登录成功
+							.subscribe(function(data) {
+								mui.toast("登录成功");
+								window.localStorage.setItem('_pwd_', that.password);
+								window.localStorage.setItem('login_type', 'pwd');
+								// 通知上层
+								app.page.setResult(data);
+								// 通知全部
+								new that.$Broadcast().emit("login_success", {
+									userInfo: data
+								});
+								plus.navigator.setStatusBarStyle('light');
+							}, function(err) {
+								$getStateFn(false)();
+								mui.toast(err.message);
+							});
+
+					},
+					onOtherLoginTap: function(type) {
+						var that = this;
+						
+						var w = plus.nativeUI.showWaiting();
+						
+						
+
+						// 获取第三方授权信息
+						var $oauth = Rx.Observable.create(function(ob) {
+							new that.$OAuth(type, function(err, info) {
+								if(err) {
+									return ob.error(new Error("请确保您有安装该应用且授权"));
+								}
+								return ob.next(info);
+
+							});
+						});
+
+						// 注销第三方授权信息
+						var $logoutOauthFn = function(auth) {
+							return Rx.Observable.create(function(ob) {
+								var o = {};
+								for(var i in auth) {
+									if(typeof auth[i] !== 'function') {
+										o[i] = auth[i];
+									}
+								}
+								auth.logout(function() {
+									ob.next(o);
+								}, ob.error);
+
+							});
+						}
+
+						// 信息处理
+						// authInfoAdapter
+
+						// 是否有绑定用户
+						var $getAccountFn = function(info) {
+							return Rx.Observable.create(function(ob) {
+								dal.system.getAccount(info.type, info.openid, function(err, data) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next({
+										account: data,
+										auth: info,
+									});
+								})
+							});
+						}
+
+						// 获取domain
+						var $getTopDomainFn = function(o) {
+							var account = o.account;
+							return Rx.Observable.create(function(ob) {
+								if(!account){
+									return ob.next(o);
+								}
+								dal.system.getTopMain(account, function(err, data) {
+									if(err) {
+										return ob.error(err);
+									}
+									o.domain = data;
+									ob.next(o);
+								});
+							});
+
+						};
+
+						// 开始第三方登录
+						var $ologin = function(o) {
+							var info = o.auth;
+							return Rx.Observable.create(function(ob) {
+								dal.user.ologin(info, function(err, data) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(data);
+								}, o.domain);
+							});
+						}
+
+						// 登录权限验证
+						var $loginLockCheck = function(data) {
+							return Rx.Observable.create(function(ob) {
 								if(data.lockterminal === 0 || data.validation === 1) {
 									// 验证通过
 									ob.next(data);
@@ -336,25 +470,36 @@
 							});
 						}
 						
-						// 本地验证帐号密码
-						$loginStateCheck
-							// 打开loading
-							.map($getStateFn(true))
-							// 获取登录帐号的domain
-							.mergeMap($getTopDomain)
-							// 通过domain进行登录
-							.mergeMap($login)
-							// 修复用户数据
-							.map(fixUserData)
-							// 关闭loading
-							.map($getStateFn(false))
-							// 登录权限验证
+						var $getWaitFn = function(str){
+							return function(o){
+								w && w.setTitle(str);
+								return o;
+							}
+						}
+						
+						
+						
+						
+
+						$oauth
+							.mergeMap($logoutOauthFn)
+							.map($getWaitFn('获取授权信息...'))
+							.map(authInfoAdapter)
+							.mergeMap($getAccountFn)
+							.mergeMap($getTopDomainFn)
+							.map($getWaitFn('正在登录...'))
+							.mergeMap($ologin)
 							.mergeMap($loginLockCheck)
-							// 登录成功
-							.subscribe(function(data){
-								mui.toast("登录成功");
-								window.localStorage.setItem('_pwd_', that.password);
-								window.localStorage.setItem('login_type', 'pwd');
+							.subscribe(function(data) {
+								w && w.close();
+								mui.toast('登录成功');
+								data = fixUserData(data);
+								window.localStorage.setItem('_pwd_', '123456');
+								window.localStorage.setItem('login_type', ({
+									qq: 'qq',
+									sinaweibo: 'wb',
+									weixin: 'wx'
+								}[type]));
 								// 通知上层
 								app.page.setResult(data);
 								// 通知全部
@@ -362,21 +507,11 @@
 									userInfo: data
 								});
 								plus.navigator.setStatusBarStyle('light');
-							}, function(err){
-								$getStateFn(false)();
+							}, function(err) {
+								w && w.close();
 								mui.toast(err.message);
 							});
-							
-
-					
-
-					},
-					onOtherLoginTap: function(type) {
-						var w = plus.nativeUI.showWaiting();
-						var that = this;
-						setTimeout(function() {
-							plus.nativeUI.closeWaiting();
-						}, 1e3);
+						return;
 
 						new Promise(function(resolve, reject) {
 								new that.$OAuth(type, function(err, info) {
@@ -460,7 +595,7 @@
 							});
 
 					},
-					
+
 				},
 				watch: {
 					loading: function(newVal, oldVal) {
@@ -479,7 +614,8 @@
 							gender: _o.userInfo.gender,
 							province: _o.userInfo.province,
 							city: _o.userInfo.city,
-							headimgurl: _o.userInfo.figureurl_qq_2
+							headimgurl: _o.userInfo.figureurl_qq_2,
+							openid: _o.authResult.openid,
 						};
 					},
 					_sinaweibo = function(_o) {
@@ -490,7 +626,8 @@
 							gender: _o.userInfo.gender === 'm' ? '男' : '女',
 							province: _o.userInfo.location.split(' ')[0],
 							city: _o.userInfo.location.split(' ')[1],
-							headimgurl: _o.userInfo.avatar_large
+							headimgurl: _o.userInfo.avatar_large,
+							openid: _o.authResult.openid,
 						};
 					},
 					_weixin = function(_o) {
@@ -501,7 +638,8 @@
 							gender: _o.userInfo.sex === 1 ? '男' : '女',
 							province: _o.userInfo.province,
 							city: _o.userInfo.city,
-							headimgurl: _o.userInfo.headimgurl
+							headimgurl: _o.userInfo.headimgurl,
+							openid: _o.authResult.unionid,
 						};
 					}
 

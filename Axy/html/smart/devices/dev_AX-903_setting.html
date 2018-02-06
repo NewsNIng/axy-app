@@ -111,20 +111,21 @@
 				},
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
-					console.log(JSON.stringify(this.devInfo));
 				},
 				methods: {
 					onArarmlogTap: function() {
 						mui.openWindow("dev_AX-903_alarmlog.html", "dev_AX-903_alarmlog", {
 							extras: {
-								_id: this.devInfo.id
+								_id: this.devInfo.id,
+								devInfo: this.devInfo
 							}
 						});
 					},
 					onDataSaveTap: function() {
 						mui.openWindow("dev_AX-903_datasave.html", "dev_AX-903_datasave", {
 							extras: {
-								_id: this.devInfo.id
+								_id: this.devInfo.id,
+								devInfo: this.devInfo
 							}
 						});
 					},
@@ -133,7 +134,7 @@
 					onNameTap: function() {
 						var that = this;
 						app.page.getInput(function(data) {
-							dal.devparam.devname(that.devInfo.devid, that.devInfo.type, data.content, function(err, rs) {
+							dal.devparam.location(that.devInfo.devid, data.content, function(err, rs) {
 								if(err) {
 									return mui.toast(err.message);
 								}

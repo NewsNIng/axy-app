@@ -295,10 +295,9 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
-			
-			
 			/*修复ix 黑条？*/
-			.mui-ios header{
+			
+			.mui-ios header {
 				background: none !important;
 				background-color: transparent !important;
 			}
@@ -626,7 +625,6 @@
 							container: ".mui-scroll-wrapper",
 							down: {
 								height: 50, //可选,默认50.触发下拉刷新拖动距离,
-								auto: true, //可选,默认false.首次加载自动下拉刷新一次
 								contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
 								contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
 								contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
@@ -684,7 +682,7 @@
 							that.longitude = p.coords.longitude;
 							that.latitude = p.coords.latitude;
 							that.city = p.address.city.replace('市', '');
-							that.position = p.address.poiName;
+							//that.position = p.address.poiName;
 							// 加载附近的店
 							that.getNearShops();
 						}, function(err) {
@@ -977,6 +975,12 @@
 								{
 									url = "../smart/devices/dev_AX-904.html";
 									pageid = "dev_AX-904";
+									break;
+								}
+							case "VH-104GN":
+								{
+									url = "../smart/devices/dev_VH-104_setting.html";
+									pageid = "dev_VH-104_setting";
 									break;
 								}
 
