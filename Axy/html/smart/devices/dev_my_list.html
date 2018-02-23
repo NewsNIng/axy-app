@@ -669,6 +669,7 @@
 								ob.next(pageUrl);
 							}, function(err) {
 								// 页面不存在
+								console.log(o.type);
 								mui.toast('尚未支持该配件');
 							});
 						}).subscribe(function(pageUrl) {

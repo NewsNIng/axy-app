@@ -95,7 +95,7 @@
 					</li>
 					<li class="mui-table-view-cell" @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
-							<span>告警延迟时间</span>
+							<span>告警抓拍延迟时间</span>
 							<span class="mui-badge" v-text="devInfo.accessory.delay+'s'"></span>
 						</a>
 					</li>
@@ -135,7 +135,7 @@
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
-		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_ms_alarm.js"></script>
 		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
@@ -228,7 +228,7 @@
 						layer: 1,
 						more: false,
 					});
-					this.pick.setData(pick_data[1]);
+					this.pick.setData(pick_data);
 				},
 				plusReady: function() {
 					plus.navigator.setStatusBarStyle('dark');
