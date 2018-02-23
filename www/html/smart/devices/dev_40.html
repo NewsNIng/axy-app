@@ -439,26 +439,26 @@
 						};
 
 						// 30s超时
-						var $getLockStateTimerOut = Rx.Observable.timer(30e3);
+						//var $getLockStateTimerOut = Rx.Observable.timer(30e3);
 
 						// 结果验证流
-						var $lockDataVaild = function(lockData) {
-							return Rx.Observable.create(function(ob) {
-								if(lockData.unlockPwErrorValid) {
-									if(lockData.unlockPwError) {
-										ob.error(new Error("开锁密码错误"));
-									} else {
-										ob.next("开锁成功");
-									}
-								} else if(lockData.lockPwErrorValid) {
-									if(lockData.lockPwError) {
-										ob.error(new Error("关锁密码错误"));
-									} else {
-										ob.next("关锁成功");
-									}
-								}
-							});
-						};
+//						var $lockDataVaild = function(lockData) {
+//							return Rx.Observable.create(function(ob) {
+//								if(lockData.unlockPwErrorValid) {
+//									if(lockData.unlockPwError) {
+//										ob.error(new Error("开锁密码错误"));
+//									} else {
+//										ob.next("开锁成功");
+//									}
+//								} else if(lockData.lockPwErrorValid) {
+//									if(lockData.lockPwError) {
+//										ob.error(new Error("关锁密码错误"));
+//									} else {
+//										ob.next("关锁成功");
+//									}
+//								}
+//							});
+//						};
 
 						// 获取设置的密码
 						var $getPwd = Rx.Observable.create(function(ob) {

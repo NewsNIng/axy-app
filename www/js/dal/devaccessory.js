@@ -618,8 +618,8 @@
 			devtype: devtype,
 			id: id,
 			type: type,
-			open,
-			password
+			open: open,
+			password: password
 		}, callback);
 	}
 

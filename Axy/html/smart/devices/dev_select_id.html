@@ -129,7 +129,7 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						devActive: 0,
+						devActive: -1,
 						devs_: [],
 
 						// 过滤显示某些主机设备 存类型名称
@@ -169,6 +169,9 @@
 						this.devActive = i;
 					},
 					onNext: function() {
+						if(this.devActive < 0){
+							return mui.toast('请选择一个设备');
+						}
 						
 						app.page.setResult({
 							devid: this.indexDev.devid,

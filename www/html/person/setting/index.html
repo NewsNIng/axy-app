@@ -199,6 +199,8 @@
 						// 清除本地用户数据
 						app.user.logout();
 						window.localStorage.setItem('_pwd_', "");
+						window.localStorage.setItem('_domain_', "");
+						
 
 						// 清除设备列表数据
 						$plusready.subscribe(function() {

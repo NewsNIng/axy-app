@@ -157,7 +157,7 @@
 			}
 			
 			.footer {
-				position: fixed;
+				position: absolute;
 				z-index: 99;
 				width: 100%;
 				height: 1.36rem;
@@ -171,6 +171,10 @@
 				justify-content: space-between;
 				align-items: center;
 				padding: 0.4rem;
+			}
+			
+			.mui-android .footer{
+				position: fixed;
 			}
 			
 			.footer img {
@@ -391,7 +395,7 @@
 						<div class="mui-slider-group mui-slider-loop">
 							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast"></div>
 							<div class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o"></div>
-							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist"></div>
+							<div class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist">-</div>
 						</div>
 						<div class="mui-slider-indicator">
 							<div v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
@@ -531,7 +535,7 @@
 							}
 						})
 					}.bind(this));
-				},
+				},  
 				plusReady: function() {
 					this.$view.setStyle({
 						top: "0px",
@@ -665,11 +669,15 @@
 					_loadImage: function() {
 						this.$nextTick(function() {
 							imagelazyload();
+						});
+					},
+					_loadSliderImage: function(){
+						this.$nextTick(function(){
 							// 图片轮播
 							mui('#slider').slider({
 								interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
 							});
-						});
+						})
 					},
 					// 上拉加载更多
 					_up: function() {
@@ -686,6 +694,7 @@
 							data.iscollection = data.isFavorites ? 1 : 0;
 							this.info = data;
 							this._loadImage();
+							this._loadSliderImage();
 							this._getInfo();
 						}.bind(this));
 					},

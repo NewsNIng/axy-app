@@ -7,7 +7,7 @@
 	</head>
 
 	<body>
-		
+
 		<script type="text/javascript" src="../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../js/lib/vue-ni.js"></script>
 
@@ -18,8 +18,10 @@
 
 		<script type="text/javascript" src="../js/dal/base.js"></script>
 		<script type="text/javascript" src="../js/dal/device.js"></script>
+		<script type="text/javascript" src="../js/dal/devaccessory.js"></script>
 		<script type="text/javascript" src="../js/dal/user.js"></script>
 		<script type="text/javascript" src="../js/dal/push.js"></script>
+		<script type="text/javascript" src="../js/dal/system.js"></script>
 
 		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
 		<script type="text/javascript" src="../js/plug/PlugDevManager.js"></script>
@@ -108,7 +110,7 @@
 					// 未登录状态 
 					// 监听一次登录事件
 					_B.once('login_success', function(data) {
-						
+
 						ob.next(data.userInfo);
 					});
 				}
@@ -117,18 +119,29 @@
 			// 获取顶级域名
 			var $getTopDomain = function(account) {
 				return Rx.Observable.create(function(ob) {
-					ob.next({
-						account: account,
-						pwd: getPwd(),
-						domain: "www.isee110.com"
+					dal.system.getTopMain(account, function(err, data) {
+						if(err) {
+							return ob.error();
+						}
+						ob.next({
+							account: account,
+							pwd: getPwd(),
+							domain: data
+						});
 					});
 				});
 
 			};
-			
+			// 保存顶级域名
+			var $SaveDomain = function(data) {
+				console.log(data.domain);
+				window.localStorage.setItem('_domain_', data.domain);
+				return data;
+			};
+
 			// 获取设备推送id流
 			var $getPushId = Rx.Observable.create(function(ob) {
-				
+
 				var rs = P.GetPushInfoSyn();
 				if(!rs) {
 					return
@@ -178,9 +191,9 @@
 				});
 
 			});
-			
+
 			// 监听更新设备列表的通知
-			var $listenDevListUpdate = Rx.Observable.create(function(ob){
+			var $listenDevListUpdate = Rx.Observable.create(function(ob) {
 				_B.on('device_update', function(data) {
 					ob.next();
 				});
@@ -196,13 +209,15 @@
 				.subscribe(function(user) {
 						user = FixUserData(user);
 						var account = user.account;
-					
+
 						// -》更新 本地 用户 数据
 						UpdateUserInfo(user);
 
 						// -》获取 顶级 域名
 						Rx.Observable.of(account)
 							.mergeMap($getTopDomain)
+							// 保存domin
+							.map($SaveDomain)
 							// 初始化 原生 插件
 							.subscribe(InitNativeSystem);
 
@@ -218,8 +233,7 @@
 							.first()
 							// 设备信息同步
 							.subscribe(SyncHronous.bind(null, account));
-						
-						
+
 						// -》开启获取设备列表定时器
 						$getDevListTimer
 							// 或者收到通知
@@ -228,8 +242,9 @@
 							.mergeMapTo($getDevListByAjax)
 							// 保存并向原生发送数据
 							.subscribe(InitNativeDevList);
-							
-						
+
+						// 向服务器发送请求缓存处理配件请求
+						SyncZoneRequest();
 
 					},
 					// 登录失败
@@ -238,7 +253,7 @@
 			$pready
 				.mergeMapTo($listenUserUpdate)
 				.subscribe(UpdateUserInfo);
-				
+
 			// 向原生注册 控制中心 处理函数回调
 			var InitNativeSystem = function(o) {
 				P.InitNativeSystem(o.account, o.pwd, o.domain, function(arg) {
@@ -255,7 +270,7 @@
 			// 设备推送开关同步
 			var SyncHronous = function(account, id) {
 				PUSH_ID.data = id;
-				
+
 				dal.push.synchronous(account, id, plus.os.name === 'iOS' ? 67 : 36, function(err, data) {
 					/*if(err) {
 						return mui.toast(err.message);
@@ -263,6 +278,11 @@
 					mui.toast(id + '同步成功');*/
 				});
 			};
+
+			// 发送同步配件请求
+			var SyncZoneRequest = function() {
+				dal.devaccessory.allacc(function() {});
+			}
 
 			// 登录失败处理
 			var AppLoginFail = function() {

@@ -163,7 +163,7 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						devActive: 0,
+						devActive: -1,
 						devs_: [],
 						wifiname: "",
 						wifipwd: "",
@@ -228,8 +228,9 @@
 						this.devActive = i;
 					},
 					onNext: function() {
-						// this is action connet device
-						// get indexDev id
+						if(this.devActive < 0){
+							return mui.toast("请选择主机设备");
+						}
 						try {
 							var devid = this.indexDev.devid;
 							if(this.result) {

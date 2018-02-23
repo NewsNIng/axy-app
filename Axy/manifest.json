@@ -7,8 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.9.0",/*应用版本名称*/
-		"code": "20180130"
+		"name": "1.9.2",/*应用版本名称*/
+		"code": "20180206"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -106,6 +106,7 @@
 		"statusbar": {
 			"immersed": true
 		},
+		"popGesture": "close",
 		"splashscreen": {
 			"autoclose": true,/*是否自动关闭程序启动界面，true表示应用加载应用入口页面后自动关闭；false则需调plus.navigator.closeSplashscreen()关闭*/
 			"waiting": true
@@ -402,7 +403,8 @@
 					"html/home/picture_2@3x.png",
 					"html/home/picture_1@3x.png",
 					"image/home/btn_Adddevice@3x.png",
-					"html/home/picture_3@3x.png"
+					"html/home/picture_3@3x.png",
+					"image/smart/devices/bg/903@3xweb.png"
 				],
 				"refer": [
 					"html/search/index.html",
@@ -415,7 +417,11 @@
 					"html/common/login.html",
 					"html/person/message/index.html",
 					"html/person/devshare/share.html",
-					"html/smart/scenes/index2.html"
+					"html/smart/scenes/index2.html",
+					"html/smart/devices/dev_AX-903.html",
+					"html/smart/devices/dev_WG-100_setting.html",
+					"html/smart/devices/dev_WG-100.html",
+					"html/smart/devices/dev_AX-903_setting.html"
 				],
 				"priority": 0
 			},
@@ -619,7 +625,8 @@
 				"refer": [
 					"html/nearby/business/store_details.html",
 					"html/public/position.html",
-					"html/public/maps.html"
+					"html/public/maps.html",
+					"html/nearby/business/signup.html"
 				],
 				"priority": 0
 			},
@@ -676,7 +683,8 @@
 				"refer": [
 					"html/public/input.html",
 					"html/smart/devices/dev_select_id.html",
-					"html/smart/add/scan_code.html"
+					"html/smart/add/scan_code.html",
+					"html/smart/add/scan_code_904.html"
 				],
 				"priority": 0
 			},
@@ -801,7 +809,9 @@
 			"html/smart/devices/dev_my_list.html": {
 				"resources": [
 					"image/smart/devices/bg/903@3xweb.png",
-					"image/smart/devices/bg/wg_100@3xweb.png"
+					"image/smart/devices/bg/wg_100@3xweb.png",
+					"image/smart/scenes/dev_icons/btn_Acousto-opticalarm@3x.png",
+					"image/smart/scenes/dev_icons/btn_Infrareddetector@3x (2).png"
 				],
 				"refer": [
 					"html/smart/add/add_device.html",
@@ -828,7 +838,9 @@
 					"html/smart/devices/dev_25.html",
 					"html/smart/devices/dev_145.html",
 					"html/smart/devices/dev_33.html",
-					"html/smart/devices/dev_40.html"
+					"html/smart/devices/dev_40.html",
+					"html/smart/devices/dev_AX-904.html",
+					"html/smart/devices/dev_VH-104_setting.html"
 				],
 				"priority": 0
 			},
@@ -1117,7 +1129,8 @@
 					"html/public/input.html",
 					"html/smart/devices/dev_AX-903_alarmlog.html",
 					"html/smart/devices/dev_select_id.html",
-					"html/smart/devices/dev_AX-903_bind.html"
+					"html/smart/devices/dev_AX-903_bind.html",
+					"html/smart/devices/dev_AX-903_datasave.html"
 				],
 				"priority": 0
 			},
@@ -1126,6 +1139,8 @@
 				"refer": [
 					"html/person/devshare/share.html",
 					"html/smart/devices/camera_settings_arming.html",
+					"html/smart/add/connect_wifi.html",
+					"html/smart/devices/camera_settings_log.html",
 					"html/public/input.html"
 				],
 				"priority": 0
@@ -1143,8 +1158,7 @@
 					"html/smart/devices/dev_35.html",
 					"html/smart/devices/dev_161.html",
 					"html/smart/devices/dev_25.html",
-					"html/smart/devices/dev_33.html",
-					"html/smart/devices/dev_my_list.html"
+					"html/smart/devices/dev_40.html"
 				],
 				"priority": 0
 			},
@@ -1183,11 +1197,33 @@
 				],
 				"priority": 0
 			},
+			"html/smart/devices/dev_40.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_40_set_pwd.html",
+					"html/smart/devices/dev_40_log.html"
+				],
+				"priority": 0
+			},
 			"html/person/collection/my_collection.html": {
 				"resources": [],
 				"refer": [
-					"html/nearby/discover/discover_details.html",
-					"html/nearby/business/store_details.html"
+					"html/nearby/discover/discover_details.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-904.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/camera_settings_log.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_VH-104_setting.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/camera_settings_record.html",
+					"html/smart/devices/camera_settings_arming.html"
 				],
 				"priority": 0
 			}

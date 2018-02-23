@@ -20,6 +20,10 @@
 				width: 0.48rem;
 			}
 			
+			.mui-bar-nav~.mui-content .mui-pull-top-pocket {
+				top: 0;
+			}
+			
 			.mui-bar-nav~.mui-content {
 				padding-top: 0;
 			}
@@ -96,13 +100,15 @@
 			}
 			
 			.dev_menu .d2 {
-				width: 20%;
 				overflow: hidden;
+				float: right;
+				margin-right: 1rem;
 			}
 			
 			.dev_menu .d3 {
-				width: 24%;
 				text-align: right;
+				float: right;
+				margin-right: 0.15rem;
 			}
 			
 			.card {
@@ -289,6 +295,12 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
+			/*修复ix 黑条？*/
+			
+			.mui-ios header {
+				background: none !important;
+				background-color: transparent !important;
+			}
 		</style>
 
 	</head>
@@ -309,106 +321,108 @@
 				</a>
 			</header>
 
-			<div class="mui-content noImmersed">
-				<!--<div class="mui-scroll">-->
+			<div class="mui-content noImmersed mui-scroll-wrapper">
+				<div class="mui-scroll">
 
-				<div id="slider" class="mui-slider" v-if="imgList.length > 0">
-					<div class="mui-slider-group mui-slider-loop">
-						<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-						<div @tap="onAdvertTap(imgLast)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.adimg"></div>
-						<!-- 中间 -->
-						<div @tap="onAdvertTap(o)" class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o.adimg"></div>
-						<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-						<div @tap="onAdvertTap(imgFrist)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.adimg"></div>
+					<div id="slider" class="mui-slider" v-if="imgList.length > 0">
+						<div class="mui-slider-group mui-slider-loop">
+							<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+							<div @tap="onAdvertTap(imgLast)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.adimg"></div>
+							<!-- 中间 -->
+							<div @tap="onAdvertTap(o)" class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o.adimg"></div>
+							<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+							<div @tap="onAdvertTap(imgFrist)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.adimg"></div>
+						</div>
+						<div class="mui-slider-indicator">
+							<div v-if="imgList.length !== 1" v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+						</div>
 					</div>
-					<div class="mui-slider-indicator">
-						<div v-if="imgList.length !== 1" v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
-					</div>
-				</div>
-				<template v-else>
-					<div style="height: 0;width: 100%; padding-top: 50%;">
+					<template v-else>
+						<div style="height: 0;width: 100%; padding-top: 50%;">
 
-					</div>
-				</template>
-
-				<div class="model_type">
-					<template v-for="o,i in modelTypes">
-						<div @tap="onModelTap(o, i)">
-							<img :src="o.src" />
-							<span class="app-font-size-26">{{o.name}}</span>
 						</div>
 					</template>
 
-				</div>
-				<template v-if="dev.devid">
-					<div class="card">
-						<div class="card_head">
-							<span class="app-font-size-30">我的设备</span>
-							<div @tap="onDeviceMore()" class="app-font-size-24 mui-pull-right">
-
-								<span class="mui-icon">
-								<span class="app-font-size-24">查看更多</span>
-								<img src="../../image/home/see_more.png" />
-								</span>
-							</div>
-						</div>
-
-						<div class="device_show">
-							<!--<div class="app-font-size-22">
-								{{dev.devimg}}	
-							</div>-->
-
-							<div class="img imgdiv" :class="_getDevName(dev.type)" v-devbg :data-devid="dev.devid" @tap="openCamListWindow($event)">
-
-							</div>
-							<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
-							<div class="dev_menu">
-								<div class="mui-icon d1">
-									<img src="../../image/home/dev_camera.png" />
-									<span class="app-font-size-24 app-color-main">{{_fixDevLocation(dev.location) || dev.devid}}</span>
-								</div>
-								<div class="mui-icon d2" @tap="onShareTap()">
-									<img src="../../image/home/dev_share.png" />
-									<span class="app-font-size-24" style="color: #696969;">分享</span>
-								</div>
-								<div class="mui-icon d3" @tap="onDeviceSetTap()">
-									<img src="../../image/home/dev_setting.png" />
-									<span class="app-font-size-24" style="color: #696969;">设置</span>
-								</div>
-
-							</div>
-						</div>
-					</div>
-				</template>
-				<template v-else>
-					<div style="text-align: center;">
-						<img @tap="addDeviceTap()" src="../../image/home/btn_Adddevice@3x.png" style="width: 1.893333rem;margin-top: 1.413333rem;" />
-						<div class="app-font-size-28 app-color-main" style="margin-top: 0.266666rem;margin-bottom: 1.12rem;">添加设备</div>
-						<div class="app-font-size-28 app-color-333333" style="margin: 0.453333rem 0;">这里空空如也，快让你的设备智能起来吧~</div>
-					</div>
-				</template>
-
-				<!--v-if="like.length"-->
-				<div class="card">
-					<div class="card_head">
-						<span class="app-font-size-30">猜你喜欢</span>
-						<div @tap="onStoreMore()" class="app-font-size-24 mui-pull-right">
-
-							<span class="app-font-size-24">查看更多</span>
-							<img src="../../image/home/see_more.png" />
-						</div>
-					</div>
-
-					<div class="like_image">
-
-						<template v-for="o,i in like">
-							<div :style="{backgroundImage: 'url('+o.img+')'}" @tap="onLikeItemTap(o)">
-
-								<span class="app-font-size-24">{{o.title}}</span>
+					<div class="model_type">
+						<template v-for="o,i in modelTypes">
+							<div @tap="onModelTap(o, i)">
+								<img :src="o.src" />
+								<span class="app-font-size-26">{{o.name}}</span>
 							</div>
 						</template>
 
-						<!--<div>
+					</div>
+					<template v-if="dev.devid">
+						<div class="card">
+							<div class="card_head">
+								<span class="app-font-size-30">我的设备</span>
+								<div @tap="onDeviceMore()" class="app-font-size-24 mui-pull-right">
+
+									<span class="mui-icon">
+								<span class="app-font-size-24">查看更多</span>
+									<img src="../../image/home/see_more.png" />
+									</span>
+								</div>
+							</div>
+
+							<div class="device_show">
+								<!--<div class="app-font-size-22">
+								{{dev.devimg}}	
+							</div>-->
+
+								<div class="img imgdiv" ref="devimgel" :class="_getDevName(dev.type)" v-devbg :data-devid="dev.devid" @tap="openCamListWindow($event)">
+
+								</div>
+								<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
+								<div class="dev_menu">
+									<div class="mui-icon d1">
+										<img src="../../image/home/dev_camera.png" />
+										<span class="app-font-size-24 app-color-main">{{_fixDevLocation(dev.location) || dev.devid}}</span>
+									</div>
+
+									<div class="mui-icon d3" @tap="onDeviceSetTap()">
+										<img src="../../image/home/dev_setting.png" />
+										<span class="app-font-size-24" style="color: #696969;">设置</span>
+									</div>
+
+									<div class="mui-icon d2" @tap="onShareTap()">
+										<img src="../../image/home/dev_share.png" />
+										<span class="app-font-size-24" style="color: #696969;">分享</span>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</template>
+					<template v-else>
+						<div style="text-align: center;">
+							<img @tap="addDeviceTap()" src="../../image/home/btn_Adddevice@3x.png" style="width: 1.893333rem;margin-top: 1.413333rem;" />
+							<div class="app-font-size-28 app-color-main" style="margin-top: 0.266666rem;margin-bottom: 1.12rem;">添加设备</div>
+							<div class="app-font-size-28 app-color-333333" style="margin: 0.453333rem 0;">这里空空如也，快让你的设备智能起来吧~</div>
+						</div>
+					</template>
+
+					<!--v-if="like.length"-->
+					<div class="card">
+						<div class="card_head">
+							<span class="app-font-size-30">猜你喜欢</span>
+							<div @tap="onStoreMore()" class="app-font-size-24 mui-pull-right">
+
+								<span class="app-font-size-24">查看更多</span>
+								<img src="../../image/home/see_more.png" />
+							</div>
+						</div>
+
+						<div class="like_image">
+
+							<template v-for="o,i in like">
+								<div :style="{backgroundImage: 'url('+o.img+')'}" @tap="onLikeItemTap(o)">
+
+									<span class="app-font-size-24">{{o.title}}</span>
+								</div>
+							</template>
+
+							<!--<div>
 							<img src="../../image/home/like_a.png" />
 							<span>舌尖上的诱惑</span>
 						</div>
@@ -426,27 +440,27 @@
 							<img src="../../image/home/like_d.png" />
 						</div>-->
 
+						</div>
 					</div>
-				</div>
-				<div class="card" style="margin-bottom: 0.266666rem;">
-					<div class="card_head">
-						<span class="app-font-size-30">附近的店</span>
-						<div @tap="onNearbyMore()" class="app-font-size-24 mui-pull-right">
+					<div class="card" style="margin-bottom: 0.266666rem;">
+						<div class="card_head">
+							<span class="app-font-size-30">附近的店</span>
+							<div @tap="onNearbyMore()" class="app-font-size-24 mui-pull-right">
 
-							<span class="app-font-size-24">查看更多</span>
-							<img src="../../image/home/see_more.png" />
+								<span class="app-font-size-24">查看更多</span>
+								<img src="../../image/home/see_more.png" />
+
+							</div>
+						</div>
+						<div class="shop_image">
+							<template v-for="o,i in nearShops">
+								<div @tap="onNearItemTap(o)" class="shop_a" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
+							</template>
 
 						</div>
 					</div>
-					<div class="shop_image">
-						<template v-for="o,i in nearShops">
-							<div @tap="onNearItemTap(o)" class="shop_a" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
-						</template>
 
-					</div>
 				</div>
-
-				<!--</div>-->
 
 			</div>
 		</div>
@@ -495,7 +509,7 @@
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
-				updated: function(el) {
+				update: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
@@ -591,16 +605,34 @@
 					// 获取喜欢列表
 					this.getThemeList();
 
-					// 动态沉浸式处理
-					//					var css = document.createElement('style');
-					//					css.innerText = ".mui-slider:before{height:"+ (immersed) +"px;}";
-					//					document.body.appendChild(css);
 					// 缓存机制加载图片
 					imagelazyload();
 					// 图片轮播
 					mui('#slider').slider({
 						interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
 					});
+
+					// 是否登录判断
+					this.$isLogin = Rx.Observable.create(function(ob) {
+						//如果用户已经登录了 则  获取第一个设备
+						if(app.user.has()) {
+							ob.next();
+						}
+					});
+
+					mui.init({
+						pullRefresh: {
+							container: ".mui-scroll-wrapper",
+							down: {
+								height: 50, //可选,默认50.触发下拉刷新拖动距离,
+								contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+								contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+								contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+								callback: this.reload
+							}
+						}
+					});
+
 				},
 				plusReady: function() {
 					var that = this;
@@ -609,14 +641,6 @@
 					this.$view.setStyle({
 						scrollIndicator: "none", // 隐藏滚动条
 						render: "always", // 始终进行渲染
-					});
-
-					// 是否登录判断
-					var $isLogin = Rx.Observable.create(function(ob) {
-						//如果用户已经登录了 则  获取第一个设备
-						if(app.user.has()) {
-							ob.next();
-						}
 					});
 
 					// 当登录时
@@ -629,7 +653,7 @@
 						// 延迟200ms
 						.delay(200);
 
-					$isLogin.merge($onLogin).subscribe(function() {
+					this.$isLogin.merge($onLogin).subscribe(function() {
 						// 获取第一个设备
 						that.getDeviceOne();
 					});
@@ -646,22 +670,19 @@
 					// 地理定位流
 					var $position = Rx.Observable.fromPromise(that.getCurrentPosition());
 
-					// 地理定位最大延迟 30s
-					var $time30out = Rx.Observable.timer(3e3);
+					// 地理定位最大延迟 5s
+					var $time5out = Rx.Observable.timer(5e3);
 
-					// 获取定位信息
-					$prePosition
-						.merge($position)
-						// 定位最多30s
-						.takeUntil($time30out)
-						// 拿到数据
+					$position
+						.merge($time5out.mergeMapTo($prePosition))
+						.first()
 						.subscribe(function(p) {
 							// 保存最近地理位置
 							POSITION.data = p;
 							that.longitude = p.coords.longitude;
 							that.latitude = p.coords.latitude;
 							that.city = p.address.city.replace('市', '');
-							that.position = p.address.poiName;
+							//that.position = p.address.poiName;
 							// 加载附近的店
 							that.getNearShops();
 						}, function(err) {
@@ -674,6 +695,22 @@
 
 				},
 				methods: {
+					reload: function() {
+						// 获取轮播广告图
+						this.getAdvert();
+						// 获取喜欢列表
+						this.getThemeList();
+						// 登录判断 获取第一个设备
+						this.$isLogin.subscribe(function() {
+							this.getDeviceOne();
+						}.bind(this));
+
+						setTimeout(function() {
+							mui('.mui-scroll-wrapper').pullRefresh().endPulldownToRefresh();
+						}, 1000);
+
+					},
+
 					getCurrentPosition: function() {
 						return new Promise(function(re, rj) {
 							plus.geolocation.getCurrentPosition(function(p) {
@@ -811,7 +848,7 @@
 							var w2 = type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
 								getScrrenHotBgFn(o.devid).then(function(path) {
-									el.style.backgroundImage = "url(" + path + ")";
+									that.$refs.devimgel.style.backgroundImage = "url(" + path + ")";
 								})
 							});
 						});
@@ -861,11 +898,6 @@
 					listenDev: function() {
 						var that = this;
 						Rx.Observable.create(function(ob) {
-								_B.on('RunstateNotify', function(data) {
-									if(data.info.devid === that.dev.devid) {
-										ob.next(data.info);
-									}
-								});
 								_B.on('update', function(data) {
 									if(data.info.devid === that.dev.devid) {
 										ob.next(data.info);
@@ -923,7 +955,7 @@
 						var name = app.dev.findName(this.dev.type);
 
 						var url, pageid;
-						
+
 						switch(name) {
 							case "WG-100":
 								{
@@ -943,6 +975,12 @@
 								{
 									url = "../smart/devices/dev_AX-904.html";
 									pageid = "dev_AX-904";
+									break;
+								}
+							case "VH-104GN":
+								{
+									url = "../smart/devices/dev_VH-104_setting.html";
+									pageid = "dev_VH-104_setting";
 									break;
 								}
 

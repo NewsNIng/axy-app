@@ -2,6 +2,8 @@ var dal = {
 	BASE_URL_DEV: "http://192.168.1.213:8080/vihiManager/vihiapi",
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
 	// http://vh.anxin-net.com/vihiManager/vihiapp/share/index.html
+	
+	BASE_URL_TOP: "http://www.isee110.com/api",
 };
 
 /**
@@ -12,11 +14,12 @@ var dal = {
  * @param {Function} callback  回调函数
  */
 function requestAdapter(type, url, params, callback) {
+	// 优先获取 单个接口设置的 url
 	var BASE_URL = params.BASE_URL;
 	if(BASE_URL) {
 		delete params.BASE_URL;
 	} else {
-		BASE_URL = dal.BASE_URL;
+		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL;
 	}
 	url = BASE_URL + url;
 

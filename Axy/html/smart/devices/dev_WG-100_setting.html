@@ -165,6 +165,13 @@
 			<div class="mui-content">
 
 				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>设备ID</span>
+							<span class="mui-badge" v-text="devInfo.devid"></span>
+						</a>
+					</li>
+
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
@@ -187,7 +194,7 @@
 							</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onWifiSetTap()">
 						<a class="mui-navigate-right">
 							<span>WIFI配置</span>
 							<span class="mui-badge "></span>
@@ -199,7 +206,7 @@
 							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
 						</a>
 					</li>-->
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onLogTap()">
 						<a class="mui-navigate-right">
 							<span>布撤防日志</span>
 						</a>
@@ -234,8 +241,12 @@
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
 
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer ></script>
+
 		<script type="text/javascript">
 			mui.init();
+
+			var _B = new ni.Broadcast();
 
 			new Vue({
 				el: '#warpper',
@@ -292,13 +303,18 @@
 					onNameTap: function(name) {
 						var that = this;
 						app.page.getInput(function(data) {
-							that.devInfo.location = data.content;
-							mui.toast('名称更新成功');
-							// 通知上层的上层
-							_B.emit("update", {
-								info: that.devInfo
-							}, {
-								views: ['dev_my_list', 'home']
+							dal.devparam.devname(that.devInfo.devid, that.devInfo.type, data.content, function(err, rs) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.devInfo.location = data.content;
+								mui.toast('名称更新成功');
+								// 通知上层
+								_B.emit("update", {
+									info: that.devInfo
+								}, {
+									views: ['dev_my_list', 'home']
+								});
 							});
 						}, {
 							title: "设备名称",
@@ -363,34 +379,57 @@
 						if(dev.relation === 2) {
 							methodName += 'share';
 						}
-						mui.confirm("确定要删除设备吗？", "", ["删除", "取消"], function(e) {
-							if(e.index === 0) {
 
-								dal.device[methodName](dev.devid, function(err, rs) {
-									plus.nativeUI.closeWaiting();
-									if(err) {
-										return mui.toast(err.message);
-									}
-									mui.toast('删除成功，设备将会重启');
-									dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
-										if(err) {
-											mui.toast(err.message);	
-										}else{
-											mui.toast("操作成功！设备状态更新会有一定的延迟")
-										}
-										_B.emit("delete", {}, {
-											views: [that.$view.opener()]
-										});
-										that.$view.close();
-										
-									});
-									
-								});
-
-							} else {
-								plus.nativeUI.closeWaiting();
-							}
+						// 弹窗确认
+						var $alert = Rx.Observable.create(function(ob) {
+							mui.confirm("确定要删除设备吗？\n删除前设备将会重启", "", ["删除", "取消"], function(e) {
+								if(e.index === 0) {
+									ob.next(dev);
+								} else {
+									ob.error(new Error("您取消了删除"));
+								}
+							});
 						});
+						// 重启设备
+						var $rebootFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									dev.methodName = methodName;
+									ob.next(dev);
+								});
+							})
+						}
+
+						// 删除设备
+						var $deleteFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.device[dev.methodName](dev.devid, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(dev);
+								});
+							})
+						}
+
+						$alert
+							.mergeMap($rebootFn)
+							.mergeMap($deleteFn)
+							.subscribe(function(dev) {
+								mui.toast("设备删除成功");
+								plus.nativeUI.closeWaiting();
+								_B.emit("delete", {}, {
+									views: [that.$view.opener()]
+								});
+								that.$view.close();
+							}, function(err) {
+								plus.nativeUI.closeWaiting();
+								mui.toast(err.message);
+							});
+
 					},
 					// 重启设备
 					onReboot: function() {
@@ -410,8 +449,8 @@
 					onWifiSetTap: function() {
 						var that = this;
 						app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data) {
-							dal.devparam.wifi(that.devInfo.devid, that.devInfo.type, data.name,data.pwd,function(err, data){
-								if(err){
+							dal.devparam.wifi(that.devInfo.devid, that.devInfo.type, data.name, data.pwd, function(err, data) {
+								if(err) {
 									return mui.toast(err.message);
 								}
 								mui.toast('配置WIFI成功');
@@ -419,8 +458,15 @@
 							});
 						}.bind(this));
 					},
-					
-					
+					// 布撤防日志
+					onLogTap: function() {
+						mui.openWindow('camera_settings_log.html', 'camera_settings_log', {
+							extras: {
+								info: this.devInfo
+							}
+						});
+					},
+
 				}
 			});
 		</script>

@@ -77,6 +77,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-rules.js" ></script>
 
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
@@ -212,7 +213,7 @@
 											});
 										}, {
 											result: true,
-											// 过滤设备 电管家 和 智能网管
+											
 											filter: that.isSmart ? [
 												"AX-903",
 												"AX-904",
@@ -220,7 +221,7 @@
 											]: [
 												"WG-100",
 												"AX-903",
-												"AX-904"
+												//"AX-904"
 											]
 										});
 									});

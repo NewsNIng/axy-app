@@ -40,6 +40,23 @@
 		
 	}
 	
+	// 获取顶级域名
+	system.getTopMain = function(account, callback){
+		return ra('get', '/getserver.do', {
+			account: account,
+			BASE_URL: _.BASE_URL_TOP
+		}, callback);
+	}
+	
+	// 获取第三方登录所关联的账户
+	system.getAccount = function(type, openid, callback){
+		return ra('post', '/user/getAccount', {
+			type: type,
+			openid: openid,
+			BASE_URL: _.BASE_URL
+		}, callback);
+	}
+	
 	
 	
 	
