@@ -1226,6 +1226,13 @@
 					"html/smart/devices/camera_settings_arming.html"
 				],
 				"priority": 0
+			},
+			"html/smart/devices/dev_33.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {

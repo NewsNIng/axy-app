@@ -10,7 +10,10 @@
 		lockpassword: /^\d{4,8}$/, // 智能门锁密码
 		devName: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,15}$/, 
 		nickname: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,18}$/, 
-		userName: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,18}$/
+		userName: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,18}$/,
+		nonEmpty: /[\S]{1,}/,
+		
+		
 	};
 
 	rules.testBy = function(rex, value, message) {

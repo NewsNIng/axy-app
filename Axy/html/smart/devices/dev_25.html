@@ -223,13 +223,13 @@
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell">
 						<a class="">
-							<span>设备ID</span>
+							<span>配件ID</span>
 							<span class="mui-badge" v-text="devInfo.accessory.id"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
-							<span>设备名称</span>
+							<span>配件名称</span>
 							<span class="mui-badge" v-text="devInfo.accessory.name"></span>
 						</a>
 					</li>
@@ -434,8 +434,12 @@
 								that._updataUi();
 							});
 						}, {
-							title: "设备名称",
+							title: "配件名称",
 							content: that.devInfo.accessory.name,
+							r: "nonEmpty", 
+							rmsg: "配件名称不能为空",
+							maxLength: 15,
+							mLengthMsg: "最长不超过15个字符！",
 						});
 					},
 					// 更新缓存数据
@@ -459,6 +463,9 @@
 					},
 					openLight: function(i, isOpen) {
 						//						alert(i+","+isOpen);
+						if(this._enableVerify()){
+							return;
+						}
 						plus.nativeUI.showWaiting();
 						dal.devaccessory.light(this.devInfo.accessory.id, this.devInfo.accessory.devid, this.devInfo.devType, i, isOpen, function(err, data) {
 							plus.nativeUI.closeWaiting();
@@ -479,6 +486,11 @@
 						}
 						this.devInfo.accessory.action = (action>>>0);
 						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
+					},
+					_enableVerify: function(){
+						if(!this.devInfo.accessory.enable){
+							return mui.toast("需启用后才能操作此配件！");
+						}
 					},
 				}
 			});
