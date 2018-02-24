@@ -254,7 +254,6 @@
 					},
 					onNext: function() {
 						if(!this.isConnected) {
-
 							return;
 						}
 						// 跳转
@@ -264,6 +263,7 @@
 								devid: this.devid,
 							}
 						});
+						plus.webview.getWebviewById('Lan_add_camera') && plus.webview.getWebviewById('Lan_add_camera').close();
 						return;
 						//						this.$view.close();
 					},
