@@ -348,7 +348,9 @@
 										that.city = data.city;
 										// 通知上层 城市变化
 										new ni.Broadcast().emit('city_change_sub', {
-											city: data.city
+											city: data.city,
+											longitude: data.longitude,
+											latitude: data.latitude
 										}, {
 											views: [that.$view.parent()]
 										})

@@ -339,7 +339,7 @@
 						// 选取图片
 						this.$gallery(function(err, imgs) {
 							if(err) {
-								return mui.toast('选取图片失败');
+								return err && mui.toast(err.message);
 							}
 							// 打开图片剪裁
 							app.page.cropper(function(data) {

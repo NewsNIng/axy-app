@@ -63,7 +63,7 @@
 		<div class="mui-content menu-box app-font-size-32">
 
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell"  @tap="onAllTap()">
 					<a>
 						<span class="app-color-333333">全部推送</span>
 						<span class="mui-badge">
@@ -78,7 +78,7 @@
 			<ul class="mui-table-view">
 				<template v-for="o,i in list">
 
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onToggle(o)">
 						<a>
 							<span class="app-color-333333">{{_fixName(o.location) || o.devid}}</span>
 							<span class="mui-badge">
@@ -93,7 +93,7 @@
 			</ul>
 
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="onActivityToggle()">
 					<a>
 						<span class="app-color-333333">活动通知</span>
 						<span class="mui-badge">
@@ -104,7 +104,7 @@
 							</span>
 					</a>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="mui-table-view-cell" @tap="onSystemToggle()" >
 					<a>
 						<span class="app-color-333333">系统通知</span>
 						<span class="mui-badge">

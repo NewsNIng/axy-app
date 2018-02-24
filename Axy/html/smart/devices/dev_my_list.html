@@ -115,12 +115,10 @@
 				/*pointer-events: none;*/
 			}
 			
-			.menudiv.AX-903 .menudiv-controller{
+			.menudiv.AX-903 .menudiv-controller {
 				opacity: 0;
 				pointer-events: none;
 			}
-			
-			
 			/*是否在线*/
 			
 			.imgdiv>span.imgdiv-line {
@@ -148,9 +146,9 @@
 				right: 0.177777rem;
 				z-index: 9;
 			}
-			
 			/*903无布撤防状态*/
-			.AX-903 .imgdiv-state{
+			
+			.AX-903 .imgdiv-state {
 				display: none !important;
 			}
 			
@@ -235,19 +233,19 @@
 		<div id="controll" class="mui-popover">
 			<div class="qmenu">
 
-				<div @tap="onTap(1,$event)">
+				<div @tap="onTap(1,$event, '求救')">
 					<img src="../../../image/smart/devices/btn_sos@3x.png" />
 					<h5 class="app-font-size-24">求救</h5>
 				</div>
-				<div @tap="onTap(8,$event)">
+				<div @tap="onTap(8,$event, '布防')">
 					<img src="../../../image/smart/devices/others/btn_protection@3x.png" />
 					<h5 class="app-font-size-24">布防</h5>
 				</div>
-				<div @tap="onTap(4,$event)">
+				<div @tap="onTap(4,$event, '撤防')">
 					<img src="../../../image/smart/devices/others/btn_Disarm@3x.png" />
 					<h5 class="app-font-size-24">撤防</h5>
 				</div>
-				<div @tap="onTap(2,$event)">
+				<div @tap="onTap(2,$event, '静音')">
 					<img src="../../../image/smart/devices/btn_Mute@3x.png" />
 					<h5 class="app-font-size-24">静音</h5>
 				</div>
@@ -273,7 +271,6 @@
 			</header>
 
 			<div class="mui-content">
-
 				<template v-if="netDivList.length">
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
@@ -387,6 +384,8 @@
 			var _B = new ni.Broadcast();
 
 			var P = plug.H5NativeBridge;
+			
+			var DEVD;
 
 			var wayPick;
 
@@ -395,10 +394,9 @@
 			var menuV = new Vue({
 				el: '#controll',
 				methods: {
-					onTap: function(state, e) {
+					onTap: function(state, e, text) {
 						plus.nativeUI.showWaiting();
 						var dev = listV.controlDev;
-						var text = e.target.innerText;
 
 						Rx.Observable.create(function(ob) {
 							dal.devparam.remotecontrol(dev.devid, dev.type, state, function(err, rs) {
@@ -484,7 +482,16 @@
 					this.$view.setStyle({
 						scrollIndicator: "none"
 					});
-					var DEVD = new ni.Cache('dev_list', [], {
+
+					this.$view.setPullToRefresh({
+						support: true,
+						style: "circle",
+						offset: 45 + immersed + "px",
+						height: '50px',
+						range: '200px'
+					}, this._down.bind(this));
+
+					DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
 
@@ -556,6 +563,27 @@
 
 				},
 				methods: {
+					_down: function() {
+						var that = this;
+						// 网络获取 最新设备信息
+						dal.device.list(1, function(err, data) {
+							that.$view.endPullToRefresh();
+							if(err) {
+								return;
+							}
+							// 数据不为空时 向原生发送数据
+							if(data && data.length > 0) {
+								DEVD.data = data;
+								P.InitNativeDevList(data);
+								that.netDivList = data;
+								that.active = 0;
+								// 配件列表置空
+								that.devaccessroyList = [];
+							}
+						}, 1000);
+						
+					},
+
 					// 摄像机点击
 					onCmTap: function(o, i, e) {
 						var that = this;
@@ -758,7 +786,8 @@
 									pageid = "dev_AX-904";
 									break;
 								}
-							case "VH-104GN": {
+							case "VH-104GN":
+								{
 									url = "dev_VH-104_setting.html";
 									pageid = "dev_VH-104_setting";
 									break;

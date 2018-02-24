@@ -173,7 +173,7 @@
 				padding: 0.4rem;
 			}
 			
-			.mui-android .footer{
+			.mui-android .footer {
 				position: fixed;
 			}
 			
@@ -293,29 +293,7 @@
 				background-size: cover;
 				background-position: center;
 			}
-			/*share*/
 			
-			#popover-share {
-				bottom: 0 !important;
-				width: 100%;
-				padding: 1rem .75rem;
-				border-radius: 0;
-			}
-			
-			#popover-share .share-title {
-				text-align: center;
-				color: #a1a1a1;
-			}
-			
-			#popover-share .share-body {}
-			
-			#popover-share .share-body>img {
-				float: left;
-				margin-top: .8rem;
-				width: 25%;
-				padding: 6%;
-			}
-			/*end share*/
 			/*图片轮播*/
 			
 			.mui-slider-indicator .mui-indicator {
@@ -344,7 +322,7 @@
 					<img src="../../../image/nearby/business/back.png" />
 				</a>
 				<h1 class="mui-title"></h1>
-				<a class="mui-icon mui-pull-right" @tap="mui('#popover-share').popover('show')">
+				<a class="mui-icon mui-pull-right" @tap="onShareTap()">
 					<img src="../../../image/nearby/business/share.png" />
 				</a>
 				<a v-if="from !== info.account" class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
@@ -352,23 +330,12 @@
 						<img src="../../../image/nearby/business/collection_3@3x.png" />
 					</template>
 					<template v-else>
-						<img src="../../../image/nearby/business/collection@3x.png"/>
+						<img src="../../../image/nearby/business/collection@3x.png" />
 					</template>
 				</a>
 			</header>
 
-			<div id="popover-share" class="mui-popover app-font-size-30">
-				<div class="share-title">
-					快把说说分享给朋友，获取更多关注~
-				</div>
-				<div class="share-body">
-					<img @tap="onShareTo('qq')" src="../../../image/common/login_qq.png" />
-					<img @tap="onShareTo('wxhy')" src="../../../image/common/login_wechat.png" />
-					<img @tap="onShareTo('wxpyq')" src="../../../image/common/pyq@3x.png" />
-					<img @tap="onShareTo('sinaweibo')" src="../../../image/common/login_weibo.png" />
-				</div>
-			</div>
-
+			
 			<div class="footer" :class="{'isFocus': true}">
 
 				<input style="margin-bottom: 0;" ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="text" name="" id="" v-model="content" placeholder="写评论" />
@@ -535,107 +502,43 @@
 							}
 						})
 					}.bind(this));
-				},  
+				},
 				plusReady: function() {
 					this.$view.setStyle({
 						top: "0px",
 						bottom: '0px',
-						softinputMode:"adjustResize",  
+						softinputMode: "adjustResize",
 					});
-					
+
 					plus.nativeUI.showWaiting();
 					this.from = app.user.get().account || "null";
 					// 获取传过来的id值
 					this.aid = this.$view.oid;
 					this.getInfo();
 					this.getComments();
-					
-					
 
 				},
 				methods: {
 
-					// 分享至
-					onShareTo: function(type) {
+					onShareTap: function() {
 						var that = this;
 						var shareImg = that._getImg(that.info.image1, that.info.image2, that.info.image3);
-						var w;
-						setTimeout(plus.nativeUI.closeWaiting, 8e3);
+						app.page.sendShare(function() {
 
-						Rx.Observable
-							// 获取授权
-							.create(function(ob) {
-								w = plus.nativeUI.showWaiting('获取授权...');
-								var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
-								new that.$OAuth(oauthType, function(err, info) {
-									if(err) {
-										return mui.toast(err.message);
-									}
-									ob.next();
-								}, that);
-							})
+						}, {
+							img: shareImg,
+							title: that.info.title,
+							content: that.info.content,
 
-							// 处理为本地图片
-							.mergeMap(function(ob) {
-								return Rx.Observable.create(function(ob) {
-									if(shareImg.indexOf('file:') >= 0) {
-										// 本地图片
-										return ob.next(shareImg);
-									}
-									// 下载
-									w.setTitle("处理图片...");
-
-									new ni.Download(shareImg, {
-										filename: 'share_temp_' + +new Date,
-										suffix: '.jpg',
-									}).onSuccess(function(src) {
-										ob.next(src);
-									}).start();
-								})
-
-							})
-							// 压缩
-							.mergeMap(function(_img) {
-								w.setTitle("压缩图片...");
-								return Rx.Observable.create(function(ob) {
-									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
-										plus.nativeUI.closeWaiting();
-										if(err) {
-											return plus.nativeUI.toast(err.message);
-										}
-										ob.next(overImgs[0]);
-									});
-								})
-
-							})
-							// 分享
-							.mergeMap(function(img) {
-								return Rx.Observable.create(function(ob) {
-									w.setTitle("拉取分享...");
-									setTimeout(plus.nativeUI.closeWaiting, 3e3);
-									new ni.Share(type, function(err, data) {
-										plus.nativeUI.closeWaiting();
-										if(err) {
-											if(err.code === -100 || err.code === -2) {
-												err.message = "用户取消分享";
-											}
-											return plus.nativeUI.toast(err.message);
-										}
-										ob.next(data);
-									}, {
-										img: img, //图片地址 暂不支持网络地址 
-										href: 'http://www.vihivision.com/', //分享的超链接
-										title: that.info.title, //当且仅当href存在时有效
-										content: that.info.content //当且仅当href存在时有效
-									});
-								});
-							})
-							// 回调
-							.subscribe(function(data) {
-								console.log(JSON.stringify(data));
-							});
-
+							tips: "快把说说分享给朋友，获取更多关注~",
+							datahref: {
+								type: "discover", // 分享类型 （店铺store, 主题theme, 发现discover）
+								id: that.info.id, // 当前类型数据的主键ID
+							}
+						});
 					},
+
+				
 
 					// 头像点击
 					onHeadTap: function(account) {
@@ -651,7 +554,7 @@
 					onSendTap: function() {
 						var that = this;
 						app.user.get(function(u) {
-							dal.article.comments.add(that.info.id, that.c, function(err, data) {
+							u && dal.article.comments.add(that.info.id, that.c, function(err, data) {
 								if(err) {
 									return mui.toast('发送评论失败，请重试');
 								}
@@ -671,8 +574,8 @@
 							imagelazyload();
 						});
 					},
-					_loadSliderImage: function(){
-						this.$nextTick(function(){
+					_loadSliderImage: function() {
+						this.$nextTick(function() {
 							// 图片轮播
 							mui('#slider').slider({
 								interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
@@ -743,11 +646,17 @@
 						}.bind(this));
 					},
 					onFocusTap: function() {
-						if(this.from === this.info.account) {
-							return mui.toast("您不能关注自己！");
-						}
-						this.isfocus = +!this.isfocus;
-						this.changeFocus();
+						app.user.get(function(u) {
+							if(!u) {
+								return
+							}
+							if(this.from === this.info.account) {
+								return mui.toast("您不能关注自己！");
+							}
+							this.isfocus = +!this.isfocus;
+							this.changeFocus();
+						}.bind(this));
+
 					},
 					changeFocus: function() {
 						var methodName = 'add';

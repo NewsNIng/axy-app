@@ -518,6 +518,7 @@
 
 					// 删除配件
 					onDelDevice: function() {
+						LOCKPWD.data = "";
 						app.page.setResult({
 							action: "del"
 						}).close();
@@ -526,6 +527,7 @@
 					},
 					// 解绑配件
 					onDevUnBind: function() {
+						LOCKPWD.data = "";
 						app.page.setResult({
 							action: "unbind"
 						}).close();
