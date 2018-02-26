@@ -136,61 +136,64 @@
 			}
 			/*店铺详情end*/
 			
-			
-			.app-btn-main{
+			.app-btn-main {
 				height: 1.173333rem;
 				width: 8.373333rem;
 				margin: 1rem 0.813333rem;
+			}
+			
+			
+			.types {
+				color: #2BB8AA;
+				display: inline;
 			}
 		</style>
 	</head>
 
 	<body>
+		<div class="root">
 
-		<header class="mui-bar mui-bar-nav app-header">
-			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">我的店铺</h1>
-		</header>
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">我的店铺</h1>
+				<span @tap="onNewBtnTap()" class="mui-pull-right app-font-size-32 app-color-white" style="line-height: 45px;">新增</span>
+			</header>
 
-		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
-			<div class="mui-scroll">
+			<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
+				<div class="mui-scroll">
 
-				<div>
-					<template v-for="o in shops">
-						<div class="shop">
-							<div class="shop_imgtext box">
-								<div class="shop_image" :style='"background-image: url("+ _getImg(o.image1,o.image2,o.image3) +");"'>
-									
-								</div>
-								<div class="shop_info flex1" @tap="onLookTap(o)">
-									<!--<div class="distance app-font-size-28">{{_m2km(o.distance)}} km</div>-->
-									<div class="name app-font-size-30 mui-ellipsis">{{o.name}}</div>
-									<!--<div class="time app-font-size-28"><img src="../../../image/nearby/time.png" />{{_min2time(o.starttime)+ '-' + _min2time(o.endtime)}}</div>-->
-									<!--<div class="types app-font-size-28" v-for="(type,i) in o.types">
-										<span v-if="i!==0"> | </span>{{type}}
-									</div>-->
-									<!--{{JSON.stringify(o)}}-->
-									<div class="mui-inline app-font-size-26 app-color-9f9fa0" v-for="(type,i) in ['自助烧烤','自助烧烤','自助烧烤']">
-										<span v-if="i!==0"> | </span>{{type}}
+					<div>
+						<template v-for="o in shops">
+							<div class="shop">
+								<div class="shop_imgtext box">
+									<div class="shop_image" :style='"background-image: url("+ _getImg(o.image1,o.image2,o.image3) +");"'>
+
 									</div>
-									<div class="activity app-font-size-26 mui-ellipsis">{{o.introduction}}</div>
+									<div class="shop_info flex1" @tap="onLookTap(o)">
+										<!--<div class="distance app-font-size-28">{{_m2km(o.distance)}} km</div>-->
+										<div class="name app-font-size-30 mui-ellipsis">{{o.name}}</div>
+										<div class="types app-font-size-26">
+											{{o.type}}
+										</div>
+										<!--<div class="activity app-font-size-26 mui-ellipsis">{{o.introduction}}</div>-->
+									</div>
 								</div>
-							</div>
-							<div class="address app-font-size-28">
-								<img src="" />
-								<div class="mui-pull-left" style="width: 88%;">{{o.address}}</div>
-								<div class="mui-pull-right" style="text-align: center;">
-									<img src="../../../image/person/myself/icon_Collection@3x.png" style="width:0.45rem;" />
-									<div class="app-font-size-22 app-color-9f9fa0" style="padding: 0;margin-top: -6px;">{{o.distance || 0}}</div>
+								<div class="address app-font-size-28">
+									<img src="" />
+									<div class="mui-pull-left" style="width: 88%;">{{o.address}}</div>
+									<div class="mui-pull-right" style="text-align: center;">
+										<img src="../../../image/person/myself/icon_Collection@3x.png" style="width:0.45rem;" />
+										<div class="app-font-size-22 app-color-9f9fa0" style="padding: 0;margin-top: -6px;">{{o.distance || 0}}</div>
+									</div>
 								</div>
+								<br style="clear: both;" />
 							</div>
-							<br style="clear: both;" />
-						</div>
-					</template>
-				</div>
+						</template>
+					</div>
 
+				</div>
 			</div>
-			<button @tap="onNewBtnTap()" type="button" class="mui-btn app-btn-main app-font-size-34">新建商铺</button>
+			<!--<button @tap="onNewBtnTap()" type="button" class="mui-btn app-btn-main app-font-size-34">新建商铺</button>-->
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 
@@ -204,7 +207,7 @@
 
 		<script type="text/javascript">
 			new Vue({
-				el: ".mui-content",
+				el: ".root",
 				data: function() {
 					return {
 						n: 0,
@@ -237,9 +240,9 @@
 
 				},
 				methods: {
-					
+
 					// 新建按钮
-					onNewBtnTap: function(){
+					onNewBtnTap: function() {
 						mui.openWindow('../../nearby/business/signup.html', 'signup');
 					},
 

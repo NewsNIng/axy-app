@@ -7,7 +7,7 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.9.6",/*应用版本名称*/
+		"name": "1.9.7",/*应用版本名称*/
 		"code": "20180206"
 	},
 	"description": "",/*应用描述信息*/
@@ -421,7 +421,8 @@
 					"html/smart/devices/dev_AX-903.html",
 					"html/smart/devices/dev_WG-100_setting.html",
 					"html/smart/devices/dev_WG-100.html",
-					"html/smart/devices/dev_AX-903_setting.html"
+					"html/smart/devices/dev_AX-903_setting.html",
+					"html/smart/devices/dev_VH-104_setting.html"
 				],
 				"priority": 0
 			},

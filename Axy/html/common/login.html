@@ -250,9 +250,18 @@
 					var opener = this.$view.opener();
 					// 获取本地记录帐号 
 					this.loadLocalHostAccount();
+					// 监听注册成功后 
+					this.listenRegister();
 
 				},
 				methods: {
+					listenRegister: function(){
+						new ni.Broadcast().on('register_success', function(data){
+							data.username && (this.username = data.username);
+						}.bind(this));
+						
+					},
+					
 					loadLocalHostAccount: function() {
 						var last_account = window.localStorage.getItem('last_account');
 						last_account && (this.username = last_account);

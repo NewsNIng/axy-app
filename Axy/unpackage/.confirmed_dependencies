@@ -232,7 +232,8 @@
       "html/smart/devices/dev_AX-903.html",
       "html/smart/devices/dev_WG-100_setting.html",
       "html/smart/devices/dev_WG-100.html",
-      "html/smart/devices/dev_AX-903_setting.html"
+      "html/smart/devices/dev_AX-903_setting.html",
+      "html/smart/devices/dev_VH-104_setting.html"
     ],
     "resources": [
       "image/home/dev_camera.png",
@@ -359,7 +360,8 @@
       "html/smart/devices/camera_settings_info.html",
       "html/smart/devices/camera_settings_log.html",
       "html/smart/devices/camera_settings_record.html",
-      "html/smart/devices/camera_settings_arming.html"
+      "html/smart/devices/camera_settings_arming.html",
+      "html/smart/add/connect_wifi.html"
     ]
   },
   "html/smart/devices/dev_WG-100.html": {

@@ -5,7 +5,7 @@ var dal = {
 	
 	BASE_URL_TOP: "http://www.isee110.com/api",
 	
-	BASE_SHARE_URL: "http:vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
+	BASE_SHARE_URL: "http://vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
 };
 
 /**

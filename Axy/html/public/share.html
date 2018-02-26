@@ -106,14 +106,7 @@
 						title: "",
 						content: "",
 						href: "",
-						datahref: {
-							type: "", // 分享类型 （店铺store, 主题theme, 发现discover）
-							id: 0, // 当前类型数据的主键ID
-							// ... 其它信息
-							img: "", // (主题需要传)
-							title: "", // (主题需要传)
-							url: "", //  (主题需要传)
-						}
+
 					};
 				},
 
@@ -123,24 +116,35 @@
 					this.title = this.$view.title;
 					this.content = this.$view.content;
 
-					this.datahref = this.$view.datahref;
+					var datahref = this.$view.datahref;
+					//						datahref: {
+					//							type: "", // 分享类型 （店铺store, 主题theme, 发现discover）
+					//							id: 0, // 当前类型数据的主键ID
+					//							// ... 其它信息
+					//							img: "", // (主题需要传)
+					//							title: "", // (主题需要传)
+					//							url: "", //  (主题需要传)
+					//						}
 
-					this.calcHref()
+					this.calcHref(datahref)
 
 				},
 				methods: {
 					// 计算href链接
-					calcHref: function() {
+					calcHref: function(datahref) {
 						var baseurl = dal.BASE_SHARE_URL;
 
 						var paramsArr = [];
 
-						for(var i in this.datahref) {
-							paramsArr.push(i + '=' + this.datahref[i].replace(/\=/g, '%3D').replace(/&/g, '%26')); 
+						datahref.url && (datahref.url = datahref.url.replace(/\=/g, '%3D').replace(/&/g, '%26'));
+						datahref.title && (datahref.title = encodeURI(datahref.title));
+						
+						for(var i in datahref) {
+							datahref[i] && paramsArr.push(i + '=' + datahref[i]);
 						}
+
 						this.href = baseurl + "?" + paramsArr.join('&');
 
-						console.log(this.href)
 					},
 					onRootTap: function() {
 						this.$view && this.$view.close();

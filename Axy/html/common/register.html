@@ -392,16 +392,18 @@
 							that.loading = false;
 
 							if(err) {
-								return mui.toast(err.code + ": " + err.message);
+								return mui.toast(err.message);
 							}
 
 							mui.toast("注册成功，请登录");
 							console.log(JSON.stringify(data));
 
 							// 发出一个通知
-							//new that.$Broadcast().emit("login_success", {
-							//	say: 'Hello'
-							//});
+							new that.$Broadcast().emit("register_success", {
+								username: that.username
+							}, {
+								views: ["login"]
+							});
 
 							that.$view.close();
 

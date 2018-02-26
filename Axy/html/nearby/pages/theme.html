@@ -43,7 +43,7 @@
 			}
 			
 			.share>img {
-				margin-right: 0.346666rem;
+				margin-right: 0.2rem;
 			}
 			
 			.see {
@@ -62,14 +62,14 @@
 		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
 			<div class="mui-scroll  app-font-size-28">
 				<template v-for="o in items">
-					<div class="theme_item" @tap="onClickTap(o)">
-						<img :src="o.img" />
+					<div class="theme_item" >
+						<img @tap="onClickTap(o)" :src="o.img" />
 						<div class="share" @tap.stop="onShareTap(o)">
 							<img src="../../../image/nearby/share_icon.png" />
 							<span>分享给好友</span>
 
 						</div>
-						<div class="see">
+						<div class="see" @tap="onClickTap(o)">
 							共{{o.clickcount}}人看过<img src="../../../image/nearby/right_icon.png" />
 						</div>
 					</div>

@@ -376,7 +376,7 @@
 					// 发送短信分享
 					sms: function(code) {
 						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
-						msg.to = [];
+						msg.to = [""];
 						msg.body = '亲友邀请您一起看，安装[安心云]App后，输入邀请码#' + code + '#就能看到我家的美景啦，快来体验全新的智能家居、智能安防哦——来自安心云';
 						plus.messaging.sendMessage(msg);
 					},

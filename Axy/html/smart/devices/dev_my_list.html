@@ -274,7 +274,7 @@
 				<template v-if="netDivList.length">
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
-						<div class="card" v-for="o,i in netDivList">
+						<div class="card" v-for="o,i in netDivList" :key="o.devid">
 							<div class="imgdiv" ref="devimgel" v-devbg :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)">
 								<span class="app-font-size-20 imgdiv-line" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 								<!--{{o.workmode}}-->
