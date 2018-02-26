@@ -266,21 +266,21 @@
 					},
 					// 打开窗帘
 					onOpenTap: function() {
-						if(this._enableVerify()){
+						if(!this._enableVerify()){
 							return;
 						}
 						mui.toast("已打开！");
 					},
 					// 暂停 开始 关闭
 					onStartTap: function() {
-						if(this._enableVerify()){
+						if(!this._enableVerify()){
 							return;
 						}
 
 					},
 					// 关闭窗帘
 					onCloseTap: function() {
-						if(this._enableVerify()){
+						if(!this._enableVerify()){
 							return;
 						}
 						mui.toast("已关闭！");
@@ -330,8 +330,10 @@
 					},
 					_enableVerify: function(){
 						if(!this.devInfo.accessory.enable){
-							return mui.toast("需启用后才能操作此配件！");
+							mui.toast("需启用后才能操作此配件！");
+							return false;
 						}
+						return true;
 					},
 				}
 			});

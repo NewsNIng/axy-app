@@ -300,7 +300,7 @@
 					},
 					// 开关操作
 					openLight: function(){
-						if(this._enableVerify()){
+						if(!this._enableVerify()){
 							return;
 						}
 						var that = this;
@@ -329,8 +329,10 @@
 					},
 					_enableVerify: function(){
 						if(!this.devInfo.accessory.enable){
-							return mui.toast("需启用后才能操作此配件！");
+							mui.toast("需启用后才能操作此配件！");
+							return false;
 						}
+						return true;
 					},
 				}
 			});

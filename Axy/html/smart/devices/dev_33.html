@@ -37,28 +37,88 @@
 			.menu {
 				width: 100%;
 				height: auto;
-				padding: 1.493333rem 2.8rem 0.746666rem 2.8rem;
+				/*padding: 1.493333rem 2.8rem 0.746666rem 2.8rem;*/
 			}
 			
 			.menu-warp {
+				padding-top: 0.933333rem;
+				padding-bottom: 0.266666rem;
+			}
+			
+			.select_item {
+				background-color: #06C1AE;
+				color: white !important;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7 !important;
+			}
+			
+			.ctrl_1 {
+				margin: 0 1.76rem;
+				/*background-color: gray;*/
+				height: 3.493333rem;
+				width: 6.48rem;
+			}
+			
+			.ctrl_name,
+			.ctrl_btn {
 				display: flex;
 				display: -webkit-flex;
-				justify-content: space-between;
-				border-radius: 5px;
-				border: 1px solid #06C1AE;
 			}
 			
-			.menu-warp>div {
-				/*border: 1px solid #ccc;*/
-				color: #333333;
+			.name_item,
+			.btn_item {
 				flex: 1;
-				height: auto;
-				/*width: rem;*/
 				text-align: center;
-				position: relative;
 			}
 			
-			.menu-warp>div:after {
+			.name_item {
+				height: 0.906666rem;
+				/*width: 2.08rem;*/
+				/*display: inline-block;*/
+				/*background-color: red;*/
+				line-height: 0.906666rem;
+			}
+			
+			.ctrl_btn {
+				height: 2.56rem;
+				/*padding: 0.12rem 0;*/
+			}
+			
+			.ctrl_btn>.btn_item {
+				height: 100%;
+				/*background-color: green*/
+			}
+			
+			.btn_item>div {
+				width: 0.92rem;
+				height: 0.92rem;
+				margin: 0.24rem auto;
+				line-height: 0.92rem;
+				text-align: center;
+				/*background-color: yellow;*/
+				border-radius: 50%;
+				border: 1px solid #D3D3D3;
+			}
+			
+			.ctrl_2 {
+				padding: 0.8rem 0;
+				text-align: center;
+			}
+			
+			.ctrl_2>div {
+				height: 1.12rem;
+				width: 1.12rem;
+				display: inline-block;
+				text-align: center;
+				line-height: 1.12rem;
+				margin: 0 0.533333rem;
+				border-radius: 50%;
+				border: 1px solid #D3D3D3;
+			}
+			/*
+			 .menu-warp>div:after {
 				position: absolute;
 				right: 0;
 				bottom: 0;
@@ -71,15 +131,51 @@
 			.menu-warp>div:last-child:after {
 				width: 0;
 			}
+			*/
 			
-			.select_item {
-				background-color: #06C1AE;
-				color: white !important;
+			.name_item,
+			.btn_item,
+			.ctrl_name {
+				position: relative;
 			}
-		
-			.mui-table-view-cell:after {
-				background-color: #E5E6E7 !important;
+			
+			.name_item:after,
+			.btn_item:after {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 1px;
+				content: '';
+				background-color: #D3D3D3;
 			}
+			
+			.name_item:last-child:after,
+			.btn_item:last-child:after {
+				width: 0;
+			}
+			
+			.ctrl_name:after {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				height: 1px;
+				content: '';
+				background-color: #D3D3D3;
+			}
+			
+			.ctrl_1 {
+				border: 1px solid #D3D3D3;
+				border-radius: 5px;
+			}
+			
+			.ctrl_name {
+				color: #708bf5;
+			}
+			/*.btn_item>div:active{
+				background-color: gray
+			}*/
 		</style>
 	</head>
 
@@ -95,11 +191,34 @@
 				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/icon/btn_Intelligentlightcontrol@3x.png' : '../../../image/smart/devices/icon/btn_Intelligentlightcontrol1@3x.png') + ')'">
 				</div>
 				<div class="menu">
-					<!--<div class="menu-warp app-font-size-24 app-color-dark">
-						<template v-for="o,i in lights">
-							<div @tap="onLightTap(i)" :class="{'select_item': i === select_index}" v-text="o.name"></div>
-						</template>
-					</div>-->
+					<div class="menu-warp app-font-size-28 app-color-dark">
+						<div class="ctrl_1">
+							<div class="ctrl_name">
+								<div class="name_item">k1</div>
+								<div class="name_item">k2</div>
+								<div class="name_item">k3</div>
+							</div>
+							<div class="ctrl_btn">
+								<div class="btn_item">
+									<div @tap="openLight(1,true)">开</div>
+									<div @tap="openLight(1,false)">关</div>
+								</div>
+								<div class="btn_item">
+									<div @tap="openLight(2,true)">开</div>
+									<div @tap="openLight(2,false)">关</div>
+								</div>
+								<div class="btn_item">
+									<div @tap="openLight(4,true)">开</div>
+									<div @tap="openLight(4,false)">关</div>
+								</div>
+							</div>
+						</div>
+						<div class="ctrl_2">
+							<div @tap="openLight(7,true)">总开</div>
+							<div @tap="openLight(7,false)">总关</div>
+						</div>
+					</div>
+
 				</div>
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell">
@@ -120,14 +239,14 @@
 							<span class="mui-badge" v-text="devInfo.devName || devInfo.accessory.devid"></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<!--<li class="mui-table-view-cell">
 						<a class="">
 							<span>总开</span>
 							<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main" ref="always_open">
 					<div class="mui-switch-handle"></div>
 				</div></span>
 						</a>
-					</li>
+					</li>-->
 					<li class="mui-table-view-cell">
 						<a>
 							<span>启用此配件</span>
@@ -156,7 +275,7 @@
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
-		
+
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -177,32 +296,32 @@
 				data: function() {
 					return {
 						state: true, // 当前状态
-//						isPwdProtection: true, // 是否开启密码保护
+						//						isPwdProtection: true, // 是否开启密码保护
 						bindDev: "AX-360主机",
-//						lights: [{
-//							name: "K1",
-//							devId: "VH-104GN-2017061500041",
-//							devName: "104GN_1",
-//							bindDev: "AX-360主机",
-//							alwaysOpen: true,
-//							enable: true,
-//						}, {
-//							name: "K2",
-//							devId: "VH-104GN-2017061500042",
-//							devName: "104GN_2",
-//							bindDev: "AX-360主机",
-//							alwaysOpen: false,
-//							enable: false,
-//						}, {
-//							name: "K3",
-//							devId: "VH-104GN-2017061500043",
-//							devName: "104GN_3",
-//							bindDev: "AX-360主机",
-//							alwaysOpen: true,
-//							enable: true,
-//						}],
+						//						lights: [{
+						//							name: "K1",
+						//							devId: "VH-104GN-2017061500041",
+						//							devName: "104GN_1",
+						//							bindDev: "AX-360主机",
+						//							alwaysOpen: true,
+						//							enable: true,
+						//						}, {
+						//							name: "K2",
+						//							devId: "VH-104GN-2017061500042",
+						//							devName: "104GN_2",
+						//							bindDev: "AX-360主机",
+						//							alwaysOpen: false,
+						//							enable: false,
+						//						}, {
+						//							name: "K3",
+						//							devId: "VH-104GN-2017061500043",
+						//							devName: "104GN_3",
+						//							bindDev: "AX-360主机",
+						//							alwaysOpen: true,
+						//							enable: true,
+						//						}],
 						select_index: 0,
-						
+
 						// 设备信息
 						devInfo: {
 							"accessory": {
@@ -229,7 +348,7 @@
 					};
 				},
 				mounted: function() {
-					
+
 					this.$refs.switch1.addEventListener("toggle", function(event) {
 						if(this.isErr) {
 							this.isErr = false;
@@ -255,12 +374,12 @@
 							that._updataUi();
 						})
 					}.bind(this));
-					
-					this.$refs.always_open.addEventListener("toggle", function(event) {
-//						this.lights[this.select_index].alwaysOpen = event.detail.isActive;
-						//TODO 总开的请求。。。
-						
-					}.bind(this));
+
+					//					this.$refs.always_open.addEventListener("toggle", function(event) {
+					//						this.lights[this.select_index].alwaysOpen = event.detail.isActive;
+					//						//TODO 总开的请求。。。
+					//						
+					//					}.bind(this));
 				},
 				plusReady: function() {
 					plus.navigator.setStatusBarStyle('dark');
@@ -281,7 +400,7 @@
 						this.state = !this.state;
 					},
 					// 选择设备
-					onLightTap:function(i){
+					onLightTap: function(i) {
 						this.select_index = i;
 					},
 					// 删除配件
@@ -321,8 +440,6 @@
 							rmsg: "配件名称不能为空",
 							maxLength: 15,
 							mLengthMsg: "最长不超过15个字符！",
-							maxLength: 15,
-							mLengthMsg: "最长不超过15个字符！",
 						});
 					},
 					// 更新缓存数据
@@ -336,6 +453,30 @@
 					// 根据Enable更新Action的值
 					_updataActionByEnable: function(isOn) {
 						var action = this.devInfo.accessory.action;
+						var enable = 0x80000000;
+						if(isOn) {
+							action = action | enable;
+						} else {
+							action = action & ~enable;
+						}
+						this.devInfo.accessory.action = action;
+					},
+					openLight: function(i, isOpen) {
+						if(!this._enableVerify()){
+							return;
+						}
+						plus.nativeUI.showWaiting();
+						dal.devaccessory.light(this.devInfo.accessory.id, this.devInfo.accessory.devid, this.devInfo.devType, i, isOpen, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							mui.toast("操作成功！");
+						});
+					},
+					// 根据Enable更新Action的值
+					_updataActionByEnable: function(isOn) {
+						var action = this.devInfo.accessory.action;
 						console.log(action);
 						if(isOn) {
 							action = action | ((0x00000001 << 15));
@@ -344,6 +485,13 @@
 						}
 						this.devInfo.accessory.action = (action>>>0);
 						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
+					},
+					_enableVerify: function(){
+						if(!this.devInfo.accessory.enable){
+							mui.toast("需启用后才能操作此配件！");
+							return false;
+						}
+						return true;
 					},
 				}
 			});

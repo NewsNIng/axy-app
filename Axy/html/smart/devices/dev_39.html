@@ -284,6 +284,7 @@
 				},
 
 				plusReady: function() {
+					plus.navigator.setStatusBarStyle('dark');
 					var that = this;
 
 					// 获取传值数据
@@ -305,6 +306,14 @@
 					}, function(err) {
 						mui.toast(err.message);
 					});
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+
+						var view = plus.webview.currentWebview();
+						plus.navigator.setStatusBarStyle('light');
+						view.close();
+					}.bind(this);
 
 				},
 				methods: {

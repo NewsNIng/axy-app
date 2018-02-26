@@ -463,7 +463,7 @@
 					},
 					openLight: function(i, isOpen) {
 						//						alert(i+","+isOpen);
-						if(this._enableVerify()){
+						if(!this._enableVerify()){
 							return;
 						}
 						plus.nativeUI.showWaiting();
@@ -489,8 +489,10 @@
 					},
 					_enableVerify: function(){
 						if(!this.devInfo.accessory.enable){
-							return mui.toast("需启用后才能操作此配件！");
+							mui.toast("需启用后才能操作此配件！");
+							return false;
 						}
+						return true;
 					},
 				}
 			});
