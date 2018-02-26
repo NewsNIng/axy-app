@@ -7,7 +7,7 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.9.5",/*应用版本名称*/
+		"name": "1.9.6",/*应用版本名称*/
 		"code": "20180206"
 	},
 	"description": "",/*应用描述信息*/
@@ -674,7 +674,9 @@
 					"image/nearby/business/收藏2@3x.png"
 				],
 				"refer": [
-					"html/person/other.html"
+					"html/person/other.html",
+					"html/common/login.html",
+					"html/public/share.html"
 				],
 				"priority": 0
 			},
@@ -1044,7 +1046,8 @@
 			"html/person/myself/discover_details.html": {
 				"resources": [],
 				"refer": [
-					"html/person/other.html"
+					"html/person/other.html",
+					"html/public/share.html"
 				],
 				"priority": 0
 			},
@@ -1067,7 +1070,8 @@
 				"resources": [],
 				"refer": [
 					"html/nearby/business/signup.html",
-					"html/nearby/business/signup_next.html"
+					"html/nearby/business/signup_next.html",
+					"html/public/share.html"
 				],
 				"priority": 0
 			},
@@ -1223,7 +1227,16 @@
 				"resources": [],
 				"refer": [
 					"html/smart/devices/camera_settings_record.html",
-					"html/smart/devices/camera_settings_arming.html"
+					"html/smart/devices/camera_settings_arming.html",
+					"html/smart/devices/camera_settings_info.html",
+					"html/smart/devices/dev_VH-104_setting_info.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/business/store_details.html": {
+				"resources": [],
+				"refer": [
+					"html/public/share.html"
 				],
 				"priority": 0
 			},

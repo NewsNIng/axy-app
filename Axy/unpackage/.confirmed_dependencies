@@ -31,7 +31,8 @@
   "html/person/setting/index.html": {
     "refer": [
       "html/person/setting/push.html",
-      "html/person/setting/safe.html"
+      "html/person/setting/safe.html",
+      "html/person/relation/bind_tel.html"
     ],
     "resources": []
   },
@@ -119,7 +120,8 @@
   "html/person/myself/business_details.html": {
     "refer": [
       "html/nearby/business/signup.html",
-      "html/nearby/business/signup_next.html"
+      "html/nearby/business/signup_next.html",
+      "html/public/share.html"
     ],
     "resources": []
   },
@@ -278,7 +280,9 @@
   },
   "html/nearby/discover/discover_details.html": {
     "refer": [
-      "html/person/other.html"
+      "html/person/other.html",
+      "html/common/login.html",
+      "html/public/share.html"
     ],
     "resources": [
       "image/nearby/business/6?@3x.png"
@@ -370,7 +374,8 @@
   },
   "html/person/myself/discover_details.html": {
     "refer": [
-      "html/person/other.html"
+      "html/person/other.html",
+      "html/public/share.html"
     ]
   },
   "html/person/other.html": {
@@ -518,12 +523,14 @@
   "html/smart/devices/dev_VH-104_setting.html": {
     "refer": [
       "html/smart/devices/camera_settings_record.html",
-      "html/smart/devices/camera_settings_arming.html"
+      "html/smart/devices/camera_settings_arming.html",
+      "html/smart/devices/camera_settings_info.html",
+      "html/smart/devices/dev_VH-104_setting_info.html"
     ]
   },
-  "html/smart/devices/dev_33.html": {
+  "html/nearby/business/store_details.html": {
     "refer": [
-      "html/public/input.html"
+      "html/public/share.html"
     ]
   }
 }
