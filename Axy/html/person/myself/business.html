@@ -234,8 +234,17 @@
 					}.bind(this));
 				},
 				plusReady: function() {
+					var that = this;
+					
 					this.$view.setStyle({
 						scrollIndicator: "none"
+					});
+					
+					new ni.Broadcast().on('signup_success', function(data){
+						//data.storeId
+						// 更新
+						that.shops = [];
+						that._up();
 					});
 
 				},

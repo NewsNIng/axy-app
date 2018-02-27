@@ -333,7 +333,7 @@
 						// 是否切换地址
 
 						new Promise(function(resolve, reject) {
-							mui.confirm("是否重新选择城市？", "城市选择", ['选择城市', '取消'], function(e) {
+							mui.confirm("是否重新选择城市？", "城市选择", ['选择城市', '忽略'], function(e) {
 								if(!e.index) {
 									// 选择城市
 									app.page.getPosition(function(data) {
@@ -344,7 +344,7 @@
 											longitude: data.longitude,
 											latitude: data.latitude
 										}, {
-											views: [that.$view.parent()]
+											views: [that.$view.parent(),'home']
 										})
 
 										resolve({

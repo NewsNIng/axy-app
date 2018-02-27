@@ -7,7 +7,7 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "1.9.7",/*应用版本名称*/
+		"name": "1.9.8",/*应用版本名称*/
 		"code": "20180206"
 	},
 	"description": "",/*应用描述信息*/
@@ -501,7 +501,8 @@
 					"html/common/reset.html",
 					"js/app/app-rules.js",
 					"js/lib/Rx.min.js",
-					"js/app/app-page.js"
+					"js/app/app-page.js",
+					"js/dal/system.js"
 				],
 				"refer": [
 					"html/common/register.html",
@@ -687,7 +688,8 @@
 					"html/public/input.html",
 					"html/smart/devices/dev_select_id.html",
 					"html/smart/add/scan_code.html",
-					"html/smart/add/scan_code_904.html"
+					"html/smart/add/scan_code_904.html",
+					"html/smart/add/scan_bind_dev.html"
 				],
 				"priority": 0
 			},
@@ -1163,7 +1165,8 @@
 					"html/smart/devices/dev_35.html",
 					"html/smart/devices/dev_161.html",
 					"html/smart/devices/dev_25.html",
-					"html/smart/devices/dev_40.html"
+					"html/smart/devices/dev_40.html",
+					"html/smart/devices/dev_65.html"
 				],
 				"priority": 0
 			},

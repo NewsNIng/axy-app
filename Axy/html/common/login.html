@@ -255,20 +255,22 @@
 
 				},
 				methods: {
-					listenRegister: function(){
-						new ni.Broadcast().on('register_success', function(data){
+					listenRegister: function() {
+						new ni.Broadcast().on('register_success', function(data) {
 							data.username && (this.username = data.username);
 						}.bind(this));
-						
+
 					},
-					
+
 					loadLocalHostAccount: function() {
 						var last_account = window.localStorage.getItem('last_account');
 						last_account && (this.username = last_account);
 					},
 					test: function() {
-						this.username = '18718690160';
-						this.password = '123456';
+												this.username = '18718690160';
+												this.password = '123456';
+//						this.username = 'huihaiweishi';
+//						this.password = '258369';
 					},
 					onLoginTap: function(e) {
 						var that = this;
@@ -379,10 +381,8 @@
 					},
 					onOtherLoginTap: function(type) {
 						var that = this;
-						
+
 						var w = plus.nativeUI.showWaiting();
-						
-						
 
 						// 获取第三方授权信息
 						var $oauth = Rx.Observable.create(function(ob) {
@@ -433,7 +433,7 @@
 						var $getTopDomainFn = function(o) {
 							var account = o.account;
 							return Rx.Observable.create(function(ob) {
-								if(!account){
+								if(!account) {
 									return ob.next(o);
 								}
 								dal.system.getTopMain(account, function(err, data) {
@@ -478,17 +478,13 @@
 								}
 							});
 						}
-						
-						var $getWaitFn = function(str){
-							return function(o){
+
+						var $getWaitFn = function(str) {
+							return function(o) {
 								w && w.setTitle(str);
 								return o;
 							}
 						}
-						
-						
-						
-						
 
 						$oauth
 							.mergeMap($logoutOauthFn)

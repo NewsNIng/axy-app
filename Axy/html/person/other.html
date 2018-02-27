@@ -159,6 +159,8 @@
 		<script type="text/javascript" src="../../js/dal/article.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+
 
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
 		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
@@ -233,11 +235,18 @@
 						}.bind(this), 6);
 					},
 					onFocusTap: function() {
-						if(this.from === this.uid) {
-							return mui.toast("您不能关注自己！");
-						}
-						this.isfocus = +!this.isfocus;
-						this.changeFocus();
+						app.user.get(function(u){
+							if(!u){
+								return false;
+							}
+							if(this.from === this.uid) {
+								return mui.toast("您不能关注自己！");
+							}
+							this.isfocus = +!this.isfocus;
+							this.changeFocus();
+						});
+						
+						
 					},
 					changeFocus: function() {
 						var methodName = 'add';

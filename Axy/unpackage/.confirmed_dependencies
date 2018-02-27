@@ -106,7 +106,8 @@
     "refer": [
       "html/nearby/discover/discover_details.html",
       "html/person/other.html",
-      "html/nearby/discover/discover_release.html"
+      "html/nearby/discover/discover_release.html",
+      "html/common/login.html"
     ],
     "resources": []
   },
@@ -233,7 +234,8 @@
       "html/smart/devices/dev_WG-100_setting.html",
       "html/smart/devices/dev_WG-100.html",
       "html/smart/devices/dev_AX-903_setting.html",
-      "html/smart/devices/dev_VH-104_setting.html"
+      "html/smart/devices/dev_VH-104_setting.html",
+      "html/common/login.html"
     ],
     "resources": [
       "image/home/dev_camera.png",
@@ -308,7 +310,8 @@
       "html/public/input.html",
       "html/smart/devices/dev_select_id.html",
       "html/smart/add/scan_code.html",
-      "html/smart/add/scan_code_904.html"
+      "html/smart/add/scan_code_904.html",
+      "html/smart/add/scan_bind_dev.html"
     ],
     "resources": []
   },
@@ -316,42 +319,50 @@
     "refer": [
       "html/smart/add/Lan_connect_dev.html",
       "html/smart/add/connect_wifi.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/Lan_connect_dev.html": {
     "refer": [
       "html/smart/add/Lan_add_camera.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/sonic_connect_camera2.html": {
     "refer": [
       "html/smart/add/sonic_connect_camera1.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/sonic_connect_dev1.html": {
     "refer": [
       "html/smart/add/sonic_connect_camera2.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/sonic_connect_dev2.html": {
     "refer": [
       "html/smart/add/sonic_connect_dev1.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/Lan_connect_camera.html": {
     "refer": [
       "html/smart/add/sonic_connect_dev2.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_16711680.html": {
     "refer": [
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_20.html": {
     "refer": [
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/camera_settings.html": {
     "refer": [
@@ -362,28 +373,33 @@
       "html/smart/devices/camera_settings_record.html",
       "html/smart/devices/camera_settings_arming.html",
       "html/smart/add/connect_wifi.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_WG-100.html": {
     "refer": [
       "html/smart/devices/camera_settings_arming.html"
-    ]
+    ],
+    "resources": []
   },
   "html/zeus.html": {
     "refer": [
       "html/common/login.html"
-    ]
+    ],
+    "resources": []
   },
   "html/person/myself/discover_details.html": {
     "refer": [
       "html/person/other.html",
       "html/public/share.html"
-    ]
+    ],
+    "resources": []
   },
   "html/person/other.html": {
     "refer": [
       "html/nearby/discover/discover_details.html"
-    ]
+    ],
+    "resources": []
   },
   "html/common/login.html": {
     "refer": [
@@ -404,35 +420,41 @@
       "js/lib/vue.min.js",
       "js/dal/base.js",
       "js/app/app.js",
-      "image/common/login_pwd.png"
+      "image/common/login_pwd.png",
+      "js/dal/system.js"
     ]
   },
   "html/common/reset.html": {
     "refer": [
       "html/common/login.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/scenes/index2.html": {
     "refer": [
       "html/smart/scenes/edit_scenes.html",
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/scenes/edit_scenes.html": {
     "refer": [
       "html/smart/scenes/trigger_conditions.html",
       "html/smart/scenes/perform_actions.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/scenes/perform_actions.html": {
     "refer": [
       "html/smart/scenes/select_device.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_35.html": {
     "refer": [
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_AX-903_setting.html": {
     "refer": [
@@ -441,25 +463,30 @@
       "html/smart/devices/dev_AX-903_bind.html",
       "html/smart/devices/dev_AX-903_alarmlog.html",
       "html/smart/devices/dev_AX-903_datasave.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/add_completed.html": {
     "refer": [
       "html/smart/devices/dev_35.html",
       "html/smart/devices/dev_161.html",
       "html/smart/devices/dev_25.html",
-      "html/smart/devices/dev_40.html"
-    ]
+      "html/smart/devices/dev_40.html",
+      "html/smart/devices/dev_65.html"
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_129.html": {
     "refer": [
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_161.html": {
     "refer": [
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_AX-903_bind.html": {
     "resources": [
@@ -471,7 +498,8 @@
       "js/dal/base.js",
       "js/lib/vue-ni.js",
       "js/config.js"
-    ]
+    ],
+    "refer": []
   },
   "html/smart/devices/dev_WG-100_setting.html": {
     "refer": [
@@ -479,29 +507,34 @@
       "html/smart/add/connect_wifi.html",
       "html/smart/devices/camera_settings_log.html",
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_25.html": {
     "refer": [
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_41.html": {
     "refer": [
       "html/public/input.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_AX-903.html": {
     "refer": [
       "html/person/devshare/share.html",
       "html/smart/devices/dev_AX-903_setting.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_40.html": {
     "refer": [
       "html/smart/devices/dev_40_set_pwd.html",
       "html/smart/devices/dev_40_log.html"
-    ]
+    ],
+    "resources": []
   },
   "html/public/maps.html": {
     "resources": [
@@ -515,12 +548,14 @@
   "html/person/collection/my_collection.html": {
     "refer": [
       "html/nearby/discover/discover_details.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_AX-904.html": {
     "refer": [
       "html/smart/devices/camera_settings_log.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/devices/dev_VH-104_setting.html": {
     "refer": [
@@ -528,11 +563,13 @@
       "html/smart/devices/camera_settings_arming.html",
       "html/smart/devices/camera_settings_info.html",
       "html/smart/devices/dev_VH-104_setting_info.html"
-    ]
+    ],
+    "resources": []
   },
   "html/nearby/business/store_details.html": {
     "refer": [
       "html/public/share.html"
-    ]
+    ],
+    "resources": []
   }
 }

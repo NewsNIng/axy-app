@@ -234,8 +234,8 @@
 					<li :class="_getColor(alarmValue['state' + o.index])">
 						<div>
 							<div class="app-color-9f9fa0 app-font-size-24">{{getName(o.index)}}</div>
-							<span class="app-font-size-36" >{{stateValue['state' + o.index] / 10 + o.company}}</span>
-							<span class="app-font-size-22">{{alarmValue['state' + o.index]?"(告警)":"(正常)"}}</span>
+							<span class="app-font-size-36" >{{stateValue['state' + (o.index-1)] / 10 + o.company}}</span>
+							<span class="app-font-size-22">{{_getStateByCode(alarmValue['state' + (o.index-1)])}}</span>
 						</div>
 					</li>
 				</template>
@@ -413,7 +413,7 @@
 						var len = this.stateList.length;
 
 						for(var i = 0; i < len; i++) {
-							if(this.stateList[i].index - 1 === index) {
+							if(this.stateList[i].index  === index) {
 								name = this.stateList[i].name;
 								break;
 							}
@@ -423,7 +423,11 @@
 					},
 					_getColor: function(v){
 						return ["","alarm-border-orange","alarm-border"][v]
-					}
+					},
+					_getStateByCode: function(i){
+						return ["正常","预警","报警"][i] || "";
+					},
+ 
 				}
 
 			});
@@ -538,7 +542,8 @@
 
 						return alarmDir[trigvar] + " 发生警告";
 					},
-
+					
+					
 					// 时间选择
 					onDateTap: function() {
 						var that = this;

@@ -66,19 +66,19 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>GPRS模块</span>
-							<span class="mui-badge" v-text="baseInfo.gprsExist ? '存在':'不存在'"></span>
+							<span v-if="baseInfo.id" class="mui-badge" v-text="baseInfo.gprsExist ? '存在':'不存在'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>GPRS模式</span>
-							<span class="mui-badge" v-text="baseInfo.gprsMode ? '是':'否'"></span>
+							<span v-if="baseInfo.id" class="mui-badge" v-text="baseInfo.gprsMode ? '是':'否'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>GPRS信号强度</span>
-							<span class="mui-badge" v-text="gprs.signal + '%'"></span>
+							<span v-if="baseInfo.id" class="mui-badge" v-text="(gprs.signal || 0) + '%'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -144,6 +144,7 @@
 							"online": 0
 						},
 						baseInfo: {
+							id: 0,
 							gprfSignal: 0,
 						},
 						gprs: {
@@ -190,6 +191,7 @@
 								if(err) {
 									return ob.error(err);
 								}
+								console.log(JSON.stringify(rs))
 								that.baseInfo = rs;
 								ob.next();
 							});
@@ -266,9 +268,9 @@
 						var $rebootFn = function(dev) {
 							return Rx.Observable.create(function(ob) {
 								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
-									if(err) {
+									/*if(err) {
 										return ob.error(err);
-									}
+									}*/ 
 									dev.methodName = methodName;
 									ob.next(dev);
 								});
@@ -295,6 +297,9 @@
 								plus.nativeUI.closeWaiting();
 								_B.emit("delete", {}, {
 									views: [that.$view.opener()]
+								});
+								_B.emit("device_update", {}, {
+									views: ["home"]
 								});
 								that.$view.close();
 							}, function(err) {

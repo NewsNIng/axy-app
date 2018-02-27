@@ -63,29 +63,16 @@
 		<div class="mui-content menu-box app-font-size-32">
 
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell" @tap="onAllTap()">
+				<li class="mui-table-view-cell" @tap="onAllTap(true)">
 					<a>
-						<span :class="all?'app-color-ff3b30':'app-color-main'" @tap="onAllTap()">{{all?"关闭":"打开"}}全部推送</span>
-
+						<span class="app-color-main" @tap="onAllTap()">打开全部推送</span>
 					</a>
 				</li>
-			</ul>
-
-			<ul class="mui-table-view">
-				<template v-for="o,i in list">
-
-					<li class="mui-table-view-cell" @tap="onToggle(o)">
-						<a>
-							<span class="app-color-333333">{{_fixName(o.location) || o.devid}}</span>
-							<span class="mui-badge">
-									<div @tap="onToggle(o, $event)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': o.state}" >
-									  <div class="mui-switch-handle"></div>
-									</div>
-								</span>
-						</a>
-					</li>
-				</template>
-
+				<li class="mui-table-view-cell" @tap="onAllTap(false)">
+					<a>
+						<span class="app-color-ff3b30" @tap="onAllTap()">关闭全部推送</span>
+					</a>
+				</li>
 			</ul>
 
 			<ul class="mui-table-view">
@@ -111,6 +98,23 @@
 							</span>
 					</a>
 				</li>
+			</ul>
+
+			<ul class="mui-table-view">
+				<template v-for="o,i in list">
+
+					<li class="mui-table-view-cell" @tap="onToggle(o)">
+						<a>
+							<span class="app-color-333333">{{_fixName(o.location) || o.devid}}</span>
+							<span class="mui-badge">
+									<div @tap="onToggle(o, $event)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': o.state}" >
+									  <div class="mui-switch-handle"></div>
+									</div>
+								</span>
+						</a>
+					</li>
+				</template>
+
 			</ul>
 
 		</div>
@@ -142,11 +146,11 @@
 				},
 
 				computed: {
-					all: function() {
-						return this.list.every(function(item) {
-							return item.state === 1;
-						});
-					}
+//					all: function() {
+//						return this.list.every(function(item) {
+//							return item.state === 1;
+//						});
+//					}
 				},
 
 				plusReady: function() {
@@ -160,14 +164,14 @@
 						that.getStatesByList(resolve);
 					}).then(function() {
 
-						that.$watch("all", function(n) {
-							dal.push.updateAll(PUSHID.data, +n, function(err, rs) {
-								if(err) {
-									return mui.toast(err.message);
-								}
-								mui.toast("设置成功");
-							});
-						});
+//						that.$watch("all", function(n) {
+//							dal.push.updateAll(PUSHID.data, +n, function(err, rs) {
+//								if(err) {
+//									return mui.toast(err.message);
+//								}
+//								mui.toast("设置成功");
+//							});
+//						});
 					});
 				},
 
@@ -207,15 +211,24 @@
 							mui.toast("系统推送开关设置成功");
 						});
 					},
-					onAllTap: function() {
-						var wantv = !this.all;
-						var l = this.list.length;
-						for(var i = 0; i < l; i++) {
-							this.list[i].state = +wantv;
-						}
+					onAllTap: function(wantv) {
+						var that = this;
+						plus.nativeUI.showWaiting();
+						dal.push.updateAll(PUSHID.data, +wantv, function(err, rs) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							mui.toast("设置成功");
+							var l = that.list.length;
+							for(var i = 0; i < l; i++) {
+								that.list[i].state = +wantv;
+							}
+						});
+
 						//this.active = wantv;
 						//this.system = wantv;
-						this.all = wantv;
+						//this.all = wantv;
 					},
 
 					// 获取运行状态
