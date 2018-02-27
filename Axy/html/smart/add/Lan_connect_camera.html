@@ -197,7 +197,6 @@
 					} else {
 						//this.autoOver();
 					}
-
 				},
 				methods: {
 					// 通过声波ID进行验证
@@ -253,9 +252,10 @@
 						}());
 					},
 					onNext: function() {
-						if(!this.isConnected) {
-							return;
-						}
+//						if(!this.isConnected) {
+//							return;
+//						}
+
 						// 跳转
 						mui.openWindow('add_completed.html', 'add_completed', {
 							extras: {
@@ -263,9 +263,8 @@
 								devid: this.devid,
 							}
 						});
-						plus.webview.getWebviewById('Lan_add_camera') && plus.webview.getWebviewById('Lan_add_camera').close();
+						//						mui.back();
 						return;
-						//						this.$view.close();
 					},
 					over: function(msg, close) {
 						if(this.timer >= 0) {

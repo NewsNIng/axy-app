@@ -124,7 +124,7 @@
 					</ul>
 				</div>
 			</div>
-			<div v-if="!noWifi || !hideWifi" class="help app-font-size-34" @tap="setWifi()">配置WIFI</div>
+			<div v-if="!noWifi" class="help app-font-size-34" @tap="setWifi()">配置WIFI</div>
 			<div class="foot app-font-size-34" @tap="onNext()" ref="btn">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -139,7 +139,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
@@ -174,14 +174,6 @@
 							"AX-360",
 							"AX-904",
 							"AX-903"
-						],
-						// wifi配置 过滤显示
-						wifiFilter: [
-							"VH-104MG",
-							"VH-104DG",
-							"VH-104GN",
-							"AX-904",
-							"AX-903"
 						]
 					};
 				},
@@ -198,22 +190,6 @@
 							}
 							return true;
 						}.bind(this));
-					},
-
-					hideWifi: function() {
-
-						var type = this.indexDev && this.indexDev.type;
-						if(!type) {
-							return false;
-						}
-
-						var tempName = app.dev.findName(type);
-
-						if(this.wifiFilter.indexOf(tempName) >= 0) {
-							return true;
-						}
-						
-						return false;
 					}
 				},
 
@@ -221,7 +197,7 @@
 					var wrapper = this.$refs.wrapper;
 					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
 						this.$refs.tabroom.offsetHeight -
-						this.$refs.btn.offsetHeight * (+(!this.noWifi || !this.hideWifi) + 1)-
+						this.$refs.btn.offsetHeight * 2 -
 						immersed -
 						44;
 
@@ -252,7 +228,13 @@
 						this.devActive = i;
 					},
 					onNext: function() {
-						if(this.devActive < 0) {
+//						测试代码，可删
+						if(true){
+							this.$view.loadURL('Lan_connect_camera.html');
+							return;
+						}
+						
+						if(this.devActive < 0){
 							return mui.toast("请选择主机设备");
 						}
 						try {

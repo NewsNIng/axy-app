@@ -530,6 +530,7 @@
 						})
 						// 数据处理
 						.subscribe(function(devData) {
+							alert("123");
 							that.isGeted = true;
 							that.netDivList = devData;
 						});
@@ -560,6 +561,12 @@
 						// 获取配件列表
 						that.getDevaccessroyData(hidewatting);
 					});
+					
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
+						var view = plus.webview.currentWebview();
+						view.close();
+					}.bind(this)
 
 				},
 				methods: {
