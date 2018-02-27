@@ -58,18 +58,7 @@
 							<span class="mui-badge" v-text="_findName(o.devtype)"></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>连接的WIFI</span>
-							<span class="mui-badge" v-text="wifiinfo.ssid"></span>
-						</a>
-					</li>
-					<li class="mui-table-view-cell">
-						<a class="">
-							<span>WIFI信号强度</span>
-							<span class="mui-badge" v-text="wifiinfo.signal + '%'"></span> 
-						</a>
-					</li>
+					
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>摄像机ID</span>
@@ -91,7 +80,7 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>IP地址</span>
-							<span class="mui-badge" v-text="wifiinfo.ip"></span>
+							<span class="mui-badge" v-text="o.ip"></span>
 						</a>
 					</li>
 					<li style="background-color: #F4F8FB !important;" />
@@ -111,8 +100,6 @@
 		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
 		
 		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
-		
-		<script type="text/javascript" src="../../../js/lib/Rx.min.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -131,13 +118,7 @@
 							"owner": "",
 							"centerServer": "",
 							"centerPort": 0,
-							"ssid": "",
-							"signal": null
-						},
-						wifiinfo: {
-							signal: 0,
-							ip: "",
-							ssid: "",
+							
 						}
 					};
 				},
@@ -145,50 +126,24 @@
 				plusReady: function() {
 					this.devid = this.$view.info.devid;
 					this.type = this.$view.info.type;
-					
-					plus.nativeUI.showWaiting();
-					this.getBaseInfo() 
-					.mergeMap(this.getwifi)
-					.subscribe(plus.nativeUI.closeWaiting, function(err) {
-						mui.toast(err.message);
-					});
-					
+					this.getBasicinfo();	
 				},
 				methods: {
-					
+					getBasicinfo: function() {
+						
+						plus.nativeUI.showWaiting();
+						
+						dal.devparam.basicinfo(this.devid, this.type, function(err, rs) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return
+							}
+							this.o = rs;
+						}.bind(this));
+					},
 					_findName: function(type){
 						return app.dev.findName(type);
-					},
-					
-					// 获取WIFI配置信息
-					getwifi: function() {
-
-						var that = this;
-						return Rx.Observable.create(function(ob) {
-							dal.devparam.getwifi(that.devid, that.type, function(err, rs) {
-								if(err) {
-									return ob.error(err);
-								}
-								that.wifiinfo = rs;
-								ob.next();
-							});
-						});
-
-					},
-
-					// 获取基础信息
-					getBaseInfo: function() {
-						var that = this;
-						return Rx.Observable.create(function(ob) {
-							dal.devparam.basicinfo(that.devid, that.type, function(err, rs) {
-								if(err) {
-									return ob.error(err);
-								}
-								that.o = rs;
-								ob.next();
-							});
-						});
-					},
+					}
 				}
 			});
 		</script>

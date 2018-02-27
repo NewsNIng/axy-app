@@ -296,10 +296,11 @@
 			}
 
 			// 更新本地用户信息
-			var UpdateUserInfo = function(data) {
+			function UpdateUserInfo(data) {
 				data = FixUserData(data);
 				// 更新用户信息
 				app.user.set(data);
+
 				window.localStorage.setItem('_account_', data.account);
 			}
 

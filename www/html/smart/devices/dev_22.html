@@ -126,13 +126,13 @@
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell">
 						<a class="">
-							<span>设备ID</span>
+							<span>配件ID</span>
 							<span class="mui-badge" v-text="devInfo.accessory.id"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
-							<span>设备名称</span>
+							<span>配件名称</span>
 							<span class="mui-badge" v-text="devInfo.accessory.name"></span>
 						</a>
 					</li>
@@ -336,8 +336,12 @@
 								that._updataUi();
 							});
 						}, {
-							title: "设备名称",
+							title: "配件名称",
 							content: that.devInfo.accessory.name,
+							r: "nonEmpty", 
+							rmsg: "配件名称不能为空",
+							maxLength: 15,
+							mLengthMsg: "最长不超过15个字符！",
 						});
 					},
 					// 获取甲醛探测器状态

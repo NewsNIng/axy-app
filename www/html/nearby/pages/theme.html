@@ -43,7 +43,7 @@
 			}
 			
 			.share>img {
-				margin-right: 0.346666rem;
+				margin-right: 0.2rem;
 			}
 			
 			.see {
@@ -62,19 +62,19 @@
 		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
 			<div class="mui-scroll  app-font-size-28">
 				<template v-for="o in items">
-					<div class="theme_item" @tap="onClickTap(o)">
-						<img :src="o.img" />
+					<div class="theme_item" >
+						<img @tap="onClickTap(o)" :src="o.img" />
 						<div class="share" @tap.stop="onShareTap(o)">
 							<img src="../../../image/nearby/share_icon.png" />
 							<span>分享给好友</span>
 
 						</div>
-						<div class="see">
+						<div class="see" @tap="onClickTap(o)">
 							共{{o.clickcount}}人看过<img src="../../../image/nearby/right_icon.png" />
 						</div>
 					</div>
 				</template>
-				
+
 			</div>
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -105,7 +105,7 @@
 								down: {
 									auto: true,
 									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
-								}, 
+								},
 								up: {
 									callback: this._up
 								}
@@ -119,34 +119,45 @@
 							url: o.link
 						});
 						// 增加点击数量
-						dal.home.theme.tap(o.id, function(err, data){
-							if(err){
+						dal.home.theme.tap(o.id, function(err, data) {
+							if(err) {
 								return console.log(JSON.stringify(err))
 							}
 							// 延迟显示点击数量变化
-							setTimeout(function(){
-								o.clickcount = data.clickcount || (o.clickcount + 1);	
+							setTimeout(function() {
+								o.clickcount = data.clickcount || (o.clickcount + 1);
 							}, 1000);
-							
+
 						});
 					},
-					onShareTap: function(o){
-						app.page.sendShare(function(){
-							
-						},{
+					onShareTap: function(o) {
+						app.page.sendShare(function() {
+
+						}, {
+
 							tips: "分享主题",
-							title: o.title,
 							img: o.img,
-							href: o.link,
+							title: o.title,
 							content: "我分享了一个主题，快来看看吧~",
+
+							datahref: {
+								type: "theme", // 分享类型 （店铺store, 主题theme, 发现discover）
+								// ... 其它信息
+								img: o.img, // (主题需要传)
+								title: o.title, // (主题需要传) 
+								url: o.link, //  (主题需要传)
+							}
+
 						})
+						
+						
 					},
-					
+
 					_down: function() {
 						this.n = 1;
 						this.$pullRefresh.pullRefresh().endPulldownToRefresh();
 						dal.home.theme.list(this.n, function(err, data) {
-							
+
 							if(err) {
 								return mui.toast(err.message);
 							}

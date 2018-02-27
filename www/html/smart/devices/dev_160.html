@@ -108,13 +108,13 @@
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell">
 						<a class="">
-							<span>设备ID</span>
+							<span>配件ID</span>
 							<span class="mui-badge" v-text="devInfo.accessory.id"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
-							<span>设备名称</span>
+							<span>配件名称</span>
 							<span class="mui-badge" v-text="devInfo.accessory.name"></span>
 						</a>
 					</li>
@@ -132,7 +132,7 @@
 					</li>
 					<li class="mui-table-view-cell" @tap="onAlarmTap()">
 						<a class="mui-navigate-right">
-							<span>告警延迟时间</span>
+							<span>告警抓拍延迟时间</span>
 							<span class="mui-badge" v-text="devInfo.accessory.delay+'s'"></span>
 						</a>
 					</li>
@@ -177,7 +177,7 @@
 
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
-		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_ms_alarm.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
@@ -262,7 +262,7 @@
 						layer: 1,
 						more: false,
 					});
-					this.pick.setData(pick_data[1]);
+					this.pick.setData(pick_data);
 				},
 				plusReady: function() {
 					plus.navigator.setStatusBarStyle('dark');
@@ -334,8 +334,12 @@
 								that._updataUi();
 							});
 						}, {
-							title: "设备名称",
+							title: "配件名称",
 							content: that.devInfo.accessory.name,
+							r: "nonEmpty", 
+							rmsg: "配件名称不能为空",
+							maxLength: 15,
+							mLengthMsg: "最长不超过15个字符！",
 						});
 					},
 					// 更新缓存数据

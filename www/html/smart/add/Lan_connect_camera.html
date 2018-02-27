@@ -187,7 +187,7 @@
 					}
 				},
 				plusReady: function() {
-
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '4.png';
 					if(this.setid) {
 						// 声波	
 						this.addDeviceByVoice();
@@ -197,7 +197,6 @@
 					} else {
 						//this.autoOver();
 					}
-
 				},
 				methods: {
 					// 通过声波ID进行验证
@@ -253,10 +252,10 @@
 						}());
 					},
 					onNext: function() {
-						if(!this.isConnected) {
+//						if(!this.isConnected) {
+//							return;
+//						}
 
-							return;
-						}
 						// 跳转
 						mui.openWindow('add_completed.html', 'add_completed', {
 							extras: {
@@ -264,8 +263,8 @@
 								devid: this.devid,
 							}
 						});
+						//						mui.back();
 						return;
-						//						this.$view.close();
 					},
 					over: function(msg, close) {
 						if(this.timer >= 0) {

@@ -131,38 +131,41 @@
 				data: function() {
 					return {
 						devActive: -1,
-						devs_: [],
+						//devs_: [],
 						devs: [],
 						// 过滤显示某些主机设备 存类型名称
-						filter: []
+						//filter: []
 
+						accid: 0,
 					};
 				},
 				computed: {
 					indexDev: function() {
 						return this.devs[this.devActive];
 					},
-					devs: function() {
-						var tempName;
-						return this.devs_.filter(function(item) {
-							if(item.online !== 1) {
-								return false;
-							}
-							tempName = app.dev.findName(item.type)
-							if(this.filter.indexOf(tempName) >= 0) {
-								return false;
-							}
-							return true;
-						}.bind(this));
-					}
+					//					devs: function() {
+					//						var tempName;
+					//						return this.devs_.filter(function(item) {
+					//							if(item.online !== 1) {
+					//								return false;
+					//							}
+					//							tempName = app.dev.findName(item.type)
+					//							if(this.filter.indexOf(tempName) >= 0) {
+					//								return false;
+					//							}
+					//							return true;
+					//						}.bind(this));
+					//					}
 
 				},
 
 				mounted: function() {
-
+					
 				},
 				plusReady: function() {
-					this.filter = this.$view.filter || [];
+					//this.filter = this.$view.filter || [];
+
+					this.accid = this.$view.accid || 0;
 
 					this.getDevList();
 				},
@@ -183,10 +186,17 @@
 					// 主机列表
 					getDevList: function() {
 
-						var D = new this.$Cache('dev_list', [], {
-							plus: true
+						//var D = new this.$Cache('dev_list', [], {
+						//							plus: true
+						//});
+						var that = this;
+						dal.devaccessory.accessorySupportDevList(this.accid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							that.devs = data;
 						});
-						this.devs = D.data;
+
 					},
 
 					_fixDevName: function(name) {

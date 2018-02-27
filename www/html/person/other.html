@@ -103,13 +103,18 @@
 				margin: 0.346666rem 0.333333rem 0.08rem 0;
 				font-weight: 400;
 				text-align: center;
-				line-height: 12px;
 			}
 			
 			.dynamic_item>img {
 				width: 2.88rem;
 				height: 2.88rem;
-				margin-bottom: 0.373333rem;
+			}
+			
+			.blur {
+				-webkit-filter: blur(10px);
+				filter: blur(10px);
+				
+				background-color: #EDEDED;
 			}
 		</style>
 	</head>
@@ -122,16 +127,17 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<img :src="userInfo.headimgurl" />
-				<div class="user_icon app-font-size-26"><img :src="userInfo.headimgurl" /></div>
+				<img :data-src="userInfo.headimgurl" class="img-lazy-load blur" data-type="avastr"/>
+				<div class="user_icon app-font-size-26"><img :data-src="userInfo.headimgurl" class="img-lazy-load" data-type="avastr" /></div>
 				<div class="user_name app-font-size-38" style="display: inline;" v-text="userInfo.nickname"></div>
 				<div class="attention app-font-size-26" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
 				<div class="fans app-font-size-26" v-text="focuscount+'人已关注'"></div>
 				<div class="TA app-font-size-26">TA的动态</div>
 				<div class="dynamic">
 					<template v-for="o in dynamic">
-						<div class="dynamic_item app-font-size-28" @tap="onClickTap(o.id)">
-							<img :src="_getImg(o.image1,o.image2,o.image3)" /> {{o.title}}
+						<div class="dynamic_item app-font-size-28 " @tap="onClickTap(o.id)">
+							<img :src="_getImg(o.image1,o.image2,o.image3)" />
+							<div class="mui-ellipsis">{{o.title}}</div>
 						</div>
 					</template>
 				</div>
@@ -153,9 +159,11 @@
 		<script type="text/javascript" src="../../js/dal/article.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
 
-		<!--<script type="text/javascript" src="../../js/lib/md5.min.js"></script>-->
-		<!--<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -164,9 +172,9 @@
 				el: '.wrapper',
 				data: function() {
 					return {
-						img: "http://placehold.it/750x517",
-						userName: "小鱼",
-						userIcon: "http://placehold.it/160x160",
+						img: "",
+						userName: "",
+						userIcon: "",
 						isAttention: false,
 
 						dynamic: [],
@@ -199,6 +207,7 @@
 					this.from = app.user.get().account || "null";
 					this.getInfo();
 					this.getList();
+					imagelazyload();
 
 				},
 				methods: {
@@ -209,8 +218,11 @@
 							}
 							this.isfocus = data.isfocus;
 							this.focuscount = data.focuscount;
-//							alert(JSON.stringify(this.focuscount));
+							//							alert(JSON.stringify(this.focuscount));
 							this.userInfo = data.user;
+							this.$nextTick(function(){
+								imagelazyload();
+							});
 						}.bind(this));
 					},
 					getList: function() {
@@ -223,18 +235,25 @@
 						}.bind(this), 6);
 					},
 					onFocusTap: function() {
-						if(this.from === this.uid) {
-							return mui.toast("您不能关注自己！");
-						}
-						this.isfocus = +!this.isfocus;
-						this.changeFocus();
+						app.user.get(function(u){
+							if(!u){
+								return false;
+							}
+							if(this.from === this.uid) {
+								return mui.toast("您不能关注自己！");
+							}
+							this.isfocus = +!this.isfocus;
+							this.changeFocus();
+						});
+						
+						
 					},
 					changeFocus: function() {
 						var methodName = 'add';
 						if(!this.focus) {
 							this.focuscount--;
 							methodName = 'delete';
-						}else{
+						} else {
 							this.focuscount++;
 						}
 						dal.user.focus[methodName](this.uid, function(err, data) {
@@ -244,7 +263,7 @@
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
 					},
-					onClickTap: function(oid){
+					onClickTap: function(oid) {
 						mui.openWindow('../nearby/discover/discover_details.html', 'discover_details', {
 							extras: {
 								oid: oid

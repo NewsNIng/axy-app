@@ -519,7 +519,7 @@
 
 						return arr;
 						// 以上代码是 两个队列每次各塞一个，循环下来多余的补齐尾部
-						
+
 						// 以下代码是 以前的随机排序   放弃
 						var arr = this.articleList.concat(this.storeList).sort(function() {
 							var _ = 1;
@@ -603,13 +603,23 @@
 						this.softinput && this.softinput.show(this.$refs.input);
 					}.bind(this))
 
-					// 获取定位信息
-					plus.geolocation.getCurrentPosition(function(p) {
-						this.longitude = p.coords.longitude;
-						this.latitude = p.coords.latitude;
-						this.city = p.address.city.replace('市', '');
-						// this.position = p.address.poiName;
-					}.bind(this));
+					var city = this.$view.city;
+					var latitude = this.$view.latitude;
+					var longitude = this.$view.longitude;
+					
+					if(city && latitude && longitude) {
+						this.longitude = longitude;
+						this.latitude = latitude;
+						this.city = city;
+					} else {
+						// 获取定位信息
+						plus.geolocation.getCurrentPosition(function(p) {
+							this.longitude = p.coords.longitude;
+							this.latitude = p.coords.latitude;
+							this.city = p.address.city.replace('市', '');
+							// this.position = p.address.poiName;
+						}.bind(this));
+					}
 
 				},
 				methods: {
@@ -692,7 +702,7 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							
+
 							var article = data.article || [];
 							var store = data.store || [];
 							if(this.n > 1) {
@@ -730,10 +740,10 @@
 						return img1 || img2 || img3;
 					},
 					_m2km: function(m) {
-						if(m < 1000){
+						if(m < 1000) {
 							return m + ' m';
 						}
-						return (m / 1000).toFixed(1) + " km";
+						return(m / 1000).toFixed(1) + " km";
 					},
 				}
 			});

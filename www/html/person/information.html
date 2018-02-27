@@ -82,7 +82,6 @@
 				background-color: #f5f8fa;
 				float: left;
 				margin-right: 0.4rem;
-				
 				background-size: cover;
 				background-position: center;
 				background-repeat: no-repeat;
@@ -119,7 +118,8 @@
 				width: 7rem;
 				text-align: right;
 			}
-			.mui-badge.nick{
+			
+			.mui-badge.nick {
 				border-radius: 0;
 			}
 		</style>
@@ -254,9 +254,9 @@
 						articleList: []
 					};
 				},
-				
+
 				computed: {
-					albumNullLen: function(){
+					albumNullLen: function() {
 						var l = 4 - (this.articleList && this.articleList.length) || 0;
 						l = l < 0 ? 0 : l;
 						return l;
@@ -280,7 +280,6 @@
 						value: 1,
 					}]);
 					this.user = app.user.get();
-//					this.user.nickname = "哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦";
 					this.updateUserInit();
 					this.$watch('user', function() {
 						// 用户信息更改后提交信息更新
@@ -291,7 +290,7 @@
 					this.updateLazyImage();
 					this.getArticleList();
 				},
-				methods: { 
+				methods: {
 					// 获取个人文章信息
 					getArticleList: function() {
 						dal.article.user.list(this.account, 1, function(err, data) {
@@ -320,6 +319,8 @@
 							// 通知其它页面 用户更新了
 							new ni.Broadcast().emit("userinfo_update", {
 								userInfo: that.user
+							}, {
+								views: ['zeus']
 							});
 							// 初始化需要更新的信息列表
 							that.updateUserInit();
@@ -339,7 +340,7 @@
 						// 选取图片
 						this.$gallery(function(err, imgs) {
 							if(err) {
-								return mui.toast('选取图片失败');
+								return err && mui.toast(err.message);
 							}
 							// 打开图片剪裁
 							app.page.cropper(function(data) {
@@ -358,41 +359,41 @@
 
 						}, 1);
 					},
-					
+
 					// 个人专辑点击
-					onAlbumTap: function(){
+					onAlbumTap: function() {
 						mui.openWindow('myself/discover.html', 'myself_discover', {
 							extras: {
 								uid: this.user.account
 							}
 						});
 					},
-					
+
 					// 个人专辑快捷点击
-					onAlbumImgTap: function(o){
+					onAlbumImgTap: function(o) {
 						var that = this;
-						app.page.openForResultBy('myself/discover_details.html', 'discover_details_edit', function(data){
-							if(data.del){
+						app.page.openForResultBy('myself/discover_details.html', 'discover_details_edit', function(data) {
+							if(data.del) {
 								that.items.splice(index, 1);
 							}
-						},{
+						}, {
 							oid: o.id
 						});
 					},
-					
+
 					// 昵称修改
 					onNickNameTap: function() {
 						var that = this;
 						app.page.getInput(function(data) {
 							that.user.nickname = data.content;
 							that.updateUser.nickname = data.content;
-							
+
 						}, {
 							title: '昵称',
 							content: that.user.nickname,
-							r: "nickname", 
-							rmsg: "昵称必须为中英文、数字和下划线 最多长度18" 
-							
+							r: "nickname",
+							rmsg: "昵称必须为中英文、数字和下划线 最多长度18"
+
 						});
 					},
 

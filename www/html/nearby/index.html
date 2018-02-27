@@ -154,7 +154,7 @@
 					<a class="mui-icon mui-icon-arrowdown app-font-size-26 app-color-white" @tap="onHeaderCityTap()" style="font-size: 20px; padding-top: 12px;"></a>
 				</div>
 
-				<div class="app-input-room" style="flex: 1;">
+				<div class="app-input-room" @tap="onSearchTap()" style="flex: 1;">
 					<span class="mui-icon">
 						<img src="../../image/search/search@3x.png"/>
 					</span>
@@ -210,24 +210,26 @@
 				top: '0px'
 			};
 
-			(function($) {
-				$.init();
-				$.ready(function() {
-					$('.app-input-room')[0].addEventListener('tap', function() {
-						mui.openWindow('../search/index.html', 'search', {
-							show: {
-								aniShow: 'slide-in-bottom'
-							}
-						});
-					});
-
-				});
-			}(mui));
+//			(function($) {
+//				$.init();
+//				$.ready(function() {
+//					$('.app-input-room')[0].addEventListener('tap', function() {
+//						mui.openWindow('../search/index.html', 'search', {
+//							show: {
+//								aniShow: 'slide-in-bottom'
+//							}
+//						});
+//					});
+//
+//				});
+//			}(mui));
 
 			new Vue({
 				el: '.warp',
 				data: {
 					city: "深圳",
+					longitude: 0,
+					latitude: 0,
 					tab: {
 						active: 0,
 						items: [{
@@ -278,6 +280,19 @@
 					this._listenMore();
 				},
 				methods: {
+					
+					onSearchTap: function(){
+						mui.openWindow('../search/index.html', 'search', {
+							show: {
+								aniShow: 'slide-in-bottom'
+							},
+							extras: {
+								longitude: this.longitude,
+								latitude: this.latitude,
+								city: this.city
+							}
+						});
+					},
 					// 页面切换时
 					onChange: function(o) {
 						if(this.tab.active === o.index) {
@@ -298,13 +313,15 @@
 					onHeaderCityTap: function() {
 						app.page.getPosition(function(data) {
 							this.city = data.city;
+							this.longitude = data.longitude;
+							this.latitude = data.latitude;
 							// 通知经纬度变化
 							new this.$Broadcast().emit("city_change", {
 								longitude: data.longitude,
 								latitude: data.latitude,
 								city: data.city
 							}, {
-								views: ['nearby_pages_list']
+								views: ['nearby_pages_list','home']
 							});
 						}.bind(this));
 					},
@@ -338,6 +355,8 @@
 						
 						new ni.Broadcast().on('city_change_sub', function(data) {
 							this.city = data.city;
+							this.longitude = data.longitude;
+							this.latitude = data.latitude;
 						}.bind(this));
 					}
 				}

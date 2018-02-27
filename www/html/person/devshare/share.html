@@ -353,7 +353,28 @@
 							}
 							// 如果是wechat则使用 分享功能
 							if(type === 'weixin') {
+								var u = app.user.get();
+								var o = {
+									type: "devshare",
+									id: this.devInfo.devid,
+									devid: this.devInfo.devid,
+									location: this.devInfo.location,
+									code: code,
+									account: u.account
+								}
+								
+								o.location && (o.location = encodeURI(o.location));
+								
+								var paramsArr = [];
+								
+								for(var i in o) {
+									o[i] && paramsArr.push(i + '=' + o[i]);
+								}
+								
+								
 
+								var href = dal.BASE_SHARE_URL + "?" + paramsArr.join('&');
+console.log(href); 
 								new ni.Share('wxhy', function(err, data) {
 									if(err) {
 										console.log(err)
@@ -361,7 +382,7 @@
 									console.log(JSON.stringify(data))
 								}, {
 									img: '../../../image/common/login_logo.png', //图片地址 暂不支持网络地址 
-									href: 'http://www.vihivision.com?code=' + code, //分享的超链接
+									href: href, //分享的超链接
 									title: '亲友邀请您一起看', //当且仅当href存在时有效
 									content: '安装[安心云]App后，输入邀请码#' + code + '#就能看到我家的美景啦，快来体验全新的智能家居、智能安防哦——来自安心云' //当且仅当href存在时有效
 								});
@@ -376,7 +397,7 @@
 					// 发送短信分享
 					sms: function(code) {
 						var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
-						msg.to = [];
+						msg.to = [""];
 						msg.body = '亲友邀请您一起看，安装[安心云]App后，输入邀请码#' + code + '#就能看到我家的美景啦，快来体验全新的智能家居、智能安防哦——来自安心云';
 						plus.messaging.sendMessage(msg);
 					},

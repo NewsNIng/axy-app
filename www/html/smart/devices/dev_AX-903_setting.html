@@ -254,9 +254,9 @@
 						var $rebootFn = function(dev) {
 							return Rx.Observable.create(function(ob) {
 								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
-									if(err) {
+									/*if(err) {
 										return ob.error(err);
-									}
+									}*/ 
 									dev.methodName = methodName;
 									ob.next(dev);
 								});
@@ -283,6 +283,9 @@
 								plus.nativeUI.closeWaiting();
 								_B.emit("delete", {}, {
 									views: [that.$view.opener()]
+								});
+								_B.emit("device_update", {}, {
+									views: ["home"]
 								});
 								that.$view.close();
 							}, function(err) {
