@@ -709,7 +709,14 @@
 					"image/smart/devices/dev_icon/燃气探测器@3x.png",
 					"image/smart/devices/dev_icon/电力安全主机@3x.png",
 					"image/smart/devices/dev_icon/红外幕帘@3x.png",
-					"image/smart/devices/dev_icon/门磁探测器@3x.png"
+					"image/smart/devices/dev_icon/门磁探测器@3x.png",
+					"js/common/immersed.js",
+					"js/app/app-page.js",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js",
+					"js/common/flexible.js",
+					"js/app/app.js",
+					"js/lib/vue-ni.js"
 				],
 				"refer": [
 					"html/smart/add/family_menu.html",
@@ -781,7 +788,8 @@
 				"resources": [],
 				"refer": [
 					"html/smart/add/Lan_select_dev_id.html",
-					"html/smart/add/sonic_connect_dev2.html"
+					"html/smart/add/sonic_connect_dev2.html",
+					"html/smart/add/add_completed.html"
 				],
 				"priority": 0
 			},
@@ -1162,7 +1170,8 @@
 					"html/smart/devices/dev_35.html",
 					"html/smart/devices/dev_161.html",
 					"html/smart/devices/dev_25.html",
-					"html/smart/devices/dev_40.html"
+					"html/smart/devices/dev_40.html",
+					"html/smart/devices/dev_my_list.html"
 				],
 				"priority": 0
 			},

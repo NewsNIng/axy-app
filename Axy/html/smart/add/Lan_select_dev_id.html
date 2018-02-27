@@ -228,6 +228,12 @@
 						this.devActive = i;
 					},
 					onNext: function() {
+//						测试代码，可删
+						if(true){
+							this.$view.loadURL('Lan_connect_camera.html');
+							return;
+						}
+						
 						if(this.devActive < 0){
 							return mui.toast("请选择主机设备");
 						}

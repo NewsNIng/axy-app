@@ -168,11 +168,11 @@
 					this.isFitting = this.$view.isFitting;
 					this.updateDeviceList();
 					this.info = this.$view.info;
-					mui.back = function() {
-						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
-						var view = plus.webview.currentWebview();
-						view.close();
-					}.bind(this)
+					
+					plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
+					plus.webview.getWebviewById('Lan_add_camera') && plus.webview.getWebviewById('Lan_add_camera').close('none');
+					plus.webview.getWebviewById('voice1') && plus.webview.getWebviewById('voice1').close('none');
+					plus.nativeUI.closeWaiting();
 				},
 				methods: {
 					show: function() {
@@ -199,22 +199,25 @@
 						} else {
 							//设备
 							mui.openWindow('../devices/dev_my_list.html', 'dev_my_list');
-							mui.back();
 						}
+
+//						mui.back();
 					},
 					bind: function() {
 						alert("bind");
 					},
 					// 通知其他页面设备列表更新
 					updateDeviceList: function() {
+						if(this.isFitting) {
+							B.emit('zone_update', {}, {
+								views: ["dev_my_list"]
+							});
+						} else {
+							B.emit('device_update', {}, {
+								views: ["zeus", "dev_my_list"]
+							});
+						}
 
-						B.emit('device_update', {}, {
-							views: ["zeus", "dev_my_list"]
-						});
-
-						B.emit('zone_update', {}, {
-							views: ["dev_my_list"]
-						});
 					},
 
 				}
