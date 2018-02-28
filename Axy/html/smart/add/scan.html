@@ -205,7 +205,7 @@
 
 									return Rx.Observable.create(function(observer) {
 
-										app.page.openForResultBy('../devices/dev_select_id.html', 'dev_select_id', function(data) {
+										app.page.openForResultBy('scan_bind_dev.html', 'scan_bind_dev', function(data) {
 
 											observer.next({
 												acc: data1,
@@ -214,15 +214,19 @@
 										}, {
 											result: true,
 											
-											filter: that.isSmart ? [
-												"AX-903",
-												"AX-904",
-												"VH-104GN"
-											]: [
-												"WG-100",
-												"AX-903",
-												//"AX-904"
-											]
+											accid: data1.aid,
+											
+//											filter: that.isSmart ? [
+//												"AX-903",
+//												"AX-904",
+//												"VH-104GN",
+//												"VH-104MG",
+//												"VH-104DG",
+//											]: [
+//												"WG-100",
+//												"AX-903",
+//												//"AX-904"
+//											]
 										});
 									});
 
@@ -267,6 +271,13 @@
 						}
 
 					},
+					
+					// 通过序列号获取过滤列表
+					_getFilterList: function(code){
+						
+					},
+					
+					
 					resetScan: function(frist) {
 						if(this.t && this.t >= 0) {
 							return;

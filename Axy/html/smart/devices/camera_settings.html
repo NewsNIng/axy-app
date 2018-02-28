@@ -263,7 +263,7 @@
 					<li v-show="otherInfo.on !== null" class="mui-table-view-cell" @tap="onOnToggle()">
 						<a class="">
 							<span>指示灯</span>
-							<span class="mui-badge">
+							<span class="mui-badge"> 
 								<div  class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': otherInfo.on}" >
 									<div class="mui-switch-handle"></div>
 								</div>
@@ -302,7 +302,7 @@
 		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -312,7 +312,7 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 
 		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
-		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer ></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -359,7 +359,7 @@
 					upsideIndex: function() {
 						return +!this.upside;
 					},
-					is104GN: function(){
+					is104GN: function() {
 						return app.dev.findName(this.devInfo.type).indexOf('AX-104') >= 0;
 					}
 				},
@@ -393,15 +393,21 @@
 					// 打开wifi设置
 					onWifiSetTap: function() {
 						var that = this;
-						app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data) {
-							dal.devparam.wifi(that.devInfo.devid, that.devInfo.type, data.name,data.pwd,function(err, data){
-								if(err){
-									return mui.toast(err.message);
-								}
-								mui.toast('配置WIFI成功');
-								console.log(JSON.stringify(data));
+
+						Rx.Observable.create(function(ob) {
+							app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data) {
+								dal.devparam.wifi(that.devInfo.devid, that.devInfo.type, data.name, data.pwd, function(err, data) {
+									if(err) {
+										return mui.toast(err.message);
+									}
+									console.log(JSON.stringify(data));
+									ob.next();
+								});
 							});
-						}.bind(this));
+						}).subscribe(function() {
+							that.onReboot("配置WIFI成功，是否现在重启设备？");
+						});
+
 					},
 
 					// 摄像机名称点击
@@ -424,14 +430,14 @@
 						}, {
 							title: "摄像机名称",
 							content: that.fixName(that.devInfo.location),
-//							r: "devName",
+							//							r: "devName",
 							maxLength: 15,
 							mLengthMsg: "最长不超过15个字符！",
 						});
 					},
 					// 基本信息跳转
 					onInfoTap: function() {
-						if(this.devInfo.online!== 1){
+						if(this.devInfo.online !== 1) {
 							return mui.toast("设备离线，无法查看基本信息");
 						}
 						mui.openWindow('camera_settings_info.html', 'camera_settings_info', {
@@ -459,22 +465,22 @@
 					// 告警时间跳转
 					onAlarmParam: function() {
 						var that = this;
-						
+
 						app.page.getAlarmParam(function(data) {
 							//data.intervalTime
 							//data.continuedTime
 						}, {
-//							intervalTime: 0,
-//							continuedTime: 0,
+							//							intervalTime: 0,
+							//							continuedTime: 0,
 							type: that.devInfo.type,
 							devid: that.devInfo.devid,
 						});
 					},
 
 					// 重启设备
-					onReboot: function() {
+					onReboot: function(msg) {
 						var dev = this.devInfo;
-						mui.confirm("确定要重启设备吗？", "", ["重启", "取消"], function(e) {
+						mui.confirm(msg || "确定要重启设备吗？", "", ["重启", "取消"], function(e) {
 							if(e.index === 0) {
 								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
 									if(err) {
@@ -541,9 +547,9 @@
 						var $rebootFn = function(dev) {
 							return Rx.Observable.create(function(ob) {
 								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
-									if(err) {
+									/*if(err) {
 										return ob.error(err);
-									}
+									}*/ 
 									dev.methodName = methodName;
 									ob.next(dev);
 								});
@@ -571,6 +577,9 @@
 								_B.emit("delete", {}, {
 									views: [that.$view.opener()]
 								});
+								_B.emit("device_update", {}, {
+									views: ["home"]
+								});
 								that.$view.close();
 							}, function(err) {
 								plus.nativeUI.closeWaiting();
@@ -583,26 +592,26 @@
 						var that = this;
 						dal.devparam.getOpenled(this.devInfo.devid, this.devInfo.type, function(err, rs) {
 							if(err) {
-								//return mui.toast(err.message);
+								return mui.toast(err.message);
 							}
 							that.otherInfo.on = !rs.on;
 						});
 					},
-					onOnToggle: function(e){
+					onOnToggle: function(e) {
 						plus.nativeUI.showWaiting();
 						var that = this;
 						var isActive = that.otherInfo.on;
-						
+
 						dal.devparam.openled(this.devInfo.devid, this.devInfo.type, !isActive, function(err, rs) {
 							plus.nativeUI.closeWaiting()
-							if(err) { 
-								return mui.toast(err.message); 
+							if(err) {
+								return mui.toast(err.message);
 							}
 							that.otherInfo.on = !isActive;
 						});
 					},
-					onLogTap: function(){
-						mui.openWindow('camera_settings_log.html','camera_settings_log',{
+					onLogTap: function() {
+						mui.openWindow('camera_settings_log.html', 'camera_settings_log', {
 							extras: {
 								info: this.devInfo
 							}

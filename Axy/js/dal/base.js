@@ -4,8 +4,8 @@ var dal = {
 	// http://vh.anxin-net.com/vihiManager/vihiapp/share/index.html
 	
 	BASE_URL_TOP: "http://www.isee110.com/api",
-	
-	BASE_SHARE_URL: "http:vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
+	BASE_SHARE_URL: "http://vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
+	//BASE_SHARE_URL: "http://192.168.1.103:8080/module/index.html",
 };
 
 /**
@@ -47,6 +47,7 @@ function requestAdapter(type, url, params, callback) {
 		type: type,
 		timeout: 60000,
 		success: function(data) {
+			
 			var o = {};
 			if(data.code !== "0000" && data.code !== "0") {
 				o.err = {
@@ -59,6 +60,7 @@ function requestAdapter(type, url, params, callback) {
 			callback(o.err, o.data);
 		},
 		error: function(xhr, type, err) {
+			
 			callback({
 				code: xhr.status,
 				message: errDir[type] || "其它错误"

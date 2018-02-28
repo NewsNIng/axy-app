@@ -353,29 +353,7 @@
 					font-size: 36px !important;
 				}
 			}
-			/*share*/
 			
-			#popover-share {
-				bottom: 0 !important;
-				width: 100%;
-				padding: 1rem .75rem;
-				border-radius: 0;
-			}
-			
-			#popover-share .share-title {
-				text-align: center;
-				color: #a1a1a1;
-			}
-			
-			#popover-share .share-body {}
-			
-			#popover-share .share-body>img {
-				float: left;
-				margin-top: .8rem;
-				width: 25%;
-				padding: 6%;
-			}
-			/*end share*/
 			/*图片轮播*/
 			
 			.mui-slider-indicator .mui-indicator {
@@ -617,90 +595,22 @@
 						mui('#popover-menu').popover('hide');
 					},
 					// 分享点击
-					onShareTap: function() {
-						mui('#popover-share').popover('show');
-						//						mui('#popover-menu').popover('hide');
-					},
-					// 分享至
-					onShareTo: function(type) {
+						onShareTap: function() {
 						var that = this;
 						var shareImg = that._getImg(that.info.image1, that.info.image2, that.info.image3);
-						var w;
-						setTimeout(plus.nativeUI.closeWaiting, 8e3);
+						app.page.sendShare(function() {
 
-						Rx.Observable
-							// 获取授权
-							.create(function(ob) {
-								w = plus.nativeUI.showWaiting('获取授权...');
-								var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
-								new that.$OAuth(oauthType, function(err, info) {
-									if(err) {
-										return mui.toast(err.message);
-									}
-									ob.next();
-								}, that);
-							})
+						}, {
+							img: shareImg,
+							title: that.info.title,
+							content: that.info.content,
 
-							// 处理为本地图片
-							.mergeMap(function(ob) {
-								return Rx.Observable.create(function(ob) {
-									if(shareImg.indexOf('file:') >= 0) {
-										// 本地图片
-										return ob.next(shareImg);
-									}
-									// 下载
-									w.setTitle("处理图片...");
-
-									new ni.Download(shareImg, {
-										filename: 'share_temp_' + +new Date,
-										suffix: '.jpg',
-									}).onSuccess(function(src) {
-										ob.next(src);
-									}).start();
-								})
-
-							})
-							// 压缩
-							.mergeMap(function(_img) {
-								w.setTitle("压缩图片...");
-								return Rx.Observable.create(function(ob) {
-									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
-										plus.nativeUI.closeWaiting();
-										if(err) {
-											return plus.nativeUI.toast(err.message);
-										}
-										ob.next(overImgs[0]);
-									});
-								})
-
-							})
-							// 分享
-							.mergeMap(function(img) {
-								return Rx.Observable.create(function(ob) {
-									w.setTitle("拉取分享...");
-									setTimeout(plus.nativeUI.closeWaiting, 3e3);
-									new ni.Share(type, function(err, data) {
-										plus.nativeUI.closeWaiting();
-										if(err) {
-											if(err.code === -100 || err.code === -2) {
-												err.message = "用户取消分享";
-											}
-											return plus.nativeUI.toast(err.message);
-										}
-										ob.next(data);
-									}, {
-										img: img, //图片地址 暂不支持网络地址 
-										href: 'http://www.vihivision.com/', //分享的超链接
-										title: that.info.title, //当且仅当href存在时有效
-										content: that.info.content //当且仅当href存在时有效
-									});
-								});
-							})
-							// 回调
-							.subscribe(function(data) {
-								console.log(JSON.stringify(data));
-							});
-
+							tips: "快把说说分享给朋友，获取更多关注~",
+							datahref: {
+								type: "discover", // 分享类型 （店铺store, 主题theme, 发现discover）
+								id: that.info.id, // 当前类型数据的主键ID
+							}
+						});
 					},
 
 					onHeadTap: function(account) {

@@ -199,7 +199,7 @@
 				font-size: 45px !important;
 			}
 			
-			.mui-slider-handle>.mui-badge{
+			.mui-slider-handle>.mui-badge {
 				position: absolute;
 				top: 50%;
 				right: 15px;
@@ -207,7 +207,7 @@
 				-webkit-transform: translateY(-50%);
 			}
 			
-			.mui-table-view-cell>.mui-slider-handle{
+			.mui-table-view-cell>.mui-slider-handle {
 				height: 100%;
 				line-height: 30px;
 			}
@@ -304,10 +304,10 @@
 									<a class="mui-btn mui-btn-red" @tap.stop="onDel(o, i, $event)">删除</a>
 								</div>
 								<div class="mui-slider-handle">
-										<span>{{_fixTime(o.start)}} - {{_fixTime(o.end)}}</span>
-										<br />
-										<span class="sign" v-for="p,i in _two2bool(o.recycle).splice(1).reverse()" v-if="p">周{{_number2string(i)}}</span>
-										<span class="mui-badge" @tap.stop="">
+									<span>{{_fixTime(o.start)}} - {{_fixTime(o.end)}}</span>
+									<br />
+									<span class="sign" v-for="p,i in _two2bool(o.recycle).splice(1).reverse()" v-if="p">周{{_number2string(i)}}</span>
+									<span class="mui-badge" @tap.stop="">
 									<div @toggle="switchToggle(o, $event)" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': _two2bool(o.recycle)[0]}" ref="pwd_protection">
 										<div class="mui-switch-handle"></div>
 									</div>
@@ -439,6 +439,7 @@
 					},
 
 					onPickTap: function(i) {
+						var methodNames = ['startTime', 'endTime'];
 
 						var that = this;
 						var p = 'startTime';
@@ -448,9 +449,6 @@
 						this.pick.pickers[0].setSelectedValue(that[p].split(':')[0]);
 						this.pick.pickers[1].setSelectedValue(that[p].split(':')[1] === undefined ? '0' : that[p].split(':')[1]);
 
-						var fn = function(h, m) {
-							that[p] = calc(h) + ":" + calc(m);
-						};
 						var calc = function(i) {
 							if(i < 10) {
 								return "0" + i;
@@ -459,7 +457,27 @@
 						}
 
 						this.pick.show(function(items) {
-							fn(items[0].value, items[1].value);
+							var h = items[0].value,
+								m = items[1].value;
+							// 选择开始时间就清空结束时间
+							if(i === 0) {
+								that[methodNames[1 - i]] = "";
+								that[methodNames[i]] = calc(h) + ":" + calc(m);
+							} else {
+								var temp = that[methodNames[i - 1]];
+								temp = temp.replace(':', '');
+								temp = +temp;
+
+								var temp2 = h + "" + m;
+								temp2 = +temp2;
+
+								if(temp2 <= temp) {
+									return mui.toast("结束时间必须大于开始时间")
+								}
+
+								that[methodNames[i]] = calc(h) + ":" + calc(m);
+							}
+
 						}, function(items) {
 
 						});

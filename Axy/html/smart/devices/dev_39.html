@@ -365,6 +365,10 @@
 
 					// 入网/退网 操作
 					onNetWorkApply: function(apply) {
+						// 暂时移除退网
+						if(!apply){
+							return false;
+						}
 						var that = this;
 
 						// 获取最新门锁基础信息

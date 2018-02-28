@@ -650,11 +650,16 @@
 								ob.next()
 							});
 						})
-						// 延迟200ms
-						.delay(200);
+						// 延迟666ms
+						.delay(666);
 
 					this.$isLogin.merge($onLogin).subscribe(function() {
 						// 获取第一个设备
+						that.getDeviceOne();
+					});
+					
+					_B.on('device_update', function(){
+						
 						that.getDeviceOne();
 					});
 
@@ -672,16 +677,36 @@
 
 					// 地理定位最大延迟 5s
 					var $time5out = Rx.Observable.timer(5e3);
-
+					
+					// 主动更改地理位置
+					var $onUpdateCity = Rx.Observable.create(function(ob){
+						_B.on('city_change_sub', function(d){
+							ob.next(d);
+						});
+						_B.on('city_change', function(d){
+							ob.next(d);
+						});
+						
+					});
+					
 					$position
 						.merge($time5out.mergeMapTo($prePosition))
 						.first()
-						.subscribe(function(p) {
+						.map(function(p){
 							// 保存最近地理位置
 							POSITION.data = p;
-							that.longitude = p.coords.longitude;
-							that.latitude = p.coords.latitude;
-							that.city = p.address.city.replace('市', '');
+							return {
+								longitude: p.coords.longitude,
+								latitude: p.coords.latitude,
+								city: p.address.city.replace('市', '')
+							}
+						})
+						.merge($onUpdateCity)
+						.subscribe(function(o) {
+							
+							that.longitude = o.longitude;
+							that.latitude = o.latitude;
+							that.city = o.city;
 							//that.position = p.address.poiName;
 							// 加载附近的店
 							that.getNearShops();

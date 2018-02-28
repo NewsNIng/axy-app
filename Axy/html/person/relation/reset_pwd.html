@@ -36,13 +36,18 @@
 			}
 			
 			input {
-				border: none;
+				border: none !important;
+				margin: 0 !important;
 				margin-left: 0.293333rem;
 				flex: 1;
 			}
 			
 			input::-webkit-input-placeholder {
 				color: #CCCCCC;
+			}
+			
+			ul:not(.mui-pciker-list) li {
+				height: 1.5rem !important;
 			}
 			
 			ul:not(.mui-pciker-list) li>a {
@@ -66,25 +71,21 @@
 		</header>
 		<div class="mui-content menu-box app-font-size-32">
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell">
-					<a class="flex">
-						<img src="../../../image/person/info/tel2@3x.png" />
-						<input class="app-font-size-28" placeholder="请输入旧密码" v-model="oldPwd" />
-					</a>
+				<li class="mui-table-view-cell flex">
+					<img src="../../../image/person/info/tel2@3x.png" />
+					<input type="text" class="app-font-size-28" placeholder="请输入旧密码" v-model="oldPwd" />
 				</li>
 
-				<li class="mui-table-view-cell">
-					<a class="flex">
-						<img src="../../../image/person/info/safe@3x.png" />
-						<input class="app-font-size-28" placeholder="请输入新密码（6至20位数字或字母）" v-model="newPwd" />
-					</a>
+				<li class="mui-table-view-cell flex">
+					<img src="../../../image/person/info/safe@3x.png" />
+					<input type="text" class="app-font-size-28" placeholder="请输入新密码（6至20位数字或字母）" v-model="newPwd" />
+
 				</li>
 
-				<li class="mui-table-view-cell">
-					<a class="flex">
-						<img src="../../../image/person/info/safe@3x.png" />
-						<input class="app-font-size-28" placeholder="请再次输入新密码" v-model="newPwd2" />
-					</a>
+				<li class="mui-table-view-cell flex">
+					<img src="../../../image/person/info/safe@3x.png" />
+					<input type="text" class="app-font-size-28" placeholder="请再次输入新密码" v-model="newPwd2" />
+
 				</li>
 			</ul>
 
@@ -94,7 +95,7 @@
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		<script type="text/javascript" src="../../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
@@ -126,7 +127,7 @@
 				},
 
 				plusReady: function() {
-					
+
 				},
 				methods: {
 					onSubmitTap: function() {
@@ -171,8 +172,7 @@
 									if(err) {
 										return mui.toast(err.message);
 									}
-									
-									
+
 									var all = plus.webview.all();
 									var index = plus.webview.currentWebview();
 									var first = plus.webview.getWebviewById('main');
@@ -187,17 +187,16 @@
 									}
 									app.user.logout();
 									window.localStorage.setItem('_pwd_', "");
-									
+
 									mui.toast("密码修改成功，需要重新登录");
-									
+
 									first.addEventListener('loaded', function() {
 										plus.nativeUI.closeWaiting();
 										index.close('none');
 									});
 									first.reload();
 									first.show("slide-in-bottom", 250);
-									
-									
+
 								});
 
 							}

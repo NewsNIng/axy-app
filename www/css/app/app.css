@@ -261,6 +261,9 @@ a.mui-icon {
 .app-color-ff3b30 {
   color: #ff3b30 !important;
 }
+.app-color-orange {
+  color: orange !important;
+}
 .app-switch-main.mui-active {
   border: 2px solid #2bb8aa !important;
   background-color: #2bb8aa !important;

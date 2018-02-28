@@ -208,7 +208,7 @@
 					</li>-->
 					<li class="mui-table-view-cell" @tap="onLogTap()">
 						<a class="mui-navigate-right">
-							<span>布撤防日志</span>
+							<span>摄像机日志</span>
 						</a>
 					</li>
 				</ul>
@@ -241,7 +241,7 @@
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
 
-		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer ></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -394,9 +394,9 @@
 						var $rebootFn = function(dev) {
 							return Rx.Observable.create(function(ob) {
 								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
-									if(err) {
+									/*if(err) {
 										return ob.error(err);
-									}
+									}*/
 									dev.methodName = methodName;
 									ob.next(dev);
 								});
@@ -424,6 +424,9 @@
 								_B.emit("delete", {}, {
 									views: [that.$view.opener()]
 								});
+								_B.emit("device_update", {}, {
+									views: ["home"]
+								});
 								that.$view.close();
 							}, function(err) {
 								plus.nativeUI.closeWaiting();
@@ -431,10 +434,11 @@
 							});
 
 					},
+
 					// 重启设备
-					onReboot: function() {
+					onReboot: function(msg) {
 						var dev = this.devInfo;
-						mui.confirm("确定要重启设备吗？", "", ["重启", "取消"], function(e) {
+						mui.confirm(msg || "确定要重启设备吗？", "", ["重启", "取消"], function(e) {
 							if(e.index === 0) {
 								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
 									if(err) {
@@ -445,18 +449,26 @@
 							}
 						});
 					},
+
 					// 打开wifi设置
 					onWifiSetTap: function() {
+
 						var that = this;
-						app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data) {
-							dal.devparam.wifi(that.devInfo.devid, that.devInfo.type, data.name, data.pwd, function(err, data) {
-								if(err) {
-									return mui.toast(err.message);
-								}
-								mui.toast('配置WIFI成功');
-								console.log(JSON.stringify(data));
+
+						Rx.Observable.create(function(ob) {
+							app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data) {
+								dal.devparam.wifi(that.devInfo.devid, that.devInfo.type, data.name, data.pwd, function(err, data) {
+									if(err) {
+										return mui.toast(err.message);
+									}
+									console.log(JSON.stringify(data));
+									ob.next();
+								});
 							});
-						}.bind(this));
+						}).subscribe(function() {
+							that.onReboot("配置WIFI成功，是否现在重启设备？");
+						});
+
 					},
 					// 布撤防日志
 					onLogTap: function() {

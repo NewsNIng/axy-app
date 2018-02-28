@@ -66,19 +66,19 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>GPRS模块</span>
-							<span class="mui-badge" v-text="baseInfo.gprsExist ? '存在':'不存在'"></span>
+							<span v-if="baseInfo.id" class="mui-badge" v-text="baseInfo.gprsExist ? '存在':'不存在'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>GPRS模式</span>
-							<span class="mui-badge" v-text="baseInfo.gprsMode ? '是':'否'"></span>
+							<span v-if="baseInfo.id" class="mui-badge" v-text="baseInfo.gprsMode ? '是':'否'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>GPRS信号强度</span>
-							<span class="mui-badge" v-text="baseInfo.gprfSignal + '%'"></span>
+							<span v-if="baseInfo.id" class="mui-badge" v-text="(gprs.signal || 0) + '%'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -124,7 +124,7 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
-		<script type="text/javascript" src="../../../js/lib/Rx.min.js" ></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -144,8 +144,12 @@
 							"online": 0
 						},
 						baseInfo: {
-							
+							id: 0,
+							gprfSignal: 0,
 						},
+						gprs: {
+							"signal": 0,
+						}
 					};
 				},
 				mounted: function() {
@@ -153,30 +157,56 @@
 				},
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
-					this.getBaseInfo();
+
+					plus.nativeUI.showWaiting();
+					this.getBaseInfo() 
+					.mergeMap(this.gprsParam)
+					.subscribe(plus.nativeUI.closeWaiting, function(err) {
+						mui.toast(err.message);
+					});
+
 				},
 				methods: {
-					getBaseInfo: function(){
-						plus.nativeUI.showWaiting();
-						dal.devparam.basicinfo(this.devInfo.devid, this.devInfo.type, function(err, rs) {
-							plus.nativeUI.closeWaiting();
-							if(err) {
-								return mui.toast(err.message);
-							}
-							this.baseInfo = rs;
-							console.log(JSON.stringify(this.baseInfo))
-						}.bind(this));
+					// 获取GPRS信号强度
+					gprsParam: function() {
+
+						var that = this;
+						return Rx.Observable.create(function(ob) {
+							dal.devparam.gprsParam(that.devInfo.devid, that.devInfo.type, function(err, rs) {
+								if(err) {
+									return ob.error(err);
+								}
+								that.gprs = rs;
+								ob.next();
+							});
+						});
+
 					},
-					
-					onLogTap: function(){
-						mui.openWindow('camera_settings_log.html','camera_settings_log',{
+
+					// 获取基础信息
+					getBaseInfo: function() {
+						var that = this;
+						return Rx.Observable.create(function(ob) {
+							dal.devparam.basicinfo(that.devInfo.devid, that.devInfo.type, function(err, rs) {
+								if(err) {
+									return ob.error(err);
+								}
+								console.log(JSON.stringify(rs))
+								that.baseInfo = rs;
+								ob.next();
+							});
+						});
+					},
+
+					// 日志点击
+					onLogTap: function() {
+						mui.openWindow('camera_settings_log.html', 'camera_settings_log', {
 							extras: {
 								info: this.devInfo
 							}
 						});
 					},
-					
-					
+
 					// 切换开关
 					toggleSwitch: function() {
 						this.state = !this.state;
@@ -238,9 +268,9 @@
 						var $rebootFn = function(dev) {
 							return Rx.Observable.create(function(ob) {
 								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
-									if(err) {
+									/*if(err) {
 										return ob.error(err);
-									}
+									}*/ 
 									dev.methodName = methodName;
 									ob.next(dev);
 								});
@@ -267,6 +297,9 @@
 								plus.nativeUI.closeWaiting();
 								_B.emit("delete", {}, {
 									views: [that.$view.opener()]
+								});
+								_B.emit("device_update", {}, {
+									views: ["home"]
 								});
 								that.$view.close();
 							}, function(err) {

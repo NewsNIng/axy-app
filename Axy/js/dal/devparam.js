@@ -205,6 +205,30 @@
 		}, callback);
 	};
 	
+	/**
+	 * 设备GPRS信号强度
+	 * @param {String} devid 
+	 * @param {Number} type
+	 */
+	devparam.gprsParam = function(devid, type, callback){
+		return ra("get", "/devparam/gprsParam", {
+			devid: devid,
+			type: type
+		}, callback);
+	};
+	
+	
+	/**
+	 * 设备WIFI参数
+	 * @param {String} devid 
+	 * @param {Number} type
+	 */
+	devparam.getwifi = function(devid, type, callback){
+		return ra("get", "/devparam/getwifi", {
+			devid: devid,
+			type: type
+		}, callback);
+	};
 	
 
 	_.devparam = devparam;

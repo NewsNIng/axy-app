@@ -116,6 +116,7 @@
 		<script type="text/javascript">
 			mui.init();
 			var getInputPage = function(g, i, ex) {
+				console.log(JSON.stringify(ex))
 					app.page.getInput(function(data) {
 						data.content && (this.infoList[g][i].value = data.content);
 					}.bind(this), ex);
@@ -305,7 +306,8 @@
 						var fn = fnArr[gindex][index];
 						fn && fn.call(this, gindex, index, {
 							title: o.name,
-							tips: o.value,
+							//tips: o.value,
+							content: o.value,
 							r: o.r,
 							t1: o.t1,
 							t2: o.t2,
@@ -333,9 +335,12 @@
 							return mui.toast('请选择至少一张店铺照片');
 						}
 
+						
+						
 						// 简单验证空
 						for(var i in o) {
-							if(o[i] === '' || o[i] === undefined) {
+							
+							if(o[i] === undefined || o[i].trim().length === 0) {
 								return mui.toast("请填写完整信息");
 							}
 						}

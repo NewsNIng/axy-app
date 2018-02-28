@@ -17,7 +17,8 @@
 					transform: translateY(0);
 				}
 			}
-			@-webkit-keyframes downToUp{
+			
+			@-webkit-keyframes downToUp {
 				from {
 					transform: translateY(100%);
 				}
@@ -34,7 +35,7 @@
 				border-radius: 0;
 				background-color: white;
 				animation: downToUp .25s linear forwards;
-				-webkit-animation: downToUp  .25s linear forwards;  
+				-webkit-animation: downToUp .25s linear forwards;
 			}
 			
 			#popover-share .share-title {
@@ -56,7 +57,7 @@
 				background-color: rgba(0, 0, 0, 0.5);
 			}
 			
-			.wrapper{
+			.wrapper {
 				position: fixed;
 				width: 100%;
 				height: 100%;
@@ -91,6 +92,8 @@
 
 		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
 
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 
@@ -102,19 +105,50 @@
 						img: "",
 						title: "",
 						content: "",
-						href: ""
+						href: "",
+
 					};
 				},
-				
+
 				plusReady: function() {
 					this.tips = this.$view.tips;
 					this.img = this.$view.img;
 					this.title = this.$view.title;
 					this.content = this.$view.content;
-					this.href = this.$view.href;
+
+					var datahref = this.$view.datahref;
+					//						datahref: {
+					//							type: "", // 分享类型 （店铺store, 主题theme, 发现discover）
+					//							id: 0, // 当前类型数据的主键ID
+					//							// ... 其它信息
+					//							img: "", // (主题需要传)
+					//							title: "", // (主题需要传)
+					//							url: "", //  (主题需要传)
+					//						}
+
+					this.calcHref(datahref)
+
 				},
 				methods: {
-					onRootTap: function(){
+					// 计算href链接
+					calcHref: function(datahref) {
+						var baseurl = dal.BASE_SHARE_URL;
+
+						var paramsArr = [];
+
+						datahref.url && (datahref.url = datahref.url.replace(/\=/g, '%3D').replace(/&/g, '%26'));
+						datahref.title && (datahref.title = encodeURI(datahref.title));
+						
+						for(var i in datahref) {
+							datahref[i] && paramsArr.push(i + '=' + datahref[i]);
+						}
+
+						this.href = baseurl + "?" + paramsArr.join('&');
+						
+						
+
+					},
+					onRootTap: function() {
 						this.$view && this.$view.close();
 					},
 					// 分享至
@@ -139,7 +173,7 @@
 
 							// 处理为本地图片
 							.mergeMap(function(ob) {
-								
+
 								return Rx.Observable.create(function(ob) {
 									if(shareImg.indexOf('file:') >= 0) {
 										// 本地图片
@@ -162,7 +196,7 @@
 								w.setTitle("压缩图片...");
 								return Rx.Observable.create(function(ob) {
 									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
-										
+
 										if(err) {
 											return plus.nativeUI.toast(err.message);
 										}

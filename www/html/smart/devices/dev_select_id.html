@@ -116,7 +116,8 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -131,9 +132,10 @@
 					return {
 						devActive: -1,
 						devs_: [],
-
+						devs: [],
 						// 过滤显示某些主机设备 存类型名称
 						filter: []
+
 					};
 				},
 				computed: {
@@ -143,7 +145,7 @@
 					devs: function() {
 						var tempName;
 						return this.devs_.filter(function(item) {
-							if(item.online !== 1){
+							if(item.online !== 1) {
 								return false;
 							}
 							tempName = app.dev.findName(item.type)
@@ -169,10 +171,10 @@
 						this.devActive = i;
 					},
 					onNext: function() {
-						if(this.devActive < 0){
+						if(this.devActive < 0) {
 							return mui.toast('请选择一个设备');
 						}
-						
+
 						app.page.setResult({
 							devid: this.indexDev.devid,
 							type: this.indexDev.type
@@ -180,17 +182,16 @@
 					},
 					// 主机列表
 					getDevList: function() {
+
 						var D = new this.$Cache('dev_list', [], {
 							plus: true
 						});
-
-						this.devs_ = D.data;
-
+						this.devs = D.data;
 					},
-					
-					_fixDevName: function(name){
+
+					_fixDevName: function(name) {
 						return app.dev.fixName(name);
-					},	
+					},
 
 				}
 			});

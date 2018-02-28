@@ -274,7 +274,7 @@
 				<template v-if="netDivList.length">
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
-						<div class="card" v-for="o,i in netDivList">
+						<div class="card" v-for="o,i in netDivList" :key="o.devid">
 							<div class="imgdiv" ref="devimgel" v-devbg :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)">
 								<span class="app-font-size-20 imgdiv-line" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 								<!--{{o.workmode}}-->
@@ -384,7 +384,7 @@
 			var _B = new ni.Broadcast();
 
 			var P = plug.H5NativeBridge;
-			
+
 			var DEVD;
 
 			var wayPick;
@@ -570,24 +570,33 @@
 				},
 				methods: {
 					_down: function() {
+
 						var that = this;
-						// 网络获取 最新设备信息
-						dal.device.list(1, function(err, data) {
-							that.$view.endPullToRefresh();
-							if(err) {
-								return;
-							}
-							// 数据不为空时 向原生发送数据
-							if(data && data.length > 0) {
-								DEVD.data = data;
-								P.InitNativeDevList(data);
-								that.netDivList = data;
-								that.active = 0;
-								// 配件列表置空
-								that.devaccessroyList = [];
-							}
-						}, 1000);
-						
+
+						if(that.active === 0) {
+							// 网络获取 最新设备信息
+							dal.device.list(1, function(err, data) {
+								that.$view.endPullToRefresh();
+								if(err) {
+									return;
+								}
+								// 数据不为空时 向原生发送数据
+								if(data && data.length > 0) {
+									DEVD.data = data;
+									P.InitNativeDevList(data);
+									that.netDivList = data;
+									//that.active = 0;
+									// 配件列表置空
+									//that.devaccessroyList = [];
+								}
+							}, 1000);
+						} else {
+							// 获取配件列表
+							that.getDevaccessroyData(true, function() {
+								that.$view.endPullToRefresh();
+							});
+						}
+
 					},
 
 					// 摄像机点击
@@ -843,7 +852,7 @@
 					},
 
 					// 获取配件列表数据
-					getDevaccessroyData: function(hide) {
+					getDevaccessroyData: function(hide, fn) {
 						var waitTitle = hide ? "正在更新配件信息..." : "正在获取配件...";
 						plus.nativeUI.showWaiting(waitTitle, {
 							//back: hide ? 'transmit' : 'close',
@@ -851,6 +860,7 @@
 
 						dal.devaccessory.allacc(function(err, data) {
 							plus.nativeUI.closeWaiting();
+							fn && fn();
 							if(err) {
 								return mui.toast(err.message);
 							}

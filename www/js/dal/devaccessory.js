@@ -7,6 +7,15 @@
 	devaccessory.allacc = function(callback) {
 		return ra("get", "/devaccessory/allacc", {}, callback);
 	};
+	
+	// 获取配件支持的我的设备列表
+	devaccessory.accessorySupportDevList = function(aid, callback){
+		return ra("get", "/devaccessory/accessorySupportDevList", {
+			aid: aid
+		}, callback);
+	}
+	
+	
 	/**
 	 * 获取配件状态
 	 * @param {Object} id
