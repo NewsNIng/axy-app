@@ -340,7 +340,7 @@
 						// 简单验证空
 						for(var i in o) {
 							
-							if(o[i] === undefined || o[i].trim().length === 0) {
+							if(o[i] === undefined || o[i].toString().trim().length === 0) {
 								return mui.toast("请填写完整信息");
 							}
 						}

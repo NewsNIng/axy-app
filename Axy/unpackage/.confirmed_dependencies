@@ -348,7 +348,8 @@
   },
   "html/smart/add/Lan_connect_camera.html": {
     "refer": [
-      "html/smart/add/sonic_connect_dev2.html"
+      "html/smart/add/sonic_connect_dev2.html",
+      "html/smart/add/Lan_select_dev_id.html"
     ],
     "resources": []
   },
@@ -571,5 +572,16 @@
       "html/public/share.html"
     ],
     "resources": []
+  },
+  "html/person/relation/bind.html": {
+    "refer": [
+      "html/person/relation/bind_tel.html"
+    ]
+  },
+  "html/smart/add/family_menu.html": {
+    "refer": [
+      "html/smart/add/family_code.html",
+      "html/smart/add/family_scan.html"
+    ]
   }
 }

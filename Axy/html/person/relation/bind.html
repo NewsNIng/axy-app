@@ -160,6 +160,16 @@
 							views: ['zeus']
 						});
 					},
+					// 更新手机号
+					updateTel: function(tel){
+						this.tel = tel;
+						this.userinfo.bindmobile = tel;
+						new ni.Broadcast().emit('userinfo_update', {
+							userInfo: this.userinfo
+						},{
+							views: ['zeus']
+						});
+					},
 
 					// 第三方授权信息点击
 					onOAuthItemTap: function(type, logintype) {
@@ -173,13 +183,14 @@
 								// 绑定成功
 								that[type] = '已绑定';
 								dal.user.bindother(type, auth.userInfo.unionid || auth.authResult.openid, function(err, data) {
-									that.updateOpenid(logintype, auth.userInfo.unionid || auth.authResult.openid);
 									
+									var id = auth.userInfo.unionid || auth.authResult.openid;
 									auth.logout(function() {});
 									if(err) {
 										that[type] = '绑定失败，请重试';
 										return mui.toast(err.message);
 									}
+									that.updateOpenid(logintype, id);
 									return mui.toast("绑定成功！");
 								});
 							});
@@ -224,7 +235,7 @@
 						app.page.openForResultBy(page + ".html", page, function(data) {
 							if(data.tel) {
 								// 更改成功后修改页面中的tel
-								that.tel = data.tel;
+								that.updateTel(data.tel);
 								// 继续通知上层
 								app.page.setResult({
 									tel: data.tel
