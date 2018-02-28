@@ -231,7 +231,7 @@
 
 			<ul class="alarm_popover_list">
 				<template v-for="o,i in stateList">
-					<li :class="_getColor(alarmValue['state' + o.index])">
+					<li :class="_getColor(alarmValue['state' + (o.index-1)])">
 						<div>
 							<div class="app-color-9f9fa0 app-font-size-24">{{getName(o.index)}}</div>
 							<span class="app-font-size-36" >{{stateValue['state' + (o.index-1)] / 10 + o.company}}</span>
@@ -536,7 +536,7 @@
 							this.$nextTick(function() {
 								this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
 							}.bind(this));
-						}.bind(this), 10);
+						}.bind(this), 20);
 					},
 					getState: function(trigvar) {
 

@@ -163,7 +163,7 @@
 		</header>
 		<div class="mui-content">
 
-			<img src="../../image/common/login_logo.png" @tap="test()" />
+			<img src="../../image/common/login_logo.png" />
 
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_account.png" />
@@ -265,12 +265,6 @@
 					loadLocalHostAccount: function() {
 						var last_account = window.localStorage.getItem('last_account');
 						last_account && (this.username = last_account);
-					},
-					test: function() {
-												this.username = '18718690160';
-												this.password = '123456';
-//						this.username = 'huihaiweishi';
-//						this.password = '258369';
 					},
 					onLoginTap: function(e) {
 						var that = this;
