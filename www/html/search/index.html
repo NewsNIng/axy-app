@@ -690,6 +690,11 @@
 						// 搜索中
 						this.searchIng = true;
 						this.content = s || this.content;
+						if(!this.content || this.content.toString().trim().length === 0){
+							this.searchIng = false;
+							this.$refs.input.focus();
+							return mui.toast("输入错误请重新编辑内容");
+						}
 						// 保存搜索历史
 						this.saveHistory();
 						// 发送请求

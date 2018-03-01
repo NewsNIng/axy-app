@@ -49,6 +49,7 @@
 			
 			.mui-switch.mui-disabled {
 				opacity: 1;
+				pointer-events: none;
 			}
 		</style>
 
@@ -67,7 +68,7 @@
 					<a>
 						<span class="app-color-333333">活动通知</span>
 						<span class="mui-badge">
-							<div @tap="onActivityToggle()" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': active}" >
+							<div  class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': active}" >
 									  <div class="mui-switch-handle"></div>
 									</div>
 									
@@ -78,7 +79,7 @@
 					<a>
 						<span class="app-color-333333">系统通知</span>
 						<span class="mui-badge">
-									<div @tap="onSystemToggle()" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': system}" >
+									<div  class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': system}" >
 									  <div class="mui-switch-handle"></div>
 									</div>
 									
@@ -87,21 +88,19 @@
 				</li>
 			</ul>
 
-
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell" @tap="onAllTap(true)">
 					<a>
-						<span class="app-color-main" @tap="onAllTap()">打开全部推送</span>
+						<span class="app-color-main">打开全部推送</span>
 					</a>
 				</li>
 				<li class="mui-table-view-cell" @tap="onAllTap(false)">
 					<a>
-						<span class="app-color-ff3b30" @tap="onAllTap()">关闭全部推送</span>
+						<span class="app-color-ff3b30">关闭全部推送</span>
 					</a>
 				</li>
 			</ul>
 
-			
 			<ul class="mui-table-view">
 				<template v-for="o,i in list">
 
@@ -109,7 +108,7 @@
 						<a>
 							<span class="app-color-333333">{{_fixName(o.location) || o.devid}}</span>
 							<span class="mui-badge">
-									<div @tap="onToggle(o, $event)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': o.state}" >
+									<div class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': o.state}" >
 									  <div class="mui-switch-handle"></div>
 									</div>
 								</span>
@@ -148,11 +147,11 @@
 				},
 
 				computed: {
-//					all: function() {
-//						return this.list.every(function(item) {
-//							return item.state === 1;
-//						});
-//					}
+					//					all: function() {
+					//						return this.list.every(function(item) {
+					//							return item.state === 1;
+					//						});
+					//					}
 				},
 
 				plusReady: function() {
@@ -166,14 +165,14 @@
 						that.getStatesByList(resolve);
 					}).then(function() {
 
-//						that.$watch("all", function(n) {
-//							dal.push.updateAll(PUSHID.data, +n, function(err, rs) {
-//								if(err) {
-//									return mui.toast(err.message);
-//								}
-//								mui.toast("设置成功");
-//							});
-//						});
+						//						that.$watch("all", function(n) {
+						//							dal.push.updateAll(PUSHID.data, +n, function(err, rs) {
+						//								if(err) {
+						//									return mui.toast(err.message);
+						//								}
+						//								mui.toast("设置成功");
+						//							});
+						//						});
 					});
 				},
 
