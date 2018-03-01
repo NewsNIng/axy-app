@@ -147,7 +147,8 @@
   },
   "html/nearby/business/signup_success.html": {
     "refer": [
-      "html/nearby/business/store_details.html"
+      "html/nearby/business/store_details.html",
+      "html/nearby/business/signup_next.html"
     ],
     "resources": []
   },
@@ -563,7 +564,8 @@
       "html/smart/devices/camera_settings_record.html",
       "html/smart/devices/camera_settings_arming.html",
       "html/smart/devices/camera_settings_info.html",
-      "html/smart/devices/dev_VH-104_setting_info.html"
+      "html/smart/devices/dev_VH-104_setting_info.html",
+      "html/smart/devices/camera_settings_log.html"
     ],
     "resources": []
   },

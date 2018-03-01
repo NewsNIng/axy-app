@@ -115,6 +115,7 @@
 		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
@@ -214,19 +215,31 @@
 					// 设备名称
 					onNameTap: function(name) {
 						var that = this;
+						
 						app.page.getInput(function(data) {
-							that.devInfo.location = data.content;
-							mui.toast('名称更新成功');
-							// 通知上层的上层
-							_B.emit("update", {
-								info: that.devInfo
-							}, {
-								views: ['dev_my_list', 'home']
+							data.content = data.content.trim().length === 0 ? that.devInfo.devid: data.content; 
+							dal.devparam.devname(that.devInfo.devid, that.devInfo.type, data.content, function(err, rs) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.devInfo.location = data.content;
+								mui.toast('名称更新成功');
+								// 通知上层
+								_B.emit("update", {
+									info: that.devInfo
+								}, {
+									views: ['dev_my_list', 'home']
+								});
 							});
 						}, {
-							title: "设备名称",
-							tips: that.devInfo.location,
+							title: "GPRS名称",
+							content: that.fixName(that.devInfo.location),
+							//							r: "devName",
+							maxLength: 15,
+							mLengthMsg: "最长不超过15个字符！",
 						});
+						
+						
 					},
 					// 重启设备
 					onReboot: function() {
@@ -308,6 +321,10 @@
 							});
 
 					},
+					
+					fixName: function(str) {
+						return app.dev.fixName(str);
+					}
 				}
 			});
 		</script>

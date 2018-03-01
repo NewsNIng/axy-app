@@ -163,8 +163,13 @@
 						this.leftIndex = i;
 					},
 					onRightTap: function(o, i){
+						var name = o.name;
+						if(i === 0){
+							name = this.category[this.leftIndex].name;
+						}
+						
 						app.page.setResult({
-							value: o.name,
+							value: name,
 							oid: o.id
 						}).close();
 					}
