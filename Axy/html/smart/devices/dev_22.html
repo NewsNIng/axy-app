@@ -103,7 +103,7 @@
 
 			<div class="mui-content noImmersed">
 				<div class="state_show">
-					<span class="app-font-size-30" v-text="state.concentrationValid?state.concentration:0+'mg/m³'"></span>
+					<span class="app-font-size-30" v-text="(state.concentrationValid?state.concentration:0)+'mg/m³'"></span>
 					<span class="app-font-size-44">舒适</span>
 					<span class="app-font-size-24">当前状态</span>
 				</div>
@@ -209,7 +209,7 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						
+
 						// 防区类型
 						zonetypes: ["出入防区",
 							"活动防区",
@@ -250,7 +250,7 @@
 						},
 
 						state: {
-							"lost": true,
+							"lost": false,
 							"underVoltage": false,
 							"concentrationValid": false,
 							"concentration": 0,
@@ -283,7 +283,7 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
-//							that._updataActionByEnable(that.devInfo.accessory.enable);
+							//							that._updataActionByEnable(that.devInfo.accessory.enable);
 							that._updataUi();
 						})
 					}.bind(this));
@@ -338,7 +338,7 @@
 						}, {
 							title: "配件名称",
 							content: that.devInfo.accessory.name,
-							r: "nonEmpty", 
+							r: "nonEmpty",
 							rmsg: "配件名称不能为空",
 							maxLength: 15,
 							mLengthMsg: "最长不超过15个字符！",
@@ -347,8 +347,10 @@
 					// 获取甲醛探测器状态
 					getState: function() {
 						var that = this;
+						plus.nativeUI.showWaiting();
 						dal.devaccessory.formaldehydedetector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {
-							console.log("state==>" + JSON.stringify(data));
+							plus.nativeUI.closeWaiting();
+							console.log("state==>" + JSON.stringify(data) + ',' + JSON.stringify(err));
 							if(err) {
 								return mui.toast(err.message);
 							}
@@ -382,8 +384,8 @@
 						} else {
 							action = action & (~(1 << 15));
 						}
-						this.devInfo.accessory.action = (action>>>0);
-						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
+						this.devInfo.accessory.action = (action >>> 0);
+						console.log("isOn==>" + isOn + "，action==>" + action + "，action===>" + (action >>> 0));
 					},
 				}
 			});

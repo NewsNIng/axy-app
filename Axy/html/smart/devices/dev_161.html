@@ -351,11 +351,16 @@
 					},
 					// 获取一氧化碳状态
 					getCoState: function() {
+						var that = this;
+						plus.nativeUI.showWaiting();
 						dal.devaccessory.codectector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log("state==>" + JSON.stringify(data) + ',' + JSON.stringify(err));
 							if(err) {
 								return mui.toast(err.message);
 							}
-							console.log(JSON.stringify(data)); 
+//							console.log(JSON.stringify(data)); 
+							that.state = data;
 						});
 					},
 					// 更新缓存数据
