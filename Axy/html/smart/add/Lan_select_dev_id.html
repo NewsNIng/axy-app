@@ -139,7 +139,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
@@ -229,7 +229,7 @@
 					},
 					onNext: function() {
 						
-						if(this.devActive < 0){
+						if(this.devActive < 0) {
 							return mui.toast("请选择主机设备");
 						}
 						try {
@@ -274,6 +274,7 @@
 						app.page.openForResultBy('connect_wifi.html', 'setwifi', function(data) {
 							this.wifiname = data.name;
 							this.wifipwd = data.pwd;
+							this.onNext();
 						}.bind(this));
 					},
 				}

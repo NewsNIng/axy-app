@@ -63,19 +63,6 @@
 		<div class="mui-content menu-box app-font-size-32">
 
 			<ul class="mui-table-view">
-				<li class="mui-table-view-cell" @tap="onAllTap(true)">
-					<a>
-						<span class="app-color-main" @tap="onAllTap()">打开全部推送</span>
-					</a>
-				</li>
-				<li class="mui-table-view-cell" @tap="onAllTap(false)">
-					<a>
-						<span class="app-color-ff3b30" @tap="onAllTap()">关闭全部推送</span>
-					</a>
-				</li>
-			</ul>
-
-			<ul class="mui-table-view">
 				<li class="mui-table-view-cell" @tap="onActivityToggle()">
 					<a>
 						<span class="app-color-333333">活动通知</span>
@@ -100,6 +87,21 @@
 				</li>
 			</ul>
 
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" @tap="onAllTap(true)">
+					<a>
+						<span class="app-color-main" @tap="onAllTap()">打开全部推送</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" @tap="onAllTap(false)">
+					<a>
+						<span class="app-color-ff3b30" @tap="onAllTap()">关闭全部推送</span>
+					</a>
+				</li>
+			</ul>
+
+			
 			<ul class="mui-table-view">
 				<template v-for="o,i in list">
 

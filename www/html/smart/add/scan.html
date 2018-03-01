@@ -143,7 +143,9 @@
 							if(data.code) {
 								var errmsg = app.rules.testBy(/^(?!25)/, data.code, "非配件设备码");
 								if(errmsg){
-									return mui.toast(errmsg);
+									// 25开头 是电管家 
+									this.isDev = true;
+									//return mui.toast(errmsg);
 								}
 								// 验证
 								this._addDevice(data.code);

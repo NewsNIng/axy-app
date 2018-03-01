@@ -275,7 +275,9 @@
 								bitleft: 1 << 6,
 								imgindex: 8,
 							},
-						]
+						],
+						
+						QRcode: null,
 					};
 				},
 
@@ -404,7 +406,12 @@ console.log(href);
 
 					// 生成二维码图片
 					generateCodeImage: function(code) {
-						new QRCode(document.getElementById("qrcode"), code);
+						if(!this.QRcode){
+							this.QRcode = new QRCode(document.getElementById("qrcode"), code);	
+						}else{
+							this.QRcode.makeCode(code);
+						}
+						
 					},
 
 					// 渲染图片二维码
