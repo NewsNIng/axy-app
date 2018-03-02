@@ -155,6 +155,9 @@
 							}
 
 							if(!data) {
+								if(mui.os.ios){
+									return;
+								}
 								mui.toast("暂无更新");
 								return; 
 							}
@@ -176,6 +179,9 @@
 								});
 								
 							} else {
+								if(mui.os.ios){
+									return;
+								}
 								mui.toast("您已经是最新版本，无需更新"); 
 							}
 
