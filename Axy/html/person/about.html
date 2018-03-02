@@ -56,6 +56,11 @@
 				width: 100%;
 				text-align: center;				
 			}
+			
+			
+			.mui-ios a.mui-active{
+				background-color: transparent !important;
+			}
 		</style>
 
 	</head>
@@ -127,6 +132,9 @@
 				
 				// 长按发现彩蛋
 				version.addEventListener('longtap', function() {
+					if(mui.os.ios){
+						return;
+					}
 					var nativeVersion = plus.runtime.version;
 					mui.toast(nativeVersion);
 				});
