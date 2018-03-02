@@ -282,7 +282,7 @@
 							if(that.loading) {
 								return;
 							}
-							var errorMessage = app.rules.testBy(/^\w{5,32}$/, that.username, "账号格式不正确") ||
+							var errorMessage = app.rules.testBy(/^\w{1,32}$/, that.username, "账号格式不正确") ||
 								app.rules.testBy(/^\w{6,20}$/, that.password, "密码长度需6-20位");
 
 							if(errorMessage) {
