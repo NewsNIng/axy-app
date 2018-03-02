@@ -229,6 +229,8 @@
 						//						alert(this.devid);
 						dal.device.add(this.devid, function(err, data) {
 							if(err) {
+								// 在此调用设备已使用时的弹窗(声波)
+//								_showUsed();
 								return this.over(err.message || "连接失败，请重试");
 							}
 
@@ -252,9 +254,9 @@
 						}());
 					},
 					onNext: function() {
-//						if(!this.isConnected) {
-//							return;
-//						}
+						//						if(!this.isConnected) {
+						//							return;
+						//						}
 
 						// TODO
 						// 跳转
@@ -295,6 +297,15 @@
 							this.over("设备添加成功", true);
 						}.bind(this), 1000);
 					},
+					_showUsed: function() {
+						mui.confirm("可能是摄像机已被添加\n摄像机ID：" + this.devid + "\n请登录已绑定账号，删除摄像机后再重试", "操作受限", ['确认', ''], function(e) {
+							if(!e.index) {
+								plus.webview.getWebviewById('voice1') && plus.webview.getWebviewById('voice1').close('none');
+								var view = plus.webview.currentWebview();
+								view.close();
+							}
+						});
+					}
 				}
 			});
 		</script>
