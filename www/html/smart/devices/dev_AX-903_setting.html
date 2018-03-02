@@ -134,6 +134,7 @@
 					onNameTap: function() {
 						var that = this;
 						app.page.getInput(function(data) {
+							data.content = data.content.trim().length === 0 ? that.devInfo.devid: data.content; 
 							dal.devparam.location(that.devInfo.devid, data.content, function(err, rs) {
 								if(err) {
 									return mui.toast(err.message);

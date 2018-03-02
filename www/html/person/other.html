@@ -239,12 +239,13 @@
 							if(!u){
 								return false;
 							}
+							
 							if(this.from === this.uid) {
 								return mui.toast("您不能关注自己！");
 							}
 							this.isfocus = +!this.isfocus;
 							this.changeFocus();
-						});
+						}.bind(this));
 						
 						
 					},

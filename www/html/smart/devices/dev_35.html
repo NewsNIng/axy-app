@@ -311,6 +311,7 @@
 					// 更新缓存数据
 					_updataUi: function() {
 						that = this;
+						alert(JSON.stringify(that.devInfo.accessory.enable));
 						app.page.setResult({
 							action: "update",
 							info: that.devInfo

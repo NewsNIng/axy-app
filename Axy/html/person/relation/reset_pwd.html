@@ -187,7 +187,11 @@
 									}
 									app.user.logout();
 									window.localStorage.setItem('_pwd_', "");
-
+									
+									// 记录当前帐号
+									var account = window.localStorage.getItem('_account_');
+									window.localStorage.setItem('last_account', account || "");
+									
 									mui.toast("密码修改成功，需要重新登录");
 
 									first.addEventListener('loaded', function() {

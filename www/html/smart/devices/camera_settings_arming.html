@@ -20,20 +20,7 @@
 				background-color: #F4F8FB;
 			}
 			
-			com-dev>ul {
-				margin-top: 0.266666rem !important;
-				margin-bottom: 0 !important;
-			}
 			
-			com-dev>ul>li {
-				height: 1.333333rem;
-				color: #333333 !important;
-				padding: 0.4rem 15px !important;
-			}
-			
-			com-dev>ul>li>a {
-				margin: -0.4rem -15px !important;
-			}
 			
 			.mui-badge {
 				font-size: inherit;
@@ -214,6 +201,13 @@
 				line-height: 30px;
 			}
 			
+			
+			
+			/*去除UL上边距*/
+			ul.plansRoom{
+				margin-top: 0 !important;
+			}
+			
 		</style>
 	</head>
 
@@ -282,7 +276,7 @@
 
 			<div class="mui-content">
 				<template v-if="plans.length">
-					<ul class="mui-table-view">
+					<ul class="mui-table-view plansRoom">
 						<template v-for="o,i in plans">
 
 							<li class="mui-table-view-cell app-font-size-30" @tap="onEditTap(o, i)" @longtap="">
@@ -424,7 +418,8 @@
 					},
 
 					onPickTap: function(i) {
-
+						var methodNames = ['startTime', 'endTime'];
+						
 						var that = this;
 						var p = 'startTime';
 						if(i === 1) {

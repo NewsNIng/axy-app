@@ -151,10 +151,20 @@
 
 					len: function() {
 						return this.imgs.length;
+					},
+					
+					nullLen: function(){
+						return this.imgs.filter(function(item){
+							return !item;
+						}).length;
 					}
 				},
 				plusReady: function() {
-					this.imgs = this.$view.imgList || ["", "", ""];
+					this.imgs = this.$view.imgList.map(function(item){
+						return item || ""
+					});
+					
+					
 				},
 				methods: {
 					onImgTap: function(index) {
@@ -170,8 +180,10 @@
 
 							// 先bind固定参数，再apply不定数量参数
 							that.imgs.splice.bind(that.imgs, index, imgArr.length).apply(that.imgs, imgArr);
-
+							console.log(JSON.stringify(that.imgs))
 						}, this.len - index);
+						
+						
 					},
 					onSuccessTap: function() {
 						var w = plus.nativeUI.showWaiting("正在上传图片...");

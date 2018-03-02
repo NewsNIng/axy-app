@@ -115,6 +115,8 @@
 
 						codeT: 90,
 						codeTime: null,
+						
+						userinfo: null,
 
 					};
 				},
@@ -122,7 +124,7 @@
 				plusReady: function() {
 					
 					var u = app.user.get(); 
-					
+					this.userinfo = u;
 					
 					this.tel = u.bindmobile;
 					this.account = u.account;
@@ -152,6 +154,17 @@
 				},
 				
 				methods: {
+					
+					// 更新手机号
+					updateTel: function(tel){
+						this.tel = tel;
+						this.userinfo.bindmobile = tel;
+						new ni.Broadcast().emit('userinfo_update', {
+							userInfo: this.userinfo
+						},{
+							views: ['zeus']
+						});
+					},
 
 					// 提交申请
 					onSubmit: function() {
@@ -168,6 +181,9 @@
 							if(err){
 								return mui.toast(err.message);
 							}
+							
+							// 通知更新
+							this.updateTel(this.tel);
 							mui.toast("更改成功!");
 							app.page.setResult().close();
 						}.bind(this));

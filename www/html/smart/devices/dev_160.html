@@ -97,7 +97,7 @@
 
 			<div class="mui-content noImmersed">
 				<div class="state_show">
-					<span class="app-font-size-30" v-text="devInfo.density+'%LEL'"></span>
+					<span class="app-font-size-30" v-text="(state.concentrationValid?state.concentration:0)+'%LEL'"></span>
 					<span class="app-font-size-44">正常</span>
 					<span class="app-font-size-24">当前浓度值</span>
 				</div>
@@ -122,6 +122,18 @@
 						<a class="">
 							<span>绑定主机</span>
 							<span class="mui-badge" v-text="devInfo.devName || devInfo.accessory.devid"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="battery_status">
+							<span>电池状态</span>
+							<span class="mui-badge battery_status" v-text="state.underVoltage?'欠压':'正常'"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="battery_status">
+							<span>通讯状态</span>
+							<span class="mui-badge battery_status" v-text="state.lost?'失联':'正常'"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -190,7 +202,7 @@
 					return {
 						// 弹框
 						pick: null,
-						
+
 						// 防区类型
 						zonetypes: ["出入防区",
 							"活动防区",
@@ -229,6 +241,13 @@
 							"devType": 4166,
 							"statusCode": 0
 						},
+						// 状态信息
+						state: {
+							"lost": false,
+							"underVoltage": false,
+							"concentrationValid": true,
+							"concentration": 0
+						}
 					};
 				},
 				mounted: function() {
@@ -253,7 +272,7 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
-//							that._updataActionByEnable(that.devInfo.accessory.enable);
+							//							that._updataActionByEnable(that.devInfo.accessory.enable);
 							that._updataUi();
 						})
 					}.bind(this));
@@ -276,6 +295,7 @@
 						plus.navigator.setStatusBarStyle('light');
 						view.close();
 					}.bind(this);
+					this.getGasState();
 				},
 				methods: {
 
@@ -336,7 +356,7 @@
 						}, {
 							title: "配件名称",
 							content: that.devInfo.accessory.name,
-							r: "nonEmpty", 
+							r: "nonEmpty",
 							rmsg: "配件名称不能为空",
 							maxLength: 15,
 							mLengthMsg: "最长不超过15个字符！",
@@ -359,8 +379,21 @@
 						} else {
 							action = action & (~(1 << 15));
 						}
-						this.devInfo.accessory.action = (action>>>0);
-						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
+						this.devInfo.accessory.action = (action >>> 0);
+						console.log("isOn==>" + isOn + "，action==>" + action + "，action===>" + (action >>> 0));
+					},
+					// 获取燃气状态
+					getGasState: function() {
+						var that = this;
+						plus.nativeUI.showWaiting();
+						dal.devaccessory.gasdectector(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log("state==>" + JSON.stringify(data) + ',' + JSON.stringify(err));
+							if(err) {
+								return mui.toast(err.message);
+							}
+							that.state = data;
+						});
 					},
 				}
 			});

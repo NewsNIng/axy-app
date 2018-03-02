@@ -75,7 +75,7 @@
 				color: #9F9FA0 !important;
 			}
 			
-			.mui-badge.mui-ellipsis{
+			.mui-badge.mui-ellipsis {
 				display: inline-block;
 				max-width: 70%;
 			}
@@ -113,10 +113,11 @@
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/store.js"></script>
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
 		<script type="text/javascript">
 			mui.init();
 			var getInputPage = function(g, i, ex) {
-				console.log(JSON.stringify(ex))
+					console.log(JSON.stringify(ex))
 					app.page.getInput(function(data) {
 						data.content && (this.infoList[g][i].value = data.content);
 					}.bind(this), ex);
@@ -335,11 +336,9 @@
 							return mui.toast('请选择至少一张店铺照片');
 						}
 
-						
-						
 						// 简单验证空
 						for(var i in o) {
-							
+
 							if(o[i] === undefined || o[i].toString().trim().length === 0) {
 								return mui.toast("请填写完整信息");
 							}
@@ -358,8 +357,13 @@
 
 						}).then(function(data) {
 							w.close();
-							app.page.setResult({});
+							var tw = app.page.setResult({});
 							mui.toast(that.isUpdate ? "更新成功" : "申请成功");
+
+							if(that.isUpdate) {
+								return tw.close();
+							}
+
 							mui.openWindow('signup_success.html', 'signup_success', {
 								extras: {
 									storeId: data.id, // TODO 入驻后有一个商品ID
@@ -380,7 +384,7 @@
 							address: arr[0][2].value,
 							//type: arr[0][3].oid,
 							type: arr[0][3].value, // 由id改为字符串
-							
+
 							telphone: arr[1][0].value,
 							startweek: arr[1][1].startweek,
 							endtweek: arr[1][1].endtweek,
@@ -409,10 +413,32 @@
 						arr[0][3].value = info.type;
 
 						arr[1][0].value = info.telphone;
+
 						arr[1][1].startweek = info.startweek;
 						arr[1][1].endtweek = info.endtweek;
 						arr[1][1].starttime = info.starttime;
 						arr[1][1].endtime = info.endtime;
+
+						var week = ["", "一", "二", "三", "四", "五", "六", "日"];
+
+						var nowDate = new Date();
+
+						var sh = Math.floor(+info.starttime),
+							sm = +info.starttime % 1 * 60,
+							eh = Math.floor(+info.endtime),
+							em = +info.endtime % 1 * 60;
+
+						sm > 0 && (sm--);
+						em > 0 && (em--);
+
+						nowDate.setHours(sh, sm);
+						var shm = nowDate.toFormatString("hh:mm");
+
+						nowDate.setHours(eh, em);
+						var ehm = nowDate.toFormatString("hh:mm");
+
+						arr[1][1].value = "周" + week[info.startweek] + " - " + "周" + week[info.endtweek] + " " + shm + " - " + ehm;
+
 						arr[1][2].onlinestate = info.onlinestate;
 
 						arr[3][0].t1 = info.introduction;
@@ -423,25 +449,22 @@
 						//image1: arr[2][0]['imgList'][0],
 						//image2: arr[2][0]['imgList'][1],
 						//image3: arr[2][0]['imgList'][2],
-						
-						
+
 						for(var i = 0; i < 3; i++) {
 							arr[2][0]['imgList'][i] = info['image' + (i + 1)];
 						}
-						
+
 						var imgList = arr[2][0]['imgList'];
 						var imgLen = imgList.filter(function(item) {
 							return !!item;
 						}).length || 0;
-						
+
 						arr[2][0].value = imgLen + "张";
-						
-						if(info.introduction){
+
+						if(info.introduction) {
 							arr[3][0].t1 = info.introduction;
-							arr[3][0].value = "已填写信息";	
+							arr[3][0].value = "已填写信息";
 						}
-						
-						
 
 					}
 				}

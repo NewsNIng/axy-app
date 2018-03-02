@@ -114,7 +114,7 @@
 
 					<ul class="mui-table-view app-font-size-28">
 						<template v-for="o,i in devs">
-							<li class="mui-table-view-cell" @tap="onSelectTap(i)">
+							<li class="mui-table-view-cell" @tap="onSelectTap(i)" :key="o.devid">
 								<a>
 									<span class="mui-badge select"><img v-if="i === devActive" src="../../../image/smart/devices/add/select1.png"/><img v-if="i !== devActive" src="../../../image/smart/devices/add/select2.png"/></span>
 									<span class="name app-color-333333 app-font-size-34">{{o.name}}<br /><span class="id app-color-9f9fa0 app-font-size-26">设备ID:{{o.devid}}</span></span>
