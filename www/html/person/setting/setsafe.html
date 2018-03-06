@@ -155,10 +155,9 @@
 				
 				methods: {
 					
-					// 更新手机号
-					updateTel: function(tel){
-						this.tel = tel;
-						this.userinfo.bindmobile = tel;
+					// 更新主设备所有者
+					updateMaster: function(){
+						this.userinfo.ismaster = true;
 						new ni.Broadcast().emit('userinfo_update', {
 							userInfo: this.userinfo
 						},{
@@ -168,6 +167,8 @@
 
 					// 提交申请
 					onSubmit: function() {
+						
+						
 						if(!this.code){
 							return mui.toast("请输入验证码");
 						}
@@ -183,7 +184,7 @@
 							}
 							
 							// 通知更新
-							this.updateTel(this.tel);
+							this.updateMaster();
 							mui.toast("更改成功!");
 							app.page.setResult().close();
 						}.bind(this));

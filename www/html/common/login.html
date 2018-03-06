@@ -183,17 +183,18 @@
 			</div>
 
 			<!--第三方登录-->
-
-			<div class="third_party_login">
-				<div class="app-font-size-30">
-					第三方账号登录
+			<template v-if="oLoginNames.length">
+				<div class="third_party_login">
+					<div class="app-font-size-30">
+						第三方账号登录
+					</div>
+					<div class="imgRoom">
+						<template v-for="o,i in oLoginNames">
+							<img v-if="_getoLoginIconSrc(o)" :src="_getoLoginIconSrc(o)" @tap="onOtherLoginTap(o)" />
+						</template>
+					</div>
 				</div>
-				<div class="imgRoom">
-					<img src="../../image/common/login_qq.png" @tap="onOtherLoginTap('qq')" />
-					<img src="../../image/common/login_weibo.png" @tap="onOtherLoginTap('sinaweibo')" />
-					<img src="../../image/common/login_wechat.png" @tap="onOtherLoginTap('weixin')" />
-				</div>
-			</div>
+			</template>
 
 		</div>
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
@@ -235,6 +236,13 @@
 					});
 				});
 			});
+			
+			
+			var _oLoginDir = {
+				sinaweibo: "login_weibo",
+				qq: "login_qq",
+				weixin: "login_wechat"
+			};
 
 			new Vue({
 				el: ".mui-content",
@@ -242,7 +250,9 @@
 					return {
 						username: '',
 						password: '',
-						loading: false
+						loading: false,
+
+						oLoginNames: ["qq","weixin", "sinaweibo"],
 					};
 				},
 				plusReady: function() {
@@ -252,20 +262,58 @@
 					this.loadLocalHostAccount();
 					// 监听注册成功后 
 					this.listenRegister();
+					// 处理第三方登录
+					mui.os.ios && this.ologinExcute(); 
 
 				},
 				methods: {
+					
+					_getoLoginIconSrc: function(type){
+						var src = _oLoginDir[type];
+						if(!src){return false}
+						return "../../image/common/" + src + ".png"
+					},
+					ologinExcute: function() {
+						var that = this;
+						Rx.Observable.create(function(ob) {
+							plus.share.getServices(function(arr) {
+								ob.next(arr);
+							}, function(err) {
+								ob.error(err);
+							});
+
+						})
+						.map(function(auths){
+							return auths.reduce(function(a, item){
+								if(item.nativeClient){
+									a.push(item.id)
+								}
+								return a;
+							}, []);
+						})
+						.subscribe(function(typeNames) {
+							that.oLoginNames = typeNames;
+							console.log(JSON.stringify(typeNames));
+						},function(err){
+							mui.toast(err.message)
+						});
+
+					},
+
+					// 监听注册成功
 					listenRegister: function() {
 						new ni.Broadcast().on('register_success', function(data) {
 							data.username && (this.username = data.username);
 						}.bind(this));
 
 					},
-
+					// 加载本地最后一个登录的帐号
 					loadLocalHostAccount: function() {
 						var last_account = window.localStorage.getItem('last_account');
 						last_account && (this.username = last_account);
 					},
+
+					// 登录点击
 					onLoginTap: function(e) {
 						var that = this;
 
@@ -380,7 +428,7 @@
 
 						// 获取第三方授权信息
 						var $oauth = Rx.Observable.create(function(ob) {
-							
+
 							new that.$OAuth(type, function(err, info) {
 								if(err) {
 									return ob.error(new Error(err.message || "请确保您有安装该应用且授权"));

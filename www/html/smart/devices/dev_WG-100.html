@@ -170,8 +170,8 @@
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
 					<div @tap="onMuteTap()">
-						<img src="../../../image/smart/devices/gateway/icon_Mute@3x.png" />
-						<div>静音</div>
+						<img :src="isMute?'../../../image/smart/devices/gateway/btn_voice@3x.png':'../../../image/smart/devices/gateway/icon_Mute@3x.png'" />
+						<div>{{isMute?"取消静音":"静音"}}</div>
 					</div>
 
 					<div class="send_sound_wave" @touchstart="onCallTap()" @touchend="onListenTap()">
@@ -232,6 +232,10 @@
 							"online": 0,
 							
 						},
+						
+						
+						
+						isMute: false, // 是否静音
 
 					};
 				},
@@ -279,18 +283,22 @@
 					// 静音按钮
 					onMuteTap: function() {
 						this.ready && P.WG100Mute();
-						mui.toast("静音");
+						plus.device.vibrate(100);
+						this.isMute = !this.isMute;
+						mui.toast(this.isMute?"静音":"取消静音");
 					},
 
 					// 通话
 					onCallTap: function() {
 						this.ready && P.WG100Call();
+						plus.device.vibrate(50);
 						mui.toast("通话");
 					},
 
 					// 松手监听
 					onListenTap: function() {
 						this.ready && P.WG100Listen();
+						plus.device.vibrate(50);
 						mui.toast("松手");
 					},
 

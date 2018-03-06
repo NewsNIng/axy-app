@@ -19,12 +19,12 @@ fp.curry = function _curry(...args) {
  * 二分法查找 
  */
 fp.twoFind = function () {
-    let _arr, _wantValue,
+    var _arr, _wantValue,
         _twoFind = function (left, right) {
             if (left > right) {
                 return -1
             }
-            let min = Math.floor((left + right) / 2)
+            var min = Math.floor((left + right) / 2)
             if (_arr[min] > _wantValue) {
                 return _twoFind(left, min - 1)
             } else if (_arr[min] < _wantValue) {

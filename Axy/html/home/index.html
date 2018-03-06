@@ -301,6 +301,13 @@
 				background: none !important;
 				background-color: transparent !important;
 			}
+			
+			/*被分享设备无设置和分享按钮*/
+			.relation-share .mui-icon.d3,.relation-share .mui-icon.d2{
+				opacity: 0 !important;
+				pointer-events: none !important;
+				order: -1;
+			}
 		</style>
 
 	</head>
@@ -365,11 +372,8 @@
 								</div>
 							</div>
 
-							<div class="device_show">
-								<!--<div class="app-font-size-22">
-								{{dev.devimg}}	
-							</div>-->
-
+							<div class="device_show" :class="_getDevRelation(dev.relation)">
+								
 								<div class="img imgdiv" ref="devimgel" :class="_getDevName(dev.type)" v-devbg :data-devid="dev.devid" @tap="openCamListWindow($event)">
 
 								</div>
@@ -532,6 +536,8 @@
 					longtap: true
 				}
 			});
+			
+			var __relationarr = ["self", "none", "share"];
 
 			var vm = new Vue({
 				el: '#approom',
@@ -1083,7 +1089,12 @@
 
 					_fixDevLocation: function(s) {
 						return app.dev.fixName(s);
-					}
+					},
+					
+					// 
+					_getDevRelation: function(relation) {
+						return 'relation-' + __relationarr[relation];
+					},
 
 				}
 			});
