@@ -32,7 +32,8 @@
     "refer": [
       "html/person/setting/push.html",
       "html/person/setting/safe.html",
-      "html/person/relation/bind_tel.html"
+      "html/person/relation/bind_tel.html",
+      "html/person/setting/setsafe.html"
     ],
     "resources": []
   },
@@ -584,6 +585,11 @@
     "refer": [
       "html/smart/add/family_code.html",
       "html/smart/add/family_scan.html"
+    ]
+  },
+  "html/person/setting/setsafe.html": {
+    "refer": [
+      "html/person/setting/safe.html"
     ]
   }
 }

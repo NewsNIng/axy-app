@@ -74,10 +74,14 @@
 
 				</div>
 				<div class="share-body">
-					<img @tap.stop="onShareTo('qq')" src="../../image/common/login_qq.png" />
-					<img @tap.stop="onShareTo('wxhy')" src="../../image/common/login_wechat.png" />
-					<img @tap.stop="onShareTo('wxpyq')" src="../../image/common/pyq@3x.png" />
-					<img @tap.stop="onShareTo('sinaweibo')" src="../../image/common/login_weibo.png" />
+
+					<img v-if="ologinHas('qq')" @tap.stop="onShareTo('qq')" src="../../image/common/login_qq.png" />
+					<template v-if="ologinHas('weixin')">
+						<img @tap.stop="onShareTo('wxhy')" src="../../image/common/login_wechat.png" />
+						<img @tap.stop="onShareTo('wxpyq')" src="../../image/common/pyq@3x.png" />
+					</template>
+
+					<img v-if="ologinHas('sinaweibo')" @tap.stop="onShareTo('sinaweibo')" src="../../image/common/login_weibo.png" />
 				</div>
 			</div>
 
@@ -107,6 +111,8 @@
 						content: "",
 						href: "",
 
+						oLoginNames: ["qq", "weixin", "sinaweibo"],
+
 					};
 				},
 
@@ -128,8 +134,42 @@
 
 					this.calcHref(datahref)
 
+					// 处理第三方登录
+					mui.os.ios && this.ologinExcute();
+
 				},
 				methods: {
+
+					ologinHas: function(type) {
+						return this.oLoginNames.indexOf(type) >= 0
+					},
+					ologinExcute: function() {
+						var that = this;
+						Rx.Observable.create(function(ob) {
+								plus.share.getServices(function(arr) {
+									ob.next(arr);
+								}, function(err) {
+									ob.error(err);
+								});
+
+							})
+							.map(function(auths) {
+								return auths.reduce(function(a, item) {
+									if(item.nativeClient) {
+										a.push(item.id)
+									}
+									return a;
+								}, []);
+							})
+							.subscribe(function(typeNames) {
+								that.oLoginNames = typeNames;
+								console.log(JSON.stringify(typeNames));
+							}, function(err) {
+								mui.toast(err.message)
+							});
+
+					},
+
 					// 计算href链接
 					calcHref: function(datahref) {
 						var baseurl = dal.BASE_SHARE_URL;
@@ -138,14 +178,12 @@
 
 						datahref.url && (datahref.url = datahref.url.replace(/\=/g, '%3D').replace(/&/g, '%26'));
 						datahref.title && (datahref.title = encodeURI(datahref.title));
-						
+
 						for(var i in datahref) {
 							datahref[i] && paramsArr.push(i + '=' + datahref[i]);
 						}
 
 						this.href = baseurl + "?" + paramsArr.join('&');
-						
-						
 
 					},
 					onRootTap: function() {

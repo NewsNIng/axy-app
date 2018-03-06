@@ -46,7 +46,7 @@ dp.toFormatString = function (format) {
  */
 dp.ago = function () {
     if (!arguments.length) return ''
-    let arg = arguments,
+    var arg = arguments,
         now = this.getTime(),
         past = !isNaN(arg[0]) ? arg[0] : new Date(arg[0]).getTime(),
         diffValue = now - past,

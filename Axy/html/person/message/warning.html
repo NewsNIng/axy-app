@@ -196,7 +196,7 @@
 			<div class="wrapper" ref="wrapper">
 
 				<div class="app-font-size-28 card-room">
-					<div class="card" v-for="o,i in list" :data-time="new Date(o.atime.replace(/-/g, '/')).toFormatString('MM/dd')" @tap="onCardTap(o, i)">
+					<div class="card" v-for="o,i in list" :data-time="new Date(o.atime.replace(/-/g, '/')).toFormatString('MM/dd')" @tap="onCardTap(o, i)" :key="o.devid">
 						<div>
 							<span class="app-color-333333">设备名称</span>
 							<span class="mui-pull-right">{{fixName(o.location)}}</span>
@@ -224,8 +224,13 @@
 								<div @tap.stop="onImageTap(o, i)">
 									<img :src="'../../../image/person/message/screenshots'+ (o.info && o.info.image ? '' : '_1') +'@3x.png'" />
 									<div class="app-font-size-28" :class="o.info && o.info.image ? 'app-color-main': 'app-color-9f9fa0'">抓拍截图</div>
+									<template v-if="o.info && o.info.image">
+										<div ref="preimgs" :data-preview-src="o.info.image.fname" :data-preview-group="i"></div>
+									</template>
+									<template v-else>
+										<div ref="preimgs"></div>
+									</template>
 
-									<div ref="preimgs" v-if="o.info && o.info.image" :data-preview-src="o.info.image.fname" :data-preview-group="i"></div>
 								</div>
 
 								<div @tap.stop="onViewTap(o, i)">
@@ -433,7 +438,7 @@
 							this.main = this.main || plus.android.runtimeMainActivity();
 							var intent = new this.Intent(this.Intent.ACTION_VIEW);
 							var uri = this.Uri.parse(url);
-							intent.setDataAndType(uri, "video/*"); 
+							intent.setDataAndType(uri, "video/*");
 							this.main.startActivity(intent);
 						}
 
@@ -441,6 +446,7 @@
 
 					// 点击查看截图
 					onImageTap: function(o, i) {
+						console.log(i)
 						this.pimg.open(this.$refs.preimgs[i]);
 					},
 
@@ -511,7 +517,7 @@
 								item.showMenu = false;
 								item.info = null;
 								return item;
-							}); 
+							});
 							console.log(JSON.stringify(data));
 							that.list.push.apply(that.list, data || []);
 							that.$nextTick(function() {
