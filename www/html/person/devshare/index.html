@@ -119,7 +119,7 @@
 				
 				
 				<div class="room app-font-size-28" v-for="o,i in list" :data-time="o.name || o.id">
-					<div class="app-font-size-28 mui-table-view-cell" v-for="oo,ii in o.list"> 
+					<div class="app-font-size-28 mui-table-view-cell" v-for="oo,ii in o.list">
 						<div class="mui-slider-right mui-disabled" @tap="onDelTap(oo, ii, $event)">
 							<a class="mui-btn mui-btn-red">删除</a>
 						</div>
@@ -187,6 +187,10 @@
 					// 获取列表
 					getList: function(){
 						dal.device.shareList(function(err, data){
+							if(err){
+								return mui.toast(err.message);
+							}
+							console.log(JSON.stringify(data));
 							data && data.length && (this.list_ = data);
 							this.$nextTick(function(){
 								imagelazyload();  
