@@ -327,9 +327,15 @@
 					<img src="../../image/home/search.png" />
 				</a>
 			</header>
+			
+			<div>	
+				
+				
+			</div>
+			
 
-			<div class="mui-content noImmersed mui-scroll-wrapper">
-				<div class="mui-scroll">
+			<!--<div class="mui-content noImmersed mui-scroll-wrapper">
+				<div class="mui-scroll">-->
 
 					<div id="slider" class="mui-slider" v-if="imgList.length > 0">
 						<div class="mui-slider-group mui-slider-loop">
@@ -465,9 +471,9 @@
 					</div>
 
 				</div>
-
+<!--
 			</div>
-		</div>
+		</div>-->
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
 
@@ -625,23 +631,37 @@
 							ob.next();
 						}
 					});
+					
+					
+					
+					
+					
 
-					mui.init({
-						pullRefresh: {
-							container: ".mui-scroll-wrapper",
-							down: {
-								height: 50, //可选,默认50.触发下拉刷新拖动距离,
-								contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
-								contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
-								contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
-								callback: this.reload
-							}
-						}
-					});
+//					mui.init({
+//						pullRefresh: {
+//							container: ".mui-scroll-wrapper",
+//							down: {
+//								height: 50, //可选,默认50.触发下拉刷新拖动距离,
+//								contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+//								contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+//								contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+//								callback: this.reload
+//							}
+//						}
+//					});
 
 				},
 				plusReady: function() {
 					var that = this;
+					
+					
+					this.$view.setPullToRefresh({
+						support: true,
+						style: "circle",
+						offset: immersed + "px",
+						height: '50px',
+						range: '200px'
+					}, this.reload.bind(this));
 
 					// 设置本页面无滚动条显示
 					this.$view.setStyle({
@@ -737,8 +757,9 @@
 						}.bind(this));
 
 						setTimeout(function() {
-							mui('.mui-scroll-wrapper').pullRefresh().endPulldownToRefresh();
-						}, 1000);
+							this.$view.endPullToRefresh();
+							//mui('.mui-scroll-wrapper').pullRefresh().endPulldownToRefresh();
+						}.bind(this), 1000);
 
 					},
 
@@ -837,7 +858,8 @@
 						}
 						var type = app.dev.fixType(o.type);
 						Rx.Observable.create(function(ob) {
-							if(type >= 0x1040 && type <= 0x1080) {
+							
+							if(app.dev.isMoreWays(type)){
 								// 获取设备的通道信息
 								plus.nativeUI.showWaiting("获取通道信息中...");
 								dal.devparam.chlist(o.devid, o.type, function(err, data) {

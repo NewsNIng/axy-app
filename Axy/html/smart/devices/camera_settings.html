@@ -206,7 +206,7 @@
 					<li class="mui-table-view-cell" @tap="onDevNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge" v-text="fixName(devInfo.location)"></span>
+							<span class="mui-badge" v-text="fixName(devInfo.location) || devInfo.devid"></span>
 						</a>
 					</li>
 					<!--<li class="mui-table-view-cell">
