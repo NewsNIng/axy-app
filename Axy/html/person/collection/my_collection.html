@@ -172,7 +172,7 @@
 				<template v-for="o,i in shops" v-if="active === 0">
 					<div class="shop mui-table-view-cell" @tap="onClickTap(o.id)">
 						<div class="mui-slider-right mui-disabled">
-							<a class="mui-btn mui-btn-red" @tap="onDeleteShopTap(o.id,i)">删除</a>
+							<a class="mui-btn mui-btn-red" @tap.stop="onDeleteShopTap(o.id,i,$event)">删除</a>
 						</div>
 						<div class="shop_bg mui-slider-handle">
 							<div class="mui-slider-handle shop_img">
@@ -185,7 +185,7 @@
 				<template v-for="o,i in discoverys" v-if="active === 1">
 					<div class="discovery mui-table-view-cell" @tap="onClickTap(o.id)">
 						<div class="mui-slider-right mui-disabled">
-							<a class="mui-btn mui-btn-red" @tap="onDeleteDisTap(o.id,i)">删除</a>
+							<a class="mui-btn mui-btn-red" @tap.stop="onDeleteDisTap(o.id,i,$event)">删除</a>
 						</div>
 						<div class="discovery_bg mui-slider-handle" @tap="">
 							<div class="mui-slider-handle discovery_img">
@@ -354,8 +354,9 @@
 							//							this.$pullRefresh.pullRefresh().endPullupToRefresh();
 						}.bind(this));
 					},
-					onDeleteShopTap: function(fid, i) {
+					onDeleteShopTap: function(fid, i, e) {
 						dal.user.collection_shop.delete(fid, function(err, data) {
+							mui.swipeoutClose(e.target.parentNode.parentNode);
 							if(err) {
 								return mui.toast(err.message)
 							}
@@ -363,8 +364,9 @@
 							this.shops.splice(i, 1);
 						}.bind(this));
 					},
-					onDeleteDisTap: function(fid, i) {
+					onDeleteDisTap: function(fid, i, e) {
 						dal.user.collection_talk.delete(fid, function(err, data) {
+							mui.swipeoutClose(e.target.parentNode.parentNode);
 							if(err) {
 								return mui.toast(err.message)
 							}
