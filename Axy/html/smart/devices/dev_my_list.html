@@ -676,7 +676,7 @@
 						}
 						var type = app.dev.fixType(o.type);
 						Rx.Observable.create(function(ob) {
-							if(type >= 0x1040 && type <= 0x1080) {
+							if(app.dev.isMoreWays(type)){
 								// 获取设备的通道信息
 								plus.nativeUI.showWaiting("获取通道信息中...");
 								dal.devparam.chlist(o.devid, type, function(err, data) {

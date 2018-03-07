@@ -17,6 +17,9 @@
 		}
 		
 		function plusReady(){
+			// 暂时去除引导页 直接 进入 主页
+			return openMain();
+			
 			if(plus.runtime.version == plus.storage.getItem("FirstTimeFlag")){
 				// 打开主页
 				openMain();

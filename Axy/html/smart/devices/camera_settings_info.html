@@ -67,7 +67,7 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>WIFI信号强度</span>
-							<span class="mui-badge" v-text="wifiinfo.signal + '%'"></span> 
+							<span class="mui-badge" v-text="(wifiinfo.signal || 0) + '%'"></span> 
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -169,6 +169,7 @@
 								if(err) {
 									return ob.error(err);
 								}
+								
 								that.wifiinfo = rs;
 								ob.next();
 							});
@@ -184,6 +185,7 @@
 								if(err) {
 									return ob.error(err);
 								}
+								console.log(JSON.stringify(rs))
 								that.o = rs;
 								ob.next();
 							});
