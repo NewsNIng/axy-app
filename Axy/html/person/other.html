@@ -140,7 +140,7 @@
 						<div class="fans app-font-size-26" v-text="focuscount+'人已关注'"></div>
 						<div class="TA app-font-size-26">TA的动态</div>
 						<div class="dynamic">
-							<template v-for="o in dynamic">
+							<template v-for="o in dynamic" :key="o.id">
 								<div class="dynamic_item app-font-size-28 " @tap="onClickTap(o.id)">
 
 									<div class="img" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
@@ -216,6 +216,7 @@
 				},
 
 				mounted: function() {
+
 					this.$pullRefresh = mui(".mui-scroll-wrapper");
 					mui.init({
 						pullRefresh: {
@@ -229,6 +230,7 @@
 				},
 
 				plusReady: function() {
+
 					this.uid = this.$view.uid;
 					this.from = app.user.get().account || "null";
 					this.getInfo();
@@ -251,8 +253,8 @@
 							});
 						}.bind(this));
 					},
-					
-					up: function(){
+
+					up: function() {
 						this.n++;
 						this.getList();
 					},
@@ -261,14 +263,14 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							
-							if(!data || data.length === 0){
+
+							if(!data || data.length === 0) {
 								this.n > 1 && mui.toast('没有更多了~');
 								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
 							}
-							
+
 							this.dynamic.push.apply(this.dynamic, data);
-							
+
 						}.bind(this), 9);
 					},
 					onFocusTap: function() {
@@ -280,21 +282,33 @@
 							if(this.from === this.uid) {
 								return mui.toast("您不能关注自己！");
 							}
-							this.isfocus = +!this.isfocus;
+
 							this.changeFocus();
 						}.bind(this));
 
 					},
 					changeFocus: function() {
+						var that = this;
 						var methodName = 'add';
-						if(!this.focus) {
-							this.focuscount--;
+						if(this.focus) {
 							methodName = 'delete';
-						} else {
-							this.focuscount++;
 						}
+//						alert(methodName+","+this.focus);
+						plus.nativeUI.showWaiting();
 						dal.user.focus[methodName](this.uid, function(err, data) {
-
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							if(that.focus) {
+								that.focuscount--;
+							} else {
+								that.focuscount++;
+							}
+							that.isfocus = +!that.isfocus;
+							app.page.setResult({
+								isfocus:that.isfocus
+							});
 						});
 					},
 					_getImg: function(img1, img2, img3) {
