@@ -77,6 +77,18 @@
 	dev.getArmBit = function() {
 		return 0x01 << 30;
 	}
+	
+	// 是否多通道
+	dev.isMoreWays=function(type){
+		if(type >= 0x1040 && type <= 0x1080){
+			return true;
+		}
+		if(type === 0x0a || type === 0xa1008){
+			return true;
+		}
+		
+		return false;
+	}
 
 	app.dev = dev;
 }(window.app || (window.app = {})));

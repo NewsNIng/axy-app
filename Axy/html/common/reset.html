@@ -234,6 +234,8 @@
 		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 
+		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
+
 		<script type="text/javascript">
 			mui.init()
 
@@ -266,6 +268,68 @@
 
 				methods: {
 					getCodeTap: function() {
+						var that = this;
+						/*
+						// 本地验证手机号码
+						var $localCheckTelFn = function(telphone) {
+							return Rx.Observable.create(function(ob) {
+								var e = app.rules.test("tel", telphone, "手机号码格式不正确");
+								if(errorMessage) {
+									return ob.error({
+										message: e
+									})
+								}
+								ob.next(telphone);
+							});
+						}
+
+						// 发送获取验证码的请求
+						var $getCodeFn = function(telphone) {
+
+							return Rx.Observable.create(function(ob) {
+								dal.user.getCode(telphone, function(err, data) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(data.validcode);
+								});
+							});
+						}
+							
+							
+						var $60timeout = Rx.Observable.time
+							
+						// 验证码按钮变化
+						var $codeTimer = Rx.Observable
+							.interval(1000)
+							.take(60)
+							.
+
+						// 显示waiting
+						plus.nativeUI.showWaiting();
+						// 验证手机是否符合规格
+						$localCheckTel(that.username)
+							// 获取短信验证码
+							.mergeMapTo($getCode)
+							// 获取成功
+							.subscribe(function(code) {
+								// 关闭waiting 且 提示用户
+								plus.nativeUI.closeWaiting();
+								mui.toast("发送短信验证码成功，请注意查收");
+								console.log(code);
+								that.codeNumber = code;
+
+								// 开始计时
+
+							}, function(e) {
+								// 错误回调
+
+								plus.nativeUI.closeWaiting();
+								mui.toast(e.message);
+							});
+
+						return 1;
+						*/
 						if(this.codeT) {
 							return
 						}
@@ -280,7 +344,7 @@
 								this.codeT = null;
 								this.codeState = false;
 								this.codeTimer = 60;
-								return mui.toast(JSON.stringify(err));
+								return mui.toast(err.message);
 							}
 							this.codeNumber = data.validcode;
 						}.bind(this));

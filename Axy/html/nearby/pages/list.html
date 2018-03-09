@@ -73,7 +73,6 @@
 				margin: 5px 0;
 			}
 			
-			
 			.distance {
 				float: right;
 			}
@@ -87,7 +86,6 @@
 			.name {
 				font-weight: bold;
 				color: #2E2E2E;
-			
 			}
 			/*兼容5s屏幕*/
 			
@@ -208,7 +206,7 @@
 										<img src="../../../image/nearby/time.png" />
 										<span>{{_min2time(o.starttime)+ '-' + _min2time(o.endtime)}}</span>
 									</div>
-									
+
 									<div class="types app-font-size-26">
 										{{o.type}}
 									</div>
@@ -273,29 +271,13 @@
 				},
 				mounted: function() {
 
-					this.$nextTick(function() {
-
-						this.$pullRefresh = mui(".mui-scroll-wrapper");
-						mui.init({
-							pullRefresh: {
-								container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
-								down: {
-
-									callback: this._down //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
-								},
-								up: {
-									callback: this._up
-								}
-							}
-						})
-					}.bind(this));
 				},
 				plusReady: function() {
 					var that = this;
 
 					// 上一次地理定位
 					var $prePosition = Rx.Observable.create(function(ob) {
-						var p = POSITION.data; 
+						var p = POSITION.data;
 						if(p) {
 							ob.next(p);
 						}
@@ -307,20 +289,39 @@
 					// 地理定位最大延迟 5s
 					var $time5out = Rx.Observable.timer(5e3);
 
-					$position
-						.merge($time5out.mergeMapTo($prePosition))
-						.first()
-						.subscribe(function(p) {
-							// 保存最近地理位置
-							POSITION.data = p;
-							that.longitude = p.coords.longitude;
-							that.latitude = p.coords.latitude;
-							that.city = p.address.city.replace('市', '');
-							that.position = p.addresses;
-							that._down();
-						}, function(err) {
-							that._down();
-						});
+					var getPositonAndDown = function() {
+						$position
+							.merge($time5out.mergeMapTo($prePosition))
+							.first()
+							.subscribe(function(p) {
+								// 保存最近地理位置
+								POSITION.data = p;
+								that.longitude = p.coords.longitude;
+								that.latitude = p.coords.latitude;
+								that.city = p.address.city.replace('市', '');
+								that.position = p.addresses;
+								that._down();
+							}, function(err) {
+								that._down();
+							});
+					}
+					
+					getPositonAndDown();
+
+					this.$nextTick(function() {
+						this.$pullRefresh = mui(".mui-scroll-wrapper");
+						mui.init({
+							pullRefresh: {
+								container: ".mui-scroll-wrapper",
+								down: {
+									callback: getPositonAndDown
+								},
+								up: {
+									callback: this._up
+								}
+							}
+						})
+					}.bind(this));
 
 					// 监听父页手动选取地区
 					new this.$Broadcast().on('city_change', this.updateGeo.bind(this));
@@ -344,7 +345,7 @@
 											longitude: data.longitude,
 											latitude: data.latitude
 										}, {
-											views: [that.$view.parent(),'home']
+											views: [that.$view.parent(), 'home']
 										})
 
 										resolve({
@@ -479,7 +480,7 @@
 							if(!data || !data.length) {
 								mui.toast('没有更多啦~~');
 								this.$pullRefresh.pullRefresh().endPullupToRefresh();
-								return this.$pullRefresh.pullRefresh().disablePullupToRefresh(); 
+								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
 							} else {
 								this.shops.push.apply(this.shops, data);
 							}

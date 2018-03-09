@@ -1,7 +1,8 @@
 //template: '<footer class="app-font-size-28"><div class="app-color-main-dark" @tap="onDelTap()">删除设备</div><div @tap="onUnBindTap()">解绑主机</div></footer>',
 
 Vue && Vue.component('dev-footer', {
-	template: '<footer class="app-font-size-28"><div class="app-color-main-dark" @tap="onDelTap()">删除配件</div><div @tap="onUnBindTap()">解绑主机</div></footer>',
+//	template: '<footer class="app-font-size-28"><div class="app-color-main-dark" @tap="onDelTap()">删除配件</div><div @tap="onUnBindTap()">解绑主机</div></footer>',
+	template: '<footer class="app-font-size-28"><div class="app-color-main-dark" @tap="onDelTap()">删除配件</div>',
 	//	props: ["deviceid", "comid"],
 	props: ["accessory", "devtype"],
 	methods: {

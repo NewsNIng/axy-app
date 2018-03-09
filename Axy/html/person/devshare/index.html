@@ -118,14 +118,14 @@
 				
 				
 				
-				<div class="room app-font-size-28" v-for="o,i in list" :data-time="o.name || o.id">
+				<div class="room app-font-size-28" v-for="o,i in list" :data-time='"\""+(o.name || o.id)+"\"正共享给好友"'>
 					<div class="app-font-size-28 mui-table-view-cell" v-for="oo,ii in o.list">
 						<div class="mui-slider-right mui-disabled" @tap="onDelTap(oo, ii, $event)">
 							<a class="mui-btn mui-btn-red">删除</a>
 						</div>
 						<div class="mui-slider-handle" @tap="onUserTap(oo)">
-							<img :data-src="oo.headimgurl" class="img-lazy-load" /> 
-							<span v-text="oo.nickname"></span>
+							<img :data-src="oo.headimgurl" class="img-lazy-load img-lazy-forever" data-type="avatar"  /> 
+							<span v-text="oo.nickname || oo.account"></span>
 						</div>
 					</div>
 				</div>

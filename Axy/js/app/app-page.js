@@ -111,7 +111,7 @@
 		_id++;
 		
 		w[_tempSrc] = function(data){
-			w[_tempSrc] = null;
+			//w[_tempSrc] = null;
 			callback(data);
 		};
 		

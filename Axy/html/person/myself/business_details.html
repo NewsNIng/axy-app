@@ -389,6 +389,8 @@
 						app.page.openForResultBy('../../nearby/business/signup.html', 'business_update', function() {
 							// 更新信息
 							that.getInfo();
+							// 通知上个页面更新
+							new ni.Broadcast().emit("signup_success", {}, {views:[that.$view.opener()]});
 						}, {
 							sourceInfo: this.data
 						});

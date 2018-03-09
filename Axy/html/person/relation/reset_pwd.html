@@ -78,7 +78,7 @@
 
 				<li class="mui-table-view-cell flex">
 					<img src="../../../image/person/info/safe@3x.png" />
-					<input type="text" class="app-font-size-28" placeholder="请输入新密码（6至20位数字或字母）" v-model="newPwd" />
+					<input type="text" class="app-font-size-28" placeholder="请输入新密码（6至18位数字或字母）" v-model="newPwd" />
 
 				</li>
 
@@ -125,11 +125,33 @@
 						return this.newPwd === this.newPwd2;
 					}
 				},
+				
+				watch: {
+					newPwd: function(s, old){
+						var errMsg = app.rules.testBy(/^\w{0,18}$/, this.newPwd ,"密码格式必须是6-18位数字或者字母");
+						if(errMsg){
+							this.newPwd = old;
+							return mui.toast(errMsg);
+						}
+					},
+					newPwd2: function(s, old){
+						var errMsg = app.rules.testBy(/^\w{0,18}$/, this.newPwd2 ,"密码格式必须是6-18位数字或者字母");
+						if(errMsg){
+							this.newPwd2 = old;
+							return mui.toast(errMsg);
+						}
+					},
+				},
+				
+				
 
 				plusReady: function() {
 
 				},
 				methods: {
+					
+					
+					
 					onSubmitTap: function() {
 						// 验证密码格式
 						var errMessage = app.rules.testListBy([{

@@ -154,7 +154,7 @@
 					return {
 						bgp: '../../../image/smart/devices/others/complete@3x.png',
 						devid: '',
-						needConn: true,
+						needConn: false,
 						isFitting: false,
 						info: null,
 					};
@@ -172,6 +172,7 @@
 					plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
 					plus.webview.getWebviewById('Lan_add_camera') && plus.webview.getWebviewById('Lan_add_camera').close('none');
 					plus.webview.getWebviewById('voice1') && plus.webview.getWebviewById('voice1').close('none');
+					plus.webview.getWebviewById('scan') && plus.webview.getWebviewById('scan').close('none');
 					plus.nativeUI.closeWaiting();
 				},
 				methods: {

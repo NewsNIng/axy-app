@@ -105,15 +105,17 @@
 				text-align: center;
 			}
 			
-			.dynamic_item>img {
+			.dynamic_item>.img {
 				width: 2.88rem;
 				height: 2.88rem;
+				background-position: center;
+				background-size: cover;
+				margin-bottom: 0.266666rem;
 			}
 			
 			.blur {
 				-webkit-filter: blur(10px);
 				filter: blur(10px);
-				
 				background-color: #EDEDED;
 			}
 		</style>
@@ -127,21 +129,32 @@
 			</header>
 
 			<div class="mui-content noImmersed">
-				<img :data-src="userInfo.headimgurl" class="img-lazy-load blur" data-type="avastr"/>
-				<div class="user_icon app-font-size-26"><img :data-src="userInfo.headimgurl" class="img-lazy-load" data-type="avastr" /></div>
-				<div class="user_name app-font-size-38" style="display: inline;" v-text="userInfo.nickname"></div>
-				<div class="attention app-font-size-26" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
-				<div class="fans app-font-size-26" v-text="focuscount+'人已关注'"></div>
-				<div class="TA app-font-size-26">TA的动态</div>
-				<div class="dynamic">
-					<template v-for="o in dynamic">
-						<div class="dynamic_item app-font-size-28 " @tap="onClickTap(o.id)">
-							<img :src="_getImg(o.image1,o.image2,o.image3)" />
-							<div class="mui-ellipsis">{{o.title}}</div>
+
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+
+						<img :data-src="userInfo.headimgurl" class="img-lazy-load blur" data-type="avastr" />
+						<div class="user_icon app-font-size-26"><img :data-src="userInfo.headimgurl" class="img-lazy-load" data-type="avastr" /></div>
+						<div class="user_name app-font-size-38" style="display: inline;" v-text="userInfo.nickname"></div>
+						<div class="attention app-font-size-26" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
+						<div class="fans app-font-size-26" v-text="focuscount+'人已关注'"></div>
+						<div class="TA app-font-size-26">TA的动态</div>
+						<div class="dynamic">
+							<template v-for="o in dynamic">
+								<div class="dynamic_item app-font-size-28 " @tap="onClickTap(o.id)">
+
+									<div class="img" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
+
+									<div class="mui-ellipsis">{{o.title}}</div>
+								</div>
+							</template>
 						</div>
-					</template>
+					</div>
 				</div>
+
 			</div>
+
+			<!--<button style="width: 100%;height: 1.173333rem;" type="button" class="mui-btn app-btn-main app-font-size-32">查看更多</button>-->
 
 		</div>
 		<!--沉浸式动态处理-->
@@ -159,8 +172,7 @@
 		<script type="text/javascript" src="../../js/dal/article.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
-
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
 		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
@@ -202,6 +214,20 @@
 						return this.isfocus !== 0;
 					}
 				},
+
+				mounted: function() {
+					this.$pullRefresh = mui(".mui-scroll-wrapper");
+					mui.init({
+						pullRefresh: {
+							container: ".mui-scroll-wrapper",
+							up: {
+								callback: this.up
+							}
+						}
+					});
+
+				},
+
 				plusReady: function() {
 					this.uid = this.$view.uid;
 					this.from = app.user.get().account || "null";
@@ -220,34 +246,44 @@
 							this.focuscount = data.focuscount;
 							//							alert(JSON.stringify(this.focuscount));
 							this.userInfo = data.user;
-							this.$nextTick(function(){
+							this.$nextTick(function() {
 								imagelazyload();
 							});
 						}.bind(this));
 					},
+					
+					up: function(){
+						this.n++;
+						this.getList();
+					},
 					getList: function() {
 						dal.article.user.list(this.uid, this.n, function(err, data) {
 							if(err) {
-								return mui.toast(JSON.stringify(err));
-							}
-							this.dynamic = data;
-							console.log(JSON.stringify(this.dynamic));
-						}.bind(this), 6);
-					},
-					onFocusTap: function() {
-						app.user.get(function(u){
-							if(!u){
-								return false;
+								return mui.toast(err.message);
 							}
 							
+							if(!data || data.length === 0){
+								this.n > 1 && mui.toast('没有更多了~');
+								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
+							}
+							
+							this.dynamic.push.apply(this.dynamic, data);
+							
+						}.bind(this), 9);
+					},
+					onFocusTap: function() {
+						app.user.get(function(u) {
+							if(!u) {
+								return false;
+							}
+
 							if(this.from === this.uid) {
 								return mui.toast("您不能关注自己！");
 							}
 							this.isfocus = +!this.isfocus;
 							this.changeFocus();
 						}.bind(this));
-						
-						
+
 					},
 					changeFocus: function() {
 						var methodName = 'add';
