@@ -170,7 +170,7 @@
 			<div class="mui-content mui-scroll-wrapper">
 
 				<template v-for="o,i in shops" v-if="active === 0">
-					<div class="shop mui-table-view-cell" @tap="onClickTap(o.id)">
+					<div class="shop mui-table-view-cell" @tap="onClickTap(o.id, i)">
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red" @tap.stop="onDeleteShopTap(o.id,i,$event)">删除</a>
 						</div>
@@ -183,7 +183,7 @@
 					</div>
 				</template>
 				<template v-for="o,i in discoverys" v-if="active === 1">
-					<div class="discovery mui-table-view-cell" @tap="onClickTap(o.id)">
+					<div class="discovery mui-table-view-cell" @tap="onClickTap(o.id, i)">
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red" @tap.stop="onDeleteDisTap(o.id,i,$event)">删除</a>
 						</div>
@@ -374,13 +374,25 @@
 							this.discoverys.splice(i, 1);
 						}.bind(this));
 					},
-					onClickTap: function(oid) {
+					onClickTap: function(oid, i) {
+						var that = this;
+						var arrays = ["shops","discoverys"][this.active];
 						var pages = ["business/store_details.html", "discover/discover_details.html"];
 						//						alert(pages[this.active]);
-						mui.openWindow('../../nearby/' + pages[this.active], pages[this.active], {
-							extras: {
-								oid: oid
+						//						mui.openWindow('../../nearby/' + pages[this.active], pages[this.active], {
+						//							extras: {
+						//								oid: oid
+						//							}
+						//						});
+						app.page.openForResultBy('../../nearby/' + pages[this.active], pages[this.active], function(data) {
+							if(!data.collection) {
+								arrayBak = that[arrays].slice(0);
+								that[arrays].splice(i, 1);
+							} else {
+								that[arrays]= arrayBak;
 							}
+						}, {
+							oid: oid
 						});
 					}
 

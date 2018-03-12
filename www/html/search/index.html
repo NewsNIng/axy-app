@@ -307,7 +307,7 @@
 
 					<div class="cardRoom app-font-size-26">
 						<template v-for="o,i in historyList">
-							<div @tap="searchResult(o)">{{o}}</div>
+							<div @tap="searchResult(o)" class="mui-ellipsis">{{o}}</div>
 						</template>
 					</div>
 				</div>
