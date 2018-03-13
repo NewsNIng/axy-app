@@ -178,6 +178,14 @@
 							<span class="mui-badge" v-text="devInfo.location || devInfo.devid"></span>
 						</a>
 					</li>
+					
+					<li class="mui-table-view-cell" @tap="onInfoTap()">
+						<a class="mui-navigate-right">
+							<span>基本信息</span>
+						</a>
+					</li>
+					
+					
 					<li class="mui-table-view-cell" @tap="onAutoArm()">
 						<a class="mui-navigate-right">
 							<span>自动布防计划</span>
@@ -367,6 +375,15 @@
 							fn(items[0].value);
 						}, function(items) {
 
+						});
+					},
+					
+					// 基本信息跳转
+					onInfoTap: function() {
+						mui.openWindow('camera_settings_info.html', 'camera_settings_info', {
+							extras: {
+								info: this.devInfo
+							}
 						});
 					},
 

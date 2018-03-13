@@ -91,7 +91,10 @@
 			.description {
 				padding-top: 0.213333rem;
 				color: #666666;
-				/*width: 100%;*/
+				
+				
+				word-wrap: break-word;
+				
 				line-height: 24px;
 				padding-bottom: 0.32rem;
 			}
@@ -488,7 +491,6 @@
 				},
 				mounted: function() {
 					this.$nextTick(function() {
-
 						this.$pullRefresh = mui(".mui-scroll-wrapper");
 						mui.init({
 							pullRefresh: {
@@ -542,11 +544,16 @@
 
 					// 头像点击
 					onHeadTap: function(account) {
-
-						mui.openWindow('../../person/other.html', 'other', {
-							extras: {
-								uid: account
-							}
+						var that = this;
+//						mui.openWindow('../../person/other.html', 'other', {
+//							extras: {
+//								uid: account
+//							}
+//						});
+						app.page.openForResultBy('../../person/other.html', 'other', function(data) {
+							that.isfocus = data.isfocus;
+						}, {
+							uid: account
 						});
 					},
 
@@ -629,12 +636,15 @@
 						this.changeCollection();
 					},
 					changeCollection: function() {
+						var that = this;
 						var methodName = 'add';
 
 						if(this.collection) {
 							methodName = 'delete';
 						}
+						plus.nativeUI.showWaiting();
 						dal.user.collection_talk[methodName](this.aid, function(err, data) {
+							plus.nativeUI.closeWaiting();
 							if(err) {
 								return mui.toast(err.message)
 							}
@@ -642,7 +652,9 @@
 							console.log("data==>" + data);
 							mui.toast((this.collection ? "取消" : "") + "收藏成功");
 							this.info.iscollection = +!this.info.iscollection;
-
+							app.page.setResult({
+								collection:that.collection
+							});
 						}.bind(this));
 					},
 					onFocusTap: function() {

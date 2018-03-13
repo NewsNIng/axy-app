@@ -77,7 +77,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-rules.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
 
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
@@ -129,20 +129,20 @@
 					// 手动添加设备号
 					onAddTap: function() {
 						this.flash = false;
-						
+
 						var url = 'scan_code.html';
-						if(this.name === 'AX-904'){
+						if(this.name === 'AX-904') {
 							// GPRS 特殊处理
 							url = 'scan_code_904.html';
 						}
-						
+
 						//this.closeScan();
 						//this.stopScan();
 						// 手动输入序列号 
 						app.page.openForResultBy(url, 'scan_code', function(data) {
 							if(data.code) {
 								var errmsg = app.rules.testBy(/^(?!25)/, data.code, "非配件设备码");
-								if(errmsg){
+								if(errmsg) {
 									// 25开头 是电管家 
 									this.isDev = true;
 									//return mui.toast(errmsg);
@@ -181,10 +181,13 @@
 								_B.emit('device_update', {}, {
 									views: ['zeus', 'dev_my_list']
 								});
-								mui.alert('添加成功');
-								app.page.setResult({
-									result: true
-								}).close();
+
+								var cw = plus.webview.currentWebview();
+								var completedWindow = plus.webview.create('add_completed.html', 'add_completed', {}, {
+									devid: id,
+								}).show('pop-in', 220, function() {
+									cw.close('none');
+								});
 							});
 						}
 						// 配件添加
@@ -215,20 +218,20 @@
 											});
 										}, {
 											result: true,
-											
+
 											accid: data1.aid,
-											
-//											filter: that.isSmart ? [
-//												"AX-903",
-//												"AX-904",
-//												"VH-104GN",
-//												"VH-104MG",
-//												"VH-104DG",
-//											]: [
-//												"WG-100",
-//												"AX-903",
-//												//"AX-904"
-//											]
+
+											//											filter: that.isSmart ? [
+											//												"AX-903",
+											//												"AX-904",
+											//												"VH-104GN",
+											//												"VH-104MG",
+											//												"VH-104DG",
+											//											]: [
+											//												"WG-100",
+											//												"AX-903",
+											//												//"AX-904"
+											//											]
 										});
 									});
 
@@ -241,16 +244,18 @@
 										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, function(err, data) {
 											plus.nativeUI.closeWaiting();
 											if(err) {
-												ob.next({result:false});
+												ob.next({
+													result: false
+												});
 												return mui.toast(err.message);
 											}
-											
+
 											ob.next({
-												result:true,
-												acc:rs.acc,
-												dev:{
-													devid:rs.dev.devid,
-													type:rs.dev.type
+												result: true,
+												acc: rs.acc,
+												dev: {
+													devid: rs.dev.devid,
+													type: rs.dev.type
 												}
 											});
 										});
@@ -258,7 +263,7 @@
 								})
 								// 添加配件结果
 								.subscribe(function(data) {
-//									console.log(JSON.stringify(data));
+									//									console.log(JSON.stringify(data));
 									if(data.result) {
 										// 通知配件更新 TODO
 										_B.emit('acc_update', {}, {
@@ -266,20 +271,19 @@
 										});
 									}
 									app.page.setResult({
-										data:data
+										data: data
 									}).close();
 								});
 
 						}
 
 					},
-					
+
 					// 通过序列号获取过滤列表
-					_getFilterList: function(code){
-						
+					_getFilterList: function(code) {
+
 					},
-					
-					
+
 					resetScan: function(frist) {
 						if(this.t && this.t >= 0) {
 							return;

@@ -82,7 +82,7 @@
 				</div>
 				<ul class="mui-table-view app-font-size-28">
 					<template v-for="o,i in devs">
-						<li class="mui-table-view-cell" @tap="onSelectTap(i)">
+						<li class="mui-table-view-cell" @tap="onSelectTap(o, i)">
 							<a>
 								<span class="mui-badge select"><img v-if="i === devActive" src="../../../image/smart/devices/add/select1.png"/><img v-if="i !== devActive" src="../../../image/smart/devices/add/select2.png"/></span>
 								<span class="name">{{o.location}}</span>
@@ -130,14 +130,15 @@
 				},
 				// plusReady: function() {},
 				methods: {
-					onSelectTap: function(i) {
+					onSelectTap: function(o, i) {
 						this.devActive = i;
+						
 					},
 					onNext: function() {
 						app.page.setResult({
 							devid: this.indexDev.devid
 						}).colse();
-					},
+					}
 					// 我的主机列表
 					getMyDevList: function(){
 						dal.device.list(1, function(err, rs){

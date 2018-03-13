@@ -331,7 +331,7 @@
 								return;
 							}
 							var errorMessage = app.rules.testBy(/^\w{1,32}$/, that.username, "账号格式不正确") ||
-								app.rules.testBy(/^\w{6,20}$/, that.password, "密码长度需6-20位");
+								app.rules.testBy(/^[0-9a-zA-Z!@#$%^&*_.]{6,20}$/, that.password, "密码长度需6-20位");
 
 							if(errorMessage) {
 								return mui.toast(errorMessage);
@@ -619,6 +619,8 @@
 
 			// 用户资料整合
 			function fixUserData(data) {
+				console.log(JSON.stringify(data));
+				
 				// 绑定手机号
 				var bindmobile = data.bindmobile;
 				// 是否开启权限验证

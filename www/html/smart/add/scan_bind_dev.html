@@ -97,7 +97,7 @@
 				</div>
 				<ul class="mui-table-view app-font-size-28">
 					<template v-for="o,i in devs">
-						<li class="mui-table-view-cell" @tap="onSelectTap(i)">
+						<li class="mui-table-view-cell" @tap="onSelectTap(o, i)">
 							<a>
 								<span class="mui-badge select"><img v-if="i === devActive" src="../../../image/smart/devices/add/select1.png"/><img v-if="i !== devActive" src="../../../image/smart/devices/add/select2.png"/></span>
 								<span class="name app-color-333333 app-font-size-34">{{_fixDevName(o.location) || o.devid}}<br /><span class="id app-color-9f9fa0 app-font-size-26">设备ID:{{o.devid}}</span></span>
@@ -118,10 +118,12 @@
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -170,8 +172,67 @@
 					this.getDevList();
 				},
 				methods: {
-					onSelectTap: function(i) {
+					onSelectTap: function(o, i) {
 						this.devActive = i;
+						// TODO 修复设备多通道问题
+						return;
+						console.log(JSON.stringify(o));
+						
+						var type = app.dev.fixType(o.type);
+						
+						Rx.Observable.create(function(ob) {
+							// 判断是否多通道
+							if(app.dev.isMoreWays(type)){
+								// 获取设备的通道信息
+								plus.nativeUI.showWaiting("获取通道信息中...");
+								dal.devparam.chlist(o.devid, type, function(err, data) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast(err.message);
+									}
+
+									if(!data || !data.length) {
+										return mui.toast("暂无通道信息");
+									}
+	console.log(JSON.stringify(data));
+									return 1;
+									data = data.map(function(item) {
+										return {
+											text: item.name,
+											value: item.no
+										}
+									});
+									
+								
+									// 动态设置设备通道
+									wayPick.setData(data);
+									// 重置弹出层到第一个通道位置
+									wayPick.pickers[0].setSelectedIndex(0);
+									// 显示通道选择器
+									wayPick.show(function(items) {
+										ob.next({
+											b: items[0].value
+										});
+									}, function(items) {
+										// 取消 或者 隐藏
+									});
+								});
+							} else {
+								ob.next({
+									b: 0
+								});
+							}
+						}).subscribe(function(data) {
+//							var w1 = data.b;
+//							var w2 = type === 0x1046 ? 1 : 0;
+//							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
+//								getScrrenHotBgFn(o.devid).then(function(path) {
+//									that.$refs.devimgel[that.tapIndex].style.backgroundImage = "url(" + path + ")";
+//								})
+//							});
+						});
+						
+						
 					},
 					onNext: function() {
 						if(this.devActive < 0) {

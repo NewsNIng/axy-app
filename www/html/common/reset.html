@@ -217,7 +217,7 @@
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_msg.png" />
 				<input type="tel" class="app-font-size-28" placeholder="请输入短信验证码" v-model="verifycode">
-				<button type="button" @tap="getCodeTap()" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined" :class="{'mui-disabled': codeState}" v-text="codeState ? codeTimer: '发送验证码'"></button>
+				<button type="button" @tap="getCodeTap()" class="send_code app-font-size-22 mui-btn mui-btn-grey mui-btn-outlined" :class="{'mui-disabled': codeState}" v-text="codeState ? (codeTimer + 's'): '发送验证码'"></button>
 			</div>
 			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="请稍后..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">下一步</button>
 		</div>
@@ -233,6 +233,8 @@
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
 			mui.init()
@@ -266,38 +268,69 @@
 
 				methods: {
 					getCodeTap: function() {
-						if(this.codeT) {
-							return
-						}
+						var that = this;
 
-						var errorMessage = app.rules.test("tel", this.username, "手机号码格式不正确");
-						if(errorMessage) {
-							return mui.toast(errorMessage);
-						}
-						// 发送获取验证码的请求
-						dal.user.getCode(this.username, function(err, data) {
-							if(err) {
-								this.codeT = null;
-								this.codeState = false;
-								this.codeTimer = 60;
-								return mui.toast(JSON.stringify(err));
-							}
-							this.codeNumber = data.validcode;
-						}.bind(this));
-
-						(function t(c) {
-							c.codeT = setTimeout(function() {
-								if(c.codeTimer <= 0) {
-									c.codeT = null;
-									c.codeState = false;
-									c.codeTimer = 60;
-									return;
+						// 本地验证手机号码
+						var $localCheckTelFn = function(telphone) {
+							return Rx.Observable.create(function(ob) {
+								var errorMessage = app.rules.test("tel", telphone, "手机号码格式不正确");
+								if(errorMessage) {
+									return ob.error({
+										message: errorMessage
+									})
 								}
-								c.codeTimer--;
-								t(c);
-							}, 1000);
-						}(this));
-						this.codeState = true;
+								ob.next(telphone);
+							});
+						}
+
+						// 发送获取验证码的请求
+						var $getCodeFn = function(telphone) {
+							return Rx.Observable.create(function(ob) {
+								dal.user.getCode(telphone, function(err, data) {
+									if(err) {
+										return ob.error(err);
+									}
+
+									ob.next(data.validcode);
+								});
+							});
+						}
+
+						// 验证码按钮变化
+						var $codeTimer = Rx.Observable
+							.interval(1000)
+							.take(60);
+
+						// 显示waiting
+						plus.nativeUI.showWaiting();
+						// 验证手机是否符合规格
+						$localCheckTelFn(that.username)
+							// 获取短信验证码
+							.mergeMap($getCodeFn)
+							// 获取成功
+							.subscribe(function(code) {
+								// 关闭waiting 且 提示用户
+								plus.nativeUI.closeWaiting();
+								mui.toast("发送短信验证码成功，请注意查收");
+								alert(code);
+								that.codeNumber = code;
+								that.codeState = true;
+								// 开始计时
+								$codeTimer.subscribe(function(t) {
+									if(t >= 59) {
+										that.codeState = false;
+										that.codeTimer = 60;
+									}
+									that.codeTimer--;
+								});
+
+							}, function(e) {
+								// 错误回调
+
+								plus.nativeUI.closeWaiting();
+								mui.toast(e.message);
+							});
+
 					},
 					onLoginTap: function(e) {
 						if(this.loading) {

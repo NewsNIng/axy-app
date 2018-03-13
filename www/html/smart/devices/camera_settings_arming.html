@@ -468,11 +468,16 @@
 					},
 					// 保存操作
 					onSave: function() {
+						
+						if(!this.endTime){
+							return mui.toast("请填写完整的时间");
+						}
+						
 						this.mask = false;
-
+						var tpweeks = this.weeks.slice(0);
 						var o = {
 							"end": this.endTime + ":00",
-							"recycle": this._bool2two([true].concat(this.weeks.reverse())),
+							"recycle": this._bool2two([true].concat(tpweeks.reverse())),
 							"start": this.startTime + 　":00"
 						};
 
@@ -506,6 +511,10 @@
 
 					// 添加布防
 					onAutoArming: function() {
+						if(this.plans.length >= 8){
+							return mui.toast("计划最多为8个，请删除其它");
+						}
+						
 						this.mask = true;
 						this.index = 1;
 						this.actionType = -1;

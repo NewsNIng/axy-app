@@ -206,7 +206,7 @@
 					<li class="mui-table-view-cell" @tap="onDevNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge" v-text="fixName(devInfo.location)"></span>
+							<span class="mui-badge" v-text="fixName(devInfo.location) || devInfo.devid"></span>
 						</a>
 					</li>
 					<!--<li class="mui-table-view-cell">
@@ -494,9 +494,9 @@
 					},
 					// 校准点击
 					onUpsideTap: function(index) {
-						if(this.upsideIndex === index) {
-							return;
-						}
+//						if(this.upsideIndex === index) {
+//							return;
+//						}
 						this.imageorientation(!index);
 
 					},
@@ -512,8 +512,10 @@
 								}
 							});
 						} else {
+							plus.nativeUI.showWaiting();
 							// 设置
 							dal.devparam.imageorientation(this.devInfo.devid, this.devInfo.type, !upside, function(err, rs) {
+								plus.nativeUI.closeWaiting();
 								if(err) {
 									return mui.toast(err.message);
 								}
