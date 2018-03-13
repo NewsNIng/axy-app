@@ -54,7 +54,7 @@
 		<!--基础库-->
 		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>-->
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
@@ -102,7 +102,19 @@
 							});
 
 							mui.toast('添加设备成功！');
-							app.page.setResult({}).close();
+
+							// 2766 跳转到主机列表
+							var dev_my_list = plus.webview.getWebviewById('dev_my_list');
+							if(!dev_my_list) {
+								dev_my_list = plus.webview.create("_www/html/smart/devices/dev_my_list.html", "dev_my_list");
+							}
+
+							dev_my_list.show("pop-in", 220, function() {
+								setTimeout(function() {
+									app.page.setResult({}).close();
+								}, 1000);
+							});
+
 						});
 					}
 

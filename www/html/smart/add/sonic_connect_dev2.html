@@ -69,19 +69,12 @@
 			
 			@keyframes ripple {
 				0% {
-					left: 50%;
-					top: 50%;
-					transform: translate3d(-50%, -50%, 0);
-					-webkit-transform: translate3d(-50%, -50%, 0);
 					opacity: 0.75;
 					width: 1.6rem;
 					height: 1.6rem;
 				}
 				100% {
-					transform: translate3d(-50%, -50%, 0);
-					-webkit-transform: translate3d(-50%, -50%, 0);
-					left: 50%;
-					top: 50%;
+					
 					opacity: 0;
 					width: 3rem;
 					height: 3rem;
@@ -89,6 +82,10 @@
 			}
 			
 			.send_sound_wave.active:after {
+				transform: translate3d(-50%, -50%, 0);
+					-webkit-transform: translate3d(-50%, -50%, 0);
+				left: 50%;
+				top: 50%;
 				content: ' ';
 				position: absolute;
 				z-index: -1;
@@ -122,20 +119,18 @@
 				/*定义动画方式*/
 			}
 			
-			
-			.imgbg{
+			.imgbg {
 				width: 100%;
 				/*padding: 1.5rem;*/
 			}
 			
-			.imgbg > img{
+			.imgbg>img {
 				width: 100%;
 			}
 			
 			.unavailable {
 				background: #7FD4CC;
 			}
-			
 		</style>
 	</head>
 
@@ -149,7 +144,7 @@
 
 			<div class="mui-content">
 				<div class="imgbg">
-					<img src="../../../image/smart/devices/dev_icon/sound.png"/>
+					<img src="../../../image/smart/devices/dev_icon/sound.png" />
 				</div>
 				<div class="dev_icon app-font-size-34">
 					<div class="dev_text">点击“发送声波”，让摄像机连上WIFI无线网络。<br />听到声波提示音后，点击“下一步”。</div>
@@ -201,9 +196,8 @@
 					};
 				},
 				mounted: function() {
-					window.localStorage.setItem('Lan_add_camera_img','../../../image/smart/devices/dev_icon/AX-360@3x.png');
-					
-					
+					window.localStorage.setItem('Lan_add_camera_img', '../../../image/smart/devices/dev_icon/AX-360@3x.png');
+
 					// get prev url params
 					function GetQueryString(name) {
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
@@ -223,16 +217,17 @@
 				},
 				methods: {
 					onNext: function() {
-						if(!this.isSend){
+						if(!this.isSend) {
 							return;
 						}
 						var url = "Lan_connect_camera.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd + "&setid=" + this.setid;
 						this._cancel();
 						// 保证指令已经发送
 						setTimeout(function() {
-							this.$view.loadURL(url, 'voice5');
+							// voice5
+							this.$view.loadURL(url);
 						}.bind(this));
-
+`
 					},
 					onVoiceTap: function() {
 						this.active = !this.active;

@@ -43,6 +43,9 @@
 		if(domain){
 			o.BASE_URL = domain;
 		}
+		
+		//o.BASE_URL = dal.BASE_URL_DEV;
+		
 		return ra('post', '/user/ologin', o, callback)
 	}
 

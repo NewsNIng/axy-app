@@ -49,6 +49,17 @@ function requestAdapter(type, url, params, callback) {
 		success: function(data) {
 			
 			var o = {};
+			
+			if(data.code === "403"){
+				// token 验证失败 通知 zeus
+				var zeus = plus.webview.getWebviewById("zeus");
+				if(!zeus){return}
+				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', {})";
+				zeus.evalJS("")
+				
+				return;
+			}
+			
 			if(data.code !== "0000" && data.code !== "0") {
 				o.err = {
 					code: data.code,

@@ -150,6 +150,12 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
+			
+			
+			.mui-switch.mui-disabled {
+				opacity: 1;
+				pointer-events: none;
+			}
 		</style>
 	</head>
 
@@ -192,11 +198,11 @@
 							<span class="mui-badge "></span>
 						</a>
 					</li>
-					<li v-show="otherInfo.on !== null" class="mui-table-view-cell">
+					<li v-show="otherInfo.on !== null" class="mui-table-view-cell" @tap="onOnToggle()">
 						<a class="">
 							<span>状态指示灯</span>
 							<span class="mui-badge">
-								<div @toggle="onOnToggle($event)" ref="onSwitch" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': otherInfo.on}" >
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': otherInfo.on}" >
 									<div class="mui-switch-handle"></div>
 								</div>
 							</span>
@@ -208,12 +214,11 @@
 							<span class="mui-badge "></span>
 						</a>
 					</li>
-					<!--<li class="mui-table-view-cell" @tap="onAlarmTap()">
+					<li class="mui-table-view-cell" @tap="onAlarmParam()">
 						<a class="mui-navigate-right">
 							<span>告警时间设置</span>
-							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
 						</a>
-					</li>-->
+					</li>
 					<li class="mui-table-view-cell" @tap="onLogTap()">
 						<a class="mui-navigate-right">
 							<span>摄像机日志</span>
@@ -262,8 +267,6 @@
 					return {
 						devid: -1,
 
-						// 告警延迟时间
-						alarmDelayTime: 0,
 						// 弹框
 						pick: null,
 						statusLight: true, // 是否开启状态指示灯,
@@ -346,14 +349,17 @@
 						});
 					},
 					// 状态指示灯
-					onOnToggle: function(e) {
-						var isActive = e.detail.isActive;
+					onOnToggle: function() {
 						var that = this;
-						dal.devparam.openled(this.devInfo.devid, this.devInfo.type, !isActive, function(err, rs) {
+						var want = !that.otherInfo.on;
+						that.otherInfo.on = want;
+						plus.nativeUI.showWaiting();
+						dal.devparam.openled(this.devInfo.devid, this.devInfo.type, want, function(err, rs) {
+							plus.nativeUI.closeWaiting();
 							if(err) {
+								that.otherInfo.on = !want;
 								return mui.toast(err.message);
 							}
-							that.otherInfo.on = !isActive;
 						});
 					},
 
@@ -361,20 +367,18 @@
 					onDelDevice: function() {
 						console.log("deldevice");
 					},
-					// 告警延迟时间
-					onAlarmTap: function() {
+					// 告警时间跳转
+					onAlarmParam: function() {
 						var that = this;
 
-						this.pick.pickers[0].setSelectedValue(this.alarmDelayTime);
-
-						var fn = function(s) {
-							that.alarmDelayTime = s;
-						};
-
-						this.pick.show(function(items) {
-							fn(items[0].value);
-						}, function(items) {
-
+						app.page.getAlarmParam(function(data) {
+							//data.intervalTime
+							//data.continuedTime
+						}, {
+							//							intervalTime: 0,
+							//							continuedTime: 0,
+							type: that.devInfo.type,
+							devid: that.devInfo.devid,
 						});
 					},
 					
