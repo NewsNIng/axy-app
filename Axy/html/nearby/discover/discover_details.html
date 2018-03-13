@@ -293,7 +293,6 @@
 				background-size: cover;
 				background-position: center;
 			}
-			
 			/*图片轮播*/
 			
 			.mui-slider-indicator .mui-indicator {
@@ -335,7 +334,6 @@
 				</a>
 			</header>
 
-			
 			<div class="footer" :class="{'isFocus': true}">
 
 				<input style="margin-bottom: 0;" ref='cinput' @focus="inputFoucs=true" @blur="inputFoucs=false" type="text" name="" id="" v-model="content" placeholder="写评论" />
@@ -537,16 +535,14 @@
 						});
 					},
 
-				
-
 					// 头像点击
 					onHeadTap: function(account) {
 						var that = this;
-//						mui.openWindow('../../person/other.html', 'other', {
-//							extras: {
-//								uid: account
-//							}
-//						});
+						//						mui.openWindow('../../person/other.html', 'other', {
+						//							extras: {
+						//								uid: account
+						//							}
+						//						});
 						app.page.openForResultBy('../../person/other.html', 'other', function(data) {
 							that.isfocus = data.isfocus;
 						}, {
@@ -630,7 +626,12 @@
 
 					},
 					onCollection: function() {
-						this.changeCollection();
+						var that = this;
+						app.user.get(function(u, sync) {
+							u && setTimeout(function() {
+								that.changeCollection();
+							}, sync ? 0: 200);
+						});
 					},
 					changeCollection: function() {
 						var that = this;
@@ -650,7 +651,7 @@
 							mui.toast((this.collection ? "取消" : "") + "收藏成功");
 							this.info.iscollection = +!this.info.iscollection;
 							app.page.setResult({
-								collection:that.collection
+								collection: that.collection
 							});
 						}.bind(this));
 					},

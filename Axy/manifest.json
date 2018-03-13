@@ -7,7 +7,7 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.0.4",/*应用版本名称*/
+		"name": "2.0.5",/*应用版本名称*/
 		"code": "20180306"
 	},
 	"description": "",/*应用描述信息*/
@@ -314,7 +314,8 @@
 					"js/lib/Rx.min.js",
 					"js/app/app.js",
 					"js/common/android-back.js",
-					"js/common/flexible.js"
+					"js/common/flexible.js",
+					"html/smart/devices/dev_error.html"
 				],
 				"refer": [
 					"html/zeus.html",
@@ -679,7 +680,8 @@
 				"refer": [
 					"html/person/other.html",
 					"html/common/login.html",
-					"html/public/share.html"
+					"html/public/share.html",
+					"html/person/message/index.html"
 				],
 				"priority": 0
 			},
@@ -817,7 +819,14 @@
 					"image/smart/devices/bg/903@3xweb.png",
 					"image/smart/devices/bg/wg_100@3xweb.png",
 					"image/smart/scenes/dev_icons/btn_Acousto-opticalarm@3x.png",
-					"image/smart/scenes/dev_icons/btn_Infrareddetector@3x (2).png"
+					"image/smart/scenes/dev_icons/btn_Infrareddetector@3x (2).png",
+					"css/app/module/poppicker.css",
+					"css/app/app.css",
+					"css/lib/mui.min.css",
+					"css/lib/mui.poppicker.css",
+					"css/lib/mui.picker.css",
+					"css/app/devices.css",
+					"fonts/mui.ttf"
 				],
 				"refer": [
 					"html/smart/add/add_device.html",
@@ -846,7 +855,8 @@
 					"html/smart/devices/dev_33.html",
 					"html/smart/devices/dev_40.html",
 					"html/smart/devices/dev_AX-904.html",
-					"html/smart/devices/dev_VH-104_setting.html"
+					"html/smart/devices/dev_VH-104_setting.html",
+					"html/smart/devices/dev_32.html"
 				],
 				"priority": 0
 			},
@@ -1169,7 +1179,8 @@
 					"html/smart/devices/dev_40.html",
 					"html/smart/devices/dev_65.html",
 					"html/smart/devices/dev_160.html",
-					"html/smart/devices/dev_22.html"
+					"html/smart/devices/dev_22.html",
+					"html/smart/devices/dev_32.html"
 				],
 				"priority": 0
 			},
@@ -1246,7 +1257,8 @@
 			"html/nearby/business/store_details.html": {
 				"resources": [],
 				"refer": [
-					"html/public/share.html"
+					"html/public/share.html",
+					"html/common/login.html"
 				],
 				"priority": 0
 			},
@@ -1255,6 +1267,41 @@
 				"refer": [
 					"html/public/input.html"
 				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_160.html": {
+				"resources": [
+					"js/app/app-page.js",
+					"js/components/devices/footer.js",
+					"js/app/app.js",
+					"js/dal/devaccessory.js",
+					"js/dal/base.js",
+					"js/data/time_ms_alarm.js",
+					"image/smart/devices/gas/btn_Formaldehydedetector@3x.png",
+					"js/lib/mui.picker.js",
+					"js/lib/vue-ni.js",
+					"js/lib/mui.poppicker.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/smart/devices/dev_32.html": {
+				"resources": [
+					"js/common/flexible.js",
+					"js/lib/mui.min.js",
+					"js/lib/vue-ni.js",
+					"js/lib/mui.picker.js",
+					"js/lib/mui.poppicker.js",
+					"js/common/immersed.js",
+					"js/app/app-page.js",
+					"js/lib/vue.min.js",
+					"js/components/devices/footer.js",
+					"js/dal/base.js",
+					"js/dal/devaccessory.js",
+					"js/app/app.js",
+					"js/data/time_ms_alarm.js"
+				],
+				"refer": [],
 				"priority": 0
 			}
 		},

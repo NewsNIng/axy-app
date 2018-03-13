@@ -306,7 +306,9 @@
 							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation)">
 								<span class="app-color-main">{{_fixDevLocation(o.location) || o.devid}}</span>
 								<img class="menudiv-controller" @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
-								<img class="menudiv-album" @tap="onAlbmTap(o,i)" src="../../../image/smart/camera/history.png" />
+								
+								<img v-if="o.type !== 23 && o.type !== 128 && o.type !== 144" class="menudiv-album" @tap="onAlbmTap(o,i)" src="../../../image/smart/camera/history.png" />
+								
 								<img class="menudiv-share" @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
 								<img class="menudiv-setting" @tap="onSettingTap(o, i)" src="../../../image/smart/camera/setting.png" />
 							</div>
@@ -872,6 +874,7 @@
 
 					// 设备录像
 					onAlbmTap: function(o, i) {
+//						alert(JSON.stringify(o));
 						mui.openWindow("../../person/collection/my_camera.html", 'my_camera', {
 							extras: {
 								devInfo: o
