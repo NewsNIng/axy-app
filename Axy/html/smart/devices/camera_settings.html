@@ -505,7 +505,9 @@
 						var that = this;
 						if(upside === undefined) {
 							// 获取
+							plus.nativeUI.showWaiting();
 							dal.devparam.getImageorientation(this.devInfo.devid, this.devInfo.type, function(err, rs) {
+								plus.nativeUI.closeWaiting();
 								console.log(JSON.stringify(rs));
 								if(!err) {
 									that.upside = !rs.upside;
