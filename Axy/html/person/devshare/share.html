@@ -189,6 +189,7 @@
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../../js/dal/common.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<script type="text/javascript" src="../../../js/lib/qrcode.min.js"></script>
@@ -276,7 +277,7 @@
 								imgindex: 8,
 							},
 						],
-						
+
 						QRcode: null,
 					};
 				},
@@ -364,30 +365,41 @@
 									code: code,
 									account: u.account
 								}
-								
+
 								o.location && (o.location = encodeURI(o.location));
-								
+
 								var paramsArr = [];
-								
+
 								for(var i in o) {
 									o[i] && paramsArr.push(i + '=' + o[i]);
 								}
-								
-								
 
 								var href = dal.BASE_SHARE_URL + "?" + paramsArr.join('&');
-console.log(href); 
-								new ni.Share('wxhy', function(err, data) {
-									if(err) {
-										console.log(err)
-									}
-									console.log(JSON.stringify(data))
-								}, {
-									img: '../../../image/common/login_logo.png', //图片地址 暂不支持网络地址 
-									href: href, //分享的超链接
-									title: '亲友邀请您一起看', //当且仅当href存在时有效
-									content: '安装[安心云]App后，输入邀请码#' + code + '#就能看到我家的美景啦，快来体验全新的智能家居、智能安防哦——来自安心云' //当且仅当href存在时有效
+
+								// SHARE TAG
+								new Promise(function(resolve, reject) {
+									dal.common.generateDURL(href, function(err, data) {
+										if(!err) {
+											href = data;
+										}
+										resolve();
+									});
+
+								}).then(function() {
+									console.log(href); 
+									new ni.Share('wxhy', function(err, data) {
+										if(err) {
+											console.log(err)
+										}
+										console.log(JSON.stringify(data))
+									}, {
+										img: '../../../image/common/login_logo.png', //图片地址 暂不支持网络地址 
+										href: href, //分享的超链接
+										title: '亲友邀请您一起看', //当且仅当href存在时有效
+										content: '安装[安心云]App后，输入邀请码#' + code + '#就能看到我家的美景啦，快来体验全新的智能家居、智能安防哦——来自安心云' //当且仅当href存在时有效
+									});
 								});
+
 							}
 						}.bind(this)).catch(function(msg) {
 							plus.nativeUI.closeWaiting();
@@ -406,12 +418,12 @@ console.log(href);
 
 					// 生成二维码图片
 					generateCodeImage: function(code) {
-						if(!this.QRcode){
-							this.QRcode = new QRCode(document.getElementById("qrcode"), code);	
-						}else{
+						if(!this.QRcode) {
+							this.QRcode = new QRCode(document.getElementById("qrcode"), code);
+						} else {
 							this.QRcode.makeCode(code);
 						}
-						
+
 					},
 
 					// 渲染图片二维码

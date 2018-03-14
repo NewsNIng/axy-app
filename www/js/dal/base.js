@@ -2,10 +2,11 @@ var dal = {
 	BASE_URL_DEV: "http://192.168.1.213:8080/vihiManager/vihiapi",
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
 	// http://vh.anxin-net.com/vihiManager/vihiapp/share/index.html
-	
+
 	BASE_URL_TOP: "http://www.isee110.com/api",
 	BASE_SHARE_URL: "http://vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
 	//BASE_SHARE_URL: "http://192.168.1.103:8080/module/index.html",
+	BASE_URL_VERSION: "206",
 };
 
 /**
@@ -23,14 +24,14 @@ function requestAdapter(type, url, params, callback) {
 	} else {
 		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL;
 	}
+
+	var apiUrl = url;
+
 	url = BASE_URL + url;
+	// 获取用户权限信息
 
-	// 获取用户account
-
-	params.account = params.account || window.localStorage.getItem('_account_');
-
-	//params.datatime = +(new Date());
-
+	params.account = params.account || window.localStorage.getItem('_account_') || "";
+	
 	console.log("[" + type + "]" + url);
 	console.log(JSON.stringify(params));
 
@@ -41,25 +42,40 @@ function requestAdapter(type, url, params, callback) {
 		"parsererror": "解析错误",
 		"null": "请求为空"
 	};
+	
+	
 
 	var options = {
+		headers: {
+			token: window.localStorage.getItem('_token_') || "",
+			loginid: window.localStorage.getItem('_loginid_') || "",
+			imei: window.localStorage.getItem('_imei_') || "",
+			account: params.account,
+			appversion: dal.BASE_URL_VERSION,
+		},
 		data: params,
 		type: type,
 		timeout: 60000,
+		
 		success: function(data) {
-			
+
 			var o = {};
-			
-			if(data.code === "403"){
+
+			console.log("[" + apiUrl + "]" + JSON.stringify(data));
+
+			if(data.code === "403") {
 				// token 验证失败 通知 zeus
 				var zeus = plus.webview.getWebviewById("zeus");
-				if(!zeus){return}
+				if(!zeus) {
+					console.log("ZEUS WINDOW NOFIND");
+					return
+				}
+				plus.nativeUI.toast("帐号保护已开启，您需要登录申请授权");
 				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', {})";
-				zeus.evalJS("")
-				
+				zeus.evalJS(jsstr);
 				return;
 			}
-			
+
 			if(data.code !== "0000" && data.code !== "0") {
 				o.err = {
 					code: data.code,
@@ -71,7 +87,7 @@ function requestAdapter(type, url, params, callback) {
 			callback(o.err, o.data);
 		},
 		error: function(xhr, type, err) {
-			
+
 			callback({
 				code: xhr.status,
 				message: errDir[type] || "其它错误"

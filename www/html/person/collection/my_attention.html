@@ -79,6 +79,10 @@
 			.attention_icon {
 				float: right;
 				margin-right: 0.346666rem;
+				color: #9F9FA0;
+				border: 1px solid #9F9FA0;
+				padding: 0.3rem 0.266666rem;
+				border-radius: 15px;
 			}
 			
 			.null {
@@ -98,7 +102,8 @@
 				<div class="attention_item" v-for="o,i in attentions" v-if="o">
 					<img class="vertical_center" :src="o.headimgurl" />
 					<span class="name vertical_center app-font-size-28" v-text="o.nickname"></span>
-					<img class="attention_icon vertical_center" @tap="unBindTap(o.account,i)" src="../../../image/person/collection/btn_Alreadypaidattentionto@3x.png" />
+					<!--<img class="attention_icon vertical_center" @tap="unBindTap(o.account,i)" src="../../../image/person/collection/btn_Alreadypaidattentionto@3x.png" />-->
+					<div class="attention_icon vertical_center" @tap="unBindTap(o.account,i)">已关注</div>
 				</div>
 				<div class="null" v-show="attentions.length === 0">
 
@@ -135,22 +140,15 @@
 				data: function() {
 					return {
 						attentions: [
-							//						{
-							//							img: "../../../image/home/gohome.png",
-							//							name: "冰封夕阳",
-							//						}, {
-							//							img: "../../../image/home/gohome.png",
-							//							name: "冰封夕阳",
-							//						}, {
-							//							img: "../../../image/home/gohome.png",
-							//							name: "冰封夕阳",
-							//						}, {
-							//							img: "../../../image/home/gohome.png",
-							//							name: "冰封夕阳",
-							//						}, {
-							//							img: "../../../image/home/gohome.png",
-							//							name: "冰封夕阳",
-							//						}
+//							{
+//								"nickname": "上海风云",
+//								"account": "13545826660",
+//								"headimgurl": "http://vihiapp.oss-cn-shenzhen.aliyuncs.com/6d95cd92-c355-4cad-9ab8-3d9c5b00476c.jpg"
+//							}, {
+//								"nickname": "啦兔兔",
+//								"account": "2018011015580426327327",
+//								"headimgurl": "http://vihiapp.oss-cn-shenzhen.aliyuncs.com/4ef6c4b1-531d-449f-92d0-c4adfc66998e.jpg"
+//							}
 						],
 
 						n: 0,
@@ -195,7 +193,7 @@
 					unBindTap: function(account, index) {
 						var that = this;
 						mui.confirm("取关后你将无法实时了解TA的动态，是否取消关注？", "温馨提示", ['确认', '取消'], function(e) {
-							if(!e.index){
+							if(!e.index) {
 								that._unfollow(account, function(data) {
 									that.attentions.splice(index, 1);
 								});

@@ -367,6 +367,13 @@
 							value: item.devid
 						};
 					});
+
+					// 添加全部设备选项
+					devPickData.unshift({
+						text: "全部设备",
+						value: ""
+					});
+
 					this.devPickData = devPickData;
 
 					devPick.setData(devPickData);
@@ -479,25 +486,38 @@
 					// 日期选择
 					onDateTap: function() {
 						var that = this;
-						var d = new Date();
-						var y = d.getFullYear();
-						var options = {
-							type: "date",
-							beginYear: y - 1,
-							endYear: y,
-							endMonth: d.getMonth() + 1,
-							endDay: d.getDate(),
-						};
 
-						if(this.dateTime !== "") {
-							options.value = this.dateTime.toFormatString('yyyy-MM-dd');
-						}
+						new Promise(function(resolve, reject) {
 
-						dtPick = new mui.DtPicker(options);
-						dtPick.show(function(rs) {
-							that.dateTime = new Date(rs.text);
-							dtPick.dispose();
-							dtPick = null;
+							mui.confirm("请选择时间范围：", "", ["所有时间", "选取时间"], function(e) {
+								if(e.index === 0) {
+									that.dateTime = "";
+								} else if(e.index === 1) {
+									resolve();
+								}
+							});
+						}).then(function() {
+
+							var d = new Date();
+							var y = d.getFullYear();
+							var options = {
+								type: "date",
+								beginYear: y - 1,
+								endYear: y,
+								endMonth: d.getMonth() + 1,
+								endDay: d.getDate(),
+							};
+
+							if(that.dateTime !== "") {
+								options.value = that.dateTime.toFormatString('yyyy-MM-dd');
+							}
+
+							dtPick = new mui.DtPicker(options);
+							dtPick.show(function(rs) {
+								that.dateTime = new Date(rs.text);
+								dtPick.dispose();
+								dtPick = null;
+							});
 						});
 
 					},

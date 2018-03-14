@@ -319,7 +319,12 @@
 						}.bind(this));
 					},
 					onCollection: function() {
-						this.changeCollection();
+						var that = this;
+						app.user.get(function(u, sync) {
+							u && setTimeout(function() {
+								that.changeCollection();
+							}, sync ? 0: 200);
+						});
 					},
 					changeCollection: function() {
 						var that = this;

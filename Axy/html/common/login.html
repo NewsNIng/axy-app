@@ -530,6 +530,11 @@
 								return o;
 							}
 						}
+						
+						Rx.Observable.timer(8e3).subscribe(function(){
+							w && w.close();
+							w = null;
+						});
 
 						$oauth
 							.mergeMap($logoutOauthFn)

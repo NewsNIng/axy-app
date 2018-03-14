@@ -114,11 +114,8 @@
 			.imgdiv.AX-904 {
 				/*pointer-events: none;*/
 			}
-			
-			
-			
-			
 			/*是否在线*/
+			
 			.imgdiv>span.imgdiv-line {
 				display: inline-block;
 				text-align: center;
@@ -178,22 +175,20 @@
 				width: 0.773333rem;
 				height: 0.773333rem;
 			}
-			
-			
 			/*903无控制器*/
+			
 			.menudiv.AX-903 .menudiv-controller {
 				opacity: 0;
 				pointer-events: none;
-				
 			}
-			
 			/*被分享设备无设置和分享按钮*/
-			.menudiv.relation-share .menudiv-share,.menudiv.relation-share .menudiv-setting{
+			
+			.menudiv.relation-share .menudiv-share,
+			.menudiv.relation-share .menudiv-setting {
 				opacity: 0;
 				pointer-events: none;
 				order: -1;
 			}
-			
 			/*控制弹窗*/
 			
 			#controll {
@@ -306,9 +301,9 @@
 							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation)">
 								<span class="app-color-main">{{_fixDevLocation(o.location) || o.devid}}</span>
 								<img class="menudiv-controller" @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
-								
+
 								<img v-if="o.type !== 23 && o.type !== 128 && o.type !== 144" class="menudiv-album" @tap="onAlbmTap(o,i)" src="../../../image/smart/camera/history.png" />
-								
+
 								<img class="menudiv-share" @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
 								<img class="menudiv-setting" @tap="onSettingTap(o, i)" src="../../../image/smart/camera/setting.png" />
 							</div>
@@ -367,7 +362,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-auth.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
@@ -528,23 +523,24 @@
 						.mergeMap(function() {
 							return Rx.Observable
 								.create(function(ob) {
-									if(!DEVD.data || !DEVD.data.length) {
-										// 网络获取
-										dal.device.list(1, function(err, data) {
-											if(err) {
-												return;
-											}
-											// 数据不为空时 向原生发送数据
-											if(data && data.length > 0) {
-												DEVD.data = data;
-												P.InitNativeDevList(data);
-												ob.next(data);
-											}
-										}, 1000);
-									} else {
-										// 本地获取
-										ob.next(DEVD.data);
-									}
+									// 207版本 去除拿取缓存 
+									//if(!DEVD.data || !DEVD.data.length) {
+									// 网络获取
+									dal.device.list(1, function(err, data) {
+										if(err) {
+											return;
+										}
+										// 数据不为空时 向原生发送数据
+										if(data && data.length > 0) {
+											DEVD.data = data;
+											P.InitNativeDevList(data);
+											ob.next(data);
+										}
+									}, 1000);
+									//} else {
+									//// 本地获取
+									//ob.next(DEVD.data);
+									//}
 
 								});
 						})
@@ -596,19 +592,21 @@
 						if(that.active === 0) {
 							// 网络获取 最新设备信息
 							dal.device.list(1, function(err, data) {
-								that.$view.endPullToRefresh();
+
 								if(err) {
-									return;
+									return that.$view.endPullToRefresh();;
 								}
 								// 数据不为空时 向原生发送数据
 								if(data && data.length > 0) {
 									DEVD.data = data;
 									P.InitNativeDevList(data);
+									that.netDivList = [];
 									that.netDivList = data;
 									//that.active = 0;
 									// 配件列表置空
 									//that.devaccessroyList = [];
 								}
+								that.$view.endPullToRefresh();
 							}, 1000);
 						} else {
 							// 获取配件列表
@@ -679,7 +677,7 @@
 						}
 						var type = app.dev.fixType(o.type);
 						Rx.Observable.create(function(ob) {
-							if(app.dev.isMoreWays(type)){
+							if(app.dev.isMoreWays(type)) {
 								// 获取设备的通道信息
 								plus.nativeUI.showWaiting("获取通道信息中...");
 								dal.devparam.chlist(o.devid, type, function(err, data) {
@@ -746,12 +744,12 @@
 					onAddTap: function() {
 						// 验证登录
 						app.user.get(function(u) {
-							u && mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
-							return 0;
+							//u && mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
+							//return 0;
 							// 验证是否主帐号
-							u && app.auth.verify(app.auth.MASTER, u).then(function(){
-								mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html'); 
-							}).catch(function(e){
+							u && app.auth.verify(app.auth.MASTER, u).then(function() {
+								mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
+							}).catch(function(e) {
 								mui.toast(e.message);
 							});
 						});
@@ -885,7 +883,7 @@
 
 					// 设备录像
 					onAlbmTap: function(o, i) {
-//						alert(JSON.stringify(o));
+						//						alert(JSON.stringify(o));
 						mui.openWindow("../../person/collection/my_camera.html", 'my_camera', {
 							extras: {
 								devInfo: o
