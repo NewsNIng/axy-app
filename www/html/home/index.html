@@ -791,8 +791,8 @@
 					onPlusTap: function() {
 						// 验证登录
 						app.user.get(function(u) {
-							u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
-							return 0;
+							//u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
+							//return 0;
 							// 验证是否主帐号
 							u && app.auth.verify(app.auth.MASTER, u).then(function(){
 								mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');

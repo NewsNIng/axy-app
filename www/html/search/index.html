@@ -297,7 +297,7 @@
 
 			<div class="mui-content app-font-size-28">
 				<!--搜索历史-->
-				<div class="history" v-show="searchState === 0">
+				<div class="history" v-show="searchState === 0 && historyList.length">
 					<div class="tips app-font-size-24 app-color-dark">
 						<span>搜索历史</span>
 						<span class="mui-icon mui-pull-right" @tap="onClearHis()">
@@ -606,7 +606,7 @@
 					var city = this.$view.city;
 					var latitude = this.$view.latitude;
 					var longitude = this.$view.longitude;
-					
+
 					if(city && latitude && longitude) {
 						this.longitude = longitude;
 						this.latitude = latitude;
@@ -625,10 +625,22 @@
 				methods: {
 					// 点击删除历史记录
 					onClearHis: function() {
-						// 清除页面历史记录数据
-						this.historyList = [];
-						// 清楚本地缓存数据
-						historyList.data = [];
+						var that = this;
+						new Promise(function(resolve, reject) {
+								// 提示用户是否删除
+								mui.confirm("是否清除历史记录", "", ["清除", "取消"], function(e) {
+									if(!e.index) {
+										resolve();
+									}
+								});
+							})
+							.then(function() {
+								// 清除页面历史记录数据
+								that.historyList = [];
+								// 清楚本地缓存数据
+								historyList.data = [];
+							});
+
 					},
 					// 点击取消文字时
 					onCancelTap: function() {
@@ -690,7 +702,7 @@
 						// 搜索中
 						this.searchIng = true;
 						this.content = s || this.content;
-						if(!this.content || this.content.toString().trim().length === 0){
+						if(!this.content || this.content.toString().trim().length === 0) {
 							this.searchIng = false;
 							this.$refs.input.focus();
 							return mui.toast("输入错误请重新编辑内容");

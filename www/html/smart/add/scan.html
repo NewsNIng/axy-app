@@ -241,6 +241,7 @@
 									console.log("==============" + JSON.stringify(rs))
 									plus.nativeUI.showWaiting("正在添加配件");
 									return Rx.Observable.create(function(ob) {
+										// TODO 需要添加通道信息
 										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, function(err, data) {
 											plus.nativeUI.closeWaiting();
 											if(err) {
