@@ -345,6 +345,7 @@
 							"devType": 4166,
 							"statusCode": 0
 						},
+						i_all: [0, 0, 0],
 					};
 				},
 				mounted: function() {
@@ -465,6 +466,25 @@
 						if(!this._enableVerify()){
 							return;
 						}
+//						if(i === 1) {
+//							this.i_all[2] = isOpen ? 1 : 0;
+//						} else if(i === 2) {
+//							this.i_all[1] = isOpen ? 1 : 0;
+//						} else if(i === 4) {
+//							this.i_all[0] = isOpen ? 1 : 0;
+//						} else if(i === 7) {
+//							this.i_all[0] = isOpen ? 1 : 0;
+//							this.i_all[1] = isOpen ? 1 : 0;
+//							this.i_all[2] = isOpen ? 1 : 0;
+//						}
+//						if(!isOpen) {
+//							this.i_all[0] = this.i_all[0] ? 0 : 1;
+//							this.i_all[1] = this.i_all[1] ? 0 : 1;
+//							this.i_all[2] = this.i_all[2] ? 0 : 1;
+//						}
+//						var allPosition = this.i_all.join('');
+//												alert(allPosition);
+//						parseInt(allPosition, 2)
 						plus.nativeUI.showWaiting();
 						dal.devaccessory.light(this.devInfo.accessory.id, this.devInfo.accessory.devid, this.devInfo.devType, i, isOpen, function(err, data) {
 							plus.nativeUI.closeWaiting();

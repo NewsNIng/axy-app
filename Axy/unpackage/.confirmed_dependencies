@@ -1,0 +1,30 @@
+{
+	"index.html": {
+		"refer": [
+			"html/main.html"
+		]
+	},
+	"html/main.html": {
+		"resources": [
+			"html/home/index.html"
+		],
+		"refer": [
+			"html/home/index.html",
+			"html/zeus.html",
+			"html/person/index.html",
+			"html/common/login.html"
+		]
+	},
+	"html/smart/devices/dev_my_list.html": {
+		"refer": [
+			"html/smart/devices/dev_33.html",
+			"html/smart/devices/dev_25.html"
+		]
+	},
+	"html/person/index.html": {
+		"refer": [
+			"html/smart/devices/dev_my_list.html",
+			"html/person/setting/index.html"
+		]
+	}
+}
