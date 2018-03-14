@@ -163,7 +163,7 @@
 								<div class="log_all">
 									<template v-for="o,i in logs">
 										<div class="log">
-											<div class="account">{{o.handlers}}<br /><span class="from app-font-size-28">来自：{{hdtypes[o.hdtypeid - 1]}}</span></div>
+											<div class="account">{{o.handlers ? o.handlers:"未知"}}<br /><span class="from app-font-size-28">来自：{{hdtypes[o.hdtypeid - 1]}}</span></div>
 											<div class="state app-font-size-32">{{o.eventid == '2'?'布防成功':o.eventid == '3'?'撤防成功':'重启成功'}}</div>
 											<div class="date app-font-size-28">{{o.attime.split(" ")[0]}}<br />{{o.attime.split(" ")[1]}}</div>
 										</div>
@@ -186,7 +186,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--<script type="text/javascript" src="../../../js/dal/devaccessory.js" ></script>-->
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
@@ -208,7 +208,7 @@
 						n: 0,
 						isPwdProtection: true, // 是否开启密码保护
 						devInfo: {},
-						hdtypes:["网页","遥控器","APP","PC播放器","联防", "计划任务"],
+						hdtypes: ["网页", "遥控器", "APP", "PC播放器", "联防", "计划任务"],
 						logs: [],
 					};
 				},
@@ -255,15 +255,15 @@
 						this.$nextTick(function() {
 							this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
 						}.bind(this));
-//						alert(JSON.stringify(this.devInfo));
-						dal.device.logs.list(this.n,this.devInfo.devid, function(err, data) {
+						//						alert(JSON.stringify(this.devInfo));
+						dal.device.logs.list(this.n, this.devInfo.devid, function(err, data) {
 							if(err) {
 								return mui.toast(err.message);
 							}
 							console.log(JSON.stringify(data));
-							
+
 							if(!data.result || !data.result) {
-//								alert(JSON.stringify(data)+"\t"+data+data.length);
+								//								alert(JSON.stringify(data)+"\t"+data+data.length);
 								mui.toast('没有更多啦~~');
 							} else {
 								this.logs.push.apply(this.logs, data.result);
@@ -272,17 +272,17 @@
 					},
 					// 接口测试
 					test: function() {
-						mui.openWindow('test.html','test');
+						mui.openWindow('test.html', 'test');
 						// 获取用户所有配件
-//						dal.devaccessory.allacc(function(data){
-//							alert(JSON.stringify(data));
-//						});
+						//						dal.devaccessory.allacc(function(data){
+						//							alert(JSON.stringify(data));
+						//						});
 						// 设置智能灯控
-//						dal.devaccessory.getStatus("14255286","20","VH-104GN-2017061500015","20",function(data){
-//							alert(JSON.stringify(data));
-//						});
+						//						dal.devaccessory.getStatus("14255286","20","VH-104GN-2017061500015","20",function(data){
+						//							alert(JSON.stringify(data));
+						//						});
 
-//						alert("==接口测试==");
+						//						alert("==接口测试==");
 					}
 				}
 			});
