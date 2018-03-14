@@ -236,8 +236,7 @@
 					});
 				});
 			});
-			
-			
+
 			var _oLoginDir = {
 				sinaweibo: "login_weibo",
 				qq: "login_qq",
@@ -252,7 +251,7 @@
 						password: '',
 						loading: false,
 
-						oLoginNames: ["qq","weixin", "sinaweibo"],
+						oLoginNames: ["qq", "weixin", "sinaweibo"],
 					};
 				},
 				plusReady: function() {
@@ -263,40 +262,42 @@
 					// 监听注册成功后 
 					this.listenRegister();
 					// 处理第三方登录
-					mui.os.ios && this.ologinExcute(); 
+					mui.os.ios && this.ologinExcute();
 
 				},
 				methods: {
-					
-					_getoLoginIconSrc: function(type){
+
+					_getoLoginIconSrc: function(type) {
 						var src = _oLoginDir[type];
-						if(!src){return false}
+						if(!src) {
+							return false
+						}
 						return "../../image/common/" + src + ".png"
 					},
 					ologinExcute: function() {
 						var that = this;
 						Rx.Observable.create(function(ob) {
-							plus.share.getServices(function(arr) {
-								ob.next(arr);
-							}, function(err) {
-								ob.error(err);
-							});
+								plus.share.getServices(function(arr) {
+									ob.next(arr);
+								}, function(err) {
+									ob.error(err);
+								});
 
-						})
-						.map(function(auths){
-							return auths.reduce(function(a, item){
-								if(item.nativeClient){
-									a.push(item.id)
-								}
-								return a;
-							}, []);
-						})
-						.subscribe(function(typeNames) {
-							that.oLoginNames = typeNames;
-							console.log(JSON.stringify(typeNames));
-						},function(err){
-							mui.toast(err.message)
-						});
+							})
+							.map(function(auths) {
+								return auths.reduce(function(a, item) {
+									if(item.nativeClient) {
+										a.push(item.id)
+									}
+									return a;
+								}, []);
+							})
+							.subscribe(function(typeNames) {
+								that.oLoginNames = typeNames;
+								console.log(JSON.stringify(typeNames));
+							}, function(err) {
+								mui.toast(err.message)
+							});
 
 					},
 
@@ -408,13 +409,14 @@
 								mui.toast("登录成功");
 								window.localStorage.setItem('_pwd_', that.password);
 								window.localStorage.setItem('login_type', 'pwd');
-								// 通知上层
-								app.page.setResult(data);
 								// 通知全部
 								new that.$Broadcast().emit("login_success", {
 									userInfo: data
 								});
 								plus.navigator.setStatusBarStyle('light');
+								// 通知上层
+								app.page.setResult(data);
+
 							}, function(err) {
 								$getStateFn(false)();
 								mui.toast(err.message);
@@ -548,13 +550,16 @@
 									sinaweibo: 'wb',
 									weixin: 'wx'
 								}[type]));
-								// 通知上层
-								app.page.setResult(data);
+
 								// 通知全部
 								new that.$Broadcast().emit("login_success", {
 									userInfo: data
 								});
+
 								plus.navigator.setStatusBarStyle('light');
+								// 通知上层
+								app.page.setResult(data);
+
 							}, function(err) {
 								w && w.close();
 								mui.toast(err.message);
@@ -619,6 +624,8 @@
 
 			// 用户资料整合
 			function fixUserData(data) {
+				console.log(JSON.stringify(data));
+				
 				// 绑定手机号
 				var bindmobile = data.bindmobile;
 				// 是否开启权限验证
@@ -628,12 +635,20 @@
 				// 是否是主帐号
 				var ismaster = data.ismaster;
 
+				// token
+				var token = data.token;
+				// loginid
+				var loginid = data.loginid;
+
 				data = data.vihiuser;
 
 				data.bindmobile = bindmobile;
 				data.lockterminal = lockterminal;
 				data.validation = validation;
 				data.ismaster = ismaster;
+
+				data.token = token;
+				data.loginid = loginid;
 
 				return data;
 

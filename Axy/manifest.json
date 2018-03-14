@@ -404,7 +404,8 @@
 					"html/home/picture_1@3x.png",
 					"image/home/btn_Adddevice@3x.png",
 					"html/home/picture_3@3x.png",
-					"image/smart/devices/bg/903@3xweb.png"
+					"image/smart/devices/bg/903@3xweb.png",
+					"image/smart/devices/bg/camera@3x.png"
 				],
 				"refer": [
 					"html/search/index.html",
@@ -1149,7 +1150,9 @@
 					"html/smart/devices/camera_settings_arming.html",
 					"html/smart/add/connect_wifi.html",
 					"html/smart/devices/camera_settings_log.html",
-					"html/public/input.html"
+					"html/public/input.html",
+					"html/smart/devices/camera_settings_info.html",
+					"html/public/alarmParam.html"
 				],
 				"priority": 0
 			},

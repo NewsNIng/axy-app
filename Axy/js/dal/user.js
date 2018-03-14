@@ -38,11 +38,13 @@
 		var o = {
 			openid: info.openid,
 			type: info.type,
-			info: info
+			info: info,
+			imei: IMEI
 		}
 		if(domain){
 			o.BASE_URL = domain;
 		}
+		
 		return ra('post', '/user/ologin', o, callback)
 	}
 

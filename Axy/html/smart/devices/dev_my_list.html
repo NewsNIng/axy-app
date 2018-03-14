@@ -365,6 +365,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-auth.js" ></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
@@ -741,7 +742,17 @@
 					},
 					// 添加配件点击
 					onAddTap: function() {
-						mui.openWindow('../add/add_device.html', 'add/add_device.html');
+						// 验证登录
+						app.user.get(function(u) {
+							u && mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
+							return 0;
+							// 验证是否主帐号
+							u && app.auth.verify(app.auth.MASTER, u).then(function(){
+								mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html'); 
+							}).catch(function(e){
+								mui.toast(e.message);
+							});
+						});
 					},
 					// 智能配件点击
 					onZoneTap: function(o, i) {

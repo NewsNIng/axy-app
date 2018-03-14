@@ -170,14 +170,19 @@
 										if(e.index !== 0) {
 											mui(that.$refs.safeSwitch).switch().toggle(false);
 										} else {
-											ob.next(false);
+											ob.next({
+												state: false
+											});
 										}
 									});
 								} else {
-									ob.next(true);
+									ob.next({
+										state: true
+									});
 								}
 							})
-							.mergeMap(function(state) {
+							.mergeMap(function(data) {
+								var state = data.state;
 								if(state === that.state) {
 									return
 								}
@@ -232,7 +237,7 @@
 							mui.confirm("确定移除该设备的登录权限么？", "温馨提示", ['确定移除', '取消'], function(e) {
 								!e.index && resolve();
 							});
-						}).then(function(){
+						}).then(function() {
 							plus.nativeUI.showWaiting();
 							dal.protect.delete(id, function(err, rs) {
 								plus.nativeUI.closeWaiting();
@@ -243,7 +248,7 @@
 								mui.toast("删除成功！");
 							});
 						});
-						
+
 					},
 
 					_toTimeString: function(x) {

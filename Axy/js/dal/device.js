@@ -1,5 +1,20 @@
 // 设备相关
 (function(_, ra) {
+	
+	var IMEI = "";
+
+	function initImei() {
+		IMEI = plus.device.uuid;
+	}
+
+	if(window.plus) {
+		initImei();
+	} else {
+		document.addEventListener('plusready', function() {
+			initImei();
+		});
+	}
+	
 	var device = {};
 
 	/**
@@ -20,7 +35,8 @@
 	device.list = function(pageNumber, callback, pageSize) {
 		return ra("get", "/device/list", {
 			pageNumber: pageNumber,
-			pageSize: pageSize || 10
+			pageSize: pageSize || 10,
+			imei: IMEI
 		}, callback);
 	};
 
