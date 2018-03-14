@@ -106,11 +106,18 @@ function addMethod(obj, name, fn) {
 	// 重载 user.get 如果传入function 则跳转登录并且登录成功会通知这个回调函数
 	addMethod(app.user, 'get', function(fn) {
 		var u = null;
+		// 是否是同步获取的用户信息
+		var sync = true;
+		// 判断是否已经登录
 		if(app.user.has()) {
 			u = app.user.get();
-			return typeof fn === 'function' ? fn(u) : u;
+			return typeof fn === 'function' ? fn(u, sync) : u;
 		}
-		return app.page && app.page.getLogin(fn);
+		// 在登录页面异步获取用户信息
+		sync = false;
+		return app.page && app.page.getLogin(function(userdata){
+			fn(userdata, sync);
+		});
 	});
 }(window.app));
 

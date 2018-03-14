@@ -315,6 +315,9 @@
 					});
 
 					var devPickData = D.data;
+					devPickData = devPickData.filter(function(item) {
+						return item.type !== 23 && item.type !== 128 && item.type !== 144;
+					});
 					devPickData = devPickData.map(function(item) {
 						return {
 							text: item.location || item.devid,
