@@ -6,13 +6,15 @@
 	},
 	"html/main.html": {
 		"resources": [
-			"html/home/index.html"
+			"html/home/index.html",
+			"html/person/index.html"
 		],
 		"refer": [
 			"html/home/index.html",
 			"html/zeus.html",
 			"html/person/index.html",
-			"html/common/login.html"
+			"html/common/login.html",
+			"html/nearby/index.html"
 		]
 	},
 	"html/smart/devices/dev_my_list.html": {
@@ -21,13 +23,17 @@
 			"html/smart/devices/dev_25.html",
 			"html/smart/devices/camera_settings.html",
 			"html/smart/devices/dev_WG-100_setting.html",
-			"html/smart/devices/dev_WG-100.html"
+			"html/smart/devices/dev_WG-100.html",
+			"html/smart/devices/dev_VH-104_setting.html",
+			"html/smart/devices/dev_22.html",
+			"html/smart/devices/dev_80.html"
 		]
 	},
 	"html/person/index.html": {
 		"refer": [
 			"html/smart/devices/dev_my_list.html",
-			"html/person/setting/index.html"
+			"html/person/setting/index.html",
+			"html/person/collection/my_collection.html"
 		]
 	},
 	"html/home/index.html": {
@@ -38,12 +44,44 @@
 	},
 	"html/smart/devices/camera_settings.html": {
 		"refer": [
-			"html/smart/devices/camera_settings_log.html"
+			"html/smart/devices/camera_settings_log.html",
+			"html/public/alarmParam.html"
 		]
 	},
 	"html/smart/devices/dev_WG-100_setting.html": {
 		"refer": [
 			"html/smart/devices/camera_settings_log.html"
+		]
+	},
+	"html/nearby/index.html": {
+		"resources": [
+			"html/nearby/pages/list.html"
+		],
+		"refer": [
+			"html/nearby/menu.html",
+			"html/nearby/pages/list.html",
+			"html/nearby/pages/discover.html"
+		]
+	},
+	"html/nearby/pages/list.html": {
+		"refer": [
+			"html/nearby/business/store_details.html"
+		]
+	},
+	"html/person/collection/my_collection.html": {
+		"refer": [
+			"html/nearby/discover/discover_details.html"
+		]
+	},
+	"html/nearby/pages/discover.html": {
+		"refer": [
+			"html/nearby/discover/discover_details.html"
+		]
+	},
+	"html/smart/devices/dev_VH-104_setting.html": {
+		"refer": [
+			"html/public/alarmParam.html",
+			"html/smart/devices/dev_VH-104_setting_info.html"
 		]
 	}
 }
