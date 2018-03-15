@@ -637,8 +637,11 @@
 				var lockterminal = data.lockterminal;
 				// 是否需要登录验证
 				var validation = data.validation;
-				// 是否是主帐号
+				// 是否是主帐号手机
 				var ismaster = data.ismaster;
+				// 是否主帐号
+				var ismasteraccount = data.ismasteraccount;
+				
 
 				// token
 				var token = data.token;
@@ -654,6 +657,8 @@
 
 				data.token = token;
 				data.loginid = loginid;
+				
+				data.ismasteraccount = ismasteraccount;
 
 				return data;
 

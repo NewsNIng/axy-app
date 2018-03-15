@@ -27,7 +27,7 @@
 		"master": {
 			exec: function(user) {
 				return new Promise(function(re, rj) {
-					if(user.ismaster === 1) {
+					if(user.ismasteraccount === 1) {
 						re(user);
 					} else {
 						rj("操作需要主账号");
