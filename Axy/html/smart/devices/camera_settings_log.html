@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
 		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
 
+		<link rel="stylesheet" href="../css/mui.min.css">
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
 
@@ -41,11 +42,15 @@
 				color: #666666;
 			}
 			
-			.top>div:active {
+			.top>a>div:active {
 				color: #06C1AE;
 			}
 			
-			.top>div>img {
+			.top>a {
+				color: #666666;
+			}
+			
+			.top>a>div>img {
 				height: 0.4rem;
 				width: 0.4rem;
 				vertical-align: middle;
@@ -128,6 +133,18 @@
 				overflow: hidden;
 				height: 100%;
 			}
+			
+			.mui-popover {
+				height: 100px;
+				width: 2.4rem;
+			}
+			
+			span.mui-icon {
+				font-size: 14px;
+				color: #007aff;
+				margin-left: -15px;
+				padding-right: 10px;
+			}
 		</style>
 	</head>
 
@@ -142,10 +159,18 @@
 			<div class="mui-content app-font-size-32">
 				<div class="top app-font-size-28" ref=tabroom>
 					<!--<div @tap="test()">操作<img src="../../../image/smart/devices/others/down.png" /></div>-->
-					<div>操作<img src="../../../image/smart/devices/others/down.png" /></div>
-					<div>终端<img src="../../../image/smart/devices/others/down.png" /></div>
-					<div>账号<img src="../../../image/smart/devices/others/down.png" /></div>
-					<div>日期<img src="../../../image/smart/devices/others/down.png" /></div>
+					<a href="#topPopover1">
+						<div>操作<img src="../../../image/smart/devices/others/down.png" /></div>
+					</a>
+					<a href="#topPopover2">
+						<div>终端<img src="../../../image/smart/devices/others/down.png" /></div>
+					</a>
+					<a href="#topPopover3">
+						<div>账号<img src="../../../image/smart/devices/others/down.png" /></div>
+					</a>
+					<a href="#topPopover4">
+						<div>日期<img src="../../../image/smart/devices/others/down.png" /></div>
+					</a>
 				</div>
 
 				<div class="scroll wrapper" ref="wrapper">
@@ -177,6 +202,27 @@
 			</div>
 
 		</div>
+
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<a href="#">Item1</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a href="#">Item2</a>
+						</li>
+						<li class="mui-table-view-cell">
+							<a href="#">Item3</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 
@@ -200,7 +246,12 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
-
+			mui('body').on('shown', '.mui-popover', function(e) {
+				//console.log('shown', e.detail.id);//detail为当前popover元素
+			});
+			mui('body').on('hidden', '.mui-popover', function(e) {
+				//console.log('hidden', e.detail.id);//detail为当前popover元素
+			});
 			new Vue({
 				el: '#warpper',
 				data: function() {
