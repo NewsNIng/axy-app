@@ -103,8 +103,8 @@
 					};
 				},
 				watch: {
-					content(curVal, oldVal) {　　　　　　　　　　
-					console.log(curVal.length+","+curVal.length > this.maxLength);
+					content: function(curVal, oldVal) {　　　　　　　　　　
+						
 						if(this.maxLength > 0 && curVal.length > this.maxLength) {
 							this.content = oldVal;
 							mui.toast(this.mLengthMsg);

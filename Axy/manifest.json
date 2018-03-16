@@ -1230,7 +1230,8 @@
 			"html/smart/devices/dev_AX-904.html": {
 				"resources": [],
 				"refer": [
-					"html/smart/devices/camera_settings_log.html"
+					"html/smart/devices/camera_settings_log.html",
+					"html/public/input.html"
 				],
 				"priority": 0
 			},

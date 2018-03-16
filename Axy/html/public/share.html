@@ -266,8 +266,11 @@
 										if(err) {
 											if(err.code === -100 || err.code === -2) {
 												err.message = "用户取消分享";
+												return;
+											}else{
+												err.message = err.code + ":" + err.message;
 											}
-											return plus.nativeUI.toast(err.code + ":" + err.message);
+											return plus.nativeUI.toast(err.message);
 										}
 										ob.next(data);
 									}, {

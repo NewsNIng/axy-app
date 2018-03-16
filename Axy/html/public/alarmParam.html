@@ -162,7 +162,7 @@
 					this.type = v.type;
 					this.devid = v.devid;
 					this.isMoreWays = app.dev.isMoreWays(this.type);
-					alert(this.isMoreWays);
+					//alert(this.isMoreWays);
 					dal.devparam.getAlarm(this.devid, this.type, function(err, data) {
 						console.log(JSON.stringify(data));
 						plus.nativeUI.closeWaiting();
