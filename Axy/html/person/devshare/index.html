@@ -77,7 +77,7 @@
 			
 			.nullbox .tip{
 				background-color: #FFFFFF;
-				padding: 2.8rem 1.173333rem 1.68rem 1.173333rem;
+				padding: 2.2rem 1.173333rem 1.68rem 1.173333rem;
 			}
 			.nullbox button{
 				margin-left: 0.813333rem;
@@ -118,7 +118,7 @@
 				
 				
 				
-				<div class="room app-font-size-28" v-for="o,i in list" :data-time='"\""+(o.name || o.id)+"\"正共享给好友"'>
+				<div class="room app-font-size-28" v-for="o,i in list" :data-time='"\""+(_fixDevName(o.name) || o.id)+"\"正共享给好友"'>
 					<div class="app-font-size-28 mui-table-view-cell" v-for="oo,ii in o.list">
 						<div class="mui-slider-right mui-disabled" @tap="onDelTap(oo, ii, $event)">
 							<a class="mui-btn mui-btn-red">删除</a>
@@ -141,6 +141,8 @@
 
 		<script type="text/javascript" src="../../../js/lib/md5.min.js" ></script>
 		<script type="text/javascript" src="../../../js/common/imagelazyload.js" ></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -218,7 +220,10 @@
 								});
 							}
 						});
-					}
+					},
+					_fixDevName: function(name){
+						return app.dev.fixName(name);
+					},
 				}
 			});
 		</script>

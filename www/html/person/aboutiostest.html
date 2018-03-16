@@ -58,9 +58,7 @@
 			}
 			
 			
-			.mui-ios a.mui-active{
-				background-color: transparent !important;
-			}
+			
 		</style>
 
 	</head>
@@ -132,9 +130,6 @@
 				
 				// 长按发现彩蛋
 				version.addEventListener('longtap', function() {
-					if(mui.os.ios){
-						return;
-					}
 					var nativeVersion = plus.runtime.version;
 					mui.toast(nativeVersion);
 				});
@@ -153,11 +148,8 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-
 							if(!data) {
-								if(mui.os.ios){
-									return;
-								}
+								
 								mui.toast("暂无更新");
 								return; 
 							}
@@ -179,9 +171,7 @@
 								});
 								
 							} else {
-								if(mui.os.ios){
-									return;
-								}
+								
 								mui.toast("您已经是最新版本，无需更新"); 
 							}
 

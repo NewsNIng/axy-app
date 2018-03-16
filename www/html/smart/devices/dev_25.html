@@ -345,6 +345,7 @@
 							"devType": 4166,
 							"statusCode": 0
 						},
+						i_all: [0, 0, 0],
 					};
 				},
 				mounted: function() {
@@ -370,7 +371,7 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
-//							that._updataActionByEnable(that.devInfo.accessory.enable);
+							//							that._updataActionByEnable(that.devInfo.accessory.enable);
 							that._updataUi();
 						})
 					}.bind(this));
@@ -386,8 +387,8 @@
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
 					mui.back = function() {
-						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
-						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close('none');
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
 
 						var view = plus.webview.currentWebview();
 						plus.navigator.setStatusBarStyle('light');
@@ -436,7 +437,7 @@
 						}, {
 							title: "配件名称",
 							content: that.devInfo.accessory.name,
-							r: "nonEmpty", 
+							r: "nonEmpty",
 							rmsg: "配件名称不能为空",
 							maxLength: 15,
 							mLengthMsg: "最长不超过15个字符！",
@@ -463,7 +464,7 @@
 					},
 					openLight: function(i, isOpen) {
 						//						alert(i+","+isOpen);
-						if(!this._enableVerify()){
+						if(!this._enableVerify()) {
 							return;
 						}
 						plus.nativeUI.showWaiting();
@@ -484,11 +485,11 @@
 						} else {
 							action = action & (~(1 << 15));
 						}
-						this.devInfo.accessory.action = (action>>>0);
-						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
+						this.devInfo.accessory.action = (action >>> 0);
+						console.log("isOn==>" + isOn + "，action==>" + action + "，action===>" + (action >>> 0));
 					},
-					_enableVerify: function(){
-						if(!this.devInfo.accessory.enable){
+					_enableVerify: function() {
+						if(!this.devInfo.accessory.enable) {
 							mui.toast("需启用后才能操作此配件！");
 							return false;
 						}

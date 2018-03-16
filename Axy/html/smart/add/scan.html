@@ -181,14 +181,12 @@
 								_B.emit('device_update', {}, {
 									views: ['zeus', 'dev_my_list']
 								});
-								//								mui.alert('添加成功');
-								//								app.page.setResult({
-								//									result: true
-								//								}).close();
-								mui.openWindow('add_completed.html', 'add_completed', {
-									extras: {
-										devid: this.devid,
-									}
+
+								var cw = plus.webview.currentWebview();
+								var completedWindow = plus.webview.create('add_completed.html', 'add_completed', {}, {
+									devid: id,
+								}).show('pop-in', 220, function() {
+									cw.close('none');
 								});
 							});
 						}
@@ -243,6 +241,7 @@
 									console.log("==============" + JSON.stringify(rs))
 									plus.nativeUI.showWaiting("正在添加配件");
 									return Rx.Observable.create(function(ob) {
+										// TODO 需要添加通道信息
 										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, function(err, data) {
 											plus.nativeUI.closeWaiting();
 											if(err) {

@@ -108,9 +108,8 @@
 					}
 				} else {
 					// 未登录状态 
-					// 监听一次登录事件
-					_B.once('login_success', function(data) {
-
+					// // 监听一次登录事件
+					_B.on('login_success', function(data) {
 						ob.next(data.userInfo);
 					});
 				}
@@ -160,7 +159,9 @@
 			// 获取设备列表计时器
 			var $getDevListTimer = Rx.Observable.create(function(_) {
 				_.next();
-			}).merge(Rx.Observable.interval(30e3));
+			})
+			.delay(3e3)
+			.merge(Rx.Observable.interval(30e3));
 
 			// 获取用户设备列表数据
 			var $getDevListByAjax = Rx.Observable.create(function(ob) {
@@ -254,6 +255,27 @@
 				.mergeMapTo($listenUserUpdate)
 				.subscribe(UpdateUserInfo);
 
+			// 登录失败处理
+			var AppLoginFail = function() {
+				app.user.clear();
+				window.localStorage.setItem('_pwd_', '');
+				plus.storage.removeItem('dev_list');
+
+				mui.toast("帐号存在异常，请重新登录");
+				app.user.get(function() {});
+			}
+
+			// 监听 token 失效
+			var $litenTokenErr = Rx.Observable.create(function(ob) {
+				_B.on('token_error', function(data) {
+					ob.next();
+				});
+			});
+
+			$pready
+				.mergeMapTo($litenTokenErr)
+				.subscribe(ReloadApp);
+
 			// 向原生注册 控制中心 处理函数回调
 			var InitNativeSystem = function(o) {
 				P.InitNativeSystem(o.account, o.pwd, o.domain, function(arg) {
@@ -284,24 +306,94 @@
 				dal.devaccessory.allacc(function() {});
 			}
 
-			// 登录失败处理
-			var AppLoginFail = function() {
-				app.user.clear();
-				window.localStorage.setItem('_pwd_', '');
-				plus.storage.removeItem('dev_list');
-				plus.storage.removeItem('AllDeviceInfo');
-				plus.storage.removeItem('AllDeviceRun');
-				mui.toast("帐号存在异常，请重新登录");
-				app.user.get(function() {});
-			}
-
 			// 更新本地用户信息
 			function UpdateUserInfo(data) {
+
 				data = FixUserData(data);
 				// 更新用户信息
 				app.user.set(data);
+				// 更新用户权限认证信息
+				app.user.setAuthInfo(data);
 
-				window.localStorage.setItem('_account_', data.account);
+			}
+
+			function ReloadApp() {
+				// 获取所有webview页面
+				var all = plus.webview.all();
+				// 获取当前webview页面
+				var index = plus.webview.currentWebview();
+				// 获取app启动页
+				var first = plus.webview.getLaunchWebview() || plus.webview.getWebviewById('main');
+				var id;
+				plus.nativeUI.showWaiting();
+				// 关闭除了当前和首页的 其它全部页面
+				for(var i = 0, l = all.length; i < l; i++) {
+					id = all[i].id;
+					if(id !== index.id && id !== first.id) {
+						plus.webview.close(all[i]);
+					}
+				}
+
+				var account = app.user.get().account;
+
+				// 记录最后一次登录的帐号
+				var login_type = window.localStorage.getItem('login_type');
+				// 只记录手动输入登录的帐号
+				if(login_type === 'pwd') {
+					window.localStorage.setItem('last_account', account || "");
+				} else {
+					window.localStorage.setItem('last_account', "");
+				}
+
+				// 清除本地用户数据
+				app.user.logout();
+				window.localStorage.setItem('_pwd_', "");
+				window.localStorage.setItem('_domain_', "");
+
+				// 清除设备列表数据
+				$pready.subscribe(function() {
+					new ni.Cache('dev_list', "", {
+						plus: true
+					}).clear();
+				});
+
+				// 清除第三方登录信息
+				plus.oauth.getServices(function(auths) {
+					// 逐个注销
+					(auths || []).forEach(function(item) {
+						if(item && item.authResult) {
+							item.logout(function() {});
+						}
+					});
+				});
+
+				$pready
+					.mergeMap(function() {
+						// 拿取到本机pushid
+						var D = new ni.Cache("push_key", "", {
+							plus: true
+						});
+						return Rx.Observable.create(function(ob) {
+							// 清除pushid
+							dal.push.clearpush(D.data, account, function(err, data) {
+								ob.next();
+							});
+						});
+					})
+					.subscribe(function() {
+						// 关闭本页面
+						index.addEventListener('close', function(){
+							plus.nativeUI.closeWaiting();
+							// 首页重新运行
+							first.reload();
+							// 显示首页
+							first.show("slide-in-bottom", 250);
+							// 打开登录
+							app.user.get(function() {});
+						});
+						index.close('none');
+					});
+
 			}
 
 			// 用户资料整合
@@ -315,8 +407,15 @@
 				var lockterminal = data.lockterminal;
 				// 是否需要登录验证
 				var validation = data.validation;
-				// 是否是主帐号
+				// 是否是主帐号手机
 				var ismaster = data.ismaster;
+				// 是否主帐号
+				var ismasteraccount = data.ismasteraccount;
+
+				// token
+				var token = data.token;
+				// loginid
+				var loginid = data.loginid;
 
 				data = data.vihiuser;
 
@@ -324,6 +423,11 @@
 				data.lockterminal = lockterminal;
 				data.validation = validation;
 				data.ismaster = ismaster;
+
+				data.token = token;
+				data.loginid = loginid;
+				
+				data.ismasteraccount = ismasteraccount;
 
 				return data;
 

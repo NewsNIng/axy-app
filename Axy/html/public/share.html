@@ -97,6 +97,7 @@
 		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/common.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -193,22 +194,35 @@
 					onShareTo: function(type) {
 						var that = this;
 						var shareImg = that.img;
-						var w;
+						var w = plus.nativeUI.showWaiting('开始分享...');
 						setTimeout(plus.nativeUI.closeWaiting, 8e3);
+						
+						// SHARE TAG
 
-						Rx.Observable
-							// 获取授权
-							.create(function(ob) {
-								w = plus.nativeUI.showWaiting('获取授权...');
-								var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
-								new that.$OAuth(oauthType, function(err, info) {
-									if(err) {
-										return mui.toast(err.message);
+						// 获取短链
+						Rx.Observable.create(function(ob) {
+								w.setTitle("生成短链...");
+								dal.common.generateDURL(that.href, function(err, data) {
+									if(!err) {
+										that.href = data;
 									}
 									ob.next();
-								}, that);
+								});
 							})
+							// 获取授权
+							.mergeMap(function() {
 
+								return Rx.Observable.create(function(ob) {
+									w.setTitle("获取授权...");
+									var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
+									new that.$OAuth(oauthType, function(err, info) {
+										if(err) {
+											return mui.toast(err.message);
+										}
+										ob.next();
+									}, that);
+								})
+							})
 							// 处理为本地图片
 							.mergeMap(function(ob) {
 
@@ -253,7 +267,7 @@
 											if(err.code === -100 || err.code === -2) {
 												err.message = "用户取消分享";
 											}
-											return plus.nativeUI.toast(err.message);
+											return plus.nativeUI.toast(err.code + ":" + err.message);
 										}
 										ob.next(data);
 									}, {

@@ -488,6 +488,7 @@
 						}.bind(this));
 					},
 					_min2time: function(n) {
+						n = +n;
 						return(n < 10 ? '0' : '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00' : '30');
 					},
 					_m2km: function(m) {

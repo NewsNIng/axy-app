@@ -39,8 +39,28 @@ function addMethod(obj, name, fn) {
 		},
 		// 清除本地用户信息
 		clear: function() {
-			window.localStorage.setItem('_account_', '');
+			app.user.setAuthInfo({
+				account: "",
+				token: "",
+				loginid: ""
+			});
 			return s("{}");
+		},
+		getAuthInfo: function() {
+			var account = window.localStorage.getItem('_account_') || "",
+				token = window.localStorage.getItem('_token_') || "",
+				loginid = window.localStorage.getItem('_loginid_') || "";
+
+			return {
+				account: account,
+				token: token,
+				loginid: loginid
+			}
+		},
+		setAuthInfo: function(o) {
+			window.localStorage.setItem('_account_', o.account);
+			window.localStorage.setItem('_token_', o.token);
+			window.localStorage.setItem('_loginid_', o.loginid);
 		},
 		// 是否存有本地用户信息
 		has: function() {
@@ -86,11 +106,18 @@ function addMethod(obj, name, fn) {
 	// 重载 user.get 如果传入function 则跳转登录并且登录成功会通知这个回调函数
 	addMethod(app.user, 'get', function(fn) {
 		var u = null;
+		// 是否是同步获取的用户信息
+		var sync = true;
+		// 判断是否已经登录
 		if(app.user.has()) {
 			u = app.user.get();
-			return typeof fn === 'function' ? fn(u) : u;
+			return typeof fn === 'function' ? fn(u, sync) : u;
 		}
-		return app.page && app.page.getLogin(fn);
+		// 在登录页面异步获取用户信息
+		sync = false;
+		return app.page && app.page.getLogin(function(userdata){
+			fn(userdata, sync);
+		});
 	});
 }(window.app));
 
@@ -159,7 +186,8 @@ function addMethod(obj, name, fn) {
 	//app.plusReady(function() {
 	//	device.getVersion(function() {});
 	//});
-
+	
+	
 	app.device = device;
 }(window.app));
 

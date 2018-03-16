@@ -333,8 +333,8 @@
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
 					mui.back = function() {
-						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
-						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close();
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close('none');
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
 
 						var view = plus.webview.currentWebview();
 						plus.navigator.setStatusBarStyle('light');

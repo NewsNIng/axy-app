@@ -106,12 +106,20 @@
 			.mask-card-body {
 				padding: 0.666666rem;
 			}
+			
+			.mask-card-footer{
+				text-align: center;
+				padding-bottom: 0.266666rem;
+			}
+			.mask-card-footer>img{
+				width: 1.5rem;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div id="warpper">
-			<div class="mask" v-if="mask">
+			<div class="mask" v-if="!mask">
 
 				<div class="mask-card" @tap.stop="">
 					<div class="mask-card-header app-font-size-30 app-color-main">
@@ -126,7 +134,7 @@
 						3.松开按键后，智能门锁将自动发送入网请求，请耐心等待结果（大约需要10~30s）。
 					</div>
 					<div class="mask-card-footer">
-
+						<img src="../../../svg/three-dots.svg"/>
 					</div>
 				</div>
 

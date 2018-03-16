@@ -13,6 +13,10 @@
 
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 
 		<style type="text/css">
 			html,
@@ -118,15 +122,21 @@
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
-		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
-		<script type="text/javascript" src="../../../js/lib/Rx.min.js" ></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+		
+		
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
+
+			var wayPick;
 
 			var vm = new Vue({
 				el: '#warpper',
@@ -139,6 +149,8 @@
 						//filter: []
 
 						accid: 0,
+						
+						waych: 0,
 					};
 				},
 				computed: {
@@ -160,10 +172,14 @@
 					//					}
 
 				},
-
 				mounted: function() {
-					
+					wayPick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+
 				},
+
 				plusReady: function() {
 					//this.filter = this.$view.filter || [];
 
@@ -175,14 +191,16 @@
 					onSelectTap: function(o, i) {
 						this.devActive = i;
 						// TODO 修复设备多通道问题
-						return;
-						console.log(JSON.stringify(o));
+
+						that = this;
+						
+						this.waych = 0;
 						
 						var type = app.dev.fixType(o.type);
-						
+
 						Rx.Observable.create(function(ob) {
 							// 判断是否多通道
-							if(app.dev.isMoreWays(type)){
+							if(app.dev.isMoreWays(type)) {
 								// 获取设备的通道信息
 								plus.nativeUI.showWaiting("获取通道信息中...");
 								dal.devparam.chlist(o.devid, type, function(err, data) {
@@ -194,16 +212,13 @@
 									if(!data || !data.length) {
 										return mui.toast("暂无通道信息");
 									}
-	console.log(JSON.stringify(data));
-									return 1;
 									data = data.map(function(item) {
 										return {
-											text: item.name,
+											text: item.name || item.uuid,
 											value: item.no
 										}
-									});
-									
-								
+									}); 
+
 									// 动态设置设备通道
 									wayPick.setData(data);
 									// 重置弹出层到第一个通道位置
@@ -223,16 +238,10 @@
 								});
 							}
 						}).subscribe(function(data) {
-//							var w1 = data.b;
-//							var w2 = type === 0x1046 ? 1 : 0;
-//							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
-//								getScrrenHotBgFn(o.devid).then(function(path) {
-//									that.$refs.devimgel[that.tapIndex].style.backgroundImage = "url(" + path + ")";
-//								})
-//							});
+							that.waych = data.b
+							that.onNext();
 						});
-						
-						
+
 					},
 					onNext: function() {
 						if(this.devActive < 0) {
@@ -241,7 +250,8 @@
 
 						app.page.setResult({
 							devid: this.indexDev.devid,
-							type: this.indexDev.type
+							type: this.indexDev.type,
+							waych: this.waych,
 						}).close();
 					},
 					// 主机列表

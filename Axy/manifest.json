@@ -8,7 +8,7 @@
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "2.0.8",/*应用版本名称*/
-		"code": "20180309"
+		"code": "20180315"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -314,8 +314,7 @@
 					"js/lib/Rx.min.js",
 					"js/app/app.js",
 					"js/common/android-back.js",
-					"js/common/flexible.js",
-					"html/smart/devices/dev_error.html"
+					"js/common/flexible.js"
 				],
 				"refer": [
 					"html/zeus.html",
@@ -406,7 +405,7 @@
 					"image/home/btn_Adddevice@3x.png",
 					"html/home/picture_3@3x.png",
 					"image/smart/devices/bg/903@3xweb.png",
-					"html/smart/devices/dev_error.html"
+					"image/smart/devices/bg/camera@3x.png"
 				],
 				"refer": [
 					"html/search/index.html",
@@ -848,8 +847,7 @@
 					"html/smart/devices/dev_33.html",
 					"html/smart/devices/dev_40.html",
 					"html/smart/devices/dev_AX-904.html",
-					"html/smart/devices/dev_VH-104_setting.html",
-					"html/smart/devices/dev_0.html"
+					"html/smart/devices/dev_VH-104_setting.html"
 				],
 				"priority": 0
 			},
@@ -1152,7 +1150,9 @@
 					"html/smart/devices/camera_settings_arming.html",
 					"html/smart/add/connect_wifi.html",
 					"html/smart/devices/camera_settings_log.html",
-					"html/public/input.html"
+					"html/public/input.html",
+					"html/smart/devices/camera_settings_info.html",
+					"html/public/alarmParam.html"
 				],
 				"priority": 0
 			},
@@ -1249,8 +1249,7 @@
 			"html/nearby/business/store_details.html": {
 				"resources": [],
 				"refer": [
-					"html/public/share.html",
-					"html/common/login.html"
+					"html/public/share.html"
 				],
 				"priority": 0
 			},

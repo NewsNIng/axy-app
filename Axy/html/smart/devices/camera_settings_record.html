@@ -481,6 +481,10 @@
 					},
 					// 保存操作
 					onSave: function() {
+						if(!this.endTime){
+							return mui.toast("请填写完整的时间");
+						}
+						
 						this.mask = false;
 						
 						var tpweeks = this.weeks.slice(0);

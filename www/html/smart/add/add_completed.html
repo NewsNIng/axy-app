@@ -148,7 +148,7 @@
 		<script type="text/javascript">
 			mui.init();
 
-			var B = new ni.Broadcast();
+			var _B = new ni.Broadcast();
 
 			new Vue({
 				el: '#warpper',
@@ -246,16 +246,16 @@
 					},
 					
 					bind: function() {
-						alert("bind");
+						//alert("bind");
 					},
 					// 通知其他页面设备列表更新
 					updateDeviceList: function() {
 						if(this.isFitting) {
-							B.emit('zone_update', {}, {
+							_B.emit('zone_update', {}, {
 								views: ["dev_my_list"]
 							});
 						} else {
-							B.emit('device_update', {}, {
+							_B.emit('device_update', {}, {
 								views: ["zeus", "dev_my_list"]
 							});
 						}

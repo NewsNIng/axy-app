@@ -66,9 +66,9 @@
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">告警参数</h1>
-				<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
+				<!--<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
 					<img src="../../image/smart/scenes/complete_icon.png" />
-				</a>
+				</a>-->
 			</header>
 
 			<div class="mui-content">
@@ -103,6 +103,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/app/app-dev.js"></script>
 
 		<!--<script type="text/javascript" src="../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>-->
@@ -130,6 +131,7 @@
 
 						type: -1,
 						devid: "",
+						isMoreWays: false, // 默认单通道
 					};
 				},
 
@@ -154,10 +156,13 @@
 					this.pick.setData(pick_data[0]);
 				},
 				plusReady: function() {
+					var that = this;
 					plus.nativeUI.showWaiting();
 					var v = this.$view;
 					this.type = v.type;
 					this.devid = v.devid;
+					this.isMoreWays = app.dev.isMoreWays(this.type);
+					alert(this.isMoreWays);
 					dal.devparam.getAlarm(this.devid, this.type, function(err, data) {
 						console.log(JSON.stringify(data));
 						plus.nativeUI.closeWaiting();
@@ -167,13 +172,16 @@
 						this.en = data.en;
 						this.recTime = data.recTime;
 						this.intervalTime = data.interval && data.interval > 60 ? data.interval : 60;
-						this.continuedTime = data.durationTime && data.durationTime > 10 ? data.durationTime : 10;
+						this.continuedTime = data.durationTime && data.durationTime > (that.isMoreWays?60:10) ? data.durationTime : (that.isMoreWays?60:10);
 //						console.log(data.interval + "," + data.durationTime);
 					}.bind(this)); //					this.intervalTime = v.intervalTime;
 					//					this.continuedTime = v.continuedTime;
 				},
 				methods: {
 					onPickTap: function(i) {
+						if(this.isMoreWays){
+							i = i + 2;
+						}
 						var that = this;
 						var p = 'intervalTime';
 						if(i === 1) {
@@ -185,6 +193,8 @@
 
 						var fn = function(s) {
 							that[p] = s;
+//							alert(123);
+							that.onSaveTap();
 						};
 
 						this.pick.show(function(items) {
