@@ -225,7 +225,6 @@
 							})
 							// 处理为本地图片
 							.mergeMap(function(ob) {
-
 								return Rx.Observable.create(function(ob) {
 									if(shareImg.indexOf('file:') >= 0) {
 										// 本地图片
