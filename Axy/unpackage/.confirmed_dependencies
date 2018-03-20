@@ -37,7 +37,9 @@
 			"html/smart/devices/dev_35.html",
 			"html/smart/devices/dev_32.html",
 			"html/smart/devices/dev_16711680.html",
-			"html/smart/devices/dev_161.html"
+			"html/smart/devices/dev_161.html",
+			"html/smart/devices/dev_34.html",
+			"html/smart/devices/dev_65.html"
 		]
 	},
 	"html/person/index.html": {
@@ -179,7 +181,20 @@
 	},
 	"html/smart/add/add_completed.html": {
 		"refer": [
-			"html/smart/devices/dev_32.html"
+			"html/smart/devices/dev_32.html",
+			"html/smart/devices/dev_34.html"
+		]
+	},
+	"html/smart/devices/dev_error.html": {
+		"resources": [
+			"js/common/immersed.js",
+			"js/lib/mui.min.js",
+			"js/common/flexible.js"
+		]
+	},
+	"html/smart/devices/dev_34.html": {
+		"refer": [
+			"html/public/input.html"
 		]
 	}
 }

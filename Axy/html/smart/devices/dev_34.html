@@ -68,16 +68,17 @@
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_Openthecurtains@3x.png" @tap="onOpenTap()" />
+						<img src="../../../image/smart/devices/curtain/btn_Openthecurtains@3x.png" @tap="onOpenTap(1)" />
 						<div>打开窗帘</div>
 					</div>
 
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_suspend@3x.png" @tap="onStartTap()" />
-						<div>暂停.开始.关闭</div>
+						<img v-if="newStop" src="../../../image/smart/devices/curtain/btn_suspend@3x.png" @tap="onOpenTap(4)" />
+						<img v-if="!newStop" src="../../../image/smart/devices/curtain/btn_start@3x.png" @tap="onOpenTap(3)" />
+						<div>暂停 / 继续</div>
 					</div>
 					<div>
-						<img src="../../../image/smart/devices/curtain/btn_Closecurtain@3x.png" @tap="onCloseTap()" />
+						<img src="../../../image/smart/devices/curtain/btn_Closecurtain@3x.png" @tap="onOpenTap(2)" />
 						<div>关闭窗帘</div>
 					</div>
 				</div>
@@ -140,21 +141,21 @@
 		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
 		<script type="text/javascript">
-//			mui.init({
-//				beforeback: function() {
-//					plus.navigator.setStatusBarStyle('light');
-//				}
-//			});
+			//			mui.init({
+			//				beforeback: function() {
+			//					plus.navigator.setStatusBarStyle('light');
+			//				}
+			//			});
 
 			var _stateImgs = [];
-
+			var stateInter;
 			new Vue({
 				el: '#warpper',
 				data: function() {
 					return {
 						state: true, // 当前状态
 						stateCode: 1, // 状态码 0 关闭 1 打开 2暂停
-						
+
 						// 防区类型
 						zonetypes: ["出入防区",
 							"活动防区",
@@ -193,7 +194,17 @@
 							"devType": 4166,
 							"statusCode": 0
 						},
-
+						state: {
+							"lost": false,
+							"underVoltage": false,
+							"valid": false,
+							"open": false,
+							"close": false
+						},
+						newStop: true,
+						actionValue: -1,
+						actionText: ["", "窗帘打开中……", "窗帘关闭中……", "已暂停"],
+						actionSucText: ["", "窗帘已打开", "窗帘已关闭"],
 					};
 				},
 
@@ -224,7 +235,7 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
-//							that._updataActionByEnable(that.devInfo.accessory.enable);
+							//							that._updataActionByEnable(that.devInfo.accessory.enable);
 							that._updataUi();
 						})
 					}.bind(this));
@@ -242,6 +253,7 @@
 						plus.navigator.setStatusBarStyle('light');
 						view.close();
 					}.bind(this);
+					this.getState(true);
 				},
 				methods: {
 					// 切换开关
@@ -265,25 +277,61 @@
 						console.log("editdevice");
 					},
 					// 打开窗帘
-					onOpenTap: function() {
-						if(!this._enableVerify()){
+					onOpenTap: function(i) {
+						var that = this;
+						if(!this._enableVerify()) {
 							return;
 						}
-						mui.toast("已打开！");
+						if(i === 4) {
+							if(this.actionValue === -1) {
+								return;
+							}
+							i = this.actionValue;
+						}
+						plus.nativeUI.showWaiting();
+						dal.devaccessory.curtain(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, i, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log("state==>" + JSON.stringify(data) + ',' + JSON.stringify(err));
+							if(err) {
+								return mui.toast(err.message);
+							}
+							that.changeState(i);
+							mui.toast(that.actionText[i]);
+						});
 					},
-					// 暂停 开始 关闭
-					onStartTap: function() {
-						if(!this._enableVerify()){
-							return;
+					changeState: function(i) {
+						if(i === 1) {
+							//							this.state.open = true;
+							this.newStop = false;
+							this.actionValue = i;
+							this.loopGetState(true, i);
+						} else if(i === 2) {
+							//							this.state.close = true;
+							this.newStop = false;
+							this.actionValue = i;
+							this.loopGetState(true, i);
+						} else if(i === 3) {
+							this.newStop = true;
+							this.loopGetState(false);
+							//							this.actionValue = -1;
 						}
-
 					},
-					// 关闭窗帘
-					onCloseTap: function() {
-						if(!this._enableVerify()){
-							return;
+					loopGetState: function(start, i) {
+						var that = this;
+						if(start) {
+							stateInter && clearInterval(stateInter);
+							stateInter = setInterval(function() {
+								if(i === 1 && that.state.open || i === 2 && 　that.state.close) {
+									clearInterval(stateInter);
+									that.newStop = true;
+									mui.toast(that.actionSucText[i]);
+									that.actionValue = -1;
+								}
+								that.getState();
+							}, 1000);
+						} else {
+							stateInter && clearInterval(stateInter);
 						}
-						mui.toast("已关闭！");
 					},
 					//修改名称
 					onNameTap: function() {
@@ -302,10 +350,32 @@
 						}, {
 							title: "配件名称",
 							content: that.devInfo.accessory.name,
-							r: "nonEmpty", 
+							r: "nonEmpty",
 							rmsg: "配件名称不能为空",
 							maxLength: 15,
 							mLengthMsg: "最长不超过15个字符！",
+						});
+					},
+					// 获取窗帘控制器状态
+					getState: function(showWaiting) {
+						var that = this;
+						if(showWaiting) {
+							plus.nativeUI.showWaiting();
+						}
+						dal.devaccessory.curtain_state(this.devInfo.accessory.id, this.devInfo.accessory.type, this.devInfo.accessory.devid, this.devInfo.devType, function(err, data) {
+							if(showWaiting) {
+								plus.nativeUI.closeWaiting();
+							}
+							console.log("state==>" + JSON.stringify(data) + ',' + JSON.stringify(err));
+							if(err) {
+								return mui.toast(err.message);
+							}
+							that.state = data;
+							if(!data.valid) {
+								that.newStop = true;
+								that.state.open = false;
+								that.state.close = false;
+							}
 						});
 					},
 					// 更新缓存数据
@@ -325,11 +395,11 @@
 						} else {
 							action = action & (~(1 << 15));
 						}
-						this.devInfo.accessory.action = (action>>>0);
-						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
+						this.devInfo.accessory.action = (action >>> 0);
+						console.log("isOn==>" + isOn + "，action==>" + action + "，action===>" + (action >>> 0));
 					},
-					_enableVerify: function(){
-						if(!this.devInfo.accessory.enable){
+					_enableVerify: function() {
+						if(!this.devInfo.accessory.enable) {
 							mui.toast("需启用后才能操作此配件！");
 							return false;
 						}
