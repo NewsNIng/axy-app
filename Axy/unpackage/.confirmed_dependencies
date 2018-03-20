@@ -17,7 +17,8 @@
 			"html/common/login.html",
 			"html/nearby/index.html",
 			"html/smart/devices/dev_error.html",
-			"html/smart/index.html"
+			"html/smart/index.html",
+			"html/public/updateWindow.html"
 		]
 	},
 	"html/smart/devices/dev_my_list.html": {
@@ -32,7 +33,11 @@
 			"html/smart/devices/dev_80.html",
 			"html/smart/add/add_device.html",
 			"html/smart/devices/dev_160.html",
-			"html/smart/devices/dev_0.html"
+			"html/smart/devices/dev_0.html",
+			"html/smart/devices/dev_35.html",
+			"html/smart/devices/dev_32.html",
+			"html/smart/devices/dev_16711680.html",
+			"html/smart/devices/dev_161.html"
 		]
 	},
 	"html/person/index.html": {
@@ -49,7 +54,8 @@
 		"refer": [
 			"html/smart/add/add_device.html",
 			"html/public/browser.html",
-			"html/smart/devices/dev_error.html"
+			"html/smart/devices/dev_error.html",
+			"html/smart/devices/dev_VH-104_setting.html"
 		],
 		"resources": [
 			"html/smart/devices/dev_error.html"
@@ -73,7 +79,8 @@
 		"refer": [
 			"html/nearby/menu.html",
 			"html/nearby/pages/list.html",
-			"html/nearby/pages/discover.html"
+			"html/nearby/pages/discover.html",
+			"html/nearby/pages/theme.html"
 		]
 	},
 	"html/nearby/pages/list.html": {
@@ -100,7 +107,9 @@
 	},
 	"html/smart/add/add_device.html": {
 		"refer": [
-			"html/smart/add/family_menu.html"
+			"html/smart/add/family_menu.html",
+			"html/smart/add/scan.html",
+			"html/smart/add/add_completed.html"
 		]
 	},
 	"html/nearby/menu.html": {
@@ -160,6 +169,17 @@
 	"html/person/relation/bind.html": {
 		"refer": [
 			"html/person/relation/reset_tel.html"
+		]
+	},
+	"html/smart/add/scan.html": {
+		"refer": [
+			"html/smart/add/scan_code.html",
+			"html/smart/add/scan_bind_dev.html"
+		]
+	},
+	"html/smart/add/add_completed.html": {
+		"refer": [
+			"html/smart/devices/dev_32.html"
 		]
 	}
 }

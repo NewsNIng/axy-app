@@ -13,7 +13,7 @@
 
 		<link rel="stylesheet" href="../css/mui.min.css">
 		<link rel="stylesheet" href="../../../css/app/app.css" />
-		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		<!--<link rel="stylesheet" href="../../../css/app/devices.css" />-->
 
 		<style type="text/css">
 			html,
@@ -135,15 +135,23 @@
 			}
 			
 			.mui-popover {
-				height: 100px;
-				width: 2.4rem;
+				width: 2.6rem;
 			}
 			
-			span.mui-icon {
-				font-size: 14px;
-				color: #007aff;
-				margin-left: -15px;
-				padding-right: 10px;
+			.mui-popover a {
+				margin: 0 !important;
+				text-align: center;
+				height: 1rem;
+				line-height: 1rem;
+			}
+			
+			.mui-popover li {
+				height: 1rem;
+				padding: 0 !important;
+			}
+			
+			.mui-popover .mui-table-view-cell:after {
+				left: 0;
 			}
 		</style>
 	</head>
@@ -201,27 +209,83 @@
 
 			</div>
 
-		</div>
-
-		<!--右上角弹出菜单-->
-		<div id="topPopover" class="mui-popover">
-			<div class="mui-popover-arrow"></div>
-			<div class="mui-scroll-wrapper">
-				<div class="mui-scroll">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">
-							<a href="#">Item1</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a href="#">Item2</a>
-						</li>
-						<li class="mui-table-view-cell">
-							<a href="#">Item3</a>
-						</li>
-					</ul>
-				</div>
+			<!--右上角弹出菜单-->
+			<div id="topPopover1" class="mui-popover app-font-size-28">
+				<div class="mui-popover-arrow"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a href="#">全部</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">重启</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">布防</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">撤防</a>
+					</li>
+				</ul>
 			</div>
-
+			<div id="topPopover2" class="mui-popover app-font-size-28">
+				<div class="mui-popover-arrow"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a href="#">全部</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">联防</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">网页</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">APP</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">遥控器</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">计划任务</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">PC播放器</a>
+					</li>
+				</ul>
+			</div>
+			<div id="topPopover3" class="mui-popover app-font-size-28">
+				<div class="mui-popover-arrow"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+							<a href="#">全部</a>
+						</li>
+					<template v-for="o,i in accounts">
+						<li class="mui-table-view-cell">
+							<a href="#">{{o}}</a>
+						</li>
+					</template>
+				</ul>
+			</div>
+			<div id="topPopover4" class="mui-popover app-font-size-28">
+				<div class="mui-popover-arrow"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a href="#">全部</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">一周</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">一个月</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">三个月</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a href="#">一年</a>
+					</li>
+				</ul>
+			</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -261,6 +325,7 @@
 						devInfo: {},
 						hdtypes: ["网页", "遥控器", "APP", "PC播放器", "联防", "计划任务"],
 						logs: [],
+						accounts: ["13988889999", "webserver"],
 					};
 				},
 				mounted: function() {
