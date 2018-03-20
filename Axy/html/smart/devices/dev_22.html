@@ -103,7 +103,7 @@
 
 			<div class="mui-content noImmersed">
 				<div class="state_show">
-					<span class="app-font-size-30" v-text="(state.concentrationValid?state.concentration:0)+'mg/m³'"></span>
+					<span class="app-font-size-30" v-text="(state.concentrationValid?(state.concentration/1000):0)+'mg/m³'"></span>
 					<span class="app-font-size-44">舒适</span>
 					<span class="app-font-size-24">当前状态</span>
 				</div>
@@ -113,13 +113,13 @@
 					<div class="app-font-size-26">
 						温度
 						<!--<img src="../../../image/smart/devices/lock/btn_Settingpassword@3x.png" />-->
-						<div class="app-font-size-34" v-text="(state.temperatureValid?state.temperature:0)+'°C'"></div>
+						<div class="app-font-size-34" v-text="(state.temperatureValid?parseInt(state.temperature/10):0)+'°C'"></div>
 					</div>
 
 					<div class="app-font-size-26">
 						湿度
 						<!--<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />-->
-						<div class="app-font-size-34" v-text="(state.humidityValid?state.humidity:0)+'%'"></div>
+						<div class="app-font-size-34" v-text="(state.humidityValid?parseInt(state.humidity/10):0)+'%'"></div>
 					</div>
 				</div>
 

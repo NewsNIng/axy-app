@@ -125,7 +125,6 @@
 				background-position: center;
 			}
 			/*end图片轮播*/
-			
 		</style>
 	</head>
 
@@ -141,14 +140,13 @@
 				</a>
 				<a class="mui-icon mui-pull-right" style="margin-right: -4px;" @tap="onCollection()">
 					<template v-if="collection">
-						<img src="../../../image/nearby/business/collection_3@3x.png"/>
+						<img src="../../../image/nearby/business/collection_3@3x.png" />
 					</template>
 					<template v-else>
-						<img src="../../../image/nearby/business/collection@3x.png"/>
+						<img src="../../../image/nearby/business/collection@3x.png" />
 					</template>
 				</a>
 			</header>
-
 
 			<div class="mui-content noImmersed">
 				<!--<img :src="data.image1" />-->
@@ -183,12 +181,12 @@
 
 					</template>
 				</div>
-				
+
 				<div class="business_signs app-font-size-28">
 					商家活动
 				</div>
 				<div class="business_description app-font-size-30">{{data.activity}}</div>
-				
+
 				<div class="business_desc app-font-size-28">
 					商家介绍
 				</div>
@@ -219,14 +217,14 @@
 
 		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
-		
+
 		<script type="text/javascript" src="../../../js/lib/gps.js"></script>
-		
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
-			
+
 			new Vue({
 				el: '.root',
 				data: function() {
@@ -249,7 +247,8 @@
 							"distance": null
 						},
 						iscollection: 0,
-						goodslist: []
+						goodslist: [],
+						isSync: true,
 					};
 
 				},
@@ -308,6 +307,7 @@
 							}
 							// 商家信息
 							this.data = data.store;
+//							alert(data.isFavorites);
 							this.iscollection = !data.isFavorites ? 0 : 1;
 							console.log(JSON.stringify(this.data));
 							// 商品信息
@@ -316,20 +316,38 @@
 								imagelazyload();
 								mui.previewImage();
 							});
+							if(!this.isSync){
+								this.onCollectionAction();
+							}
 						}.bind(this));
 					},
 					onCollection: function() {
+						if(!this.data.state) {
+							return mui.toast("该店铺暂未通过审核");
+						}
 						var that = this;
 						app.user.get(function(u, sync) {
 							u && setTimeout(function() {
-								that.changeCollection();
-							}, sync ? 0: 200);
+								that.isSync = sync;
+								if(that.isSync) {
+									that.changeCollection();
+								} else {
+									that.getInfo();
+								}
+
+							}, sync ? 0 : 200);
 						});
+					},
+					onCollectionAction: function() {
+//						alert(that.iscollection + "," + that.isSync);
+						if(!this.iscollection || this.isSync) {
+							this.changeCollection();
+						}
 					},
 					changeCollection: function() {
 						var that = this;
 						var methodName = 'add';
-//						console.log(this.collection);
+						//						console.log(this.collection);
 						if(this.collection) {
 							methodName = 'delete';
 						}
@@ -342,7 +360,7 @@
 							mui.toast((this.collection ? "取消" : "") + "收藏成功");
 							this.iscollection = +!this.iscollection;
 							app.page.setResult({
-								collection:that.collection
+								collection: that.collection
 							});
 						}.bind(this));
 					},
@@ -350,9 +368,11 @@
 						var el = e.target;
 
 					},
-					
-					
+
 					onShareTap: function() {
+						if(!this.data.state) {
+							return mui.toast("该店铺暂未通过审核");
+						}
 						var that = this;
 						var shareImg = that._getImg(that.data.image1, that.data.image2, that.data.image3);
 						app.page.sendShare(function() {
@@ -361,7 +381,7 @@
 							img: shareImg,
 							title: that.data.name,
 							content: that.data.introduction || that.data.name,
-							
+
 							tips: "快把商家分享给朋友，获取更多赞~",
 							datahref: {
 								type: "store", // 分享类型 （店铺store, 主题theme, 发现discover）
@@ -370,13 +390,10 @@
 						});
 					},
 
-					
-					
-					
 					_getImg: function(img1, img2, img3) {
 						return img1 || img2 || img3;
 					},
-					
+
 					// 点击打电话
 					onCallTap: function() {
 						var o = this.data;
@@ -397,7 +414,7 @@
 								}
 							});
 					},
-					
+
 					// 点击导航
 					onWithMapTap: function() {
 						var o = this.data;

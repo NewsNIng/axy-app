@@ -201,7 +201,7 @@
 
 						// 获取短链
 						Rx.Observable.create(function(ob) {
-								w.setTitle("生成短链...");
+								//w.setTitle("生成短链...");
 								dal.common.generateDURL(that.href, function(err, data) {
 									if(!err) {
 										that.href = data;
@@ -217,7 +217,7 @@
 									var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
 									new that.$OAuth(oauthType, function(err, info) {
 										if(err) {
-											return mui.toast(err.message);
+											return ob.error(err);
 										}
 										ob.next();
 									}, that);
@@ -250,7 +250,7 @@
 									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
 
 										if(err) {
-											return plus.nativeUI.toast(err.message);
+											return ob.error(err);
 										}
 										ob.next(overImgs[0]);
 									});
@@ -270,7 +270,7 @@
 											}else{
 												err.message = err.code + ":" + err.message;
 											}
-											return plus.nativeUI.toast(err.message);
+											return ob.error(err);
 										}
 										ob.next(data);
 									}, {
@@ -287,6 +287,9 @@
 									type: type,
 									result: data
 								}).close();
+							}, function(err){
+								mui.toast(err.message);
+								mui.back();
 							});
 
 					},

@@ -7,8 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.0.8",/*应用版本名称*/
-		"code": "20180315"
+		"name": "2.1.0",/*应用版本名称*/
+		"code": "20180320"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -922,7 +922,9 @@
 					"html/person/setting/push.html",
 					"html/person/setting/setsafe.html",
 					"html/person/relation/bind.html",
-					"html/person/relation/bind_tel.html"
+					"html/person/relation/bind_tel.html",
+					"html/public/input.html",
+					"html/common/login.html"
 				],
 				"priority": 0
 			},

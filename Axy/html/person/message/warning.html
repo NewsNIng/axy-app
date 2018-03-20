@@ -211,7 +211,7 @@
 						</div>
 						<div style="padding-bottom: 0.2rem;">
 							<span class="app-color-333333">告警防区</span>
-							<span class="mui-pull-right">{{o.areaname}}</span>
+							<span class="mui-pull-right">{{o.areaname || o.areaid}}</span>
 						</div>
 						<transition name="menu-fade">
 
@@ -525,13 +525,16 @@
 					// 获取告警消息列表
 					getMessageList: function(override) {
 						if(override) {
-							this.list.length = 0;
+							this.list = [];
 							this.n = 1;
 						}
 						var that = this;
 						dal.message.getAlarmList(this.n, this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "", function(err, data) {
 							if(err) {
 								return mui.toast(err.message);
+							}
+							if(!data || data.length === 0){
+								return;
 							}
 							data = data.map(function(item) {
 								item.showMenu = false;
