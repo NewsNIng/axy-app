@@ -208,9 +208,9 @@
 	 * @param {Object} sf
 	 * @param {Object} ff
 	 */
-	pgn.AddSmartDeviceAsyn = function(deviceid, iqid, name, delay, ptz, bindV, sf, ff) {
-		return pg.asyncExec(N, 'AddSmartDeviceAsyn', [deviceid, iqid, name, delay, ptz, bindV], sf, ff);
-	};
+	//pgn.AddSmartDeviceAsyn = function(deviceid, iqid, name, delay, ptz, bindV, sf, ff) {
+	//	return pg.asyncExec(N, 'AddSmartDeviceAsyn', [deviceid, iqid, name, delay, ptz, bindV], sf, ff);
+	//};
 
 	/**
 	 * 删除单个配件
@@ -219,9 +219,9 @@
 	 * @param {Function} sf 正确回调函数
 	 * @param {Function} ff 失败回调函数
 	 */
-	pgn.DelSmartDeviceAsyn = function(deviceid, iqid, sf, ff) {
-		return pg.asyncExec(N, 'DelSmartDeviceAsyn', [deviceid, iqid], sf, ff);
-	};
+	//pgn.DelSmartDeviceAsyn = function(deviceid, iqid, sf, ff) {
+	//	return pg.asyncExec(N, 'DelSmartDeviceAsyn', [deviceid, iqid], sf, ff);
+	//};
 
 	/**
 	 * 修改配件的信息
@@ -233,9 +233,9 @@
 	 * @param {Function} sf 正确回调函数
 	 * @param {Function} ff 失败回调函数
 	 */
-	pgn.UpdateSmartDeviceAsyn = function(deviceid, iqid, name, _switch, step, ptzSet, bindV, sf, ff) {
-		return pg.asyncExec(N, 'UpdateSmartDeviceAsyn', [deviceid, iqid, name, _switch, step, ptzSet, bindV], sf, ff);
-	};
+	//pgn.UpdateSmartDeviceAsyn = function(deviceid, iqid, name, _switch, step, ptzSet, bindV, sf, ff) {
+	//	return pg.asyncExec(N, 'UpdateSmartDeviceAsyn', [deviceid, iqid, name, _switch, step, ptzSet, bindV], sf, ff);
+	//};
 
 	/**
 	 * 获取本地录像&拍照的记录
@@ -273,9 +273,9 @@
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.SmartDeviceQueryChannelAsyn = function(deviceid, iqid, action, comd, sf, ff) {
-		return pg.asyncExec(N, 'SmartDeviceQueryChannelAsyn', [deviceid, iqid, action, comd], sf, ff);
-	};
+	//pgn.SmartDeviceQueryChannelAsyn = function(deviceid, iqid, action, comd, sf, ff) {
+	//	return pg.asyncExec(N, 'SmartDeviceQueryChannelAsyn', [deviceid, iqid, action, comd], sf, ff);
+	//};
 
 	/**
 	 * 智能配件控制通道
@@ -286,9 +286,9 @@
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.SmartDeviceControlChannelAsyn = function(deviceid, iqid, action, comd, sf, ff) {
-		return pg.asyncExec(N, 'SmartDeviceControlChannelAsyn', [deviceid, iqid, action, comd], sf, ff);
-	};
+	//pgn.SmartDeviceControlChannelAsyn = function(deviceid, iqid, action, comd, sf, ff) {
+	//	return pg.asyncExec(N, 'SmartDeviceControlChannelAsyn', [deviceid, iqid, action, comd], sf, ff);
+	//};
 
 	/**
 	 * 查询通道返回数据
@@ -304,11 +304,11 @@
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.SetDeviceParamAsyn = function(deviceid, xmljson, sf, ff) {
+	//pgn.SetDeviceParamAsyn = function(deviceid, xmljson, sf, ff) {
 		//xmljson = pg.json2xml(xmljson);
 		//console.log(xmljson);
-		return pg.asyncExec(N, 'SetDeviceParamAsyn', [deviceid, xmljson], sf, ff);
-	};
+	//	return pg.asyncExec(N, 'SetDeviceParamAsyn', [deviceid, xmljson], sf, ff);
+	//};
 
 	/**
 	 * 手机遥控器SOS/布撤防/静音
@@ -317,9 +317,9 @@
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.VirtualityRemoteControlAsyn = function(deviceid, action, sf, ff) {
-		return pg.asyncExec(N, 'VirtualityRemoteControlAsyn', [deviceid, action], sf, ff);
-	};
+	//pgn.VirtualityRemoteControlAsyn = function(deviceid, action, sf, ff) {
+	//	return pg.asyncExec(N, 'VirtualityRemoteControlAsyn', [deviceid, action], sf, ff);
+	//};
 
 	/**
 	 * 重启主机
@@ -327,16 +327,16 @@
 	 * @param {Function} sf
 	 * @param {Function} ff
 	 */
-	pgn.RebootDeviceAsyn = function(deviceid, sf, ff) {
-		return pg.asyncExec(N, 'RebootDeviceAsyn', [deviceid], sf, ff);
-	};
+	//pgn.RebootDeviceAsyn = function(deviceid, sf, ff) {
+	//	return pg.asyncExec(N, 'RebootDeviceAsyn', [deviceid], sf, ff);
+	//};
 
 	/**
 	 * 内网主机列表
 	 */
-	pgn.GetLanDevHostList = function() {
-		return pg.syncExec(N, 'GetLanDevHostList', []);
-	}
+	//pgn.GetLanDevHostList = function() {
+	//	return pg.syncExec(N, 'GetLanDevHostList', []);
+	//}
 	/**
 	 * 获取原生推送id
 	 */
@@ -399,6 +399,11 @@
 	pgn.GetPhoneWifiListAsyn  = function(sf, ff){
 		return pg.asyncExec(N, 'GetPhoneWifiListAsyn', [], sf, ff);
 	};
-
+	
+	
+	// 通知原生账户信息变化
+	pgn.NotifyAccountInfoChange = function(){
+		return pg.syncExec(N, 'NotifyAccountInfoChange', []);
+	}
 
 }(window));

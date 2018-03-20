@@ -24,7 +24,7 @@
 			
 			.mui-content {
 				background-color: white;
-				position: relative;
+				/*position: relative;*/
 			}
 			
 			.mui-content>img {
@@ -116,7 +116,10 @@
 			.blur {
 				-webkit-filter: blur(10px);
 				filter: blur(10px);
-				background-color: #EDEDED;
+				background-color: #EDEDED; 
+				padding-top: 70%;
+				background-position: center;
+				background-size: cover;
 			}
 		</style>
 	</head>
@@ -132,8 +135,10 @@
 
 				<div class="mui-scroll-wrapper">
 					<div class="mui-scroll">
-
-						<img :data-src="userInfo.headimgurl" class="img-lazy-load blur" data-type="avastr" />
+						<div style="width: 100%; text-align: center;">
+							<div :data-src="userInfo.headimgurl" class="img-lazy-load blur" data-type="avastr"></div>
+						</div>
+						
 						<div class="user_icon app-font-size-26"><img :data-src="userInfo.headimgurl" class="img-lazy-load" data-type="avastr" /></div>
 						<div class="user_name app-font-size-38" style="display: inline;" v-text="userInfo.nickname"></div>
 						<div class="attention app-font-size-26" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>

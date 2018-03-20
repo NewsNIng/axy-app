@@ -249,6 +249,13 @@
 			type: type
 		}, callback);
 	};
+	
+	
+	user.syncsuser = function(callback){
+		return ra('post', '/user/syncsuser', {
+			
+		}, callback);
+	};
 
 	_.user = user;
 

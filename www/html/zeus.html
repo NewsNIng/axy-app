@@ -158,10 +158,10 @@
 
 			// 获取设备列表计时器
 			var $getDevListTimer = Rx.Observable.create(function(_) {
-				_.next();
-			})
-			.delay(3e3)
-			.merge(Rx.Observable.interval(30e3));
+					_.next();
+				})
+				.delay(3e3)
+				.merge(Rx.Observable.interval(30e3));
 
 			// 获取用户设备列表数据
 			var $getDevListByAjax = Rx.Observable.create(function(ob) {
@@ -256,7 +256,8 @@
 				.subscribe(UpdateUserInfo);
 
 			// 登录失败处理
-			var AppLoginFail = function() {
+			function AppLoginFail() {
+
 				app.user.clear();
 				window.localStorage.setItem('_pwd_', '');
 				plus.storage.removeItem('dev_list');
@@ -264,7 +265,6 @@
 				mui.toast("帐号存在异常，请重新登录");
 				app.user.get(function() {});
 			}
-
 			// 监听 token 失效
 			var $litenTokenErr = Rx.Observable.create(function(ob) {
 				_B.on('token_error', function(data) {
@@ -274,7 +274,12 @@
 
 			$pready
 				.mergeMapTo($litenTokenErr)
-				.subscribe(ReloadApp);
+				.subscribe(function() {
+					// 重启app
+					ReloadApp();
+					// 通知原生
+					P.NotifyAccountInfoChange();
+				});
 
 			// 向原生注册 控制中心 处理函数回调
 			var InitNativeSystem = function(o) {
@@ -381,17 +386,13 @@
 						});
 					})
 					.subscribe(function() {
-						// 关闭本页面
-						index.addEventListener('close', function(){
-							plus.nativeUI.closeWaiting();
-							// 首页重新运行
-							first.reload();
-							// 显示首页
-							first.show("slide-in-bottom", 250);
-							// 打开登录
-							app.user.get(function() {});
-						});
-						index.close('none');
+						plus.nativeUI.closeWaiting();
+						// 首页重新运行
+						first.reload();
+						// 显示首页
+						first.show("slide-in-bottom", 250);
+						// 打开登录
+						app.user.get(function() {});
 					});
 
 			}
@@ -426,7 +427,7 @@
 
 				data.token = token;
 				data.loginid = loginid;
-				
+
 				data.ismasteraccount = ismasteraccount;
 
 				return data;

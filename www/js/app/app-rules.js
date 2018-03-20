@@ -13,6 +13,8 @@
 		userName: /^[\u4e00-\u9fa5a-zA-Z0-9_/-]{1,18}$/,
 		nonEmpty: /[\S]{1,}/,
 		
+		isqqsdomain: /^(qqs.isee110.com)$/,
+		
 		
 	};
 

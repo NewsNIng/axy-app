@@ -13,7 +13,7 @@
 
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
-		
+
 		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
 		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
 		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
@@ -128,13 +128,18 @@
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
-		
-		
+
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				//处理窗口关闭前的业务 
+				beforeback: function() {
+					app.page.setResult({}).close();
+					return false;
+				},
+			});
 
 			var wayPick;
 
@@ -149,7 +154,7 @@
 						//filter: []
 
 						accid: 0,
-						
+
 						waych: 0,
 					};
 				},
@@ -179,11 +184,14 @@
 					});
 
 				},
-
 				plusReady: function() {
 					//this.filter = this.$view.filter || [];
 
 					this.accid = this.$view.accid || 0;
+					
+					this.$view.addEventListener("popGesture", function() {
+						app.page.setResult({});
+					});
 
 					this.getDevList();
 				},
@@ -193,9 +201,9 @@
 						// TODO 修复设备多通道问题
 
 						that = this;
-						
+
 						this.waych = 0;
-						
+
 						var type = app.dev.fixType(o.type);
 
 						Rx.Observable.create(function(ob) {
@@ -210,6 +218,10 @@
 									}
 
 									if(!data || !data.length) {
+										// 无通道直接下一步
+										return ob.next({
+											b: 0
+										});
 										return mui.toast("暂无通道信息");
 									}
 									data = data.map(function(item) {
@@ -217,7 +229,7 @@
 											text: item.name || item.uuid,
 											value: item.no
 										}
-									}); 
+									});
 
 									// 动态设置设备通道
 									wayPick.setData(data);

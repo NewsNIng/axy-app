@@ -486,7 +486,7 @@
 						var $getPwd = Rx.Observable.create(function(ob) {
 							var pwd = LOCKPWD.data;
 							if(!pwd) {
-								mui.toast("请设置操作门锁的密码")
+								mui.toast("请输入开锁密码")
 								// 请设置一个默认连接密码
 								app.page.openForResultBy("dev_40_set_pwd.html", "dev_40_set_pwd", function(data) {
 									if(data && data.pwd) {

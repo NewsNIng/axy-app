@@ -122,8 +122,15 @@
 				},
 				plusReady: function() {
 					_B = new ni.Broadcast();
-
-					plus.webview.create('zeus.html', 'zeus');
+					
+					zeus = plus.webview.getWebviewById('zeus');
+					if(zeus){
+						zeus.reload();
+					}else{
+						zeus = plus.webview.create('zeus.html', 'zeus');	
+					}
+					
+					
 					// plus ready !
 					// 这时候才能调用 plus 相关 API
 					this.group = new this.$WebviewGroupLow(plus.webview.currentWebview().id, {

@@ -1,12 +1,19 @@
 var dal = {
 	BASE_URL_DEV: "http://192.168.1.213:8080/vihiManager/vihiapi",
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
+	BASE_DOMAIN: "vh.anxin-net.com",
+	QQS_DOMAIN: "qqs.isee110.com",
 	// http://vh.anxin-net.com/vihiManager/vihiapp/share/index.html
 
 	BASE_URL_TOP: "http://www.isee110.com/api",
 	BASE_SHARE_URL: "http://vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
 	//BASE_SHARE_URL: "http://192.168.1.103:8080/module/index.html",
 	BASE_URL_VERSION: "206",
+};
+
+dal.isVihiDomain = function(){
+	var domain = window.localStorage.getItem('_domain_') || "";
+	return dal.BASE_URL.indexOf(domain) >= 0
 };
 
 /**
@@ -87,10 +94,11 @@ function requestAdapter(type, url, params, callback) {
 			callback(o.err, o.data);
 		},
 		error: function(xhr, type, err) {
-
+			var errmsg = errDir[type] || "其它错误";
+			//console.log("["+errmsg+"]" + url);
 			callback({
 				code: xhr.status,
-				message: errDir[type] || "其它错误"
+				message: errmsg
 
 			}, null);
 		}

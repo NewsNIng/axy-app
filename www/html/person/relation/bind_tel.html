@@ -60,10 +60,33 @@
 				margin: 0.906666rem 0.36rem;
 				height: 1.173333rem;
 			}
-			.app-btn-main-ghost{
+			
+			.app-btn-main-ghost {
 				display: inline-block;
 				width: 2.133333rem;
-				text-align: center !important;	
+				text-align: center !important;
+			}
+			/*兼容5s屏幕*/
+			
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				.app-btn-main-ghost {
+					width: 2.333333rem;
+					padding-right: 0;
+					padding-left: 0;
+				}
+				ul:not(.mui-pciker-list) li {
+					height: auto;
+				}
+				
+				input::-webkit-input-placeholder {
+					font-size: 13px !important;
+				}
+				[data-dpr="2"] input::-webkit-input-placeholder {
+					font-size: 26px !important;
+				}
+				[data-dpr="3"] input::-webkit-input-placeholder {
+					font-size: 39px !important;
+				}
 			}
 		</style>
 
@@ -90,7 +113,7 @@
 							<button type="button" class="mui-btn app-btn-main-ghost app-font-size-24 " :class="{'mui-disabled': codeTime}" @tap="onCodeTap()" v-text="codeText"></button>
 						</a>
 					</li>
-					
+
 				</ul>
 				<button type="button" class="mui-btn app-btn-main" @tap="onSubmitTap()">确定</button>
 
@@ -99,10 +122,10 @@
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/user.js" ></script>
-		
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
+
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -111,33 +134,33 @@
 				el: "#box",
 				data: function() {
 					return {
-						
+
 						tel: "",
-						
+
 						code: "",
 						validcode: "",
-						
+
 						codeT: 90,
 						codeTime: null,
 					};
 				},
 
 				computed: {
-					codeText: function(){
-						if(this.codeTime!==null){
+					codeText: function() {
+						if(this.codeTime !== null) {
 							return this.codeT + "s";
 						}
 						return "发送验证码"
 					},
-					isTel: function(){
+					isTel: function() {
 						return /\d{11}/.test(this.tel);
 					}
 				},
 
 				methods: {
-					getCode: function(){
-						dal.user.getCode(this.tel, function(err, rs){
-							if(err){
+					getCode: function() {
+						dal.user.getCode(this.tel, function(err, rs) {
+							if(err) {
 								this.codeT = 90;
 								window.clearTimeout(this.codeTime);
 								this.codeTime = null;
@@ -146,14 +169,14 @@
 							this.validcode = rs.validcode;
 						}.bind(this));
 					},
-					onCodeTap: function(){
-						if(!this.isTel){
+					onCodeTap: function() {
+						if(!this.isTel) {
 							return mui.toast("请输入正确的手机号");
 						}
-						
-						(function _(){
+
+						(function _() {
 							this.codeT--;
-							if(this.codeT <= 0){
+							if(this.codeT <= 0) {
 								this.codeT = 90;
 								window.clearTimeout(this.codeTime);
 								this.codeTime = null;
@@ -163,24 +186,24 @@
 						}.bind(this)())
 						this.getCode();
 					},
-					
+
 					// 提交
-					onSubmitTap: function(){
-						
-						if(!this.isTel){
+					onSubmitTap: function() {
+
+						if(!this.isTel) {
 							return mui.toast("请输入正确的手机号");
 						}
-						if(!this.code){
+						if(!this.code) {
 							return mui.toast("请输入验证码");
 						}
-						if(this.validcode !== this.code){
+						if(this.validcode !== this.code) {
 							return mui.toast("输入验证码错误");
 						}
 						// TODO 调用接口
 						plus.nativeUI.showWaiting();
-						dal.user.bindphone(this.tel, function(err, data){
+						dal.user.bindphone(this.tel, function(err, data) {
 							plus.nativeUI.closeWaiting();
-							if(err){
+							if(err) {
 								return mui.toast(err.message);
 							}
 							mui.toast("绑定手机成功");

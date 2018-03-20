@@ -109,6 +109,25 @@
 				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
 			}
 			
+			/*.imgdiv.AX-203 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-203A {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-360 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-403 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-503 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-603 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}*/
+			
 			.imgdiv.WG-100,
 			.imgdiv.AX-903,
 			.imgdiv.AX-904 {
@@ -129,6 +148,17 @@
 				left: 0.266666rem;
 				z-index: 9;
 			}
+			
+			
+			/*兼容5s屏幕*/
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				
+				.imgdiv>span.imgdiv-line { 
+				  line-height: 0.453333rem;
+				}
+				
+			}
+			
 			/*布防状态*/
 			
 			.imgdiv>span.imgdiv-state {
@@ -277,7 +307,6 @@
 					<span @tap="onActive(1)" :class="{active: active === 1}">智能配件</span>
 				</h1>
 				<a class="app-icon-plus mui-pull-right" @tap="onAddTap()"></a>
-
 			</header>
 
 			<div class="mui-content">

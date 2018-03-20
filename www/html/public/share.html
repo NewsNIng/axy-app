@@ -201,7 +201,7 @@
 
 						// 获取短链
 						Rx.Observable.create(function(ob) {
-								w.setTitle("生成短链...");
+								//w.setTitle("生成短链...");
 								dal.common.generateDURL(that.href, function(err, data) {
 									if(!err) {
 										that.href = data;
@@ -217,7 +217,7 @@
 									var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
 									new that.$OAuth(oauthType, function(err, info) {
 										if(err) {
-											return mui.toast(err.message);
+											return ob.error(err);
 										}
 										ob.next();
 									}, that);
@@ -225,7 +225,6 @@
 							})
 							// 处理为本地图片
 							.mergeMap(function(ob) {
-
 								return Rx.Observable.create(function(ob) {
 									if(shareImg.indexOf('file:') >= 0) {
 										// 本地图片
@@ -250,7 +249,7 @@
 									new ni.Zip().processImage(_img, 32, function(err, overImgs) {
 
 										if(err) {
-											return plus.nativeUI.toast(err.message);
+											return ob.error(err);
 										}
 										ob.next(overImgs[0]);
 									});
@@ -266,8 +265,11 @@
 										if(err) {
 											if(err.code === -100 || err.code === -2) {
 												err.message = "用户取消分享";
+												return;
+											}else{
+												err.message = err.code + ":" + err.message;
 											}
-											return plus.nativeUI.toast(err.code + ":" + err.message);
+											return ob.error(err);
 										}
 										ob.next(data);
 									}, {
@@ -284,6 +286,9 @@
 									type: type,
 									result: data
 								}).close();
+							}, function(err){
+								mui.toast(err.message);
+								mui.back();
 							});
 
 					},

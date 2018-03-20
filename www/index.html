@@ -15,14 +15,13 @@
 		if(window.plus){
 			setTimeout(plusReady);
 		}else{
-			document.addEventListener('plusready', plusReady, false);	
+			document.addEventListener('plusready', plusReady, false);
 		}
 		
 		function plusReady(){
 			//记录IMEI
 			var IMEI = plus.device.uuid;
 			window.localStorage.setItem("_imei_", IMEI);
-			
 			
 			// 暂时去除引导页 直接 进入 主页
 			return openMain();

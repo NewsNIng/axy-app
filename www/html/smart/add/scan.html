@@ -209,9 +209,18 @@
 								.mergeMap(function(data1) {
 
 									return Rx.Observable.create(function(observer) {
-
+										var t;
 										app.page.openForResultBy('scan_bind_dev.html', 'scan_bind_dev', function(data) {
-
+											if(!data.devid) {
+												if(t) {
+													clearTimeout(t)
+												}
+												t = setTimeout(function() {
+													that.resetScan();
+													t = null;
+												}, 200);
+												return;
+											}
 											observer.next({
 												acc: data1,
 												dev: data
