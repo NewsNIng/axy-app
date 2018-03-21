@@ -847,7 +847,8 @@
 					"html/smart/devices/dev_33.html",
 					"html/smart/devices/dev_40.html",
 					"html/smart/devices/dev_AX-904.html",
-					"html/smart/devices/dev_VH-104_setting.html"
+					"html/smart/devices/dev_VH-104_setting.html",
+					"html/smart/devices/dev_34.html"
 				],
 				"priority": 0
 			},
@@ -1174,7 +1175,8 @@
 					"html/smart/devices/dev_40.html",
 					"html/smart/devices/dev_65.html",
 					"html/smart/devices/dev_160.html",
-					"html/smart/devices/dev_22.html"
+					"html/smart/devices/dev_22.html",
+					"html/smart/devices/dev_34.html"
 				],
 				"priority": 0
 			},

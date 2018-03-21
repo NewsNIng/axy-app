@@ -61,11 +61,15 @@
 		 * @param {Object} devid
 		 * @param {Object} pageSize
 		 */
-		list: function(pageNumber, devid, callback, pageSize) {
+		list: function(pageNumber, devid, callback, pageSize, eventid, hdtypeid, handlers, attime) {
 			return ra('post', '/device/log/list', {
 				pageNumber: pageNumber,
 				pageSize: pageSize || 10,
-				devid: devid
+				devid: devid,
+				eventid: eventid,
+				hdtypeid: hdtypeid,
+				handlers: handlers,
+				attime: attime
 			}, callback);
 		}
 	}
