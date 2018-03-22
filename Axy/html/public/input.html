@@ -104,7 +104,6 @@
 				},
 				watch: {
 					content: function(curVal, oldVal) {　　　　　　　　　　
-						
 						if(this.maxLength > 0 && curVal.length > this.maxLength) {
 							this.content = oldVal;
 							mui.toast(this.mLengthMsg);
@@ -121,8 +120,8 @@
 					this.isIconSave = v.isIconSave || false;
 					this.maxLength = v.maxLength || 18;
 					this.mLengthMsg = v.mLengthMsg || "长度超出限制";
-//					alert(this.content.length);
-//					this.type = v.type || 'text';
+					//					alert(this.content.length);
+					//					this.type = v.type || 'text';
 				},
 				methods: {
 					onOkTap: function() {
@@ -140,6 +139,24 @@
 					}
 				}
 			})
+			document.querySelector('.input').onkeydown = function(e) {
+//				console.log(JSON.stringify(e.keyCode));
+				var code;
+				if(!e){
+					var e = window.event;
+				}
+				if(e.keyCode){
+					code = e.keyCode;
+				} else if(e.which){
+					code = e.which;
+				}
+				if(code == 13 && window.event) {
+					this.blur();
+					e.returnValue = false;
+				} else if(code == 13) {
+					e.preventDefault();
+				}
+			}
 		</script>
 	</body>
 
