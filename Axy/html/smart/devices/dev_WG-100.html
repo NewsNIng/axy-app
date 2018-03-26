@@ -33,14 +33,6 @@
 				background-position: bottom;
 			}
 			
-			.img-wrap>img {
-				width: 100%;
-				position: relative;
-				top: 50%;
-				transform: translateY(-50%);
-				-webkit-transform: translateY(-50%);
-			}
-			
 			.menu-warp {
 				display: flex;
 				display: -webkit-flex;
@@ -100,8 +92,9 @@
 				position: relative;
 				background-color: transparent;
 			}
+			/*.send_sound_wave:active:after,*/
 			
-			.send_sound_wave:active:after {
+			.send_sound_wave.active:after {
 				content: ' ';
 				position: absolute;
 				z-index: 0;
@@ -134,7 +127,7 @@
 				-webkit-animation-direction: normal;
 				/*定义动画方式*/
 			}
-		
+			
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
@@ -149,6 +142,31 @@
 			
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
+			}
+			/*波纹*/
+			
+			@keyframes ripple_ {
+				0% {
+					-webkit-transform: translate3d(50%, -50%, 0) scaleX(3);
+					transform: translate3d(50%, -50%, 0) scaleX(3);
+				}
+				100% {
+					-webkit-transform: translate3d(-50%, -50%, 0) scaleX(3);
+					transform: translate3d(-50%, -50%, 0) scaleX(3);
+				}
+			}
+			
+			.ripple {
+				width: 100%;
+				position: relative;
+				top: 50%;
+				left: 50%;
+				-webkit-transform: translate3d(50%, -50%, 0) scaleX(3);
+				transform: translate3d(50%, -50%, 0) scaleX(3);
+			}
+			
+			.ripple.active{
+				animation: ripple_ 4s infinite linear;
 			}
 		</style>
 	</head>
@@ -166,7 +184,7 @@
 
 			<div class="mui-content noImmersed">
 				<div class="img-wrap">
-					<img src="../../../image/smart/devices/gateway/icon_audiofrequency@3x.png" />
+					<img class="ripple" :class="{'active': ready || ing}" src="../../../image/smart/devices/gateway/icon_audiofrequency@3x.png" />
 				</div>
 				<div class="menu-warp app-font-size-24 app-color-dark">
 					<div @tap="onMuteTap()">
@@ -174,9 +192,10 @@
 						<div>{{isMute?"取消静音":"静音"}}</div>
 					</div>
 
-					<div class="send_sound_wave" @touchstart="onCallTap()" @touchend="onListenTap()">
+					<!--<div class="send_sound_wave" @touchstart="onCallTap()" @touchend="onListenTap()">-->
+					<div class="send_sound_wave" :class="{'active': ing}" @tap="onMicTap()">
 						<img src="../../../image/smart/devices/gateway/btn_Voiceintercom@3x.png" />
-						<div>语音对讲</div>
+						<div>{{ing?"停止对讲":"语音对讲"}}</div>
 					</div>
 					<!--<div>
 						<img src="../../../image/smart/devices/gateway/btn_Disarm@3x.png" />
@@ -184,133 +203,142 @@
 					</div>-->
 				</div>
 
-				
-			
-			
-		</div>
-		<!--沉浸式动态处理-->
-		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+			</div>
+			<!--沉浸式动态处理-->
+			<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 
-		<!--基础库-->
-		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
-		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-		<!--App相关业务逻辑-->
-		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+			<!--基础库-->
+			<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+			<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+			<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+			<!--App相关业务逻辑-->
+			<script type="text/javascript" src="../../../js/app/app.js"></script>
+			<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 
-		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+			<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
 
-		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+			<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
-		<script type="text/javascript">
-			mui.init();
+			<script type="text/javascript">
+				mui.init();
 
-			var P = plug.H5NativeBridge;
+				var P = plug.H5NativeBridge;
 
-			new Vue({
-				el: '#warpper',
-				data: function() {
-					return {
-						ready: false,
+				new Vue({
+					el: '#warpper',
+					data: function() {
+						return {
+							ready: false,
 
-						devid: -1,
+							devid: -1,
 
-						
-						devInfo: {
-							"id": 0,
-							"streamfwdport": 0,
-							"location": "",
-							"devid": "",
-							"relation": 0,
-							"binding": "",
-							"streamfwd": "vh.anxin-net.com",
-							"workmode": 0,
-							"type": 0,
-							"signalfwd": "vh.anxin-net.com",
-							"signalfwdport": 0,
-							"online": 0,
-							
+							devInfo: {
+								"id": 0,
+								"streamfwdport": 0,
+								"location": "",
+								"devid": "",
+								"relation": 0,
+								"binding": "",
+								"streamfwd": "vh.anxin-net.com",
+								"workmode": 0,
+								"type": 0,
+								"signalfwd": "vh.anxin-net.com",
+								"signalfwdport": 0,
+								"online": 0,
+
+							},
+
+							isMute: false, // 是否静音
+
+							ing: false, // 是否开启了语音
+
+						};
+					},
+					plusReady: function() {
+						this.devInfo = this.$view.devInfo;
+						this.devid = this.$view.devInfo.devid;
+
+						this._connectWG100();
+
+						var oldback = mui.back;
+						mui.back = function() {
+							this._disconnet();
+							this.$view.close();
+						}.bind(this)
+
+					},
+					methods: {
+						// 分享按钮
+						onShareTap: function() {
+							mui.openWindow("../../person/devshare/share.html", 'dev_share', {
+								extras: {
+									devInfo: this.devInfo
+								}
+							});
 						},
-						
-						
-						
-						isMute: false, // 是否静音
 
-					};
-				},
-				plusReady: function() {
-					this.devInfo = this.$view.devInfo;
-					this.devid = this.$view.devInfo.devid;
-					
-					this._connectWG100();
-					
-					var oldback = mui.back;
-					mui.back = function() {
-						this._disconnet();
-						this.$view.close();
-					}.bind(this)
+						// 初始化连接
+						_connectWG100: function() {
+							try {
+								this.ready || P.ConnectWG100(this.devid, function() {
+									this.ready = true;
+									mui.toast("初始化完毕");
+								}.bind(this));
 
-				},
-				methods: {
-					// 分享按钮
-					onShareTap: function(){
-						mui.openWindow("../../person/devshare/share.html", 'dev_share', {
-							extras: {
-								devInfo: this.devInfo
+							} catch(e) {
+								//TODO handle the exception
+								mui.toast(e.message);
 							}
-						});
-					},
-					
-					
-					
 
-					// 初始化连接
-					_connectWG100: function() {
-						try {
-							this.ready || P.ConnectWG100(this.devid, function() {
-								this.ready = true;
-								mui.toast("初始化完毕");
-							}.bind(this));
+						},
 
-						} catch(e) {
-							//TODO handle the exception
-							mui.toast(e.message);
-						}
+						// 静音按钮
+						onMuteTap: function() {
+							this.ready && P.WG100Mute();
+							plus.device.vibrate(100);
+							this.isMute = !this.isMute;
+							mui.toast(this.isMute ? "静音" : "取消静音");
+						},
 
-					},
+						onMicTap: function() {
+							//							if(!this.ready){
+							//								return mui.toast("尚未初始化完成");
+							//							}
+							this.ing = !this.ing;
+							plus.device.vibrate(50);
 
-					// 静音按钮
-					onMuteTap: function() {
-						this.ready && P.WG100Mute();
-						plus.device.vibrate(100);
-						this.isMute = !this.isMute;
-						mui.toast(this.isMute?"静音":"取消静音");
-					},
+							if(this.ing) {
+								mui.toast("开始通话");
+								P.WG100Call();
+							} else {
+								mui.toast("通话结束");
+								P.WG100Listen();
 
-					// 通话
-					onCallTap: function() {
-						this.ready && P.WG100Call();
-						plus.device.vibrate(50);
-						mui.toast("通话");
-					},
+							}
 
-					// 松手监听
-					onListenTap: function() {
-						this.ready && P.WG100Listen();
-						plus.device.vibrate(50);
-						mui.toast("松手");
-					},
+						},
 
-					_disconnet: function() {
-						this.ready && P.DisconnectWG100();
-					},
-					
-					
-					
-				}
-			});
-		</script>
+						// 通话
+						onCallTap: function() {
+							this.ready && P.WG100Call();
+							plus.device.vibrate(50);
+							mui.toast("通话");
+						},
+
+						// 松手监听
+						onListenTap: function() {
+							this.ready && P.WG100Listen();
+							plus.device.vibrate(50);
+							mui.toast("松手");
+						},
+
+						_disconnet: function() {
+							this.ready && P.DisconnectWG100();
+						},
+
+					}
+				});
+			</script>
 	</body>
 
 </html>

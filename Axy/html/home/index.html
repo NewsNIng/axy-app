@@ -93,6 +93,8 @@
 			.dev_menu .d1 {
 				width: 50%;
 				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 			
 			.dev_menu .d1>span {
@@ -408,7 +410,9 @@
 						<div class="dev_menu">
 							<div class="mui-icon d1">
 								<img src="../../image/home/dev_camera.png" />
-								<span class="app-font-size-24 app-color-main">{{_fixDevLocation(dev.location) || dev.devid}}</span>
+								<span class="app-font-size-24 app-color-main">
+									{{_fixDevLocation(dev.location) || dev.devid}}
+								</span>
 							</div>
 
 							<div class="mui-icon d3" @tap="onDeviceSetTap()">
@@ -511,7 +515,7 @@
 		<script type="text/javascript" src="../../js/dal/device.js"></script>
 		<script type="text/javascript" src="../../js/dal/devparam.js"></script>
 		<script type="text/javascript" src="../../js/dal/store.js"></script>
-		<script type="text/javascript" src="../../js/dal/message.js" ></script>
+		<script type="text/javascript" src="../../js/dal/message.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
@@ -531,10 +535,10 @@
 		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript" src="temp_like_json.js"></script>
-		
-		<script type="text/javascript" src="../../js/extend/Date.js" ></script>
-		
-		<script type="text/javascript" src="../../js/components/home/warnmsg.js" ></script>
+
+		<script type="text/javascript" src="../../js/extend/Date.js"></script>
+
+		<script type="text/javascript" src="../../js/components/home/warnmsg.js"></script>
 
 		<script type="text/javascript">
 			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
@@ -706,7 +710,6 @@
 					});
 
 					_B.on('device_update', function() {
-
 						that.getDeviceOne();
 					});
 
@@ -772,8 +775,7 @@
 						_B.emit("home_reload", {}, {
 							self: true
 						});
-						
-						
+
 						// 获取轮播广告图
 						this.getAdvert();
 						// 获取喜欢列表

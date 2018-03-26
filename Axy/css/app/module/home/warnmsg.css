@@ -3,6 +3,13 @@
   margin-bottom: 0.213333rem;
   height: 1.2rem;
   overflow: hidden;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+}
+.home-warnmsg > div {
+  flex: 1;
+  -webkit-flex: 1;
 }
 .home-warnmsg .flip-list-move {
   transition: transform 1s;
@@ -21,7 +28,6 @@
   color: #4c4c4c;
 }
 .home-warnmsg img {
-  margin-right: 0.293333rem;
   width: 1.36rem;
   height: 0.32rem;
 }

@@ -1,12 +1,12 @@
 Vue && Vue.component('warnMsg', {
 
-	template: `<div class="home-warnmsg" v-if="items.length">
+	template: `<div class="home-warnmsg" v-if="items.length" style="display: flex;display: -webkit-flex;justify-content: center;">
 	
-	
-	 <transition-group name="flip-list" tag="div">
+	<img src="../../image/home/icon_Alarmnews@3x.png" style="margin: 0.42rem 0.293333rem;" />
+	 <transition-group name="flip-list" tag="div" style="flex: 1;-webkit-flex: 1;">
 
 				<div class="home-warnmsg-item" v-for="o,i in items" :key="o.id" @tap="onTap(o)">
-					<img src="../../image/home/icon_Alarmnews@3x.png" />
+										
 					<span class="app-font-size-26 mui-ellipsis">
 							{{_fixDevLocation(o.location) +　" " + (o.areaname || o.areaid)}}
 						</span>
@@ -22,7 +22,8 @@ Vue && Vue.component('warnMsg', {
 			animate: false,
 			items: [
 
-			]
+			],
+			st: null,
 		}
 	},
 	created() {
@@ -43,7 +44,17 @@ Vue && Vue.component('warnMsg', {
 
 			.subscribe(function(data) {
 				that.items = data;
-				data.length > 1 && setInterval(that.scroll, 4000);
+				
+				if(data.length > 1){
+					if(!that.st){
+						that.st = setInterval(that.scroll, 8e3);
+					}
+				}else{
+					if(that.st){
+						window.clearInterval(that.st);
+						that.st = null;
+					}
+				}
 			}, function(err) {
 				mui.toast(err.message);
 			});

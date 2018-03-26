@@ -221,7 +221,7 @@
 					// 获取内网主机列表
 					_getLanDevHostList: function() {
 						var rs = P.GetLanDevHostList();
-						return JSON.parse(rs).devlist || [];
+						return JSON.parse(rs || "{}").devlist || [];
 					},
 
 					// 通过设备ID进行添加 且 验证

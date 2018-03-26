@@ -267,6 +267,9 @@
 
 						// 是否获取过数据
 						isGeted: false,
+
+						// 是否获取到了定位信息
+						isPositionEnd: false,
 					};
 				},
 				mounted: function() {
@@ -291,6 +294,11 @@
 
 					var getPositonAndDown = function() {
 						$position
+							.map(function(arg) {
+								that.isPositionEnd = true;
+								return arg;
+
+							})
 							.merge($time5out.mergeMapTo($prePosition))
 							.first()
 							.subscribe(function(p) {
@@ -305,7 +313,15 @@
 								that._down();
 							});
 					}
-					
+
+					var callbackDown = function() {
+						if(this.isPositionEnd){
+							that._down();
+						}else{
+							getPositonAndDown();
+						}
+					}
+
 					getPositonAndDown();
 
 					this.$nextTick(function() {
@@ -314,7 +330,7 @@
 							pullRefresh: {
 								container: ".mui-scroll-wrapper",
 								down: {
-									callback: getPositonAndDown
+									callback: callbackDown
 								},
 								up: {
 									callback: this._up
@@ -375,6 +391,10 @@
 								that.position = p.address;
 								that.longitude = p.longitude;
 								that.latitude = p.latitude;
+								
+								// 已经手动选过地址了，不再重新获取定位信息
+								that.isPositionEnd = true;
+								
 								// 重新获取附近的商家列表
 								that._down();
 							}, rs);
