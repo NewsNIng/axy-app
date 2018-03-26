@@ -153,6 +153,24 @@
 					}
 				}
 			})
+			document.querySelector('.input').onkeydown = function(e) {
+//				console.log(JSON.stringify(e.keyCode));
+				var code;
+				if(!e){
+					var e = window.event;
+				}
+				if(e.keyCode){
+					code = e.keyCode;
+				} else if(e.which){
+					code = e.which;
+				}
+				if(code == 13 && window.event) {
+					this.blur();
+					e.returnValue = false;
+				} else if(code == 13) {
+					e.preventDefault();
+				}
+			}
 		</script>
 	</body>
 

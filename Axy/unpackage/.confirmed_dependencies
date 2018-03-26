@@ -577,7 +577,8 @@
 			"html/smart/devices/camera_settings_arming.html",
 			"html/smart/devices/camera_settings_info.html",
 			"html/smart/devices/dev_VH-104_setting_info.html",
-			"html/smart/devices/camera_settings_log.html"
+			"html/smart/devices/camera_settings_log.html",
+			"html/public/alarmParam.html"
 		],
 		"resources": []
 	},
