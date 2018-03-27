@@ -163,6 +163,7 @@
 				font-size: 45px !important;
 			}
 			/*end video*/
+			/*bscroll-vertical-scrollbar*/
 		</style>
 
 	</head>
@@ -328,6 +329,10 @@
 								scrollY: true,
 								pullUpLoad: {
 									threshold: -70, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+								},
+								scrollbar: {
+									fade: true,
+									interactive: false // 1.8.0 新增
 								}
 							});
 							this.scroll.on('pullingUp', function() {
@@ -340,6 +345,8 @@
 						} else {
 							this.scroll.refresh();
 						}
+
+						document.querySelector('.bscroll-vertical-scrollbar').style.top = this.$refs.tabroom.offsetHeight + immersed + 44 + "px";
 
 					}.bind(this));
 
@@ -459,6 +466,8 @@
 
 					// 点击观看实时视频视图
 					onViewTap: function(o, i) {
+						console.log(JSON.stringify(o));
+
 						// TODO 需要获取到通道信息
 						var w1 = 0;
 						// 遍历获取 设备的 在线状态 so stupid
@@ -524,16 +533,18 @@
 
 					// 获取告警消息列表
 					getMessageList: function(override) {
+						plus.nativeUI.showWaiting("正在加载");
 						if(override) {
 							this.list = [];
 							this.n = 1;
 						}
 						var that = this;
 						dal.message.getAlarmList(this.n, this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "", function(err, data) {
+							plus.nativeUI.closeWaiting();
 							if(err) {
 								return mui.toast(err.message);
 							}
-							if(!data || data.length === 0){
+							if(!data || data.length === 0) {
 								return;
 							}
 							data = data.map(function(item) {

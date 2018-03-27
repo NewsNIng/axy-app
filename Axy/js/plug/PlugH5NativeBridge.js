@@ -334,9 +334,9 @@
 	/**
 	 * 内网主机列表
 	 */
-	//pgn.GetLanDevHostList = function() {
-	//	return pg.syncExec(N, 'GetLanDevHostList', []);
-	//}
+	pgn.GetLanDevHostList = function() {
+		return pg.syncExec(N, 'GetLanDevHostList', []);
+	}
 	/**
 	 * 获取原生推送id
 	 */

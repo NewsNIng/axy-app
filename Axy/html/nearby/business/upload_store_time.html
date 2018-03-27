@@ -11,7 +11,7 @@
 
 		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
 		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
-		
+
 		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 
 		<style type="text/css">
@@ -100,7 +100,7 @@
 			.allDay .sd .leftname {
 				color: #808080 !important;
 			}
-
+			
 			.mui-poppicker-header .mui-btn {
 				font-size: 15px !important;
 			}
@@ -112,8 +112,6 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
-			
-			
 		</style>
 	</head>
 
@@ -178,8 +176,8 @@
 
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
-		<script type="text/javascript" src="../../../js/data/time_slot.js" ></script>
-		<script type="text/javascript" src="../../../js/data/time_week.js" ></script>
+		<script type="text/javascript" src="../../../js/data/time_slot.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_week.js"></script>
 		</script>
 
 		<script type="text/javascript">
@@ -200,10 +198,10 @@
 						allDay: false, // 是否全天
 						startweek: 1,
 						endtweek: 7,
-						
+
 						starttime: 0,
 						endtime: 24,
-						
+
 						week_str: '',
 						week_index: 0,
 						time_str: '',
@@ -211,28 +209,28 @@
 					};
 				},
 				watch: {
-					allDay: function(nv){
-						if(nv){
+					allDay: function(nv) {
+						if(nv) {
 							this.starttime = 0;
 							this.endtime = 24;
 						}
 					}
 				},
 				computed: {
-					onLine: function(){
+					onLine: function() {
 						var d = new Date();
 						// 判断当天
 						var week = (d.getDay() + 6) % 7 + 1;
-						if(week < this.startweek || week > this.endtweek){
+						if(week < this.startweek || week > this.endtweek) {
 							return false;
 						}
 						// 是否全天
-						if(this.allDay){
+						if(this.allDay) {
 							return true;
 						}
 						// 判断时间点
 						var h = d.getHours();
-						if(h < this.starttime || h > this.endtime){
+						if(h < this.starttime || h > this.endtime) {
 							return false;
 						}
 						return true;
@@ -243,23 +241,46 @@
 						this.allDay = event.detail.isActive;
 					}.bind(this));
 
-				
-					this.pick = new mui.PopPicker({
-						layer: 2,
-						more: true
-					});
-					this.pick.setData([pick_data, pick_data]);
-					
-					
+				},
+				plusReady: function() {
+					/*name: "营业时间",
+					value: "00:00-24:00",
+					tips: '',
+					startweek: 1,
+					endtweek: 7,
+					starttime: 0,
+					endtime: 24,*/
+
+					this.starttime = this.$view.starttime;
+					this.endtime = this.$view.endtime;
+					if(this.endtime - this.starttime === 24) {
+						this.allDay = true;
+					}
+
+					// 周
 					this.pick_week = new mui.PopPicker({
 						layer: 2,
 						more: true
 					});
 					this.pick_week.setData([pick_data_week, pick_data_week]);
-					
-				},
-				plusReady: function() {
-					
+
+					this.pick_week.pickers[0].setSelectedValue(this.$view.startweek);
+					this.pick_week.pickers[1].setSelectedValue(this.$view.endtweek);
+
+					this.week_str = pick_data_week[this.$view.startweek - 1].text + ' - ' + pick_data_week[this.$view.endtweek - 1].text;
+
+					// 时
+					this.pick = new mui.PopPicker({
+						layer: 2,
+						more: true
+					});
+					this.pick.setData([pick_data, pick_data]);
+
+					this.pick.pickers[0].setSelectedValue(this.$view.starttime);
+					this.pick.pickers[1].setSelectedValue(this.$view.endtime);
+
+					this.time_str = pick_data[this.$view.starttime * 2].text + ' - ' + pick_data[this.$view.endtime * 2].text; 
+
 				},
 				methods: {
 					onSaveTap: function() {
@@ -274,19 +295,19 @@
 						}).close();
 					},
 					// 营业周点击
-					onWeekTap: function(){
+					onWeekTap: function() {
 						this.pick_week.show(function(items) {
-	   						this.week_str = items[0].text + ' - ' + items[1].text;
-	   						this.startweek = items[0].value;
-	   						this.endtweek = items[1].value;
+							this.week_str = items[0].text + ' - ' + items[1].text;
+							this.startweek = items[0].value;
+							this.endtweek = items[1].value;
 						}.bind(this));
 					},
 					// 营业时段点击
-					onTimeTap: function(){
+					onTimeTap: function() {
 						this.pick.show(function(items) {
 							this.time_str = items[0].text + ' - ' + items[1].text;
 							this.starttime = items[0].value;
-	   						this.endtime = items[1].value;
+							this.endtime = items[1].value;
 						}.bind(this));
 					}
 				}

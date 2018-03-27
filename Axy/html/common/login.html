@@ -151,6 +151,25 @@
 				font-weight: bold;
 				color: #666666 !important;
 			}
+			/*历史记录icon*/
+			
+			div.mui-input-row>img.history {
+				left: initial;
+				top: 0.45rem;
+				right: 0.106666rem;
+			}
+			
+			.history-box {
+				width: 8.4rem;
+				left: 0.826666rem;
+				height: 50px;
+				position: absolute;
+				z-index: 999;
+				height: auto;
+			}
+			.history-box>ul{
+				box-shadow: 0px 0px 3px #CCCCCC;
+			}
 		</style>
 	</head>
 
@@ -161,13 +180,22 @@
 			</a>
 			<span class="mui-pull-right app-font-size-30 app-color-main" id="reg">新用户注册</span>
 		</header>
-		<div class="mui-content">
+		<div class="mui-content" @tap="onTouchstart()">
 
 			<img src="../../image/common/login_logo.png" />
 
 			<div class="mui-input-row app-font-size-30">
 				<img src="../../image/common/login_account.png" />
 				<input type="text" placeholder="请输入手机号码" v-model="username">
+				<img class="history" @tap.stop.prevent.self="onHistoryIconTap()" src="../../image/smart/devices/others/down.png" />
+
+			</div>
+
+			<div v-show="showhistory" class="history-box app-font-size-32" >
+				<ul class="mui-table-view">
+					<li v-for="o,i in historyList" @touchend.prevent.self @tap="onHistoryTap(o)" class="mui-table-view-cell" v-text="o"></li>
+					<li @touchend.prevent.self @tap="onHistoryClearTap()" class="mui-table-view-cell" style="text-align: center;">清除记录</li>
+				</ul>
 			</div>
 
 			<div class="mui-input-row app-font-size-30">
@@ -242,6 +270,9 @@
 				qq: "login_qq",
 				weixin: "login_wechat"
 			};
+			
+			
+			var historyList;
 
 			new Vue({
 				el: ".mui-content",
@@ -250,11 +281,20 @@
 						username: '',
 						password: '',
 						loading: false,
+						showhistory: false,
+						historyList: [],
 
 						oLoginNames: ["qq", "weixin", "sinaweibo"],
 					};
 				},
 				plusReady: function() {
+					// 获取帐号历史记录
+					historyList = new ni.Cache("accounthistoryLists",[], {
+						plus: true,
+						max: 5
+					});
+					this.historyList.push.apply(this.historyList, historyList.data);
+					
 					// 获取到创建者 (webview)
 					var opener = this.$view.opener();
 					// 获取本地记录帐号 
@@ -266,6 +306,28 @@
 
 				},
 				methods: {
+					// touchstart
+					onTouchstart: function(){
+						this.showhistory = false;
+					},
+					// 历史记录选项点击
+					onHistoryTap: function(o){
+						this.username = o;
+						this.showhistory = false;
+					},
+					// 历史记录清除点击
+					onHistoryClearTap: function(){
+						this.historyList = [];
+						historyList.data = [];
+						this.showhistory = false; 
+					},
+					// 历史记录图片点击
+					onHistoryIconTap: function() {
+						if(this.historyList.length === 0){
+							return mui.toast("账号登录历史为空")
+						}
+						this.showhistory = !this.showhistory;
+					},
 
 					_getoLoginIconSrc: function(type) {
 						var src = _oLoginDir[type];
@@ -407,6 +469,12 @@
 							// 登录成功
 							.subscribe(function(data) {
 								mui.toast("登录成功");
+								
+								// 记录历史帐号
+								if(that.historyList.indexOf(data.account) < 0){
+									historyList.unshift(data.account);	
+								}
+								
 								window.localStorage.setItem('_pwd_', that.password);
 								window.localStorage.setItem('login_type', 'pwd');
 								// 通知全部
@@ -415,7 +483,8 @@
 								});
 								plus.navigator.setStatusBarStyle('light');
 								// 通知上层
-								app.page.setResult(data);
+								app.page.setResult(data).close();
+								//mui.back();
 
 							}, function(err) {
 								$getStateFn(false)();
@@ -530,8 +599,8 @@
 								return o;
 							}
 						}
-						
-						Rx.Observable.timer(8e3).subscribe(function(){
+
+						Rx.Observable.timer(8e3).subscribe(function() {
 							w && w.close();
 							w = null;
 						});
@@ -563,7 +632,8 @@
 
 								plus.navigator.setStatusBarStyle('light');
 								// 通知上层
-								app.page.setResult(data);
+								app.page.setResult(data).close();
+								//mui.back();
 
 							}, function(err) {
 								w && w.close();
@@ -630,7 +700,7 @@
 			// 用户资料整合
 			function fixUserData(data) {
 				console.log(JSON.stringify(data));
-				
+
 				// 绑定手机号
 				var bindmobile = data.bindmobile;
 				// 是否开启权限验证
@@ -641,7 +711,6 @@
 				var ismaster = data.ismaster;
 				// 是否主帐号
 				var ismasteraccount = data.ismasteraccount;
-				
 
 				// token
 				var token = data.token;
@@ -657,7 +726,7 @@
 
 				data.token = token;
 				data.loginid = loginid;
-				
+
 				data.ismasteraccount = ismasteraccount;
 
 				return data;

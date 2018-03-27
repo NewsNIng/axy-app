@@ -104,6 +104,7 @@
 				},
 				watch: {
 					content: function(curVal, oldVal) {　　　　　　　　　　
+
 						if(this.maxLength > 0 && curVal.length > this.maxLength) {
 							this.content = oldVal;
 							mui.toast(this.mLengthMsg);
@@ -126,6 +127,9 @@
 				methods: {
 					onOkTap: function() {
 						var errmsg = "";
+						
+						this.content = this.filteremoji(this.content);
+						
 						if(this.regexpType) {
 							errmsg = app.rules.testBy(this.regexpType, this.content, this.regexpErrorMessage);
 						}
@@ -136,6 +140,16 @@
 						app.page.setResult({
 							content: this.content
 						}).close();
+					},
+					// 过滤表情字符
+					filteremoji: function(content) {
+						var ranges = [
+							'\ud83c[\udf00-\udfff]',
+							'\ud83d[\udc00-\ude4f]',
+							'\ud83d[\ude80-\udeff]'
+						];
+						emojireg = content.replace(new RegExp(ranges.join('|'), 'g'), '');
+						return emojireg;
 					}
 				}
 			})

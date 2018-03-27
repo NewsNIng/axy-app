@@ -563,8 +563,8 @@
 										if(data && data.length > 0) {
 											DEVD.data = data;
 											P.InitNativeDevList(data);
-											ob.next(data);
 										}
+										ob.next(data || []);
 									}, 1000);
 									//} else {
 									//// 本地获取

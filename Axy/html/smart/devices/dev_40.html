@@ -493,6 +493,8 @@
 										// 记住密码
 										if(data.remember) {
 											LOCKPWD.data = data.pwd;
+										}else{
+											LOCKPWD.data = "";	
 										}
 										ob.next(data.pwd);
 									}

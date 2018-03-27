@@ -4,9 +4,17 @@
         margin-bottom: 0.213333rem;
         height: 1.2rem;
         overflow: hidden;
+        display: flex;
+        display: -webkit-flex;
+        justify-content: center;
+        
+        
+        &>div {
+            flex: 1;
+            -webkit-flex: 1;
+        }
         .flip-list-move {
             transition: transform 1s;
-            
         }
         &-item {
             height: 1.2rem;
@@ -16,18 +24,18 @@
             align-items: center;
             justify-content: space-between;
             color: #acacac;
-            .mui-ellipsis{
+            .mui-ellipsis {
                 flex: 1;
                 color: #4c4c4c;
             }
         }
         img {
-            margin-right: 0.293333rem;
+//          margin-right: 0.293333rem;
             width: 1.36rem;
             height: 0.32rem;
         }
-//      .mui-ellipsis {
-//          max-width: 6rem;
-//      }
+        //      .mui-ellipsis {
+        //          max-width: 6rem;
+        //      }
     }
 }
