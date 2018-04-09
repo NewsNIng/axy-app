@@ -351,7 +351,10 @@
 
 						new Promise(function(resolve, reject) {
 							mui.confirm("是否重新选择城市？", "城市选择", ['选择城市', '忽略'], function(e) {
-								if(!e.index) {
+								if(e.index === -1){
+									return;
+								}
+								if(e.index === 0) {
 									// 选择城市
 									app.page.getPosition(function(data) {
 										that.city = data.city;

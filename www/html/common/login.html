@@ -7,6 +7,9 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
+
+		<link rel="stylesheet" href="../../css/app/devices.css" />
+
 		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<style type="text/css">
 			html,
@@ -87,12 +90,18 @@
 			
 			.forget_pwd {
 				color: #999999;
-				text-align: right;
-				padding-right: 0.826666rem;
+				/*text-align: right;*/
+				padding: 0 0.826666rem;
 			}
 			
 			.forget_pwd>a {
 				color: #999999;
+			}
+			
+			.forget_pwd>img {
+				width: 0.32rem;
+				vertical-align: middle;
+				margin-right: 0.213333rem;
 			}
 			
 			.third_party_login {
@@ -146,7 +155,7 @@
 				margin-left: 1.64rem;
 			}
 			
-			.mui-icon {
+			header .mui-icon {
 				font-size: 32px !important;
 				font-weight: bold;
 				color: #666666 !important;
@@ -166,9 +175,18 @@
 				position: absolute;
 				z-index: 999;
 				height: auto;
+				overflow: hidden;
+				box-shadow: 0 1px 3px #CCCCCC;
+				background-color: #FFFFFF;
 			}
-			.history-box>ul{
-				box-shadow: 0px 0px 3px #CCCCCC;
+			
+			.history-box>ul {
+				/*box-shadow: 0px 0px 3px #CCCCCC;*/
+			}
+			
+			.history-box>ul>li {
+				padding-left: 1.173333rem !important;
+				padding-right: 1.173333rem !important;
 			}
 		</style>
 	</head>
@@ -191,10 +209,14 @@
 
 			</div>
 
-			<div v-show="showhistory" class="history-box app-font-size-32" >
+			<!--帐号历史记录-->
+			<div v-show="showhistory" class="history-box app-font-size-32" ref="wrapper">
 				<ul class="mui-table-view">
-					<li v-for="o,i in historyList" @touchend.prevent.self @tap="onHistoryTap(o)" class="mui-table-view-cell" v-text="o"></li>
-					<li @touchend.prevent.self @tap="onHistoryClearTap()" class="mui-table-view-cell" style="text-align: center;">清除记录</li>
+					<li v-for="o,i in historyList" @touchend.prevent.self @tap="onHistoryTap(o)" class="mui-table-view-cell">
+						<span class="app-color-9f9fa0" v-text="o"></span>
+						<span @tap.stop.self="onHistoryClearTap(o, i)" class="mui-icon mui-icon-close app-color-9f9fa0 app-font-size-36 mui-pull-right" style="line-height: 1 !important; padding-left: .5rem;"></span>
+					</li>
+					<!--<li @touchend.prevent.self @tap="onHistoryClearTap()" class="mui-table-view-cell" style="text-align: center;">清除记录</li>-->
 				</ul>
 			</div>
 
@@ -207,7 +229,11 @@
 			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在登录..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">登录</button>
 
 			<div class="forget_pwd app-font-size-24">
-				<a :href="'reset.html?tel='+username">忘记密码</a>
+				<img v-show="isRemember" src="../../image/common/agree_selected.png" />
+				<img v-show="!isRemember" src="../../image/common/agree_noselect.png" />
+				<a @tap="isRemember = !isRemember">记住帐号</a>
+
+				<a style="float: right;" :href="'reset.html?tel='+username">忘记密码</a>
 			</div>
 
 			<!--第三方登录-->
@@ -237,6 +263,8 @@
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/better-scroll.min.js"></script>
 
 		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
 
@@ -270,14 +298,14 @@
 				qq: "login_qq",
 				weixin: "login_wechat"
 			};
-			
-			
+
 			var historyList;
 
 			new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
+						isRemember: true,
 						username: '',
 						password: '',
 						loading: false,
@@ -287,16 +315,40 @@
 						oLoginNames: ["qq", "weixin", "sinaweibo"],
 					};
 				},
+
+				mounted: function() {
+					var wrapper = this.$refs.wrapper;
+					wrapper.style.height = 180 + 'px';
+
+					this.$nextTick(function() {
+						if(!this.scroll) {
+							this.scroll = new BScroll(wrapper, {
+								click: true,
+								scrollY: true,
+								scrollbar: {
+									fade: true,
+									interactive: false // 1.8.0 新增
+								}
+							});
+
+						} else {
+							this.scroll.refresh();
+						}
+
+					}.bind(this));
+
+				},
+
 				plusReady: function() {
 					// 获取帐号历史记录
-					historyList = new ni.Cache("accounthistoryLists",[], {
+					historyList = new ni.Cache("accounthistoryLists", [], {
 						plus: true,
-						max: 5
+						max: 1000 // 最大支持千个帐号
 					});
 					this.historyList.push.apply(this.historyList, historyList.data);
-					
+
 					// 获取到创建者 (webview)
-					var opener = this.$view.opener();
+					//var opener = this.$view.opener();
 					// 获取本地记录帐号 
 					this.loadLocalHostAccount();
 					// 监听注册成功后 
@@ -307,23 +359,39 @@
 				},
 				methods: {
 					// touchstart
-					onTouchstart: function(){
+					onTouchstart: function() {
 						this.showhistory = false;
 					},
 					// 历史记录选项点击
-					onHistoryTap: function(o){
+					onHistoryTap: function(o) {
 						this.username = o;
 						this.showhistory = false;
 					},
 					// 历史记录清除点击
-					onHistoryClearTap: function(){
-						this.historyList = [];
-						historyList.data = [];
-						this.showhistory = false; 
+					//					onHistoryClearTap: function(){
+					//						this.historyList = [];
+					//						historyList.data = [];
+					//						this.showhistory = false; 
+					//					},
+					// 历史记录清除点击 (单个)
+					onHistoryClearTap: function(o, i) {
+						Rx.Observable.create(function(ob) {
+							mui.confirm("是否删除帐号" + o + "的记录？", "", ["删除", "取消"], function(e) {
+								e.index === 0 && ob.next();
+							});
+						}).subscribe(function() {
+							mui.toast("删除成功")
+							this.historyList.splice(i, 1);
+							historyList.data = this.historyList;
+							if(this.historyList.length === 0) {
+								this.showhistory = false;
+							}
+						}.bind(this));
+
 					},
 					// 历史记录图片点击
 					onHistoryIconTap: function() {
-						if(this.historyList.length === 0){
+						if(this.historyList.length === 0) {
 							return mui.toast("账号登录历史为空")
 						}
 						this.showhistory = !this.showhistory;
@@ -469,12 +537,12 @@
 							// 登录成功
 							.subscribe(function(data) {
 								mui.toast("登录成功");
-								
+
 								// 记录历史帐号
-								if(that.historyList.indexOf(data.account) < 0){
-									historyList.unshift(data.account);	
+								if(that.historyList.indexOf(data.account) < 0 || that.isRemember) {
+									historyList.unshift(data.account);
 								}
-								
+
 								window.localStorage.setItem('_pwd_', that.password);
 								window.localStorage.setItem('login_type', 'pwd');
 								// 通知全部
@@ -485,9 +553,9 @@
 								// 通知上层
 								app.page.setResult(data);
 								// 延迟关闭
-								setTimeout(function(){
+								setTimeout(function() {
 									mui.back();
-								},250);
+								}, 250);
 
 							}, function(err) {
 								$getStateFn(false)();
@@ -505,7 +573,7 @@
 
 							new that.$OAuth(type, function(err, info) {
 								if(err) {
-									return ob.error(new Error(err.message || "请确保您有安装该应用且授权"));
+									return ob.error(new Error(err.message || "获取授权失败或未安装该应用！"));
 								}
 								return ob.next(info);
 
@@ -637,9 +705,9 @@
 								// 通知上层
 								app.page.setResult(data);
 								// 延迟关闭
-								setTimeout(function(){
+								setTimeout(function() {
 									mui.back();
-								},250);
+								}, 250);
 
 							}, function(err) {
 								w && w.close();

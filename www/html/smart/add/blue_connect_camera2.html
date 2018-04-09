@@ -180,6 +180,8 @@
 						wifiname: "",
 						wifipwd: "",
 						uuid: "",
+						cid: "",
+						cuid: "",
 
 						pwd: "1234",
 						pwd2: "1234",
@@ -202,8 +204,33 @@
 					this.wifiname = GetQueryString("wifiname");
 					this.wifipwd = GetQueryString("wifipwd");
 					this.uuid = GetQueryString("uuid");
+					this.cid =  GetQueryString("cid");
 				},
+				
+				plusReady: function(){
+					this.genCuid();
+				},
+				
 				methods: {
+					genCuid: function(){
+						var ID = new ni.Cache("blueuuid", "", {
+							plus: true
+						});
+						
+						if(!ID.data){
+							ID.data = (function(){
+							  function S4() {
+							    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+							  }
+							  return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
+							})();
+						}
+						
+						this.cuid = ID.data;
+						
+					},
+					
+					
 					onPrev: function() {
 						mui.back();
 					},
@@ -232,8 +259,8 @@
 							
 						});
 
-						//var url = "blue_connect_camera3.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd + "&uuid=" + this.uuid;
-						//this.$view.loadURL(url);
+						var url = "blue_connect_camera3.html?cid=" + this.cid + "&pwd=" + this.pwd + "&cuid=" + this.cuid;
+						this.$view.loadURL(url);
 
 					},
 

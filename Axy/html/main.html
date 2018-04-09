@@ -34,9 +34,9 @@
 				color: #929292 !important;
 			}
 			
-			img.icon2 {
+			/*img.icon2 {
 				opacity: 0;
-			}
+			}*/
 		</style>
 	</head>
 
@@ -74,7 +74,7 @@
 
 		<script type="text/javascript" src="../js/common/android-back.js"></script>
 
-		<script type="text/javascript" src="../js/app/app-mall.js"></script>
+		<!--<script type="text/javascript" src="../js/app/app-mall.js"></script>-->
 
 		<script>
 			// 4个子webview统一样式
@@ -99,17 +99,17 @@
 					extras: {},
 				},
 
-				{
-					url: '',
-					id: 'mall',
-					icon: 'mui-icon-phone',
-					name: '商城',
-					styles: {
-						bottom: '0px',
-						top: '0px'
-					},
-					extras: {},
-				},
+//				{
+//					url: '',
+//					id: 'mall',
+//					icon: 'mui-icon-phone',
+//					name: '商城',
+//					styles: {
+//						bottom: '0px',
+//						top: '0px'
+//					},
+//					extras: {},
+//				},
 
 				{
 					url: './nearby/index.html',
@@ -165,7 +165,7 @@
 					this._listenTabar();
 
 					// 加载商城图标
-					this._loadMallIcon();
+					//this._loadMallIcon();
 
 				},
 				methods: {
@@ -213,13 +213,13 @@
 						}
 
 						// 如果点击的是商城
-						if(index === 2) {
-							return;
-						}
+//						if(index === 2) {
+//							return;
+//						}
 
 						Rx.Observable.create(function(ob) {
 								// 个人中心登录拦截
-								if(index === 4) {
+								if(index === 3) {
 									app.user.get(function(u) {
 										u && setTimeout(function() {
 											ob.next();

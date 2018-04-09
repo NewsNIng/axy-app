@@ -18,7 +18,7 @@
 
 	pg.getCallBackId = function(s, f) {
 		return B.callbackId(pg.fun2ok(s), pg.fun2ok(f));
-	} 
+	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
 		//return;

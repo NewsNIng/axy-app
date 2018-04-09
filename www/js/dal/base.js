@@ -31,17 +31,12 @@ function requestAdapter(type, url, params, callback) {
 	} else {
 		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL;
 	}
-
 	var apiUrl = url;
-
 	url = BASE_URL + url;
 	// 获取用户权限信息
-
 	params.account = params.account || window.localStorage.getItem('_account_') || "";
-	
 	console.log("[" + type + "]" + url);
 	console.log(JSON.stringify(params));
-
 	var errDir = {
 		"timeout": "请求超时",
 		"error": "请求错误",
@@ -49,9 +44,6 @@ function requestAdapter(type, url, params, callback) {
 		"parsererror": "解析错误",
 		"null": "请求为空"
 	};
-	
-	
-
 	var options = {
 		headers: {
 			token: window.localStorage.getItem('_token_') || "",
@@ -63,15 +55,11 @@ function requestAdapter(type, url, params, callback) {
 		data: params,
 		type: type,
 		timeout: 60000,
-		
 		success: function(data) {
-
 			var o = {};
-
 			console.log("[" + apiUrl + "]" + JSON.stringify(data));
-		
 			if(data.code === "403") {
-					//alert("[" + apiUrl + "]" + JSON.stringify(data));
+				//alert("[" + apiUrl + "]" + JSON.stringify(data));
 				// token 验证失败 通知 zeus
 				var zeus = plus.webview.getWebviewById("zeus");
 				if(!zeus) {
@@ -82,7 +70,6 @@ function requestAdapter(type, url, params, callback) {
 				zeus.evalJS(jsstr);
 				return;
 			}
-
 			if(data.code !== "0000" && data.code !== "0") {
 				o.err = {
 					code: data.code,

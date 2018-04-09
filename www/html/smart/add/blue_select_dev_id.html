@@ -181,61 +181,6 @@
 								"uuid": "36C4204993974D028EEB13A64A80D0E6",
 								"type": "0"
 							},
-							{
-								"bname": "Z0DS1Z90NH0000CL",
-								"uuid": "21b3104993974D028EEB13A64A80D0d5",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH00051L",
-								"uuid": "36C4204993974D028EEB13A64A80D0E6",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH0000CL",
-								"uuid": "21b3104993974D028EEB13A64A80D0d5",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH00051L",
-								"uuid": "36C4204993974D028EEB13A64A80D0E6",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH0000CL",
-								"uuid": "21b3104993974D028EEB13A64A80D0d5",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH00051L",
-								"uuid": "36C4204993974D028EEB13A64A80D0E6",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH0000CL",
-								"uuid": "21b3104993974D028EEB13A64A80D0d5",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH00051L",
-								"uuid": "36C4204993974D028EEB13A64A80D0E6",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH0000CL",
-								"uuid": "21b3104993974D028EEB13A64A80D0d5",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH00051L",
-								"uuid": "36C4204993974D028EEB13A64A80D0E6",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH0000CL",
-								"uuid": "21b3104993974D028EEB13A64A80D0d5",
-								"type": "0"
-							}
 						],
 						filter: "",
 						wifiname: "",
@@ -288,7 +233,12 @@
 						if(this.devActive < 0) {
 							return mui.toast("请选择蓝牙设备");
 						}
-						var url = "blue_connect_camera2.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd + "&uuid=" + this.indexDev.uuid;
+						
+						// 停止扫描
+						this.stopBlueScan();
+						
+						
+						var url = "blue_connect_camera2.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd + "&uuid=" + this.indexDev.uuid + "&cid=" + this.indexDev.bname;
 						this.$view.loadURL(url);
 						
 					},
@@ -304,6 +254,7 @@
 							});
 						});
 						
+						
 						blueScan$
 						.filter(function(rs){return !!rs})
 						.map(function(rs){return JSON.parse(rs)})
@@ -315,6 +266,12 @@
 						})
 						
 					},
+					
+					
+					stopBlueScan: function(){
+						P.stopScan4GenDevice();
+					},
+					
 					// 配置WIFI
 					setWifi: function() {
 						app.page.openForResultBy('connect_wifi.html', 'setwifi', function(data) {

@@ -32,7 +32,6 @@
 				bottom: 0;
 				background-color: #06c1ae;
 			}
-			
 			/*.dev_icon {
 				background-image: url(../../../image/smart/devices/dev_icon/AX-360@3x.png.png);
 				width: 100%;
@@ -67,26 +66,23 @@
 				padding: 0.106666rem 0.346666rem;
 				float: left;
 				margin-left: 50%;
-				transform: translateX(-50%);			
+				transform: translateX(-50%);
 				-webkit-transform: translateX(-50%);
-				color: white;			
+				color: white;
 			}
 			
-			.imgbg{
+			.imgbg {
 				width: 100%;
 				padding: 1.5rem;
 			}
 			
-			.imgbg > img{
+			.imgbg>img {
 				width: 100%;
 			}
-			
 			
 			.unavailable {
 				background: #7FD4CC;
 			}
-			
-			
 		</style>
 	</head>
 
@@ -100,17 +96,13 @@
 
 			<div class="mui-content">
 				<div class="imgbg">
-					<img src="../../../image/smart/devices/dev_icon/AX-203@3x.png4.png"/>
+					<img src="../../../image/smart/devices/dev_icon/AX-203@3x.png4.png" />
 				</div>
 				<div class="dev_icon app-font-size-30">
 					<div class="dev_text app-font-size-34">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
 				</div>
 				<div class="time app-font-size-24" v-text="t+'s'"></div>
-				
-			
-				
-				
-				
+
 			</div>
 			<div class="foot app-font-size-34">
 				<div @tap="onPrev()" style="width: 50%; float: left;background-color: #F4F8FB;" class="app-color-9f9fa0">上一步</div>
@@ -125,7 +117,8 @@
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
-		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 
@@ -135,24 +128,46 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
+
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+
 		<script type="text/javascript">
+			var P = plug.H5NativeBridge;
+
 			mui.init();
 
 			new Vue({
 				el: '#warpper',
 				data: function() {
 					return {
+						cuid: "",
+						pwd: "",
+						cid: "",
+
 						t: 100,
 						timer: -1,
-						
-							isConnected: false,
+
+						isConnected: false,
 					};
 				},
 				mounted: function() {
+
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					this.cuid = GetQueryString("cuid");
+					this.pwd = GetQueryString("pwd");
+					this.cid = GetQueryString("cid");
+
 					// start timer
 					this.startTimer();
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					this.isConnectedWithDevice();
+				},
 				methods: {
 					onPrev: function() {
 						mui.back();
@@ -164,22 +179,45 @@
 						mui.openWindow('add_completed.html', 'add_completed', {
 							extras: {
 								needConn: false,
-								//devid: this.devid,
+								devid: this.cid,
 							}
 						});
 					},
-					
+
+					// 设备连接状态（Optional）
+					isConnectedWithDevice: function() {
+						var that = this;
+						P.isConnectedWithDevice(this.cid, this.pwd, this.cuid, function(data) {
+							// 添加设备
+							that.addDevice();
+						}, function(err) {
+
+						});
+					},
+
+					// 通过设备ID进行添加 且 验证
+					addDevice: function() {
+						dal.device.add(this.cid, function(err, data) {
+							if(err) {
+								return this.over(err.message || "连接失败，请重试");
+							}
+							return this.over("设备添加成功", true);
+						}.bind(this));
+					},
+
+					// 倒计时
 					startTimer: function() {
 						var that = this;
 						(function _() {
 							that.t--;
 							if(that.t <= 0) {
-								that.over("连接失败，请重试"); 
+								that.over("连接失败，请重试");
 							}
 							that.timer = setTimeout(_, 1000);
 						}());
 					},
-					
+
+					// 完毕，显示结果
 					over: function(msg, close) {
 						if(this.timer >= 0) {
 							window.clearTimeout(this.timer);
