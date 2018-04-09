@@ -162,12 +162,10 @@
 						dal.protect.validation(this.account, plus.device.uuid, plus.device.model, function(err, data) {
 							plus.nativeUI.closeWaiting();
 							if(err) {
-								mui.toast(err.message);
-							} else {
-								mui.toast("认证成功！");
-							}
+								return mui.toast(err.message);
+							} 
 							app.page.setResult({
-								result: !err
+								result: true
 							}).close();
 						}.bind(this));
 					},

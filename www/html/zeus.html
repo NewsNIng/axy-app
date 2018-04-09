@@ -82,6 +82,8 @@
 							// 验证通过
 							ob.next(data);
 						} else {
+							ob.error();
+							return;
 							// 跳转页面认证
 							mui.toast("帐号已保护，您需要权限认证");
 							app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
@@ -245,7 +247,7 @@
 							.subscribe(InitNativeDevList);
 
 						// 向服务器发送请求缓存处理配件请求
-						SyncZoneRequest();
+						// SyncZoneRequest();
 
 					},
 					// 登录失败
@@ -263,18 +265,21 @@
 				plus.storage.removeItem('dev_list');
 
 				mui.toast("帐号存在异常，请重新登录");
-				app.user.get(function() {});
+				//app.user.get(function() {}); 
 			}
 			// 监听 token 失效
 			var $litenTokenErr = Rx.Observable.create(function(ob) {
 				_B.on('token_error', function(data) {
-					ob.next();
+					// token 错误
+					// 并且已经登录
+					app.user.has() && ob.next();
 				});
 			});
 
 			$pready
 				.mergeMapTo($litenTokenErr)
 				.subscribe(function() {
+					plus.nativeUI.toast("帐号保护已开启，您需要登录申请授权");
 					// 重启app
 					ReloadApp();
 					// 通知原生
@@ -391,6 +396,8 @@
 						first.reload();
 						// 显示首页
 						first.show("slide-in-bottom", 250);
+						
+						//index.reload();
 						// 打开登录
 						app.user.get(function() {});
 					});

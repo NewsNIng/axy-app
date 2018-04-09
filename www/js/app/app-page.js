@@ -142,7 +142,8 @@
 			jsstr = "window." + indexV.callbackName;
 			jsstr = jsstr + "&&" + jsstr + "(" + JSON.stringify(data) + ")";
 		}
-		jsstr && indexV.opener().evalJS(jsstr);
+		var op = indexV.opener();
+		jsstr && op && op.evalJS(jsstr);
 		return indexV;
 	}
 	

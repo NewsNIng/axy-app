@@ -122,15 +122,14 @@
 				},
 				plusReady: function() {
 					_B = new ni.Broadcast();
-					
+
 					zeus = plus.webview.getWebviewById('zeus');
-					if(zeus){
+					if(zeus) {
 						zeus.reload();
-					}else{
-						zeus = plus.webview.create('zeus.html', 'zeus');	
+					} else {
+						zeus = plus.webview.create('zeus.html', 'zeus');
 					}
-					
-					
+
 					// plus ready !
 					// 这时候才能调用 plus 相关 API
 					this.group = new this.$WebviewGroupLow(plus.webview.currentWebview().id, {
@@ -153,26 +152,26 @@
 						}
 
 						Rx.Observable.create(function(ob) {
-							// 个人中心登录拦截
-							if(index === 3) {
-								app.user.get(function(u) {
-									u && setTimeout(function(){
-										ob.next();	
-									}, mui.os.ios ? 200 : 50);
-									
-								})
-							} else {
-								ob.next();
-							}
-						})
-						.subscribe(function() {
-							// 更新index下标
-							this.index = index;
-							// 控制webview切换
-							this.group.switchTab(o.id);
-							// 吐司
-							//mui.toast(o.name);
-						}.bind(this));
+								// 个人中心登录拦截
+								if(index === 3) {
+									app.user.get(function(u) {
+										u && setTimeout(function() {
+											ob.next();
+										}, mui.os.ios ? 200 : 50);
+
+									})
+								} else {
+									ob.next();
+								}
+							})
+							.subscribe(function() {
+								// 更新index下标
+								this.index = index;
+								// 控制webview切换
+								this.group.switchTab(o.id);
+								// 吐司
+								//mui.toast(o.name);
+							}.bind(this));
 
 					},
 					// 页面切换时
@@ -218,7 +217,7 @@
 					}
 				}
 
-			}); 
+			});
 
 			setTimeout(function() {
 				mui.plusReady(function() {
@@ -231,7 +230,7 @@
 						var appVersion = version2number(info.version);
 						dal.system.update(info.version, function(err, data) {
 							if(err) {
-								return ;// mui.toast(err.message);
+								return; // mui.toast(err.message);
 							}
 
 							if(!data) {
@@ -280,6 +279,59 @@
 
 				//plus.webview.create('zeus.html');
 			}, 0); //1s 后检查更新
+
+			// ====================检查带启动参数====================
+
+			// App 回到前台时
+			var resume$ = Rx.Observable.fromEvent(document, "resume");
+			// 设备准备完毕
+			var plusrd$ = Rx.Observable.create(function(ob) {
+				if(window.plus) {
+					ob.next();
+				} else {
+					document.addEventListener('plusready', function() {
+						ob.next();
+					});
+				}
+			});
+			
+			var CheckArguments = (function() {
+				var prevS = "";
+				return function(s) {
+					return s && (s = JSON.stringify(s)) && prevS !== s && (prevS = s);
+				}
+			}());
+
+			var ACTION = {
+				//打开添加分享设备
+				"devshare": function(data) {
+					/*id: this.devInfo.devid,
+					devid: this.devInfo.devid,
+					location: this.devInfo.location,
+					code: code,
+					account: u.account*/
+					mui.openWindow('smart/add/family_menu.html', 'add_family', {
+						extras: {
+							code: data.code
+						}
+					});
+				}
+			};
+
+			// 设备准备完毕
+			plusrd$
+				// 或者每次切换回app为前台时(包括通过浏览器唤醒)
+				.merge(resume$)
+				// 获取 启动参数
+				.map(app.device.getArguments)
+				// 过滤跟上次 一样的 启动参数
+				.filter(CheckArguments)
+				// 订阅
+				.subscribe(function(data) {
+					// 执行相关动作
+					var ac = ACTION[data.type];
+					ac && ac(data);
+				});
 		</script>
 	</body>
 

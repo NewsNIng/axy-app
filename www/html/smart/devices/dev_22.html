@@ -87,6 +87,10 @@
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
+			
+			.topState {
+				height: 0.693333rem;	
+			}
 		</style>
 	</head>
 
@@ -103,9 +107,9 @@
 
 			<div class="mui-content noImmersed">
 				<div class="state_show">
-					<span class="app-font-size-30" v-text="(state.concentrationValid?(state.concentration/1000):0)+'mg/m³'"></span>
-					<span class="app-font-size-44">舒适</span>
-					<span class="app-font-size-24">当前状态</span>
+					<span class="app-font-size-30 topState" v-text="isNoState?'':((state.concentrationValid?(state.concentration/1000):0)+'mg/m³')"></span>
+					<span class="app-font-size-44" v-text="isNoState?'无数据':'舒适'"></span>
+					<span class="app-font-size-24" v-if="!isNoState">当前状态</span>
 				</div>
 				<div @tap="toggleSwitch()" class="img-wrap">
 				</div>
@@ -113,13 +117,13 @@
 					<div class="app-font-size-26">
 						温度
 						<!--<img src="../../../image/smart/devices/lock/btn_Settingpassword@3x.png" />-->
-						<div class="app-font-size-34" v-text="(state.temperatureValid?parseInt(state.temperature/10):0)+'°C'"></div>
+						<div class="app-font-size-34" v-text="isNoState?'无数据':((state.temperatureValid?parseInt(state.temperature/10):0)+'°C')"></div>
 					</div>
 
 					<div class="app-font-size-26">
 						湿度
 						<!--<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />-->
-						<div class="app-font-size-34" v-text="(state.humidityValid?parseInt(state.humidity/10):0)+'%'"></div>
+						<div class="app-font-size-34" v-text="isNoState?'无数据':((state.humidityValid?parseInt(state.humidity/10):0)+'%')"></div>
 					</div>
 				</div>
 
@@ -145,13 +149,13 @@
 					<li class="mui-table-view-cell">
 						<a class="battery_status">
 							<span>电池状态</span>
-							<span class="mui-badge battery_status" v-text="state.underVoltage?'欠压':'正常'"></span>
+							<span class="mui-badge battery_status" v-text="isNoState?'无数据':(state.underVoltage?'欠压':'正常')"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="battery_status">
 							<span>通讯状态</span>
-							<span class="mui-badge battery_status" v-text="state.lost?'失联':'正常'"></span>
+							<span class="mui-badge battery_status" v-text="isNoState?'无数据':(state.lost?'失联':'正常')"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -258,7 +262,9 @@
 							"temperature": 0,
 							"humidityValid": false,
 							"humidity": 0
-						}
+						},
+						
+						isNoState: false,
 					};
 				},
 				mounted: function() {
@@ -287,7 +293,6 @@
 							that._updataUi();
 						})
 					}.bind(this));
-
 				},
 				plusReady: function() {
 					plus.navigator.setStatusBarStyle('dark');
@@ -301,7 +306,12 @@
 						plus.navigator.setStatusBarStyle('light');
 						view.close();
 					}.bind(this);
-					this.getState();
+					if(this.devInfo.devType === 4166) {
+						this.isNoState = true;
+						mui.toast("该设备不支持查看配件数据");
+					} else {
+						this.getState();
+					}
 				},
 				methods: {
 
@@ -340,8 +350,8 @@
 							content: that.devInfo.accessory.name,
 							r: "nonEmpty",
 							rmsg: "配件名称不能为空",
-							maxLength: 15,
-							mLengthMsg: "最长不超过15个字符！",
+							maxLength: 30,
+							mLengthMsg: "最长不超过30个字符！",
 						});
 					},
 					// 获取甲醛探测器状态
@@ -391,4 +401,5 @@
 			});
 		</script>
 	</body>
+
 </html>

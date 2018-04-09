@@ -217,6 +217,7 @@
 									var oauthType = type.indexOf('wx') >= 0 ? 'weixin' : type;
 									new that.$OAuth(oauthType, function(err, info) {
 										if(err) {
+											err.message = err.message || "获取授权失败或未安装该应用！";
 											return ob.error(err);
 										}
 										ob.next();

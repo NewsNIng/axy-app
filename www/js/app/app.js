@@ -154,7 +154,7 @@ function addMethod(obj, name, fn) {
 	 */
 	device.getArguments = function() {
 		var s = plus.runtime.arguments;
-		if(!s && !~s.indexOf('?')) {
+		if(!s || !~s.indexOf('?')) {
 			// 为空 或 无参时
 			return null;
 		}

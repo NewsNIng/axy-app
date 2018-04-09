@@ -135,7 +135,7 @@
 			}
 			
 			.mui-popover {
-				width: 2.6rem;
+				width: 2.8rem;
 			}
 			
 			.mui-popover a {
@@ -153,6 +153,34 @@
 			.mui-popover .mui-table-view-cell:after {
 				left: 0;
 			}
+			/*.mui-popover .mui-popover-arrow {
+				top: -38px;
+			}*/
+			/*#topPopover1 {
+				display: block;
+				top: 2.373333rem;
+				left: 7.60938px;
+			}*/
+			
+			.mui-popover {
+				border-radius: 0;
+				top: 2.373333rem !important;
+				/*left: 0 !important;*/
+			}
+			
+			.mui-popover .mui-popover-arrow:after {
+				border-radius: 0;
+			}
+			
+			.mui-popover .mui-popover-arrow {
+				top: -0.586666rem;
+				left: 1.4rem !important;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+			}
+			.newPopover {
+				top: 2.83rem !important;
+			}
 		</style>
 	</head>
 
@@ -165,7 +193,7 @@
 			</header>
 
 			<div class="mui-content app-font-size-32">
-				<div class="top app-font-size-28" ref=tabroom>
+				<div class="top app-font-size-28" @tap="console.log(JSON.stringify(document.getElementById('topPopover1').style.top))" ref=tabroom>
 					<!--<div @tap="test()">操作<img src="../../../image/smart/devices/others/down.png" /></div>-->
 					<a href="#topPopover1">
 						<div>操作<img src="../../../image/smart/devices/others/down.png" /></div>
@@ -213,16 +241,16 @@
 			<div id="topPopover1" class="mui-popover app-font-size-28">
 				<div class="mui-popover-arrow"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(0,'')">
 						<a href="#">全部</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(0,'1')">
 						<a href="#">重启</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(0,'2')">
 						<a href="#">布防</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(0,'3')">
 						<a href="#">撤防</a>
 					</li>
 				</ul>
@@ -230,38 +258,38 @@
 			<div id="topPopover2" class="mui-popover app-font-size-28">
 				<div class="mui-popover-arrow"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(1,'')">
 						<a href="#">全部</a>
 					</li>
-					<li class="mui-table-view-cell">
-						<a href="#">联防</a>
-					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(1,'1')">
 						<a href="#">网页</a>
 					</li>
-					<li class="mui-table-view-cell">
-						<a href="#">APP</a>
-					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(1,'2')">
 						<a href="#">遥控器</a>
 					</li>
-					<li class="mui-table-view-cell">
-						<a href="#">计划任务</a>
+					<li class="mui-table-view-cell" @tap="onSelectTap(1,'3')">
+						<a href="#">APP</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(1,'4')">
 						<a href="#">PC播放器</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onSelectTap(1,'5')">
+						<a href="#">联防</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onSelectTap(1,'6')">
+						<a href="#">计划任务</a>
 					</li>
 				</ul>
 			</div>
 			<div id="topPopover3" class="mui-popover app-font-size-28">
 				<div class="mui-popover-arrow"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell">
-							<a href="#">全部</a>
-						</li>
+					<li class="mui-table-view-cell" @tap="onSelectTap(2,'')">
+						<a href="#">全部</a>
+					</li>
 					<template v-for="o,i in accounts">
-						<li class="mui-table-view-cell">
-							<a href="#">{{o}}</a>
+						<li class="mui-table-view-cell" v-if="o.handlers" @tap="onSelectTap(2,o.handlers)">
+							<a href="#">{{o.handlers}}</a>
 						</li>
 					</template>
 				</ul>
@@ -269,19 +297,19 @@
 			<div id="topPopover4" class="mui-popover app-font-size-28">
 				<div class="mui-popover-arrow"></div>
 				<ul class="mui-table-view">
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
 						<a href="#">全部</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
 						<a href="#">一周</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
 						<a href="#">一个月</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
 						<a href="#">三个月</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
 						<a href="#">一年</a>
 					</li>
 				</ul>
@@ -325,10 +353,25 @@
 						devInfo: {},
 						hdtypes: ["网页", "遥控器", "APP", "PC播放器", "联防", "计划任务"],
 						logs: [],
-						accounts: ["13988889999", "webserver"],
+						accounts: [
+							//						{
+							//							"count": 43,
+							//							"handlers": "webserver"
+							//						}
+						],
+						eventid: undefined,
+						hdtypeid: undefined,
+						handlers: undefined,
+						attime: undefined,
+						selectItems: ["topPopover1", "topPopover2", "topPopover3", "topPopover4"],
 					};
 				},
 				mounted: function() {
+					document.getElementById("topPopover1").className += ' newPopover';
+					document.getElementById("topPopover2").className += ' newPopover';
+					document.getElementById("topPopover3").className += ' newPopover';
+					document.getElementById("topPopover4").className += ' newPopover';
+//					document.styleSheets[0].addRule('.newPopover','top: 2.8rem !important');
 					var wrapper = this.$refs.wrapper;
 					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
 						this.$refs.tabroom.offsetHeight -
@@ -336,7 +379,7 @@
 						44;
 
 					wrapper.style.height = wrapperHight + 'px';
-
+					//					document.getElementById("topPopover1").style.top = 0;
 					this.$nextTick(function() {
 						if(!this.scroll) {
 							this.scroll = new BScroll(wrapper, {
@@ -352,10 +395,10 @@
 						} else {
 							this.scroll.refresh();
 						}
-
 					}.bind(this));
 				},
 				plusReady: function() {
+					document.getElementById("topPopover1").className += ' newPopover';
 					this.devInfo = this.$view.info;
 					console.log(JSON.stringify(this.devInfo));
 					this.searchResult();
@@ -383,8 +426,33 @@
 								mui.toast('没有更多啦~~');
 							} else {
 								this.logs.push.apply(this.logs, data.result);
+								if(!this.accounts.length) {
+									this.accounts = data.handlers;
+								}
 							}
-						}.bind(this));
+						}.bind(this), "", this.eventid, this.hdtypeid, this.handlers, this.attime);
+					},
+					onSelectTap: function(i, value) {
+						mui('#' + this.selectItems[i]).popover('hide');
+						this._onClearSelect();
+						if(i === 0) {
+							this.eventid = value;
+						} else if(i === 1) {
+							this.hdtypeid = value;
+						} else if(i === 2) {
+							this.handlers = value;
+						} else if(i === 3) {
+							this.attime = value;
+						}
+						this.searchResult();
+					},
+					_onClearSelect: function() {
+						this.n = 0;
+						this.logs = [];
+						this.eventid = "";
+						this.hdtypeid = "";
+						this.handlers = "";
+						this.attime = "";
 					},
 					// 接口测试
 					test: function() {

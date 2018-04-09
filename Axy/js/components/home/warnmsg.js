@@ -96,7 +96,7 @@ Vue && Vue.component('warnMsg', {
 			return app.dev.fixName(s);
 		},
 		_fixTimeAgo: function(s) {
-
+			s = s.replace(/-/g,"/");
 			return new Date().ago(s);
 		},
 	},

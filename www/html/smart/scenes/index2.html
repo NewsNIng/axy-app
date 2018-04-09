@@ -47,16 +47,16 @@
 			.mui-content>div>img {
 				width: 1.866666rem;
 				height: 1.866666rem;
-				margin: 1.12rem 1.306666rem 0.8rem 1.306666rem;
+				margin: 1.12rem 1.306666rem 0.74rem 1.306666rem;
 			}
 			
 			.foot {
 				position: fixed;
 				width: 100%;
 				height: 1.173333rem;
-				line-height: 1.173333rem;
+				/*line-height: 1.173333rem;*/
 				color: white;
-				text-align: center;
+				/*text-align: center;*/
 				bottom: 0;
 				background-color: #06c1ae;
 			}
@@ -111,6 +111,35 @@
 			.com-dev>.cancel {
 				margin-bottom: 0 !important;
 			}
+			
+			.devWork {
+				color: #909090;
+				margin-top: 0.266666rem;
+				display: inline-block;
+			}
+			
+			ul:not(.mui-pciker-list) li>a {
+				margin: -11px -15px !important;
+			}
+			
+			ul:not(.mui-pciker-list) li.devConn {
+				padding: 11px 15px !important;
+				background-color: #06c1ae;
+				color: white !important;
+			}
+			
+			.mui-navigate-right:after,
+			.mui-push-right:after {
+				color: white;
+			}
+			
+			ul:not(.mui-pciker-list) .mui-badge {
+				color: white;
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
+				background-color: #06C1AE;
+			}
 		</style>
 	</head>
 
@@ -119,6 +148,7 @@
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">智能场景</h1>
+				<a class="app-icon-plus mui-pull-right" @tap="onNewTap()"></a>
 			</header>
 
 			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
@@ -139,10 +169,19 @@
 
 					<div class="app-font-size-30" @tap="onClickTap(o, i, o.img)">
 						<span class="setting_icon" @tap.stop="onSetting(i)"><img src="../../../image/smart/scenes/btn_Setup@3x.png"/></span>
-						<img :src="o.img" />{{o.title}}</div>
+						<img :src="o.img" />{{o.title}}<br /><span class="devWork app-font-size-26">{{o.workCount?o.workCount+'台设备工作中':'未添加任何执行动作'}}</span></div>
 				</template>
 			</div>
-			<div class="foot app-font-size-34" @tap="onNewTap()">添加新场景</div>
+			<div class="foot" @tap="onDevConn()">
+				<ul class="mui-table-view app-font-size-32">
+					<li class="mui-table-view-cell devConn">
+						<a class="mui-navigate-right">
+							<span>设备互联</span>
+							<span class="mui-badge" v-text="'3'"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -176,18 +215,22 @@
 							state: false,
 							//img: "../../../image/smart/scenes/loading.gif",
 							img: "../../../image/smart/scenes/btn_get home1@3x.png",
+							workCount: 9,
 						}, {
 							title: "离家模式",
 							state: false,
 							img: "../../../image/smart/scenes/btn_Be away from home1@3x.png",
+							workCount: 9,
 						}, {
 							title: "回店模式",
 							state: false,
 							img: "../../../image/smart/scenes/icon_Back to the shop1@3x.png",
+							workCount: 0,
 						}, {
 							title: "离店模式",
 							state: false,
 							img: "../../../image/smart/scenes/btn_Departure1@3x.png",
+							workCount: 0,
 						}],
 						loadingImg: "../../../image/smart/scenes/loading.gif", // 加载动画
 						completeImg: "../../../image/smart/scenes/icon_Clickeffect@3x.png", // 完成标志
@@ -199,10 +242,10 @@
 					onNewTap: function() {
 						// 设定场景名称
 						app.page.getInput(function(data) {
-//							data = data.content.trim();
-//							if(!data || data.length === 0 || data.length > 12) {
-//								return mui.toast('场景名称不能为空或者大于12个字符');
-//							}
+							//							data = data.content.trim();
+							//							if(!data || data.length === 0 || data.length > 12) {
+							//								return mui.toast('场景名称不能为空或者大于12个字符');
+							//							}
 							mui.openWindow('edit_scenes.html', 'edit_scenes', {
 								extras: {
 									name: data
@@ -222,9 +265,9 @@
 						}
 						this.isLoading = true;
 						that = this,
-						this.scenes[i].img = this.loadingImg;
+							this.scenes[i].img = this.loadingImg;
 						// 需要执行的操作
-						
+
 						setTimeout(function() {
 							that.scenes[i].img = that.completeImg;
 							setTimeout(function() {
@@ -245,6 +288,9 @@
 					onDelTap: function() {
 						this.scenes.splice(this.index, 1);
 						this.mask = false;
+					},
+					onDevConn: function() {
+						
 					}
 				}
 			});

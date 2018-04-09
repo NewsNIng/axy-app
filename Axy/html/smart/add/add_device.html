@@ -127,6 +127,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -140,6 +141,7 @@
 			 * type 0 声波
 			 * type 1内网
 			 * type 2扫码
+			 * type 3蓝牙
 			 */
 
 			new Vue({
@@ -191,7 +193,15 @@
 								name: "VH-104GN",
 								type: 1,
 								noWifi: true
-							}, ]
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
+								name: "AX-203B",
+								type: 3
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
+								name: "AX-403B",
+								type: 3,
+							},]
 						},
 						ctrl_fit: {
 							title: "智能控制配件",
@@ -285,18 +295,28 @@
 
 					// 主机
 					onItemTap1: function(o) {
-						//						alert(JSON.stringify(o));
-						if(o.type === 0) {
-							this._voiceDevLine();
-						} else if(o.type === 1) {
-							this._hostNetLine(o);
-						} else {
-							this._scanCodeLine({
-								isDev: true,
-								isSmart: false,
-								name: o.name
-							});
-						}
+						var that = this;
+						// 验证是否主帐号
+						var u = app.user.get();
+						app.auth.verify(app.auth.MASTER, u).then(function() {
+							//						alert(JSON.stringify(o));
+							if(o.type === 0) {
+								that._voiceDevLine();
+							} else if(o.type === 1) {
+								that._hostNetLine(o);
+							} else if(o.type === 2) {
+								that._scanCodeLine({
+									isDev: true,
+									isSmart: false,
+									name: o.name
+								});
+							}else if(o.type === 3){
+								that._bluetoothLine();
+							}
+						}).catch(function(e) {
+							mui.toast(e.message);
+						});
+
 					},
 					// 控制配件
 					onItemTap2: function(o) {
@@ -320,6 +340,15 @@
 							isDev: false,
 							isSmart: false,
 							name: o.name
+						});
+					},
+					
+					// 蓝牙连接设备
+					_bluetoothLine: function(o){
+						// 第一步设置设备WIFI
+						app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
+							var url = "blue_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
+							mui.openWindow(url, 'voice1');
 						});
 					},
 

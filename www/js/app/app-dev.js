@@ -89,6 +89,18 @@
 		
 		return false;
 	}
+	
+	// 是否是GPRS模式
+	dev.isGPRS = function(workmode){
+		var aaa = 0x01 << 28;
+		return (workmode & aaa) == aaa;
+	}
+	
+	// 是否是隐私（安全）模式
+	dev.isSafe = function(workmode){
+		var aaa = 0x01 << 28;
+		return (workmode & aaa) == aaa;
+	}
 
 	app.dev = dev;
 }(window.app || (window.app = {})));

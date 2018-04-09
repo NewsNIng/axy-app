@@ -154,7 +154,7 @@
 
 			<div class="mui-content noImmersed">
 
-				<div class="imgdiv" :class="_getDevName(devInfo.type)" v-devbg :data-devid="devInfo.devid">
+				<div class="imgdiv" :class="_getDevName(devInfo.type)" v-devbg :data-devid="devInfo.devid" >
 
 				</div>
 
@@ -198,17 +198,27 @@
 
 		<script type="text/javascript">
 			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
-
+			
+			var devbg_src = "";
+			
 			Vue.directive('devbg', {
 				inserted: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path) {
+						if(devbg_src){
+							reutrn;
+						};
+						devbg_src = path;
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
 				update: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path) {
+						if(devbg_src){
+							reutrn;
+						};
+						devbg_src = path;
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 
@@ -262,6 +272,8 @@
 								bitleft: 1 << 4,
 								imgindex: 2,
 							},
+							
+							
 
 							{
 								name: "云台",

@@ -18,7 +18,7 @@
 
 	pg.getCallBackId = function(s, f) {
 		return B.callbackId(pg.fun2ok(s), pg.fun2ok(f));
-	}
+	} 
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
 		//return;
@@ -405,5 +405,29 @@
 	pgn.NotifyAccountInfoChange = function(){
 		return pg.syncExec(N, 'NotifyAccountInfoChange', []);
 	}
+	
+	//====================================卡片机4.0=====================================
+	
+	// 蓝牙开始扫描设备 
+	pgn.scan4GenOnCIDFilter = function(filter, sf, ff){
+		return pg.asyncExec(N, 'scan4GenOnCIDFilter', [filter], sf, ff );
+	}
+	
+	// 蓝牙结束扫描
+	pgn.stopScan4GenDevice = function(){
+		return pg.syncExec(N, 'stopScan4GenDevice', []);
+	}
+	
+	// 设备WiFi配置
+	pgn.updateWiFiConfiguration = function(uuid, ssid, pwd, accessPwd, sf, ff){
+		return pg.asyncExec(N, 'updateWiFiConfiguration', [uuid, ssid, pwd, accessPwd], sf, ff);
+	}
+	
+	// 设备连接状态（Optional）
+	pgn.isConnectedWithDevice = function(cid, accessPwd, connectUUID, sf, ff){
+		return pg.asyncExec(N, 'isConnectedWithDevice', [cid, accessPwd, connectUUID], sf, ff);
+	}
+	
+	//====================================卡片机4.0 END=====================================
 
 }(window));

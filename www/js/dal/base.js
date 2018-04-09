@@ -69,15 +69,15 @@ function requestAdapter(type, url, params, callback) {
 			var o = {};
 
 			console.log("[" + apiUrl + "]" + JSON.stringify(data));
-
+		
 			if(data.code === "403") {
+					//alert("[" + apiUrl + "]" + JSON.stringify(data));
 				// token 验证失败 通知 zeus
 				var zeus = plus.webview.getWebviewById("zeus");
 				if(!zeus) {
 					console.log("ZEUS WINDOW NOFIND");
 					return
 				}
-				plus.nativeUI.toast("帐号保护已开启，您需要登录申请授权");
 				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', {})";
 				zeus.evalJS(jsstr);
 				return;

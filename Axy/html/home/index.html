@@ -520,7 +520,7 @@
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../js/app/app-dev.js"></script>
-		<script type="text/javascript" src="../../js/app/app-auth.js"></script>
+		<!--<script type="text/javascript" src="../../js/app/app-auth.js"></script>-->
 
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
@@ -821,12 +821,7 @@
 						app.user.get(function(u) {
 							//u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
 							//return 0;
-							// 验证是否主帐号
-							u && app.auth.verify(app.auth.MASTER, u).then(function() {
-								mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
-							}).catch(function(e) {
-								mui.toast(e.message);
-							});
+							u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
 						});
 
 					},
@@ -965,10 +960,11 @@
 					},
 					// 轮播点击
 					onAdvertTap: function(o) {
+						
 						// 打开内部浏览器
-						/*app.page.openBrowser({
+						o.adlink && app.page.openBrowser({
 							url: o.adlink
-						});*/
+						});
 					},
 					// 获取一个设备
 					getDeviceOne: function() {

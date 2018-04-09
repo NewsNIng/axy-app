@@ -119,7 +119,7 @@
 
 	<body>
 		<div id="warpper">
-			<div class="mask" v-if="1 || mask">
+			<div class="mask" v-if="mask">
 
 				<div class="mask-card" @tap.stop="">
 					<div class="mask-card-header app-font-size-30 app-color-main">
@@ -594,8 +594,8 @@
 							content: that.devInfo.accessory.name,
 							r: "nonEmpty", 
 							rmsg: "配件名称不能为空",
-							maxLength: 15,
-							mLengthMsg: "最长不超过15个字符！",
+							maxLength: 30,
+							mLengthMsg: "最长不超过30个字符！",
 						});
 					},
 					// 开锁日志

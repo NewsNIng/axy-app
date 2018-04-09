@@ -104,7 +104,7 @@
 			<div class="mui-content">
 				<div class="point app-font-size-24">远程开锁时的密码</div>
 				<div class="set_pwd app-font-size-28">
-					<input type="number" v-model="pwd" placeholder="请输入门锁的4到6位密码">
+					<input type="number" v-model="pwd" placeholder="请输入门锁的4到8位密码，首位不能为0">
 				</div>
 				<div class="mui-input-row ">
 					<label class="app-font-size-26 app-color-9f9fa0">是否记住密码</label>
@@ -129,6 +129,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -144,8 +145,22 @@
 
 				watch: {
 					pwd: function(newValue, oldValue) {
-						if(!/^\d{0,6}$/.test(newValue)) {
-							mui.toast("密码必须是4到6位的数字")
+						var tlist = [{
+							type: /^[^0]*$/, 
+							value: newValue,
+							message: "密码不能为0开头"
+						},
+						{
+							type: function(v){
+								return v.length <= 8;
+							},
+							value: newValue,
+							message: "密码不能超过8位"
+						}];
+
+						var msg = app.rules.testLists(tlist);
+						if(msg) {
+							mui.toast(msg);
 							return this.pwd = oldValue;
 						}
 					}
@@ -161,8 +176,8 @@
 					},
 
 					onSave: function() {
-						if(!/^\d{4,6}$/.test(this.pwd)) {
-							return mui.toast("密码必须是4到6位的数字");
+						if(!/^[1-9](\d){3,7}$/.test(this.pwd)) {
+							return mui.toast("密码必须是4到8位的数字，不能为0开头");
 						}
 
 						app.page.setResult({

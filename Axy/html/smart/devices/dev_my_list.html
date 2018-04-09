@@ -108,7 +108,6 @@
 			.imgdiv.VH-104GN {
 				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
 			}
-			
 			/*.imgdiv.AX-203 {
 				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
 			}
@@ -148,17 +147,13 @@
 				left: 0.266666rem;
 				z-index: 9;
 			}
-			
-			
 			/*兼容5s屏幕*/
-			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
-				
-				.imgdiv>span.imgdiv-line { 
-				  line-height: 0.453333rem;
-				}
-				
-			}
 			
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				.imgdiv>span.imgdiv-line {
+					line-height: 0.453333rem;
+				}
+			}
 			/*布防状态*/
 			
 			.imgdiv>span.imgdiv-state {
@@ -313,7 +308,7 @@
 				<template v-if="netDivList.length">
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
-						<div class="card" v-for="o,i in netDivList" >
+						<div class="card" v-for="o,i in netDivList">
 							<div class="imgdiv" ref="devimgel" v-devbg :key="o.devid" :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)">
 								<span class="app-font-size-20 imgdiv-line" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 								<!--{{o.workmode}}-->
@@ -391,7 +386,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
+		<!--<script type="text/javascript" src="../../../js/app/app-auth.js"></script>-->
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
@@ -559,11 +554,6 @@
 										if(err) {
 											return;
 										}
-										// 数据不为空时 向原生发送数据
-										if(data && data.length > 0) {
-											DEVD.data = data;
-											P.InitNativeDevList(data);
-										}
 										ob.next(data || []);
 									}, 1000);
 									//} else {
@@ -573,6 +563,19 @@
 
 								});
 						})
+						.map(function(data){
+							// 数据不为空时 向原生发送数据
+							if(data && data.length > 0) {
+								DEVD.data = data;
+								P.InitNativeDevList(data);
+							}
+							return data;
+						})
+						.merge(Rx.Observable.create(function(ob){
+							_B.on('device_update_timer', function(o) {
+								ob.next(o.devlist);
+							});
+						}))
 						// 数据处理
 						.subscribe(function(devData) {
 							that.isGeted = true;
@@ -773,14 +776,7 @@
 					onAddTap: function() {
 						// 验证登录
 						app.user.get(function(u) {
-							//u && mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
-							//return 0;
-							// 验证是否主帐号
-							u && app.auth.verify(app.auth.MASTER, u).then(function() {
-								mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
-							}).catch(function(e) {
-								mui.toast(e.message);
-							});
+							u && mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
 						});
 					},
 					// 智能配件点击
