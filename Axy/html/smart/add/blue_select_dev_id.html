@@ -195,6 +195,17 @@
 				},
 
 				mounted: function() {
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					// get wifiname & wifipwd
+					this.wifiname = GetQueryString("wifiname");
+					this.wifipwd = GetQueryString("wifipwd");
+					
+					
 					var wrapper = this.$refs.wrapper;
 					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
 						this.$refs.tabroom.offsetHeight -

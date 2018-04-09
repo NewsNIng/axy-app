@@ -8,7 +8,7 @@
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
-		
+
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
 
 		<style type="text/css">
@@ -16,9 +16,7 @@
 			body,
 			.mui-content {
 				background-color: #F4F8FB;
-				
 			}
-			
 		</style>
 	</head>
 
@@ -32,25 +30,23 @@
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
-							
 							<span class="app-color-333333">我的订单</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="openShopCart">
 						<a class="mui-navigate-right">
-							
 							<span class="app-color-333333">购物车</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
-							
+
 							<span class="app-color-333333">收货地址</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
-							
+
 							<span class="app-color-333333">关于商城</span>
 						</a>
 					</li>
@@ -73,7 +69,7 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-mall.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-mall.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -91,7 +87,10 @@
 				},
 				plusReady: function() {},
 				methods: {
-
+					// 打开购物车
+					openShopCart: function() {
+						app.mall.openShopCart();
+					},
 				},
 			});
 		</script>

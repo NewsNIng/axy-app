@@ -194,15 +194,15 @@
 								type: 1,
 								noWifi: true
 							},
-//							{
-//								img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
-//								name: "AX-203B",
-//								type: 3
-//							}, {
-//								img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
-//								name: "AX-403B",
-//								type: 3,
-//							},
+							{
+								img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
+								name: "AX-203B",
+								type: 3
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
+								name: "AX-403B",
+								type: 3,
+							},
 							]
 						},
 						ctrl_fit: {
@@ -350,7 +350,7 @@
 						// 第一步设置设备WIFI
 						app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
 							var url = "blue_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
-							mui.openWindow(url, 'voice1');
+							mui.openWindow(url, 'blue1');
 						});
 					},
 
