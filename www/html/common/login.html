@@ -229,8 +229,8 @@
 			<button type="button" id="loginBtn" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="正在登录..." class="mui-btn app-btn-main app-font-size-32" @tap="onLoginTap($event)">登录</button>
 
 			<div class="forget_pwd app-font-size-24">
-				<img v-show="isRemember" src="../../image/common/agree_selected.png" />
-				<img v-show="!isRemember" src="../../image/common/agree_noselect.png" />
+				<img @tap="isRemember = !isRemember" v-show="isRemember" src="../../image/common/agree_selected.png" />
+				<img @tap="isRemember = !isRemember" v-show="!isRemember" src="../../image/common/agree_noselect.png" />
 				<a @tap="isRemember = !isRemember">记住帐号</a>
 
 				<a style="float: right;" :href="'reset.html?tel='+username">忘记密码</a>
@@ -364,6 +364,9 @@
 					},
 					// 历史记录选项点击
 					onHistoryTap: function(o) {
+						if(this.username !== o){
+							this.password = "";
+						}
 						this.username = o;
 						this.showhistory = false;
 					},
@@ -539,7 +542,7 @@
 								mui.toast("登录成功");
 
 								// 记录历史帐号
-								if(that.historyList.indexOf(data.account) < 0 || that.isRemember) {
+								if(that.isRemember && that.historyList.indexOf(data.account) < 0) {
 									historyList.unshift(data.account);
 								}
 
