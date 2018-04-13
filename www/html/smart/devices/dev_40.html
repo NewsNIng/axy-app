@@ -399,7 +399,7 @@
 									if(lockData.networkApplyOK) {
 										ob.next("入网成功");
 									} else {
-										ob.error(new Error("申请入网失败"));
+										ob.error(new Error("入网失败，该配件可能已被添加。"));
 									}
 								} else if(lockData.networkQuitOKValid) {
 									if(lockData.networkQuitOK) {
@@ -436,6 +436,11 @@
 							that.closeMask();
 							// 显示提示
 							mui.toast(msg);
+							// 通知上层
+							app.page.setResult({
+								action: "update",
+								info: that.devInfo
+							});
 						}, function(err) {
 							// 关闭遮罩
 							that.closeMask();

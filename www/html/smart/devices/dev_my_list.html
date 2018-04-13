@@ -203,6 +203,7 @@
 			/*903无控制器*/
 			
 			.menudiv.AX-903 .menudiv-controller {
+				order: -1;
 				opacity: 0;
 				pointer-events: none;
 			}
@@ -298,7 +299,7 @@
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title app-font-size-34">
-					<span @tap="onActive(0)" :class="{active: active === 0}">智能主机</span>
+					<span @tap="onActive(0)" :class="{active: active === 0}" v-text="'智能主机'+netDivList.length+'个'">智能主机</span>
 					<span @tap="onActive(1)" :class="{active: active === 1}">智能配件</span>
 				</h1>
 				<a class="app-icon-plus mui-pull-right" @tap="onAddTap()"></a>

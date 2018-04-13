@@ -356,10 +356,12 @@
 				methods: {
 
 					// 获取状态数据
-					getData: function() {
+					getData: function(hideToast) {
 						dal.device.electric.state(this.devInfo.id, function(err, rs) {
+							// 需求，自动更新数据
+							setTimeout(this.getData.bind(this, true), 20e3);
 							if(err) {
-								return mui.toast("获取信息失败");
+								return hideToast || mui.toast("获取信息失败");
 							}
 							console.log(JSON.stringify(rs));
 							rs.state && (this.o = rs.state);

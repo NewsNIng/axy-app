@@ -156,11 +156,12 @@
 	 * 初始化原生系统（需在用户登录成功后初始化原生系统）
 	 * @param {String} username 用户名
 	 * @param {String} serverurl 顶级服务器地址
+	 * @param {String} imei uuid
 	 * @param {Function} sfn 正确回调函数
 	 * @param {Function} ffn 失败回调函数
 	 */
-	pgn.InitNativeSystem = function(username, password, serverurl, sfn, ffn) {
-		return pg.asyncExec(N, 'InitNativeSystem', [username, password, serverurl], sfn, ffn);
+	pgn.InitNativeSystem = function(username, password, serverurl, imei, sfn, ffn) {
+		return pg.asyncExec(N, 'InitNativeSystem', [username, password, serverurl, imei], sfn, ffn);
 	};
 
 	/**

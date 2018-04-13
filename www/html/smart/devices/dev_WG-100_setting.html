@@ -255,6 +255,8 @@
 		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
 
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-auth.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -436,8 +438,10 @@
 								});
 							})
 						}
-
-						$alert
+						// 是否主账号
+						var $isMaster = Rx.Observable.fromPromise(app.auth.verify(app.auth.MASTER, app.user.get()));
+						
+						$isMaster.mergeMapTo($alert)
 							.mergeMap($rebootFn)
 							.mergeMap($deleteFn)
 							.subscribe(function(dev) {

@@ -309,7 +309,7 @@
 
 			// 向原生注册 控制中心 处理函数回调
 			var InitNativeSystem = function(o) {
-				P.InitNativeSystem(o.account, o.pwd, o.domain, function(arg) {
+				P.InitNativeSystem(o.account, o.pwd, o.domain, plus.device.uuid, function(arg) {
 					//console.log(arg);
 				});
 			};

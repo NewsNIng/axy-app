@@ -418,6 +418,11 @@
 							that.closeMask();
 							// 显示提示
 							mui.toast(msg);
+							// 通知上层
+							app.page.setResult({
+								action: "update",
+								info: that.devInfo
+							});
 						}, function(err) {
 							// 关闭遮罩
 							that.closeMask();

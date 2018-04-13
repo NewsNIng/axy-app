@@ -171,12 +171,28 @@
 					this.isFitting = this.$view.isFitting;
 					this.updateDeviceList();
 					this.info = this.$view.info;
-
-					plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
-					plus.webview.getWebviewById('Lan_add_camera') && plus.webview.getWebviewById('Lan_add_camera').close('none');
-					plus.webview.getWebviewById('voice1') && plus.webview.getWebviewById('voice1').close('none');
-					plus.webview.getWebviewById('scan') && plus.webview.getWebviewById('scan').close('none');
+					
+					
+//					plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
+//					plus.webview.getWebviewById('Lan_add_camera') && plus.webview.getWebviewById('Lan_add_camera').close('none');
+//					plus.webview.getWebviewById('voice1') && plus.webview.getWebviewById('voice1').close('none');
+//					plus.webview.getWebviewById('scan') && plus.webview.getWebviewById('scan').close('none');
+//					plus.nativeUI.closeWaiting();
+					
+					var tempw;
+					([
+						"add/add_device.html",
+						"Lan_add_camera",
+						"voice1",
+						"scan",
+					].forEach(function(item){
+						tempw = plus.webview.getWebviewById(item);
+						tempw && tempw.close('none');
+					}));
+					
 					plus.nativeUI.closeWaiting();
+					
+					
 				},
 				methods: {
 					show: function() {
@@ -208,7 +224,7 @@
 								// 检查本地是否有相关配件页面
 								var pageUrl = '_www/html/smart/devices/dev_' + o.type + '.html';
 								pageUrl = plus.io.convertLocalFileSystemURL(pageUrl);
-								if(mui.os.ios) {
+								if(mui.os.ios && pageUrl.indexOf('file://') < 0) {
 									pageUrl = 'file://' + pageUrl;
 								}
 								plus.io.resolveLocalFileSystemURL(pageUrl, function() {
