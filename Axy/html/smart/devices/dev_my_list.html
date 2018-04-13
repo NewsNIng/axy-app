@@ -153,6 +153,9 @@
 				.imgdiv>span.imgdiv-line {
 					line-height: 0.453333rem;
 				}
+				header>h1>span {
+					margin: 0 0.3rem;
+				}
 			}
 			/*布防状态*/
 			
@@ -211,9 +214,19 @@
 			
 			.menudiv.relation-share .menudiv-share,
 			.menudiv.relation-share .menudiv-setting {
-				opacity: 0;
+				display: none;
+				/*opacity: 0;*/
 				pointer-events: none;
 				order: -1;
+			}
+			/*删除按钮*/
+			
+			.menudiv-delete {
+				display: none;
+			}
+			
+			.menudiv.relation-share .menudiv-delete {
+				display: block;
 			}
 			/*控制弹窗*/
 			
@@ -323,7 +336,7 @@
 									
 								</span>
 							</div>
-							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation)">
+							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation) + ' ' + _getDevAuthorize(o.authorize)">
 								<span class="app-color-main">{{_fixDevLocation(o.location) || o.devid}}</span>
 								<img class="menudiv-controller" @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
 
@@ -331,6 +344,7 @@
 
 								<img class="menudiv-share" @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
 								<img class="menudiv-setting" @tap="onSettingTap(o, i)" src="../../../image/smart/camera/setting.png" />
+								<img class="menudiv-delete" @tap="onDeleteTap(o, i)" src="../../../image/smart/camera/close.png" />
 							</div>
 
 						</div>
@@ -564,7 +578,7 @@
 
 								});
 						})
-						.map(function(data){
+						.map(function(data) {
 							// 数据不为空时 向原生发送数据
 							if(data && data.length > 0) {
 								DEVD.data = data;
@@ -572,7 +586,7 @@
 							}
 							return data;
 						})
-						.merge(Rx.Observable.create(function(ob){
+						.merge(Rx.Observable.create(function(ob) {
 							_B.on('device_update_timer', function(o) {
 								ob.next(o.devlist);
 							});
@@ -759,9 +773,13 @@
 
 					},
 
-					// 
+					// 计算关系显示菜单 
 					_getDevRelation: function(relation) {
 						return 'relation-' + __relationarr[relation];
+					},
+					// 计算权限显示菜单
+					_getDevAuthorize: function(authorize) {
+
 					},
 
 					// 空空如也 
@@ -887,6 +905,53 @@
 								devInfo: o
 							}
 						});
+					},
+
+					// 设备分享删除
+					onDeleteTap: function(o, i) {
+						plus.nativeUI.showWaiting();
+
+						var dev = o;
+						var methodName = 'deleteshare';
+						var that = this;
+
+						// 弹窗确认
+						var $alert = Rx.Observable.create(function(ob) {
+							mui.confirm("确定把这台分享设备移除列表吗？", "", ["移除", "取消"], function(e) {
+								if(e.index === 0) {
+									ob.next(dev);
+								}
+							});
+						});
+
+						// 删除设备
+						var $deleteFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.device[methodName](dev.devid, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(dev);
+								});
+							})
+						};
+
+						$alert
+							.mergeMap($deleteFn)
+							.subscribe(function(dev) {
+								mui.toast("设备移除成功");
+								plus.nativeUI.closeWaiting();
+
+								_B.emit("device_update", {}, {
+									views: ["home"]
+								});
+
+								this.netDivList.splice(i, 1);
+
+							}, function(err) {
+								plus.nativeUI.closeWaiting();
+								mui.toast(err.message);
+							});
 					},
 
 					// 设备控制

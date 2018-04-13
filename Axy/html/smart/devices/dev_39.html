@@ -305,7 +305,11 @@
 					var $getBaseState = Rx.Observable.fromPromise(this.getBaseState());
 					var $getLockState = Rx.Observable.fromPromise(this.getLockState());
 
-					$getBaseState.mergeMap(function(baseData) {
+					// 新增 定时自动刷新 门锁信息
+					var $getBaseSateTicker = Rx.Observable.interval(15e3).startWith(0).mapTo($getBaseState)
+					
+					$getBaseSateTicker
+					.mergeMap(function(baseData) {
 						baseData.id = baseData.aid;
 						mui.extend(that.devInfo.accessory, baseData);
 						return $getLockState;

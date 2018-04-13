@@ -300,6 +300,12 @@
 
 				// 清除本地用户数据
 				app.user.logout();
+				// 用户信息备份
+				var USER_INFO = new ni.Cache('app_user_info', {}, {
+					plus: true
+				});
+				USER_INFO.clear();
+				
 				window.localStorage.setItem('_pwd_', "");
 				window.localStorage.setItem('_domain_', "");
 
@@ -309,6 +315,8 @@
 						plus: true
 					}).clear();
 				});
+				
+				
 
 				// 清除第三方登录信息
 				plus.oauth.getServices(function(auths) {

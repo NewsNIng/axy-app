@@ -539,6 +539,9 @@
 							.mergeMap($loginLockCheck)
 							// 登录成功
 							.subscribe(function(data) {
+								
+								console.log(JSON.stringify(data));
+								
 								mui.toast("登录成功");
 
 								// 记录历史帐号
