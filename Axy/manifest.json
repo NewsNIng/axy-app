@@ -424,7 +424,8 @@
 					"html/smart/devices/dev_WG-100_setting.html",
 					"html/smart/devices/dev_WG-100.html",
 					"html/smart/devices/dev_AX-903_setting.html",
-					"html/smart/devices/dev_VH-104_setting.html"
+					"html/smart/devices/dev_VH-104_setting.html",
+					"html/smart/devices/dev_AX-904.html"
 				],
 				"priority": 0
 			},

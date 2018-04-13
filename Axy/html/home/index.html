@@ -976,6 +976,8 @@
 								this.dev = data[0];
 								//this.dev.devimg = this._getDevImg(this.dev.devid);
 								this.dev.location = this.dev.location ? this.dev.location.replace(/<[^<]*>/gi, "") : "";
+							}else{
+								this.dev.devid = "";
 							}
 
 						}.bind(this), 1);
@@ -1127,7 +1129,7 @@
 
 					addDeviceTap: function() {
 						app.user.get(function(u) {
-							u && mui.openWindow('../smart/add/add_device.html', 'add_device');
+							u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
 						});
 					},
 

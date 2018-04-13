@@ -9,7 +9,11 @@
 		"AX-203": 0x31, // AX_203
 		"AX-503": 0x32, // AX_503
 		"AX-803": 0x33, // AX_803
-
+		
+		"AX-203B": 0x3b, // AX-203B
+		
+		"AX-403B": 0x3c, // AX-403B
+		
 		"AX-603": 0x35, //AX-603 半球
 		"AX-803A": 0x36, //AX-803 数字
 		"AX-403A": 0x37, // AX_403A
@@ -41,6 +45,15 @@
 		for(var i in absTypeidDir) {
 			if(absTypeidDir[i] === type) {
 				return i;
+			}
+		}
+		return "";
+	};
+	
+	dev.findNameByDevid = function(devid){
+		for(var i in absTypeidDir) {
+			if(i.indexOf(devid) === 0){
+				return absTypeidDir[i];
 			}
 		}
 		return "";

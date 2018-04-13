@@ -21,7 +21,7 @@
 
 	// 配置	
 	var config = {
-		url: "http://192.168.1.150:8080/#/home",
+		url: "http://192.168.1.161:8080/#/home",
 		id: "mall",
 		routerCmdName: "router",
 	};

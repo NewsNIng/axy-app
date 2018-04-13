@@ -39,8 +39,8 @@ function requestAdapter(type, url, params, callback) {
 	console.log(JSON.stringify(params));
 	var errDir = {
 		"timeout": "请求超时",
-		"error": "请求错误",
-		"abort": "请求中断",
+		"error": "网络连接错误，请检查！",
+		"abort": "网络连接中断，请检查！",
 		"parsererror": "解析错误",
 		"null": "请求为空"
 	};
