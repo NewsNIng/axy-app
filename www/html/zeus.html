@@ -388,7 +388,7 @@
 
 				// 清除本地用户数据
 				app.user.logout();
-				USER_INFO.data = {};
+				USER_INFO.clear();
 				
 				window.localStorage.setItem('_pwd_', "");
 				window.localStorage.setItem('_domain_', "");

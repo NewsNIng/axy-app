@@ -300,6 +300,12 @@
 
 				// 清除本地用户数据
 				app.user.logout();
+				// 用户信息备份
+				var USER_INFO = new ni.Cache('app_user_info', {}, {
+					plus: true
+				});
+				USER_INFO.clear();
+				
 				window.localStorage.setItem('_pwd_', "");
 				window.localStorage.setItem('_domain_', "");
 
@@ -309,6 +315,8 @@
 						plus: true
 					}).clear();
 				});
+				
+				
 
 				// 清除第三方登录信息
 				plus.oauth.getServices(function(auths) {
@@ -334,8 +342,10 @@
 						});
 					})
 					.subscribe(function() {
+						plus.nativeUI.closeWaiting();
 						// 监听首页的加载完成，关闭本页面
 						first.addEventListener('loaded', function() {
+							plus.nativeUI.closeWaiting();
 							index.close('none');
 						});
 						// 首页重新运行
@@ -343,7 +353,6 @@
 						// 显示首页
 						first.show("slide-in-bottom", 250);
 						
-						plus.nativeUI.closeWaiting();
 						app.user.get(function(){});
 					});
 

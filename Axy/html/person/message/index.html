@@ -101,7 +101,7 @@
 				<img src="../../../image/person/message/btn_Alarmnews@3x.png" />
 				<div class="name">
 					<div class="app-font-size-30 app-color-333333">告警消息</div>
-					<div class="app-font-size-26 app-color-9f9fa0" v-text="(_fixName(alarmMsg.location) || alarmMsg.devid) + ' ' + alarmMsg.areaname">...</div>
+					<div class="app-font-size-26 app-color-9f9fa0" v-text="(_fixName(alarmMsg.location) || alarmMsg.devid) + ' ' + (alarmMsg.areaname || '')">...</div>
 					<!--<span class="app-badge app-font-size-20">99+</span>-->
 				</div>
 			</div>

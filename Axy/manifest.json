@@ -7,8 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.1.3",/*应用版本名称*/
-		"code": "20180329"
+		"name": "2.1.4",/*应用版本名称*/
+		"code": "20180416"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -742,7 +742,8 @@
 				"resources": [],
 				"refer": [
 					"html/smart/add/family_code.html",
-					"html/smart/add/family_scan.html"
+					"html/smart/add/family_scan.html",
+					"html/smart/devices/dev_my_list.html"
 				],
 				"priority": 0
 			},

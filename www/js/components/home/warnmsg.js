@@ -1,9 +1,9 @@
 Vue && Vue.component('warnMsg', {
 
-	template: `<div class="home-warnmsg" v-if="items.length" style="display: flex;display: -webkit-flex;justify-content: center;">
+	template: `<div class="home-warnmsg" v-if="items.length" >
 	
-	<img src="../../image/home/icon_Alarmnews@3x.png" style="margin: 0.42rem 0.293333rem;" />
-	 <transition-group name="flip-list" tag="div" style="flex: 1;-webkit-flex: 1;">
+	<img src="../../image/home/icon_Alarmnews@3x.png" />
+	 <transition-group name="flip-list" tag="div">
 
 				<div class="home-warnmsg-item" v-for="o,i in items" :key="o.id" @tap="onTap(o)">
 										

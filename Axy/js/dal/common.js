@@ -18,10 +18,7 @@
 			dataType: "json",
 			success: function(data) {
 				if(data.err) {
-					return callback({
-						code: xhr.status,
-						message: err
-					}, null);
+					return callback(data, null);
 				}
 				callback(null, data.url);
 

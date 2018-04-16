@@ -196,6 +196,7 @@
 				white-space: nowrap;
 				overflow: hidden;
 				order: -2;
+				
 			}
 			
 			.menudiv img {
@@ -337,6 +338,7 @@
 								</span>
 							</div>
 							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation) + ' ' + _getDevAuthorize(o.authorize)">
+								
 								<span class="app-color-main">{{_fixDevLocation(o.location) || o.devid}}</span>
 								<img class="menudiv-controller" @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
 
@@ -920,6 +922,8 @@
 							mui.confirm("确定把这台分享设备移除列表吗？", "", ["移除", "取消"], function(e) {
 								if(e.index === 0) {
 									ob.next(dev);
+								}else{
+									ob.error(new Error(""));
 								}
 							});
 						});
@@ -946,11 +950,11 @@
 									views: ["home"]
 								});
 
-								this.netDivList.splice(i, 1);
+								that.netDivList.splice(i, 1);
 
 							}, function(err) {
 								plus.nativeUI.closeWaiting();
-								mui.toast(err.message);
+								err.message && mui.toast(err.message);
 							});
 					},
 

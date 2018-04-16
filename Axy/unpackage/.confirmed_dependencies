@@ -607,7 +607,8 @@
   "html/smart/add/family_menu.html": {
     "refer": [
       "html/smart/add/family_code.html",
-      "html/smart/add/family_scan.html"
+      "html/smart/add/family_scan.html",
+      "html/smart/devices/dev_my_list.html"
     ],
     "resources": []
   },
@@ -626,16 +627,19 @@
   "html/smart/add/blue_select_dev_id.html": {
     "refer": [
       "html/smart/add/blue_connect_camera1.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/blue_connect_camera2.html": {
     "refer": [
       "html/smart/add/blue_select_dev_id.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/blue_connect_camera3.html": {
     "refer": [
       "html/smart/add/blue_connect_camera2.html"
-    ]
+    ],
+    "resources": []
   }
 }

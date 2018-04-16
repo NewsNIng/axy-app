@@ -50,7 +50,7 @@ function requestAdapter(type, url, params, callback) {
 			loginid: window.localStorage.getItem('_loginid_') || "",
 			imei: window.localStorage.getItem('_imei_') || "",
 			account: params.account,
-			//appversion: dal.BASE_URL_VERSION,
+//			appversion: dal.BASE_URL_VERSION,
 		},
 		data: params,
 		type: type,
