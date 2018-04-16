@@ -1,21 +1,6 @@
 Vue && Vue.component('warnMsg', {
 
-	template: `<div class="home-warnmsg" v-if="items.length" >
-	
-	<img src="../../image/home/icon_Alarmnews@3x.png" />
-	 <transition-group name="flip-list" tag="div">
-
-				<div class="home-warnmsg-item" v-for="o,i in items" :key="o.id" @tap="onTap(o)">
-										
-					<span class="app-font-size-26 mui-ellipsis">
-							{{_fixDevLocation(o.location) +　" " + (o.areaname || o.areaid)}}
-						</span>
-					<span class="app-font-size-26 home-warnmsg-item-right">{{_fixTimeAgo(o.atime)}}</span>
-				</div>
-					 
-  </transition-group>
-	
-			</div>`,
+	template: '<div class="home-warnmsg" v-if="items.length" ><img src="../../image/home/icon_Alarmnews@3x.png" /><transition-group name="flip-list" tag="div"><div class="home-warnmsg-item" v-for="o,i in items" :key="o.id" @tap="onTap(o)"><span class="app-font-size-26 mui-ellipsis">{{_fixDevLocation(o.location) +　" " + (o.areaname || o.areaid)}}</span><span class="app-font-size-26 home-warnmsg-item-right">{{_fixTimeAgo(o.atime)}}</span></div></transition-group></div>',
 
 	data: function() {
 		return {

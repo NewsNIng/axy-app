@@ -625,6 +625,9 @@
 						longitude: 0,
 						latitude: 0,
 						city: '深圳',
+						
+						
+						isInitNativeDevList: false,
 
 					};
 				},
@@ -768,6 +771,11 @@
 
 					// 监听设备变化
 					this.listenDev();
+					
+					// 监听 原生已经收到数据
+					_B.on("InitNativeDevList", function(){
+						that.isInitNativeDevList = true;
+					});
 
 				},
 				methods: {
@@ -930,6 +938,11 @@
 								});
 							}
 						}).subscribe(function(data) {
+							
+							if(!that.isInitNativeDevList){
+								return mui.toast("设备初始化中...请稍后...");
+							}
+							
 							var w1 = data.b;
 							var w2 = type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {

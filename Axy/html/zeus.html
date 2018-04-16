@@ -318,6 +318,10 @@
 			var InitNativeDevList = function(data) {
 				DEVICE.data = data;
 				P.InitNativeDevList(data);
+				// 通知 其他页面 原生已经收到数据
+				_B.emit("InitNativeDevList", {}, {
+					views: ["home"]
+				});
 			};
 			
 			// 向devlist发送更新信息
