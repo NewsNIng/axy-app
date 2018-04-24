@@ -2,9 +2,10 @@
 (function(_, ra, $) {
 	var system = {};
 
-	system.update = function(version, callback) {
+	system.update = function(nativeVersion, version, callback) {
 
 		return ra('get', '/app/appversion', {
+			nativeVersion: nativeVersion,
 			version: version,
 			type: +!$.os.ios
 		}, callback);

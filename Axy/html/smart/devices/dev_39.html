@@ -332,9 +332,11 @@
 					// 获取基础数据
 					getBaseState: function() {
 						var devid = this.devInfo.accessory.devid,
+							devtype = this.devInfo.devType,
 							id = this.devInfo.accessory.id || this.devInfo.accessory.aid;
+							
 						return new Promise(function(re, rj) {
-							dal.devaccessory.getinfo(devid, id, function(err, data) {
+							dal.devaccessory.getinfo(devid, devtype, id, function(err, data) {
 								if(err) {
 									return rj(err);
 								}

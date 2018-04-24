@@ -146,7 +146,10 @@
 				watch: {
 					pwd: function(newValue, oldValue) {
 						var tlist = [{
-							type: /^[^0]*$/, 
+							//type: /^[^0]*$/,
+							type: function(v){
+								return v[0] !== '0';
+							},
 							value: newValue,
 							message: "密码不能为0开头"
 						},

@@ -21,7 +21,8 @@
 
 	// 配置	
 	var config = {
-		url: "http://192.168.1.161:8080/#/home",
+		url: "http://47.106.92.195/shop/#home",
+//		url: "http://192.168.1.150:8080/#/home",
 		id: "mall",
 		routerCmdName: "router",
 	};
@@ -30,7 +31,7 @@
 	var routerCmd = {
 		// 主页
 		HOME: {
-			path: "/",
+			path: "/home",
 			query: {
 				goindex: false
 			}
@@ -38,7 +39,7 @@
 
 		// 订单
 		ORDER: {
-			path: '/order',
+			path: '/order/index',
 			query: {
 				goindex: true,
 
@@ -52,6 +53,13 @@
 				goindex: true
 			}
 		},
+		
+		ADDRESS: {
+			path: '/user/address',
+			query: {
+				goindex: true
+			}
+		}
 
 	};
 
@@ -121,6 +129,20 @@
 		this.sendRouterCmd(routerCmd.SHOPCAR);
 
 	};
+	
+	// 打开订单
+	mall.openOrder = function() {
+		this.sendRouterCmd(routerCmd.ORDER);
+
+	};
+	// 打开收获地址
+	mall.openAddress = function() {
+		this.sendRouterCmd(routerCmd.ADDRESS);
+
+	};
+	
+	
+	
 	
 	// 打开首页
 	mall.openHome = function(){

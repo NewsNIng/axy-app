@@ -187,7 +187,7 @@
 				</div>
 
 			</div>
-
+			
 			<div class="video-root" v-if="videoplay" @tap.self="videoplay=false">
 				<div class="video-room">
 					<video :src="videosrc" controls autoplay playsinline webkit-playsinline></video>
@@ -239,8 +239,15 @@
 								</div>
 
 								<div @tap.stop="onViewTap(o, i)">
-									<img src="../../../image/person/message/video@3x.png" />
-									<div class="app-font-size-28 app-color-main">实时视频</div>
+									<template v-if="canPlay(o)">
+										<img src="../../../image/person/message/video@3x.png" />
+										<div class="app-font-size-28 app-color-main">实时视频</div>	
+									</template>
+									<template v-else>
+										<img src="../../../image/person/message/video_1@3x.png" />
+										<div class="app-font-size-28 app-color-9f9fa0">实时视频</div>	
+									</template>
+									
 								</div>
 							</div>
 
@@ -358,7 +365,7 @@
 						layer: 1
 					});
 
-				},
+				}, 
 
 				plusReady: function() {
 
@@ -471,7 +478,9 @@
 					// 点击观看实时视频视图
 					onViewTap: function(o, i) {
 						//var sortDevid = app.dev.findNameByDevid(o.devid);
-						
+						if(!this.canPlay(o)){
+							return;
+						}
 						
 						
 						
@@ -589,6 +598,10 @@
 					},
 					fixName: function(str) {
 						return app.dev.fixName(str);
+					},
+					
+					canPlay: function(o){
+						return app.dev.canPlay(o.type);
 					}
 				}
 			})

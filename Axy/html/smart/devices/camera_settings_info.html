@@ -64,7 +64,7 @@
 							<span class="mui-badge" v-text="wifiinfo.ssid"></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" v-if="isHasWIFI">
 						<a class="">
 							<span>WIFI信号强度</span>
 							<span class="mui-badge" v-text="(wifiinfo.signal || 0) + '%'"></span> 
@@ -88,10 +88,10 @@
 							<span class="mui-badge" v-text="o.appVersion"></span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" v-if="is360">
 						<a class="">
 							<span>IP地址</span>
-							<span class="mui-badge" v-text="wifiinfo.ip || '未知'"></span>
+							<span class="mui-badge" v-text="wifiinfo.ip || ''"></span>
 						</a>
 					</li>
 					<li style="background-color: #F4F8FB !important;" />
@@ -138,8 +138,19 @@
 							signal: 0,
 							ip: "",
 							ssid: "",
-						}
+						},
+						devid: "",
+						type: "",
 					};
+				},
+				computed: {
+					is360: function(){
+						return app.dev.findName(this.type) === 'AX-360'	
+					},
+					isHasWIFI: function(){
+						var name = app.dev.findName(this.type);
+						return ['AX-360','AX-203','AX-203A','AX-203B', 'AX-403', 'AX-403A', 'AX-403B'].indexOf(name) >= 0;
+					}
 				},
 				
 				plusReady: function() {

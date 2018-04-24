@@ -196,7 +196,6 @@
 				white-space: nowrap;
 				overflow: hidden;
 				order: -2;
-				
 			}
 			
 			.menudiv img {
@@ -275,6 +274,90 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
+			/*===配件（折叠面板）*/
+			
+			ul.a1-room>li {
+				height: auto;
+				color: #505050;
+				border-bottom: 0.213333rem #F4F8FB solid;
+			}
+			/*去除默认点下样式*/
+			
+			ul.a1-room>li.mui-active {
+				background-color: transparent;
+			}
+			/*下划线 left 0*/
+			
+			ul.a1-room>li.mui-table-view-cell:after {
+				height: 0;
+				left: 0;
+				color: #E4E5E6;
+			}
+			/*配件图标*/
+			
+			ul.a1-room>li>a>img {
+				margin-right: 0.2rem;
+				width: 0.7rem;
+				vertical-align: middle;
+			}
+			/*配件个数*/
+			
+			ul.a1-room>li span.mui-pull-right {
+				position: absolute;
+				color: #505050;
+				top: 50%;
+				right: 0;
+				transform: translate(-34px, -50%);
+				-webkit-transform: translate(-34px, -50%);
+			}
+			/*===配件（折叠面板）End*/
+			/*=== 新配件列表*/
+			
+			.flex {
+				display: flex;
+				display: -webkit-flex;
+			}
+			
+			.flex-item-center {
+				justify-content: center;
+				align-items: center;
+			}
+			
+			.mui-table-view-cell.mui-collapse .mui-collapse-content {
+				padding: 0 !important;
+			}
+			
+			.a1-list,
+			.a1-list>div.flex {
+				position: relative;
+			}
+			
+			.a1-list:before {
+				position: absolute;
+				top: 0.2rem;
+				bottom: 0.2rem;
+				left: 50%;
+				width: 1px;
+				content: '';
+				-webkit-transform: scaleX(.5);
+				transform: scaleX(.5);
+				background-color: #E5E6E7;
+			}
+			
+			
+			
+			.a1-list>div.flex:before {
+				position: absolute;
+				right: 0;
+				top: 0;
+				left: 0;
+				height: 1px;
+				content: '';
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				background-color: #E5E6E7;
+			}
+			/*=== 新配件列表 End*/
 		</style>
 	</head>
 
@@ -339,7 +422,7 @@
 								</span>
 							</div>
 							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation) + ' ' + _getDevAuthorize(o.authorize)">
-								
+
 								<span class="app-color-main">{{_fixDevLocation(o.location) || o.devid}}</span>
 								<img class="menudiv-controller" @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
 
@@ -353,26 +436,66 @@
 						</div>
 					</div>
 					<div v-show="active === 1">
-						<ul class="mui-table-view app-font-size-28 a1" v-for="o,i in devaccessroyList">
-							<li class="mui-table-view-cell" @tap="onZoneTap(o, i)">
-								<a class="mui-navigate-right">
-									<span class="left app-font-size-28 app-color-333333">
-								<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-if="iconList[o.type] == null"/>
-								<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[o.type]" v-if="!(iconList[o.type] == null)"/>
-								<span>{{o.name}}</span>
-									</span>
-									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.enable ? "已启用" : "未启用"}}</span>
+						<ul class="mui-table-view a1-room app-font-size-32">
+							<li class="mui-table-view-cell mui-collapse" v-for="o, i in devaccessroyList2">
+								<a class="mui-navigate-right" href="#">
+
+									<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[i]" v-if="iconList[i]" />
+									<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-else/>
+
+									<span class="app-font-size-30">{{_findAccName(i)}}</span>
+									<span class="mui-pull-right app-font-size-30">{{o.length}}</span>
 								</a>
+								<div class="mui-collapse-content">
+
+									<div class="flex a1-list" v-for="oo,ii in o" @tap="onZoneTap(oo, oo.appIndex)">
+										<div class="flex" style="flex: 1; flex-direction: column;height: 2.026666rem;">
+											<div class="flex app-font-size-28" style="flex: 1; align-items: center; justify-content: flex-start;">
+												<span style="margin:0 0.2rem 0 0.346666rem;" class="app-color-9f9fa0">当前状态</span>
+												<!-- ["正常", "失联", "失压"];-->
+												<span v-if="oo.statecode === 0" class="app-color-333333">
+															通讯正常
+														</span>
+												<span v-else-if="oo.statecode === 1" class="app-color-ff3b30">
+															通讯失联
+														</span>
+												<span v-else-if="oo.statecode === 2" class="app-color-orange">
+															通讯失压
+														</span>
+												<span v-else>
+															通讯未知
+														</span>
+														
+																											
+											</div>
+											<div class="flex flex-item-center app-font-size-32" style="flex: 1;">
+												<span v-if="oo.enable" class="app-color-main">
+															已启用
+														</span>
+												<span v-else class="app-color-ff3b30">
+															未启用
+													</span>
+											</div>
+
+										</div>
+										<div class="flex flex-item-center  " style="flex: 1; flex-direction: column;">
+											<div class="flex flex-item-center" style="flex: 1;">
+												<p class="mui-ellipsis app-font-size-32 app-color-333333">{{oo.name}}</p>
+											</div>
+											<div class="flex flex-item-center" style="flex: 1; ">
+												<p class="mui-ellipsis app-font-size-30">{{_fixDevLocation(oo.devname) || oo.devid}}</p>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
 							</li>
-							<li class="mui-table-view-cell">
-								<a>
-									<span class="app-font-size-28 app-color-9f9fa0">
-								主机: {{_fixDevLocation(o.devname) || o.devid}}
-							</span>
-									<span class="mui-badge app-color-main">{{_getStateByCode(o.statuscode)}}</span>
-								</a>
-							</li>
+
 						</ul>
+
+						
+						
 					</div>
 				</template>
 				<template v-else-if="isGeted">
@@ -404,6 +527,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-acc.js"></script>
 		<!--<script type="text/javascript" src="../../../js/app/app-auth.js"></script>-->
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
@@ -421,13 +545,13 @@
 			Vue.directive('devbg', {
 				inserted: function(el) {
 					var devid = el.dataset.devid;
-					getScrrenHotBgFn(devid).then(function(path) {
+					getScrrenHotBgFn(devid, true).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
 				update: function(el) {
 					var devid = el.dataset.devid;
-					getScrrenHotBgFn(devid).then(function(path) {
+					getScrrenHotBgFn(devid, true).then(function(path) {
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
@@ -443,8 +567,7 @@
 			var DEVD;
 
 			var wayPick;
-
-			var __stateCodearr = ["正常", "失联", "失压"];
+			
 
 			var __relationarr = ["self", "none", "share"];
 
@@ -523,7 +646,24 @@
 				computed: {
 					controlDev: function() {
 						return this.netDivList[this.controlIndex];
-					}
+					},
+					devaccessroyList2: function() {
+						var dir = {},
+							arr = this.devaccessroyList,
+							l = arr.length;
+
+						var temp;
+
+						for(var i = 0; i < l; i++) {
+							if(!dir[arr[i].type]) {
+								dir[arr[i].type] = [];
+							}
+							arr[i].appIndex = i;
+							dir[arr[i].type].push(arr[i]);
+						}
+
+						return dir;
+					},
 				},
 
 				mounted: function() {
@@ -535,6 +675,9 @@
 				},
 
 				plusReady: function() {
+
+					//return;
+
 					var that = this;
 					this.$view.setStyle({
 						scrollIndicator: "none"
@@ -727,6 +870,9 @@
 						}
 						var type = app.dev.fixType(o.type);
 						Rx.Observable.create(function(ob) {
+							if(app.dev.isGPRS(o.workmode)){
+								return mui.toast("当前设备处于GPRS模式，暂不能播放");
+							}
 							if(app.dev.isMoreWays(type)) {
 								// 获取设备的通道信息
 								plus.nativeUI.showWaiting("获取通道信息中...");
@@ -840,7 +986,7 @@
 								accessory: o,
 								devName: that._fixDevLocation(o.devname),
 								devType: o.devtype,
-								statusCode: o.statuscode
+								statusCode: o.statecode
 							};
 
 							app.page.openForResultBy(pageUrl, 'dev_' + o.type, function(data) {
@@ -923,7 +1069,7 @@
 							mui.confirm("确定把这台分享设备移除列表吗？", "", ["移除", "取消"], function(e) {
 								if(e.index === 0) {
 									ob.next(dev);
-								}else{
+								} else {
 									ob.error(new Error(""));
 								}
 							});
@@ -1017,10 +1163,10 @@
 							return "file://" + iospath;
 						}
 					},
-
-					_getStateByCode: function(code) {
-						return __stateCodearr[code];
+					_findAccName: function(type) {
+						return app.acc.findName(type);
 					},
+
 					_isArm: function(mode) {
 						return app.dev.isArm(mode);
 					},

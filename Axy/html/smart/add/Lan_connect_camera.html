@@ -240,7 +240,7 @@
 							if(!this.setid && this.wifiname && this.wifipwd) {
 								this.nativeSetWIFI(this.wifiname, this.wifipwd);
 							} else {
-								return this.over("设备添加成功", true);
+								return this.over("添加成功，请点击完成！", true);
 							}
 						}.bind(this));
 					},
@@ -280,7 +280,6 @@
 						if(close) {
 							// 连接成功
 							this.isConnected = true;
-							mui.toast("添加成功，请点击完成！");
 							return;
 							// return this.$view.close();***
 						}
@@ -295,9 +294,9 @@
 							//alert(JSON.stringify(data));
 						});
 						// 参数配置WIFI 可选, 无论成功失败
-						setTimeout(function() {
-							this.over("设备添加成功", true);
-						}.bind(this), 1000);
+						//setTimeout(function() {
+						//	this.over("设备添加成功", true);
+						//}.bind(this), 1000);
 					},
 					_showUsed: function() {
 						mui.confirm("可能是摄像机已被添加\n摄像机ID：" + this.devid + "\n请登录已绑定账号，删除摄像机后再重试", "操作受限", ['确认'], function(e) {

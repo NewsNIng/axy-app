@@ -430,5 +430,11 @@
 	}
 	
 	//====================================卡片机4.0 END=====================================
+	
+	
+	// 告警信息通知
+	pgn.NotifyWarningMsg = function(sf, ff){
+		return pg.asyncExec(N, 'NotifyWarningMsg', [], sf, ff);
+	}
 
 }(window));

@@ -184,6 +184,8 @@
 						"add/add_device.html",
 						"Lan_add_camera",
 						"voice1",
+						"voice2",
+						"voice3",
 						"scan",
 					].forEach(function(item){
 						tempw = plus.webview.getWebviewById(item);
@@ -241,7 +243,7 @@
 									accessory: o,
 									devName: that._fixDevLocation(o.devname),
 									devType: o.devtype,
-									statusCode: o.statuscode
+									statusCode: o.statecode
 								};
 
 								app.page.openForResultBy(pageUrl, 'dev_' + o.type, function(data) {

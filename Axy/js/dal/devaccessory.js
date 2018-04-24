@@ -589,9 +589,10 @@
 	 * @param {Object} aid 配件id
 	 * @param {Object} callback
 	 */
-	devaccessory.getinfo = function(devid, aid, callback) {
+	devaccessory.getinfo = function(devid, devtype, aid, callback) {
 		return ra('get', "/devaccessory/getinfo", {
 			devid: devid,
+			devtype: devtype,
 			aid: aid
 		}, callback);
 	}

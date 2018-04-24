@@ -772,10 +772,19 @@
 					// 监听设备变化
 					this.listenDev();
 					
-					// 监听 原生已经收到数据
-					_B.on("InitNativeDevList", function(){
+					Rx.Observable.create(function(ob){
+						// 监听 原生已经收到数据
+						_B.on("InitNativeDevList", function(){
+							ob.next();
+						});
+					})
+					.merge(Rx.Observable.timer(5e3))
+					.last()
+					.subscribe(function(){
 						that.isInitNativeDevList = true;
 					});
+					
+					
 
 				},
 				methods: {
@@ -899,7 +908,9 @@
 						}
 						var type = app.dev.fixType(o.type);
 						Rx.Observable.create(function(ob) {
-
+							if(app.dev.isGPRS(o.workmode)){
+								return mui.toast("当前设备处于GPRS模式，暂不能播放");
+							}
 							if(app.dev.isMoreWays(type)) {
 								// 获取设备的通道信息
 								plus.nativeUI.showWaiting("获取通道信息中...");

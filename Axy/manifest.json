@@ -877,7 +877,9 @@
 				"resources": [
 					"js/common/immersed.js",
 					"js/common/flexible.js",
-					"js/lib/mui.min.js"
+					"js/lib/mui.min.js",
+					"css/app/app.css",
+					"css/lib/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0

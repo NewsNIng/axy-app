@@ -31,6 +31,13 @@
 		"none": 0, // 未知
 
 	};
+	
+	var cantPlayArr = [
+		"none",
+		"AX-904",
+		"WG-100",
+		"AX-903"
+	];
 
 	var _isEqual = function(name, type) {
 		return type & (~(0x01 << 31)) === absTypeidDir[name];
@@ -113,6 +120,12 @@
 	dev.isSafe = function(workmode){
 		var aaa = 0x01 << 28;
 		return (workmode & aaa) == aaa;
+	}
+	
+	// 是否能支持播放视频
+	dev.canPlay = function(type){
+		var name = dev.findName(type);
+		return cantPlayArr.indexOf(name) === -1;
 	}
 
 	app.dev = dev;

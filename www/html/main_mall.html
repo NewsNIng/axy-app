@@ -309,7 +309,7 @@
 					// 获取当前应用版本
 					plus.runtime.getProperty(plus.runtime.appid, function(info) {
 						var appVersion = version2number(info.version);
-						dal.system.update(plus.runtime.version, info.version, function(err, data) {
+						dal.system.update(info.version, function(err, data) {
 							if(err) {
 								return; // mui.toast(err.message);
 							}

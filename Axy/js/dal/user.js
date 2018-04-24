@@ -59,7 +59,8 @@
 		return ra("post", "/user/register", {
 			account: account,
 			passwd: passwd,
-			code: code
+			code: code,
+			imei: IMEI
 		}, callback);
 	}
 

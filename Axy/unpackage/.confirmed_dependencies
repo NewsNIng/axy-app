@@ -641,5 +641,11 @@
       "html/smart/add/blue_connect_camera2.html"
     ],
     "resources": []
+  },
+  "html/smart/devices/dev_error.html": {
+    "resources": [
+      "css/app/app.css",
+      "css/lib/mui.min.css"
+    ]
   }
 }

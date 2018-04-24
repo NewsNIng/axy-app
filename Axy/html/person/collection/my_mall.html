@@ -29,7 +29,7 @@
 			<div class="mui-content mui-scroll-wrapper app-font-size-32">
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
-						<a class="mui-navigate-right">
+						<a class="mui-navigate-right" @tap="openOrder">
 							<span class="app-color-333333">我的订单</span>
 						</a>
 					</li>
@@ -38,18 +38,18 @@
 							<span class="app-color-333333">购物车</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="openAddress">
 						<a class="mui-navigate-right">
 
 							<span class="app-color-333333">收货地址</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell">
+					<!--<li class="mui-table-view-cell">
 						<a class="mui-navigate-right">
 
 							<span class="app-color-333333">关于商城</span>
 						</a>
-					</li>
+					</li>-->
 
 				</ul>
 			</div>
@@ -91,6 +91,14 @@
 					openShopCart: function() {
 						app.mall.openShopCart();
 					},
+					// 订单
+					openOrder: function(){
+						app.mall.openOrder();
+					},
+					// 收获地址
+					openAddress: function(){
+						app.mall.openAddress();
+					}
 				},
 			});
 		</script>

@@ -252,7 +252,7 @@ function addMethod(obj, name, fn) {
 		return __iosSafeBoxPath;
 	}
 
-	ios.getScreenshotByDevId = function(devid) {
+	ios.getScreenshotByDevId = function(devid, noForce) {
 		_account_ = window.localStorage.getItem('_account_');
 		return new Promise(function(resolve, reject) {
 			app.plusReady(function() {
@@ -261,7 +261,9 @@ function addMethod(obj, name, fn) {
 				}
 				var s = "file://" + __Documents + "/account_" + _account_ + "/device_" + devid + "/thumbnail.png";
 				plus.io.resolveLocalFileSystemURL(s, function() {
-					s = s + "?t=" + new Date().getTime();
+					if(!noForce){
+						s = s + "?t=" + new Date().getTime();	
+					}
 					resolve(s);
 				});
 
@@ -275,12 +277,14 @@ function addMethod(obj, name, fn) {
 (function(app) {
 	var android = {};
 
-	android.getScreenshotByDevId = function(devid) {
+	android.getScreenshotByDevId = function(devid, noForce) {
 		var s = "file:///storage/emulated/0/CameraFamily/Thumbnail/" + devid + ".jpeg";
 		return new Promise(function(resolve, reject) {
 			app.plusReady(function() {
 				plus.io.resolveLocalFileSystemURL(s, function() {
-					s = s + "?t=" + new Date().getTime();
+					if(!noForce){
+						s = s + "?t=" + new Date().getTime();	
+					}
 					resolve(s);
 				});
 			})

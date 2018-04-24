@@ -201,7 +201,7 @@
 							if(err) {
 								return this.over(err.message || "连接失败，请重试");
 							}
-							return this.over("设备添加成功", true);
+							return this.over("添加成功，请点击完成！", true);
 						}.bind(this));
 					},
 
@@ -227,7 +227,6 @@
 						if(close) {
 							// 连接成功
 							this.isConnected = true;
-							mui.toast("添加成功，请点击完成！");
 							return;
 							// return this.$view.close();***
 						}
