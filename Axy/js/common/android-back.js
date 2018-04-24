@@ -4,7 +4,7 @@
 		var mall = plus.webview.getWebviewById("mall");
 		
 		new Promise(function(re, rj){
-			if(mall){
+			if(mall && mall.isVisible()){
 				mall.canBack(function(e){
 					if(e.canBack){
 						return mall.back();
