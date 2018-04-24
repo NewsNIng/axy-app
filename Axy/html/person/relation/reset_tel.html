@@ -65,6 +65,29 @@
 				width: 2.133333rem;
 				text-align: center !important;	
 			}
+			
+			/*兼容5s屏幕*/
+			
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				.app-btn-main-ghost {
+					width: 2.333333rem;
+					padding-right: 0;
+					padding-left: 0;
+				}
+				ul:not(.mui-pciker-list) li {
+					height: auto;
+				}
+				
+				input::-webkit-input-placeholder {
+					font-size: 13px !important;
+				}
+				[data-dpr="2"] input::-webkit-input-placeholder {
+					font-size: 26px !important;
+				}
+				[data-dpr="3"] input::-webkit-input-placeholder {
+					font-size: 39px !important;
+				}
+			}
 		</style>
 
 	</head>

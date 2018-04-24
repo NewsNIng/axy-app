@@ -52,9 +52,9 @@
 			BASE_URL: _.BASE_URL_TOP
 		}, function(err, data) {
 
-//			if(!err) {
-//				data = dal.BASE_URL_DEV
-//			}
+			if(!err) {
+				data = dal.BASE_URL_DEV
+			}    
 			callback(err, data);
 		});
 	}

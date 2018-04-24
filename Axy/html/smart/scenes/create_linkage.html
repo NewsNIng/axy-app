@@ -1,0 +1,425 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能场景</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html {
+				background-color: #F4F8FB;
+			}
+			
+			body,
+			.mui-content {
+				background-color: white;
+				margin-bottom: 2rem;
+			}
+			
+			.mui-input-row>label {
+				padding: 0.426666rem 0.346666rem;
+			}
+			
+			.mui-input-row {
+				height: 1.2rem;
+			}
+			
+			.mui-switch {
+				margin: 0 !important;
+				right: 0.346666rem;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.prompt {
+				color: #9F9FA0;
+				padding-left: 0.346666rem;
+				height: 0.906666rem;
+				line-height: 0.906666rem;
+				background-color: #F4F8FB;
+			}
+			
+			.add_conditions {
+				height: 1.653333rem;
+			}
+			
+			.add_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.add_icon {
+				float: left;
+				width: 0.613333rem;
+				left: 1.04rem;
+			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
+			}
+			
+			.title {
+				padding-left: 2.24rem;
+				color: #9F9FA0;
+			}
+			
+			.app-switch-main {
+				height: 22px;
+				width: 39px;
+			}
+			
+			.mui-switch-handle {
+				height: 20px !important;
+				width: 20px !important;
+			}
+			
+			.mui-icon>img {
+				width: 0.526666rem;
+			}
+			
+			.mui-table-view-cell {
+				padding-left: 0;
+			}
+			
+			.trigger_comply {
+				height: 1.386666rem;
+				background-color: white;
+			}
+			
+			.mui-slider-handle {
+				height: 100%;
+			}
+			
+			.item_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%) !important;
+				-webkit-transform: translateY(-50%) !important;
+			}
+			
+			.item_icon {
+				float: left;
+				width: 0.48rem;
+				left: 0.346666rem;
+			}
+			
+			.trigger_comply .title {
+				padding-left: 1.173333rem;
+				color: #333333;
+			}
+			
+			.foot {
+				position: fixed;
+				z-index: 99;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.mainLinkage {
+				width: 100%;
+				height: 5.266666rem;
+				display: flex;
+				display: -webkit-flex;
+			}
+			
+			.mainLinkage>img {
+				width: 100%;
+			}
+			
+			.mainLinkage>div {
+				height: 100%;
+				position: relative;
+				flex: 1;
+			}
+			
+			.mainLinkage>div:first-child:after {
+				content: "";
+				position: absolute;
+				width: 1px;
+				height: 100%;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				background-color: #E5E6E7;
+			}
+			
+			.relation {
+				position: absolute;
+				width: 0.933333rem;
+				right: 0;
+				top: 67%;
+				-webkit-transform: translate(50%, -50%);
+				transform: translate(50%, -50%);
+				background-color: white;
+				border: 0.186666rem solid white;
+				z-index: 2;
+			}
+			
+			.dev_icon {
+				height: 50%;
+				width: 100%;
+				/*background-color: #555555;*/
+				position: relative;
+			}
+			
+			.dev_icon>img {
+				position: absolute;
+				height: 56%;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				-webkit-transform: translate(-50%, -50%);
+			}
+			
+			.dev_name,
+			.dev_text {
+				display: block;
+				text-align: center;
+			}
+			
+			.dev_text {
+				margin-top: 0.133333rem;
+			}
+			
+			.dev_text,
+			.action_item>span:last-child {
+				color: #8D8D8D;
+			}
+			
+			.action_item {
+				display: -webkit-flex;
+				display: flex;
+				justify-content: space-around;
+				padding: 0 0.746666rem;
+				position: relative;
+			}
+			
+			.action_item>span:first-child {
+				display: inline-block;
+				width: 1.8rem;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				color: #333333;
+			}
+			
+			.action_list {
+				height: 49%;
+				overflow: hidden;
+			}
+			
+			.action_list>.action_item:nth-child(4):before {
+				content: "...";
+				color: #333333;
+				position: absolute;
+				text-align: center;
+				line-height: 8px;
+				left: 0;
+				right: 0;
+				/*background-color: #E5E6E7;*/
+			}
+			
+			.action_list>.action_item:nth-child(n+4)>span {
+				color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">新建联动</h1>
+				<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
+					<img src="../../../image/smart/scenes/save_icon.png" />
+				</a>
+			</header>
+
+			<!--<div class="foot app-font-size-34" :class="{}" @tap="onActionTap()">添加动作</div>-->
+
+			<div class="mui-content">
+				<div class="mainLinkage">
+					<img src="../../../image/smart/scenes/add_linkage_schematic.gif"/>
+				</div>
+				<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
+				<div class="mui-input-row app-font-size-28">
+					<label>发送消息</label>
+					<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isSendMsgs}" ref="switch1">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div>
+				<div class="prompt app-font-size-24">如果触发条件</div>
+				<div class="add_conditions app-font-size-28" @tap="onAddCondition()" v-if="conditionList.length === 0">
+					<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					<div class="title app-font-size-28">添加条件</div>
+				</div>
+				<div class="trigger_comply app-font-size-28" @tap="onAddCondition()" v-if="conditionList.length > 0">
+					<img class="item_icon" :src="conditionList[0].img" />
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					<div class="title app-font-size-28" v-text="conditionList[0].title"></div>
+				</div>
+				<div class="prompt app-font-size-24">就执行动作</div>
+				
+				<!--<div style="height: 1px; background-color: #E5E6E7;" v-if="actionList.length === 0"></div>-->
+
+				<template v-for="o,i in actionList" v-if="actionList.length > 0">
+					<div class="trigger_comply app-font-size-28 mui-table-view-cell">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
+						</div>
+						<div class="mui-slider-handle">
+							<img class="item_icon" :src="o.img" />
+							<div class="title app-font-size-28" v-text="o.text+' | '+o.title"></div>
+						</div>
+					</div>
+				</template>
+				<div></div>
+				<div class="add_conditions app-font-size-28" @tap="onActionTap()">
+					<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					<div class="title app-font-size-28">添加执行动作</div>
+				</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#box',
+				data: function() {
+					return {
+						name: "场景开关", // 场景名称
+
+						isBackStore: false,
+						isSendMsgs: false,
+
+						conditionList: [], // 条件列表
+						actionList: [], // 动作列表
+						conditionDev: {
+							//							icon:"../../../image/smart/devices/dev_icon/AX-360@3x.png",
+							icon: "../../../image/smart/scenes/dev_linkage_icons/AX-360@3x.png",
+							name: "Wilin智能摄像机",
+							text: "处于布防时",
+						},
+						action: {
+							icon: "../../../image/smart/scenes/dev_linkage_icons/zndk@3x.png",
+							list: [{
+								name: "厨房灯控",
+								text: "关闭",
+							}, {
+								name: "大厅灯控",
+								text: "关闭",
+							}, {
+								name: "卧室灯控",
+								text: "关闭",
+							}, {
+								name: "卧室灯控",
+								text: "关闭",
+							}, ]
+						},
+					};
+				},
+				mounted: function() {
+					this.$refs.switch1.addEventListener("toggle", function(event) {
+						this.isSendMsgs = event.detail.isActive;
+					}.bind(this));
+				},
+				plusReady: function() {
+
+				},
+				methods: {
+					// 触发条件添加
+					onAddCondition: function() {
+						app.page.openForResultBy('trigger_conditions.html', 'trigger_conditions', function(data) {
+							this.conditionList.unshift({
+								title: data.title,
+								img: data.img,
+							});
+						}.bind(this));
+					},
+
+					// 执行动作添加
+					onActionTap: function() {
+						app.page.openForResultBy('perform_actions.html', 'perform_actions', function(data) {
+							this.actionList.push({
+								title: data.dev.name,
+								img: data.dev.icon,
+								text: data.dev.text,
+							});
+						}.bind(this));
+
+					},
+					onDelete: function(i, e) {
+						mui.swipeoutClose(e.target.parentNode.parentNode);
+						this.actionList.splice(i, 1);
+
+						//this.complys.$remove
+					},
+					// 保存按钮
+					onSaveTap: function() {
+						app.page.setResult({
+							conditionDev: {
+								icon: "../../../image/smart/scenes/dev_linkage_icons/AX-360@3x.png",
+								name: "Wilin智能摄像机",
+								text: "处于布防时",
+							},
+							action: {
+								icon: "../../../image/smart/scenes/dev_linkage_icons/zndk@3x.png",
+								list: [{
+									name: "厨房灯控",
+									text: "关闭",
+								}, {
+									name: "大厅灯控",
+									text: "关闭",
+								}, {
+									name: "卧室灯控",
+									text: "关闭",
+								}, {
+									name: "卧室灯控",
+									text: "关闭",
+								}, ]
+							}
+						}).close();
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

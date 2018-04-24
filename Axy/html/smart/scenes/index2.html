@@ -34,7 +34,7 @@
 				transition-duration: 100ms;
 				box-shadow: 0px 0px 5px #EFEFEF;
 				text-align: center;
-				line-height: 1;
+				/*				line-height: 1;*/
 				color: #333333;
 				position: relative;
 				/*font-weight: bold;*/
@@ -96,7 +96,7 @@
 				min-height: 10%;
 				z-index: 99;
 				/*				background-color: #FFFFFF;*/
-				background-color: #FBFCFD
+				background-color: #F4F8FB;
 			}
 			
 			.com-dev>ul {
@@ -165,19 +165,19 @@
 			</div>
 
 			<div class="mui-content">
-				<template v-for="o,i in scenes">
+				<template v-for="o,i in scenes" v-if="o.type !== 6">
 
-					<div class="app-font-size-30" @tap="onClickTap(o, i, o.img)">
+					<div class="app-font-size-30" @tap="onClickTap(o, i, o.icon)">
 						<span class="setting_icon" @tap.stop="onSetting(i)"><img src="../../../image/smart/scenes/btn_Setup@3x.png"/></span>
-						<img :src="o.img" />{{o.title}}<br /><span class="devWork app-font-size-26">{{o.workCount?o.workCount+'台设备工作中':'未添加任何执行动作'}}</span></div>
+						<img :src="'../../../image/smart/scenes/scenes_icons/'+o.icon+(isLoading&(i === loading)?'.gif':'.png')" />{{o.name}}</div>
 				</template>
 			</div>
-			<div class="foot" @tap="onDevConn()">
+			<div class="foot" @tap="onLinkageTap()">
 				<ul class="mui-table-view app-font-size-32">
 					<li class="mui-table-view-cell devConn">
 						<a class="mui-navigate-right">
 							<span>设备互联</span>
-							<span class="mui-badge" v-text="'3'"></span>
+							<span class="mui-badge" v-text="linkages.length"></span>
 						</a>
 					</li>
 				</ul>
@@ -194,6 +194,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/scene.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -211,68 +212,123 @@
 						mask: false, // 遮罩控制
 						index: -1, // 当前操作对象
 						scenes: [{
-							title: "回家模式",
+							name: "回家模式",
 							state: false,
 							//img: "../../../image/smart/scenes/loading.gif",
-							img: "../../../image/smart/scenes/btn_get home1@3x.png",
+							icon: "1",
 							workCount: 9,
 						}, {
-							title: "离家模式",
+							name: "离家模式",
 							state: false,
-							img: "../../../image/smart/scenes/btn_Be away from home1@3x.png",
+							icon: "2",
 							workCount: 9,
 						}, {
-							title: "回店模式",
+							name: "回店模式",
 							state: false,
-							img: "../../../image/smart/scenes/icon_Back to the shop1@3x.png",
+							icon: "3",
 							workCount: 0,
 						}, {
-							title: "离店模式",
+							name: "离店模式",
 							state: false,
-							img: "../../../image/smart/scenes/btn_Departure1@3x.png",
+							icon: "4",
 							workCount: 0,
 						}],
-						loadingImg: "../../../image/smart/scenes/loading.gif", // 加载动画
-						completeImg: "../../../image/smart/scenes/icon_Clickeffect@3x.png", // 完成标志
+						newScenes: [{
+							"icon": 1,
+							"linkageid": 128,
+							"name": "回家模式",
+							"state": 1,
+							"delay": 0,
+							"type": 1,
+							"push": 1
+						}, {
+							"icon": 2,
+							"linkageid": 129,
+							"name": "离家模式",
+							"state": 1,
+							"delay": 0,
+							"type": 2,
+							"push": 1
+						}, {
+							"icon": 3,
+							"linkageid": 130,
+							"name": "回店模式",
+							"state": 1,
+							"delay": 0,
+							"type": 2,
+							"push": 1
+						}, {
+							"icon": 4,
+							"linkageid": 131,
+							"name": "离店模式",
+							"state": 1,
+							"delay": 0,
+							"type": 2,
+							"push": 1
+						}, {
+							"icon": 10,
+							"linkageid": 139,
+							"name": "自定义模式",
+							"state": 1,
+							"delay": 0,
+							"type": 5,
+							"push": 1
+						}, {
+							"icon": 1,
+							"linkageid": 149,
+							"name": "设备互联",
+							"state": 1,
+							"delay": 0,
+							"type": 6,
+							"push": 1
+						}],
+						loadingImg: "-1", // 加载动画
+						completeImg: "-2", // 完成标志
 						isLoading: false, // 是否加载中
+						loading: -1, // 加载中的模式
 					};
 				},
-				plusReady: function() {},
-				methods: {
-					onNewTap: function() {
-						// 设定场景名称
-						app.page.getInput(function(data) {
-							//							data = data.content.trim();
-							//							if(!data || data.length === 0 || data.length > 12) {
-							//								return mui.toast('场景名称不能为空或者大于12个字符');
-							//							}
-							mui.openWindow('edit_scenes.html', 'edit_scenes', {
-								extras: {
-									name: data
-								}
-							});
-						}, {
-							title: "场景名称",
-							tips: "请输入名称...",
-							maxLength: 12,
-							mLengthMsg: "场景名称不能大于12个字符"
+				computed: {
+					linkages: function() {
+						return this.scenes.filter(function(o, i) {
+							return o.type === 6;
 						});
 					},
+				},
+				plusReady: function() {
+					this.getList();
+				},
+				methods: {
+					getList: function() {
+						plus.nativeUI.showWaiting();
+						dal.scene.list(function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log(JSON.stringify(data));
+							this.scenes = data;
+						}.bind(this));
 
-					onClickTap: function(o, i, img) {
+					},
+
+					onNewTap: function() {
+						mui.openWindow('edit_scenes.html', 'edit_scenes');
+					},
+
+					onClickTap: function(o, i, icon) {
 						if(this.isLoading) {
 							return;
 						}
 						this.isLoading = true;
-						that = this,
-							this.scenes[i].img = this.loadingImg;
+						this.loading = i;
+						that = this;
+						this.scenes[i].icon = this.loadingImg;
 						// 需要执行的操作
 
 						setTimeout(function() {
-							that.scenes[i].img = that.completeImg;
+							that.scenes[i].icon = that.completeImg;
 							setTimeout(function() {
-								that.scenes[i].img = img;
+								that.scenes[i].icon = icon;
 								that.isLoading = false;
+								that.loading = -1;
 							}, 600);
 						}, 1800);
 					},
@@ -282,15 +338,26 @@
 						this.index = i;
 					},
 					onEditTap: function() {
-						mui.openWindow('edit_scenes.html', 'edit_scenes');
 						this.mask = false;
+						mui.openWindow('edit_scenes.html', 'edit_scenes', {
+							extras: {
+								linkageid: this.scenes[this.index].linkageid,
+							}
+						});
 					},
 					onDelTap: function() {
-						this.scenes.splice(this.index, 1);
 						this.mask = false;
+						this.scenes.splice(this.index, 1);
 					},
 					onDevConn: function() {
-						
+
+					},
+					onLinkageTap: function() {
+						mui.openWindow('index_linkage.html', 'index_linkage', {
+							extras: {
+								linkages: this.linkages,
+							}
+						});
 					}
 				}
 			});

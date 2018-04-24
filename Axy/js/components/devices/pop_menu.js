@@ -89,7 +89,7 @@ Vue.component('dev-360', {
 	}
 });
 Vue.component('dev-men', {
-	template: '<div v-show="show"  class="com-dev"><input v-model="content" /><dev-btns @action="onAction"></dev-btns></div>',
+	template: '',
 	data: function() {
 		return {
 			content: "默认值"

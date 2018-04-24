@@ -16,7 +16,7 @@
 			
 			body,
 			.mui-content {
-				/*background-color: white;*/
+				background-color: #F4F8FB;
 				margin-bottom: 2rem;
 				padding-bottom: 0;
 			}
@@ -46,8 +46,22 @@
 			}
 			
 			.add_conditions {
+				/*border-top: 1px solid #E5E6E7;*/
 				height: 1.626666rem;
+				position: relative;
 				background-color: white;
+			}
+			
+			.add_conditions:before {
+				position: absolute;
+				right: 0;
+				top: 0;
+				left: 0;
+				height: 1px;
+				content: '';
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				background-color: #E5E6E7;
 			}
 			
 			.add_icon,
@@ -103,19 +117,26 @@
 				height: 100%;
 			}
 			
-			.item_icon,
-			.more,
-			.title {
+			.item_icon {
+				float: left;
+				width: 0.48rem;
+				left: 0.346666rem;
 				position: relative;
 				top: 50%;
 				transform: translateY(-50%) !important;
 				-webkit-transform: translateY(-50%) !important;
 			}
 			
-			.item_icon {
+			.item_icon:first-child {
 				float: left;
-				width: 0.48rem;
-				left: 0.346666rem;
+			}
+			
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%) !important;
+				-webkit-transform: translateY(-50%) !important;
 			}
 			
 			.trigger_comply .title {
@@ -142,14 +163,49 @@
 			.scenesName {
 				border: none !important;
 				margin-bottom: 0 !important;
-				border-bottom: 1px solid #E5E6E7 !important;
 				height: 1.333333rem !important;
+				border-bottom: 1px solid #E5E6E7 !important;
+			}
+			
+			.scenesName,
+			.messagePush {
+				margin-top: 0.346666rem !important;
 			}
 			
 			.scenesName::-webkit-input-placeholder {
 				color: #D3D3D3 !important;
 			}
 			
+			.scenesIcon {
+				width: 0.64rem;
+			}
+			
+			.messagePush {
+				background-color: white;
+				/*border-top: 1px solid #E5E6E7 !important;*/
+			}
+			
+			.list-item {
+				display: inline-block;
+			}
+			
+			.list-enter-active,
+			.list-leave-active {
+				transition: all 0.8s;
+			}
+			
+			.list-enter,
+			.list-leave-to
+			/* .list-leave-active for below version 2.1.8 */
+			
+			{
+				opacity: 0;
+				transform: translateX(-100%);
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
 		</style>
 	</head>
 
@@ -159,45 +215,65 @@
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">编辑场景</h1>
-				<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
+				<a class="mui-icon mui-pull-right" @tap="onSaveTap()" v-if="saveAlbe">
 					<img src="../../../image/smart/scenes/save_icon.png" />
 				</a>
 			</header>
 
 			<!--<div class="foot app-font-size-34" :class="{}" v-if="actionList.length > 0" @tap="onActionTap()">添加执行任务</div>-->
-			<div class="foot app-font-size-34" :class="{}" @tap="onActionTap()">添加执行任务</div>
+			<!--<div class="foot app-font-size-34" :class="{}" @tap="onActionTap()">添加执行任务</div>-->
 
 			<div class="mui-content">
-				<input type="text" class="scenesName app-font-size-28" placeholder="请输入场景名称">
+				<!--<input :readonly="sceneInfo.basiceinfo.type < 5" type="text" class="scenesName app-font-size-28" placeholder="请输入场景名称" v-model="sceneInfo.basiceinfo.name">-->
 				<ul class="mui-table-view app-font-size-28">
-					<li class="mui-table-view-cell">
+					<li class="mui-table-view-cell" @tap="onNameTap()">
+						<a class="mui-navigate-right">
+							<span>场景名称</span>
+							<span class="mui-badge" v-text="sceneInfo.basiceinfo.name"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onScenesIconTap()">
 						<a class="mui-navigate-right">
 							<span>场景图标</span>
-							<span class="mui-badge">123</span>
+							<span class="mui-badge">
+								<img class="scenesIcon" :src="'../../../image/smart/scenes/scenes_icons/'+sceneInfo.basiceinfo.icon+'.png'"/>
+							</span>
 						</a>
 					</li>
 				</ul>
+				<div class="mui-input-row messagePush app-font-size-28">
+					<label>消息推送</label>
+					<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': sceneInfo.basiceinfo.push}" ref="switch1">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div>
 				<div class="prompt app-font-size-28">执行任务</div>
-				<div class="add_conditions app-font-size-28" @tap="onActionTap()" v-if="actionList.length === 0">
+
+				<transition-group name="list" tag="div">
+
+					<!--<template v-for="o,i in sceneInfo.linkaction" :key="o.index" v-if="sceneInfo.linkaction.length > 0">-->
+
+					<!--<div v-if="false"></div>-->
+
+					<div v-for="o,i in sceneInfo.linkaction" :key="o.index" v-if="sceneInfo.linkaction.length > 0" class="trigger_comply app-font-size-28 mui-table-view-cell">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
+						</div>
+						<div class="mui-slider-handle">
+							<img class="item_icon" :src="devIcon" />
+							<div class="title app-font-size-28" v-text="o.name+' | '+o.smartid"></div>
+						</div>
+					</div>
+					<!--</template>-->
+				</transition-group>
+				<!--<div style="height: 1px; background-color: #E5E6E7;"></div>-->
+				<div class="add_conditions app-font-size-28" @tap="onActionTap()">
 
 					<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
 					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
 					<div class="title app-font-size-28">添加执行任务</div>
 
 				</div>
-				<!--<div style="height: 1px; background-color: #E5E6E7;" v-if="actionList.length === 0"></div>-->
-
-				<template v-for="o,i in actionList" v-if="actionList.length > 0">
-					<div class="trigger_comply app-font-size-28 mui-table-view-cell">
-						<div class="mui-slider-right mui-disabled">
-							<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
-						</div>
-						<div class="mui-slider-handle">
-							<img class="item_icon" :src="o.img" />
-							<div class="title app-font-size-28" v-text="o.text+' | '+o.title"></div>
-						</div>
-					</div>
-				</template>
 			</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -211,6 +287,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script src="../../../js/dal/scene.js" type="text/javascript" charset="utf-8"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -227,54 +304,172 @@
 					return {
 						name: "场景开关", // 场景名称
 
-						isBackStore: false,
-						isSendMsgs: false,
-
 						conditionList: [], // 条件列表
-						actionList: [], // 动作列表
+						actionList: [{
+							title: '123',
+							img: null,
+							text: '456'
+						}, {
+							title: '123',
+							img: null,
+							text: '456'
+						}], // 动作列表
+						scenesIcon: "10",
+						//						isCustom: true,
+						linkageId: null,
+						saveAlbe: false,
+						isEdit: false,
+						devIcon: '../../../image/smart/scenes/select_dev_icons/btn_Videocamera@3x.png',
+						sceneInfo: {
+							"basiceinfo": {
+								"icon": 1,
+								"linkageid": 115,
+								"name": "回家模式",
+								"state": 1,
+								"delay": 0,
+								"type": 6,
+								"push": 1
+							},
+							"linkaction": [{
+									"index": 0,
+									"triggerid": "255",
+									"flage": 0,
+									"linkageid": 115,
+									"name": "test",
+									"enable": 1,
+									"smartid": "AX-403A-2016061400005",
+									"feature": 1
+								},
+								{
+									"index": 1,
+									"triggerid": "245",
+									"flage": 0,
+									"linkageid": 125,
+									"name": "test",
+									"enable": 1,
+									"smartid": "AX-403A-2016061400005",
+									"feature": 1
+								}
+							]
+						},
 					};
 				},
 				mounted: function() {
 					this.$refs.switch1.addEventListener("toggle", function(event) {
-						this.isBackStore = event.detail.isActive;
-					}.bind(this));
-					this.$refs.switch2.addEventListener("toggle", function(event) {
-						this.isSendMsgs = event.detail.isActive;
+						this.sceneInfo.basiceinfo.push = event.detail.isActive ? 1 : 0;
+						this.changeSave();
 					}.bind(this));
 				},
 				plusReady: function() {
 					this.name = this.$view.name || '场景开关';
+					this.linkageId = this.$view.linkageid;
+					this.isEdit = !!this.linkageId;
+					this.saveAlbe = !this.isEdit;
+					if(this.isEdit) {
+						this._getInfo(this.linkageId);
+					}
 				},
 				methods: {
 					// 保存按钮
 					onSaveTap: function() {
 						// 发送请求保存新场景
-
-						// 如果开关并未打开，提示用户是否立即打开
-						if(!this.isBackStore) {
-							mui.confirm('是否立即打开该场景模式？', '', ['立即打开', '取消'], function(e) {
-								console.log(e.index);
+						//						alert(JSON.stringify(this.sceneInfo));
+						plus.nativeUI.showWaiting();
+						if(this.isEdit) {
+							dal.scene.add(this.sceneInfo, function(err, data) {
+								plus.nativeUI.closeWaiting();
+								console.log(err + "," + data);
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("保存成功！");
+								mui.back();
+							});
+						} else {
+							dal.scene.add(this.sceneInfo, function(err, data) {
+								plus.nativeUI.closeWaiting();
+								console.log(err + "," + data);
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("新增成功！");
+								mui.back();
 							});
 						}
 					},
 
 					// 执行动作添加
 					onActionTap: function() {
-						app.page.openForResultBy('perform_actions.html', 'perform_actions', function(data) {
-							this.actionList.push({
-								title: data.dev.name,
-								img: data.dev.icon,
-								text: data.dev.text,
+						app.page.openForResultBy('select_device.html', 'select_device', function(data) {
+							//							this.actionList.push({
+							//								title: data.dev.name,
+							//								img: data.dev.img,
+							//								text: data.text,
+							//							});
+							console.log(data.dev.img);
+							this.sceneInfo.linkaction.push({
+								"index": 0,
+								"triggerid": "255",
+								"flage": 0,
+								"linkageid": 115,
+								"name": data.text,
+								"enable": 1,
+								"smartid": data.dev.name,
+								"feature": 1
 							});
+							this.changeSave();
 						}.bind(this));
 
 					},
+
 					onDelete: function(i, e) {
-						mui.swipeoutClose(e.target.parentNode.parentNode);
-						this.actionList.splice(i, 1);
-						
-						//this.complys.$remove
-					}
+						this.sceneInfo.linkaction.splice(i, 1);
+						this.changeSave();
+					},
+
+					onScenesIconTap: function() {
+						if(this.sceneInfo.basiceinfo.type < 5) {
+							return;
+						}
+						app.page.openForResultBy('select_scenes_icon.html', 'select_scenes_icon', function(data) {
+							this.sceneInfo.basiceinfo.icon = data.scenesIcon;
+							this.changeSave();
+						}.bind(this));
+					},
+					onNameTap: function() {
+						var that = this;
+						if(that.sceneInfo.basiceinfo.type < 5) {
+							return;
+						}
+						app.page.getInput(function(data) {
+							//							plus.nativeUI.showWaiting();
+							//							alert(that.sceneInfo.basiceinfo.name + "," + data.content);
+							that.sceneInfo.basiceinfo.name = data.content;
+							this.changeSave();
+						}, {
+							title: "场景名称",
+							content: that.sceneInfo.basiceinfo.name,
+							r: "nonEmpty",
+							rmsg: "场景名称不能为空",
+							maxLength: 15,
+							mLengthMsg: "最长不超过15个字符！",
+						});
+					},
+
+					_getInfo: function(linkageId) {
+						plus.nativeUI.showWaiting();
+						dal.scene.getInfo(linkageId, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							//							console.log(JSON.stringify(err) + "," + JSON.stringify(data));
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.sceneInfo = data;
+						}.bind(this));
+					},
+					changeSave: function() {
+						this.saveAlbe = true;
+					},
 				}
 			});
 		</script>

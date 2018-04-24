@@ -7,7 +7,7 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.1.0",/*应用版本名称*/
+		"name": "2.1.2",/*应用版本名称*/
 		"code": "20180321"
 	},
 	"description": "",/*应用描述信息*/
@@ -356,7 +356,8 @@
 					"html/person/collection/my_attention.html",
 					"html/person/about.html",
 					"html/person/myself/business.html",
-					"html/person/collection/my_collection.html"
+					"html/person/collection/my_collection.html",
+					"html/smart/devices/help_feedback.html"
 				],
 				"priority": 0
 			},
@@ -469,7 +470,8 @@
 					"js/lib/vue-ni.js",
 					"js/extend/String.js",
 					"html/nearby/pages/list.html",
-					"html/nearby/pages/theme.html"
+					"html/nearby/pages/theme.html",
+					"html/smart/devices/dev_error.html"
 				],
 				"refer": [
 					"html/public/position.html",
@@ -669,7 +671,10 @@
 				"resources": [],
 				"refer": [
 					"html/smart/scenes/trigger_conditions.html",
-					"html/smart/scenes/perform_actions.html"
+					"html/smart/scenes/perform_actions.html",
+					"html/smart/scenes/select_device.html",
+					"html/smart/scenes/select_scenes_icon.html",
+					"html/public/input.html"
 				],
 				"priority": 0
 			},
@@ -1023,7 +1028,8 @@
 				"resources": [],
 				"refer": [
 					"html/smart/scenes/edit_scenes.html",
-					"html/public/input.html"
+					"html/public/input.html",
+					"html/smart/scenes/index_linkage.html"
 				],
 				"priority": 0
 			},
@@ -1176,7 +1182,8 @@
 					"html/smart/devices/dev_65.html",
 					"html/smart/devices/dev_160.html",
 					"html/smart/devices/dev_22.html",
-					"html/smart/devices/dev_34.html"
+					"html/smart/devices/dev_34.html",
+					"html/smart/devices/dev_21.html"
 				],
 				"priority": 0
 			},
@@ -1263,6 +1270,35 @@
 				"resources": [],
 				"refer": [
 					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/select_device.html": {
+				"resources": [
+					"image/smart/scenes/select_dev_icons/btn_Intelligentcurtainscontroller@3x.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/smart/scenes/create_linkage.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/trigger_conditions.html",
+					"html/smart/scenes/perform_actions.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/index_linkage.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/create_linkage.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/help_feedback.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/hf_camera.html"
 				],
 				"priority": 0
 			}

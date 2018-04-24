@@ -1,0 +1,528 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能场景</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html {
+				background-color: #F4F8FB;
+			}
+			
+			body,
+			.mui-content {
+				background-color: white;
+				margin-bottom: 2rem;
+			}
+			
+			.mui-content {
+				padding-bottom: 0;
+			}
+			
+			.mui-input-row>label {
+				padding: 0.426666rem 0.346666rem;
+			}
+			
+			.mui-input-row {
+				height: 1.2rem;
+			}
+			
+			.mui-switch {
+				margin: 0 !important;
+				right: 0.346666rem;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.prompt {
+				color: #9F9FA0;
+				padding-left: 0.346666rem;
+				height: 0.906666rem;
+				line-height: 0.906666rem;
+				background-color: #F4F8FB;
+			}
+			
+			.add_conditions {
+				height: 1.653333rem;
+			}
+			
+			.add_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.add_icon {
+				float: left;
+				width: 0.613333rem;
+				left: 1.04rem;
+			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
+			}
+			
+			.title {
+				padding-left: 2.24rem;
+				color: #9F9FA0;
+			}
+			
+			.app-switch-main {
+				height: 22px;
+				width: 39px;
+			}
+			
+			.mui-switch-handle {
+				height: 20px !important;
+				width: 20px !important;
+			}
+			
+			.mui-icon>img {
+				width: 0.526666rem;
+			}
+			
+			.mui-table-view-cell {
+				padding-left: 0;
+			}
+			
+			.trigger_comply {
+				height: 1.386666rem;
+				background-color: white;
+			}
+			
+			.mui-slider-handle {
+				height: 100%;
+			}
+			
+			.item_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%) !important;
+				-webkit-transform: translateY(-50%) !important;
+			}
+			
+			.item_icon {
+				float: left;
+				width: 0.48rem;
+				left: 0.346666rem;
+			}
+			
+			.trigger_comply .title {
+				padding-left: 1.173333rem;
+				color: #333333;
+			}
+			
+			.foot {
+				position: fixed;
+				z-index: 99;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.mainLinkage {
+				width: 100%;
+				height: 5.8rem;
+				display: flex;
+				display: -webkit-flex;
+			}
+			
+			.mainLinkage>div {
+				height: 100%;
+				position: relative;
+				flex: 1;
+			}
+			
+			.mainLinkage>div:first-child:after {
+				content: "";
+				position: absolute;
+				width: 1px;
+				height: 100%;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				background-color: #E5E6E7;
+			}
+			
+			.relation {
+				position: absolute;
+				width: 0.933333rem;
+				right: 0;
+				top: 67%;
+				-webkit-transform: translate(50%, -50%);
+				transform: translate(50%, -50%);
+				background-color: white;
+				border: 0.186666rem solid white;
+				z-index: 2;
+			}
+			
+			.dev_icon {
+				height: 50%;
+				width: 100%;
+				/*background-color: #555555;*/
+				position: relative;
+			}
+			
+			.dev_icon>img {
+				position: absolute;
+				height: 56%;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				-webkit-transform: translate(-50%, -50%);
+			}
+			
+			.dev_name,
+			.dev_text {
+				display: block;
+				text-align: center;
+			}
+			
+			.dev_text {
+				margin-top: 0.133333rem;
+			}
+			
+			.dev_text,
+			.action_item>span:last-child {
+				color: #8D8D8D;
+			}
+			
+			.action_item {
+				display: -webkit-flex;
+				display: flex;
+				justify-content: space-between;
+				padding: 0 0.746666rem;
+				position: relative;
+			}
+			
+			.action_item>span:first-child {
+				display: inline-block;
+				width: 1.8rem;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				color: #333333;
+			}
+			
+			.action_list {
+				height: 49%;
+				overflow: hidden;
+			}
+			
+			.action_list>.action_item:nth-child(4):before {
+				content: "...";
+				color: #333333;
+				position: absolute;
+				text-align: center;
+				line-height: 8px;
+				padding-left: 0.746666rem;
+				left: 0;
+				/*right: 0;*/
+				/*background-color: #E5E6E7;*/
+			}
+			
+			.action_list>.action_item:nth-child(n+4)>span {
+				color: white;
+			}
+			
+			.mainLinkage .mui-switch {
+				position: absolute;
+				display: inline-block;
+				top: 0.533333rem;
+				right: 0.346666rem;
+				z-index: 90;
+			}
+			
+			.mui-disabled {
+				opacity: 1 !important;
+			}
+			
+			.setting_icon {
+				width: 0.826666rem;
+				position: absolute;
+				bottom: 0.16rem;
+				right: 0.186666rem;
+				border: 0.16rem solid white;
+			}
+			
+			.com-dev-mask {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 98;
+			}
+			
+			.com-dev {
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				min-height: 10%;
+				z-index: 99;
+				/*				background-color: #FFFFFF;*/
+				background-color: #F4F8FB;
+			}
+			
+			.com-dev>ul {
+				text-align: center;
+			}
+			
+			.com-dev>ul>.mui-table-view-cell:after {
+				left: 0;
+				background-color: #F2F2F3;
+			}
+			
+			.com-dev>.cancel {
+				margin-bottom: 0 !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">设备互联</h1>
+				<a class="app-icon-plus mui-pull-right" @tap="onNewTap()"></a>
+			</header>
+			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
+				<slot></slot>
+				<div class="com-dev app-font-size-28" v-show="mask">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" @tap="onEditTap()">编辑互联</li>
+						<li class="mui-table-view-cell" @tap="onDelTap()">删除互联</li>
+					</ul>
+					<ul class="mui-table-view cancel">
+						<li class="mui-table-view-cell" @tap="mask = false">取消</li>
+					</ul>
+				</div>
+			</div>
+			<div class="mui-content">
+				<div class="mui-input-row app-font-size-28">
+					<label>全部开启</label>
+					<div @tap="onAllSwitchToggle()" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': isAllOpen}">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div>
+				<template v-for="o,i in linkageList">
+
+					<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
+					<div class="mainLinkage">
+						<div>
+							<img class="relation" src="../../../image/smart/scenes/icon_Relation@3x.png" />
+							<div class="dev_icon">
+								<img :src="o.conditionDev.icon" />
+							</div>
+							<span class="dev_name app-font-size-28 app-color-333333" v-text="o.conditionDev.name"></span>
+							<span class="dev_text app-font-size-24" v-text="o.conditionDev.text"></span>
+						</div>
+						<div>
+							<div @tap="onSwitchToggle(o)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': o.isOpen}">
+								<div class="mui-switch-handle"></div>
+							</div>
+							<img @tap="onSettingTap(i)" class="setting_icon" src="../../../image/smart/scenes/dev_linkage_icons/btn_Setup@3x.png" />
+							<div class="dev_icon">
+								<img :src="o.action.icon" />
+							</div>
+							<div class="action_list">
+								<div class="action_item" v-for="o1 in o.action.list">
+									<span class="app-font-size-28" v-text="o1.name"></span><span class="app-font-size-28" v-text="o1.text">2</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</template>
+
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#box',
+				data: function() {
+					return {
+						name: "场景开关", // 场景名称
+						mask: false, // 遮罩控制
+						index: -1, // 当前操作对象
+
+						conditionList: [], // 条件列表
+						actionList: [], // 动作列表
+						linkages: [{
+							"icon": 1,
+							"linkageid": 149,
+							"name": "设备互联",
+							"state": 1,
+							"delay": 0,
+							"type": 6,
+							"push": 1
+						}],
+						linkageList: [{
+								isOpen: false,
+								conditionDev: {
+									icon: "../../../image/smart/scenes/dev_linkage_icons/AX-360@3x.png",
+									name: "Wilin智能摄像机",
+									text: "处于布防时",
+								},
+								action: {
+									icon: "../../../image/smart/scenes/dev_linkage_icons/zndk@3x.png",
+									list: [{
+										name: "厨房灯控",
+										text: "关闭",
+									}, {
+										name: "大厅灯控",
+										text: "关闭",
+									}, {
+										name: "卧室灯控",
+										text: "关闭",
+									}, {
+										name: "卧室灯控",
+										text: "关闭",
+									}, ]
+								},
+							},
+														{
+														isOpen: true,
+														conditionDev: {
+															icon: "../../../image/smart/scenes/dev_linkage_icons/AX-360@3x.png",
+															name: "Wilin智能摄像机",
+															text: "处于布防时",
+														},
+														action: {
+															icon: "../../../image/smart/scenes/dev_linkage_icons/zndk@3x.png",
+															list: [{
+																name: "厨房灯控",
+																text: "关闭",
+															}, {
+																name: "大厅灯控",
+																text: "关闭",
+															}, {
+																name: "卧室灯控",
+																text: "关闭",
+															}]
+														},
+													}, {
+														isOpen: false,
+														conditionDev: {
+															icon: "../../../image/smart/scenes/dev_linkage_icons/AX-360@3x.png",
+															name: "Wilin智能摄像机",
+															text: "处于布防时",
+														},
+														action: {
+															icon: "../../../image/smart/scenes/dev_linkage_icons/zndk@3x.png",
+															list: [{
+																name: "厨房灯控",
+																text: "关闭",
+															}, {
+																name: "大厅灯控",
+																text: "关闭",
+															}, ]
+														},
+													}
+						],
+					};
+				},
+				computed: {
+					isAllOpen: function() {
+						return this.linkageList.every(function(item) {
+							return item.isOpen;
+						});
+					},
+				},
+				mounted: function() {
+					//					this.$refs.switchs[2].addEventListener("toggle", function(event) {
+					//						this.isAllOpen = event.detail.isActive;
+					//					}.bind(this));
+
+					mui(".mui-switch").switch();
+
+				},
+				plusReady: function() {
+					this.linkages = this.$view.linkages;
+					console.log(JSON.stringify(this.linkages));
+				},
+				methods: {
+					onEditTap: function(o) {
+						mui.openWindow();
+					},
+
+					//
+					onSwitchToggle: function(o) {
+						o.isOpen = !o.isOpen;
+					},
+					onAllSwitchToggle: function() {
+						// this.isAllOpen = !this.isAllOpen;
+						var want = !this.isAllOpen;
+						this.linkageList.forEach(function(item) {
+							item.isOpen = want;
+						});
+					},
+					onSettingTap: function(i) {
+						this.mask = true;
+						this.index = i;
+					},
+					onEditTap: function() {
+						this.mask = false;
+						mui.openWindow('create_linkage.html', 'create_linkage', {
+							extras: {
+								o: this.linkageList[this.index],
+							}
+						});
+					},
+					onDelTap: function() {
+						this.mask = false;
+						this.linkageList.splice(this.index, 1);
+					},
+					onNewTap: function() {
+						app.page.openForResultBy('create_linkage.html', 'create_linkage', function(data) {
+							this.linkageList.push({
+								isOpen: true,
+								conditionDev: data.conditionDev,
+								action: data.action,
+							});
+						}.bind(this));
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>
