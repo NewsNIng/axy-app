@@ -625,8 +625,7 @@
 						longitude: 0,
 						latitude: 0,
 						city: '深圳',
-						
-						
+
 						isInitNativeDevList: false,
 
 					};
@@ -771,20 +770,22 @@
 
 					// 监听设备变化
 					this.listenDev();
-					
-					Rx.Observable.create(function(ob){
-						// 监听 原生已经收到数据
-						_B.on("InitNativeDevList", function(){
-							ob.next();
+
+					Rx.Observable.create(function(ob) {
+							// 监听 原生已经收到数据
+							_B.on("InitNativeDevList", function() {
+								ob.next();
+							});
+						})
+						.merge(Rx.Observable.create(function(ob) {
+							_B.on('login_success', function() {
+								ob.next();
+							});
+						}).delay(3e3))
+						//.first()
+						.subscribe(function() {
+							that.isInitNativeDevList = true;
 						});
-					})
-					.merge(Rx.Observable.timer(5e3))
-					.last()
-					.subscribe(function(){
-						that.isInitNativeDevList = true;
-					});
-					
-					
 
 				},
 				methods: {
@@ -908,7 +909,7 @@
 						}
 						var type = app.dev.fixType(o.type);
 						Rx.Observable.create(function(ob) {
-							if(app.dev.isGPRS(o.workmode)){
+							if(app.dev.isGPRS(o.workmode)) {
 								return mui.toast("当前设备处于GPRS模式，暂不能播放");
 							}
 							if(app.dev.isMoreWays(type)) {
@@ -949,11 +950,11 @@
 								});
 							}
 						}).subscribe(function(data) {
-							
-							if(!that.isInitNativeDevList){
+
+							if(!that.isInitNativeDevList) {
 								return mui.toast("设备初始化中...请稍后...");
 							}
-							
+
 							var w1 = data.b;
 							var w2 = type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
@@ -985,7 +986,7 @@
 					},
 					// 轮播点击
 					onAdvertTap: function(o) {
-						
+
 						// 打开内部浏览器
 						o.adlink && app.page.openBrowser({
 							url: o.adlink
@@ -1001,7 +1002,7 @@
 								this.dev = data[0];
 								//this.dev.devimg = this._getDevImg(this.dev.devid);
 								this.dev.location = this.dev.location ? this.dev.location.replace(/<[^<]*>/gi, "") : "";
-							}else{
+							} else {
 								this.dev.devid = "";
 							}
 
@@ -1128,12 +1129,11 @@
 
 					// 查看猜你喜欢更多
 					onStoreMore: function() {
-
 						_B.emit('tabar', {
 							mindex: 2,
 							nindex: 1
 						}, {
-							views: [this.$view.parent()],
+							views: ["main"],
 						});
 					},
 
@@ -1144,7 +1144,7 @@
 							mindex: 2,
 							nindex: 0
 						}, {
-							views: [this.$view.parent()],
+							views: ["main"],
 						});
 					},
 					// 查看我的设备

@@ -645,7 +645,11 @@
   "html/smart/devices/dev_error.html": {
     "resources": [
       "css/app/app.css",
-      "css/lib/mui.min.css"
-    ]
+      "css/lib/mui.min.css",
+      "js/common/immersed.js",
+      "js/lib/mui.min.js",
+      "js/common/flexible.js"
+    ],
+    "refer": []
   }
 }

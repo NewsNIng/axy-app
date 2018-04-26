@@ -21,8 +21,8 @@
 
 	// 配置	
 	var config = {
-		url: "http://47.106.92.195/shop/#home",
-//		url: "http://192.168.1.150:8080/#/home",
+//		url: "http://47.106.92.195/shop/#home?t=" + +new Date(),
+		url: "http://192.168.1.161:8080/#/home?t=" + +new Date(),
 		id: "mall",
 		routerCmdName: "router",
 	};
@@ -42,7 +42,7 @@
 			path: '/order/index',
 			query: {
 				goindex: true,
-
+				state: 0
 			}
 		},
 
@@ -54,6 +54,7 @@
 			}
 		},
 		
+		// 收货地址
 		ADDRESS: {
 			path: '/user/address',
 			query: {
@@ -73,7 +74,9 @@
 			popGesture: "hide",
 			top: (window.immersed || 0) + 'px',
 			bottom: '0px',
-			background: "#06c1ae"
+			background: "#06c1ae",
+			cachemode: "noCache",
+			
 		});
 	};
 
@@ -114,6 +117,7 @@
 		}).then(function() {
 			// 标识为 app 发送的命令
 			data.query.app = true;
+			console.log(JSON.stringify(data));
 			_B.emit(config.routerCmdName, data, {
 				views: [config.id]
 			});

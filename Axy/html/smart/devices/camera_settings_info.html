@@ -94,6 +94,12 @@
 							<span class="mui-badge" v-text="wifiinfo.ip || ''"></span>
 						</a>
 					</li>
+					<li class="mui-table-view-cell" v-if="is360">
+						<a class="">
+							<span>MAC地址</span>
+							<span class="mui-badge" v-text="wifiinfo.mac || ''"></span>
+						</a>
+					</li>
 					<li style="background-color: #F4F8FB !important;" />
 				</ul>
 
