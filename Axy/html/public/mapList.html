@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>附近地址</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content,
+			{
+				background-color: #F4F8FB;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left app-color-white"></a>
+			<h1 class="mui-title">附近地址</h1>
+		</header>
+		<div class="mui-content app-font-size-28">
+			<ul class="mui-table-view">
+				<template v-for="o,i in list">
+					<li class="mui-table-view-cell mui-media" @tap="onTap(o)">
+						<a href="javascript:;">
+							<div class="mui-media-body">
+								<span>{{o.name}}</span>
+								<p class="mui-ellipsis">{{o.address}}</p>
+							</div>
+						</a>
+					</li>
+				</template>
+			</ul>
+		</div>
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+		<script src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						list: []
+					};
+				},
+				plusReady: function() {
+					this.$view.setStyle({
+						scrollIndicator: 'none'
+					});
+					this.list = this.$view.plist || [];
+				},
+				methods: {
+					onTap: function(o) {
+						app.page.setResult({
+							p: o
+						}).close();
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

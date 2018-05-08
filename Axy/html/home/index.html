@@ -1,0 +1,1186 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+
+		<link rel="stylesheet" href="../../css/app/app.css" />
+
+		<link rel="stylesheet" href="../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../css/app/module/poppicker.css" />
+
+		<link rel="stylesheet" href="../../css/app/module/home/home.css" />
+		<link rel="stylesheet" href="../../css/app/module/home/warnmsg.css" />
+
+		<style type="text/css">
+			header img {
+				width: 0.48rem;
+			}
+			
+			.mui-bar-nav~.mui-content .mui-pull-top-pocket {
+				top: 0;
+			}
+			
+			.mui-bar-nav~.mui-content {
+				padding-top: 0;
+			}
+			
+			.mui-slider-indicator .mui-indicator {
+				background: transparent;
+				margin: 0 1.5px;
+				border: .5px white solid;
+			}
+			
+			.mui-slider-item {
+				width: 100%;
+				height: 0 !important;
+				padding-top: 50.6666%;
+				background-size: cover;
+				background-position: center;
+			}
+			
+			.model_type {
+				background-color: white;
+			}
+			
+			.model_type>div {
+				padding: 0.32rem 0;
+				display: inline-block;
+				/*//修改20%-->25%*/
+				width: 25%;
+				text-align: center;
+			}
+			
+			.model_type>div>img {
+				width: 1.04rem;
+			}
+			/*3轮播head阴影*/
+			/*.mui-slider{
+				position: relative;
+			}
+			.mui-slider:before{
+				z-index: 10;
+				content: "";
+				height: 0;
+				width: 100%;
+				position: absolute;
+				left: 0;top: 0;
+				filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=red,endcolorstr=blue,gradientType=0);
+			    background: transparent;
+			    background:-webkit-gradient(linear, 0 0, 0 bottom, from(rgba(0, 0, 0, 1)), to(rgba(255, 255, 255, 0.2))); 
+			}*/
+			/*3end*/
+			
+			.dev_menu>div {
+				padding: 0.4rem 0;
+				vertical-align: middle;
+				display: inline-block;
+			}
+			
+			.dev_menu .mui-icon img {
+				width: 0.506666rem;
+			}
+			
+			.dev_menu .mui-icon>* {
+				vertical-align: middle;
+			}
+			
+			.dev_menu .d1 {
+				width: 50%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+			
+			.dev_menu .d1>span {
+				width: 80%;
+				white-space: nowrap;
+				display: inline-block;
+			}
+			
+			.dev_menu .d2 {
+				overflow: hidden;
+				float: right;
+				margin-right: 1rem;
+			}
+			
+			.dev_menu .d3 {
+				text-align: right;
+				float: right;
+				margin-right: 0.15rem;
+			}
+			
+			.card {
+				background-color: white !important;
+				margin-top: 0.266666rem;
+			}
+			
+			.card_head {
+				padding: 0 0.346666rem;
+				color: #646464;
+			}
+			
+			.card_head>* {
+				height: 0.986666rem;
+				line-height: 0.986666rem;
+			}
+			
+			.card_head>* {
+				line-height: 0.986666rem;
+				color: #A8A8A9;
+			}
+			
+			.card_head>div>* {
+				vertical-align: middle;
+			}
+			
+			.card_head img {
+				width: .17rem;
+			}
+			
+			.model_type>div>span {
+				display: block;
+				color: #2E2E2E;
+				margin-top: 0.266666rem;
+			}
+			/*设备影像*/
+			
+			.device_show {
+				padding: 0 0.28rem 0 0.28rem;
+				background: white;
+				position: relative;
+			}
+			/*设备预览图*/
+			/*设备状态*/
+			
+			.device_show .dev_status {
+				z-index: 9;
+				position: absolute;
+				background-color: #2bb8aa;
+				width: 0.76rem;
+				height: 0.4rem;
+				color: #f5fbfa;
+				right: 0.626666rem;
+				top: 0.306666rem;
+				line-height: 0.4rem;
+				text-align: center;
+				border-radius: 2px;
+			}
+			
+			.device_show .dev_status.offline {
+				background-color: #9F9FA0;
+			}
+			/*设备名称及菜单====start====*/
+			/*设备名称及菜单====end====*/
+			/*猜你喜欢====start====*/
+			
+			.user_like {
+				background-color: white;
+				margin-top: 0.266666rem;
+				padding: 0.346666rem;
+			}
+			
+			.like_image {
+				padding: 0 0.266666rem;
+				width: 100%;
+				overflow: hidden;
+				/*height: 230px;*/
+			}
+			
+			.like_image>div {
+				float: left;
+				position: relative;
+				margin: 0 1%;
+				width: 48%;
+				height: 0 !important;
+				padding-bottom: 30%;
+				margin-bottom: 2%;
+				background-size: cover;
+				background-position: center;
+			}
+			
+			.like_image>div>img {
+				width: 100%;
+			}
+			
+			.like_image>div>span {
+				position: absolute;
+				bottom: 17%;
+				/*transform: translateX(-50%);*/
+				color: #FFFFFF;
+				font-size: 1.2rem;
+				width: 100%;
+				text-align: center;
+			}
+			/*猜你喜欢====end====*/
+			/*附近的店====start====*/
+			
+			.near_shop {
+				background-color: white;
+				margin-top: 12px;
+				padding: 16px;
+			}
+			
+			.near_title {
+				font-size: 14px;
+				color: #646464;
+			}
+			
+			.shop_image {
+				padding: 0 0.266666rem 0.32rem 0.266666rem;
+				overflow-x: scroll;
+				overflow-y: hidden;
+				white-space: nowrap;
+				width: 100%;
+				margin-right: 0.266666rem !important;
+			}
+			
+			.shop_image>div {
+				display: inline-block;
+				border: 1px solid #F5F5F5;
+				box-sizing: content-box;
+				height: 0;
+				margin: 0 1%;
+				width: 31.33%;
+				padding-bottom: 31.33%;
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+			}
+			/*附近的店====end====*/
+			/*设备背景图fix*/
+			
+			.imgdiv {
+				height: 4.666666rem;
+				width: 9.306666rem;
+				background-image: url(../../image/smart/devices/bg/camera@3x.png);
+				background-size: cover;
+				/*background-position: center;*/
+				background-repeat: no-repeat;
+				position: relative;
+			}
+			
+			.imgdiv.WG-100 {
+				background-image: url(../../image/smart/devices/bg/wg_100@3xweb.png);
+			}
+			
+			.imgdiv.AX-903 {
+				background-image: url(../../image/smart/devices/bg/903@3xweb.png);
+			}
+			
+			.imgdiv.AX-904 {
+				background-image: url(../../image/smart/devices/bg/904@3xweb.png);
+			}
+			
+			.imgdiv.VH-104GN {
+				background-image: url(../../image/smart/devices/bg/104gn@3x.png);
+			}
+			
+			.imgdiv.WG-100,
+			.imgdiv.AX-903,
+			.imgdiv.AX-904 {
+				/*pointer-events: none;*/
+			}
+			/*设备背景图fix--------*/
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+			/*修复ix 黑条？*/
+			
+			.mui-ios header {
+				background: none !important;
+				background-color: transparent !important;
+			}
+			/*被分享设备无设置和分享按钮*/
+			
+			.relation-share .mui-icon.d3,
+			.relation-share .mui-icon.d2 {
+				opacity: 0 !important;
+				pointer-events: none !important;
+				order: -1;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="approom">
+
+			<header class="mui-bar mui-bar-nav mui-bar-transparent" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-icon mui-pull-left" @tap="onMessageTap()">
+					<img src="../../image/home/message.png" />
+				</a>
+				<h1 class="mui-title"></h1>
+				<a class="mui-icon mui-pull-right" @tap="onPlusTap()">
+					<img src="../../image/home/plus.png" />
+				</a>
+				<a class="mui-icon mui-pull-right" style="margin-right: 0.133333rem;" @tap="onSearchTap()">
+					<img src="../../image/home/search.png" />
+				</a>
+			</header>
+
+			<div>
+
+			</div>
+
+			<!--<div class="mui-content noImmersed mui-scroll-wrapper">
+				<div class="mui-scroll">-->
+
+			<div id="slider" class="mui-slider" v-if="imgList.length > 0">
+				<div class="mui-slider-group mui-slider-loop">
+					<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+					<div @tap="onAdvertTap(imgLast)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgLast.adimg"></div>
+					<!-- 中间 -->
+					<div @tap="onAdvertTap(o)" class="mui-slider-item img-lazy-load" v-for="o, index in imgList" :data-src="o.adimg"></div>
+					<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+					<div @tap="onAdvertTap(imgFrist)" class="mui-slider-item mui-slider-item-duplicate img-lazy-load" :data-src="imgFrist.adimg"></div>
+				</div>
+				<div class="mui-slider-indicator">
+					<div v-if="imgList.length !== 1" v-for="o, index in imgList" class="mui-indicator" :class="index === 0 ? 'mui-active':''"></div>
+				</div>
+			</div>
+			<template v-else>
+				<div style="height: 0;width: 100%; padding-top: 50%;">
+
+				</div>
+			</template>
+
+			<!--<div class="home-warnmsg">
+				<div class="home-warnmsg-item">
+					<img src="../../image/home/icon_Alarmnews@3x.png" />
+					<span class="app-font-size-26 mui-ellipsis">
+							汇海威视VH-104GN 第一路有线防区
+						</span>
+					<span class="app-font-size-26">6分钟前</span>
+				</div>
+				
+				<div class="home-warnmsg-item">
+					<img src="../../image/home/icon_Alarmnews@3x.png" />
+					<span class="app-font-size-26 mui-ellipsis">
+							汇海威视VH-104GN 第一路有线防区
+						</span>
+					<span class="app-font-size-26">6分钟前</span>
+				</div>
+				
+			</div>-->
+			<warn-msg></warn-msg>
+
+			<div class="model_type">
+				<template v-for="o,i in modelTypes">
+					<div @tap="onModelTap(o, i)">
+						<img :src="o.src" />
+						<span class="app-font-size-26">{{o.name}}</span>
+					</div>
+				</template>
+
+			</div>
+			<template v-if="dev.devid">
+				<div class="card">
+					<div class="card_head">
+						<span class="app-font-size-30">我的设备</span>
+						<div @tap="onDeviceMore()" class="app-font-size-24 mui-pull-right">
+
+							<span class="mui-icon">
+								<span class="app-font-size-24">查看更多</span>
+							<img src="../../image/home/see_more.png" />
+							</span>
+						</div>
+					</div>
+
+					<div class="device_show" :class="_getDevRelation(dev.relation)">
+
+						<div class="img imgdiv" ref="devimgel" :class="_getDevName(dev.type)" v-devbg :data-devid="dev.devid" @tap="openCamListWindow($event)">
+
+						</div>
+						<div class="dev_status app-font-size-22" :class="dev.online === 1? '':'offline'">{{dev.online === 1 ? '在线': '离线'}}</div>
+						<div class="dev_menu">
+							<div class="mui-icon d1">
+								<img src="../../image/home/dev_camera.png" />
+								<span class="app-font-size-24 app-color-main">
+									{{_fixDevLocation(dev.location) || dev.devid}}
+								</span>
+							</div>
+
+							<div class="mui-icon d3" @tap="onDeviceSetTap()">
+								<img src="../../image/home/dev_setting.png" />
+								<span class="app-font-size-24" style="color: #696969;">设置</span>
+							</div>
+
+							<div class="mui-icon d2" @tap="onShareTap()">
+								<img src="../../image/home/dev_share.png" />
+								<span class="app-font-size-24" style="color: #696969;">分享</span>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</template>
+			<template v-else>
+				<div style="text-align: center;">
+					<img @tap="addDeviceTap()" src="../../image/home/btn_Adddevice@3x.png" style="width: 1.893333rem;margin-top: 1.413333rem;" />
+					<div class="app-font-size-28 app-color-main" style="margin-top: 0.266666rem;margin-bottom: 1.12rem;">添加设备</div>
+					<div class="app-font-size-28 app-color-333333" style="margin: 0.453333rem 0;">这里空空如也，快让你的设备智能起来吧~</div>
+				</div>
+			</template>
+
+			<!--v-if="like.length"-->
+			<div class="card">
+				<div class="card_head">
+					<span class="app-font-size-30">猜你喜欢</span>
+					<div @tap="onStoreMore()" class="app-font-size-24 mui-pull-right">
+
+						<span class="app-font-size-24">查看更多</span>
+						<img src="../../image/home/see_more.png" />
+					</div>
+				</div>
+
+				<div class="like_image">
+
+					<template v-for="o,i in like">
+						<div :style="{backgroundImage: 'url('+o.img+')'}" @tap="onLikeItemTap(o)">
+
+							<span class="app-font-size-24">{{o.title}}</span>
+						</div>
+					</template>
+
+					<!--<div>
+							<img src="../../image/home/like_a.png" />
+							<span>舌尖上的诱惑</span>
+						</div>
+						<div>
+							<img src="../../image/home/like_b.png" />
+							<span>周末来嗨呀</span>
+						</div>
+
+						<div>
+							<img src="../../image/home/like_c.png" />
+							<span>限时特惠</span>
+						</div>
+						<div>
+							<span>一起来看红包雨</span>
+							<img src="../../image/home/like_d.png" />
+						</div>-->
+
+				</div>
+			</div>
+			<div class="card" style="margin-bottom: 0.266666rem;">
+				<div class="card_head">
+					<span class="app-font-size-30">附近的店</span>
+					<div @tap="onNearbyMore()" class="app-font-size-24 mui-pull-right">
+
+						<span class="app-font-size-24">查看更多</span>
+						<img src="../../image/home/see_more.png" />
+
+					</div>
+				</div>
+				<div class="shop_image">
+					<template v-for="o,i in nearShops">
+						<div @tap="onNearItemTap(o)" class="shop_a" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
+					</template>
+
+				</div>
+			</div>
+
+		</div>
+		<!--
+			</div>
+		</div>-->
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../js/dal/home.js"></script>
+		<script type="text/javascript" src="../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../js/dal/devparam.js"></script>
+		<script type="text/javascript" src="../../js/dal/store.js"></script>
+		<script type="text/javascript" src="../../js/dal/message.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/app/app-dev.js"></script>
+		<!--<script type="text/javascript" src="../../js/app/app-auth.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
+		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
+
+		<script type="text/javascript" src="../../js/plug/PlugDevManager.js"></script>
+		<script type="text/javascript" src="../../js/plug/PlugH5NativeBridge.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.poppicker.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript" src="temp_like_json.js"></script>
+
+		<script type="text/javascript" src="../../js/extend/Date.js"></script>
+
+		<script type="text/javascript" src="../../js/components/home/warnmsg.js"></script>
+
+		<script type="text/javascript">
+			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
+
+			Vue.directive('devbg', {
+				inserted: function(el) {
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid).then(function(path) {
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				},
+				update: function(el) {
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid).then(function(path) {
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				},
+			});
+
+			var advert_cache = new ni.Cache('advert_cache', []);
+
+			var POSITION = new ni.Cache('position_cache', null);
+
+			var _B = new ni.Broadcast();
+
+			var wayPick;
+
+			var runManager, devManager;
+
+			mui.init({
+				gestureConfig: {
+					longtap: true
+				}
+			});
+
+			var __relationarr = ["self", "none", "share"];
+
+			var vm = new Vue({
+				el: '#approom',
+				data: function() {
+					return {
+
+						imgList: advert_cache.data,
+						modelTypes: [{
+								name: "回家模式",
+								src: "../../image/home/gohome.png"
+							},
+							{
+								name: "离家模式",
+								src: "../../image/home/outhome.png"
+							},
+							{
+								name: "回店模式",
+								src: "../../image/home/goshop.png"
+							},
+							{
+								name: "离店模式",
+								src: "../../image/home/outshop.png"
+							}
+						],
+						dev: {
+							"streamfwdport": 0,
+							"location": "",
+							"devid": "",
+							"relation": 0,
+							"streamfwd": "",
+							"type": 1,
+							"signalfwd": "",
+							"signalfwdport": 0,
+							"online": 1,
+							"devimg": "",
+						},
+						localDev: {
+
+						},
+
+						like: [
+
+						],
+
+						nearShops: [],
+
+						longitude: 0,
+						latitude: 0,
+						city: '深圳',
+
+						isInitNativeDevList: false,
+
+					};
+				},
+
+				computed: {
+					imgFrist: function() {
+						return this.imgList[0];
+					},
+					imgLast: function() {
+						return this.imgList[this.imgList.length - 1];
+					}
+				},
+				mounted: function() {
+					wayPick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+
+					// 获取轮播广告图
+					this.getAdvert();
+
+					// 获取喜欢列表
+					this.getThemeList();
+
+					// 缓存机制加载图片
+					imagelazyload();
+					// 图片轮播
+					mui('#slider').slider({
+						interval: 3000 // 自动轮播周期，若为0则不自动播放，默认为0
+					});
+
+					// 是否登录判断
+					this.$isLogin = Rx.Observable.create(function(ob) {
+						//如果用户已经登录了 则  获取第一个设备
+						if(app.user.has()) {
+							ob.next();
+						}
+					});
+
+					//					mui.init({
+					//						pullRefresh: {
+					//							container: ".mui-scroll-wrapper",
+					//							down: {
+					//								height: 50, //可选,默认50.触发下拉刷新拖动距离,
+					//								contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+					//								contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+					//								contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+					//								callback: this.reload
+					//							}
+					//						}
+					//					});
+
+				},
+				plusReady: function() {
+					var that = this;
+
+					this.$view.setPullToRefresh({
+						support: true,
+						style: "circle",
+						offset: immersed + "px",
+						height: '50px',
+						range: '200px'
+					}, this.reload.bind(this));
+
+					// 设置本页面无滚动条显示
+					this.$view.setStyle({
+						scrollIndicator: "none", // 隐藏滚动条
+						render: "always", // 始终进行渲染
+					});
+
+					// 当登录时
+					var $onLogin = Rx.Observable.create(function(ob) {
+							//如果用户重新了 则  获取第一个设备
+							_B.on('login_success', function() {
+								ob.next()
+							});
+						})
+						// 延迟666ms
+						.delay(666);
+
+					this.$isLogin.merge($onLogin).subscribe(function() {
+						// 获取第一个设备
+						that.getDeviceOne();
+					});
+
+					_B.on('device_update', function() {
+						that.getDeviceOne();
+					});
+
+					// 上一次地理定位
+					var $prePosition = Rx.Observable.create(function(ob) {
+						var p = POSITION.data;
+						// console.log("最近地理位置："+JSON.stringify(p)); 
+						if(p) {
+							ob.next(p);
+						}
+					});
+					// 
+					// 地理定位流
+					var $position = Rx.Observable.fromPromise(that.getCurrentPosition());
+
+					// 地理定位最大延迟 5s
+					var $time5out = Rx.Observable.timer(5e3);
+
+					// 主动更改地理位置
+					var $onUpdateCity = Rx.Observable.create(function(ob) {
+						_B.on('city_change_sub', function(d) {
+							ob.next(d);
+						});
+						_B.on('city_change', function(d) {
+							ob.next(d);
+						});
+
+					});
+
+					$position
+						.merge($time5out.mergeMapTo($prePosition))
+						.first()
+						.map(function(p) {
+							// 保存最近地理位置
+							POSITION.data = p;
+							return {
+								longitude: p.coords.longitude,
+								latitude: p.coords.latitude,
+								city: p.address.city.replace('市', '')
+							}
+						})
+						.merge($onUpdateCity)
+						.subscribe(function(o) {
+
+							that.longitude = o.longitude;
+							that.latitude = o.latitude;
+							that.city = o.city;
+							//that.position = p.address.poiName;
+							// 加载附近的店
+							that.getNearShops();
+						}, function(err) {
+							// 加载附近的店
+							that.getNearShops();
+						});
+
+					// 监听设备变化
+					this.listenDev();
+
+					Rx.Observable.create(function(ob) {
+							// 监听 原生已经收到数据
+							_B.on("InitNativeDevList", function() {
+								ob.next();
+							});
+						})
+						.merge(Rx.Observable.create(function(ob) {
+							_B.on('login_success', function() {
+								ob.next();
+							});
+						}).delay(3e3))
+						//.first()
+						.subscribe(function() {
+							that.isInitNativeDevList = true;
+						});
+
+				},
+				methods: {
+					reload: function() {
+						// 通知其他组件
+						_B.emit("home_reload", {}, {
+							self: true
+						});
+
+						// 获取轮播广告图
+						this.getAdvert();
+						// 获取喜欢列表
+						this.getThemeList();
+						// 登录判断 获取第一个设备
+						this.$isLogin.subscribe(function() {
+							this.getDeviceOne();
+						}.bind(this));
+
+						setTimeout(function() {
+							this.$view.endPullToRefresh();
+							//mui('.mui-scroll-wrapper').pullRefresh().endPulldownToRefresh();
+						}.bind(this), 1000);
+
+					},
+
+					getCurrentPosition: function() {
+						return new Promise(function(re, rj) {
+							plus.geolocation.getCurrentPosition(function(p) {
+								re(p);
+							}, rj);
+						});
+					},
+					// 点击消息按钮
+					onMessageTap: function() {
+						app.user.get(function(u) {
+							u && mui.openWindow('../person/message/index.html');
+						});
+
+					},
+
+					// 点击搜索按钮
+					onSearchTap: function() {
+						mui.openWindow('../search/index.html', 'search', {
+							show: {
+								aniShow: 'slide-in-bottom'
+							}
+						});
+					},
+					// 点击添加按钮
+					onPlusTap: function() {
+						// 验证登录
+						app.user.get(function(u) {
+							//u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
+							//return 0;
+							u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
+						});
+
+					},
+
+					// 当点击模式时
+					onModelTap: function(o, index) {
+						return mui.toast("该功能尚未开放...");
+						// console.log(JSON.stringify(o));
+						app.user.get(function(u) {
+							u && mui.openWindow('../smart/scenes/index2.html');
+						});
+					},
+
+					openCamListWindow: function($event) {
+
+						var that = this;
+
+						var o = this.dev;
+
+						var that = this;
+
+						if(o.online !== 1) {
+							return mui.toast("设备不在线");
+						}
+
+						var name = app.dev.findName(o.type);
+
+						var url, pageid;
+						switch(name) {
+							case "WG-100":
+								{
+									url = "../smart/devices/dev_WG-100.html";
+									pageid = "dev_WG-100";
+									break;
+								}
+
+							case "AX-903":
+								{
+									url = "../smart/devices/dev_AX-903.html";
+									pageid = "dev_AX-903";
+									break;
+								}
+
+							case "AX-904":
+								{
+									url = "../smart/devices/dev_AX-904.html";
+									pageid = "dev_AX-904";
+									break;
+								}
+
+							default:
+								{
+									url = "";
+									break;
+								}
+
+						}
+
+						if(url) {
+							mui.openWindow(url, pageid, {
+								extras: {
+									devInfo: o
+								}
+							});
+							return;
+						}
+						var type = app.dev.fixType(o.type);
+						Rx.Observable.create(function(ob) {
+							if(app.dev.isGPRS(o.workmode)) {
+								return mui.toast("当前设备处于GPRS模式，暂不能播放");
+							}
+							if(app.dev.isMoreWays(type)) {
+								// 获取设备的通道信息
+								plus.nativeUI.showWaiting("获取通道信息中...");
+								dal.devparam.chlist(o.devid, o.type, function(err, data) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast(err.message);
+									}
+
+									if(!data || !data.length) {
+										return mui.toast("暂无通道信息");
+									}
+
+									data = data.map(function(item) {
+										return {
+											text: item.name,
+											value: item.no
+										}
+									});
+									// 动态设置设备通道
+									wayPick.setData(data);
+									// 重置弹出层到第一个通道位置
+									wayPick.pickers[0].setSelectedIndex(0);
+									// 显示通道选择器
+									wayPick.show(function(items) {
+										ob.next({
+											b: items[0].value
+										});
+									}, function(items) {
+										// 取消 或者 隐藏
+									});
+								});
+							} else {
+								ob.next({
+									b: 0
+								});
+							}
+						}).subscribe(function(data) {
+
+							if(!that.isInitNativeDevList) {
+								return mui.toast("设备初始化中...请稍后...");
+							}
+
+							var w1 = data.b;
+							var w2 = type === 0x1046 ? 1 : 0;
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
+								getScrrenHotBgFn(o.devid).then(function(path) {
+									that.$refs.devimgel.style.backgroundImage = "url(" + path + ")";
+								})
+							});
+						});
+
+					},
+
+					// 获取轮播广告图
+					getAdvert: function() {
+
+						dal.home.advert(function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.imgList = data;
+							advert_cache.data = data;
+
+							this.$nextTick(function() {
+								imagelazyload();
+								if(this.imgList.length === 1) {
+									mui('.mui-slider').slider().setStopped(true);
+								}
+							}.bind(this));
+						}.bind(this));
+					},
+					// 轮播点击
+					onAdvertTap: function(o) {
+
+						// 打开内部浏览器
+						o.adlink && app.page.openBrowser({
+							url: o.adlink
+						});
+					},
+					// 获取一个设备
+					getDeviceOne: function() {
+						dal.device.list(1, function(err, data) {
+							if(err) {
+								return
+							}
+							if(data) {
+								this.dev = data[0];
+								//this.dev.devimg = this._getDevImg(this.dev.devid);
+								this.dev.location = this.dev.location ? this.dev.location.replace(/<[^<]*>/gi, "") : "";
+							} else {
+								this.dev.devid = "";
+							}
+
+						}.bind(this), 1);
+					},
+					// 监听设备变化
+					listenDev: function() {
+						var that = this;
+						Rx.Observable.create(function(ob) {
+								_B.on('update', function(data) {
+									if(data.info.devid === that.dev.devid) {
+										ob.next(data.info);
+									}
+								});
+							})
+							.subscribe(function(data) {
+								that.dev = data;
+								//that.dev.devimg = that._getDevImg(that.dev.devid);
+								that.dev.location = that.dev.location ? that.dev.location.replace(/<[^<]*>/gi, "") : "";
+							})
+
+					},
+
+					// 获取喜欢列表
+					getThemeList: function() {
+						return this.like = temp_like_json;
+						dal.home.theme.get(function(err, data) {
+							if(err) {
+								return
+							}
+							this.like = data;
+						}.bind(this));
+					},
+					// 猜你喜欢点击
+					onLikeItemTap: function(o) {
+						// 打开内部浏览器
+						app.page.openBrowser({
+							url: o.link
+						});
+					},
+					// 附近的店
+					getNearShops: function() {
+						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
+							if(err) {
+								return;
+							}
+							this.nearShops = data;
+						}.bind(this), 1);
+					},
+					// 附近的店点击
+					onNearItemTap: function(o) {
+						// 店铺
+						mui.openWindow('../nearby/business/store_details.html', 'store_details', {
+							extras: {
+								oid: o.id
+							}
+						});
+					},
+
+					// 设备设置点击
+					onDeviceSetTap: function() {
+						var id = this.dev.devid;
+
+						var name = app.dev.findName(this.dev.type);
+
+						var url, pageid;
+
+						switch(name) {
+							case "WG-100":
+								{
+									url = "../smart/devices/dev_WG-100_setting.html";
+									pageid = "dev_WG-100_setting";
+									break;
+								}
+
+							case "AX-903":
+								{
+									url = "../smart/devices/dev_AX-903_setting.html";
+									pageid = "dev_AX-903_setting";
+									break;
+								}
+
+							case "AX-904":
+								{
+									url = "../smart/devices/dev_AX-904.html";
+									pageid = "dev_AX-904";
+									break;
+								}
+							case "VH-104GN":
+								{
+									url = "../smart/devices/dev_VH-104_setting.html";
+									pageid = "dev_VH-104_setting";
+									break;
+								}
+
+							default:
+								{
+									url = "../smart/devices/camera_settings.html";
+									pageid = "camera_settings";
+									break;
+								}
+
+						}
+
+						url && app.page.openForResultBy(url, pageid, function() {
+
+						}, {
+							devInfo: this.dev
+						});
+
+					},
+					// 设备分享
+					onShareTap: function() {
+						mui.openWindow("../person/devshare/share.html", 'dev_share', {
+							extras: {
+								devInfo: this.dev
+							}
+						});
+					},
+
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
+
+					// 查看猜你喜欢更多
+					onStoreMore: function() {
+						_B.emit('tabar', {
+							mindex: 3,
+							nindex: 1
+						}, {
+							views: ["main"],
+						});
+					},
+
+					// 查看附近的店更多
+					onNearbyMore: function() {
+						// TODO 主页名称
+						_B.emit('tabar', {
+							mindex: 3,
+							nindex: 0
+						}, {
+							views: ["main"],
+						});
+					},
+					// 查看我的设备
+					onDeviceMore: function() {
+						mui.openWindow('../smart/devices/dev_my_list.html', 'dev_my_list');
+					},
+
+					addDeviceTap: function() {
+						app.user.get(function(u) {
+							u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
+						});
+					},
+
+					_getDevImg: function(devid, iospath) {
+						if(this.$os.android) {
+							return app.android.getScreenshotByDevId(devid);
+						} else if(this.$os.ios) {
+							return "file://" + iospath;
+						}
+					},
+					_getDevName: function(type) {
+						return app.dev.findName(type);
+					},
+
+					_fixDevLocation: function(s) {
+						return app.dev.fixName(s);
+					},
+
+					// 
+					_getDevRelation: function(relation) {
+						return 'relation-' + __relationarr[relation];
+					},
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

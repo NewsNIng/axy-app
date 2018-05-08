@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能门锁</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.img-wrap {
+				height: 0;
+				padding-bottom: 7.333333rem;
+				/*background-image: url(../../../image/smart/devices/curtain/btn_Acoustoopticalarm@3x.png);*/
+				background-repeat: no-repeat;
+				background-size: 50%;
+				background-position: bottom;
+			}
+			
+			.menu-warp {
+				display: flex;
+				display: -webkit-flex;
+				padding: 1.5rem 1.4rem 0.7rem 1.4rem;
+				justify-content: space-between;
+			}
+			
+			.menu-warp>div {
+				/*border: 1px solid #ccc;*/
+				flex: 1;
+				height: 100px;
+				/*width: rem;*/
+				text-align: center;
+			}
+			
+			.menu-warp>div>img {
+				width: 1.4rem;
+			}
+			
+			.battery_status {
+				color: #333333 !important;
+			}
+			
+			.point {
+				color: #9F9FA0;
+				padding-left: 0.266666rem;
+			}
+		
+			
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">智能门锁</h1>
+			</header>
+
+			<div class="mui-content noImmersed">
+				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/lock/btn_Intelligentdoorlock@3x.png' : '../../../image/smart/devices/lock/btn_Intelligentdoorlock1@3x.png') + ')'">
+				</div>
+				<div class="menu-warp app-font-size-24 app-color-dark">
+					<div @tap="onSetPassword()">
+						<img src="../../../image/smart/devices/lock/btn_Settingpassword@3x.png" />
+						<div>设置密码</div>
+					</div>
+
+					<div @tap="onOncePassword()">
+						<img src="../../../image/smart/devices/lock/btn_Onetimeunlocking@3x.png" />
+						<div>一次性开锁密码</div>
+					</div>
+					<div>
+						<img src="../../../image/smart/devices/lock/btn_Unlockinglock@3x.png" />
+						<div>闭锁状态</div>
+					</div>
+				</div>
+
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>设备ID</span>
+							<span class="mui-badge">123456789</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onNameTap()">
+						<a class="mui-navigate-right">
+							<span>设备名称</span>
+							<span class="mui-badge">xx店铺的智能门锁</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>绑定主机</span>
+							<span class="mui-badge">xx店铺的AX-360智能主机</span>
+						</a>
+					</li>
+				</ul>
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>开锁记录</span>
+							<span class="mui-badge">123456789</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="battery_status">
+							<span>电池状态</span>
+							<span class="mui-badge battery_status">正常</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>密码保护</span>
+							<span class="point">远程开锁时需要密码验证</span>
+							<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isPwdProtection}" ref="pwd_protection">
+					<div class="mui-switch-handle"></div>
+				</div></span>
+						</a>
+					</li>
+				</ul>
+
+			</div>
+
+			<!--<footer class="app-font-size-28">
+				<div class="app-color-main-dark">删除设备</div>
+				<div>解绑主机</div>
+			</footer>-->
+			<dev-footer :deviceid = "5" :comid="6" @del="onDelDevice">
+				
+			</dev-footer>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+        <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
+		
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						state: true, // 当前状态
+						isPwdProtection: true, // 是否开启密码保护
+						dev: {
+							"alarmPlan": [{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								},
+								{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								}
+							],
+							"basicInfo": {
+								"appversion": "2017-09-28 09:36:04",
+								"devName": "104GN",
+								"devType": 4166,
+								"devid": "VH-104GN-2017061500043",
+								"hwversion": "2015-11-01 10:13:43"
+							},
+							"netInfo": {
+								"ip": "192.168.1.23",
+								"ssid": "aaa2.4",
+								"type": 0
+							},
+							"onvif": [{
+									"ch": 0,
+									"name": "第一个外部通道",
+									"online": 1
+								},
+								{
+									"ch": 1,
+									"name": "第二个外部通道",
+									"online": 1
+								}
+							],
+							"recordPlan": [{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								},
+								{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								}
+							],
+							"zones": [{
+									"ID": "81457896",
+									"bindV": 128,
+									"delay": 0,
+									"ptzSet": 0,
+									"zoneAction": "32775",
+									"zoneName": "红外幕帘1"
+								},
+								{
+									"ID": "81457897",
+									"bindV": 128,
+									"delay": 0,
+									"ptzSet": 0,
+									"zoneAction": "32775",
+									"zoneName": "红外幕帘1"
+								}
+							]
+						},
+					};
+				}, 
+				mounted: function() {
+					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
+						this.isPwdProtection = event.detail.isActive;
+					}.bind(this));
+				},
+				plusReady: function() {},
+				methods: {
+					// 切换开关
+					toggleSwitch: function() {
+						this.state = !this.state;
+					},
+					// 设备名称
+					onNameTap: function(name) {
+						var that = this;
+						app.page.getInput(function(data) {
+							that.dev.basicInfo.devName = data.content;
+						}, {
+							title: "设备名称",
+							tips: that.dev.basicInfo.devName,
+						});
+					},
+					// 删除设备
+					onDelDevice: function(){
+						console.log("deldevice");
+					},
+					
+					// 设置密码
+					onSetPassword: function(){
+						app.page.getInput(function(rs){
+							
+						}, {
+							title: '密码',
+							tips: '请输入门锁密码',
+							r: 'loc4kpassword',
+							// type: 'tel',
+							rmsg: '门锁密码格式为4到8位数字'
+						});
+					},
+					// 一次性密码
+					onOncePassword: function(){
+						app.page.openForResultBy('dev_generation_password.html','dev_generation_password', function(data){
+							console.log(data.pwd);
+						});
+					}
+					
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,25 @@
+.app-btn,
+.app-btn-main,
+.app-btn-main-ghost {
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #cccccc;
+}
+.app-btn-main {
+  background-color: #2bb8aa;
+  border-color: #2bb8aa;
+  color: #ffffff;
+}
+.app-btn-main:active {
+  background-color: #43d3c5 !important;
+  border-color: #43d3c5 !important;
+}
+.app-btn-main-ghost {
+  border-color: #2bb8aa !important;
+  color: #2bb8aa;
+}
+.app-btn-main-ghost:active {
+  background-color: #F4F8FB !important;
+  color: #43d3c5 !important;
+}

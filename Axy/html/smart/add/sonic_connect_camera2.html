@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>连接摄像机</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<link rel="stylesheet" href="../../../css/app/app-pop-tip.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+				width: 100%;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			/*.dev_icon {
+				background-image: url(../../../image/smart/devices/dev_icon/AX-360@3x.png.png);
+				width: 100%;
+				height: 9.2rem;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: 50%;
+				position: relative;
+			}*/
+			
+			.dev_text {
+				width: 100%;
+				margin-bottom: 0.4rem;
+				text-align: center;
+				color: #333333;
+				/*font-weight: bold;*/
+			}
+			
+			.help {
+				position: fixed;
+				bottom: 60px;
+				left: 50%;
+				padding: 0.01rem 0;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				border-bottom: 1px solid #2BB8AA;
+				color: #2BB8AA;
+			}
+			
+			.red {
+				color: red;
+			}
+			
+			.imgbg{
+				width: 100%;
+				padding: 1.5rem;
+			}
+			
+			.imgbg > img{
+				width: 100%;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+
+		<div id="popover_tip" class="mui-popover">
+			<div class="tip-card">
+				<div class="tip-card-header app-font-size-34 app-color-white">未听到提示音？戳这里</div>
+				<div class="tip-card-body app-font-size-30">
+					1.顶针放置在说明书中，未找到可以使用其他较细的针代替;<br /> 2.请重新用顶针轻插摄像机背后的配置孔[SET],并按住至少3秒;
+					<br /> 3.尝试点击“已听到提示音”按钮，进行下一步操作，看看是否能正常连接上。
+					<br /> 4.其他问题，请您联系当地服务运营商。
+				</div>
+				<div class="tip-card-footer">
+					<a href="#popover_tip" class="mui-icon mui-icon-close app-color-white"></a>
+				</div>
+			</div>
+		</div>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">连接摄像机</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="imgbg">
+					<img src="../../../image/smart/devices/dev_icon/360_2.png"/>
+				</div>
+				<div class="dev_icon app-font-size-30">
+					<div class="dev_text app-font-size-34">用顶针轻插<span class="red">SET</span>孔，听到“嘀”的一声后<br />点击“下一步”</div>
+				</div>
+
+			</div>
+			<a href="#popover_tip" class="help app-font-size-28">未听到提示音？戳这里</a>
+			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						wifiname: "",
+						wifipwd: "",
+					};
+				},
+				mounted: function() {
+					// get prev url params
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					// get wifiname & wifipwd
+					this.wifiname = GetQueryString("wifiname");
+					this.wifipwd = GetQueryString("wifipwd");
+				},
+				plusReady: function() {},
+				methods: {
+					onNext: function() {
+						var url = "sonic_connect_dev1.html?wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd;
+						// voice3
+						this.$view.loadURL(url);
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

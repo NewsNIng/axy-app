@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link rel="stylesheet" href="../../css/lib/mui.min.css" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+
+		<style type="text/css">
+			body {
+				background-color: rgba(0, 0, 0, 0.1) !important;
+			}
+			
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			.room.mui-table-view {
+				float: right;
+				background-color: #FFFFFF;
+				margin-top: 45px;
+				box-shadow: 0px 1px 2px #CCCCCC;
+				position: relative;
+			}
+			
+			.room.mui-table-view:after {
+				content: none;
+			}
+			
+			.room.mui-table-view:before {
+				right: 0 !important;
+				top: 0;
+				right: 0;
+				left: initial;
+				background-color: transparent !important;
+				width: 0 !important;
+				height: 0 !important;
+				border-left: 10px solid transparent;
+				border-right: 10px solid transparent;
+				border-bottom: 12px solid rgba(255, 255, 255, 0.8);
+				transform: translate(-10px, -100%);
+				-webkit-transform: translate(-10px, -100%);
+			}
+			
+			.room.mui-table-view li {
+				width: 3.333333rem !important;
+				height: 1.2rem;
+			}
+			
+			.room.mui-table-view li:after {
+				left: 0 !important;
+				/*background-color: #ccc !important;*/
+			}
+			
+			.room.mui-table-view img {
+				width: 0.773333rem;
+				vertical-align: middle;
+			}
+			
+			.room.mui-table-view span {
+				color: #A2ABB1;
+				vertical-align: middle;
+			}
+			
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				
+				.room.mui-table-view {
+				  font-size: 12px !important;
+				}
+				[data-dpr="2"] .room.mui-table-view {
+				  font-size: 24px !important;
+				}
+				[data-dpr="3"] .room.mui-table-view {
+				  font-size: 36px !important;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<ul class="mui-table-view room app-font-size-28 app-color-dark">
+			<li class="mui-table-view-cell" data-href="business/signup.html" data-id="signup">
+				<span class="mui-icon"><img src="../../image/nearby/discover/store@3x.png"/></span>
+				<span>商家入驻</span>
+			</li>
+			<li class="mui-table-view-cell" data-href="discover/discover_release.html" data-id="discover_release">
+				<span class="mui-icon"><img src="../../image/nearby/discover/release@3x.png"/></span>
+				<span>发布说说</span>
+			</li>
+		</ul>
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/app/app.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		
+		<script>
+			
+			var ni = {
+				Broadcast: {
+					_self: function(){
+						
+					}
+				}
+			}
+			
+			mui.ready(function() {
+				mui('.room')[0].style.marginTop = 44 + immersed + 'px';
+				document.addEventListener('touchend', function() {
+					mui.back();
+				});
+				mui('ul').on('tap', 'li', function() {
+					app.user.get(function(u){
+						u && mui.openWindow(this.dataset.href, this.dataset.id);	
+					}.bind(this));
+				});
+			});
+		</script>
+	</body>
+
+</html>

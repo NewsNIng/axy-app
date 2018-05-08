@@ -1,0 +1,300 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能网关</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.img-wrap {
+				height: 6.133333rem;
+				/*padding-bottom: 6.133333rem;*/
+				background-image: url(../../../image/smart/devices/gateway/bg@3x.png);
+				background-repeat: no-repeat;
+				background-size: 100%;
+				background-position: bottom;
+			}
+			
+			.img-wrap>img {
+				width: 100%;
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.menu-warp {
+				display: flex;
+				display: -webkit-flex;
+				padding: 0.693333rem 0.5rem;
+				justify-content: space-between;
+				background-color: white;
+				margin-bottom: 0.266666rem;
+			}
+			
+			.menu-warp>div {
+				/*border: 1px solid #ccc;*/
+				flex: 1;
+				height: auto;
+				/*width: rem;*/
+				text-align: center;
+			}
+			
+			.menu-warp>div>img {
+				width: 1.466666rem;
+			}
+			
+			header img {
+				width: 0.48rem;
+				/*margin-right: 0.346666rem;*/
+			}
+			
+			.mui-icon {
+				/*padding: 0 !important;*/
+				margin-right: 0 !important;
+				padding-right: 0 !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<!--<h1 class="mui-title">智能网关</h1>-->
+				<span class="mui-icon mui-pull-right">
+					<img src="../../../image/smart/devices/electric/btn_share@3x.png" />
+				</span>
+			</header>
+
+			<div class="mui-content noImmersed">
+				<div class="img-wrap">
+					<img src="../../../image/smart/devices/gateway/icon_audiofrequency@3x.png" />
+				</div>
+				<div class="menu-warp app-font-size-24 app-color-dark">
+					<div>
+						<img src="../../../image/smart/devices/gateway/icon_Mute@3x.png" />
+						<div>静音</div>
+					</div>
+
+					<div>
+						<img src="../../../image/smart/devices/gateway/btn_Voiceintercom@3x.png" />
+						<div>语音对讲</div>
+					</div>
+					<div>
+						<img src="../../../image/smart/devices/gateway/btn_Disarm@3x.png" />
+						<div>一键布撤防</div>
+					</div>
+				</div>
+
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell" @tap="onNameTap()">
+						<a class="mui-navigate-right">
+							<span>设备名称</span>
+							<span class="mui-badge">xxx的智能网关</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>自动布防计划</span>
+							<span class="mui-badge ">xx房间的智能插座</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>状态指示灯</span>
+							<span class="mui-badge">
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': statusLight}" ref="pwd_protection">
+									<div class="mui-switch-handle"></div>
+								</div>
+							</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>WIFI配置</span>
+							<span class="mui-badge ">30S</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onAlarmTap()">
+						<a class="mui-navigate-right">
+							<span>告警时间设置</span>
+							<span class="mui-badge" v-text="alarmDelayTime+'s'"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>布撤防日志</span>
+						</a>
+					</li>
+				</ul>
+
+			</div>
+
+			<footer class="app-font-size-28">
+				<div class="app-color-main-dark">删除设备</div>
+				<div>重启设备</div>
+			</footer>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+        <script type="text/javascript" src="../../../js/components/devices/footer.js" ></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						// 告警延迟时间
+						alarmDelayTime: 0,
+						// 弹框
+						pick: null,
+						statusLight: true, // 是否开启状态指示灯
+						dev: {
+							"alarmPlan": [{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								},
+								{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								}
+							],
+							"basicInfo": {
+								"appversion": "2017-09-28 09:36:04",
+								"devName": "104GN",
+								"devType": 4166,
+								"devid": "VH-104GN-2017061500043",
+								"hwversion": "2015-11-01 10:13:43"
+							},
+							"netInfo": {
+								"ip": "192.168.1.23",
+								"ssid": "aaa2.4",
+								"type": 0
+							},
+							"onvif": [{
+									"ch": 0,
+									"name": "第一个外部通道",
+									"online": 1
+								},
+								{
+									"ch": 1,
+									"name": "第二个外部通道",
+									"online": 1
+								}
+							],
+							"recordPlan": [{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								},
+								{
+									"end": "19:50:00",
+									"recycle": 129,
+									"start": "13:50:00"
+								}
+							],
+							"zones": [{
+									"ID": "81457896",
+									"bindV": 128,
+									"delay": 0,
+									"ptzSet": 0,
+									"zoneAction": "32775",
+									"zoneName": "红外幕帘1"
+								},
+								{
+									"ID": "81457897",
+									"bindV": 128,
+									"delay": 0,
+									"ptzSet": 0,
+									"zoneAction": "32775",
+									"zoneName": "红外幕帘1"
+								}
+							]
+						},
+					};
+				},
+				mounted: function() {
+					this.$refs.pwd_protection.addEventListener("toggle", function(event) {
+						this.statusLight = event.detail.isActive;
+					}.bind(this));
+					this.pick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+					this.pick.setData(pick_data[1]);
+				},
+				plusReady: function() {},
+				methods: {
+					// 设备名称
+					onNameTap: function(name) {
+						var that = this;
+						app.page.getInput(function(data) {
+							that.dev.basicInfo.devName = data.content;
+						}, {
+							title: "设备名称",
+							tips: that.dev.basicInfo.devName,
+						});
+					},
+					// 删除设备
+					onDelDevice: function(){
+						console.log("deldevice");
+					},
+					// 告警延迟时间
+					onAlarmTap: function() {
+						var that = this;
+
+						this.pick.pickers[0].setSelectedValue(this.alarmDelayTime);
+
+						var fn = function(s) {
+							that.alarmDelayTime = s;
+						};
+
+						this.pick.show(function(items) {
+							fn(items[0].value);
+						}, function(items) {
+
+						});
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

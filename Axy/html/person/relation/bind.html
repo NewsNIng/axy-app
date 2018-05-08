@@ -1,0 +1,253 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>帐号绑定</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*-left图片文字*/
+			
+			.menu-box a {}
+			
+			.menu-box a>img {
+				width: 0.6rem;
+				margin: 0 0.2rem;
+				vertical-align: middle;
+			}
+			
+			.menu-box a>span {
+				vertical-align: middle;
+			}
+			/*end菜单*/
+			/*隐藏手机号码的箭头*/
+			/*li:first-child .mui-navigate-right:after{
+				color: transparent;
+			}*/
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">帐号绑定</h1>
+		</header>
+		<div class="mui-content menu-box app-font-size-32">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" @tap="onTelphoneTap()">
+					<a class="mui-navigate-right">
+						<img src="../../../image/person/info/tel@3x.png" />
+						<span class="app-color-333333">手机号码</span>
+						<span class="mui-badge" v-text='telphone || "未绑定"'>...</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" @tap="onOAuthItemTap('weixin','wx')">
+					<a class="mui-navigate-right">
+						<img src="../../../image/person/info/wx@3x.png" />
+						<span class="app-color-333333">微信帐号</span>
+						<span class="mui-badge" v-text="weixin">...</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" @tap="onOAuthItemTap('qq','qq')">
+					<a class="mui-navigate-right">
+						<img src="../../../image/person/info/qq@3x.png" />
+						<span class="app-color-333333">QQ帐号</span>
+						<span class="mui-badge" v-text="qq">...</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" @tap="onOAuthItemTap('sinaweibo','wb')">
+					<a class="mui-navigate-right">
+						<img src="../../../image/person/info/weibo@3x.png" />
+						<span class="app-color-333333">新浪微博</span>
+						<span class="mui-badge" v-text="sinaweibo">...</span>
+					</a>
+				</li>
+			</ul>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						tel: "",
+
+						weixin: "未绑定",
+						qq: "未绑定",
+						sinaweibo: "未绑定",
+						userinfo: {
+							
+						},
+
+					};
+				},
+
+				computed: {
+					telphone: function() {
+						if(/^1\d{10}$/.test(this.tel)) {
+							var temp = this.tel.split("");
+							temp.splice(3, 4, "*", "*", "*", "*")
+							temp = temp.join("");
+							return temp;
+						} else {
+							return null;
+						}
+					}
+				},
+
+				plusReady: function() {
+					this.getBindTel();
+				},
+				methods: {
+					// 获取本地用户绑定手机
+					getBindTel: function() {
+						var u = app.user.get();
+						
+						this.tel = u.bindmobile;
+						u.qqopenid && (this.qq = "已绑定");
+						u.wxopenid && (this.weixin = "已绑定");
+						u.wbopenid && (this.sinaweibo = "已绑定");
+						
+						this.userinfo = u;
+					},
+					
+					// 更新帐号的Openid
+					updateOpenid: function(logintype, id){
+						this.userinfo[logintype+"openid"] = id;
+						// 通知
+						new ni.Broadcast().emit('userinfo_update', {
+							userInfo: this.userinfo
+						},{
+							views: ['zeus']
+						});
+					},
+					// 更新手机号
+					updateTel: function(tel){
+						this.tel = tel;
+						this.userinfo.bindmobile = tel;
+						new ni.Broadcast().emit('userinfo_update', {
+							userInfo: this.userinfo
+						},{
+							views: ['zeus']
+						});
+					},
+
+					// 第三方授权信息点击
+					onOAuthItemTap: function(type, logintype) {
+						var that = this;
+						// 如果未绑定
+						if(!this.userinfo[logintype+"openid"]){
+							new ni.OAuth(type, function(err, auth) {
+								if(err) {
+									return mui.toast("授权失败");
+								}
+								// 绑定成功
+								that[type] = '已绑定';
+								dal.user.bindother(type, auth.userInfo.unionid || auth.authResult.openid, function(err, data) {
+									
+									var id = auth.userInfo.unionid || auth.authResult.openid;
+									auth.logout(function() {});
+									if(err) {
+										that[type] = '绑定失败，请重试';
+										return mui.toast(err.message);
+									}
+									that.updateOpenid(logintype, id);
+									return mui.toast("绑定成功！");
+								});
+							});
+					
+						} else {
+
+							if(!this.telphone &&
+							   !this.userinfo.wxopenid &&
+							   !this.userinfo.qqopenid && 
+							   !this.userinfo.wbopenid) {
+								mui.toast("您需要先绑定手机号");
+								return this.onTelphoneTap();
+							}
+
+							mui.confirm("您确定要注销该绑定吗？\n以后将不能用改方式登录您的帐号。", "", ["解除绑定", "取消"], function(e) {
+								if(e.index === 0) {
+									dal.user.deletebind(type, function(err, data) {
+										if(err) {
+											return mui.toast(err.message);
+										}
+										mui.toast("解绑成功");
+										that.updateOpenid(logintype, null);  
+										that[type] = "已解绑";
+									});
+
+								}
+							});
+
+						}
+					},
+					// 手机号点击
+					onTelphoneTap: function() {
+
+						var that = this;
+						var page;
+						if(this.telphone) {
+							page = "reset_tel";
+						} else {
+							page = "bind_tel";
+						}
+
+						app.page.openForResultBy(page + ".html", page, function(data) {
+							if(data.tel) {
+								// 更改成功后修改页面中的tel
+								that.updateTel(data.tel);
+								// 继续通知上层
+								app.page.setResult({
+									tel: data.tel
+								});
+							}
+						}, {
+							tel: this.tel
+						});
+					},
+				}
+			})
+		</script>
+	</body>
+
+</html>

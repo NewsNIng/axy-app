@@ -1,0 +1,521 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能灯控</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body {
+				background-color: white;
+			}
+			
+			.mui-content {
+				background-color: #F4F8FB;
+				padding-bottom: 0;
+			}
+			
+			.img-wrap {
+				height: 0;
+				padding-bottom: 7.333333rem;
+				/*background-image: url(../../../image/smart/devices/curtain/btn_Acoustoopticalarm@3x.png);*/
+				background-repeat: no-repeat;
+				background-size: 50%;
+				background-position: bottom;
+			}
+			
+			.menu {
+				width: 100%;
+				height: auto;
+				/*padding: 1.493333rem 2.8rem 0.746666rem 2.8rem;*/
+			}
+			
+			.menu-warp {
+				padding-top: 0.933333rem;
+				padding-bottom: 0.266666rem;
+			}
+			
+			.select_item {
+				background-color: #06C1AE;
+				color: white !important;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7 !important;
+			}
+			
+			.ctrl_1 {
+				margin: 0 1.76rem;
+				/*background-color: gray;*/
+				height: 3.493333rem;
+				width: 6.48rem;
+			}
+			
+			.ctrl_name,
+			.ctrl_btn {
+				display: flex;
+				display: -webkit-flex;
+			}
+			
+			.name_item,
+			.btn_item {
+				flex: 1;
+				text-align: center;
+			}
+			
+			.name_item {
+				height: 0.906666rem;
+				/*width: 2.08rem;*/
+				/*display: inline-block;*/
+				/*background-color: red;*/
+				line-height: 0.906666rem;
+			}
+			
+			.ctrl_btn {
+				height: 2.56rem;
+				/*padding: 0.12rem 0;*/
+			}
+			
+			.ctrl_btn>.btn_item {
+				height: 100%;
+				/*background-color: green*/
+			}
+			
+			.btn_item>div {
+				width: 0.92rem;
+				height: 0.92rem;
+				margin: 0.24rem auto;
+				line-height: 0.92rem;
+				text-align: center;
+				/*background-color: yellow;*/
+				border-radius: 50%;
+				border: 1px solid #D3D3D3;
+			}
+			
+			.ctrl_2 {
+				padding: 0.8rem 0;
+				text-align: center;
+			}
+			
+			.ctrl_2>div {
+				height: 1.12rem;
+				width: 1.12rem;
+				display: inline-block;
+				text-align: center;
+				line-height: 1.12rem;
+				margin: 0 0.533333rem;
+				border-radius: 50%;
+				border: 1px solid #D3D3D3;
+			}
+			/*
+			 .menu-warp>div:after {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 1px;
+				content: '';
+				background-color: #06C1AE;
+			}
+			
+			.menu-warp>div:last-child:after {
+				width: 0;
+			}
+			*/
+			
+			.name_item,
+			.btn_item,
+			.ctrl_name {
+				position: relative;
+			}
+			
+			.name_item:after,
+			.btn_item:after {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				top: 0;
+				width: 1px;
+				content: '';
+				background-color: #D3D3D3;
+			}
+			
+			.name_item:last-child:after,
+			.btn_item:last-child:after {
+				width: 0;
+			}
+			
+			.ctrl_name:after {
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				height: 1px;
+				content: '';
+				background-color: #D3D3D3;
+			}
+			
+			.ctrl_1 {
+				border: 1px solid #D3D3D3;
+				border-radius: 5px;
+			}
+			
+			.ctrl_name {
+				color: #708bf5;
+			}
+			/*.btn_item>div:active{
+				background-color: gray
+			}*/
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title" v-text="devInfo.accessory.name"></h1>
+			</header>
+
+			<div class="mui-content noImmersed">
+				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/icon/btn_Intelligentlightcontrol@3x.png' : '../../../image/smart/devices/icon/btn_Intelligentlightcontrol1@3x.png') + ')'">
+				</div>
+				<div class="menu">
+					<div class="menu-warp app-font-size-28 app-color-dark">
+						<div class="ctrl_1">
+							<div class="ctrl_name">
+								<div class="name_item">k1</div>
+								<div class="name_item">k2</div>
+								<div class="name_item">k3</div>
+							</div>
+							<div class="ctrl_btn">
+								<div class="btn_item">
+									<div @tap="openLight(1,true)">开</div>
+									<div @tap="openLight(1,false)">关</div>
+								</div>
+								<div class="btn_item">
+									<div @tap="openLight(2,true)">开</div>
+									<div @tap="openLight(2,false)">关</div>
+								</div>
+								<div class="btn_item">
+									<div @tap="openLight(4,true)">开</div>
+									<div @tap="openLight(4,false)">关</div>
+								</div>
+							</div>
+						</div>
+						<div class="ctrl_2">
+							<div @tap="openLight(7,true)">总开</div>
+							<div @tap="openLight(7,false)">总关</div>
+						</div>
+					</div>
+
+				</div>
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>配件ID</span>
+							<span class="mui-badge" v-text="devInfo.accessory.id"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onNameTap()">
+						<a class="mui-navigate-right">
+							<span>配件名称</span>
+							<span class="mui-badge" v-text="devInfo.accessory.name"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>绑定主机</span>
+							<span class="mui-badge" v-text="devInfo.devName || devInfo.accessory.devid"></span>
+						</a>
+					</li>
+					<!--<li class="mui-table-view-cell">
+						<a class="">
+							<span>总开</span>
+							<span class="mui-badge"><div class="mui-switch mui-switch-mini app-switch-main" ref="always_open">
+					<div class="mui-switch-handle"></div>
+				</div></span>
+						</a>
+					</li>-->
+					<li class="mui-table-view-cell">
+						<a>
+							<span>启用此配件</span>
+							<span class="mui-badge">
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': devInfo.accessory.enable}" ref="switch1">
+									<div class="mui-switch-handle"></div>
+								</div>
+							</span>
+						</a>
+					</li>
+					<li></li>
+				</ul>
+			</div>
+
+			<dev-footer :accessory="devInfo.accessory" :devtype="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind">
+
+			</dev-footer>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						state: true, // 当前状态
+						//						isPwdProtection: true, // 是否开启密码保护
+						bindDev: "AX-360主机",
+						//						lights: [{
+						//							name: "K1",
+						//							devId: "VH-104GN-2017061500041",
+						//							devName: "104GN_1",
+						//							bindDev: "AX-360主机",
+						//							alwaysOpen: true,
+						//							enable: true,
+						//						}, {
+						//							name: "K2",
+						//							devId: "VH-104GN-2017061500042",
+						//							devName: "104GN_2",
+						//							bindDev: "AX-360主机",
+						//							alwaysOpen: false,
+						//							enable: false,
+						//						}, {
+						//							name: "K3",
+						//							devId: "VH-104GN-2017061500043",
+						//							devName: "104GN_3",
+						//							bindDev: "AX-360主机",
+						//							alwaysOpen: true,
+						//							enable: true,
+						//						}],
+						select_index: 0,
+
+						// 设备信息
+						devInfo: {
+							"accessory": {
+								"id": "14255286",
+								"devid": "VH-104GN-2017061500015",
+								"name": "",
+								"action": 41990,
+								"type": 20,
+								"delay": 0,
+								"zonetype": 0,
+								"chnID": 0,
+								"externChn": true,
+								"x": 0,
+								"y": 0,
+								"ptzset": 0,
+								"xmlDescrition": "",
+								"enableDelete": true,
+								"enable": true
+							},
+							"devName": "",
+							"devType": 4166,
+							"statusCode": 0
+						},
+						i_all: [0, 0, 0],
+					};
+				},
+				mounted: function() {
+
+					this.$refs.switch1.addEventListener("toggle", function(event) {
+						if(this.isErr) {
+							this.isErr = false;
+							return;
+						}
+						var that = this;
+						// 发送更改请求
+						plus.nativeUI.showWaiting();
+						this.devInfo.accessory.enable = event.detail.isActive;
+						that._updataActionByEnable(that.devInfo.accessory.enable);
+						dal.devaccessory.enable(this.devInfo.accessory, this.devInfo.devType, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log(err + "," + data);
+							if(err) {
+								that.isErr = true;
+								mui(that.$refs.switch1).switch().toggle();
+								that.devInfo.accessory.enable = !that.devInfo.accessory.enable;
+								that._updataActionByEnable(that.devInfo.accessory.enable);
+								return mui.toast(err.message);
+							}
+							mui.toast("操作成功！");
+//							that._updataActionByEnable(that.devInfo.accessory.enable);
+							that._updataUi();
+						})
+					}.bind(this));
+
+					//					this.$refs.always_open.addEventListener("toggle", function(event) {
+					//						this.lights[this.select_index].alwaysOpen = event.detail.isActive;
+					//						//TODO 总开的请求。。。
+					//						
+					//					}.bind(this));
+				},
+				plusReady: function() {
+					plus.navigator.setStatusBarStyle('dark');
+					this.devInfo = this.$view.info;
+					console.log(JSON.stringify(this.devInfo));
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close('none');
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
+
+						var view = plus.webview.currentWebview();
+						plus.navigator.setStatusBarStyle('light');
+						view.close();
+					}.bind(this);
+				},
+				methods: {
+					// 切换开关
+					toggleSwitch: function() {
+						this.state = !this.state;
+					},
+					// 选择设备
+					onLightTap: function(i) {
+						this.select_index = i;
+					},
+					// 删除配件
+					onDelDevice: function() {
+						app.page.setResult({
+							action: "del"
+						}).close();
+
+						console.log("deldevice");
+					},
+					// 解绑配件
+					onDevUnBind: function() {
+						app.page.setResult({
+							action: "unbind"
+						}).close();
+						// TODO 可能需要重新选择主机
+						console.log("editdevice");
+					},
+					//修改名称
+					onNameTap: function() {
+						var that = this;
+						app.page.getInput(function(data1) {
+							plus.nativeUI.showWaiting();
+							dal.devaccessory.name(that.devInfo.accessory.id, that.devInfo.accessory.type, that.devInfo.accessory.devid, that.devInfo.devType, data1.content, that.devInfo.accessory.name, that.devInfo.accessory.action, that.devInfo.accessory.delay, that.devInfo.accessory.zonetype, that.devInfo.accessory.chnID, that.devInfo.accessory.externChn, that.devInfo.accessory.x, that.devInfo.accessory.y, that.devInfo.accessory.ptzset, function(err, data) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("修改成功！");
+								that.devInfo.accessory.name = data1.content;
+								that._updataUi();
+							});
+						}, {
+							title: "配件名称",
+							content: that.devInfo.accessory.name,
+							r: "nonEmpty", 
+							rmsg: "配件名称不能为空",
+							maxLength: 30,
+							mLengthMsg: "最长不超过30个字符！",
+						});
+					},
+					// 更新缓存数据
+					_updataUi: function() {
+						that = this;
+						app.page.setResult({
+							action: "update",
+							info: that.devInfo
+						});
+					},
+					// 根据Enable更新Action的值
+					_updataActionByEnable: function(isOn) {
+						var action = this.devInfo.accessory.action;
+						var enable = 0x80000000;
+						if(isOn) {
+							action = action | enable;
+						} else {
+							action = action & ~enable;
+						}
+						this.devInfo.accessory.action = action;
+					},
+					openLight: function(i, isOpen) {
+						if(!this._enableVerify()){
+							return;
+						}
+//						if(i === 1) {
+//							this.i_all[2] = isOpen ? 1 : 0;
+//						} else if(i === 2) {
+//							this.i_all[1] = isOpen ? 1 : 0;
+//						} else if(i === 4) {
+//							this.i_all[0] = isOpen ? 1 : 0;
+//						} else if(i === 7) {
+//							this.i_all[0] = isOpen ? 1 : 0;
+//							this.i_all[1] = isOpen ? 1 : 0;
+//							this.i_all[2] = isOpen ? 1 : 0;
+//						}
+//						if(!isOpen) {
+//							this.i_all[0] = this.i_all[0] ? 0 : 1;
+//							this.i_all[1] = this.i_all[1] ? 0 : 1;
+//							this.i_all[2] = this.i_all[2] ? 0 : 1;
+//						}
+//						var allPosition = this.i_all.join('');
+//												alert(allPosition);
+//						parseInt(allPosition, 2)
+						plus.nativeUI.showWaiting();
+						dal.devaccessory.light(this.devInfo.accessory.id, this.devInfo.accessory.devid, this.devInfo.devType, i, isOpen, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							mui.toast("操作成功！");
+						});
+					},
+					// 根据Enable更新Action的值
+					_updataActionByEnable: function(isOn) {
+						var action = this.devInfo.accessory.action;
+						console.log(action);
+						if(isOn) {
+							action = action | ((0x00000001 << 15));
+						} else {
+							action = action & (~(1 << 15));
+						}
+						this.devInfo.accessory.action = (action>>>0);
+						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
+					},
+					_enableVerify: function(){
+						if(!this.devInfo.accessory.enable){
+							mui.toast("需启用后才能操作此配件！");
+							return false;
+						}
+						return true;
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+
+		<script type="text/javascript" src="../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript" src="../js/plug/PlugH5NativeBridge.js"></script>
+
+		<script type="text/javascript" src="../js/app/app.js"></script>
+		<script type="text/javascript" src="../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../js/dal/base.js"></script>
+		<script type="text/javascript" src="../js/dal/device.js"></script>
+		<script type="text/javascript" src="../js/dal/devaccessory.js"></script>
+		<script type="text/javascript" src="../js/dal/user.js"></script>
+		<script type="text/javascript" src="../js/dal/push.js"></script>
+		<script type="text/javascript" src="../js/dal/system.js"></script>
+
+		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
+		<script type="text/javascript" src="../js/plug/PlugDevManager.js"></script>
+
+		<script type="text/javascript">
+			/**
+			 * H5Native 控制中心 
+			 */
+			var PUSH_ID, DEVICE, USER_INFO, P, _B;
+
+			var getPwd = function() {
+				return window.localStorage.getItem('_pwd_');
+			}
+
+			// 设备就绪流
+			var $pready = Rx.Observable.create(function(ob) {
+				if(window.plus) {
+					ob.next();
+				} else {
+					document.addEventListener('plusready', function() {
+						ob.next();
+					});
+				}
+			});
+
+			// 页面初始化
+			var $init = Rx.Observable.create(function(ob) {
+				// pushid 缓存
+				PUSH_ID = new ni.Cache('push_key', "", {
+					plus: true
+				});
+				// 设备列表 缓存
+				DEVICE = new ni.Cache('dev_list', "", {
+					plus: true
+				});
+				// 用户信息备份
+				USER_INFO = new ni.Cache('app_user_info', {}, {
+					plus: true
+				});
+				// 原生桥梁
+				P = plug.H5NativeBridge;
+				// 多页面通知
+				_B = new ni.Broadcast();
+
+				ob.next();
+			});
+
+			// 登录流
+			var $login = Rx.Observable.create(function _loginFn(ob, logincount) {
+				logincount = logincount || 0;
+				// 是否登录
+				if(app.user.has()) {
+					var u = app.user.get();
+					var type = window.localStorage.getItem('login_type');
+
+					var ajaxResult = function(err, data) {
+						if(err) {
+							if(err.code === '0110') {
+								// 验证失败
+								ob.error();
+							} else if(logincount < 5) {
+								// 递归
+								logincount = logincount + 1;
+								setTimeout(_loginFn.bind(null, ob, logincount), Math.pow(2, logincount) * 100);
+							}
+							return;
+						}
+						if(data.lockterminal === 0 || data.validation === 1) {
+							// 验证通过
+							ob.next(data);
+						} else {
+							ob.error();
+							return;
+							// 跳转页面认证
+							mui.toast("帐号已保护，您需要权限认证");
+							app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
+								if(rs.result) {
+									ob.next(data);
+								} else {
+									// 验证失败
+									ob.error();
+								}
+							});
+						}
+					};
+
+					if(type === 'pwd') {
+						// 验证用户信息
+						dal.user.login(u.account, getPwd(), ajaxResult);
+					} else {
+						var o = {
+							type: type,
+						};
+						o[type + "openid"] = u[type + "openid"];
+						// 自动第三方登录
+						dal.user.ologin(o, ajaxResult);
+					}
+				}
+				//				else {
+				// 未登录状态 
+				// // 监听一次登录事件
+				//_B.on('login_success', function(data) {
+				//	ob.next(data.userInfo);
+				//});
+				//				}
+			});
+
+			// 获取顶级域名
+			var $getTopDomain = function(account) {
+				return Rx.Observable.create(function(ob) {
+					dal.system.getTopMain(account, function(err, data) {
+						if(err) {
+							return ob.error();
+						}
+						ob.next({
+							account: account,
+							pwd: getPwd(),
+							domain: data
+						});
+					});
+				});
+
+			};
+			// 保存顶级域名
+			var $SaveDomain = function(data) {
+				window.localStorage.setItem('_domain_', data.domain);
+				return data;
+			};
+
+			// 获取设备推送id流
+			var $getPushId = Rx.Observable.create(function(ob) {
+
+				var rs = P.GetPushInfoSyn();
+				if(!rs) {
+					return
+				}
+				rs = JSON.parse(rs);
+				if(!rs || rs["code"] !== 0) {
+					return
+				}
+				if(!rs.data || !rs.data.clientId) {
+					return
+				}
+				ob.next(rs.data.clientId);
+
+			});
+
+			// 获取设备列表计时器
+			var $getDevListTimer = Rx.Observable.create(function(_) {
+					_.next();
+				})
+				.delay(3e3)
+				.merge(Rx.Observable.interval(30e3));
+
+			// 获取用户设备列表数据
+			var $getDevListByAjax = Rx.Observable.create(function(ob) {
+				dal.device.list(1, function(err, data) {
+					if(err) {
+						return;
+					}
+					if(data && data.length > 0) {
+						ob.next(data);
+					}
+				}, 1000);
+			});
+
+			// 设备推送同步
+			/*var $synchronous = Rx.Observable.create(function(ob) {
+				_B.on('device_push_update', function(data) {
+					ob.next(data.id);
+				});
+				_B.on('login_success', function() {
+					ob.next();
+				});
+			});*/
+
+			// 监听用户资料更改信息
+			var $listenUserUpdate = Rx.Observable.create(function(ob) {
+				_B.on('userinfo_update', function(data) {
+					ob.next(data.userInfo);
+				});
+
+			});
+
+			// 监听更新设备列表的通知
+			var $listenDevListUpdate = Rx.Observable.create(function(ob) {
+				_B.on('device_update', function(data) {
+					ob.next();
+				});
+			});
+
+			var getDevListTimer$;
+
+			var ListenLoginSuccess$ = Rx.Observable.create(function(ob) {
+				_B.on('login_success', function(data) {
+					ob.next(data.userInfo);
+				});
+			});
+
+			var Success$fn = function(user) {
+				user = FixUserData(user);
+				var account = user.account;
+
+				// -》更新 本地 用户 数据
+				UpdateUserInfo(user);
+
+				// -》获取 顶级 域名
+				Rx.Observable.of(account)
+					.mergeMap($getTopDomain)
+					// 保存domin
+					.map($SaveDomain)
+					// 初始化 原生 插件
+					.subscribe(InitNativeSystem);
+
+				// -》获取 推送 ID
+				Rx.Observable
+					// 频率 3s一次
+					.interval(3e3)
+					// 最多获取5次
+					.take(5)
+					// 获取id
+					.mergeMapTo($getPushId)
+					// 取第一次获取到的值
+					.first()
+					// 设备信息同步
+					.subscribe(SyncHronous.bind(null, account));
+
+				// 关闭之前的订阅
+				getDevListTimer$ && getDevListTimer$.unsubscribe();
+				// -》开启获取设备列表定时器
+				getDevListTimer$ = $getDevListTimer
+					// 或者收到通知
+					.merge($listenDevListUpdate)
+					// 获取ajax数据
+					.mergeMapTo($getDevListByAjax)
+					// 订阅
+					.subscribe(function(data) {
+						// 保存并向原生发送数据
+						InitNativeDevList(data);
+						// 向devlist发送更新信息
+						SendDevListPageMsg(data);
+					});
+
+				// 向服务器发送请求缓存处理配件请求
+				// SyncZoneRequest();
+
+			};
+			
+			
+
+			// 页面准备完毕
+			$pready
+				// 页面初始化
+				.mergeMapTo($init)
+				// 自动登录
+				// 或者监听登录 TODO
+				.mergeMapTo($login).merge($pready.mergeMapTo(ListenLoginSuccess$))
+				// 执行
+				.subscribe(Success$fn,
+					// 登录失败
+					AppLoginFail);
+					
+					
+			$pready
+				.mergeMapTo($listenUserUpdate)
+				.subscribe(UpdateUserInfo);
+
+			// 登录失败处理
+			function AppLoginFail() {
+
+				app.user.clear();
+				window.localStorage.setItem('_pwd_', '');
+				plus.storage.removeItem('dev_list');
+
+				mui.toast("帐号存在异常，请重新登录");
+				//app.user.get(function() {}); 
+			}
+			// 监听 token 失效
+			var $litenTokenErr = Rx.Observable.create(function(ob) {
+				_B.on('token_error', function(data) {
+					// token 错误
+					// 并且已经登录
+					app.user.has() && ob.next(data);
+				});
+			});
+			$pready
+				.mergeMapTo($litenTokenErr)
+				.subscribe(function(data) {
+					// 如果 是 token 过期
+					if(data.message === "TokenTimeOut") {
+						// 重新登录
+						$login
+							// 执行
+							.subscribe(Success$fn,
+								// 登录失败
+								AppLoginFail);
+						return;
+
+					}
+
+					plus.nativeUI.toast("帐号登录状态已失效，请重新登录");
+					// 重启app
+					ReloadApp();
+					// 通知原生
+					P.NotifyAccountInfoChange();
+				});
+
+			// 向原生注册 控制中心 处理函数回调
+			var InitNativeSystem = function(o) {
+				P.InitNativeSystem(o.account, o.pwd, o.domain, plus.device.uuid, function(arg) {
+					//console.log(arg);
+				});
+			};
+
+			// 向原生发送 设备列表数据
+			var InitNativeDevList = function(data) {
+				DEVICE.data = data;
+				P.InitNativeDevList(data);
+				// 通知 其他页面 原生已经收到数据
+				_B.emit("InitNativeDevList", {}, {
+					views: ["home"]
+				});
+			};
+
+			// 向devlist发送更新信息
+			var SendDevListPageMsg = function(data) {
+				_B.emit('device_update_timer', {
+					devlist: data
+				}, {
+					views: ['dev_my_list']
+				});
+			};
+
+			// 设备推送开关同步
+			var SyncHronous = function(account, id) {
+				PUSH_ID.data = id;
+
+				dal.push.synchronous(account, id, plus.os.name === 'iOS' ? 67 : 36, function(err, data) {
+					/*if(err) {
+						return mui.toast(err.message);
+					}
+					mui.toast(id + '同步成功');*/
+				});
+			};
+
+			// 发送同步配件请求
+			var SyncZoneRequest = function() {
+				dal.devaccessory.allacc(function() {});
+			}
+
+			// 更新本地用户信息
+			function UpdateUserInfo(data) {
+
+				data = FixUserData(data);
+				// 更新用户信息
+				app.user.set(data);
+				USER_INFO.data = data;
+				// 更新用户权限认证信息
+				app.user.setAuthInfo(data);
+
+			}
+
+			function ReloadApp() {
+				// 获取所有webview页面
+				var all = plus.webview.all();
+				// 获取当前webview页面
+				var index = plus.webview.currentWebview();
+				// 获取app启动页
+				var first = plus.webview.getLaunchWebview() || plus.webview.getWebviewById('main');
+				var id;
+				plus.nativeUI.showWaiting();
+				// 关闭除了当前和首页的 其它全部页面
+				for(var i = 0, l = all.length; i < l; i++) {
+					id = all[i].id;
+					if(id !== index.id && id !== first.id) {
+						plus.webview.close(all[i]);
+					}
+				}
+
+				var account = app.user.get().account;
+
+				// 记录最后一次登录的帐号
+				var login_type = window.localStorage.getItem('login_type');
+				// 只记录手动输入登录的帐号
+				if(login_type === 'pwd') {
+					window.localStorage.setItem('last_account', account || "");
+				} else {
+					window.localStorage.setItem('last_account', "");
+				}
+
+				// 清除本地用户数据
+				app.user.logout();
+				USER_INFO.clear();
+
+				window.localStorage.setItem('_pwd_', "");
+				window.localStorage.setItem('_domain_', "");
+
+				// 清除设备列表数据
+				$pready.subscribe(function() {
+					new ni.Cache('dev_list', "", {
+						plus: true
+					}).clear();
+				});
+
+				// 清除第三方登录信息
+				plus.oauth.getServices(function(auths) {
+					// 逐个注销
+					(auths || []).forEach(function(item) {
+						if(item && item.authResult) {
+							item.logout(function() {});
+						}
+					});
+				});
+
+				$pready
+					.mergeMap(function() {
+						// 拿取到本机pushid
+						var D = new ni.Cache("push_key", "", {
+							plus: true
+						});
+						return Rx.Observable.create(function(ob) {
+							// 清除pushid
+							dal.push.clearpush(D.data, account, function(err, data) {
+								ob.next();
+							});
+						});
+					})
+					.subscribe(function() {
+						plus.nativeUI.closeWaiting();
+						// 首页重新运行
+						first.reload();
+						// 显示首页
+						first.show("slide-in-bottom", 250);
+
+						//index.reload();
+						// 打开登录
+						app.user.get(function() {});
+					});
+
+			}
+
+			// 用户资料整合
+			var FixUserData = function(data) {
+				if(!data.vihiuser) {
+					return data;
+				}
+				// 绑定手机号
+				var bindmobile = data.bindmobile;
+				// 是否开启权限验证
+				var lockterminal = data.lockterminal;
+				// 是否需要登录验证
+				var validation = data.validation;
+				// 是否是主帐号手机
+				var ismaster = data.ismaster;
+				// 是否主帐号
+				var ismasteraccount = data.ismasteraccount;
+
+				// token
+				var token = data.token;
+				// loginid
+				var loginid = data.loginid;
+
+				data = data.vihiuser;
+
+				data.bindmobile = bindmobile;
+				data.lockterminal = lockterminal;
+				data.validation = validation;
+				data.ismaster = ismaster;
+
+				data.token = token;
+				data.loginid = loginid;
+
+				data.ismasteraccount = ismasteraccount;
+
+				return data;
+
+			}
+		</script>
+	</body>
+
+</html>

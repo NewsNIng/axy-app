@@ -1,0 +1,308 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设置</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">设置</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view app-font-size-28">
+				<li class="mui-table-view-cell">
+					<a class="">
+						<span>设备ID</span>
+						<span class="mui-badge" v-text="devInfo.devid">123456789</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" @tap="onNameTap()">
+					<a class="mui-navigate-right">
+						<span>设备名称</span>
+						<span class="mui-badge" v-text="devInfo.location || devInfo.devid"></span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" @tap="onBindTap()">
+					<a class="mui-navigate-right">
+						<span>绑定的摄像机</span>
+						<span class="mui-badge" v-text="devInfo.binding"></span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" @tap="onDataSaveTap()">
+					<a class="mui-navigate-right">
+						<span>数据保存记录</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" @tap="onArarmlogTap()">
+					<a class="mui-navigate-right">
+						<span>告警消息记录</span>
+					</a>
+				</li>
+			</ul>
+			<footer class="app-font-size-28">
+				<div @tap="onDel()" class="app-color-main-dark">删除设备</div>
+				<!--<div @tap="onReboot()">重启设备</div>-->
+			</footer>
+		</div>
+
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
+		
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer ></script>
+
+		<script type="text/javascript" src="../../../js/app/app-auth.js" ></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			var _B = new ni.Broadcast();
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						devInfo: {
+							"id": 0,
+							"streamfwdport": 0,
+							"location": "",
+							"devid": "",
+							"relation": 0,
+							"streamfwd": "",
+							"type": 0,
+							"signalfwd": "",
+							"signalfwdport": 0,
+							"online": 0,
+							"binding": "",
+							
+						},
+					};
+				},
+				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
+				},
+				methods: {
+					onArarmlogTap: function() {
+						mui.openWindow("dev_AX-903_alarmlog.html", "dev_AX-903_alarmlog", {
+							extras: {
+								_id: this.devInfo.id,
+								devInfo: this.devInfo
+							}
+						});
+					},
+					onDataSaveTap: function() {
+						mui.openWindow("dev_AX-903_datasave.html", "dev_AX-903_datasave", {
+							extras: {
+								_id: this.devInfo.id,
+								devInfo: this.devInfo
+							}
+						});
+					},
+
+					// 设备名称点击
+					onNameTap: function() {
+						var that = this;
+						app.page.getInput(function(data) {
+							data.content = data.content.trim().length === 0 ? that.devInfo.devid: data.content; 
+							dal.devparam.location(that.devInfo.devid, data.content, function(err, rs) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.devInfo.location = data.content;
+								mui.toast('名称更新成功');
+								// 通知上层的上层
+								_B.emit("update", {
+									info: that.devInfo
+								}, {
+									views: ['dev_my_list', 'home']
+								});
+							});
+						}, {
+							title: "摄像机名称",
+							content: that._fixName(that.devInfo.location),
+						});
+					},
+
+					// 设备绑定点击
+					onBindTap: function() {
+						var that = this;
+						
+						if(this.devInfo.binding) {
+							app.page.openForResultBy('dev_AX-903_bind.html', 'dev_AX-903_bind', function(data){
+								if(data.chage){
+									that.devInfo.binding = data.bindid;
+									_B.emit('chageBind', {
+										bindid: data.bindid
+									},{
+										views: ['dev_my_list','dev_AX-903']
+									});
+								}
+							},{
+								devInfo: this.devInfo
+							});
+						} else {
+							app.page.openForResultBy('dev_AX-903_select_id.html', 'dev_AX-903_select_id', function(data) {
+								plus.nativeUI.showWaiting();
+								dal.device.electric.binding(that.devInfo.devid, data.devid, function(err, rs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast(err.message);
+									}
+									mui.toast("修改绑定成功！");
+									that.devInfo.binding = data.devid;
+									// 通知上层的上层
+									_B.emit("update", {
+										info: that.devInfo
+									}, {
+										views: ['dev_my_list']
+									});
+									_B.emit('chageBind', {
+										bindid: data.devid 
+									},{
+										views: ['dev_my_list','dev_AX-903'] 
+									});
+									
+								});
+
+							}, {
+								// 过滤设备 电管家 和 智能网管
+								filter: [
+									"WG-100",
+									"AX-903",
+									"AX-904",
+									"VH-104MG",
+									"VH-104DG",
+									"VH-104GN",
+									"none"
+								]
+							});
+						}
+
+					},
+
+					_fixName: function(s) {
+						return app.dev.fixName(s);
+					},
+					
+					// 重启设备
+					onReboot: function() {
+						var dev = this.devInfo;
+						mui.confirm("确定要重启设备吗？", "", ["重启", "取消"], function(e) {
+							if(e.index === 0) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									if(err) {
+										return mui.toast('重启设备失败');
+									}
+									return mui.toast('重启设备成功');
+								});
+							}
+						});
+					},
+					
+					// 删除设备
+					onDel: function() {
+						plus.nativeUI.showWaiting();
+
+						var dev = this.devInfo;
+						var methodName = 'delete';
+						var that = this;
+						if(dev.relation === 2) {
+							methodName += 'share';
+						}
+
+						// 弹窗确认
+						var $alert = Rx.Observable.create(function(ob) {
+							mui.confirm("确定要删除设备吗？\n删除前设备将会重启", "", ["删除", "取消"], function(e) {
+								if(e.index === 0) {
+									ob.next(dev);
+								} else {
+									ob.error(new Error("您取消了删除"));
+								}
+							});
+						});
+						// 重启设备
+						var $rebootFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									/*if(err) {
+										return ob.error(err);
+									}*/ 
+									dev.methodName = methodName;
+									ob.next(dev);
+								});
+							})
+						}
+
+						// 删除设备
+						var $deleteFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.device[dev.methodName](dev.devid, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(dev);
+								});
+							})
+						}
+
+						// 是否主账号
+						var $isMaster = Rx.Observable.fromPromise(app.auth.verify(app.auth.MASTER, app.user.get()));
+						
+						$isMaster.mergeMapTo($alert)
+							.mergeMap($rebootFn)
+							.mergeMap($deleteFn)
+							.subscribe(function(dev) {
+								mui.toast("设备删除成功");
+								plus.nativeUI.closeWaiting();
+								_B.emit("delete", {}, {
+									views: [that.$view.opener()]
+								});
+								_B.emit("device_update", {}, {
+									views: ["home"]
+								});
+								that.$view.close();
+							}, function(err) {
+								plus.nativeUI.closeWaiting();
+								mui.toast(err.message);
+							});
+
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

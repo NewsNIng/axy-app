@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择设备ID</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.menu-warp {
+				height: 3.066666rem;
+			}
+			
+			.select {
+				left: 0.346666rem;
+			}
+			
+			.select>img {
+				width: 0.426666rem;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.title {
+				height: 0.96rem;
+				line-height: 0.96rem;
+				padding-left: 0.346666rem;
+				color: #9F9FA0;
+			}
+			
+			.name {
+				/*padding-left: 0.693333rem;*/
+			}
+			
+			.help {
+				padding-top: 0.5rem !important;
+				position: fixed;
+				bottom: 0;
+				left: 50%;
+				height: 2.5rem;
+				padding: 0.01rem 0;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				border-bottom: 1px solid #2BB8AA;
+				color: #2BB8AA;
+				width: 100%;
+				text-align: center;
+				height: ;
+				/*background-color: gray*/
+			}
+			
+			ul:not(.mui-pciker-list) {
+				margin-bottom: 2rem !important;
+			}
+			
+			.wrapper {
+				overflow: hidden;
+				height: 100%;
+			}
+			
+			.mui-table-view-cell,
+			.mui-table-view-cell>a {
+				height: 1.6rem !important;
+			}
+			
+			.mui-table-view-cell>a {
+				padding: 0.3rem !important;
+				padding-left: 1.04rem !important;
+				line-height: 0.6rem !important;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7 !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">选择设备ID</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="title app-font-size-24" ref="tabroom">
+					选择需要添加的设备ID
+				</div>
+				<div class="wrapper" ref="wrapper">
+
+					<ul class="mui-table-view app-font-size-28">
+						<template v-for="o,i in devs">
+							<li class="mui-table-view-cell" @tap="onSelectTap(i)" :key="o.devid">
+								<a>
+									<span class="mui-badge select"><img v-if="i === devActive" src="../../../image/smart/devices/add/select1.png"/><img v-if="i !== devActive" src="../../../image/smart/devices/add/select2.png"/></span>
+									<span class="name app-color-333333 app-font-size-34">{{o.name}}<br /><span class="id app-color-9f9fa0 app-font-size-26">设备ID:{{o.devid}}</span></span>
+								</a>
+							</li>
+						</template>
+					</ul>
+				</div>
+			</div>
+			<div v-if="!noWifi" class="help app-font-size-34" @tap="setWifi()">配置WIFI</div>
+			<div class="foot app-font-size-34" @tap="onNext()" ref="btn">下一步</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+
+		<script type="text/javascript" src="../../../js/lib/better-scroll.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			var P = plug.H5NativeBridge;
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						devActive: -1,
+						devs_: [],
+						wifiname: "",
+						wifipwd: "",
+						noWifi: true,
+
+						// 过滤显示某些主机设备 存类型名称
+						filter: [
+							"AX-360",
+							"AX-904",
+							"AX-903"
+						]
+					};
+				},
+				computed: {
+					indexDev: function() {
+						return this.devs[this.devActive];
+					},
+					devs: function() {
+						var tempName;
+						return this.devs_.filter(function(item) {
+							tempName = app.dev.findName(item.type)
+							if(this.filter.indexOf(tempName) >= 0) {
+								return false;
+							}
+							return true;
+						}.bind(this));
+					}
+				},
+
+				mounted: function() {
+					var wrapper = this.$refs.wrapper;
+					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
+						this.$refs.tabroom.offsetHeight -
+						this.$refs.btn.offsetHeight * 2 -
+						immersed -
+						44;
+
+					wrapper.style.height = wrapperHight + 'px';
+
+					this.$nextTick(function() {
+						if(!this.scroll) {
+							this.scroll = new BScroll(wrapper, {
+								click: true,
+								scrollY: true
+							});
+
+						} else {
+							this.scroll.refresh();
+						}
+
+					}.bind(this));
+				},
+				plusReady: function() {
+					//this.filter = this.$view.filter || [];
+
+					this.result = !!this.$view.result;
+					this.getLanDevHostList();
+					this.noWifi = this.$view.ex.noWifi;
+				},
+				methods: {
+					onSelectTap: function(i) {
+						this.devActive = i;
+					},
+					onNext: function() {
+						
+						if(this.devActive < 0) {
+							return mui.toast("请选择主机设备");
+						}
+						try {
+							var devid = this.indexDev.devid;
+							if(this.result) {
+								app.page.setResult({
+									devid: devid
+								}).close();
+							} else {
+								this.$view.loadURL('Lan_connect_camera.html?devid=' + devid + "&wifiname=" + this.wifiname + "&wifipwd=" + this.wifipwd);
+							}
+
+						} catch(e) {
+							mui.toast('获取主机信息失败');
+						}
+					},
+					// 内网主机列表
+					getLanDevHostList: function() {
+						var that = this;
+
+						// 5s 定时器
+						var $timer = Rx.Observable.interval(5e3);
+						var $start = Rx.Observable.create(function(_) {
+							_.next()
+						});
+
+						$start.merge($timer)
+							.map(P.GetLanDevHostList)
+							.filter(function(rs) {
+								return !!rs;
+							})
+							.subscribe(function(rs) {
+								rs = JSON.parse(rs).devlist;
+								if(rs && rs.length) {
+									that.devs_ = rs;
+								}
+							});
+
+					},
+					// 配置WIFI
+					setWifi: function() {
+						app.page.openForResultBy('connect_wifi.html', 'setwifi', function(data) {
+							this.wifiname = data.name;
+							this.wifipwd = data.pwd;
+							this.onNext();
+						}.bind(this));
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>
