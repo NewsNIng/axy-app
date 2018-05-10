@@ -178,6 +178,15 @@
 			.imgdiv>span.imgdiv-state>img {
 				width: 0.666666rem;
 			}
+			/*GPRS状态*/
+			
+			.imgdiv>span.gprs-state {
+				position: absolute;
+				bottom: 0.177777rem;
+				right: 0.2rem;
+				z-index: 9;
+				font-weight: bold;
+			}
 			
 			.imgdiv>span.online {
 				background-color: #06C1AE;
@@ -344,8 +353,6 @@
 				background-color: #E5E6E7;
 			}
 			
-			
-			
 			.a1-list>div.flex:before {
 				position: absolute;
 				right: 0;
@@ -420,6 +427,9 @@
 									</template>
 									
 								</span>
+								<span class="gprs-state app-color-ff3b30" v-if="app.dev.isGPRS(o.workmode)">
+									GPRS
+								</span>
 							</div>
 							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation) + ' ' + _getDevAuthorize(o.authorize)">
 
@@ -465,8 +475,7 @@
 												<span v-else>
 															通讯未知
 														</span>
-														
-																											
+
 											</div>
 											<div class="flex flex-item-center app-font-size-32" style="flex: 1;">
 												<span v-if="oo.enable" class="app-color-main">
@@ -481,7 +490,7 @@
 										<div class="flex flex-item-center mui-ellipsis" style="flex: 1; flex-direction: column;">
 											<div class="flex flex-item-center" style="flex: 1;">
 												<p class="mui-ellipsis app-font-size-32 app-color-333333">{{oo.name}}</p>
-											</div> 
+											</div>
 											<div class="flex flex-item-center " style="flex: 1; ">
 												<p class="app-font-size-30 mui-ellipsis-2">{{_fixDevLocation(oo.devname) || oo.devid}}</p>
 											</div>
@@ -494,8 +503,6 @@
 
 						</ul>
 
-						
-						
 					</div>
 				</template>
 				<template v-else-if="isGeted">
@@ -528,7 +535,7 @@
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-acc.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-mall.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-mall.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
@@ -566,9 +573,9 @@
 			var P = plug.H5NativeBridge;
 
 			var DEVD;
+			//, DEVICE_AUTH;
 
 			var wayPick;
-			
 
 			var __relationarr = ["self", "none", "share"];
 
@@ -645,8 +652,7 @@
 							"145": "btn_Stealthburglardetector@3x.png",
 							"160": "btn_Gasdetector@3x.png",
 							"161": "btn_Carbonmonoxidedetector@3x.png",
-							
-							
+
 						},
 
 					};
@@ -703,6 +709,11 @@
 					DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
+
+					// 设备列表 权限 字典
+					//DEVICE_AUTH = new ni.Cache('dev_list_auth', {}, {
+					//	plus: true
+					//});
 
 					Rx.Observable
 						// 入口
@@ -879,7 +890,7 @@
 						}
 						var type = app.dev.fixType(o.type);
 						Rx.Observable.create(function(ob) {
-							if(app.dev.isGPRS(o.workmode)){
+							if(app.dev.isGPRS(o.workmode)) {
 								return mui.toast("当前设备处于GPRS模式，暂不能播放");
 							}
 							if(app.dev.isMoreWays(type)) {
@@ -958,24 +969,39 @@
 					},
 					// 智能配件点击
 					onZoneTap: function(o, i) {
-						//						console.log(o.type);
-
 						var that = this;
-						Rx.Observable.create(function(ob) {
-							// 检查本地是否有相关配件页面
-							var pageUrl = '_www/html/smart/devices/dev_' + o.type + '.html';
-							pageUrl = plus.io.convertLocalFileSystemURL(pageUrl);
-							if(mui.os.ios) {
-								pageUrl = 'file://' + pageUrl;
-							}
-							plus.io.resolveLocalFileSystemURL(pageUrl, function() {
-								ob.next(pageUrl);
-							}, function(err) {
-								// 页面不存在
-								console.log(o.type);
-								mui.toast('尚未支持该配件');
-							});
-						}).subscribe(function(pageUrl) {
+						// 判断是否有 权限
+						//var authDir = DEVICE_AUTH.data;
+//						var authorization = o.authorize;//authDir[o.devid] || 0;
+//
+//						var authName = app.auth.ACC_SMART;
+//						if(app.acc.isTypeSafe(o.type)) {
+//							authName = app.auth.ACC_SAFE;
+//						}
+//						Rx.Observable.create(function(ob) {
+//							app.auth.verify(authName, authorization).then(function() {
+//								ob.next();
+//							}).catch(function(err) {
+//								mui.toast(err.message);
+//							});
+//						}).mergeMapTo(
+							Rx.Observable.create(function(ob) {
+								// 检查本地是否有相关配件页面
+								var pageUrl = '_www/html/smart/devices/dev_' + o.type + '.html';
+								pageUrl = plus.io.convertLocalFileSystemURL(pageUrl);
+								if(mui.os.ios) {
+									pageUrl = 'file://' + pageUrl;
+								}
+								plus.io.resolveLocalFileSystemURL(pageUrl, function() {
+									ob.next(pageUrl);
+								}, function(err) {
+									// 页面不存在
+									console.log(o.type);
+									mui.toast('尚未支持该配件');
+								});
+							})
+//						)
+			.subscribe(function(pageUrl) {
 
 							var actionDir = {
 								del: function() {
@@ -1075,7 +1101,7 @@
 
 						// 弹窗确认
 						var $alert = Rx.Observable.create(function(ob) {
-							mui.confirm("确定把这台分享设备移除列表吗？", "", ["移除", "取消"], function(e) {
+							mui.confirm("删除后，将无权限访问亲友分享的设备。确定要继续吗？", "", ["继续删除", "再等等"], function(e) {
 								if(e.index === 0) {
 									ob.next(dev);
 								} else {
@@ -1117,7 +1143,7 @@
 					// 设备控制
 					onControlTap: function(o, i) {
 						var that = this;
-						app.auth.verify(app.auth.MCR, o.authorize).then(function(){
+						app.auth.verify(app.auth.MCR, o.authorize).then(function() {
 							if(o.online !== 1) {
 								return mui.toast("设备不在线");
 							}
@@ -1126,7 +1152,7 @@
 						}).catch(function(e) {
 							mui.toast(e.message);
 						});
-						
+
 					},
 
 					// 设备分享

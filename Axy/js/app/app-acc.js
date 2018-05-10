@@ -19,7 +19,7 @@
 		0x22: "窗帘控制器",
 		0x23: "遥控器",
 		0x24: "磁力锁",
-		0x25: "电力安全主机",
+		//0x25: "电力安全主机",
 		0x26: "窗帘升降器",
 		0x27: "新智能锁",
 		0x28: "新智能锁（LK-02R）",
@@ -36,10 +36,34 @@
 		0xFF0001: "手机遥控"
 	};
 	
+	// 智能控制配件
+	var accSmart = [
+		0x13,
+		0x15,
+		0x17,
+		0x18,
+		0x19,
+		0x21,
+		0x22,
+		0x26,
+		0x27,
+		0x28
+	];
+	
 	// 通过type查找配件名称
 	acc.findName = function(type){
 		var s = accNameDir[type];
 		return s || "未知类型";
+	};
+	
+	// 是否是智能控制配件
+	acc.isTypeSmart = function(type){
+		return accSmart.indexOf(type) >= 0;
+	};
+	
+	// 是否是智能安全配件
+	acc.isTypeSafe = function(type){
+		return !acc.isTypeSmart(type);
 	};
 
 	app.acc = acc;

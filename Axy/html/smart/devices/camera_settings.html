@@ -275,6 +275,18 @@
 							</span>
 						</a>
 					</li>
+					
+					<li v-show="is360" class="mui-table-view-cell" @tap="onSecurityToggle()">
+						<a class="">
+							<span>隐私模式</span>
+							<span class="mui-badge"> 
+								<div @tap.stop  class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': isSecurity}" >
+									<div class="mui-switch-handle"></div>
+								</div>
+							</span>
+						</a>
+					</li>
+
 
 					<li v-if="!is104GN" class="mui-table-view-cell" @tap="onWifiSetTap()">
 						<a class="mui-navigate-right">
@@ -354,6 +366,9 @@
 
 						otherInfo: {
 							on: null,
+						},
+						wifiInfo: {
+							securitytype: 0,
 						}
 
 					};
@@ -368,6 +383,12 @@
 					},
 					is104GN: function() {
 						return app.dev.findName(this.devInfo.type).indexOf('AX-104') >= 0;
+					},
+					is360: function(){
+						return app.dev.findName(this.devInfo.type) === 'AX-360';
+					},
+					isSecurity: function(){
+						return this.is360 && this.wifiInfo.securitytype === 1;
 					}
 				},
 				mounted: function() {
@@ -387,6 +408,10 @@
 						"AX-360"
 					].indexOf(devtypename) >= 0){
 						this._getOpenled();
+					}
+					
+					if(this.is360){
+						this.getwifi();
 					}
 				},
 				methods: {
@@ -542,6 +567,23 @@
 							});
 						}
 					},
+					
+					// 获取WIFI配置信息
+					getwifi: function() {
+
+						var that = this;
+						return Rx.Observable.create(function(ob) {
+							dal.devparam.getwifi(that.devInfo.devid, that.devInfo.type, function(err, rs) {
+								if(err) {
+									return ob.error(err);
+								}
+								
+								that.wifiInfo = rs;
+								ob.next();
+							});
+						});
+
+					},
 
 					// 删除设备
 					onDel: function() {
@@ -635,6 +677,11 @@
 							}
 							that.otherInfo.on = !isActive;
 						});
+					},
+					// 隐私模式切换
+					onSecurityToggle: function(){
+						// TODO 发送请求
+						this.wifiInfo.securitytype = +!this.wifiInfo.securitytype;
 					},
 					onLogTap: function() {
 						mui.openWindow('camera_settings_log.html', 'camera_settings_log', {

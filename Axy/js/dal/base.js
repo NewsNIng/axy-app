@@ -49,6 +49,7 @@ function requestAdapter(type, url, params, callback) {
 	url = BASE_URL + url;
 	// 获取用户权限信息
 	params.account = params.account || window.localStorage.getItem('_account_') || "";
+	console.log("==========");
 	console.log("request: [" + type + "]" + url);
 	console.log("params: [json]" + JSON.stringify(params));
 	
@@ -66,6 +67,7 @@ function requestAdapter(type, url, params, callback) {
 		success: function(data) {
 			var o = {};
 			console.log("response: [" + apiUrl + "]" + JSON.stringify(data));
+			console.log("==========");
 			if(dal.tokenCodeDir[data.code]){
 			//if(data.code === "403") {
 				//alert("[" + apiUrl + "]" + JSON.stringify(data));

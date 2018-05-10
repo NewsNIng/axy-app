@@ -12,6 +12,8 @@
 		LOGIN: "login", // 登录权限
 		MASTER: "master", // 是否主账号
 		MCR: "mcr", // 遥控器
+		ACC_SAFE: "acc_safe", // 智能安全配件权限
+		ACC_SMART: "acc_smart", // 智能控制配件权限
 	};
 
 	// 权限对应处理
@@ -45,6 +47,34 @@
 						re();
 					}else{
 						rj("您没有遥控器的权限");
+					}
+				});
+			},
+		},
+		
+		"acc_safe": {
+			exec: function(authorize) {
+				authorize = authorize || 0;
+				return new Promise(function(re, rj) {
+					var b = 0x01 << 8;
+					if(authorize & b == b){
+						re();
+					}else{
+						rj("您没有智能安全配件的权限");
+					}
+				});
+			},
+		},
+		
+		"acc_smart": {
+			exec: function(authorize) {
+				authorize = authorize || 0;
+				return new Promise(function(re, rj) {
+					var b = 0x01 << 16;
+					if(authorize & b == b){
+						re();
+					}else{
+						rj("您没有智能控制配件的权限");
 					}
 				});
 			},

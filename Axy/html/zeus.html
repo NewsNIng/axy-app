@@ -30,7 +30,9 @@
 			/**
 			 * H5Native 控制中心 
 			 */
-			var PUSH_ID, DEVICE, USER_INFO, P, _B;
+			var PUSH_ID, DEVICE,
+			//DEVICE_AUTH, 
+			USER_INFO, P, _B;
 
 			var getPwd = function() {
 				return window.localStorage.getItem('_pwd_');
@@ -61,6 +63,10 @@
 				USER_INFO = new ni.Cache('app_user_info', {}, {
 					plus: true
 				});
+				// 设备列表 权限 字典
+				//DEVICE_AUTH = new ni.Cache('dev_list_auth', {}, {
+				//	plus: true
+				//});
 				// 原生桥梁
 				P = plug.H5NativeBridge;
 				// 多页面通知
@@ -263,6 +269,8 @@
 						InitNativeDevList(data);
 						// 向devlist发送更新信息
 						SendDevListPageMsg(data);
+						// 保存设备的权限信息
+						//SaveDevListAuth(data);
 					});
 
 				// 向服务器发送请求缓存处理配件请求
@@ -353,6 +361,18 @@
 				}, {
 					views: ['dev_my_list']
 				});
+			};
+			
+			// 保存设备的权限信息
+			var SaveDevListAuth = function(data){
+				var i = 0, l = data.length;
+				var authDir = {}, temp;
+				while(i < l){
+					temp = data[i];
+					authDir[temp.devid] = temp.authorize || 0;
+					i++;
+				}
+				DEVICE_AUTH.data = authDir;
 			};
 
 			// 设备推送开关同步
