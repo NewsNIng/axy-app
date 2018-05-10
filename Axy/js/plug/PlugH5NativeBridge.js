@@ -436,5 +436,15 @@
 	pgn.NotifyWarningMsg = function(sf, ff){
 		return pg.asyncExec(N, 'NotifyWarningMsg', [], sf, ff);
 	}
-
+	//告警消息列表
+	pgn.GetAlarmListAsyn = function(devid, stime, endtime,username,pageIndex,pageSize, sf, ff){
+		return pg.asyncExec(N,'GetAlarmListAsyn', [devid,stime,endtime,username,pageIndex,pageSize], sf, ff)
+	}
+	//修改告警消息
+	pgn.UpdateAlarm = function(username,ids){
+		return pg.syncExec(N,'UpdateAlarm',[username,ids])
+	}
+	pgn.DelAlarmListAsyn = function(username,ids,sf,ff){
+		return pg.asyncExec(N,'DelAlarmListAsyn',[username,ids],sf,ff)
+	}
 }(window));
