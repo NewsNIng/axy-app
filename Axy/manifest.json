@@ -1,0 +1,1344 @@
+{
+	"@platforms": [
+		"android",
+		"iPhone",
+		"iPad"
+	],
+	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
+	"name": "Axy",/*应用名称，程序桌面图标名称*/
+	"version": {
+		"name": "2.1.6",/*应用版本名称*/
+		"code": "20180517"
+	},
+	"description": "",/*应用描述信息*/
+	"icons": {
+		"72": "icon.png"
+	},
+	"launch_path": "index.html",/*应用的入口页面，默认为根目录下的index.html；支持网络地址，必须以http://或https://开头*/
+	"developer": {
+		"name": "msr7",/*开发者名称*/
+		"email": "",/*开发者邮箱地址*/
+		"url": ""
+	},
+	"permissions": {
+
+
+		"Cache": {
+			"description": "管理应用缓存"
+		},
+		"Camera": {
+			"description": "访问摄像头"
+		},
+		"Console": {
+			"description": "跟踪调试输出日志"
+		},
+
+		"Device": {
+			"description": "访问设备信息"
+		},
+		"Downloader": {
+			"description": "文件下载管理"
+		},
+		"Events": {
+			"description": "应用扩展事件"
+		},
+		"File": {
+			"description": "访问本地文件系统"
+		},
+		"Gallery": {
+			"description": "访问系统相册"
+		},
+
+		"Invocation": {
+			"description": "使用Native.js能力"
+		},
+
+
+
+		"Storage": {
+			"description": "管理应用本地数据"
+		},
+
+		"Uploader": {
+			"description": "管理文件上传任务"
+		},
+		"Runtime": {
+			"description": "访问运行期环境"
+		},
+		"XMLHttpRequest": {
+			"description": "跨域网络访问"
+		},
+		"Zip": {
+			"description": "文件压缩与解压缩"
+		},
+
+		"Maps": {
+			"description": "管理地图插件"
+		},
+
+		"Webview": {
+			"description": "窗口管理"
+		},
+		"NativeUI": {
+			"description": "原生UI控件"
+		},
+		"Navigator": {
+			"description": "浏览器信息"
+		},
+		"NativeObj": {
+			"description": "原生对象"
+		},
+
+		"Geolocation": {},
+		"H5NativeBridge": {
+			"description": "安心云智能"
+		},
+		"Barcode": {},
+
+		"OAuth": {},
+		"Messaging": {},
+		"Share": {},
+		"Statistic": {}
+	},
+	"plus": {
+		"error": {
+			"url": "html/smart/devices/dev_error.html"
+		},
+		"statusbar": {
+			"immersed": true
+		},
+		"popGesture": "close",
+		"splashscreen": {
+			"autoclose": true,/*是否自动关闭程序启动界面，true表示应用加载应用入口页面后自动关闭；false则需调plus.navigator.closeSplashscreen()关闭*/
+			"waiting": true
+		},
+		"runmode": "liberate",/*应用的首次启动运行模式，可取liberate或normal，liberate模式在第一次启动时将解压应用资源（Android平台File API才可正常访问_www目录）*/
+		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
+		"distribute": {
+			"plugins": {
+				"statics": {
+					"umeng": {
+						"appkey_ios": "53d1cdb256240b9ab503254c",
+						"channelid_ios": "Appstore",
+						"appkey_android": "53d1cdb256240b9ab503254c",
+						"channelid_android": "应用宝,360,百度,UC,豌豆荚,安卓市场"
+					}
+				},
+				"share": {
+					"qq": {
+						"appid": "1104763696",
+						"description": "QQ分享"
+					},
+					"sina": {
+						"appkey": "619676523",
+						"appsecret": "452783db93630b4fd82a1dd42c4f4be2",
+						"redirect_uri": "https://api.weibo.com/oauth2/default.html",
+						"description": "可选，新浪微博分享"
+					},
+					"weixin": {
+						"appid": "wx880affb92989a60e",
+						"appsecret": "85471c18b19a88d181e4f732968cea55",
+						"description": "可选，微信分享"
+					}
+				},
+				"oauth": {
+					"qq": {
+						"appid": "1104763696"
+					},
+					"sina": {
+						"appkey": "619676523",
+						"appsecret": "452783db93630b4fd82a1dd42c4f4be2",
+						"redirect_uri": "https://api.weibo.com/oauth2/default.html"
+					},
+					"weixin": {
+						"appid": "wx880affb92989a60e",
+						"appsecret": "85471c18b19a88d181e4f732968cea55"
+					}
+				},
+				"maps": {
+					"baidu": {
+						"appkey_ios": "gcFrC4FpFYgTMMFkMRQNP4zR5wQ5yOcK",
+						"appkey_android": "nuSPRZlyd5fy3dRBRcvX6iZNHWUxyH7c",
+						"appkey": "",
+						"description": ""
+					}
+				}
+			},
+			"apple": {
+				"appid": "",/*iOS应用标识，苹果开发网站申请的appid，如io.dcloud.HelloH5*/
+				"mobileprovision": "",/*iOS应用打包配置文件*/
+				"password": "",/*iOS应用打包个人证书导入密码*/
+				"p12": "",/*iOS应用打包个人证书，打包配置文件关联的个人证书*/
+				"devices": "universal",/*iOS应用支持的设备类型，可取值iphone/ipad/universal*/
+				"frameworks": []
+			},
+			"google": {
+				"packagename": "",/*Android应用包名，如io.dcloud.HelloH5*/
+				"keystore": "",/*Android应用打包使用的密钥库文件*/
+				"password": "",/*Android应用打包使用密钥库中证书的密码*/
+				"aliasname": "",/*Android应用打包使用密钥库中证书的别名*/
+				"permissions": [
+					"<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
+					"<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+					"<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+					"<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\"/>",
+					"<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>",
+					"<uses-permission android:name=\"android.permission.CAMERA\"/>",
+					"<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>",
+					"<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
+					"<uses-permission android:name=\"android.permission.SEND_SMS\"/>",
+					"<uses-permission android:name=\"android.permission.INTERNET\"/>",
+					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+					"<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
+					"<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
+					"<uses-feature android:name=\"android.hardware.camera\"/>",
+					"<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
+					"<uses-permission android:name=\"android.permission.RECEIVE_USER_PRESENT\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_SMS\"/>",
+					"<uses-permission android:name=\"android.permission.READ_SMS\"/>"
+				]
+			},
+			"orientation": [
+				"portrait-primary",
+				"portrait-secondary",
+				"landscape-primary"
+			],/*应用支持的方向，portrait-primary：竖屏正方向；portrait-secondary：竖屏反方向；landscape-primary：横屏正方向；landscape-secondary：横屏反方向*/
+			"icons": {
+				"ios": {
+					"prerendered": true, /*应用图标是否已经高亮处理，在iOS6及以下设备上有效*/
+					"auto": "", /*应用图标，分辨率：512x512，用于自动生成各种尺寸程序图标*/
+					"iphone": {
+						"normal": "unpackage/res/icons/57x57.png",/*iPhone普通屏幕程序图标，分辨率：57x57*/
+						"retina": "unpackage/res/icons/114x114.png",/*iPhone高分屏程序图标，分辨率：114x114*/
+						"retina7": "unpackage/res/icons/120x120.png",/*iPhone iOS7高分屏程序图标，分辨率：120x120*/
+						"spotlight-normal": "unpackage/res/icons/29x29.png", /*iPhone Spotlight搜索程序图标，分辨率：29x29*/
+						"spotlight-retina": "unpackage/res/icons/58x58.png", /*iPhone高分屏Spotlight搜索程序图标，分辨率：58x58*/
+						"spotlight-retina7": "unpackage/res/icons/80x80.png",/*iPhone iOS7高分屏Spotlight搜索程序图标，分辨率：80x80*/
+						"settings-normal": "unpackage/res/icons/29x29.png", /*iPhone设置页面程序图标，分辨率：29x29*/
+						"settings-retina": "unpackage/res/icons/58x58.png",
+						"retina8": "unpackage/res/icons/180x180.png",
+						"settings-retina8": "unpackage/res/icons/87x87.png"
+					},
+					"ipad": {
+						"normal": "unpackage/res/icons/72x72.png", /*iPad普通屏幕程序图标，分辨率：72x72*/
+						"retina": "unpackage/res/icons/144x144.png", /*iPad高分屏程序图标，分辨率：144x144*/
+						"normal7": "unpackage/res/icons/76x76.png", /*iPad iOS7程序图标，分辨率：76x76*/
+						"retina7": "unpackage/res/icons/152x152.png", /*iPad iOS7高分屏程序图标，分辨率：152x152*/
+						"spotlight-normal": "unpackage/res/icons/50x50.png", /*iPad Spotlight搜索程序图标，分辨率：50x50*/
+						"spotlight-retina": "unpackage/res/icons/100x100.png", /*iPad高分屏Spotlight搜索程序图标，分辨率：100x100*/
+						"spotlight-normal7": "unpackage/res/icons/40x40.png",/*iPad iOS7 Spotlight搜索程序图标，分辨率：40x40*/
+						"spotlight-retina7": "unpackage/res/icons/80x80.png",/*iPad iOS7高分屏Spotlight搜索程序图标，分辨率：80x80*/
+						"settings-normal": "unpackage/res/icons/29x29.png",/*iPad设置页面程序图标，分辨率：29x29*/
+						"settings-retina": "unpackage/res/icons/58x58.png"
+					}
+				},
+				"android": {
+					"mdpi": "unpackage/res/icons/48x48.png", /*普通屏程序图标，分辨率：48x48*/
+					"ldpi": "unpackage/res/icons/48x48.png", /*大屏程序图标，分辨率：48x48*/
+					"hdpi": "unpackage/res/icons/72x72.png", /*高分屏程序图标，分辨率：72x72*/
+					"xhdpi": "unpackage/res/icons/96x96.png",/*720P高分屏程序图标，分辨率：96x96*/
+					"xxhdpi": "unpackage/res/icons/144x144.png",
+					"xxxhdpi": "unpackage/res/icons/192x192.png"
+				}
+			},
+			"splashscreen": {
+				"ios": {
+					"iphone": {
+						"default": "", /*iPhone3启动图片选，分辨率：320x480*/
+						"retina35": "",/*3.5英寸设备(iPhone4)启动图片，分辨率：640x960*/
+						"retina40": ""
+					},
+					"ipad": {
+						"portrait": "", /*iPad竖屏启动图片，分辨率：768x1004*/
+						"portrait-retina": "",/*iPad高分屏竖屏图片，分辨率：1536x2008*/
+						"landscape": "", /*iPad横屏启动图片，分辨率：1024x748*/
+						"landscape-retina": "", /*iPad高分屏横屏启动图片，分辨率：2048x1496*/
+						"portrait7": "", /*iPad iOS7竖屏启动图片，分辨率：768x1024*/
+						"portrait-retina7": "",/*iPad iOS7高分屏竖屏图片，分辨率：1536x2048*/
+						"landscape7": "", /*iPad iOS7横屏启动图片，分辨率：1024x768*/
+						"landscape-retina7": ""
+					}
+				},
+				"android": {
+					"mdpi": "", /*普通屏启动图片，分辨率：240x282*/
+					"ldpi": "", /*大屏启动图片，分辨率：320x442*/
+					"hdpi": "", /*高分屏启动图片，分辨率：480x762*/
+					"xhdpi": "", /*720P高分屏启动图片，分辨率：720x1242*/
+					"xxhdpi": ""
+				}
+			},
+			"debug": false
+		},"ads":{"rp":false,"splash":false,"push":false},"adid":""
+	},
+	"dependencies": {
+		"pages": {
+			"index.html": {
+				"resources": [
+					"js/mui.min.js",
+					"css/mui.min.css",
+					"html/home/index.html",
+					"js/app/app-page.js"
+				],
+				"refer": [
+					"html/common/guide.html",
+					"html/main.html"
+				],
+				"priority": 0
+			},
+			"html/main.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/vue.min.js",
+					"js/vue-ni.min.js",
+					"html/home/index.html",
+					"js/vue-ni.js",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js",
+					"css/lib/mui.min.css",
+					"js/lib/vue-ni.js",
+					"image/main/home_active.png",
+					"css/app/app.css",
+					"image/main/smart_active.png",
+					"image/main/nearby_active.png",
+					"image/main/person_active.png",
+					"image/main/person.png",
+					"image/main/smart.png",
+					"image/main/nearby.png",
+					"image/main/home.png",
+					"html/person/index.html",
+					"html/smart/index.html",
+					"html/nearby/index.html",
+					"js/dal/system.js",
+					"js/dal/base.js",
+					"js/common/rsmanager.js",
+					"js/app/app-page.js",
+					"js/lib/Rx.min.js",
+					"js/app/app.js",
+					"js/common/android-back.js",
+					"js/common/flexible.js",
+					"image/main/mall.png",
+					"js/app/app-mall.js"
+				],
+				"refer": [
+					"html/zeus.html",
+					"html/smart/index2.html",
+					"html/common/login.html",
+					"html/public/updateWindow.html"
+				],
+				"priority": 0
+			},
+			"html/person/index.html": {
+				"resources": [
+					"css/mui.min.css",
+					"css/lib/mui.min.css",
+					"css/app/app.css",
+					"js/common/immersed.js",
+					"js/lib/mui.min.js",
+					"js/app/app-page.js",
+					"js/common/imagelazyload.js",
+					"js/lib/md5.min.js",
+					"js/lib/vue.min.js",
+					"js/common/flexible.js",
+					"js/app/app.js",
+					"js/lib/vue-ni.js",
+					"js/config.js"
+				],
+				"refer": [
+					"html/common/login.html",
+					"html/common/reset2.html",
+					"html/public/position.html",
+					"html/public/browser.html",
+					"html/person/information.html",
+					"html/person/wallet/index.html",
+					"html/smart/devices/dev_my_list.html",
+					"html/person/devshare/index.html",
+					"html/person/setting/index.html",
+					"html/person/coupon/index.html",
+					"html/person/message/index.html",
+					"html/person/collection/my_camera.html",
+					"html/person/collection/my_attention.html",
+					"html/person/about.html",
+					"html/person/myself/business.html",
+					"html/person/collection/my_collection.html",
+					"html/person/collection/my_mall.html"
+				],
+				"priority": 0
+			},
+			"html/home/index.html": {
+				"resources": [
+					"css/mui.min.css",
+					"css/lib/mui.min.css",
+					"js/api/user.js",
+					"js/lib/axios.min.js",
+					"js/dal/user.js",
+					"js/dal/base.js",
+					"js/config.js",
+					"js/app/user_info.js",
+					"css/app/app.css",
+					"js/common/immersed.js",
+					"js/app/app.js",
+					"js/common/imagelazyload.js",
+					"js/lib/md5.min.js",
+					"image/home/goshop.png",
+					"image/home/gohome.png",
+					"image/home/outhome.png",
+					"image/home/outshop.png",
+					"image/home/message.png",
+					"image/home/plus.png",
+					"image/home/search.png",
+					"image/home/like_b.png",
+					"image/home/dev_camera.png",
+					"image/home/like_d.png",
+					"image/home/like_c.png",
+					"image/home/like_a.png",
+					"image/home/see_more.png",
+					"image/home/dev_share.png",
+					"image/home/dev_setting.png",
+					"js/plug/test.js",
+					"fonts/mui.ttf",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js",
+					"js/lib/vue-ni.js",
+					"js/dal/home.js",
+					"js/common/flexible.js",
+					"js/dal/store.js",
+					"js/app/app-page.js",
+					"html/home/picture_4@3x.png",
+					"html/home/picture_2@3x.png",
+					"html/home/picture_1@3x.png",
+					"image/home/btn_Adddevice@3x.png",
+					"html/home/picture_3@3x.png",
+					"image/smart/devices/bg/903@3xweb.png",
+					"image/smart/devices/bg/camera@3x.png"
+				],
+				"refer": [
+					"html/search/index.html",
+					"html/public/browser.html",
+					"html/nearby/business/store_details.html",
+					"html/smart/devices/dev_my_list.html",
+					"html/smart/devices/camera_settings.html",
+					"html/smart/add/add_device.html",
+					"html/smart/scenes/index.html",
+					"html/common/login.html",
+					"html/person/message/index.html",
+					"html/person/devshare/share.html",
+					"html/smart/scenes/index2.html",
+					"html/smart/devices/dev_AX-903.html",
+					"html/smart/devices/dev_WG-100_setting.html",
+					"html/smart/devices/dev_WG-100.html",
+					"html/smart/devices/dev_AX-903_setting.html",
+					"html/smart/devices/dev_VH-104_setting.html",
+					"html/smart/devices/dev_AX-904.html"
+				],
+				"priority": 0
+			},
+			"html/smart/index.html": {
+				"resources": [
+					"css/mui.min.css",
+					"css/lib/mui.min.css",
+					"css/app/app.css",
+					"js/dal/user.js",
+					"js/dal/base.js",
+					"js/common/flexible.js",
+					"js/common/immersed.js",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js"
+				],
+				"refer": [
+					"html/smart/scenes/index.html",
+					"html/smart/devices/dev_curtain_controller.html",
+					"html/smart/devices/dev_electric_controller.html",
+					"html/smart/devices/dev_Infrared_controller.html",
+					"html/smart/add/scan.html",
+					"html/smart/add/add_device.html",
+					"html/smart/add/family_menu.html",
+					"html/search/index.html",
+					"html/common/login.html",
+					"html/smart/devices/dev_my_list.html",
+					"html/public/browser.html",
+					"html/smart/scenes/index2.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/index.html": {
+				"resources": [
+					"css/mui.min.css",
+					"css/lib/mui.min.css",
+					"css/app/app.css",
+					"js/common/imagelazyload.js",
+					"js/lib/md5.min.js",
+					"js/common/immersed.js",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js",
+					"js/app/app.js",
+					"js/lib/vue-ni.js",
+					"js/extend/String.js",
+					"html/nearby/pages/list.html",
+					"html/nearby/pages/theme.html",
+					"html/nearby/pages/discover.html"
+				],
+				"refer": [
+					"html/public/position.html",
+					"html/nearby/business/signup.html",
+					"html/nearby/menu.html",
+					"html/search/index.html"
+				],
+				"priority": 0
+			},
+			"html/common/login.html": {
+				"resources": [
+					"js/common/flexible.js",
+					"css/lib/mui.min.css",
+					"js/common/immersed.js",
+					"css/app/app.css",
+					"js/lib/mui.min.js",
+					"js/dal/user.js",
+					"js/lib/vue.min.js",
+					"fonts/mui.ttf",
+					"js/app/app.js",
+					"js/dal/base.js",
+					"image/common/login_weibo.png",
+					"image/common/login_logo.png",
+					"image/common/login_wechat.png",
+					"image/common/login_account.png",
+					"image/common/login_pwd.png",
+					"image/common/login_qq.png",
+					"js/lib/vue-ni.js",
+					"html/common/reset.html",
+					"js/app/app-rules.js",
+					"js/lib/Rx.min.js",
+					"js/app/app-page.js",
+					"js/dal/system.js",
+					"image/smart/devices/others/down.png",
+					"js/lib/better-scroll.min.js"
+				],
+				"refer": [
+					"html/common/register.html",
+					"html/common/authorized.html"
+				],
+				"priority": 0
+			},
+			"html/common/register.html": {
+				"resources": [
+					"css/lib/mui.min.css",
+					"css/app/app.css",
+					"image/common/login_msg.png",
+					"js/common/flexible.js",
+					"js/lib/mui.min.js",
+					"fonts/mui.ttf",
+					"image/common/login_account.png",
+					"js/common/immersed.js",
+					"image/common/login_logo.png",
+					"js/dal/user.js",
+					"js/lib/vue.min.js",
+					"js/app/app.js",
+					"js/dal/base.js",
+					"image/common/login_pwd.png",
+					"image/common/agree_noselect.png",
+					"image/common/agree_selected.png"
+				],
+				"refer": [
+					"html/common/login.html"
+				],
+				"priority": 0
+			},
+			"html/common/reset.html": {
+				"resources": [
+					"css/lib/mui.min.css",
+					"html/common/login.html",
+					"js/lib/mui.min.js",
+					"css/app/app.css",
+					"js/common/flexible.js",
+					"image/common/login_logo.png",
+					"image/common/login_account.png",
+					"image/common/login_pwd.png",
+					"image/common/login_msg.png",
+					"js/common/immersed.js",
+					"js/dal/user.js",
+					"js/lib/vue.min.js",
+					"fonts/mui.ttf",
+					"js/app/app.js",
+					"js/dal/base.js"
+				],
+				"refer": [
+					"html/common/reset2.html"
+				],
+				"priority": 0
+			},
+			"html/common/reset2.html": {
+				"resources": [
+					"css/lib/mui.min.css",
+					"html/common/reset.html",
+					"js/common/immersed.js",
+					"js/dal/user.js",
+					"image/common/login_logo.png",
+					"css/app/app.css",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js",
+					"js/common/flexible.js",
+					"fonts/mui.ttf",
+					"image/common/login_account.png",
+					"js/app/app.js",
+					"js/dal/base.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/nearby/business/signup.html": {
+				"resources": [],
+				"refer": [
+					"html/public/position.html",
+					"html/public/input.html",
+					"html/public/mailltype.html",
+					"html/public/maps.html",
+					"html/nearby/business/upload_store_info.html",
+					"html/nearby/business/signup_next.html",
+					"html/nearby/business/upload_store_pic.html",
+					"html/nearby/business/upload_store_time.html",
+					"html/common/login.html",
+					"html/nearby/business/signup_success.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/business/signup_success.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/store_details.html",
+					"html/nearby/business/signup_next.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/business/signup_next.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/signup_success.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/pages/discover.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html",
+					"html/nearby/pages/discover_release.html",
+					"html/nearby/discover/discover_release.html",
+					"html/person/other.html",
+					"html/common/login.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/pages/list.html": {
+				"resources": [
+					"image/nearby/time.png",
+					"image/nearby/phone.png",
+					"image/nearby/show.png",
+					"image/nearby/navigation.png"
+				],
+				"refer": [
+					"html/nearby/business/store_details.html",
+					"html/public/position.html",
+					"html/public/maps.html",
+					"html/nearby/business/signup.html"
+				],
+				"priority": 0
+			},
+			"html/public/position.html": {
+				"resources": [],
+				"refer": [
+					"html/public/city.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/index.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/edit_scenes.html",
+					"html/smart/scenes/create_scenes.html",
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/create_scenes.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/edit_scenes.html",
+					"html/smart/scenes/add_scenes.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/trigger_conditions.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/setting_trigger.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/edit_scenes.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/trigger_conditions.html",
+					"html/smart/scenes/perform_actions.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/discover/discover_details.html": {
+				"resources": [
+					"image/nearby/business/收藏2@3x.png"
+				],
+				"refer": [
+					"html/person/other.html",
+					"html/common/login.html",
+					"html/public/share.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/scan.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html",
+					"html/smart/devices/dev_select_id.html",
+					"html/smart/add/scan_code.html",
+					"html/smart/add/scan_code_904.html",
+					"html/smart/add/scan_bind_dev.html",
+					"html/smart/add/add_completed.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/add_device.html": {
+				"resources": [
+					"image/smart/devices/dev_icon/门禁主机@3x.png",
+					"image/smart/devices/dev_icon/紧急按钮@3x.png",
+					"image/smart/devices/dev_icon/隐形防盗探测器@3x.png",
+					"image/smart/devices/dev_icon/窗帘控制器@3x.png",
+					"image/smart/devices/dev_icon/智能门锁@3x.png",
+					"image/smart/devices/dev_icon/智能灯控@3x.png",
+					"image/smart/devices/dev_icon/遥控器@3x.png",
+					"image/smart/devices/dev_icon/烟雾探测器@3x.png",
+					"image/smart/devices/dev_icon/智能插座@3x.png",
+					"image/smart/devices/dev_icon/迎宾器@3x.png",
+					"image/smart/devices/dev_icon/窗帘升降器@3x.png",
+					"image/smart/devices/dev_icon/红外遥控模块@3x.png",
+					"image/smart/devices/dev_icon/声光报警器@3x.png",
+					"image/smart/devices/dev_icon/一氧化碳探测器@3x.png",
+					"image/smart/devices/dev_icon/燃气探测器@3x.png",
+					"image/smart/devices/dev_icon/电力安全主机@3x.png",
+					"image/smart/devices/dev_icon/红外幕帘@3x.png",
+					"image/smart/devices/dev_icon/门磁探测器@3x.png"
+				],
+				"refer": [
+					"html/smart/add/family_menu.html",
+					"html/smart/add/scan.html",
+					"html/smart/add/Lan_add_camera.html",
+					"html/smart/add/Lan_connect_dev.html",
+					"html/smart/add/Lan_select_dev_id.html",
+					"html/smart/add/Lan_connect_camera.html",
+					"html/smart/add/connect_wifi.html",
+					"html/smart/add/sonic_connect_camera1.html",
+					"html/smart/add/sonic_connect_camera2.html",
+					"html/smart/add/sonic_connect_dev1.html",
+					"html/smart/add/sonic_connect_dev2.html",
+					"html/smart/add/add_completed.html",
+					"html/smart/add/blue_connect_camera1.html",
+					"html/smart/add/blue_select_dev_id.html",
+					"html/smart/add/blue_connect_camera2.html",
+					"html/smart/add/blue_connect_camera3.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/family_menu.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/family_code.html",
+					"html/smart/add/family_scan.html",
+					"html/smart/devices/dev_my_list.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/menu.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/signup.html",
+					"html/nearby/discover/discover_release.html"
+				],
+				"priority": 0
+			},
+			"html/search/index.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html",
+					"html/nearby/business/store_details.html"
+				],
+				"priority": 0
+			},
+			"html/smart/index2.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/index.html",
+					"html/common/login.html",
+					"html/smart/add/scan.html",
+					"html/smart/add/add_device.html",
+					"html/smart/devices/dev_my_list.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/perform_actions.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/select_device.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/Lan_select_dev_id.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/Lan_connect_dev.html",
+					"html/smart/add/connect_wifi.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/Lan_connect_camera.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/Lan_select_dev_id.html",
+					"html/smart/add/sonic_connect_dev2.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/Lan_connect_dev.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/Lan_add_camera.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/sonic_connect_dev2.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/sonic_connect_dev1.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/sonic_connect_dev1.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/sonic_connect_dev2.html",
+					"html/smart/add/sonic_connect_camera2.html",
+					"html/smart/add/sonic_connect_camera1.html",
+					"html/smart/add/blue_connect_camera1.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_my_list.html": {
+				"resources": [
+					"image/smart/devices/bg/903@3xweb.png",
+					"image/smart/devices/bg/wg_100@3xweb.png",
+					"image/smart/scenes/dev_icons/btn_Acousto-opticalarm@3x.png",
+					"image/smart/scenes/dev_icons/btn_Infrareddetector@3x (2).png"
+				],
+				"refer": [
+					"html/smart/add/add_device.html",
+					"html/smart/devices/camera_settings.html",
+					"html/smart/devices/dev_17.html",
+					"html/person/devshare/share.html",
+					"html/smart/devices/dev_WG-100.html",
+					"html/smart/devices/dev_20.html",
+					"html/smart/devices/dev_65.html",
+					"html/smart/devices/dev_129.html",
+					"html/smart/devices/dev_48.html",
+					"html/person/collection/my_camera.html",
+					"html/smart/devices/dev_16711680.html",
+					"html/smart/devices/dev_80.html",
+					"html/smart/devices/dev_21.html",
+					"html/smart/devices/dev_22.html",
+					"html/smart/devices/dev_160.html",
+					"html/smart/devices/dev_161.html",
+					"html/smart/devices/dev_35.html",
+					"html/smart/devices/dev_AX-903.html",
+					"html/smart/devices/dev_AX-903_setting.html",
+					"html/smart/devices/dev_WG-100_setting.html",
+					"html/smart/devices/dev_41.html",
+					"html/smart/devices/dev_25.html",
+					"html/smart/devices/dev_145.html",
+					"html/smart/devices/dev_33.html",
+					"html/smart/devices/dev_40.html",
+					"html/smart/devices/dev_AX-904.html",
+					"html/smart/devices/dev_VH-104_setting.html",
+					"html/smart/devices/dev_34.html",
+					"html/smart/devices/dev_0.html",
+					"html/smart/devices/dev_32.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/camera_settings.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/camera_settings_info.html",
+					"html/smart/devices/camera_settings_arming.html",
+					"html/smart/add/connect_wifi.html",
+					"html/public/input.html",
+					"html/smart/devices/camera_settings_record.html",
+					"html/public/alarmParam.html",
+					"html/smart/devices/camera_settings_log.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_error.html": {
+				"resources": [
+					"js/common/immersed.js",
+					"js/common/flexible.js",
+					"js/lib/mui.min.js",
+					"css/app/app.css",
+					"css/lib/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/person/information.html": {
+				"resources": [],
+				"refer": [
+					"html/public/image_cropper.html",
+					"html/public/input.html",
+					"html/person/relation/bind.html",
+					"html/person/relation/reset_pwd.html",
+					"html/person/myself/discover.html",
+					"html/person/myself/discover_details.html"
+				],
+				"priority": 0
+			},
+			"html/person/wallet/index.html": {
+				"resources": [],
+				"refer": [
+					"html/person/wallet/withdrawal.html",
+					"html/person/wallet/bills.html"
+				],
+				"priority": 0
+			},
+			"html/public/browser.html": {
+				"resources": [
+					"html/smart/devices/dev_error.html"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/person/devshare/index.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_my_list.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/sonic_connect_camera2.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/sonic_connect_camera1.html"
+				],
+				"priority": 0
+			},
+			"html/person/setting/index.html": {
+				"resources": [],
+				"refer": [
+					"html/person/setting/version.html",
+					"html/person/setting/safe.html",
+					"html/person/setting/push.html",
+					"html/person/setting/setsafe.html",
+					"html/person/relation/bind.html",
+					"html/person/relation/bind_tel.html",
+					"html/public/input.html",
+					"html/common/login.html"
+				],
+				"priority": 0
+			},
+			"html/person/setting/setsafe.html": {
+				"resources": [],
+				"refer": [
+					"html/person/setting/safe.html"
+				],
+				"priority": 0
+			},
+			"html/person/message/index.html": {
+				"resources": [],
+				"refer": [
+					"html/person/message/warning.html",
+					"html/person/message/system.html",
+					"html/person/message/activity.html"
+				],
+				"priority": 0
+			},
+			"html/zeus.html": {
+				"resources": [
+					"html/smart/devices/dev_error.html"
+				],
+				"refer": [
+					"html/common/login.html",
+					"html/common/authorized.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_WG-100.html": {
+				"resources": [
+					"image/smart/devices/gateway/btn_Setup@3x.png"
+				],
+				"refer": [
+					"html/smart/devices/camera_settings_arming.html",
+					"html/person/devshare/share.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/camera_settings_log.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/test.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/test.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_warning_sign.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_warning_sign.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_129.html": {
+				"resources": [
+					"js/common/flexible.js",
+					"js/lib/mui.min.js",
+					"js/lib/vue-ni.js",
+					"js/lib/mui.picker.js",
+					"js/lib/mui.poppicker.js",
+					"js/common/immersed.js",
+					"js/app/app-page.js",
+					"js/lib/vue.min.js",
+					"js/components/devices/footer.js",
+					"js/dal/base.js",
+					"js/dal/devaccessory.js",
+					"js/app/app.js",
+					"js/data/time_hm.js"
+				],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_20.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_65.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/index2.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/edit_scenes.html",
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/pages/theme.html": {
+				"resources": [],
+				"refer": [
+					"html/public/browser.html",
+					"html/public/share.html"
+				],
+				"priority": 0
+			},
+			"html/person/relation/bind.html": {
+				"resources": [],
+				"refer": [
+					"html/person/relation/bind_tel.html",
+					"html/person/relation/reset_tel.html"
+				],
+				"priority": 0
+			},
+			"html/person/myself/discover.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html",
+					"html/person/myself/discover_details.html"
+				],
+				"priority": 0
+			},
+			"html/person/myself/discover_details.html": {
+				"resources": [],
+				"refer": [
+					"html/person/other.html",
+					"html/public/share.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/discover/discover_release.html": {
+				"resources": [
+					"/storage/emulated/0/Tencent/QQfile_recv/1M6KU%0[TC%60H5FMIE%7DW1IZP.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/person/myself/business.html": {
+				"resources": [],
+				"refer": [
+					"html/person/myself/business_details.html",
+					"html/nearby/business/signup.html"
+				],
+				"priority": 0
+			},
+			"html/person/myself/business_details.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/business/signup.html",
+					"html/nearby/business/signup_next.html",
+					"html/public/share.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/business/upload_store_pic.html": {
+				"resources": [
+					"/storage/emulated/0/Tencent/QQfile_recv/1M6KU%0[TC%60H5FMIE%7DW1IZP.png"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/smart/devices/dev_80.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_22.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_chart.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_16711680.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/person/other.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html"
+				],
+				"priority": 0
+			},
+			"html/public/maps.html": {
+				"resources": [
+					"html/public/qiqiu.html"
+				],
+				"refer": [
+					"html/public/mapList.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-903.html": {
+				"resources": [],
+				"refer": [
+					"html/person/devshare/share.html",
+					"html/smart/devices/dev_AX-903_setting.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-903_setting.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html",
+					"html/smart/devices/dev_AX-903_alarmlog.html",
+					"html/smart/devices/dev_select_id.html",
+					"html/smart/devices/dev_AX-903_bind.html",
+					"html/smart/devices/dev_AX-903_datasave.html",
+					"html/smart/devices/dev_AX-903_select_id.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_WG-100_setting.html": {
+				"resources": [],
+				"refer": [
+					"html/person/devshare/share.html",
+					"html/smart/devices/camera_settings_arming.html",
+					"html/smart/add/connect_wifi.html",
+					"html/smart/devices/camera_settings_log.html",
+					"html/public/input.html",
+					"html/smart/devices/camera_settings_info.html",
+					"html/public/alarmParam.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_35.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/add_completed.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_35.html",
+					"html/smart/devices/dev_161.html",
+					"html/smart/devices/dev_25.html",
+					"html/smart/devices/dev_40.html",
+					"html/smart/devices/dev_65.html",
+					"html/smart/devices/dev_160.html",
+					"html/smart/devices/dev_22.html",
+					"html/smart/devices/dev_34.html",
+					"html/smart/devices/dev_129.html",
+					"html/smart/devices/dev_my_list.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_161.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-903_bind.html": {
+				"resources": [
+					"js/common/immersed.js",
+					"js/lib/vue.min.js",
+					"js/lib/mui.min.js",
+					"js/common/flexible.js",
+					"js/app/app.js",
+					"js/dal/base.js",
+					"js/lib/vue-ni.js",
+					"js/config.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"html/smart/devices/dev_25.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_41.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_40.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_40_set_pwd.html",
+					"html/smart/devices/dev_40_log.html"
+				],
+				"priority": 0
+			},
+			"html/person/collection/my_collection.html": {
+				"resources": [],
+				"refer": [
+					"html/nearby/discover/discover_details.html",
+					"html/nearby/business/store_details.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-904.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/camera_settings_log.html",
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_VH-104_setting.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/camera_settings_record.html",
+					"html/smart/devices/camera_settings_arming.html",
+					"html/smart/devices/camera_settings_info.html",
+					"html/smart/devices/dev_VH-104_setting_info.html",
+					"html/smart/devices/camera_settings_log.html",
+					"html/public/alarmParam.html"
+				],
+				"priority": 0
+			},
+			"html/nearby/business/store_details.html": {
+				"resources": [],
+				"refer": [
+					"html/public/share.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_33.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/blue_select_dev_id.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/blue_connect_camera1.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/blue_connect_camera2.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/blue_select_dev_id.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/blue_connect_camera3.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/blue_connect_camera2.html"
+				],
+				"priority": 0
+			},
+			"html/person/about.html": {
+				"resources": [],
+				"refer": [
+					"html/public/updateWindow.html"
+				],
+				"priority": 0
+			},
+			"html/person/devshare/share.html": {
+				"resources": [],
+				"refer": [
+					"html/person/devshare/index.html"
+				],
+				"priority": 0
+			}
+		},
+		"idle": {
+			"resources": [
+				"js/mui.js",
+				"css/mui.css"
+			]
+		}
+	}
+}
