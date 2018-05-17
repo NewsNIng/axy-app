@@ -382,7 +382,7 @@
 
 			<div class="model_type">
 				<template v-for="o,i in modelTypes">
-					<div @tap="onModelTap(o, i+1)">
+					<div @tap="onModelTap(o, i)">
 						<img :src="o.src" />
 						<span class="app-font-size-26">{{o.name}}</span>
 					</div>
@@ -777,8 +777,12 @@
 								ob.next();
 							});
 						})
-						.merge(Rx.Observable.timer(5e3))
-						.last()
+						.merge(Rx.Observable.create(function(ob) {
+							_B.on('login_success', function() {
+								ob.next();
+							});
+						}).delay(3e3))
+						//.first()
 						.subscribe(function() {
 							that.isInitNativeDevList = true;
 						});
@@ -843,14 +847,10 @@
 
 					// 当点击模式时
 					onModelTap: function(o, index) {
-						//						return mui.toast("该功能尚未开放...");
+						return mui.toast("该功能尚未开放...");
 						// console.log(JSON.stringify(o));
 						app.user.get(function(u) {
-							u && mui.openWindow('../smart/scenes/edit_scenes.html', 'edit_scenes', {
-								extras: {
-									model_index: index,
-								}
-							});
+							u && mui.openWindow('../smart/scenes/index2.html');
 						});
 					},
 
@@ -1129,12 +1129,11 @@
 
 					// 查看猜你喜欢更多
 					onStoreMore: function() {
-
 						_B.emit('tabar', {
 							mindex: 2,
 							nindex: 1
 						}, {
-							views: [this.$view.parent()],
+							views: ["main"],
 						});
 					},
 
@@ -1145,7 +1144,7 @@
 							mindex: 2,
 							nindex: 0
 						}, {
-							views: [this.$view.parent()],
+							views: ["main"],
 						});
 					},
 					// 查看我的设备

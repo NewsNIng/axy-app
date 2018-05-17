@@ -8,7 +8,7 @@
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "2.1.5",/*应用版本名称*/
-		"code": "20180416"
+		"code": "20180426"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -425,8 +425,7 @@
 					"html/smart/devices/dev_WG-100.html",
 					"html/smart/devices/dev_AX-903_setting.html",
 					"html/smart/devices/dev_VH-104_setting.html",
-					"html/smart/devices/dev_AX-904.html",
-					"html/smart/scenes/edit_scenes.html"
+					"html/smart/devices/dev_AX-904.html"
 				],
 				"priority": 0
 			},
@@ -454,8 +453,7 @@
 					"html/common/login.html",
 					"html/smart/devices/dev_my_list.html",
 					"html/public/browser.html",
-					"html/smart/scenes/index2.html",
-					"html/smart/devices/dev_AX-801.html"
+					"html/smart/scenes/index2.html"
 				],
 				"priority": 0
 			},
@@ -673,9 +671,7 @@
 				"resources": [],
 				"refer": [
 					"html/smart/scenes/trigger_conditions.html",
-					"html/smart/scenes/perform_actions.html",
-					"html/smart/scenes/select_scenes_icon.html",
-					"html/smart/scenes/select_device.html"
+					"html/smart/scenes/perform_actions.html"
 				],
 				"priority": 0
 			},
@@ -1037,8 +1033,7 @@
 				"resources": [],
 				"refer": [
 					"html/smart/scenes/edit_scenes.html",
-					"html/public/input.html",
-					"html/smart/scenes/index_linkage.html"
+					"html/public/input.html"
 				],
 				"priority": 0
 			},
@@ -1300,40 +1295,6 @@
 				"resources": [],
 				"refer": [
 					"html/smart/add/blue_connect_camera2.html"
-				],
-				"priority": 0
-			},
-			"html/smart/scenes/index_linkage.html": {
-				"resources": [],
-				"refer": [
-					"html/smart/scenes/create_linkage.html"
-				],
-				"priority": 0
-			},
-			"html/smart/devices/dev_AX-801.html": {
-				"resources": [],
-				"refer": [
-					"html/smart/devices/dev_AX-801_helper.html",
-					"html/smart/devices/dev_AX-801_setting.html"
-				],
-				"priority": 0
-			},
-			"html/smart/devices/dev_AX-801_helper.html": {
-				"resources": [],
-				"refer": [
-					"html/smart/devices/dev_AX-801_alarm_clock.html",
-					"html/smart/devices/dev_AX-801_broadcast.html"
-				],
-				"priority": 0
-			},
-			"html/smart/devices/dev_AX-801_setting.html": {
-				"resources": [],
-				"refer": [
-					"html/public/alarmParam.html",
-					"html/smart/devices/dev_AX-801_info.html",
-					"html/public/input.html",
-					"html/smart/devices/dev_AX-801_log.html",
-					"html/smart/devices/dev_AX-801_arming.html"
 				],
 				"priority": 0
 			}

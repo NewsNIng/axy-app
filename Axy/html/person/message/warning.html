@@ -210,13 +210,14 @@
 							<span class="app-color-333333">告警时间</span>
 							<span class="mui-pull-right">{{o.atime}}</span>
 						</div>
-						<div>
-							<span class="app-color-333333">防区ID</span>
-							<span class="mui-pull-right">{{o.areaid}}</span>
-						</div>
-						<div style="padding-bottom: 0.2rem;">
+						
+						<div v-if="o.areaname" style="padding-bottom: 0.2rem;">
 							<span class="app-color-333333">告警防区</span>
-							<span class="mui-pull-right">{{o.areaname || o.areaid}}</span>
+							<span class="mui-pull-right">{{o.areaname}}</span>
+						</div>
+						<div v-else style="padding-bottom: 0.2rem;">
+							<span class="app-color-333333">防区ID</span>
+							<span class="mui-pull-right">{{to16(o.areaid)}}</span>
 						</div>
 						<transition name="menu-fade"> 
 
@@ -602,7 +603,10 @@
 					
 					canPlay: function(o){
 						return app.dev.canPlay(o.type);
-					}
+					},
+					to16: function(n){
+						return n.toString(16).toUpperCase();
+					},
 				}
 			})
 		</script>
