@@ -680,8 +680,17 @@
 					},
 					// 隐私模式切换
 					onSecurityToggle: function(){
+						plus.nativeUI.showWaiting();
+						var want = !this.wifiInfo.securitytype;
+						var that = this;
 						// TODO 发送请求
-						this.wifiInfo.securitytype = +!this.wifiInfo.securitytype;
+						dal.devparam.setPrivacy(that.devInfo.devid, want, function(err, data){
+							plus.nativeUI.closeWaiting();
+							if(err){
+								return mui.toast(err.message);
+							}
+							that.wifiInfo.securitytype = +want;
+						});
 					},
 					onLogTap: function() {
 						mui.openWindow('camera_settings_log.html', 'camera_settings_log', {

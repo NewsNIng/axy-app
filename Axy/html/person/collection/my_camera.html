@@ -119,9 +119,32 @@
 				background-size: cover;
 				transform: translate(33%, -33%);
 				-webkit-transform: translate(33%, -33%);
-				;
 			}
 			/*抖动end*/
+			/*编辑模式下*/
+			
+			.imgroom.editing>div {
+				position: relative;
+			}
+			
+			.imgroom.editing>div:before {
+				content: "";
+				position: absolute;
+				z-index: 999;
+				right: 0;
+				bottom: 0;
+				height: 0.506666rem;
+				width: 0.506666rem;
+				background-color: rgba(0, 0, 0, 0.5);
+				border-radius: 50%;
+				background-image: url(../../../image/person/message/btn_Unselected@3x.png) !important;
+				background-size: cover;
+			}
+			
+			.imgroom.editing>div.isSelect:before {
+				background-image: url(../../../image/person/message/btn_Alreadychosen@3x.png) !important;
+			}
+			/*编辑模式下 End*/
 			
 			.imgroom:after {
 				content: '';
@@ -184,10 +207,9 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
-			
 			/*footer*/
 			
-			footer{
+			footer {
 				position: fixed;
 				bottom: 0;
 				left: 0;
@@ -195,15 +217,34 @@
 				height: 45px;
 				display: flex;
 				display: -webkit-flex;
-				
 			}
 			
-			footer>div{
+			footer>div {
+				position: relative;
 				flex: 1;
 				text-align: center;
 				line-height: 45px;
 			}
 			
+			footer>div:after {
+				content: '';
+				position: absolute;
+				height: 1px;
+				width: 100%;
+				top: 0;
+				left: 0;
+				background-color: #ddd;
+			}
+			
+			footer>div>img {
+				width: 0.506666rem;
+				height: 0.506666rem;
+				vertical-align: middle;
+			}
+			
+			footer>div>span {
+				vertical-align: middle;
+			}
 			/*footer End*/
 		</style>
 
@@ -217,14 +258,23 @@
 				<h1 class="mui-title">我的相册</h1>
 				<a @tap="onEditTap()" class="mui-pull-right app-font-size-30 app-color-white" style="line-height: 45px;" v-text="editing?'取消':'编辑'">编辑</a>
 			</header>
-			
-			<footer class="app-font-size-32">
-				<div>
-					<img src=""/>
+
+			<footer v-show="editing" class="app-font-size-32">
+				<div @tap="onAllSelectTap()">
+					<template v-if="isAllSelect">
+						<img src="../../../image/person/message/btn_Alreadychosen@3x.png" />
+					</template>
+					<template v-else>
+						<img src="../../../image/person/message/btn_Unselected@3x.png" />
+					</template>
+
+					<span v-text="isAllSelect?'取消全选':'全选'">全选</span>
+					<span class="app-color-9f9fa0">({{selectCount}})</span>
+					
 				</div>
-				<div class="app-color-333333" style="background-color: #06C1AE;" >删除</div>
+				<div class="app-color-white" style="background-color: #06C1AE;" @tap="onDelete()">删除</div>
 			</footer>
-			
+
 			<div class="mui-content">
 				<div class="tabroom app-color-333333" ref="tabroom">
 					<div @tap="onDevTap()">
@@ -251,13 +301,13 @@
 
 						<template v-for="o,i in record">
 							<div class="app-font-size-24 app-color-333333 tips">{{o.day}}</div>
-							<div class="imgroom app-font-size-24 app-color-white">
+							<div class="imgroom app-font-size-24 app-color-white" :class="{'editing': editing}">
 								<template v-for="oo,ii in o.list">
 									<template v-if="oo.fileType === 2">
-										<div @longtap="onLongTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" class="video" @tap="onVideoTap(oo)"></div>
+										<div @longtap="onLongTap(oo, ii)" @tap="onItemTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" class="video" :class="{isSelect: oo.isSelect}" @tap="onVideoTap(oo)"></div>
 									</template>
 									<template v-else>
-										<div @longtap="onLongTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" :data-preview-src="fixPath(oo.fileName)" data-preview-group="1"></div>
+										<div @longtap="onLongTap(oo, ii)" @tap="onItemTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" :class="{isSelect: oo.isSelect}" :data-preview-src="fixPath(oo.fileName)" data-preview-group="1"></div>
 									</template>
 								</template>
 
@@ -293,30 +343,38 @@
 			mui.init({
 				gestureConfig: {
 					longtap: true
-				}
+				},
+				//处理窗口关闭前的业务
+				beforeback: function() {
+					if(vm.editing) {
+						vm.editing = false;
+						return false;
+					}
+				},
 			});
 
 			var P = plug.H5NativeBridge;
 
 			var dtPick, devPick;
 
-			new Vue({
+			var vm = new Vue({
 				el: "#root",
 				data: function() {
 					return {
 						dateTime: "",
 						devName: "",
 						devId: "",
-						
+
 						// 编辑模式
 						editing: false,
-						
+
 						record_: [{
 								"carmraID": "VH-104GN-2017061500043",
 								"fileName": "/sdcard/CameraFamily/photo/2017-11-24_13-52-52_935.mp4",
 								"time": "2017-11-24 13:52:52",
 								"thumbnailImage": "/sdcard/CameraFamily/photo/device_VH-104GN-2017061500043.jpg",
 								"fileType": 2,
+								"isSelect": true,
 							},
 							{
 								"carmraID": "VH-104GN-2017061500043",
@@ -324,6 +382,7 @@
 								"time": "2017-11-24 13:52:52",
 								"thumbnailImage": "https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256",
 								"fileType": 1,
+								"isSelect": false,
 							}
 						],
 
@@ -354,7 +413,7 @@
 						for(var i in dir) {
 							arr.push({
 								day: i,
-								list: dir[i]
+								list: dir[i],
 							});
 						}
 
@@ -363,6 +422,20 @@
 						});
 
 						return arr;
+					},
+
+					isAllSelect: function() {
+						return this.record_.every(function(item) {
+							return item.isSelect;
+						});
+					},
+					selectCount: function(){
+						return this.record_.reduce(function(count, item) {
+							if(item.isSelect){
+								count = count + 1;
+							}
+							return count;
+						}, 0);
 					}
 				},
 
@@ -404,7 +477,7 @@
 						plus: true
 					});
 
-					var devPickData = D.data;
+					var devPickData = D.data || []; 
 					devPickData = devPickData.filter(function(item) {
 						return item.type !== 23 && item.type !== 128 && item.type !== 144;
 					});
@@ -437,22 +510,72 @@
 				},
 
 				methods: {
-					
-					// 点击header编辑文字按钮
-					onEditTap: function(){
-						// 进入/退出 编辑模式
-						this.editing = !this.editing;
-						
+					// 获取已选择的项
+					_getSelectItems: function(){
+						return this.record_.filter(function(item) {
+							return item.isSelect;
+						});
 					},
 					
-					// 图片/视频长按
+					// 点击删除按钮
+					onDelete: function() {
+						mui.confirm("确定需要删除所选择的图片吗？", "", ["删除", "取消"], function(e) {
+							console.log(e.index);
+						});
+					},
+
+					// 全选/取消全选 按钮
+					onAllSelectTap: function() {
+						var want = true;
+						if(this.isAllSelect) {
+							// 清除
+							want = false;
+						}
+						this._setAllSelect(want);
+					},
+
+					// 设置所有item的select状态
+					_setAllSelect: function(want) {
+						this.record_.forEach(function(item) {
+							item.isSelect = want;
+						});
+					},
+
+					// 点击header编辑文字按钮
+					onEditTap: function() {
+						// 进入/退出 编辑模式
+						this.editing = !this.editing;
+
+					},
+
+					//  图片/视频 单击
+					onItemTap: function(o, i, e) {
+						if(!this.editing) {
+							return;
+						}
+						o.isSelect = !o.isSelect;
+
+						console.log(o.isSelect);
+						// 如果是编辑模式，则阻止点击预览
+						e.stopPropagation();
+					},
+
+					// 图片/视频 长按
 					onLongTap: function(o, i, e) {
-						var el = e.target;
-						el.classList.add('shake');
+						window.plus && plus.device.vibrate(100);
+						this._setAllSelect(false);
+						o.isSelect = true;
+						this.editing = true;
+						return;
+						//var el = e.target;
+						//el.classList.add('shake');
+						console.log(JSON.stringify(o));
+						o.isSelect = true;
 						// 振动
 						window.plus && plus.device.vibrate(100);
 						mui.confirm("是否删除该文件？", "温馨提示", ["删除", "取消"], function(e) {
-							el.classList.remove('shake');
+							//el.classList.remove('shake');
+							o.isSelect = false;
 							if(e.index !== 0) {
 								return;
 							}

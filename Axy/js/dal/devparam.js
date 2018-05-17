@@ -230,6 +230,19 @@
 		}, callback);
 	};
 	
+	
+	/**
+	 * 360开关隐私模式
+	 * @param {String} devid
+	 * @param {Boolean} state
+	 */
+	devparam.setPrivacy = function(devid, state, callback){
+		return ra("post", "/devparam/setPrivacy", {
+			devid: devid,
+			state: +state,
+		}, callback);
+	};
+	
 
 	_.devparam = devparam;
 

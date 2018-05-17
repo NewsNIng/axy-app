@@ -379,7 +379,7 @@
 			var SyncHronous = function(account, id) {
 				PUSH_ID.data = id;
 
-				dal.push.synchronous(account, id, plus.os.name === 'iOS' ? 67 : 36, function(err, data) {
+				dal.push.synchronous(account, id, mui.os.ios ? 67 : 36, function(err, data) {
 					/*if(err) {
 						return mui.toast(err.message);
 					}

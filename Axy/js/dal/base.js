@@ -69,8 +69,9 @@ function requestAdapter(type, url, params, callback) {
 			console.log("response: [" + apiUrl + "]" + JSON.stringify(data));
 			console.log("==========");
 			if(dal.tokenCodeDir[data.code]){
+				
 			//if(data.code === "403") {
-				//alert("[" + apiUrl + "]" + JSON.stringify(data));
+				// alert("[" + apiUrl + "]" + JSON.stringify(data));
 				// token 验证失败 通知 zeus
 				var zeus = plus.webview.getWebviewById("zeus");
 				if(!zeus) {
@@ -79,6 +80,7 @@ function requestAdapter(type, url, params, callback) {
 				}
 				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', "+ JSON.stringify(data) +")";
 				zeus.evalJS(jsstr);
+				
 				return;
 			}
 			if(data.code !== "0000" && data.code !== "0") {
