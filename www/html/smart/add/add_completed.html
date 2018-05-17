@@ -135,7 +135,7 @@
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
@@ -145,7 +145,7 @@
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
-		<script type="text/javascript" src="../../../js/lib/Rx.min.js" ></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -171,43 +171,60 @@
 					this.isFitting = this.$view.isFitting;
 					this.updateDeviceList();
 					this.info = this.$view.info;
-
-					plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
-					plus.webview.getWebviewById('Lan_add_camera') && plus.webview.getWebviewById('Lan_add_camera').close('none');
-					plus.webview.getWebviewById('voice1') && plus.webview.getWebviewById('voice1').close('none');
-					plus.webview.getWebviewById('scan') && plus.webview.getWebviewById('scan').close('none');
+					
+					
+//					plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
+//					plus.webview.getWebviewById('Lan_add_camera') && plus.webview.getWebviewById('Lan_add_camera').close('none');
+//					plus.webview.getWebviewById('voice1') && plus.webview.getWebviewById('voice1').close('none');
+//					plus.webview.getWebviewById('scan') && plus.webview.getWebviewById('scan').close('none');
+//					plus.nativeUI.closeWaiting();
+					
+					var tempw;
+					([
+						"add/add_device.html",
+						"Lan_add_camera",
+						"voice1",
+						"scan",
+					].forEach(function(item){
+						tempw = plus.webview.getWebviewById(item);
+						tempw && tempw.close('none');
+					}));
+					
 					plus.nativeUI.closeWaiting();
+					
+					
 				},
 				methods: {
 					show: function() {
 						if(this.isFitting) {
 							//配件
 							var that = this;
-//							this.info.data.acc.devid = this.info.data.dev.devid;
-//							this.info.data.accessory = this.info.data.acc;
-//							this.info.data.devName = "";
-//							this.info.data.devType = this.info.data.dev.type;
-//							console.log(JSON.stringify(this.info));
-//							var page = 'dev_' + this.info.data.acc.type;
-//							var pageUrl = '../devices/' + page + '.html';
-//							plus.io.resolveLocalFileSystemURL(pageUrl, function() {
-//								mui.openWindow(pageUrl, page, {
-//									extras: {
-//										info: that.info.data
-//									}
-//								});
-//							}, function() {
-//								// 页面不存在
-//								mui.toast('尚未支持该配件');
-//							});
-							
+							//							this.info.data.acc.devid = this.info.data.dev.devid;
+							//							this.info.data.accessory = this.info.data.acc;
+							//							this.info.data.devName = "";
+							//							this.info.data.devType = this.info.data.dev.type;
+							//							console.log(JSON.stringify(this.info));
+							//							var page = 'dev_' + this.info.data.acc.type;
+							//							var pageUrl = '../devices/' + page + '.html';
+							//							plus.io.resolveLocalFileSystemURL(pageUrl, function() {
+							//								mui.openWindow(pageUrl, page, {
+							//									extras: {
+							//										info: that.info.data
+							//									}
+							//								});
+							//							}, function() {
+							//								// 页面不存在
+							//								mui.toast('尚未支持该配件');
+							//							});
+
 							var o = this.info.data.acc;
+							o.devid = this.info.data.dev.devid;
 
 							Rx.Observable.create(function(ob) {
 								// 检查本地是否有相关配件页面
 								var pageUrl = '_www/html/smart/devices/dev_' + o.type + '.html';
 								pageUrl = plus.io.convertLocalFileSystemURL(pageUrl);
-								if(mui.os.ios) {
+								if(mui.os.ios && pageUrl.indexOf('file://') < 0) {
 									pageUrl = 'file://' + pageUrl;
 								}
 								plus.io.resolveLocalFileSystemURL(pageUrl, function() {
@@ -232,20 +249,27 @@
 								}, {
 									info: info
 								});
+
+								setTimeout(function() {
+									that.$view.close("none");
+								}, 1000)
 							});
 
 						} else {
 							//设备
 							mui.openWindow('../devices/dev_my_list.html', 'dev_my_list');
+							setTimeout(function() {
+								that.$view.close("none");
+							}, 1000)
 						}
 
 						//						mui.back();
 					},
-					
+
 					_fixDevLocation: function(name) {
 						return app.dev.fixName(name);
 					},
-					
+
 					bind: function() {
 						//alert("bind");
 					},

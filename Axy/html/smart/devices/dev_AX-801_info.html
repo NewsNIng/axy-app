@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>基本信息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.img-wrap {
+				height: 0;
+				padding-bottom: 7.866666rem;
+				background-repeat: no-repeat;
+				background-size: 60%;
+				background-position: bottom;
+			}
+			
+			.menu-warp {
+				height: 2.986666rem;
+			}
+			
+			ul {
+				top: 0.266666rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">基本信息</h1>
+			</header>
+
+			<div class="mui-content">
+
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>设备型号</span>
+							<span class="mui-badge" v-text="devInfo.设备型号"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>连接的WIFI</span>
+							<span class="mui-badge" v-text="devInfo.连接的WIFI"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>WIFI信号强度</span>
+							<span class="mui-badge" v-text="devInfo.WIFI信号强度"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>硬件版本</span>
+							<span class="mui-badge" v-text="devInfo.硬件版本"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>软件版本</span>
+							<span class="mui-badge" v-text="devInfo.软件版本"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>IP地址</span>
+							<span class="mui-badge" v-text="devInfo.IP地址"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>剩余电量</span>
+							<span class="mui-badge" v-text="devInfo.剩余电量+'%'"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						devInfo: {
+							"音箱id": "",
+							"温度": 20,
+							"PM2.5": 36,
+							"湿度": 74,
+							"位置信息": "深圳市·南山区",
+							"设备名称": "AX-4035652525",
+							"设备型号": "",
+							"连接的WIFI": "main123293",
+							"WIFI信号强度": "高",
+							"硬件版本": "4.0.1",
+							"软件版本": "",
+							"IP地址": "192.163.1.1",
+							"剩余电量": "20"
+						}
+					};
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {
+//					this.devInfo = this.$view.devinfo;
+				},
+				methods: {
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -178,13 +178,14 @@
 				},
 				methods: {
 					onPickTap: function(i) {
-						if(this.isMoreWays){
-							i = i + 2;
-						}
 						var that = this;
+//						alert(i);
 						var p = 'intervalTime';
 						if(i === 1) {
 							p = 'continuedTime';
+						}
+						if(this.isMoreWays){
+							i = i + 2;
 						}
 						this.pick.setData(pick_data[i]);
 						//						alert(this.intervalTime+","+this.continuedTime);
@@ -192,7 +193,8 @@
 
 						var fn = function(s) {
 							that[p] = s;
-//							alert(123);
+//							alert(p);
+//							alert(that.continuedTime);
 							that.onSaveTap();
 						};
 

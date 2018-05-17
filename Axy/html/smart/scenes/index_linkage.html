@@ -19,6 +19,9 @@
 				background-color: white;
 				margin-bottom: 2rem;
 			}
+			/*.mui-bar {
+				z-index: 100;
+			}*/
 			
 			.mui-content {
 				padding-bottom: 0;
@@ -38,6 +41,7 @@
 				top: 50%;
 				transform: translateY(-50%);
 				-webkit-transform: translateY(-50%);
+				z-index: 9;
 			}
 			
 			.prompt {
@@ -193,6 +197,8 @@
 			.dev_text {
 				display: block;
 				text-align: center;
+				text-overflow: ellipsis;
+				padding: 0 0.346666rem;
 			}
 			
 			.dev_text {
@@ -246,7 +252,6 @@
 				display: inline-block;
 				top: 0.533333rem;
 				right: 0.346666rem;
-				z-index: 90;
 			}
 			
 			.mui-disabled {
@@ -331,22 +336,22 @@
 						<div>
 							<img class="relation" src="../../../image/smart/scenes/icon_Relation@3x.png" />
 							<div class="dev_icon">
-								<img :src="o.conditionDev.icon" />
+								<img v-acticon:trigger="o" />
 							</div>
-							<span class="dev_name app-font-size-28 app-color-333333" v-text="o.conditionDev.name"></span>
-							<span class="dev_text app-font-size-24" v-text="o.conditionDev.text"></span>
+							<span class="dev_name app-font-size-28 app-color-333333 mui-ellipsis" v-text="o.trigger[0].name.split('|')[0]"></span>
+							<span class="dev_text app-font-size-24" v-text="o.trigger[0].name.split('|')[1]"></span>
 						</div>
 						<div>
-							<div @tap="onSwitchToggle(o)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': o.isOpen}">
+							<div @tap="onSwitchToggle(o)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': o.basicinfo.state}">
 								<div class="mui-switch-handle"></div>
 							</div>
 							<img @tap="onSettingTap(i)" class="setting_icon" src="../../../image/smart/scenes/dev_linkage_icons/btn_Setup@3x.png" />
 							<div class="dev_icon">
-								<img :src="o.action.icon" />
+								<img v-acticon:linkaction="o" />
 							</div>
 							<div class="action_list">
-								<div class="action_item" v-for="o1 in o.action.list">
-									<span class="app-font-size-28" v-text="o1.name"></span><span class="app-font-size-28" v-text="o1.text">2</span>
+								<div class="action_item" v-for="o1 in o.linkaction">
+									<span class="app-font-size-28 mui-ellipsis" v-text="o1.name.split('|')[0]"></span><span class="app-font-size-28" v-text="o1.name.split('|')[1]">2</span>
 								</div>
 							</div>
 						</div>
@@ -376,6 +381,26 @@
 		<script type="text/javascript">
 			mui.init();
 
+			function v_action_img(el, o) {
+				mui.plusReady(function() {
+					var pageUrl = '../../../image/smart/scenes/dev_linkage_icons/' + o[0].iconflage + '-' + o[0].icontype + '.png';
+					plus.io.resolveLocalFileSystemURL(pageUrl, function() {
+						el.src = pageUrl;
+					}, function(err) {
+						el.src = "morendizhi.png";
+					});
+				});
+			}
+
+			Vue.directive('acticon', {
+				inserted: function(el, binding) {
+					v_action_img(el, binding.value[binding.arg]);
+				},
+				update: function(el, binding) {
+					v_action_img(el, binding.value[binding.arg]);
+				},
+			});
+
 			new Vue({
 				el: '#box',
 				data: function() {
@@ -387,112 +412,209 @@
 						conditionList: [], // 条件列表
 						actionList: [], // 动作列表
 						linkages: [{
-							"icon": 1,
-							"linkageid": 149,
-							"name": "设备互联",
-							"state": 1,
-							"delay": 0,
-							"type": 6,
-							"push": 1
+							"basicinfo": {
+								"delay": " 0",
+								"icon": 10,
+								"linkageid": 111,
+								"name": "测试联动",
+								"push": "1",
+								"state": "1",
+								"type": 6
+							},
+							"linkaction": [{
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005|撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}],
+							"trigger": [{
+								"condition": 8,
+								"enable": 1,
+								"feature": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400006|撤防",
+								"smartid": "AX-403A-2016061400006",
+								"triggerid": "AX-403A-2016061400006"
+							}]
 						}],
 						linkageList: [{
-								isOpen: false,
-								conditionDev: {
-									icon: "../../../image/smart/scenes/dev_linkage_icons/AX-360@3x.png",
-									name: "Wilin智能摄像机",
-									text: "处于布防时",
-								},
-								action: {
-									icon: "../../../image/smart/scenes/dev_linkage_icons/zndk@3x.png",
-									list: [{
-										name: "厨房灯控",
-										text: "关闭",
-									}, {
-										name: "大厅灯控",
-										text: "关闭",
-									}, {
-										name: "卧室灯控",
-										text: "关闭",
-									}, {
-										name: "卧室灯控",
-										text: "关闭",
-									}, ]
-								},
+							"basicinfo": {
+								"delay": " 0",
+								"icon": 10,
+								"linkageid": 111,
+								"name": "测试联动",
+								"push": "1",
+								"state": "1",
+								"type": 6
 							},
-														{
-														isOpen: true,
-														conditionDev: {
-															icon: "../../../image/smart/scenes/dev_linkage_icons/AX-360@3x.png",
-															name: "Wilin智能摄像机",
-															text: "处于布防时",
-														},
-														action: {
-															icon: "../../../image/smart/scenes/dev_linkage_icons/zndk@3x.png",
-															list: [{
-																name: "厨房灯控",
-																text: "关闭",
-															}, {
-																name: "大厅灯控",
-																text: "关闭",
-															}, {
-																name: "卧室灯控",
-																text: "关闭",
-															}]
-														},
-													}, {
-														isOpen: false,
-														conditionDev: {
-															icon: "../../../image/smart/scenes/dev_linkage_icons/AX-360@3x.png",
-															name: "Wilin智能摄像机",
-															text: "处于布防时",
-														},
-														action: {
-															icon: "../../../image/smart/scenes/dev_linkage_icons/zndk@3x.png",
-															list: [{
-																name: "厨房灯控",
-																text: "关闭",
-															}, {
-																name: "大厅灯控",
-																text: "关闭",
-															}, ]
-														},
-													}
-						],
+							"linkaction": [{
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 2,
+								"icontype": 25,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005|撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}, {
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005|撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}],
+							"trigger": [{
+								"condition": 8,
+								"enable": 1,
+								"feature": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400006|撤防",
+								"smartid": "AX-403A-2016061400006",
+								"triggerid": "AX-403A-2016061400006"
+							}]
+						}, {
+							"basicinfo": {
+								"delay": " 0",
+								"icon": 10,
+								"linkageid": 111,
+								"name": "测试联动",
+								"push": "1",
+								"state": "1",
+								"type": 6
+							},
+							"linkaction": [{
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 2,
+								"icontype": 25,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005|撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}, {
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005|撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}],
+							"trigger": [{
+								"condition": 8,
+								"enable": 1,
+								"feature": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400006|撤防",
+								"smartid": "AX-403A-2016061400006",
+								"triggerid": "AX-403A-2016061400006"
+							}]
+						}, {
+							"basicinfo": {
+								"delay": " 0",
+								"icon": 10,
+								"linkageid": 111,
+								"name": "测试联动",
+								"push": "1",
+								"state": "1",
+								"type": 6
+							},
+							"linkaction": [{
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 2,
+								"icontype": 25,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005|撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}, {
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005|撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}],
+							"trigger": [{
+								"condition": 8,
+								"enable": 1,
+								"feature": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400006|撤防",
+								"smartid": "AX-403A-2016061400006",
+								"triggerid": "AX-403A-2016061400006"
+							}]
+						}, ],
 					};
 				},
 				computed: {
 					isAllOpen: function() {
 						return this.linkageList.every(function(item) {
-							return item.isOpen;
+							return !!item.basicinfo.state;
 						});
 					},
 				},
 				mounted: function() {
-					//					this.$refs.switchs[2].addEventListener("toggle", function(event) {
-					//						this.isAllOpen = event.detail.isActive;
-					//					}.bind(this));
-
 					mui(".mui-switch").switch();
-
 				},
 				plusReady: function() {
-					this.linkages = this.$view.linkages;
-					console.log(JSON.stringify(this.linkages));
+					this.linkageList = this.$view.linkages;
+					console.log(JSON.stringify(this.linkageList));
 				},
 				methods: {
-					onEditTap: function(o) {
-						mui.openWindow();
-					},
-
 					//
 					onSwitchToggle: function(o) {
-						o.isOpen = !o.isOpen;
+						o.basicinfo.state = !o.basicinfo.state ? 1 : 0;
 					},
 					onAllSwitchToggle: function() {
 						// this.isAllOpen = !this.isAllOpen;
 						var want = !this.isAllOpen;
 						this.linkageList.forEach(function(item) {
-							item.isOpen = want;
+							item.basicinfo.state = want ? 1 : 0;
 						});
 					},
 					onSettingTap: function(i) {
@@ -514,12 +636,56 @@
 					onNewTap: function() {
 						app.page.openForResultBy('create_linkage.html', 'create_linkage', function(data) {
 							this.linkageList.push({
-								isOpen: true,
-								conditionDev: data.conditionDev,
-								action: data.action,
+								"basicinfo": {
+									"delay": " 0",
+									"icon": 10,
+									"linkageid": 111,
+									"name": "测试联动",
+									"push": "1",
+									"state": "1",
+									"type": 6
+								},
+								"linkaction": [{
+									"action": 4,
+									"enable": 1,
+									"feature": 0,
+									"flage": 0,
+									"iconflage": 2,
+									"icontype": 25,
+									"index": 0,
+									"linkageid": 111,
+									"name": " AX-403A-2016061400005|撤防",
+									"smartid": "AX-403A-2016061400005",
+									"triggerid": "AX-403A-2016061400005"
+								}, {
+									"action": 4,
+									"enable": 1,
+									"feature": 0,
+									"flage": 0,
+									"iconflage": 1,
+									"icontype": 32,
+									"index": 0,
+									"linkageid": 111,
+									"name": " AX-403A-2016061400005|撤防",
+									"smartid": "AX-403A-2016061400005",
+									"triggerid": "AX-403A-2016061400005"
+								}],
+								"trigger": [{
+									"condition": 8,
+									"enable": 1,
+									"feature": 0,
+									"iconflage": 1,
+									"icontype": 32,
+									"index": 0,
+									"linkageid": 111,
+									"name": " AX-403A-2016061400006|撤防",
+									"smartid": "AX-403A-2016061400006",
+									"triggerid": "AX-403A-2016061400006"
+								}]
 							});
 						}.bind(this));
-					}
+					},
+
 				}
 			});
 		</script>

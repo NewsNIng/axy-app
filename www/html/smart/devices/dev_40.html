@@ -127,11 +127,17 @@
 						<div @tap.slef="closeMask()" class="mask-close-btn"></div>
 					</div>
 					<div class="mask-card-body app-font-size-28 app-color-333333">
-						1. 请确认智能门锁已装入电池，并开机完成；
+						第一步：请确认智能门锁已装入电池，并开机完成；
 						<div style="height: 10px;"></div>
-						2.轻触摸键盘或指纹，划开门锁背面的电池盖，轻按一下“-”键，请确认听到滴的一声；
+						第二步：
+						<br />
+						<span class="app-color-main">02R锁：</span>
+						轻触摸键盘或指纹，划开门锁背面的电池盖，轻按一下“-”键，请确认听到滴的一声；
+						<br />
+						<span class="app-color-main">03R锁：</span>
+						轻触摸键盘或指纹，唤醒屏幕键盘，按顺序输入“123#”，请确认听到滴的一声；
 						<div style="height: 10px;"></div>
-						3.听到“滴”声后，智能门锁将自动发送入网请求，请耐心等待结果（大约10~30s）。
+						第三步：听到“滴”声后，智能门锁将自动发送入网请求，请耐心等待结果（大约10~30s）。
 					</div>
 					<div class="mask-card-footer">
 						<img src="../../../svg/three-dots.svg"/>
@@ -305,7 +311,11 @@
 					var $getBaseState = Rx.Observable.fromPromise(this.getBaseState());
 					var $getLockState = Rx.Observable.fromPromise(this.getLockState());
 
-					$getBaseState.mergeMap(function(baseData) {
+					// 新增 定时自动刷新 门锁信息
+					var $getBaseSateTicker = Rx.Observable.interval(15e3).startWith(0).mapTo($getBaseState)
+					
+					$getBaseSateTicker
+					.mergeMap(function(baseData) {
 						baseData.id = baseData.aid;
 						mui.extend(that.devInfo.accessory, baseData);
 						return $getLockState;
@@ -393,7 +403,7 @@
 									if(lockData.networkApplyOK) {
 										ob.next("入网成功");
 									} else {
-										ob.error(new Error("申请入网失败"));
+										ob.error(new Error("入网失败，该配件可能已被添加。"));
 									}
 								} else if(lockData.networkQuitOKValid) {
 									if(lockData.networkQuitOK) {
@@ -430,6 +440,11 @@
 							that.closeMask();
 							// 显示提示
 							mui.toast(msg);
+							// 通知上层
+							app.page.setResult({
+								action: "update",
+								info: that.devInfo
+							});
 						}, function(err) {
 							// 关闭遮罩
 							that.closeMask();
@@ -493,6 +508,8 @@
 										// 记住密码
 										if(data.remember) {
 											LOCKPWD.data = data.pwd;
+										}else{
+											LOCKPWD.data = "";	
 										}
 										ob.next(data.pwd);
 									}
@@ -586,8 +603,8 @@
 							content: that.devInfo.accessory.name,
 							r: "nonEmpty", 
 							rmsg: "配件名称不能为空",
-							maxLength: 15,
-							mLengthMsg: "最长不超过15个字符！",
+							maxLength: 30,
+							mLengthMsg: "最长不超过30个字符！",
 						});
 					},
 					// 开锁日志

@@ -348,7 +348,7 @@
 						devid: -1,
 						type: -1,
 
-						weeks: [true, false, false, false, false, false, false],
+						weeks: [true, true, true, true, true, true, true],
 
 						startTime: "00:00",
 						endTime: "23:59",
@@ -444,14 +444,12 @@
 								that[methodNames[1 - i]] = "";
 								that[methodNames[i]] = calc(h) + ":" + calc(m);
 							} else {
+								
 								var temp = that[methodNames[i - 1]];
-								temp = temp.replace(':', '');
-								temp = +temp;
-
-								var temp2 = h + "" + m;
-								temp2 = +temp2;
-
-								if(temp2 <= temp) {
+								
+								temp = temp.split(":").map(function(item){return parseInt(item)}).reduce(function(n, item){return n * 60 + item}, 0)
+								
+								if(h * 60 + m <= temp) {	
 									return mui.toast("结束时间必须大于开始时间")
 								}
 

@@ -78,6 +78,15 @@
 				mounted: function() {
 
 				},
+				
+				plusReady: function(){
+					var code = this.$view.code;
+					// 添加传过来的参数
+					if(code){
+						this.addFamiliDevice(code);
+					}
+				},
+				
 				methods: {
 					onCodeTap: function() {
 						app.page.openForResultBy('family_code.html', 'family_code', function(data) {
@@ -92,7 +101,9 @@
 					},
 
 					addFamiliDevice: function(code) {
+						plus.nativeUI.showWaiting();
 						dal.device.getShare(code, function(err, rs) {
+							plus.nativeUI.closeWaiting();
 							if(err) {
 								return mui.toast(err.message);
 							}

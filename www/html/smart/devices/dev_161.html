@@ -73,6 +73,9 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
+			.topState {
+				height: 0.693333rem;	
+			}
 		</style>
 	</head>
 
@@ -86,9 +89,9 @@
 
 			<div class="mui-content noImmersed">
 				<div class="state_show">
-					<span class="app-font-size-30" v-text="(state.concentrationValid?state.concentration:0)+'ppm'"></span>
-					<span class="app-font-size-44">正常</span>
-					<span class="app-font-size-24">当前浓度值</span>
+					<span class="app-font-size-30 topState" v-text="isNoState?'':((state.concentrationValid?state.concentration:0)+'ppm')"></span>
+					<span class="app-font-size-44" v-text="isNoState?'无数据':'正常'"></span>
+					<span class="app-font-size-24" v-if="!isNoState">当前浓度值</span>
 				</div>
 				<div @tap="toggleSwitch()" class="img-wrap">
 				</div>
@@ -116,13 +119,13 @@
 					<li class="mui-table-view-cell">
 						<a class="battery_status">
 							<span>电池状态</span>
-							<span class="mui-badge battery_status" v-text="state.underVoltage?'欠压':'正常'"></span>
+							<span class="mui-badge battery_status" v-text="isNoState?'无数据':(state.underVoltage?'欠压':'正常')"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="battery_status">
 							<span>通讯状态</span>
-							<span class="mui-badge battery_status" v-text="state.lost?'失联':'正常'"></span>
+							<span class="mui-badge battery_status" v-text="isNoState?'无数据':(state.lost?'失联':'正常')"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
@@ -233,7 +236,8 @@
 							"underVoltage": false,
 							"concentrationValid": true,
 							"concentration": 0
-						}
+						},
+						isNoState: false,
 					};
 				},
 				mounted: function() {
@@ -281,7 +285,12 @@
 						plus.navigator.setStatusBarStyle('light');
 						view.close();
 					}.bind(this);
-					this.getCoState();
+					if(this.devInfo.devType === 4166) {
+						this.isNoState = true;
+						mui.toast("该设备不支持查看配件数据");
+					} else {
+						this.getCoState();
+					}
 				},
 				methods: {
 					// 删除配件
@@ -345,8 +354,8 @@
 							content: that.devInfo.accessory.name,
 							r: "nonEmpty", 
 							rmsg: "配件名称不能为空",
-							maxLength: 15,
-							mLengthMsg: "最长不超过15个字符！",
+							maxLength: 30,
+							mLengthMsg: "最长不超过30个字符！",
 						});
 					},
 					// 获取一氧化碳状态

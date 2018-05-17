@@ -22,6 +22,8 @@
 			body,
 			.mui-content {
 				background-color: #F4F8FB;
+				width: 100%;
+				overflow-x: hidden;
 			}
 			
 			.img-wrap {
@@ -67,22 +69,14 @@
 			
 			@keyframes ripple {
 				0% {
-					left: 50%;
-					top: 35%;
-					transform: translate3d(-50%, -50%, 0);
-					-webkit-transform: translate3d(-50%, -50%, 0);
+					transform: translate3d(-50%, -70%, 0) scale(1);
 					opacity: 0.75;
-					width: 1.6rem;
-					height: 1.6rem;
+					
 				}
 				100% {
-					transform: translate3d(-50%, -50%, 0);
-					-webkit-transform: translate3d(-50%, -50%, 0);
-					left: 50%;
-					top: 35%;
+					transform:  translate3d(-50%, -70%, 0) scale(2);
 					opacity: 0;
-					width: 3rem;
-					height: 3rem;
+					
 				}
 			}
 			
@@ -94,26 +88,27 @@
 			}
 			/*.send_sound_wave:active:after,*/
 			
+			
 			.send_sound_wave.active:after {
 				content: ' ';
 				position: absolute;
+				left: 50%;
+				top: 50%;
+				
+				transform: translate3d(-50%, -70%, 0);
+				
+				-webkit-transform: translate3d(-50%, -70%, 0);
+				
 				z-index: 0;
 				width: 1.6rem;
 				height: 1.6rem;
 				background-color: #2BB8AA;
+				
+				
+				
 				border-radius: 50%;
 				box-shadow: 0 0 10px rgba(0, 0, 0, .35) inset;
-				animation-name: 'ripple';
-				/*动画属性名，也就是我们前面keyframes定义的动画名*/
-				animation-duration: 1s;
-				/*动画持续时间*/
-				animation-timing-function: ease;
-				/*动画频率，和transition-timing-function是一样的*/
-				animation-delay: 0s;
-				/*动画延迟时间*/
-				animation-iteration-count: infinite;
-				/*定义循环资料，infinite为无限次*/
-				animation-direction: normal;
+				
 				-webkit-animation-name: 'ripple';
 				/*动画属性名，也就是我们前面keyframes定义的动画名*/
 				-webkit-animation-duration: 1s;
@@ -126,6 +121,18 @@
 				/*定义循环资料，infinite为无限次*/
 				-webkit-animation-direction: normal;
 				/*定义动画方式*/
+				
+				animation-name: 'ripple';
+				/*动画属性名，也就是我们前面keyframes定义的动画名*/
+				animation-duration: 1s;
+				/*动画持续时间*/
+				animation-timing-function: ease;
+				/*动画频率，和transition-timing-function是一样的*/
+				animation-delay: 0s;
+				/*动画延迟时间*/
+				animation-iteration-count: infinite;
+				/*定义循环资料，infinite为无限次*/
+				animation-direction: normal;
 			}
 			
 			.mui-table-view-cell:after {
@@ -221,7 +228,7 @@
 
 			<script type="text/javascript">
 				mui.init();
-
+				
 				var P = plug.H5NativeBridge;
 
 				new Vue({

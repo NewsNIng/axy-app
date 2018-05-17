@@ -224,26 +224,26 @@
 			<!--<div class="foot app-font-size-34" :class="{}" @tap="onActionTap()">添加执行任务</div>-->
 
 			<div class="mui-content">
-				<!--<input :readonly="sceneInfo.basiceinfo.type < 5" type="text" class="scenesName app-font-size-28" placeholder="请输入场景名称" v-model="sceneInfo.basiceinfo.name">-->
+				<!--<input :readonly="sceneInfo.basicinfo.type < 5" type="text" class="scenesName app-font-size-28" placeholder="请输入场景名称" v-model="sceneInfo.basicinfo.name">-->
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>场景名称</span>
-							<span class="mui-badge" v-text="sceneInfo.basiceinfo.name"></span>
+							<span class="mui-badge" v-text="sceneInfo.basicinfo.name"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onScenesIconTap()">
 						<a class="mui-navigate-right">
 							<span>场景图标</span>
 							<span class="mui-badge">
-								<img class="scenesIcon" :src="'../../../image/smart/scenes/scenes_icons/'+sceneInfo.basiceinfo.icon+'.png'"/>
+								<img class="scenesIcon" :src="'../../../image/smart/scenes/scenes_icons/'+sceneInfo.basicinfo.icon+'.png'"/>
 							</span>
 						</a>
 					</li>
 				</ul>
 				<div class="mui-input-row messagePush app-font-size-28">
 					<label>消息推送</label>
-					<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': sceneInfo.basiceinfo.push}" ref="switch1">
+					<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': sceneInfo.basicinfo.push}" ref="switch1">
 						<div class="mui-switch-handle"></div>
 					</div>
 				</div>
@@ -261,7 +261,7 @@
 						</div>
 						<div class="mui-slider-handle">
 							<img class="item_icon" :src="devIcon" />
-							<div class="title app-font-size-28" v-text="o.name+' | '+o.smartid"></div>
+							<div class="title app-font-size-28" v-text="o.name"></div>
 						</div>
 					</div>
 					<!--</template>-->
@@ -319,53 +319,189 @@
 						linkageId: null,
 						saveAlbe: false,
 						isEdit: false,
+						model_index: -1,
 						devIcon: '../../../image/smart/scenes/select_dev_icons/btn_Videocamera@3x.png',
 						sceneInfo: {
-							"basiceinfo": {
+							"basicinfo": {
 								"icon": 1,
 								"linkageid": 115,
-								"name": "回家模式",
+								"name": "回家模式test",
 								"state": 1,
 								"delay": 0,
 								"type": 6,
 								"push": 1
 							},
 							"linkaction": [{
-									"index": 0,
-									"triggerid": "255",
-									"flage": 0,
-									"linkageid": 115,
-									"name": "test",
-									"enable": 1,
-									"smartid": "AX-403A-2016061400005",
-									"feature": 1
-								},
-								{
-									"index": 1,
-									"triggerid": "245",
-									"flage": 0,
-									"linkageid": 125,
-									"name": "test",
-									"enable": 1,
-									"smartid": "AX-403A-2016061400005",
-									"feature": 1
-								}
-							]
+								"index": 0,
+								"triggerid": "255",
+								"flage": 0,
+								"linkageid": 115,
+								"name": "test",
+								"enable": 1,
+								"smartid": "AX-403A-2016061400005",
+								"feature": 1
+							}, ]
 						},
+						scenes: [{
+							"basicinfo": {
+								"delay": " 0",
+								"icon": 1,
+								"linkageid": 111,
+								"name": "回家模式",
+								"push": "1",
+								"state": "1",
+								"type": 1
+							},
+							"linkaction": [{
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}, {
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}]
+						}, {
+							"basicinfo": {
+								"delay": " 0",
+								"icon": 2,
+								"linkageid": 111,
+								"name": "离家模式",
+								"push": "1",
+								"state": "1",
+								"type": 2
+							},
+							"linkaction": [{
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}, {
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}]
+						}, {
+							"basicinfo": {
+								"delay": " 0",
+								"icon": 3,
+								"linkageid": 111,
+								"name": "回店模式",
+								"push": "1",
+								"state": "1",
+								"type": 3
+							},
+							"linkaction": [{
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}, {
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}]
+						}, {
+							"basicinfo": {
+								"delay": " 0",
+								"icon": 4,
+								"linkageid": 111,
+								"name": "离店模式",
+								"push": "1",
+								"state": "1",
+								"type": 4
+							},
+							"linkaction": [{
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}, {
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}]
+						}],
+
 					};
 				},
 				mounted: function() {
 					this.$refs.switch1.addEventListener("toggle", function(event) {
-						this.sceneInfo.basiceinfo.push = event.detail.isActive ? 1 : 0;
+						this.sceneInfo.basicinfo.push = event.detail.isActive ? 1 : 0;
 						this.changeSave();
 					}.bind(this));
 				},
 				plusReady: function() {
 					this.name = this.$view.name || '场景开关';
 					this.linkageId = this.$view.linkageid;
-					this.isEdit = !!this.linkageId;
+					this.model_index = this.$view.model_index;
+					this.isEdit = !!this.linkageId || (this.model_index >= 0);
 					this.saveAlbe = !this.isEdit;
-					if(this.isEdit) {
+					if(this.model_index >= 0) {
+						this._getAllInfo();
+						//						this._getInfoByType();
+					} else if(this.isEdit) {
 						this._getInfo(this.linkageId);
 					}
 				},
@@ -376,7 +512,7 @@
 						//						alert(JSON.stringify(this.sceneInfo));
 						plus.nativeUI.showWaiting();
 						if(this.isEdit) {
-							dal.scene.add(this.sceneInfo, function(err, data) {
+							dal.scene.updata(this.sceneInfo, function(err, data) {
 								plus.nativeUI.closeWaiting();
 								console.log(err + "," + data);
 								if(err) {
@@ -428,27 +564,27 @@
 					},
 
 					onScenesIconTap: function() {
-						if(this.sceneInfo.basiceinfo.type < 5) {
+						if(this.sceneInfo.basicinfo.type < 5) {
 							return;
 						}
 						app.page.openForResultBy('select_scenes_icon.html', 'select_scenes_icon', function(data) {
-							this.sceneInfo.basiceinfo.icon = data.scenesIcon;
+							this.sceneInfo.basicinfo.icon = data.scenesIcon;
 							this.changeSave();
 						}.bind(this));
 					},
 					onNameTap: function() {
 						var that = this;
-						if(that.sceneInfo.basiceinfo.type < 5) {
+						if(that.sceneInfo.basicinfo.type < 5) {
 							return;
 						}
 						app.page.getInput(function(data) {
 							//							plus.nativeUI.showWaiting();
-							//							alert(that.sceneInfo.basiceinfo.name + "," + data.content);
-							that.sceneInfo.basiceinfo.name = data.content;
+							//							alert(that.sceneInfo.basicinfo.name + "," + data.content);
+							that.sceneInfo.basicinfo.name = data.content;
 							this.changeSave();
 						}, {
 							title: "场景名称",
-							content: that.sceneInfo.basiceinfo.name,
+							content: that.sceneInfo.basicinfo.name,
 							r: "nonEmpty",
 							rmsg: "场景名称不能为空",
 							maxLength: 15,
@@ -467,9 +603,34 @@
 							this.sceneInfo = data;
 						}.bind(this));
 					},
+
+					_getAllInfo: function(linkageId) {
+						plus.nativeUI.showWaiting();
+						dal.scene.list(function(err, data) {
+							plus.nativeUI.closeWaiting();
+														console.log(JSON.stringify(err) + "," + JSON.stringify(data));
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.scenes = data;
+							this._getInfoByType();
+						}.bind(this));
+					},
+
+					_getInfoByType: function() {
+						this.scenes.forEach(function(o) {
+							if(o.basicinfo.type === this.model_index) {
+								//								console.log(JSON.stringify(this.sceneInfo)+","+JSON.stringify(o));
+								this.sceneInfo = o;
+								return;
+							}
+						}.bind(this));
+					},
+
 					changeSave: function() {
 						this.saveAlbe = true;
 					},
+
 				}
 			});
 		</script>

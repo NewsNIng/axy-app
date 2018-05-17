@@ -256,7 +256,7 @@
 
 			<div class="mui-content">
 				<div class="mainLinkage">
-					<img src="../../../image/smart/scenes/add_linkage_schematic.gif"/>
+					<img src="../../../image/smart/scenes/add_linkage_schematic.gif" />
 				</div>
 				<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
 				<div class="mui-input-row app-font-size-28">
@@ -277,7 +277,7 @@
 					<div class="title app-font-size-28" v-text="conditionList[0].title"></div>
 				</div>
 				<div class="prompt app-font-size-24">就执行动作</div>
-				
+
 				<!--<div style="height: 1px; background-color: #E5E6E7;" v-if="actionList.length === 0"></div>-->
 
 				<template v-for="o,i in actionList" v-if="actionList.length > 0">
@@ -353,6 +353,55 @@
 								text: "关闭",
 							}, ]
 						},
+
+						linkageInfo: {
+							"basicinfo": {
+								"delay": " 0",
+								"icon": 10,
+								"linkageid": 111,
+								"name": "测试联动",
+								"push": "1",
+								"state": "1",
+								"type": 6
+							},
+							"linkaction": [{
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 2,
+								"icontype": 25,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005|撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}, {
+								"action": 4,
+								"enable": 1,
+								"feature": 0,
+								"flage": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400005|撤防",
+								"smartid": "AX-403A-2016061400005",
+								"triggerid": "AX-403A-2016061400005"
+							}],
+							"trigger": [{
+								"condition": 8,
+								"enable": 1,
+								"feature": 0,
+								"iconflage": 1,
+								"icontype": 32,
+								"index": 0,
+								"linkageid": 111,
+								"name": " AX-403A-2016061400006|撤防",
+								"smartid": "AX-403A-2016061400006",
+								"triggerid": "AX-403A-2016061400006"
+							}]
+						}
 					};
 				},
 				mounted: function() {

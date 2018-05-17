@@ -26,9 +26,9 @@ var temp_like_json = [
 	},
 	{
 		"id": 1227,
-		"title": "公益传递",
+		"title": "公益捐书",
 		"img": "picture_3@3x.png",
-		"link": "http://cn.mikecrm.com/ZvgrvJE",
+		"link": "http://mp.weixin.qq.com/s/8I8gu80MVvsEdQ_9NnFJDQ",
 		"starttime": "2017/12/01",
 		"endtime": "2017/12/31",
 		"clickcount": 0,

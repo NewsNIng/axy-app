@@ -7,8 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-		"name": "2.1.2",/*应用版本名称*/
-		"code": "20180321"
+		"name": "2.1.5",/*应用版本名称*/
+		"code": "20180416"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -357,7 +357,7 @@
 					"html/person/about.html",
 					"html/person/myself/business.html",
 					"html/person/collection/my_collection.html",
-					"html/smart/devices/help_feedback.html"
+					"html/person/collection/my_mall.html"
 				],
 				"priority": 0
 			},
@@ -424,7 +424,9 @@
 					"html/smart/devices/dev_WG-100_setting.html",
 					"html/smart/devices/dev_WG-100.html",
 					"html/smart/devices/dev_AX-903_setting.html",
-					"html/smart/devices/dev_VH-104_setting.html"
+					"html/smart/devices/dev_VH-104_setting.html",
+					"html/smart/devices/dev_AX-904.html",
+					"html/smart/scenes/edit_scenes.html"
 				],
 				"priority": 0
 			},
@@ -452,7 +454,8 @@
 					"html/common/login.html",
 					"html/smart/devices/dev_my_list.html",
 					"html/public/browser.html",
-					"html/smart/scenes/index2.html"
+					"html/smart/scenes/index2.html",
+					"html/smart/devices/dev_AX-801.html"
 				],
 				"priority": 0
 			},
@@ -470,8 +473,7 @@
 					"js/lib/vue-ni.js",
 					"js/extend/String.js",
 					"html/nearby/pages/list.html",
-					"html/nearby/pages/theme.html",
-					"html/smart/devices/dev_error.html"
+					"html/nearby/pages/theme.html"
 				],
 				"refer": [
 					"html/public/position.html",
@@ -672,9 +674,8 @@
 				"refer": [
 					"html/smart/scenes/trigger_conditions.html",
 					"html/smart/scenes/perform_actions.html",
-					"html/smart/scenes/select_device.html",
 					"html/smart/scenes/select_scenes_icon.html",
-					"html/public/input.html"
+					"html/smart/scenes/select_device.html"
 				],
 				"priority": 0
 			},
@@ -733,7 +734,11 @@
 					"html/smart/add/sonic_connect_camera2.html",
 					"html/smart/add/sonic_connect_dev1.html",
 					"html/smart/add/sonic_connect_dev2.html",
-					"html/smart/add/add_completed.html"
+					"html/smart/add/add_completed.html",
+					"html/smart/add/blue_connect_camera1.html",
+					"html/smart/add/blue_select_dev_id.html",
+					"html/smart/add/blue_connect_camera2.html",
+					"html/smart/add/blue_connect_camera3.html"
 				],
 				"priority": 0
 			},
@@ -741,7 +746,8 @@
 				"resources": [],
 				"refer": [
 					"html/smart/add/family_code.html",
-					"html/smart/add/family_scan.html"
+					"html/smart/add/family_scan.html",
+					"html/smart/devices/dev_my_list.html"
 				],
 				"priority": 0
 			},
@@ -814,7 +820,8 @@
 				"refer": [
 					"html/smart/add/sonic_connect_dev2.html",
 					"html/smart/add/sonic_connect_camera2.html",
-					"html/smart/add/sonic_connect_camera1.html"
+					"html/smart/add/sonic_connect_camera1.html",
+					"html/smart/add/blue_connect_camera1.html"
 				],
 				"priority": 0
 			},
@@ -874,7 +881,9 @@
 				"resources": [
 					"js/common/immersed.js",
 					"js/common/flexible.js",
-					"js/lib/mui.min.js"
+					"js/lib/mui.min.js",
+					"css/app/app.css",
+					"css/lib/mui.min.css"
 				],
 				"refer": [],
 				"priority": 0
@@ -1148,7 +1157,8 @@
 					"html/smart/devices/dev_AX-903_alarmlog.html",
 					"html/smart/devices/dev_select_id.html",
 					"html/smart/devices/dev_AX-903_bind.html",
-					"html/smart/devices/dev_AX-903_datasave.html"
+					"html/smart/devices/dev_AX-903_datasave.html",
+					"html/smart/devices/dev_AX-903_select_id.html"
 				],
 				"priority": 0
 			},
@@ -1183,7 +1193,7 @@
 					"html/smart/devices/dev_160.html",
 					"html/smart/devices/dev_22.html",
 					"html/smart/devices/dev_34.html",
-					"html/smart/devices/dev_21.html"
+					"html/smart/devices/dev_129.html"
 				],
 				"priority": 0
 			},
@@ -1254,8 +1264,7 @@
 					"html/smart/devices/camera_settings_info.html",
 					"html/smart/devices/dev_VH-104_setting_info.html",
 					"html/smart/devices/camera_settings_log.html",
-					"html/public/alarmParam.html",
-					"html/public/input.html"
+					"html/public/alarmParam.html"
 				],
 				"priority": 0
 			},
@@ -1273,18 +1282,24 @@
 				],
 				"priority": 0
 			},
-			"html/smart/scenes/select_device.html": {
-				"resources": [
-					"image/smart/scenes/select_dev_icons/btn_Intelligentcurtainscontroller@3x.png"
-				],
-				"refer": [],
-				"priority": 0
-			},
-			"html/smart/scenes/create_linkage.html": {
+			"html/smart/add/blue_select_dev_id.html": {
 				"resources": [],
 				"refer": [
-					"html/smart/scenes/trigger_conditions.html",
-					"html/smart/scenes/perform_actions.html"
+					"html/smart/add/blue_connect_camera1.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/blue_connect_camera2.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/blue_select_dev_id.html"
+				],
+				"priority": 0
+			},
+			"html/smart/add/blue_connect_camera3.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/add/blue_connect_camera2.html"
 				],
 				"priority": 0
 			},
@@ -1295,10 +1310,30 @@
 				],
 				"priority": 0
 			},
-			"html/smart/devices/help_feedback.html": {
+			"html/smart/devices/dev_AX-801.html": {
 				"resources": [],
 				"refer": [
-					"html/smart/devices/hf_camera.html"
+					"html/smart/devices/dev_AX-801_helper.html",
+					"html/smart/devices/dev_AX-801_setting.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-801_helper.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_AX-801_alarm_clock.html",
+					"html/smart/devices/dev_AX-801_broadcast.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-801_setting.html": {
+				"resources": [],
+				"refer": [
+					"html/public/alarmParam.html",
+					"html/smart/devices/dev_AX-801_info.html",
+					"html/public/input.html",
+					"html/smart/devices/dev_AX-801_log.html",
+					"html/smart/devices/dev_AX-801_arming.html"
 				],
 				"priority": 0
 			}

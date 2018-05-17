@@ -16,6 +16,7 @@
 		<link rel="stylesheet" href="../../css/app/module/poppicker.css" />
 
 		<link rel="stylesheet" href="../../css/app/module/home/home.css" />
+		<link rel="stylesheet" href="../../css/app/module/home/warnmsg.css" />
 
 		<style type="text/css">
 			header img {
@@ -93,6 +94,8 @@
 			.dev_menu .d1 {
 				width: 50%;
 				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
 			}
 			
 			.dev_menu .d1>span {
@@ -408,7 +411,9 @@
 						<div class="dev_menu">
 							<div class="mui-icon d1">
 								<img src="../../image/home/dev_camera.png" />
-								<span class="app-font-size-24 app-color-main">{{_fixDevLocation(dev.location) || dev.devid}}</span>
+								<span class="app-font-size-24 app-color-main">
+									{{_fixDevLocation(dev.location) || dev.devid}}
+								</span>
 							</div>
 
 							<div class="mui-icon d3" @tap="onDeviceSetTap()">
@@ -511,12 +516,12 @@
 		<script type="text/javascript" src="../../js/dal/device.js"></script>
 		<script type="text/javascript" src="../../js/dal/devparam.js"></script>
 		<script type="text/javascript" src="../../js/dal/store.js"></script>
-		<script type="text/javascript" src="../../js/dal/message.js" ></script>
+		<script type="text/javascript" src="../../js/dal/message.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../js/app/app-dev.js"></script>
-		<script type="text/javascript" src="../../js/app/app-auth.js"></script>
+		<!--<script type="text/javascript" src="../../js/app/app-auth.js"></script>-->
 
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
@@ -531,10 +536,10 @@
 		<script type="text/javascript" src="../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript" src="temp_like_json.js"></script>
-		
-		<script type="text/javascript" src="../../js/extend/Date.js" ></script>
-		
-		<script type="text/javascript" src="../../js/components/home/warnmsg.js" ></script>
+
+		<script type="text/javascript" src="../../js/extend/Date.js"></script>
+
+		<script type="text/javascript" src="../../js/components/home/warnmsg.js"></script>
 
 		<script type="text/javascript">
 			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
@@ -620,6 +625,9 @@
 						longitude: 0,
 						latitude: 0,
 						city: '深圳',
+						
+						
+						isInitNativeDevList: false,
 
 					};
 				},
@@ -706,7 +714,6 @@
 					});
 
 					_B.on('device_update', function() {
-
 						that.getDeviceOne();
 					});
 
@@ -764,6 +771,11 @@
 
 					// 监听设备变化
 					this.listenDev();
+					
+					// 监听 原生已经收到数据
+					_B.on("InitNativeDevList", function(){
+						that.isInitNativeDevList = true;
+					});
 
 				},
 				methods: {
@@ -772,8 +784,7 @@
 						_B.emit("home_reload", {}, {
 							self: true
 						});
-						
-						
+
 						// 获取轮播广告图
 						this.getAdvert();
 						// 获取喜欢列表
@@ -819,12 +830,7 @@
 						app.user.get(function(u) {
 							//u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
 							//return 0;
-							// 验证是否主帐号
-							u && app.auth.verify(app.auth.MASTER, u).then(function() {
-								mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
-							}).catch(function(e) {
-								mui.toast(e.message);
-							});
+							u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
 						});
 
 					},
@@ -932,6 +938,11 @@
 								});
 							}
 						}).subscribe(function(data) {
+							
+							if(!that.isInitNativeDevList){
+								return mui.toast("设备初始化中...请稍后...");
+							}
+							
 							var w1 = data.b;
 							var w2 = type === 0x1046 ? 1 : 0;
 							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
@@ -963,10 +974,11 @@
 					},
 					// 轮播点击
 					onAdvertTap: function(o) {
+						
 						// 打开内部浏览器
-						/*app.page.openBrowser({
+						o.adlink && app.page.openBrowser({
 							url: o.adlink
-						});*/
+						});
 					},
 					// 获取一个设备
 					getDeviceOne: function() {
@@ -978,6 +990,8 @@
 								this.dev = data[0];
 								//this.dev.devimg = this._getDevImg(this.dev.devid);
 								this.dev.location = this.dev.location ? this.dev.location.replace(/<[^<]*>/gi, "") : "";
+							}else{
+								this.dev.devid = "";
 							}
 
 						}.bind(this), 1);
@@ -1129,7 +1143,7 @@
 
 					addDeviceTap: function() {
 						app.user.get(function(u) {
-							u && mui.openWindow('../smart/add/add_device.html', 'add_device');
+							u && mui.openWindow('../smart/add/add_device.html', 'add/add_device.html');
 						});
 					},
 

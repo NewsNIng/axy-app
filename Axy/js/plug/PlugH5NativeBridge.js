@@ -21,13 +21,13 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-		return;
+		//return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		return;
+		//return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
@@ -156,11 +156,12 @@
 	 * 初始化原生系统（需在用户登录成功后初始化原生系统）
 	 * @param {String} username 用户名
 	 * @param {String} serverurl 顶级服务器地址
+	 * @param {String} imei uuid
 	 * @param {Function} sfn 正确回调函数
 	 * @param {Function} ffn 失败回调函数
 	 */
-	pgn.InitNativeSystem = function(username, password, serverurl, sfn, ffn) {
-		return pg.asyncExec(N, 'InitNativeSystem', [username, password, serverurl], sfn, ffn);
+	pgn.InitNativeSystem = function(username, password, serverurl, imei, sfn, ffn) {
+		return pg.asyncExec(N, 'InitNativeSystem', [username, password, serverurl, imei], sfn, ffn);
 	};
 
 	/**
@@ -404,6 +405,36 @@
 	// 通知原生账户信息变化
 	pgn.NotifyAccountInfoChange = function(){
 		return pg.syncExec(N, 'NotifyAccountInfoChange', []);
+	}
+	
+	//====================================卡片机4.0=====================================
+	
+	// 蓝牙开始扫描设备 
+	pgn.scan4GenOnCIDFilter = function(filter, sf, ff){
+		return pg.asyncExec(N, 'scan4GenOnCIDFilter', [filter], sf, ff );
+	}
+	
+	// 蓝牙结束扫描
+	pgn.stopScan4GenDevice = function(){
+		return pg.syncExec(N, 'stopScan4GenDevice', []);
+	}
+	
+	// 设备WiFi配置
+	pgn.updateWiFiConfiguration = function(uuid, ssid, pwd, accessPwd, sf, ff){
+		return pg.asyncExec(N, 'updateWiFiConfiguration', [uuid, ssid, pwd, accessPwd], sf, ff);
+	}
+	
+	// 设备连接状态（Optional）
+	pgn.isConnectedWithDevice = function(cid, accessPwd, connectUUID, sf, ff){
+		return pg.asyncExec(N, 'isConnectedWithDevice', [cid, accessPwd, connectUUID], sf, ff);
+	}
+	
+	//====================================卡片机4.0 END=====================================
+	
+	
+	// 告警信息通知
+	pgn.NotifyWarningMsg = function(sf, ff){
+		return pg.asyncExec(N, 'NotifyWarningMsg', [], sf, ff);
 	}
 
 }(window));

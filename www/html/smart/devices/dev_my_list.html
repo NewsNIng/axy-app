@@ -108,7 +108,6 @@
 			.imgdiv.VH-104GN {
 				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
 			}
-			
 			/*.imgdiv.AX-203 {
 				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
 			}
@@ -148,17 +147,16 @@
 				left: 0.266666rem;
 				z-index: 9;
 			}
-			
-			
 			/*兼容5s屏幕*/
-			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
-				
-				.imgdiv>span.imgdiv-line { 
-				  line-height: 0.453333rem;
-				}
-				
-			}
 			
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				.imgdiv>span.imgdiv-line {
+					line-height: 0.453333rem;
+				}
+				header>h1>span {
+					margin: 0 0.3rem;
+				}
+			}
 			/*布防状态*/
 			
 			.imgdiv>span.imgdiv-state {
@@ -198,6 +196,7 @@
 				white-space: nowrap;
 				overflow: hidden;
 				order: -2;
+				
 			}
 			
 			.menudiv img {
@@ -208,6 +207,7 @@
 			/*903无控制器*/
 			
 			.menudiv.AX-903 .menudiv-controller {
+				order: -1;
 				opacity: 0;
 				pointer-events: none;
 			}
@@ -215,9 +215,19 @@
 			
 			.menudiv.relation-share .menudiv-share,
 			.menudiv.relation-share .menudiv-setting {
-				opacity: 0;
+				display: none;
+				/*opacity: 0;*/
 				pointer-events: none;
 				order: -1;
+			}
+			/*删除按钮*/
+			
+			.menudiv-delete {
+				display: none;
+			}
+			
+			.menudiv.relation-share .menudiv-delete {
+				display: block;
 			}
 			/*控制弹窗*/
 			
@@ -303,7 +313,8 @@
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title app-font-size-34">
-					<span @tap="onActive(0)" :class="{active: active === 0}">智能主机</span>
+					<!--v-text="'智能主机'+netDivList.length+'个'"-->
+					<span @tap="onActive(0)" :class="{active: active === 0}" >智能主机</span>
 					<span @tap="onActive(1)" :class="{active: active === 1}">智能配件</span>
 				</h1>
 				<a class="app-icon-plus mui-pull-right" @tap="onAddTap()"></a>
@@ -313,8 +324,8 @@
 				<template v-if="netDivList.length">
 
 					<div class="app-font-size-28 a0" v-show="active === 0">
-						<div class="card" v-for="o,i in netDivList" :key="o.devid">
-							<div class="imgdiv" ref="devimgel" v-devbg :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)">
+						<div class="card" v-for="o,i in netDivList">
+							<div class="imgdiv" ref="devimgel" v-devbg :key="o.devid" :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)">
 								<span class="app-font-size-20 imgdiv-line" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
 								<!--{{o.workmode}}-->
 								<span class="imgdiv-state">
@@ -327,7 +338,8 @@
 									
 								</span>
 							</div>
-							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation)">
+							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation) + ' ' + _getDevAuthorize(o.authorize)">
+								
 								<span class="app-color-main">{{_fixDevLocation(o.location) || o.devid}}</span>
 								<img class="menudiv-controller" @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
 
@@ -335,6 +347,7 @@
 
 								<img class="menudiv-share" @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
 								<img class="menudiv-setting" @tap="onSettingTap(o, i)" src="../../../image/smart/camera/setting.png" />
+								<img class="menudiv-delete" @tap="onDeleteTap(o, i)" src="../../../image/smart/camera/close.png" />
 							</div>
 
 						</div>
@@ -391,7 +404,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
-		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
+		<!--<script type="text/javascript" src="../../../js/app/app-auth.js"></script>-->
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
@@ -559,12 +572,7 @@
 										if(err) {
 											return;
 										}
-										// 数据不为空时 向原生发送数据
-										if(data && data.length > 0) {
-											DEVD.data = data;
-											P.InitNativeDevList(data);
-											ob.next(data);
-										}
+										ob.next(data || []);
 									}, 1000);
 									//} else {
 									//// 本地获取
@@ -573,6 +581,19 @@
 
 								});
 						})
+						.map(function(data) {
+							// 数据不为空时 向原生发送数据
+							if(data && data.length > 0) {
+								DEVD.data = data;
+								P.InitNativeDevList(data);
+							}
+							return data;
+						})
+						.merge(Rx.Observable.create(function(ob) {
+							_B.on('device_update_timer', function(o) {
+								ob.next(o.devlist);
+							});
+						}))
 						// 数据处理
 						.subscribe(function(devData) {
 							that.isGeted = true;
@@ -755,9 +776,13 @@
 
 					},
 
-					// 
+					// 计算关系显示菜单 
 					_getDevRelation: function(relation) {
 						return 'relation-' + __relationarr[relation];
+					},
+					// 计算权限显示菜单
+					_getDevAuthorize: function(authorize) {
+
 					},
 
 					// 空空如也 
@@ -773,14 +798,7 @@
 					onAddTap: function() {
 						// 验证登录
 						app.user.get(function(u) {
-							//u && mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
-							//return 0;
-							// 验证是否主帐号
-							u && app.auth.verify(app.auth.MASTER, u).then(function() {
-								mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
-							}).catch(function(e) {
-								mui.toast(e.message);
-							});
+							u && mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
 						});
 					},
 					// 智能配件点击
@@ -890,6 +908,55 @@
 								devInfo: o
 							}
 						});
+					},
+
+					// 设备分享删除
+					onDeleteTap: function(o, i) {
+						plus.nativeUI.showWaiting();
+
+						var dev = o;
+						var methodName = 'deleteshare';
+						var that = this;
+
+						// 弹窗确认
+						var $alert = Rx.Observable.create(function(ob) {
+							mui.confirm("确定把这台分享设备移除列表吗？", "", ["移除", "取消"], function(e) {
+								if(e.index === 0) {
+									ob.next(dev);
+								}else{
+									ob.error(new Error(""));
+								}
+							});
+						});
+
+						// 删除设备
+						var $deleteFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.device[methodName](dev.devid, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(dev);
+								});
+							})
+						};
+
+						$alert
+							.mergeMap($deleteFn)
+							.subscribe(function(dev) {
+								mui.toast("设备移除成功");
+								plus.nativeUI.closeWaiting();
+
+								_B.emit("device_update", {}, {
+									views: ["home"]
+								});
+
+								that.netDivList.splice(i, 1);
+
+							}, function(err) {
+								plus.nativeUI.closeWaiting();
+								err.message && mui.toast(err.message);
+							});
 					},
 
 					// 设备控制

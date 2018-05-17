@@ -5,7 +5,7 @@
 
 	// 获取所有场景列表
 	scene.list = function(callback) {
-		return ra("get", "/scene/list", {}, callback);
+		return ra("get", "/scene/listallinfo", {}, callback);
 	};
 	
 	// 获取场景详情

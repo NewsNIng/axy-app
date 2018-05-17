@@ -297,6 +297,9 @@
 					// 营业周点击
 					onWeekTap: function() {
 						this.pick_week.show(function(items) {
+							if(items[1].value < items[0].value){
+								return mui.toast("营业周设置不正确");
+							}
 							this.week_str = items[0].text + ' - ' + items[1].text;
 							this.startweek = items[0].value;
 							this.endtweek = items[1].value;
@@ -305,6 +308,9 @@
 					// 营业时段点击
 					onTimeTap: function() {
 						this.pick.show(function(items) {
+							if(items[1].value < items[0].value){
+								return mui.toast("营业时段设置不正确"); 
+							}
 							this.time_str = items[0].text + ' - ' + items[1].text;
 							this.starttime = items[0].value;
 							this.endtime = items[1].value;

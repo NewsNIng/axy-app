@@ -1,28 +1,14 @@
 Vue && Vue.component('warnMsg', {
 
-	template: `<div class="home-warnmsg" v-if="items.length">
-	
-	
-	 <transition-group name="flip-list" tag="div">
-
-				<div class="home-warnmsg-item" v-for="o,i in items" :key="o.id" @tap="onTap(o)">
-					<img src="../../image/home/icon_Alarmnews@3x.png" />
-					<span class="app-font-size-26 mui-ellipsis">
-							{{_fixDevLocation(o.location) +　" " + (o.areaname || o.areaid)}}
-						</span>
-					<span class="app-font-size-26 home-warnmsg-item-right">{{_fixTimeAgo(o.atime)}}</span>
-				</div>
-					 
-  </transition-group>
-	
-			</div>`,
+	template: '<div class="home-warnmsg" v-if="items.length" ><img src="../../image/home/icon_Alarmnews@3x.png" /><transition-group name="flip-list" tag="div"><div class="home-warnmsg-item" v-for="o,i in items" :key="o.id" @tap="onTap(o)"><span class="app-font-size-26 mui-ellipsis">{{_fixDevLocation(o.location) +　" " + (o.areaname || o.areaid)}}</span><span class="app-font-size-26 home-warnmsg-item-right">{{_fixTimeAgo(o.atime)}}</span></div></transition-group></div>',
 
 	data: function() {
 		return {
 			animate: false,
 			items: [
 
-			]
+			],
+			st: null,
 		}
 	},
 	created() {
@@ -43,7 +29,17 @@ Vue && Vue.component('warnMsg', {
 
 			.subscribe(function(data) {
 				that.items = data;
-				data.length > 1 && setInterval(that.scroll, 4000);
+				
+				if(data.length > 1){
+					if(!that.st){
+						that.st = setInterval(that.scroll, 8e3);
+					}
+				}else{
+					if(that.st){
+						window.clearInterval(that.st);
+						that.st = null;
+					}
+				}
 			}, function(err) {
 				mui.toast(err.message);
 			});
@@ -85,7 +81,7 @@ Vue && Vue.component('warnMsg', {
 			return app.dev.fixName(s);
 		},
 		_fixTimeAgo: function(s) {
-
+			s = s.replace(/-/g,"/");
 			return new Date().ago(s);
 		},
 	},

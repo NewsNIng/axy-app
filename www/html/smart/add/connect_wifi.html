@@ -102,16 +102,18 @@
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">配置设备WIFI</h1>
 			</header>
-
+ 
 			<div class="mui-content">
 				<img class="wifi_icon" src="../../../image/smart/devices/add/sound_add/wifi_icon.png" />
 				<div class="wifi_connect">
 					<input type="text" v-model="wifiname" placeholder="WiFi名称" />
 
 					<select v-model="selected">
-
-						<option v-for="o in wifiList" v-if="o.ssid" :value="o.ssid">{{o.ssid}}</option>
-
+						<template v-for="o in wifiList" v-if="o.ssid">
+							<option v-if="o.ssid === connWifi.ssid" :value="o.ssid" selected="selected">{{o.ssid}}</option>
+							<option v-else :value="o.ssid">{{o.ssid}}</option>
+						</template>
+						
 					</select>
 
 					<input type="password" v-model="wifipwd" placeholder="输入WiFi密码" />
@@ -237,18 +239,13 @@
 					},
 					GetPhoneWifiListAsyn: function() {
 						var that = this;
+						
 						plug.H5NativeBridge.GetPhoneWifiListAsyn(function(rs) {
 							rs = JSON.parse(rs);
 							that.connWifi = rs.connWifi;
 							that.wifiList = rs.wifiList;
-							//							that.wifiList.push({
-							//								"capabilities":"[WPA-PSK-CCMP][WPA2-PSK-CCMP][ESS]",
-							//								"ip":0,
-							//								"level":-43,
-							//								"ssid":""
-							//							});
-							that.wifiname = rs.connWifi.ssid || "";
-							that.getWifiPwd();
+							that.selected = rs.connWifi.ssid || "";
+							
 						});
 						mui.os.ios || setTimeout(function() {
 							if(!this.wifiList.length) {

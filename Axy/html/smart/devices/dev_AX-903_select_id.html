@@ -132,7 +132,7 @@
 					return {
 						devActive: -1,
 						devs_: [],
-						devs: [],
+						//devs: [],
 						// 过滤显示某些主机设备 存类型名称
 						filter: []
 
@@ -152,6 +152,7 @@
 							if(this.filter.indexOf(tempName) >= 0) {
 								return false;
 							}
+							
 							return true;
 						}.bind(this));
 					}
@@ -164,7 +165,8 @@
 				plusReady: function() {
 					this.filter = this.$view.filter || [];
 
-					this.getDevList();
+					this.getDevList(); 
+					
 				},
 				methods: {
 					onSelectTap: function(i) {

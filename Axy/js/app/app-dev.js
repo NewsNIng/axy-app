@@ -9,7 +9,11 @@
 		"AX-203": 0x31, // AX_203
 		"AX-503": 0x32, // AX_503
 		"AX-803": 0x33, // AX_803
-
+		
+		"AX-203B": 0x3b, // AX-203B
+		
+		"AX-403B": 0x3c, // AX-403B
+		
 		"AX-603": 0x35, //AX-603 半球
 		"AX-803A": 0x36, //AX-803 数字
 		"AX-403A": 0x37, // AX_403A
@@ -24,9 +28,17 @@
 		"VH-104MG": 0x1044, // 4路混合DVR
 		"VH-104DG": 0x1045, // 4路DVR
 		"VH-104GN": 0x1046, // 4路NVR
+		"AX-801": 0x1101, // AI+智能音箱
 		"none": 0, // 未知
 
 	};
+	
+	var cantPlayArr = [
+		"none",
+		"AX-904",
+		"WG-100",
+		"AX-903"
+	];
 
 	var _isEqual = function(name, type) {
 		return type & (~(0x01 << 31)) === absTypeidDir[name];
@@ -41,6 +53,15 @@
 		for(var i in absTypeidDir) {
 			if(absTypeidDir[i] === type) {
 				return i;
+			}
+		}
+		return "";
+	};
+	
+	dev.findNameByDevid = function(devid){
+		for(var i in absTypeidDir) {
+			if(i.indexOf(devid) === 0){
+				return absTypeidDir[i];
 			}
 		}
 		return "";
@@ -88,6 +109,24 @@
 		}
 		
 		return false;
+	}
+	
+	// 是否是GPRS模式
+	dev.isGPRS = function(workmode){
+		var aaa = 0x01 << 28;
+		return (workmode & aaa) == aaa;
+	}
+	
+	// 是否是隐私（安全）模式
+	dev.isSafe = function(workmode){
+		var aaa = 0x01 << 28;
+		return (workmode & aaa) == aaa;
+	}
+	
+	// 是否能支持播放视频
+	dev.canPlay = function(type){
+		var name = dev.findName(type);
+		return cantPlayArr.indexOf(name) === -1;
 	}
 
 	app.dev = dev;

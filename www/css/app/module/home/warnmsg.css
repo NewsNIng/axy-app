@@ -1,18 +1,28 @@
 .home-warnmsg {
   background-color: #FFFFFF;
   margin-bottom: 0.213333rem;
+  width: 100%;
   height: 1.2rem;
   overflow: hidden;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+}
+.home-warnmsg > div {
+  flex: 1;
+  -webkit-flex: 1;
 }
 .home-warnmsg .flip-list-move {
   transition: transform 1s;
 }
 .home-warnmsg-item {
+  width: 100%;
   height: 1.2rem;
-  padding: 0 0.346666rem;
+  overflow: hidden;
   display: flex;
   display: -webkit-flex;
   align-items: center;
+  padding: 0 0.346666rem !important;
   justify-content: space-between;
   color: #acacac;
 }
@@ -21,7 +31,7 @@
   color: #4c4c4c;
 }
 .home-warnmsg img {
-  margin-right: 0.293333rem;
   width: 1.36rem;
   height: 0.32rem;
+  margin: 0.42rem 0.293333rem;
 }

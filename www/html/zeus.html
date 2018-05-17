@@ -30,7 +30,7 @@
 			/**
 			 * H5Native 控制中心 
 			 */
-			var PUSH_ID, DEVICE, P, _B;
+			var PUSH_ID, DEVICE, USER_INFO,  P, _B;
 
 			var getPwd = function() {
 				return window.localStorage.getItem('_pwd_');
@@ -57,6 +57,10 @@
 				DEVICE = new ni.Cache('dev_list', "", {
 					plus: true
 				});
+				// 用户信息备份
+				USER_INFO = new ni.Cache('app_user_info', {}, {
+					plus: true
+				});
 				// 原生桥梁
 				P = plug.H5NativeBridge;
 				// 多页面通知
@@ -66,7 +70,8 @@
 			});
 
 			// 登录流
-			var $login = Rx.Observable.create(function(ob) {
+			var $login = Rx.Observable.create(function _loginFn(ob, logincount) {
+				logincount = logincount || 0;
 				// 是否登录
 				if(app.user.has()) {
 					var u = app.user.get();
@@ -74,14 +79,22 @@
 
 					var ajaxResult = function(err, data) {
 						if(err) {
-							// 验证失败
-							ob.error();
+							if(err.code === '0110'){
+								// 验证失败
+								ob.error();	
+							}else if(logincount < 5){
+								// 递归
+								logincount  = logincount + 1;
+								setTimeout(_loginFn.bind(null, ob, logincount), Math.pow(2, logincount) * 100);
+							}
 							return;
 						}
 						if(data.lockterminal === 0 || data.validation === 1) {
 							// 验证通过
 							ob.next(data);
 						} else {
+							ob.error();
+							return;
 							// 跳转页面认证
 							mui.toast("帐号已保护，您需要权限认证");
 							app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
@@ -106,13 +119,14 @@
 						// 自动第三方登录
 						dal.user.ologin(o, ajaxResult);
 					}
-				} else {
+				} 
+//				else {
 					// 未登录状态 
 					// // 监听一次登录事件
 					_B.on('login_success', function(data) {
 						ob.next(data.userInfo);
 					});
-				}
+//				}
 			});
 
 			// 获取顶级域名
@@ -199,7 +213,9 @@
 					ob.next();
 				});
 			});
-
+			
+			var getDevListTimer$;
+			
 			// 页面准备完毕
 			$pready
 				// 页面初始化
@@ -234,18 +250,25 @@
 							.first()
 							// 设备信息同步
 							.subscribe(SyncHronous.bind(null, account));
-
+						
+						// 关闭之前的订阅
+						getDevListTimer$ && getDevListTimer$.unsubscribe();
 						// -》开启获取设备列表定时器
-						$getDevListTimer
+						getDevListTimer$ = $getDevListTimer
 							// 或者收到通知
 							.merge($listenDevListUpdate)
 							// 获取ajax数据
 							.mergeMapTo($getDevListByAjax)
-							// 保存并向原生发送数据
-							.subscribe(InitNativeDevList);
+							// 订阅
+							.subscribe(function(data){
+								// 保存并向原生发送数据
+								InitNativeDevList(data);
+								// 向devlist发送更新信息
+								SendDevListPageMsg(data);
+							});
 
 						// 向服务器发送请求缓存处理配件请求
-						SyncZoneRequest();
+						// SyncZoneRequest();
 
 					},
 					// 登录失败
@@ -263,18 +286,21 @@
 				plus.storage.removeItem('dev_list');
 
 				mui.toast("帐号存在异常，请重新登录");
-				app.user.get(function() {});
+				//app.user.get(function() {}); 
 			}
 			// 监听 token 失效
 			var $litenTokenErr = Rx.Observable.create(function(ob) {
 				_B.on('token_error', function(data) {
-					ob.next();
+					// token 错误
+					// 并且已经登录
+					app.user.has() && ob.next();
 				});
 			});
 
 			$pready
 				.mergeMapTo($litenTokenErr)
 				.subscribe(function() {
+					plus.nativeUI.toast("帐号保护已开启，您需要登录申请授权");
 					// 重启app
 					ReloadApp();
 					// 通知原生
@@ -283,7 +309,7 @@
 
 			// 向原生注册 控制中心 处理函数回调
 			var InitNativeSystem = function(o) {
-				P.InitNativeSystem(o.account, o.pwd, o.domain, function(arg) {
+				P.InitNativeSystem(o.account, o.pwd, o.domain, plus.device.uuid, function(arg) {
 					//console.log(arg);
 				});
 			};
@@ -292,6 +318,19 @@
 			var InitNativeDevList = function(data) {
 				DEVICE.data = data;
 				P.InitNativeDevList(data);
+				// 通知 其他页面 原生已经收到数据
+				_B.emit("InitNativeDevList", {}, {
+					views: ["home"]
+				});
+			};
+			
+			// 向devlist发送更新信息
+			var SendDevListPageMsg = function(data){
+				_B.emit('device_update_timer', {
+					devlist: data
+				}, {
+					views: ['dev_my_list']
+				});
 			};
 
 			// 设备推送开关同步
@@ -317,6 +356,7 @@
 				data = FixUserData(data);
 				// 更新用户信息
 				app.user.set(data);
+				USER_INFO.data = data;
 				// 更新用户权限认证信息
 				app.user.setAuthInfo(data);
 
@@ -352,6 +392,8 @@
 
 				// 清除本地用户数据
 				app.user.logout();
+				USER_INFO.clear();
+				
 				window.localStorage.setItem('_pwd_', "");
 				window.localStorage.setItem('_domain_', "");
 
@@ -391,6 +433,8 @@
 						first.reload();
 						// 显示首页
 						first.show("slide-in-bottom", 250);
+						
+						//index.reload();
 						// 打开登录
 						app.user.get(function() {});
 					});

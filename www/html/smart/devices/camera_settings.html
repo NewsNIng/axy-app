@@ -162,6 +162,11 @@
 			.li_repeat2 {
 				height: 2.186666rem !important;
 			}
+			
+			.mui-switch.mui-disabled {
+				opacity: 1;
+				pointer-events: none;
+			}
 		</style>
 	</head>
 
@@ -264,7 +269,7 @@
 						<a class="">
 							<span>指示灯</span>
 							<span class="mui-badge"> 
-								<div  class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': otherInfo.on}" >
+								<div @tap.stop  class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': otherInfo.on}" >
 									<div class="mui-switch-handle"></div>
 								</div>
 							</span>
@@ -313,6 +318,8 @@
 
 		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-auth.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -369,7 +376,16 @@
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
 					console.log(JSON.stringify(this.devInfo));
-					if(this.devInfo.type === 32) {
+					
+					
+					// 获取设备的名称
+					var devtypename = app.dev.findName(this.devInfo.type);
+					if([
+						"AX-203",
+						"AX-203A",
+						"AX-403A",
+						"AX-360"
+					].indexOf(devtypename) >= 0){
 						this._getOpenled();
 					}
 				},
@@ -432,8 +448,8 @@
 							title: "摄像机名称",
 							content: that.fixName(that.devInfo.location),
 							//							r: "devName",
-							maxLength: 15,
-							mLengthMsg: "最长不超过15个字符！",
+							maxLength: 30,
+							mLengthMsg: "最长不超过30个字符！",
 						});
 					},
 					// 基本信息跳转
@@ -529,6 +545,7 @@
 
 					// 删除设备
 					onDel: function() {
+						
 						plus.nativeUI.showWaiting();
 
 						var dev = this.devInfo;
@@ -572,8 +589,12 @@
 								});
 							})
 						}
-
-						$alert
+						
+						
+						// 是否主账号
+						var $isMaster = Rx.Observable.fromPromise(app.auth.verify(app.auth.MASTER, app.user.get()));
+						
+						$isMaster.mergeMapTo($alert)
 							.mergeMap($rebootFn)
 							.mergeMap($deleteFn)
 							.subscribe(function(dev) {

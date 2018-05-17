@@ -125,6 +125,7 @@
 				getStoreTimePage = function(g, i, ex) {
 					var that = this;
 					var upload_store_time = plus.webview.getWebviewById('upload_store_time');
+					console.log(JSON.stringify(ex));
 					if(!upload_store_time) {
 						app.page.openForResultBy('upload_store_time.html', 'upload_store_time', function(data) {
 							that.infoList[1][1].value = data.week + " " + data.time;
@@ -173,7 +174,8 @@
 					// 营业时间
 					getStoreTimePage,
 					// 营业状态
-					getStoreTimePage,
+					function(){}
+					//getStoreTimePage,
 				],
 				[
 					// 店铺照片
@@ -305,7 +307,8 @@
 						// 防抖end
 
 						var fn = fnArr[gindex][index];
-						fn && fn.call(this, gindex, index, {
+						
+						mui.extend(o, {
 							title: o.name,
 							//tips: o.value,
 							content: o.value,
@@ -314,7 +317,9 @@
 							t2: o.t2,
 							imgList: o.imgList,
 							rmsg: o.regexpErrorMessage
-						});
+						}, true);
+						
+						fn && fn.call(this, gindex, index, o);
 					},
 					onNextTap: function() {
 						var that = this;

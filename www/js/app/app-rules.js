@@ -25,6 +25,7 @@
 			return rules.test(rex, value, message);
 		}
 		if(type === '[object RegExp]'){
+			
 			if(rex.test(value)) {
 				return null;
 			}
@@ -72,6 +73,40 @@
 			message = rules.test(arr[i].type, arr[i].value, arr[i].message);
 			if(message !== null) {
 				return message;
+			}
+			i++;
+		}
+		return null;
+	};
+	
+	
+	rules.testBys = function(rex, value, message) {
+		var type = Object.prototype.toString.call(rex);
+		
+		if(type === '[object String]'){
+			return rules.test(rex, value, message);
+		}
+		if(type === '[object RegExp]'){
+			return rex.test(value)
+		}
+		if(type === "[object Function]") {
+			return rex(value);
+		}
+		return message;
+	}
+	
+	/**
+	 * 对数据进行验证 （多个）
+	 * @param {Array} arr 数据数组，格式按照test
+	 */
+	rules.testLists = function(arr) {
+		var i = 0,
+			l = arr.length,
+			message = "";
+		while(i < l) {
+			message = rules.testBys(arr[i].type, arr[i].value, arr[i].message);
+			if(message !== true) {
+				return message || arr[i].message;
 			}
 			i++;
 		}

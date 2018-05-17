@@ -2,9 +2,10 @@
 (function(_, ra, $) {
 	var system = {};
 
-	system.update = function(version, callback) {
+	system.update = function(nativeVersion, version, callback) {
 
 		return ra('get', '/app/appversion', {
+			nativeVersion: nativeVersion,
 			version: version,
 			type: +!$.os.ios
 		}, callback);
@@ -22,7 +23,7 @@
 		}, function(up, status) {
 			if(up.state == 4 && status == 200) {
 				var data = JSON.parse(up.responseText);
-				if(data.code !== '0000') {
+				if(data.code !== '0000' && data.code !== 0) {
 					return callback({
 						message: data.message
 					}, null);
@@ -51,10 +52,9 @@
 			account: account,
 			BASE_URL: _.BASE_URL_TOP
 		}, function(err, data) {
-
-			if(!err) {
-				data = dal.BASE_URL_DEV
-			}    
+//			if(!err) {
+//				data = dal.BASE_URL_DEV
+//			}    
 			callback(err, data);
 		});
 	}

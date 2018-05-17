@@ -63,6 +63,23 @@
 		</header>
 		<div class="mui-content menu-box app-font-size-32">
 
+			
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" @tap="onAllTap()">
+					
+					<a>
+						<span class="app-color-333333">全部推送</span>
+						<span class="mui-badge">
+									<div class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': isAllSwitch}" >
+									  <div class="mui-switch-handle"></div>
+									</div>
+									
+							</span>
+					</a>
+				</li>
+			</ul>
+				
+				
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell" @tap="onActivityToggle()">
 					<a>
@@ -79,7 +96,7 @@
 					<a>
 						<span class="app-color-333333">系统通知</span>
 						<span class="mui-badge">
-									<div  class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': system}" >
+									<div class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active': system}" >
 									  <div class="mui-switch-handle"></div>
 									</div>
 									
@@ -88,7 +105,7 @@
 				</li>
 			</ul>
 
-			<ul class="mui-table-view">
+			<!--<ul class="mui-table-view">
 				<li class="mui-table-view-cell" @tap="onAllTap(true)">
 					<a>
 						<span class="app-color-main">打开全部推送</span>
@@ -99,7 +116,7 @@
 						<span class="app-color-ff3b30">关闭全部推送</span>
 					</a>
 				</li>
-			</ul>
+			</ul>-->
 
 			<ul class="mui-table-view">
 				<template v-for="o,i in list">
@@ -138,7 +155,9 @@
 						active: true,
 						system: true,
 
-						list: []
+						list: [],
+						
+						isAllSwitch: false,
 					};
 				},
 
@@ -213,6 +232,7 @@
 						});
 					},
 					onAllTap: function(wantv) {
+						wantv = !this.isAllSwitch;
 						var that = this;
 						plus.nativeUI.showWaiting();
 						dal.push.updateAll(PUSHID.data, +wantv, function(err, rs) {
@@ -221,6 +241,7 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("设置成功");
+							that.isAllSwitch = wantv;
 							var l = that.list.length;
 							for(var i = 0; i < l; i++) {
 								that.list[i].state = +wantv;

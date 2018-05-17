@@ -1,20 +1,30 @@
 // 设备相关
 (function(_, ra) {
-	
-	var IMEI = "";
 
-	function initImei() {
+	var IMEI = "";
+	
+	var PUSH_ID = {};
+	
+	var SENDMODE = "";
+	
+
+	function initPlus() {
 		IMEI = plus.device.uuid;
+		PUSH_ID = new ni.Cache('push_key', "", {
+			plus: true
+		});
+		SENDMODE = plus.os.name === 'iOS' ? 67 : 36
 	}
+	
 
 	if(window.plus) {
-		initImei();
+		initPlus();
 	} else {
 		document.addEventListener('plusready', function() {
-			initImei();
+			initPlus();
 		});
 	}
-	
+
 	var device = {};
 
 	/**
@@ -23,7 +33,9 @@
 	 */
 	device.add = function(devid, callback) {
 		return ra("post", "/device/add", {
-			devid: devid
+			devid: devid,
+			target : PUSH_ID.data || "",
+			sendmode: SENDMODE,
 		}, callback);
 	};
 
@@ -98,7 +110,7 @@
 			}, callback);
 		},
 		// 绑定摄像头主机
-		unbinding: function(devid, callback){
+		unbinding: function(devid, callback) {
 			return ra('post', '/device/electric/clearbinding', {
 				devid: devid,
 			}, callback);
@@ -137,7 +149,7 @@
 	device.delShare = function(id, callback) {
 		return ra("post", "/share/delete/" + id, {}, callback);
 	};
-	
+
 	/**
 	 * 获取设备告警参数
 	 * @param {Object} type 设备类型

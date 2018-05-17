@@ -14,6 +14,7 @@
 			body,
 			.mui-content {
 				background-color: #FFFFFF;
+				overflow: hidden;
 			}
 			
 			.mui-bar-nav~.mui-content {
@@ -75,6 +76,7 @@
 			
 			.share-icon {
 				text-align: center;
+				padding-bottom: 0.5rem;
 			}
 			
 			.share-icon>img {
@@ -140,6 +142,78 @@
 				/*pointer-events: none;*/
 			}
 			/*设备背景图fix--------*/
+			/*===== 权限列表 =====*/
+			
+			.menu-box {
+				position: relative;
+			}
+			
+			.menu-box:before {
+				content: attr(data-tips);
+				position: initial;
+				display: block;
+				width: 100%;
+				height: 0.96rem !important;
+				line-height: 0.96rem !important;
+				background-color: #F4F8FB !important;
+				padding-left: 0.346666rem;
+				font-size: 1;
+				color: #646464;
+				-webkit-transform: scaleY(1);
+				transform: scaleY(1);
+			}
+			
+			.menu-box .menu-box-item:after {
+				left: 0;
+			}
+			
+			.menu-box .menu-box-item>a {
+				position: relative;
+				padding-left: 22px;
+			}
+			/*点*/
+			
+			.menu-box .menu-box-item>a:before {
+				content: "";
+				position: absolute;
+				display: block;
+				left: 0.2rem;
+				top: 19px;
+				width: 4px;
+				height: 4px;
+				background-color: #06C1AE;
+				border-radius: 50%;
+			}
+			/*选中状态*/
+			
+			.menu-box .menu-box-item>a:after {
+				content: "";
+				position: absolute;
+				display: block;
+				right: 0.4rem;
+				top: 50%;
+				width: 0.64rem;
+				height: 0.64rem;
+				background-repeat: no-repeat;
+				background-size: cover;
+				-webkit-transform: scaleY(1) translateY(-50%);
+				transform: scaleY(1) translateY(-50%);
+			}
+			/*base默认选中 不可更改*/
+			
+			.menu-box.base .menu-box-item>a:after {
+				background-image: url(../../../image/person/devshare/click_3@3x.png);
+			}
+			/*hight默认不选中 可更改*/
+			
+			.menu-box.hight .menu-box-item>a:after {
+				background-image: url(../../../image/person/devshare/click@3x.png);
+			}
+			
+			.menu-box.hight .menu-box-item.select>a:after {
+				background-image: url(../../../image/person/devshare/click_2@3x.png);
+			}
+			/*===== 权限列表 End =====*/
 		</style>
 
 	</head>
@@ -163,11 +237,41 @@
 						<span class="app-color-333333">请选择权限：</span>
 						<span class="app-color-9f9fa0">（选择权限后，共享的成员可直接使用该摄像头相应功能，请注意隐私保护。）</span>
 					</div>
-					<div class="menu-icon">
+
+					<!--<div class="menu-icon">
 						<div v-for="o,i in menus" @tap="o.selected = !o.selected">
 							<img :src='"../../../image/person/devshare/"+ (o.imgindex) + (o.selected?("_"+(o.imgindex)):"") +".png"' />
 							<div v-text="o.name"></div>
 						</div>
+					</div>-->
+
+					<div style="clear: both;">
+
+						<ul class="mui-table-view menu-box app-font-size-28 base" data-tips="基础权限">
+
+							<li class="mui-table-view-cell menu-box-item" v-for="o, i in menus.base">
+								<a href="javascript:;">
+									<div class="mui-media-body">
+										<span>{{o.name}}</span>
+										<p class="mui-ellipsis app-font-size-24">{{o.tips}}</p>
+									</div>
+								</a>
+							</li>
+
+						</ul>
+
+						<ul class="mui-table-view menu-box app-font-size-28 hight" data-tips="高级权限">
+
+							<li class="mui-table-view-cell menu-box-item" :class="{'select': o.selected}" v-for="o, i in menus.hight" @tap="onSelectTap(o)">
+								<a href="javascript:;">
+									<div class="mui-media-body">
+										<span>{{o.name}}</span>
+										<p class="mui-ellipsis app-font-size-24">{{o.tips}}</p>
+									</div>
+								</a>
+							</li>
+
+						</ul>
 					</div>
 
 					<div class="xian app-color-9f9fa0" data-content="分享至"></div>
@@ -196,19 +300,31 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 
+		<script type="text/javascript" src="../../../js/data/devauthdata.js"></script>
+
 		<script type="text/javascript">
 			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
+
+			var devbg_src = "";
 
 			Vue.directive('devbg', {
 				inserted: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path) {
+						if(devbg_src) {
+							reutrn;
+						};
+						devbg_src = path;
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 				},
 				update: function(el) {
 					var devid = el.dataset.devid;
 					getScrrenHotBgFn(devid).then(function(path) {
+						if(devbg_src) {
+							reutrn;
+						};
+						devbg_src = path;
 						el.style.backgroundImage = "url(" + path + ")";
 					})
 
@@ -232,51 +348,57 @@
 						},
 						canvasWidth: 0,
 						mask: false,
-						menus: [{
-								name: "视频查看",
-								selected: true,
-								bitleft: 1 << 0,
-								imgindex: 1,
-							},
-							{
-								name: "告警提醒",
-								selected: true,
-								bitleft: 1 << 1,
-								imgindex: 3,
-							},
-							{
-								name: "遥控器操作",
-								selected: false,
-								bitleft: 1 << 2,
-								imgindex: 7,
-							},
-							{
-								name: "智能安全",
-								selected: false,
-								bitleft: 1 << 3,
-								imgindex: 0,
-							},
-							{
-								name: "智能控制",
-								selected: false,
-								bitleft: 1 << 4,
-								imgindex: 2,
-							},
 
-							{
-								name: "云台",
-								selected: false,
-								bitleft: 1 << 5,
-								imgindex: 9,
-							},
+						menus: {
+							base: [],
+							hight: []
+						},
 
-							{
-								name: "查看电管家",
-								selected: false,
-								bitleft: 1 << 6,
-								imgindex: 8,
-							},
-						],
+						//						menus: [{
+						//								name: "视频查看",
+						//								selected: true,
+						//								bitleft: 1 << 0,
+						//								imgindex: 1,
+						//							},
+						//							{
+						//								name: "告警提醒",
+						//								selected: true,
+						//								bitleft: 1 << 1,
+						//								imgindex: 3,
+						//							},
+						//							{
+						//								name: "遥控器操作",
+						//								selected: false,
+						//								bitleft: 1 << 2,
+						//								imgindex: 7,
+						//							},
+						//							{
+						//								name: "智能安全",
+						//								selected: false,
+						//								bitleft: 1 << 3,
+						//								imgindex: 0,
+						//							},
+						//							{
+						//								name: "智能控制",
+						//								selected: false,
+						//								bitleft: 1 << 4,
+						//								imgindex: 2,
+						//							},
+						//
+						//							{
+						//								name: "云台",
+						//								selected: false,
+						//								bitleft: 1 << 5,
+						//								imgindex: 9,
+						//							},
+						//
+						//							{
+						//								name: "查看电管家",
+						//								selected: false,
+						//								bitleft: 1 << 6,
+						//								imgindex: 8,
+						//							},
+						//						],
 
 						QRcode: null,
 					};
@@ -285,7 +407,11 @@
 				computed: {
 					// 权限
 					authorize: function() {
-						return this.menus.reduce(function(n, item) {
+
+						return this.menus.base.reduce(function(n, item) {
+							n = n | item.bitleft;
+							return n;
+						}, 0) | this.menus.hight.reduce(function(n, item) {
 							if(item.selected) {
 								n = n | item.bitleft;
 							}
@@ -295,6 +421,8 @@
 				},
 
 				mounted: function() {
+					
+
 					// 动态计算canvas的宽，设置为屏幕宽度一半大小
 					this.canvasWidth = window.innerWidth / 1.5 * 2;
 					this.$refs.canvas.width = this.canvasWidth;
@@ -311,9 +439,19 @@
 
 				plusReady: function() {
 					this.devInfo = this.$view.devInfo;
+					
+					var devname = app.dev.findName(this.devInfo.type);
+					// 动态获取权限
+					this.menus = devauthdata[devname];
+					
 					console.log(JSON.stringify(this.devInfo));
 				},
 				methods: {
+					//权限点击
+					onSelectTap: function(o) {
+						o.selected = !o.selected;
+					},
+
 					getCode: function() {
 						return new Promise(function(re, rj) {
 							dal.device.share(this.devInfo.id, this.authorize, function(err, code) {
@@ -386,7 +524,7 @@
 									});
 
 								}).then(function() {
-									console.log(href); 
+									console.log(href);
 									new ni.Share('wxhy', function(err, data) {
 										if(err) {
 											console.log(err)

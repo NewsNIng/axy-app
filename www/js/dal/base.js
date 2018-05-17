@@ -31,58 +31,45 @@ function requestAdapter(type, url, params, callback) {
 	} else {
 		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL;
 	}
-
 	var apiUrl = url;
-
 	url = BASE_URL + url;
 	// 获取用户权限信息
-
 	params.account = params.account || window.localStorage.getItem('_account_') || "";
-	
 	console.log("[" + type + "]" + url);
 	console.log(JSON.stringify(params));
-
 	var errDir = {
 		"timeout": "请求超时",
-		"error": "请求错误",
-		"abort": "请求中断",
+		"error": "网络连接错误，请检查！",
+		"abort": "网络连接中断，请检查！",
 		"parsererror": "解析错误",
 		"null": "请求为空"
 	};
-	
-	
-
 	var options = {
 		headers: {
 			token: window.localStorage.getItem('_token_') || "",
 			loginid: window.localStorage.getItem('_loginid_') || "",
 			imei: window.localStorage.getItem('_imei_') || "",
 			account: params.account,
-			//appversion: dal.BASE_URL_VERSION,
+//			appversion: dal.BASE_URL_VERSION,
 		},
 		data: params,
 		type: type,
 		timeout: 60000,
-		
 		success: function(data) {
-
 			var o = {};
-
 			console.log("[" + apiUrl + "]" + JSON.stringify(data));
-
 			if(data.code === "403") {
+				//alert("[" + apiUrl + "]" + JSON.stringify(data));
 				// token 验证失败 通知 zeus
 				var zeus = plus.webview.getWebviewById("zeus");
 				if(!zeus) {
 					console.log("ZEUS WINDOW NOFIND");
 					return
 				}
-				plus.nativeUI.toast("帐号保护已开启，您需要登录申请授权");
 				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', {})";
 				zeus.evalJS(jsstr);
 				return;
 			}
-
 			if(data.code !== "0000" && data.code !== "0") {
 				o.err = {
 					code: data.code,

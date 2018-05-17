@@ -84,6 +84,8 @@
 		
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer ></script>
 
+		<script type="text/javascript" src="../../../js/app/app-auth.js" ></script>
+
 		<script type="text/javascript">
 			mui.init();
 
@@ -172,7 +174,7 @@
 								devInfo: this.devInfo
 							});
 						} else {
-							app.page.openForResultBy('dev_select_id.html', 'dev_select_id', function(data) {
+							app.page.openForResultBy('dev_AX-903_select_id.html', 'dev_AX-903_select_id', function(data) {
 								plus.nativeUI.showWaiting();
 								dal.device.electric.binding(that.devInfo.devid, data.devid, function(err, rs) {
 									plus.nativeUI.closeWaiting();
@@ -276,7 +278,10 @@
 							})
 						}
 
-						$alert
+						// 是否主账号
+						var $isMaster = Rx.Observable.fromPromise(app.auth.verify(app.auth.MASTER, app.user.get()));
+						
+						$isMaster.mergeMapTo($alert)
 							.mergeMap($rebootFn)
 							.mergeMap($deleteFn)
 							.subscribe(function(dev) {

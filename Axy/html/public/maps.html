@@ -170,6 +170,8 @@
 							//this.address = p.address;
 							this.longitude = p.coord.longitude;
 							this.latitude = p.coord.latitude;
+							
+							//this.searchObj.poiSearchInbounds("");
 							this.searchObj.poiSearchNearBy(p.address, value, 25);
 						}.bind(this), function(err) {
 							mui.toast(err.message);
@@ -312,12 +314,13 @@
 								that.address = fristPostion.address;
 								that.where = fristPostion.name;
 								that.plist.length = 0;
-								for(var i = 0; i < result.currentNumber; i++) {
+								for(var i = 0; i < result.currentNumber; i++) {		
 									that.plist.push(result.getPosition(i));
 								}
 							} else {
 								mui.toast("检索附近列表失败，请重试");
 							}
+							console.log(JSON.stringify(that.plist))
 						};
 
 						this.searchObj.setPageCapacity(20);

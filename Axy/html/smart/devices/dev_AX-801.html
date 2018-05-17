@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>红外探测</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+		<!--<link rel="stylesheet" href="../../../css/app/devices.css" />-->
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+				position: absolute;
+				height: 100%;
+				width: 100%;
+			}
+			
+			.mui-content {
+				background-image: url(../../../image/smart/devices/smart_sound/main_bg@3x.png);
+				background-repeat: no-repeat;
+				background-size: 100% 100%;
+			}
+			
+			header>span {
+				height: 100%;
+				line-height: 44px;
+			}
+			
+			.menu-item {
+				margin: 0 0.48rem 0.133333rem 0.48rem;
+				background-color: rgba(87, 87, 87, 0.5);
+				color: white;
+				height: 1.866666rem;
+				padding-left: 0.48rem;
+				padding-right: 0.4rem;
+				border-radius: 0.133333rem;
+				position: relative;
+			}
+			
+			.right-text {
+				right: 0.4rem;
+			}
+			
+			.temp>.right-text {
+				position: absolute;
+				top: 0.8rem;
+			}
+			
+			.vertical-center {
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.temp {
+				height: 2.986666rem;
+			}
+			
+			.temp>.value {
+				display: inline-block;
+				margin-top: 0.266666rem;
+				line-height: 1;
+			}
+			
+			.temp>.desc {
+				display: inline-block;
+				margin-top: 0.266666rem;
+			}
+			
+			.app-icon-back {
+				border-left: none !important;
+			}
+			
+			.app-font-size-120 {
+				font-size: 60px !important;
+			}
+			
+			[data-dpr="2"] .app-font-size-120 {
+				font-size: 120px !important;
+			}
+			
+			[data-dpr="3"] .app-font-size-120 {
+				font-size: 180px !important;
+			}
+			
+			header {
+				background-color: rgba(0, 0, 0, 0) !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+			<header class="mui-bar mui-bar-nav app-header " data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title" v-text="'AI+智能音箱'"></h1>
+				<span class="mui-pull-right app-font-size-30 app-color-white" @tap="onSettingTap()">
+					设置
+				</span>
+			</header>
+
+			<div class="mui-content noImmersed">
+				<div class="menu-item temp">
+					<span class="value app-font-size-120">20</span><span class="unit app-font-size-40">°C</span><br /><span class="desc app-font-size-28">冷热适宜，感觉很舒适</span>
+					<span class="right-text app-font-size-26">深圳市·南山区</span>
+				</div>
+				<div class="menu-item air-quality">
+					<div class="vertical-center">
+						<span class="value app-font-size-64">36</span><span class="unit app-font-size-26">PM2.5</span>
+						<span class="desc app-font-size-26">良</span>
+					</div>
+					<span class="right-text app-font-size-26 vertical-center">深圳市·南山区</span>
+				</div>
+				<div class="menu-item humidity">
+					<div class="vertical-center">
+						<span class="value app-font-size-64">74</span><span class="unit app-font-size-26">%</span>
+						<span class="desc app-font-size-26">相对湿度</span>
+					</div>
+					<span class="right-text app-font-size-26 vertical-center">深圳市·南山区</span>
+				</div>
+				<div class="menu-item life-helper" @tap="onLifeTap()">
+					<span class="vertical-center app-font-size-28">生活助手</span>
+					<span class="right-text app-font-size-26 vertical-center">定时闹钟，来电提醒</span>
+				</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_ms_alarm.js"></script>
+
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
+
+		<img src="" />
+		<script type="text/javascript">
+			//			mui.init({
+			//				beforeback: function() {
+			//					plus.navigator.setStatusBarStyle('light');
+			//				}
+			//			});
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						// 设备信息
+						devInfo: {
+							"音箱id": "",
+							"温度": 20,
+							"PM2.5": 36,
+							"湿度": 74,
+							"位置信息": "深圳市·南山区",
+							"设备名称": "AX-4035652525",
+							"设备型号": "",
+							"连接的WIFI": "main123293",
+							"WIFI信号强度": "高",
+							"硬件版本": "4.0.1",
+							"软件版本": "",
+							"IP地址": "192.163.1.1",
+							"剩余电量": "20",
+							"应用程序版本": "5.2.0"
+						},
+
+					};
+				},
+				mounted: function() {
+					document.querySelector(".mui-content").style.paddingTop = 45 + 5 + window.immersed + 'px';
+				},
+				plusReady: function() {
+
+				},
+				methods: {
+					onLifeTap: function() {
+						mui.openWindow('dev_AX-801_helper.html', 'dev_AX-801_helper');
+					},
+					onSettingTap: function() {
+						mui.openWindow('dev_AX-801_setting.html', 'dev_AX-801_setting');
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

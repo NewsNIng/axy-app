@@ -211,7 +211,7 @@
 					this.init();
 
 					// 获取门锁记录 流
-					var $getLogList = Rx.Observable.fromPromise(this.getLogList());
+					//var $getLogList = 
 					// 数据转换 流
 					var $list2dir = function(data) {
 						return data.reduce(function(dir, item) {
@@ -244,11 +244,23 @@
 						that.$watch("pageNumber", function(n) {
 							ob.next();
 						});
+						ob.next();
 					});
+					
+					
+					
+					$listenPageNumber
+					.mergeMapTo(Rx.Observable.create(function(ob){
+						that.getLogList().then(function(data){
+							ob.next(data)
+						}).catch(function(err){
+							ob.error(err)
+						});
+					}))
 
-					$getLogList.merge($listenPageNumber)
+					//$getLogList.merge($listenPageNumber)
 						.filter(function(data) {
-							that.scroll && (that.scroll.finishPullUp());
+							that.scroll && (that.scroll.finishPullUp(), that.scroll.refresh());
 							return data && data.length;
 						})
 						.map($list2dir)
@@ -266,12 +278,14 @@
 						var pageNumber = this.pageNumber;
 						var did = this.did;
 						return new Promise(function(resolve, reject) {
+							var w = plus.nativeUI.showWaiting();
 							dal.logger.doorList(did, pageNumber, function(err, data) {
+								w.close();
 								if(err) {
 									return reject(err);
 								}
 								resolve(data);
-							});
+							}, 20);
 						});
 
 					},

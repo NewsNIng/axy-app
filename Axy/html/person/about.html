@@ -46,19 +46,17 @@
 			.logo>div {
 				margin-bottom: 0.8rem;
 			}
-			
-			
 			/*声明*/
-			.final{
+			
+			.final {
 				position: fixed;
 				bottom: 0.533333rem;
 				left: 0;
 				width: 100%;
-				text-align: center;				
+				text-align: center;
 			}
 			
-			
-			.mui-ios a.mui-active{
+			.mui-ios a.mui-active {
 				background-color: transparent !important;
 			}
 		</style>
@@ -104,90 +102,96 @@
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../js/common/immersed.js"></script>
 		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
-		
+
 		<script type="text/javascript" src="../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../js/dal/system.js"></script>
 		<script type="text/javascript" src="../../js/common/rsmanager.js"></script>
-		
+
 		<script type="text/javascript" src="../../js/app/app.js"></script>
-		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 		<script type="text/javascript">
 			mui.init({
 				gestureConfig: {
 					longtap: true
 				}
 			});
+			
+			function version2number(version) {
+					return +(version.split('.').join(''));
+				}
 
 			mui.plusReady(function() {
 				var version = document.getElementById("version");
 				// 获取前端版本号
 				app.device.getVersion(function(data) {
-					version.innerText = "当前版本：V " + data;
+					var appVersion = version2number(data);
+					version.innerText = "当前版本：V " + plus.runtime.version + "" + appVersion;
 				});
-				
-				// 点击检查更新
-				version.addEventListener('tap', function() {
-					checkUpdate();
-				});
-				
+
+
+					// 点击检查更新
+					version.addEventListener('tap', function() {
+						checkUpdate();
+					});
+
 				// 长按发现彩蛋
-				version.addEventListener('longtap', function() {
-					if(mui.os.ios){
-						return;
-					}
-					var nativeVersion = plus.runtime.version;
-					mui.toast(nativeVersion);
-				});
+				//				version.addEventListener('longtap', function() {
+				//					if(mui.os.ios) {
+				//						return;
+				//					}
+				//					// 获取前端版本号
+				//					app.device.getVersion(function(data) {
+				//						mui.toast(data);
+				//					});
+				//				});
 
 			});
 
 			function checkUpdate() {
-				function version2number(version) {
-						return +(version.split('.').join(''));
-					}
+				
 
-					// 获取当前应用版本
-					plus.runtime.getProperty(plus.runtime.appid, function(info) {
-						var appVersion = version2number(info.version);
-						dal.system.update(info.version, function(err, data) {
-							if(err) {
-								return mui.toast(err.message);
+				// 获取当前应用版本
+				plus.runtime.getProperty(plus.runtime.appid, function(info) {
+					var appVersion = version2number(info.version);
+					dal.system.update(plus.runtime.version, info.version, function(err, data) {
+						if(err) {
+							return mui.toast(err.message);
+						}
+
+						if(!data) {
+							if(mui.os.ios) {
+								return;
 							}
+							mui.toast("暂无更新");
+							return;
+						}
+						var newAppVersion = version2number(data.version);
 
-							if(!data) {
-								if(mui.os.ios){
-									return;
-								}
-								mui.toast("暂无更新");
-								return; 
+						if(newAppVersion > appVersion) {
+							// 需要隐藏升级？
+							if(data.hide) {
+								rsmanager._install(data.path, function(succ) {}, true);
+								return;
 							}
-							var newAppVersion = version2number(data.version);
+							// 弹出升级提示框
+							app.page.openUpdate(function(rs) {}, {
+								path: data.path, // 更新包地址
+								enforce: data.enforce, // 强制更新 不能关闭提示框
+								// title: "", // 更新提示框的标题内容 
+								version: data.version, // 版本号
+								message: data.message, // 更新内容
+							});
 
-							if(newAppVersion > appVersion) {
-								// 需要隐藏升级？
-								if(data.hide) {
-									rsmanager._install(data.path, function(succ) {}, true);
-									return;
-								}
-								// 弹出升级提示框
-								app.page.openUpdate(function(rs) {}, {
-									path: data.path, // 更新包地址
-									enforce: data.enforce, // 强制更新 不能关闭提示框
-									// title: "", // 更新提示框的标题内容 
-									version: data.version, // 版本号
-									message: data.message, // 更新内容
-								});
-								
-							} else {
-								if(mui.os.ios){
-									return;
-								}
-								mui.toast("您已经是最新版本，无需更新"); 
+						} else {
+							if(mui.os.ios) {
+								return;
 							}
-
-						});
+							mui.toast("您已经是最新版本，无需更新");
+						}
 
 					});
+
+				});
 			}
 		</script>
 	</body>
