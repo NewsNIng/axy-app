@@ -1,0 +1,539 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>附近推荐商家</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			.box {
+				display: flex;
+				display: -webkit-flex;
+				/* 新版本语法: Chrome 21+ */
+				display: -webkit-box;
+				/* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+				align-content: center;
+				justify-content: center;
+			}
+			
+			.flex1 {
+				-webkit-flex: 1;
+				/* Chrome */
+				flex: 1;
+				/* NEW, Spec - Opera 12.1, Firefox 20+ */
+				-webkit-box-flex: 1/* OLD - iOS 6-, Safari 3.1-6 */
+				;
+			}
+		</style>
+
+		<style type="text/css">
+			.mui-content {
+				background-color: #f5f5f9;
+			}
+			/*位置显示start*/
+			
+			.position {
+				height: 1.04rem;
+				background-color: #f5f5f9;
+				/*margin-bottom: 0.266666rem;*/
+				/*background-color: white;*/
+			}
+			
+			.position>img {
+				margin: 0.306666rem;
+				width: 0.4rem;
+				height: 0.4rem;
+				vertical-align: middle;
+			}
+			/*位置显示end*/
+			/*店铺详情start*/
+			
+			.shop_imgtext {
+				height: 2.4rem;
+			}
+			
+			.shop_image {
+				width: 2.4rem;
+				height: 2.4rem;
+				margin-right: 0.346666rem;
+				background-position: center;
+				background-size: cover;
+			}
+			
+			.shop_info {
+				/*line-height: 0.426666rem;*/
+				padding-right: 0.346666rem;
+			}
+			
+			.shop_info>div {
+				margin: 5px 0;
+			}
+			
+			.distance {
+				float: right;
+			}
+			
+			.shop {
+				padding: 0.346666rem 0 0 0.346666rem;
+				background-color: white;
+				margin-bottom: 0.266666rem;
+			}
+			
+			.name {
+				font-weight: bold;
+				color: #2E2E2E;
+			}
+			/*兼容5s屏幕*/
+			
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				.name {
+					font-size: 13px !important;
+				}
+				[data-dpr="2"] .name {
+					font-size: 26px !important;
+				}
+				[data-dpr="3"] .name {
+					font-size: 39px !important;
+				}
+			}
+			
+			.time>img {
+				width: 0.4rem;
+				height: 0.4rem;
+				vertical-align: middle;
+				margin-right: 0.15rem;
+			}
+			
+			.time>span {
+				vertical-align: middle;
+			}
+			
+			.time,
+			.distance {
+				color: #9F9FA0;
+			}
+			
+			.types {
+				color: #2BB8AA;
+				display: inline;
+			}
+			
+			.activity {
+				color: #F46276;
+				/*color: #2BB8AA;*/
+			}
+			
+			.address {
+				padding: 0.4rem 0;
+				padding-right: 0.4rem !important;
+				color: #5D5C5C;
+			}
+			
+			.address,
+			.shop_info {
+				border-bottom: 1px solid #f5f5f5;
+			}
+			
+			.shop_menu {
+				color: #5D5C5C;
+				padding-right: 0.346666rem;
+				display: flex;
+				display: -webkit-flex;
+				/* 新版本语法: Chrome 21+ */
+				display: -webkit-box;
+				/* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+				/*align-content: center;*/
+				/*justify-content:  center;*/
+				text-align: center;
+			}
+			
+			.shop_menu>div>img {
+				vertical-align: middle;
+				margin: 0.346666rem 0.346666rem 0.346666rem 0;
+				/*height: 0.373333rem;*/
+				width: 0.373333rem;
+			}
+			/*店铺详情end*/
+			
+			.nolog {
+				text-align: center;
+			}
+			
+			.nolog>.nolog_divimg {
+				background-image: url(../../../image/other/icon_Nolog@3x.png);
+				background-size: cover;
+				background-position: center;
+				width: 4rem;
+				height: 3.12rem;
+				margin: 2.986666rem auto 1.413333rem auto;
+			}
+			
+			.nolog .app-btn-main {
+				padding: 0;
+				width: 8.373333rem;
+				margin: 1.226666rem auto;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<div class="mui-content wrapper mui-scroll-wrapper" ref='wrapper'>
+			<div class="mui-scroll">
+
+				<div @tap="onPositionTap()" class="position app-font-size-28 mui-ellipsis">
+					<img src="../../../image/nearby/map.png" />
+					<span v-text="position"></span>
+				</div>
+				<div>
+					<template v-if="shops.length">
+						<div v-for="o in shops" class="shop">
+							<div class="shop_imgtext box" @tap="onLookTap(o)">
+								<div class="shop_image" :style='"background-image: url("+ _getImg(o.image1,o.image2,o.image3) +");"'>
+
+								</div>
+								<div class="shop_info flex1">
+									<div class="distance app-font-size-28">{{_m2km(o.distance)}}</div>
+									<div class="name app-font-size-28 mui-ellipsis">{{o.name}}</div>
+									<div class="time app-font-size-28">
+										<img src="../../../image/nearby/time.png" />
+										<span>{{_min2time(o.starttime)+ '-' + _min2time(o.endtime)}}</span>
+									</div>
+
+									<div class="types app-font-size-26">
+										{{o.type}}
+									</div>
+									<!--<div class="activity app-font-size-26 mui-ellipsis">{{o.introduction}}</div>-->
+								</div>
+							</div>
+							<div class="address app-font-size-28">
+								{{o.address}}
+							</div>
+							<!--<div class="shop_menu app-font-size-28">
+								<div @tap.stop="onCallTap(o)" class="flex1"><img src="../../../image/nearby/phone.png" />电话</div>
+								<div @tap.stop="onWithMapTap(o)" class="flex1"><img src="../../../image/nearby/navigation.png" />导航</div>
+								<div @tap.stop="onLookTap(o)" class="flex1"><img style="vertical-align: middle; padding-top: 0.05rem;" src="../../../image/nearby/show.png" /><span style="vertical-align: middle;">查看</span></div>
+							</div>-->
+						</div>
+					</template>
+					<template v-else-if="isGeted">
+						<div class="nolog">
+							<div class="nolog_divimg"></div>
+							<div class="app-font-size-30 app-color-9f9fa0">
+								该城市暂无商家入驻，快来加入吧~
+							</div>
+							<button type="button" class="mui-btn app-btn-main app-font-size-34" @tap="onSignIn()">申请入驻</button>
+						</div>
+					</template>
+				</div>
+
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+
+		<script src="../../../js/lib/mui.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/store.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/gps.js"></script>-->
+
+		<script type="text/javascript">
+			var POSITION = new ni.Cache('position_cache', null);
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						n: 1,
+						position: "未知",
+						longitude: 0,
+						latitude: 0,
+						city: '深圳',
+						shops: [],
+
+						// 是否获取过数据
+						isGeted: false,
+
+						// 是否获取到了定位信息
+						isPositionEnd: false,
+					};
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {
+					var that = this;
+
+					// 上一次地理定位
+					var $prePosition = Rx.Observable.create(function(ob) {
+						var p = POSITION.data;
+						if(p) {
+							ob.next(p);
+						}
+					});
+					// 
+					// 地理定位流
+					var $position = Rx.Observable.fromPromise(that.getCurrentPosition());
+
+					// 地理定位最大延迟 5s
+					var $time5out = Rx.Observable.timer(5e3);
+
+					var getPositonAndDown = function() {
+						$position
+							.map(function(arg) {
+								that.isPositionEnd = true;
+								return arg;
+
+							})
+							.merge($time5out.mergeMapTo($prePosition))
+							.first()
+							.subscribe(function(p) {
+								// 保存最近地理位置
+								POSITION.data = p;
+								that.longitude = p.coords.longitude;
+								that.latitude = p.coords.latitude;
+								that.city = p.address.city.replace('市', '');
+								that.position = p.addresses;
+								that._down();
+							}, function(err) {
+								that._down();
+							});
+					}
+
+					var callbackDown = function() {
+						if(this.isPositionEnd){
+							that._down();
+						}else{
+							getPositonAndDown();
+						}
+					}
+
+					getPositonAndDown();
+
+					this.$nextTick(function() {
+						this.$pullRefresh = mui(".mui-scroll-wrapper");
+						mui.init({
+							pullRefresh: {
+								container: ".mui-scroll-wrapper",
+								down: {
+									callback: callbackDown
+								},
+								up: {
+									callback: this._up
+								}
+							}
+						})
+					}.bind(this));
+
+					// 监听父页手动选取地区
+					new this.$Broadcast().on('city_change', this.updateGeo.bind(this));
+
+				},
+				methods: {
+					// 点击地理位置
+					onPositionTap: function() {
+						var that = this;
+						// 是否切换地址
+
+						new Promise(function(resolve, reject) {
+							mui.confirm("是否重新选择城市？", "城市选择", ['选择城市', '忽略'], function(e) {
+								if(e.index === -1){
+									return;
+								}
+								if(e.index === 0) {
+									// 选择城市
+									app.page.getPosition(function(data) {
+										that.city = data.city;
+										// 通知上层 城市变化
+										new ni.Broadcast().emit('city_change_sub', {
+											city: data.city,
+											longitude: data.longitude,
+											latitude: data.latitude
+										}, {
+											views: [that.$view.parent(), 'home']
+										})
+
+										resolve({
+											longitude: data.longitude,
+											latitude: data.latitude,
+
+										});
+
+										// 通知经纬度变化
+										//										new this.$Broadcast().emit("city_change", {
+										//											longitude: data.longitude,
+										//											latitude: data.latitude,
+										//											city: data.city
+										//										}, {
+										//											views: ['nearby_pages_list']
+										//										});
+									});
+								} else {
+									// 当前城市
+									resolve({});
+								}
+							});
+						}).then(function(rs) {
+							rs.room = 13;
+							// 打开地图选择
+							app.page.getMaps(function(p) {
+								that.position = p.address;
+								that.longitude = p.longitude;
+								that.latitude = p.latitude;
+								
+								// 已经手动选过地址了，不再重新获取定位信息
+								that.isPositionEnd = true;
+								
+								// 重新获取附近的商家列表
+								that._down();
+							}, rs);
+						});
+
+					},
+
+					// 更新地理位置
+					updateGeo: function(o) {
+						this.longitude = o.longitude;
+						this.latitude = o.latitude;
+						this.city = o.city;
+						this.position = o.position || o.city;
+						// 重新获取店铺信息
+						this._down();
+					},
+
+					// 获取定位
+					getCurrentPosition: function() {
+						return new Promise(function(re, rj) {
+							plus.geolocation.getCurrentPosition(function(p) {
+								re(p);
+							}, rj);
+						});
+					},
+					// 获取商铺列表
+					_getList: function(f) {
+						//var w = plus ? plus.nativeUI.showWaiting() : null;
+						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
+							//w && w.close();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							f(data);
+						}, this.n);
+					},
+
+					// 点击查看
+					onLookTap: function(o) {
+						mui.openWindow('../business/store_details.html', 'store_details', {
+							createNew: true,
+							extras: {
+								oid: o.id
+							}
+						});
+					},
+
+					// 点击打电话
+					//					onCallTap: function(o) {
+					//						var buttons = o.telphone.split("/").map(function(item) {
+					//							return {
+					//								color: "rgb(0,0,255)",
+					//								style: "default",
+					//								title: item
+					//							}
+					//						});
+					//						plus.nativeUI.actionSheet({
+					//								cancel: "取消",
+					//								buttons: buttons
+					//							},
+					//							function(e) {
+					//								if(e.index > 0) {
+					//									plus.device.dial(buttons[e.index - 1].title);
+					//								}
+					//							});
+					//					},
+
+					// 点击导航
+					//					onWithMapTap: function(o) {
+					//						//BD-09 to GCJ-02先将百度坐标转成中国坐标
+					//						var tmp = GPS.bd_decrypt(parseFloat(o.latitude), parseFloat(o.longitude));
+					//						//GCJ-02 to WGS-84再将中国坐标转成GPS坐标
+					//						var dstarr = GPS.gcj_decrypt_exact(tmp['lat'], tmp['lon']);
+					//						//目的地
+					//						var dst = new plus.maps.Point(dstarr['lon'], dstarr['lat']);
+					//						//目的地描述
+					//						var shop = o.address + " - " + o.name;
+					//						//起始地   
+					//						var src = new plus.maps.Point(this.longitude, this.latitude);
+					//						//调用导航 
+					//						plus.maps.openSysMap(dst, shop, src);
+					//					},
+
+					_down: function() {
+						this.isGeted = false;
+						console.log("down");
+						this.n = 1;
+						this.shops = [];
+						this._getList(function(data) {
+							console.log(JSON.stringify(data));
+							if(!data || !data.length) {
+								this.isGeted = true;
+							}
+							this.shops.unshift.apply(this.shops, data);
+							this.$pullRefresh.pullRefresh().endPulldownToRefresh();
+						}.bind(this));
+					},
+					_up: function() {
+						console.log("up");
+						this.n++;
+						this._getList(function(data) {
+							console.log(JSON.stringify(data));
+							if(!data || !data.length) {
+								mui.toast('没有更多啦~~');
+								this.$pullRefresh.pullRefresh().endPullupToRefresh();
+								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
+							} else {
+								this.shops.push.apply(this.shops, data);
+							}
+							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+						}.bind(this));
+					},
+					_min2time: function(n) {
+						n = +n;
+						return(n < 10 ? '0' : '') + parseInt(n) + ':' + ((n % 1 * 60) === 0 ? '00' : '30');
+					},
+					_m2km: function(m) {
+						if(m < 1000) {
+							return m + ' m';
+						}
+						return(m / 1000).toFixed(1) + " km";
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
+
+					// 申请入驻
+					onSignIn: function() {
+						app.user.get(function(u) {
+							u && mui.openWindow('../business/signup.html', 'signup');
+						});
+					}
+				}
+
+			});
+		</script>
+	</body>
+
+</html>

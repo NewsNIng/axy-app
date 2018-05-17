@@ -1,0 +1,325 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>门锁日志</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: white;
+				height: 100%;
+			}
+			
+			.mui-content {
+				padding-bottom: 0;
+			}
+			
+			header img {
+				width: 0.48rem;
+			}
+			
+			.date {
+				margin: 0.453333rem 0 0.16rem 1.066666rem;
+				color: #333333;
+			}
+			
+			.item {
+				margin-left: 1.066666rem;
+				line-height: 1;
+				position: relative;
+			}
+			
+			.item>div {
+				display: inline;
+			}
+			
+			.item>.img {
+				width: 0.226666rem;
+			}
+			
+			.item>.text {
+				padding: 0.453333rem 0;
+				display: block;
+			}
+			
+			.text>span {
+				margin-left: 1.013333rem;
+				display: block;
+			}
+			
+			.text_value {
+				color: #555555;
+			}
+			
+			.name {
+				color: #000000;
+			}
+			
+			.img>img {
+				width: 0.24rem;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+				margin-right: 0.8rem;
+			}
+			
+			.item:after {
+				position: absolute;
+				left: 0.1rem;
+				bottom: 0;
+				top: 0;
+				width: 1px;
+				height: 100%;
+				content: '';
+				background-color: #d9d9d9;
+			}
+			
+			.item:first-child:after {
+				height: 50%;
+				top: 50%;
+				bottom: 0;
+			}
+			
+			.item:last-child:after {
+				height: 50%;
+				bottom: 50%;
+			}
+			
+			.item:only-child:after {
+				width: 0;
+			}
+			
+			.right_text {
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+				right: 0.64rem;
+				float: right;
+				color: #9F9FA0;
+			}
+			
+			.num {
+				color: #9F9FA0;
+			}
+			
+			.null {
+				position: fixed;
+				height: 100%;
+				width: 100%;
+				background-color: #F4F8FB;
+				text-align: center;
+				color: #9F9FA0;
+			}
+			
+			.null>img {
+				width: 4.773333rem;
+				margin: 2.986666rem 2.613333rem 1.413333rem 2.613333rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="root">
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">门锁日志</h1>
+				<!--<span class="mui-icon mui-pull-right">
+				<img src="../../../image/smart/devices/electric/btn_calendar@3x.png" />
+			</span>-->
+			</header>
+			<div class="mui-content">
+				<div class="wrapper" ref="wrapper">
+
+					<div>
+						<template v-for="o,i in logs">
+							<div class="date app-font-size-24" v-text="o.date"></div>
+							<div class="items">
+								<div v-for="o in o.items" class="item">
+									<div class="img">
+										<img src="../../../image/smart/devices/electric/point.png" />
+									</div>
+									<div class="text app-font-size-28">
+										<span class="text_value"><span class="name">{{o.lockName}}</span> {{o.openType}}</span>
+										<br />
+										<span class="num app-font-size-24">编号：{{o.keyID}}</span>
+									</div>
+									<div class="right_text app-font-size-24">{{o.hhmmss}}</div>
+								</div>
+							</div>
+						</template>
+					</div>
+
+				</div>
+
+				<div class="null app-font-size-30" v-show="logs.length === 0">
+					<img src="../../../image/smart/devices/lock/icon_Nolocklog@3x.png" /> 亲，您还没有任何记录哦
+				</div>
+
+			</div>
+		</div>
+
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/logger.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/better-scroll.min.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						logs: [],
+						did: 0,
+						pageNumber: 1,
+					};
+				},
+				plusReady: function() {
+					
+					this.did = this.$view.did;
+					
+					var that = this;
+
+					this.init();
+
+					// 获取门锁记录 流
+					//var $getLogList = 
+					// 数据转换 流
+					var $list2dir = function(data) {
+						return data.reduce(function(dir, item) {
+							// 时间格式兼容iOS
+							var time = item.time.replace(/-/g, '/');
+							var timeArr = new Date(time).toFormatString('yyyy/MM/dd*hh:mm:ss').split('*');
+							if(!dir[timeArr[0]]) {
+								dir[timeArr[0]] = [];
+							}
+							item.hhmmss = timeArr[1];
+							dir[timeArr[0]].push(item);
+							return dir;
+						}, {});
+
+					};
+
+					var $dir2list = function(dir) {
+						var arr = [];
+						for(var i in dir) {
+							arr.push({
+								date: i,
+								items: dir[i]
+							})
+						}
+						return arr;
+					};
+
+					// 监听 pageNumber 变化
+					var $listenPageNumber = Rx.Observable.create(function(ob) {
+						that.$watch("pageNumber", function(n) {
+							ob.next();
+						});
+						ob.next();
+					});
+					
+					
+					
+					$listenPageNumber
+					.mergeMapTo(Rx.Observable.create(function(ob){
+						that.getLogList().then(function(data){
+							ob.next(data)
+						}).catch(function(err){
+							ob.error(err)
+						});
+					}))
+
+					//$getLogList.merge($listenPageNumber)
+						.filter(function(data) {
+							that.scroll && (that.scroll.finishPullUp(), that.scroll.refresh());
+							return data && data.length;
+						})
+						.map($list2dir)
+						.map($dir2list)
+						.subscribe(function(data) {
+							that.logs.push.apply(that.logs, data);
+						}, function(err) {
+							mui.toast(err.message);
+						});
+
+				},
+				methods: {
+					// 获取服务器门锁记录
+					getLogList: function() {
+						var pageNumber = this.pageNumber;
+						var did = this.did;
+						return new Promise(function(resolve, reject) {
+							var w = plus.nativeUI.showWaiting();
+							dal.logger.doorList(did, pageNumber, function(err, data) {
+								w.close();
+								if(err) {
+									return reject(err);
+								}
+								resolve(data);
+							}, 20);
+						});
+
+					},
+
+					init: function() {
+						var wrapper = this.$refs.wrapper;
+						var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
+							immersed -
+							44;
+
+						wrapper.style.height = wrapperHight + 'px';
+
+						this.$nextTick(function() {
+							if(!this.scroll) {
+								this.scroll = new BScroll(wrapper, {
+									click: true,
+									scrollY: true,
+									pullUpLoad: {
+										threshold: -50, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+									}
+								});
+								this.scroll.on('pullingUp', function() {
+									this.pageNumber++;
+								}.bind(this));
+
+							} else {
+								this.scroll.refresh();
+							}
+
+						}.bind(this));
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

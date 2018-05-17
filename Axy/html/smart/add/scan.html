@@ -223,8 +223,7 @@
 											}
 											observer.next({
 												acc: data1,
-												dev: data,
-												
+												dev: data
 											});
 										}, {
 											result: true,
@@ -252,7 +251,7 @@
 									plus.nativeUI.showWaiting("正在添加配件");
 									return Rx.Observable.create(function(ob) {
 										// TODO 需要添加通道信息 waych
-										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, rs.dev.waych, function(err, data) {
+										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, function(err, data) {
 											plus.nativeUI.closeWaiting();
 											if(err) {
 												ob.next({
@@ -281,12 +280,9 @@
 											views: ['zeus', 'dev_my_list']
 										});
 									}
-									setTimeout(function(){
-										app.page.setResult({
-											data: data
-										}).close();	
-									}, 200);
-									
+									app.page.setResult({
+										data: data
+									}).close();
 								});
 
 						}

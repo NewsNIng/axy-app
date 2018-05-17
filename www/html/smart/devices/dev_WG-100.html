@@ -1,0 +1,351 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能网关</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+				width: 100%;
+				overflow-x: hidden;
+			}
+			
+			.img-wrap {
+				height: 6.133333rem;
+				/*padding-bottom: 6.133333rem;*/
+				background-image: url(../../../image/smart/devices/gateway/bg@3x.png);
+				background-repeat: no-repeat;
+				background-size: 100%;
+				background-position: bottom;
+			}
+			
+			.menu-warp {
+				display: flex;
+				display: -webkit-flex;
+				padding: 0.693333rem 0.5rem;
+				justify-content: space-between;
+				background-color: white;
+				margin-bottom: 0.266666rem;
+			}
+			
+			.menu-warp>div {
+				/*border: 1px solid #ccc;*/
+				flex: 1;
+				height: auto;
+				/*width: rem;*/
+				text-align: center;
+			}
+			
+			.menu-warp>div>img {
+				width: 1.466666rem;
+			}
+			
+			header img {
+				width: 0.48rem;
+				/*margin-right: 0.346666rem;*/
+			}
+			
+			.mui-icon {
+				/*padding: 0 !important;*/
+				margin-right: 0 !important;
+				padding-right: 0 !important;
+			}
+			
+			@keyframes ripple {
+				0% {
+					transform: translate3d(-50%, -70%, 0) scale(1);
+					opacity: 0.75;
+					
+				}
+				100% {
+					transform:  translate3d(-50%, -70%, 0) scale(2);
+					opacity: 0;
+					
+				}
+			}
+			
+			.send_sound_wave>* {}
+			
+			.send_sound_wave {
+				position: relative;
+				background-color: transparent;
+			}
+			/*.send_sound_wave:active:after,*/
+			
+			
+			.send_sound_wave.active:after {
+				content: ' ';
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				
+				transform: translate3d(-50%, -70%, 0);
+				
+				-webkit-transform: translate3d(-50%, -70%, 0);
+				
+				z-index: 0;
+				width: 1.6rem;
+				height: 1.6rem;
+				background-color: #2BB8AA;
+				
+				
+				
+				border-radius: 50%;
+				box-shadow: 0 0 10px rgba(0, 0, 0, .35) inset;
+				
+				-webkit-animation-name: 'ripple';
+				/*动画属性名，也就是我们前面keyframes定义的动画名*/
+				-webkit-animation-duration: 1s;
+				/*动画持续时间*/
+				-webkit-animation-timing-function: ease;
+				/*动画频率，和transition-timing-function是一样的*/
+				-webkit-animation-delay: 0s;
+				/*动画延迟时间*/
+				-webkit-animation-iteration-count: infinite;
+				/*定义循环资料，infinite为无限次*/
+				-webkit-animation-direction: normal;
+				/*定义动画方式*/
+				
+				animation-name: 'ripple';
+				/*动画属性名，也就是我们前面keyframes定义的动画名*/
+				animation-duration: 1s;
+				/*动画持续时间*/
+				animation-timing-function: ease;
+				/*动画频率，和transition-timing-function是一样的*/
+				animation-delay: 0s;
+				/*动画延迟时间*/
+				animation-iteration-count: infinite;
+				/*定义循环资料，infinite为无限次*/
+				animation-direction: normal;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7 !important;
+			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+			/*波纹*/
+			
+			@keyframes ripple_ {
+				0% {
+					-webkit-transform: translate3d(50%, -50%, 0) scaleX(3);
+					transform: translate3d(50%, -50%, 0) scaleX(3);
+				}
+				100% {
+					-webkit-transform: translate3d(-50%, -50%, 0) scaleX(3);
+					transform: translate3d(-50%, -50%, 0) scaleX(3);
+				}
+			}
+			
+			.ripple {
+				width: 100%;
+				position: relative;
+				top: 50%;
+				left: 50%;
+				-webkit-transform: translate3d(50%, -50%, 0) scaleX(3);
+				transform: translate3d(50%, -50%, 0) scaleX(3);
+			}
+			
+			.ripple.active{
+				animation: ripple_ 4s infinite linear;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<!--<h1 class="mui-title">智能网关</h1>-->
+				<!--<span class="mui-icon mui-pull-right" @tap="onShareTap()">
+					<img src="../../../image/smart/devices/electric/btn_share@3x.png" />
+				</span>-->
+			</header>
+
+			<div class="mui-content noImmersed">
+				<div class="img-wrap">
+					<img class="ripple" :class="{'active': ready || ing}" src="../../../image/smart/devices/gateway/icon_audiofrequency@3x.png" />
+				</div>
+				<div class="menu-warp app-font-size-24 app-color-dark">
+					<div @tap="onMuteTap()">
+						<img :src="isMute?'../../../image/smart/devices/gateway/btn_voice@3x.png':'../../../image/smart/devices/gateway/icon_Mute@3x.png'" />
+						<div>{{isMute?"取消静音":"静音"}}</div>
+					</div>
+
+					<!--<div class="send_sound_wave" @touchstart="onCallTap()" @touchend="onListenTap()">-->
+					<div class="send_sound_wave" :class="{'active': ing}" @tap="onMicTap()">
+						<img src="../../../image/smart/devices/gateway/btn_Voiceintercom@3x.png" />
+						<div>{{ing?"停止对讲":"语音对讲"}}</div>
+					</div>
+					<!--<div>
+						<img src="../../../image/smart/devices/gateway/btn_Disarm@3x.png" />
+						<div>一键布撤防</div>
+					</div>-->
+				</div>
+
+			</div>
+			<!--沉浸式动态处理-->
+			<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+			<!--基础库-->
+			<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+			<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+			<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+			<!--App相关业务逻辑-->
+			<script type="text/javascript" src="../../../js/app/app.js"></script>
+			<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+			<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+
+			<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+
+			<script type="text/javascript">
+				mui.init();
+				
+				var P = plug.H5NativeBridge;
+
+				new Vue({
+					el: '#warpper',
+					data: function() {
+						return {
+							ready: false,
+
+							devid: -1,
+
+							devInfo: {
+								"id": 0,
+								"streamfwdport": 0,
+								"location": "",
+								"devid": "",
+								"relation": 0,
+								"binding": "",
+								"streamfwd": "vh.anxin-net.com",
+								"workmode": 0,
+								"type": 0,
+								"signalfwd": "vh.anxin-net.com",
+								"signalfwdport": 0,
+								"online": 0,
+
+							},
+
+							isMute: false, // 是否静音
+
+							ing: false, // 是否开启了语音
+
+						};
+					},
+					plusReady: function() {
+						this.devInfo = this.$view.devInfo;
+						this.devid = this.$view.devInfo.devid;
+
+						this._connectWG100();
+
+						var oldback = mui.back;
+						mui.back = function() {
+							this._disconnet();
+							this.$view.close();
+						}.bind(this)
+
+					},
+					methods: {
+						// 分享按钮
+						onShareTap: function() {
+							mui.openWindow("../../person/devshare/share.html", 'dev_share', {
+								extras: {
+									devInfo: this.devInfo
+								}
+							});
+						},
+
+						// 初始化连接
+						_connectWG100: function() {
+							try {
+								this.ready || P.ConnectWG100(this.devid, function() {
+									this.ready = true;
+									mui.toast("初始化完毕");
+								}.bind(this));
+
+							} catch(e) {
+								//TODO handle the exception
+								mui.toast(e.message);
+							}
+
+						},
+
+						// 静音按钮
+						onMuteTap: function() {
+							this.ready && P.WG100Mute();
+							plus.device.vibrate(100);
+							this.isMute = !this.isMute;
+							mui.toast(this.isMute ? "静音" : "取消静音");
+						},
+
+						onMicTap: function() {
+							//							if(!this.ready){
+							//								return mui.toast("尚未初始化完成");
+							//							}
+							this.ing = !this.ing;
+							plus.device.vibrate(50);
+
+							if(this.ing) {
+								mui.toast("开始通话");
+								P.WG100Call();
+							} else {
+								mui.toast("通话结束");
+								P.WG100Listen();
+
+							}
+
+						},
+
+						// 通话
+						onCallTap: function() {
+							this.ready && P.WG100Call();
+							plus.device.vibrate(50);
+							mui.toast("通话");
+						},
+
+						// 松手监听
+						onListenTap: function() {
+							this.ready && P.WG100Listen();
+							plus.device.vibrate(50);
+							mui.toast("松手");
+						},
+
+						_disconnet: function() {
+							this.ready && P.DisconnectWG100();
+						},
+
+					}
+				});
+			</script>
+	</body>
+
+</html>

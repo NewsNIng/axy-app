@@ -1,0 +1,598 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>告警消息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.dtpicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+
+		<link rel="stylesheet" href="../../../css/lib/mui.zoom.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.tabroom {
+				position: relative;
+				background-color: #FFFFFF;
+				z-index: 10;
+			}
+			
+			.tabroom:after {
+				clear: both;
+				content: '';
+				display: block;
+			}
+			
+			.tabroom:before {
+				content: '';
+				display: block;
+				width: 2px;
+				height: 0.746666rem;
+				position: absolute;
+				left: 50%;
+				top: 0.226666rem;
+				background-color: #E5E6E7;
+				transform: translate3d(-50%, 0, 0);
+				-webkit-transform: translate3d(-50%, 0, 0);
+			}
+			
+			.tabroom>div {
+				overflow: hidden;
+				float: left;
+				width: 50%;
+				text-align: center;
+				height: 1.2rem;
+				border-bottom: 1px solid #E5E6E7;
+			}
+			
+			.tabroom span {
+				line-height: 1.2rem;
+			}
+			/*card*/
+			
+			.card-room {
+				background-color: #F4F8FB;
+				padding: 0 0.346666rem;
+			}
+			
+			.card-room>.card {
+				width: 100%;
+				background-color: #FFFFFF;
+			}
+			
+			.card-room>.card:before {
+				content: attr(data-time);
+				display: block;
+				background-color: #F4F8FB;
+				color: #9F9FA0;
+				height: 0.906666rem;
+				line-height: 0.906666rem;
+			}
+			
+			.card-room>.card>div:not(.menu) {
+				padding: 0.2rem 0.346666rem 0 0.346666rem;
+			}
+			
+			.card-room>.card>div:not(.menu) .mui-pull-right {
+				color: #A2A6B1;
+			}
+			
+			.card-room>.card>div.menu {
+				border-top: 1px #E4E5E6 solid;
+				margin-top: 0.2rem;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-between;
+				padding: 0.346666rem 0.826666rem;
+			}
+			
+			.card-room>.card>div.menu>div {
+				text-align: center;
+			}
+			
+			.card-room>.card>div.menu img {
+				width: 0.906666rem;
+			}
+			
+			.menu-fade-enter-active {
+				animation: fade-in .3s;
+			}
+			
+			.menu-fade-leave-active {
+				animation: fade-in .3s reverse;
+			}
+			
+			@keyframes fade-in {
+				from {
+					transform: translateY(-100%);
+					opacity: 0;
+				}
+				to {
+					transform: translateY(0%);
+					opacity: 1;
+				}
+			}
+			/*video*/
+			
+			.video-root {
+				position: fixed;
+				left: 0;
+				top: 0;
+				z-index: 66;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.75);
+			}
+			
+			.video-root .video-room {
+				position: fixed;
+				left: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+				width: 10rem;
+				height: 5.625rem;
+			}
+			
+			.video-root .video-room video {
+				width: 100%;
+				height: 100%;
+			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+			/*end video*/
+			/*bscroll-vertical-scrollbar*/
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">告警消息</h1>
+		</header>
+		<div class="mui-content">
+			<div class="tabroom app-color-333333" ref="tabroom">
+				<div @tap="onDevTap()" class="app-color-main">
+					<span class="app-font-size-28">{{fixName(devName) || '全部设备'}}</span>
+					<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
+				</div>
+
+				<div @tap="onDateTap()">
+					<span class="app-font-size-28">{{dateText}}</span>
+					<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
+				</div>
+
+			</div>
+
+			<div class="video-root" v-if="videoplay" @tap.self="videoplay=false">
+				<div class="video-room">
+					<video :src="videosrc" controls autoplay playsinline webkit-playsinline></video>
+				</div>
+			</div>
+
+			<div class="wrapper" ref="wrapper">
+
+				<div class="app-font-size-28 card-room">
+					<div class="card" v-for="o,i in list" :data-time="new Date(o.atime.replace(/-/g, '/')).toFormatString('MM/dd')" @tap="onCardTap(o, i)" :key="o.devid">
+						<div>
+							<span class="app-color-333333">设备名称</span>
+							<span class="mui-pull-right">{{fixName(o.location)}}</span>
+						</div>
+						<div>
+							<span class="app-color-333333">设备ID</span>
+							<span class="mui-pull-right">{{o.devid}}</span>
+						</div>
+						<div>
+							<span class="app-color-333333">告警时间</span>
+							<span class="mui-pull-right">{{o.atime}}</span>
+						</div>
+						<div>
+							<span class="app-color-333333">防区ID</span>
+							<span class="mui-pull-right">{{o.areaid}}</span>
+						</div>
+						<div style="padding-bottom: 0.2rem;">
+							<span class="app-color-333333">告警防区</span>
+							<span class="mui-pull-right">{{o.areaname || o.areaid}}</span>
+						</div>
+						<transition name="menu-fade"> 
+
+							<div class="menu" v-show="o.showMenu">
+								<div @tap.stop="onVideoTap(o, i)">
+									<img :src="'../../../image/person/message/alarm'+ (o.info && o.info.video ? '' : '_1') +'@3x.png'" />
+									<div class="app-font-size-28" :class="o.info && o.info.video ? 'app-color-main': 'app-color-9f9fa0'">告警录像</div>
+								</div>
+
+								<div @tap.stop="onImageTap(o, i)">
+									<img :src="'../../../image/person/message/screenshots'+ (o.info && o.info.image ? '' : '_1') +'@3x.png'" />
+									<div class="app-font-size-28" :class="o.info && o.info.image ? 'app-color-main': 'app-color-9f9fa0'">抓拍截图</div>
+									<template v-if="o.info && o.info.image">
+										<div ref="preimgs" :data-preview-src="o.info.image.fname" :data-preview-group="i"></div>
+									</template>
+									<template v-else>
+										<div ref="preimgs"></div>
+									</template>
+
+								</div>
+
+								<div @tap.stop="onViewTap(o, i)">
+									<img src="../../../image/person/message/video@3x.png" />
+									<div class="app-font-size-28 app-color-main">实时视频</div>
+								</div>
+							</div>
+
+						</transition>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/lib/better-scroll.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.dtpicker.js"></script>
+
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
+
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/message.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			var P = plug.H5NativeBridge;
+			var D;
+
+			var TYPEDIR = {
+				16: "image",
+				34: "video"
+			}
+
+			var dtPick, devPick;
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+
+						dateTime: "",
+						devName: "",
+						devId: "",
+
+						n: 1,
+						list: [],
+
+						videoplay: false,
+						videosrc: "",
+
+						pimg: null,
+						devPickData: []
+					};
+				},
+
+				computed: {
+					dateText: function() {
+						if(this.dateTime === "") {
+							return "所有";
+						}
+						return this.dateTime.toFormatString('MM/dd');
+					},
+				},
+
+				mounted: function() {
+					var wrapper = this.$refs.wrapper;
+					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
+						this.$refs.tabroom.offsetHeight -
+						immersed -
+						44;
+
+					wrapper.style.height = wrapperHight + 'px';
+
+					this.$nextTick(function() {
+						if(!this.scroll) {
+							this.scroll = new BScroll(wrapper, {
+								click: true,
+								scrollY: true,
+								pullUpLoad: {
+									threshold: -70, // 负值是当上拉到超过低部 70px；正值是距离底部距离 时，                    
+								},
+								scrollbar: {
+									fade: true,
+									interactive: false // 1.8.0 新增
+								}
+							});
+							this.scroll.on('pullingUp', function() {
+								// 获取更多 TODO
+								this.n++;
+								this.getMessageList();
+
+							}.bind(this));
+
+						} else {
+							this.scroll.refresh();
+						}
+
+						document.querySelector('.bscroll-vertical-scrollbar').style.top = this.$refs.tabroom.offsetHeight + immersed + 44 + "px";
+
+					}.bind(this));
+
+					devPick = new mui.PopPicker({
+						layer: 1
+					});
+
+				},
+
+				plusReady: function() {
+
+					this.$view.setStyle({
+						kernel: 'WKWebview'
+					});
+
+					D = new this.$Cache("dev_list", [], {
+						plus: true
+					});
+
+					var devPickData = D.data;
+
+					devPickData = devPickData.map(function(item) {
+						return {
+							text: item.location || item.devid,
+							value: item.devid
+						};
+					});
+
+					// 添加全部设备选项
+					devPickData.unshift({
+						text: "全部设备",
+						value: ""
+					});
+
+					this.devPickData = devPickData;
+
+					devPick.setData(devPickData);
+
+					var devInfo = this.$view.devInfo;
+					if(devInfo) {
+
+						this.devId = devInfo.devid;
+						this.devName = devInfo.location || this.devId;
+					}
+
+					this.$watch('devId', this.getMessageList.bind(this, true));
+					this.$watch('dateTime', this.getMessageList.bind(this, true));
+
+					this.getMessageList();
+
+					mui.back = function() {
+						if(this.videoplay) {
+							this.videoplay = false;
+						} else if(this.pimg.isShown()) {
+							this.pimg.close();
+						} else {
+							this.$view.close();
+						}
+						return false;
+					}.bind(this)
+
+				},
+
+				methods: {
+
+					// 卡片点击
+					onCardTap: function(o, i) {
+						// 切换菜单
+						o.showMenu = !o.showMenu;
+						if(o.showMenu === false || o.info !== null) {
+							return;
+						}
+						// 获取二级信息 
+						dal.message.getAlarm(o.id, function(err, data) {
+							if(err) {
+								o.showMenu = false;
+								o.info = null;
+								return mui.toast(err.message);
+							}
+							data = data || [];
+							data = data.reduce(function(o, item) {
+								o[TYPEDIR[item.TYPE]] = item;
+								return o;
+							}, {});
+							o.info = data;
+						});
+
+					},
+
+					// 点击观看录像
+					onVideoTap: function(o, i) {
+						if(!o.info || !o.info.video) {
+							return;
+						}
+						var url = o.info.video.fname;
+						url = url.replace(/\\/g, "/");
+						if(mui.os.ios) {
+							this.videosrc = url;
+							this.videoplay = true;
+						} else {
+							this.Intent = this.Intent || plus.android.importClass("android.content.Intent");
+							this.Uri = this.Uri || plus.android.importClass("android.net.Uri");
+							this.main = this.main || plus.android.runtimeMainActivity();
+							var intent = new this.Intent(this.Intent.ACTION_VIEW);
+							var uri = this.Uri.parse(url);
+							intent.setDataAndType(uri, "video/*");
+							this.main.startActivity(intent);
+						}
+
+					},
+
+					// 点击查看截图
+					onImageTap: function(o, i) {
+						console.log(i)
+						this.pimg.open(this.$refs.preimgs[i]);
+					},
+
+					// 点击观看实时视频视图
+					onViewTap: function(o, i) {
+						//var sortDevid = app.dev.findNameByDevid(o.devid);
+						
+						
+						
+						
+						
+						console.log(JSON.stringify(o));
+
+						// TODO 需要获取到通道信息
+						var w1 = 0;
+						// 遍历获取 设备的 在线状态 so stupid
+						var devData = D.data;
+						var tmep;
+						for(var i = 0, l = devData.length; i < l; i++) {
+							temp = devData[i];
+							if(temp.devid === o.devid && temp.online === 1) {
+								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, temp.type === 0x1046 ? 1 : 0, this.fixName(o.location), function() {});
+								return;
+							}
+						}
+						mui.toast("设备不在线");
+					},
+
+					// 设备选择
+					onDevTap: function() {
+						this.devId && devPick.pickers[0].setSelectedValue(this.devId);
+						devPick.show(function(items) {
+							this.devName = items[0].text;
+							this.devId = items[0].value;
+						}.bind(this));
+					},
+
+					// 日期选择
+					onDateTap: function() {
+						var that = this;
+
+						new Promise(function(resolve, reject) {
+
+							mui.confirm("请选择时间范围：", "", ["所有时间", "选取时间"], function(e) {
+								if(e.index === 0) {
+									that.dateTime = "";
+								} else if(e.index === 1) {
+									resolve();
+								}
+							});
+						}).then(function() {
+
+							var d = new Date();
+							var y = d.getFullYear();
+							var options = {
+								type: "date",
+								beginYear: y - 1,
+								endYear: y,
+								endMonth: d.getMonth() + 1,
+								endDay: d.getDate(),
+							};
+
+							if(that.dateTime !== "") {
+								options.value = that.dateTime.toFormatString('yyyy-MM-dd');
+							}
+
+							dtPick = new mui.DtPicker(options);
+							dtPick.show(function(rs) {
+								that.dateTime = new Date(rs.text);
+								dtPick.dispose();
+								dtPick = null;
+							});
+						});
+
+					},
+
+					// 获取告警消息列表
+					getMessageList: function(override) {
+						plus.nativeUI.showWaiting("正在加载");
+						if(override) {
+							this.list = [];
+							this.n = 1;
+						}
+						var that = this;
+						dal.message.getAlarmList(this.n, this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "", function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							if(!data || data.length === 0) {
+								return;
+							}
+							data = data.map(function(item) {
+								item.showMenu = false;
+								item.info = null;
+								return item;
+							});
+							console.log(JSON.stringify(data));
+							that.list.push.apply(that.list, data || []);
+							that.$nextTick(function() {
+								that.scroll && (that.scroll.finishPullUp(), that.scroll.refresh());
+								that.pimg = mui.previewImage();
+							});
+
+						});
+					},
+
+					// 是否为视频
+					isVideo: function(path) {
+						return /\.(?:mp4|3gp)$/i.test(path);
+					},
+
+					// 修复文件路径
+					fixPath: function(path) {
+						if(mui.os.ios) {
+							path = app.ios.getSafeBoxPath() + path;
+						}
+						if(!/^file:/.test(path)) {
+							path = "file://" + path;
+						}
+						return path;
+					},
+					fixName: function(str) {
+						return app.dev.fixName(str);
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

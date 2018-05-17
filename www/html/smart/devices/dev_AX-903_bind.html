@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设置</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">设置</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view app-font-size-28">
+				<li class="mui-table-view-cell">
+					<a class="">
+						<span>摄像机名称</span>
+						<span class="mui-badge" v-text="devInfo.binding"></span>
+					</a>
+				</li>
+			</ul>
+			<div class="foot app-font-size-34" @tap="onUnBind()">解除绑定</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js" ></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			var _B = new ni.Broadcast();
+
+			new Vue({
+				el: '.mui-content',
+				data: function() {
+					return {
+						name: "403",
+						devInfo: {},
+					};
+				},
+				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
+					console.log(JSON.stringify(this.devInfo));
+				},
+				methods: {
+					onUnBind: function() {
+						var that = this;
+						plus.nativeUI.showWaiting();
+						dal.device.electric.unbinding(that.devInfo.devid, function(err, rs) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							mui.toast("解绑成功！");
+							that.devInfo.binding = "";
+							// 通知上层的上层
+							_B.emit("update", {
+								info: that.devInfo
+							}, {
+								views: ['dev_my_list']
+							});
+							app.page.setResult({
+								bindid: "",
+								chage: true,
+							}).close();
+						});
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

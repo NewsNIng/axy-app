@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>提现</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.box {
+				margin: 0.506666rem 0.373333rem;
+				background-color: #FFFFFF;
+				padding: 0 0.853333rem;
+			}
+			
+			input::-webkit-input-placeholder {
+				font-size: 14px !important;
+				color: #9F9FA0 !important;
+			}
+			
+			[data-dpr="2"] input::-webkit-input-placeholder {
+				font-size: 28px !important;
+			}
+			
+			[data-dpr="3"] input::-webkit-input-placeholder {
+				font-size: 52px !important;
+			}
+			
+			.mui-input-row label {
+				padding: 11px 0 !important;
+				width: 30%;
+			}
+			
+			.mui-input-row input {
+				width: 70% !important;
+			}
+			
+			.mui-input-row {
+				padding: 0.1rem 0;
+				border-bottom: 1px #E5E6E7 solid;
+			}
+			
+			.mui-input-row.m label {
+				margin-top: 1.066666rem;
+			}
+			
+			.mui-input-row.m input {
+				width: 100% !important;
+				margin-top: 1.333333rem !important;
+				padding-left: 0.853333rem;
+			}
+			
+			.m input::-webkit-input-placeholder {
+				color: #D3D3D3 !important;
+			}
+			
+			.m input,
+			.m input::-webkit-input-placeholder {
+				font-size: 20px !important;
+			}
+			
+			[data-dpr="3"] .m input,
+			[data-dpr="2"] .m input::-webkit-input-placeholder {
+				font-size: 40px !important;
+			}
+			
+			[data-dpr="3"] .m input,
+			[data-dpr="3"] .m input::-webkit-input-placeholder {
+				font-size: 60px !important;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">提现</h1>
+		</header>
+		<div class="mui-content">
+			<template v-if="!result">
+				<div class="box app-font-size-28 app-color-333333">
+					<div class="mui-input-row">
+						<label>提现帐号</label>
+						<input type="text" v-model="wxuname" placeholder="请输入提现微信号">
+					</div>
+
+					<div class="mui-input-row m">
+						<label>提现金额</label>
+						<input type="number" v-model="amount" placeholder="提现金额不低于100元">
+					</div>
+					<div style="margin: 20px 0;">
+						<span style="color: #555555;">
+						钱包余额:100.00	
+					</span>
+						<span style="color: #8190b0;" @tap="amount = max">
+						全部提现
+					</span>
+					</div>
+
+					<button @tap="onSubmitTap()" style="width: 7.413333rem; height: 1.173333rem;margin: 0.693333rem 0;" type="button" class="mui-btn app-btn-main app-font-size-34">申请提现</button>
+				</div>
+			</template>
+			<template v-else>
+
+				<div class="box app-font-size-28 app-color-333333" style="text-align: center;">
+					<img src="../../../image/person/wallet/icon_Bringupsuccess@3x.png" style="width: 1.92rem;margin: 0.853333rem 0;" />
+					<div style="color: #8190b0;">
+						申请提现成功，财务已安排打款。
+					</div>
+					<div style="margin-top: 0.8rem;">
+						提现金额：￥100.00
+					</div>
+					<button style="width: 7.413333rem; height: 1.173333rem;margin: 0.693333rem 0;" type="button" class="mui-btn app-btn-main app-font-size-34">返回首页</button>
+				</div>
+
+			</template>
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: 　 ".mui-content",
+				data: function() {
+					return {
+						result: false,
+
+						// 微信号
+						wxuname: "News_Ning",
+						// 提现金额
+						amount: 50,
+						// 全部金额
+						max: 100,
+
+					}
+				},
+				
+				methods: {
+					// 申请提现
+					onSubmitTap: function() {
+						this.result = true;
+					},
+				}
+			})
+		</script>
+	</body>
+
+</html>

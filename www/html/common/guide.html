@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link rel="stylesheet" href="../../css/lib/mui.min.css" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style>
+			#close {
+				position: absolute;
+				width: 160px;
+				left: 50%;
+				margin-left: -80px;
+				bottom: 5%;
+				padding: 10px;
+				color: #fff;
+				border-color: rgba(255, 255, 255, 0.8);
+				background-color: #5C75EE;
+				background: transparent !important;
+			}
+			  
+			.item-logo {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				background-repeat: no-repeat !important;
+				background-size: cover !important;
+				background-position: center !important;
+			}
+			
+			.out {
+				position: absolute;
+				width: 1.6rem;
+				height: 1.6rem;
+				background-color: transparent;
+				top: 0.4rem;
+				right: 0;
+				z-index: 10;
+				text-align: center;
+				line-height: 1.6rem;
+			}
+			
+			.out2 {
+				width: 66%;
+				background-color: transparent;
+				position: absolute;
+				top: calc(50% + 5.2rem);
+				left: 17%;
+				text-align: center;
+			}
+			/*iphone x*/
+			
+			@media only screen and (width: 375px) and (height: 812px) {
+				.out2 {
+					top: calc(50% + 6.4rem);
+				}
+			}
+			
+			.out2>button {
+				color: #91ceff !important;
+				border: 1px #91ceff solid !important;
+				border-radius: 50px;
+				padding-left: 1.1rem;
+				height: 1.1rem;
+				padding-right: 1.1rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="slider" class="mui-slider mui-fullscreen" style="background-color: white;">
+
+			<div v-show="!isLast" class="out app-font-size-32 app-color-9f9fa0" @tap="onCloseTap()">
+				跳过
+			</div>
+			<!-- v-if="i === list.length - 1" -->
+			<div class="mui-slider-group">
+				<div v-for='o,i in list' class="mui-slider-item" :itemIndex='i'>
+					<div class="item-logo" :style="{backgroundImage: 'url('+o.img+')'}">
+						<div @tap="onCloseTap()" v-if="i === list.length - 1" class="out2">
+							<button type="button" class="mui-btn app-btn-main-ghost">立即体验</button>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="js/common/android-back.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			new Vue({
+				el: '#slider',
+				data: function() {
+					return {
+						list: [{
+							"img": "../../image/common/guide1.png"
+						}, {
+							"img": "../../image/common/guide2.png"
+						}, {
+							"img": "../../image/common/guide3.png"
+						}, {
+							"img": "../../image/common/guide4.png"
+						}],
+						
+						isLast: false
+					};
+				},
+				
+				mounted: function(){
+					var that = this;
+					
+					document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+					  that.isLast = event.detail.slideNumber === 3; 
+					});
+				},
+				
+				plusReady: function() {
+					// 延迟2s后进入app
+					setTimeout(function() {
+						this.onCloseTap();
+					}.bind(this), 2e3);
+					
+					
+					
+				},
+				methods: {
+					onCloseTap: function() {
+						plus.storage.setItem("FirstTimeFlag", plus.runtime.version);
+						app.page.setResult({}).close();
+					}
+				}
+			});
+
+			// 扩展API加载
+			mui.plusReady(function() {
+				//仅支持竖屏显示
+				plus.screen.lockOrientation("portrait-primary");
+				//去除滚动条
+				plus.webview.currentWebview().setStyle({
+					scrollIndicator: 'none'
+				});
+			});
+
+			(function($) {
+				var backButtonPress = 0;
+				$.back = function() {
+					backButtonPress++;
+					if(backButtonPress > 1) {
+						//退出
+						plus.runtime.quit();
+						//后台
+						//var main = plus.android.runtimeMainActivity();
+						//main.moveTaskToBack(false);
+					} else {
+						plus.nativeUI.toast('再按一次退出程序');
+					}
+					setTimeout(function() {
+						backButtonPress = 0;
+					}, 1000);
+					return false;
+				};
+			}(mui));
+		</script>
+	</body>
+
+</html>

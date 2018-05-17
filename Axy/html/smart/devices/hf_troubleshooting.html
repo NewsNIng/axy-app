@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>故障排查</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.mui-table-view:before,
+			.mui-table-view:after {
+				height: 0;
+			}
+			
+			.mui-table-view {
+				margin-bottom: 0.5rem;
+			}
+			
+			.mui-table-view-cell>a {
+				margin: -6px -15px !important;
+			}
+			
+			.mui-table-view-cell.mui-active {
+				background-color: white;
+			}
+			
+			.mui-table-view-cell:after {
+				left: 15px;
+				background-color: #E5E6E7;
+			}
+			
+			.mui-navigate-right:after {
+				color: #D4D4D4;
+			}
+			
+			.mui-collapse-content {
+				background-color: #F4F8FB !important;
+			}
+			
+			.mui-table-view-cell p {
+				margin-bottom: 0;
+				color: #9F9FA0;
+			}
+			
+			.mui-table-view-cell.mui-collapse.mui-active {
+				margin-top: 0px;
+			}
+			
+			.mui-table-view-cell.mui-collapse.mui-active:after {
+				background-color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">故障排查</h1>
+			</header>
+
+			<div class="mui-content app-font-size-28">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell mui-collapse" v-for="o in textList">
+						<a class="mui-navigate-right" href="#" v-text="o.title"></a>
+						<div class="mui-collapse-content">
+							<p>
+								<template v-for="o1 in o.list">
+									{{o1}}<br />
+								</template>
+							</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						textList: [{
+								title: "1.	局域网设备在线看不到视频，读不到网络参数？",
+								list: [
+									"(1)	设备ip与电脑ip不在同一网段，或者不在同一级路由器下，请检查路由设置，确保设备和电脑连接的为同一个路由器或者交换机；",
+									"(2)	设备ip与局域网内其他网络设备ip地址有冲突；",
+									"(3)	通过cmd命令窗口ping设备ip是否有丢包，如有丢包请更换网线或RJ45水晶头。",
+								],
+							},
+							{
+								title: "2.	内网设备时而在线时而不在线或设备不在线、设备网口灯不亮？",
+								list: [
+									"(1)	IP冲突，同一路由器下有与摄像机相同IP的设备（电脑或者其他网络设备），请修改摄像机IP，并确保不与其他网络设备IP冲突；",
+									"(2)	网线质量，安心产品正常运行要求标准超五类网线（特别是传输距离较长的情况下）；水晶头制作不规范，或者水晶头质量不好，请重新制作水晶头或更换水晶头，水晶头请按照568B的标准制作：橙白-1，橙-2，绿白-3，蓝-4，蓝白-5，绿-6，棕白-7，棕-8；",
+									"(3)	网线距离太长，网线距离超过100米信号衰减，建议加交换机中继；",
+									"(4)	如更换网线、水晶头都无法解决，请更换主机设备，将问题设备返厂维修。",
+								],
+							},
+							{
+								title: "3.	遥控器、门磁与主机如何设置理想距离？",
+								list: [
+									"a.	设备安装环境：金属有对无线信号造成干扰（包括无线路由器），安装时应避开有金属的环境，如金属门，金属隔墙，金属隔层;门磁和无线模块安装在金属门或窗时，应延长连接线，避开金属门或窗的位置；",
+									"b.	遥控器、门磁没电或电量不足，更换电池。",
+									"注：正常情况下，安心所有设备的无线距离在空旷的区域小于或等于50米",
+								],
+							},
+							{
+								title: "4.	远程播放时，视频播放画面延迟?",
+								list: [
+									"a.	同一电脑在第一次播放设备时会检查连接通道，所以第一次播放会稍有延时，同一电脑、同一网络环境第二次播放视频基本正常",
+									"b.	设备端网络上传慢和电脑端下载慢也会播放延时（即设备端的上行带宽和访问端下行的带宽不足）",
+									"c.	路由器设置，把路由器upnp打开",
+								],
+							},
+							{
+								title: "5.	在局域网内设备网页打不开，如何处理？",
+								list: [
+									"(1)	若为第二代产品的设备，请检查IE版本，第二代产品暂不支持高版本的IE，推荐使用IE9，第三代产品支持高版本的IE11",
+									"(2)	检查在打开网页时，是否有电脑管家或其他杀毒软件阻止了网页的打开，如有请关闭杀毒软件，重试",
+									"(3)	检查局域网内其他的网络设备是否跟设备的IP地址有冲突",
+									"(4)	检查主机设备IP与电脑IP为同一个网段，若不是请将电脑IP设置为和主机设备同一网段后，在调试主机设备",
+								],
+							},
+							{
+								title: "6.	局域网在线，设备正常，但提示外网不在线？",
+								list: [
+									"(1)	检查设备DNS设置是否正确；",
+									"(2)	路由器是否连上外网；",
+									"(3)	路由器是否做了MAC地址过滤或MAC地址限制",
+									"(4)	设备是否有在服务器进行注册，是否有添加到用户名",
+									"(5)	检查设备服务器地址是否正确",
+								],
+							},
+							{
+								title: "7.	可视化报警主机（AX-203、AX-403等）信号灯不亮？",
+								list: [
+									"(1)	检查RJ45头是否插好，水晶头制作是否标准，还有网线是否接连到路由器或者交换机，网线是否有磨损断裂；",
+									"(2)	看路由器的电源是否插好了，没插好也是会没有网络信号灯",
+								],
+							},
+							{
+								title: "8.	报警主机设备内网看不到？",
+								list: [
+									"(1)	PC和设备是否连接的为同一个路由器；",
+									"(2)	网线是否有损坏；",
+									"(3)	网络线是否插好，指示灯是否正常；",
+									"(4)	设备自检是否完成",
+								],
+							},
+							{
+								title: "9.	触发报警探测器，报警主机设备无响应？",
+								list: [
+									"(1)	检查设备是否在线，电源、网线连接是否正常；",
+									"(2)	检查探测器是否学习配置到设备，及该防区是否启用；",
+									"(3)	尝试断电，重启设备；",
+									"(4)	如上述处理方式任无法解决，需将设备返厂已做进一步检查。",
+								],
+							},
+							{
+								title: "10.	VH-104GN设备连接红外对射有误报，如何处理？",
+								list: [
+									"(1)	用万能表检查红外对射信号线的通断，接常闭信号在未触发报警时，信号线应为通路，若此时为断路则表示红外对射安装有误，请调整对射至最佳状态；",
+									"(2)	检查接入电阻的阻值是否在2.2K左右；",
+									"(3)	检查红外对射供电是否不足；",
+									"(4)	对接入设备的信号线，线路阻值不可大于100Ω；",
+									"(5)	检查红外对射是否对准，阳光直射、温度变化、遮挡物都会影响红外对射，所以推荐使用三光束及以上光束的正规品牌厂家的产品或者使用红外光栅。",
+								],
+							},
+							{
+								title: "11.	AX-360设备在添加过程中声波一直接收不成功，或者接收成功后设备不上线，无法观看视频？",
+								list: [
+									"(1)	检查WIFI账号是否为隐藏的SSID以及中文命名的SSID，若是中文请修改为字母或数字后再尝试，WIFI密码请勿设置特殊字符，不要设置太复杂的密码（解决声波接收不成功）；",
+									"(2)	顶针轻插配置孔[SET]，请在3分钟之内完成声波添加，超时需重新轻插配置孔[SET]，尝试重新添加；",
+									"(3)	手机APP在发送声波时，请将手机声音喇叭音量调至最大并将喇叭靠近设备，保持周围环境安静，避免嘈杂的环境声音产生干扰；",
+									"(4)	若设备添加成功后，不上线无法观看视频，请检查无线路由器是否设置MAC地址过滤或路由器拨号成功后从运营商处获取到的DNS是否正确；",
+									"(5)	若WIFI为二级路由时，检查二级路由上的DNS是否正确。",
+								],
+							},
+							{
+								title: "12.	AX-360对网络带宽有什么要求",
+								list: [
+									"(1)	安心360看家摄像机实时查看目前支持流畅和高清两种模式；	",
+									"(2)	高清模式下查看实时视频，推荐摄像机所处的网络上行带宽在120KB/S（4M以上ADSL），手机所处的网络下行带宽建议在120KB/S；",
+									"(3)	流畅模式下查看实时视频，推荐摄像机处于网络的上行带宽在30KB/S（1M以上ADSL），手机所处的网络下行带宽建议在30KB/S；",
+									"(4)	客户端支持3G及4G网络，请在网络环境良好的情况下观看高清。",
+								],
+							},
+							{
+								title: "13.	AX-360设备偏色；夜视情况下，红外灯亮起，看视频是黑色的？",
+								list: [
+									"由于AX-360摄像机底部内置有吸铁石，设备在安装放置时，请尽量避免吸铁石靠近摄像部分，尽量将设备立着放置。",
+								],
+							},
+							{
+								title: "14.	磁力锁在闭锁的状态下，发生自动开锁或误报？",
+								list: [
+									"(1)	检查磁力锁到控制开关及键盘处的控制信号线是否与220V等强电压的线缆共埋于同一管槽内，尽量避免将控制信号线与强电压置于同一管槽内以免产生干扰，建议两线平行间隔50cm；",
+									"(2)	检查磁力锁控制开关、磁力锁上的接线是否松动或者未接触。",
+								],
+							},
+							{
+								title: "15.	VH-104GN视频报警一体化主机装硬盘后显示“未挂载”？",
+								list: [
+									"(1)	主机在通电启动，运行5-10分钟后才会去获取硬盘挂载信息；",
+									"(2)	请确认所用硬盘是否为监控专用硬盘，推荐使用希捷、西部数据等品牌的监控专用硬盘；",
+									"(3)	请检查硬盘的电源线、数据线等接口是否接好或者松动，或者更换数据线、电源线。",
+								],
+							},
+							{
+								title: "16.	VH-104GN视频报警一体化主机接入的ONVIF网络IPC频繁上下线或者离线？",
+								list: [
+									"(1)	请检查ONVIF网络摄像机的IP地址与之前搜索保存在报警主机内的IP地址是否一致，若不一致，建议将ONVIF网络摄像机指定IP地址后重新接入保存至报警主机内；",
+									"(2)	请检查报警主机设备应用程序版本是否为“2017-10-11”及以后的，若不是请联系技术支持升级设备程序；",
+									"(3)	通过cmd命令窗口ping网络摄像机ip是否有丢包，如有丢包请更换网线或RJ45水晶头。",
+								],
+							}
+						]
+					};
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {},
+				methods: {
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

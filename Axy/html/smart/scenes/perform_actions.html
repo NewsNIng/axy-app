@@ -25,7 +25,7 @@
 			}
 			
 			.actions_item {
-				height: 1.386666rem;
+				height: 1.333333rem;
 				padding-left: 0.346666rem;
 				background-color: white;
 				/*border-bottom: 1px solid #E5E6E7;*/
@@ -68,6 +68,66 @@
 				font-size: 15px !important;
 			}
 			
+			.com-dev-mask {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 98;
+			}
+			
+			.com-dev {
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				/*min-height: 30%;*/
+				z-index: 99;
+				/*				background-color: #FFFFFF;*/
+				background-color: #F4F8FB;
+				/*max-height: 50%;*/
+			}
+			
+			.com-dev .mui-table-view-cell {
+				text-align: center;
+				height: 1.386666rem;
+				padding: 0;
+				line-height: 1.386666rem;
+			}
+			
+			.com-dev ul:last-child {
+				margin-top: 0.266666rem;
+			}
+			
+			.mui-table-view-cell>a {
+				height: 100%;
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn) {
+				margin: 0;
+			}
+			
+			.mui-table-view:after {
+				height: 0;
+			}
+			
+			.mui-table-view-cell:after {
+				right: 15px;
+				background-color: #E4E5E6;
+			}
+			
+			.mui-table-view:before {
+				height: 0;
+			}
+			
+			.scroll {
+				max-height: 6.826666rem !important;
+				overflow-x: hidden;
+				overflow-y: scroll;
+			}
+			
 			[data-dpr="2"] .mui-poppicker-header .mui-btn {
 				font-size: 30px !important;
 			}
@@ -84,10 +144,28 @@
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">执行动作</h1>
-				<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
+				<!--<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
 					<img src="../../../image/smart/scenes/complete_icon.png" />
-				</a>
+				</a>-->
 			</header>
+			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
+				<div class="com-dev app-font-size-28">
+					<ul class="mui-table-view app-font-size-30 scroll">
+						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in scenes">
+							<a class="">
+								<span>{{o.name}}</span>
+							</a>
+						</li>
+					</ul>
+					<ul class="mui-table-view app-font-size-30">
+						<li class="mui-table-view-cell" @tap="onCancelTap()">
+							<a class="">
+								<span>取消</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
 			<div class="mui-content">
 				<div class="actions_item app-font-size-28" @tap="onSelectDev()">
 					<img class="actions_icon" :src="icon" />
@@ -102,9 +180,10 @@
 					<div class="title app-font-size-28" v-text="name"></div>
 
 				</div>
-				<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
+				<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
+
 				<div class="actions_item app-font-size-28">
-					<img class="actions_icon" src="../../../image/smart/scenes/icon_Timing start@3x.png" />
+					<img class="actions_icon" src="../../../image/smart/scenes/btn_Scenepattern@3x.png" />
 
 					<template v-if="devDelay">
 						<span class="mui-pull-right app-color-9f9fa0" style="line-height: 1.3896666rem;margin-right:0.346666rem;">{{devDelayText}}</span>
@@ -113,9 +192,8 @@
 						<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
 					</template>
 
-					<div @tap="onPickTap()" class="title app-font-size-28">延迟设置</div>
+					<div @tap="onScenesTap()" class="title app-font-size-28">场景模式</div>
 				</div>
-				<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
 			</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -147,8 +225,30 @@
 				data: function() {
 					return {
 						pick: null,
+						mask: false, // 遮罩控制
+						scenes: [{
+							name: '回家模式',
+						}, {
+							name: '离家模式',
+						}, {
+							name: '回店模式',
+						}, {
+							name: '离店模式',
+						}, {
+							name: '离家模式',
+						}, {
+							name: '回店模式',
+						}, {
+							name: '离店模式',
+						}, {
+							name: '离家模式',
+						}, {
+							name: '回店模式',
+						}, {
+							name: '离店模式',
+						}],
 						name: '选择设备',
-						icon: 　 '../../../image/smart/scenes/btn_Selection device@3x.png',
+						icon: '../../../image/smart/scenes/btn_Selection device@3x.png',
 						devText: '',
 						devDelay: 0,
 						devDelayText: '',
@@ -180,9 +280,16 @@
 					},
 					onSelectDev: function() {
 						app.page.openForResultBy('select_device.html', 'select_device', function(data) {
-							this.devText = data.text;
-							this.icon = data.dev.img;
 							this.name = data.dev.name;
+							this.icon = data.dev.img;
+							this.devText = data.text;
+							app.page.setResult({
+								dev: {
+									icon: this.icon,
+									name: this.name,
+									text: this.devText,
+								}
+							}).close();
 						}.bind(this));
 					},
 					onSaveTap: function() {
@@ -195,9 +302,21 @@
 								icon: this.icon,
 								name: this.name,
 								text: this.devText,
-								//value: this.value,
 							}
 						}).close();
+					},
+					onCancelTap: function() {
+						this.mask = false;
+					},
+					onSelectedTap: function(o) {
+						this.mask = false;
+						//						app.page.setResult({
+						//							title: o.name,
+						//							img: this.selectImg,
+						//						}).close();
+					},
+					onScenesTap: function(i, img) {
+						this.mask = true;
 					},
 				}
 			});

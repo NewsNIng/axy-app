@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>网络摄像机</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.mui-table-view:before,
+			.mui-table-view:after {
+				height: 0;
+			}
+			
+			.mui-table-view {
+				margin-bottom: 0.5rem;
+			}
+			
+			.mui-table-view-cell>a {
+				margin: -6px -15px !important;
+			}
+			
+			.mui-table-view-cell.mui-active {
+				background-color: white;
+			}
+			
+			.mui-table-view-cell:after {
+				left: 15px;
+				background-color: #E5E6E7;
+			}
+			
+			.mui-navigate-right:after {
+				color: #D4D4D4;
+			}
+			
+			.mui-collapse-content {
+				background-color: #F4F8FB !important;
+			}
+			
+			.mui-table-view-cell p {
+				margin-bottom: 0;
+				color: #9F9FA0;
+			}
+			
+			.mui-table-view-cell.mui-collapse.mui-active {
+				margin-top: 0px;
+			}
+			
+			.mui-table-view-cell.mui-collapse.mui-active:after {
+				background-color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">网络摄像机</h1>
+			</header>
+
+			<div class="mui-content app-font-size-28">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell mui-collapse" v-for="o in textList">
+						<a class="mui-navigate-right" href="#" v-text="o.title"></a>
+						<div class="mui-collapse-content">
+							<p>
+								<template v-for="o1 in o.list">
+									{{o1}}<br />
+								</template>
+							</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						textList: [{
+								title: "1. 摄像机对网络宽带有什么要求？",
+								list: [
+									"安心云摄像机目前支持流畅和高清两种模式。	",
+									"(1)	高清模式下观看实时视频，推荐摄像机所处的网络上行带宽建议为80KB/S(2M以上ADSL),手机所处的网络下行带宽建议为80KB/S;",
+									"(2)	流畅模式下观看实时视频，推荐摄像机所处的网络上行带宽建议为40KB/S(1M以上ADSL),手机所处的网络下行带宽建议为40KB/S;",
+									"(3)	客户端支持3G/4G网络，请在网络环境良好的情况下观看高清。",
+								],
+							},
+							{
+								title: "2. 摄像机支持语音通话吗？",
+								list: [
+									"安心云APP实时观看视频界面默认开启监听功能，您可以听到摄像机端的声音；点击“对讲”即开启对讲模式。",
+								],
+							},
+							{
+								title: "3. 摄像机各指示灯分别表示什么？",
+								list: [
+									"(1)	绿灯常亮：摄像机处于撤防状态；",
+									"(2)	绿灯闪烁：撤防状态下，摄像机处于视频访问中；",
+									"(3)	红灯常亮：摄像机处于布防状态",
+								],
+							},
+							{
+								title: "4. 摄像机的隐私模式是什么？是否安全？",
+								list: [
+									"隐私模式是为保护用户隐私而贴心设计的。用户开启摄像机隐私模式后，其他人即使登录此账号也将无法观看该摄像机视频。为防止手机丢失或其他意外情况，隐私模式有效时间为8小时，8小时后将自动恢复常规模式。",
+									"(1)	安心云摄像机、手机APP及服务器之间采用了严格的加密协议，确保用户身份认证安全；",
+									"(2)	视频数据采用私有加密协议进行传输，保证数据流的安全；",
+									"(3)	隐私模式采用手机卫衣标识符认证，可确保其他人及时在获知您账号及密码的情况下也无法观看视频，全面保护您的隐私。",
+								],
+							},
+							{
+								title: "5. APP在wifi配置过程中，“选择WIFI”界面，却找不到所需的wifi？",
+								list: [
+									"有可能是安心云APP获取手机的权限功能被禁止，请在手机的安全中心开启安心云APP的手机权限（其中含定位和开启wifi权限）。",
+								],
+							},
+							{
+								title: "6. APP中自动布撤防计划是什么？",
+								list: [
+									"在安心云APP设备设置页面，可对该设备进行布撤防设置，即您可以根据需要自主设定某一时间段内进行布防计划并设置循环周期，系统将在改时间段内自动布防；反之，则在未设置布防时间段内自动撤防。",
+									"注意事项：",
+									"(1)	若设置的时间段重合，将自动按并集处理。",
+									"如设置的两个布防计划分别为00:00-08:00和00:06-09:00 且都已开启，则系统将默认该设备在00:00-09:00开启布防；",
+									"(2)	设置的布防计划为一天之内即00:00-24:00，且需设置循环周期。",
+								],
+							},
+							{
+								title: "7. APP中自动录像计划是什么？",
+								list: [
+									"安心云摄像机支持SD卡录像功能，用户可在摄像机对应位置插入SD卡（每次插入SD卡后请重启设备）并在安心云APP设备设置页面添加自动录像计划，可自主设置循环周期和时间段。该时间段内，摄像机将自动开启录像功能；反之则处于关闭状态。为节省您的SD卡内存， 请尽可能设置您需要录制视频的时间段。",
+								],
+							},
+							{
+								title: "8. 为什么收不到告警推送了？",
+								list: [
+									"用户若发现使用安心云APP时未收到告警推送，可在“我的 —> 设置 —>消息推送”查看该摄像机是否开启推送；若开启推送后仍无法接收告警推送，有可能是摄像机为发生告警或您的手机未成功绑定推送。该情况下建议重装APP或下载APP最新版本。",
+									"如需关闭告警推送，可在“我的 —> 设置 —>消息推送”中关闭该设备推送。",
+								],
+							},
+							{
+								title: "9. 添加摄像机失败？",
+								list: [
+									"(1)	请重新拔插摄像机电源，确保电源线已插好；",
+									"(2)	请使用包装盒中所配置的顶针或其他可替代物轻插摄像机SET配置孔，按住至少3s并听到“嘀”声后松开。",
+								],
+							},
+							{
+								title: "10. 观看视频延时或经常中断？",
+								list: [
+									"一般是网络状况较差或无线网信号弱导致的， 请检查网络或刷新重试。",
+								],
+							},
+							{
+								title: "11. 无法与摄像机进行语音对讲？",
+								list: [
+									"请检查网络状况是否良好。如网络环境不理想，可能会导致声音断断续续或严重延时。",
+								],
+							},
+							{
+								title: "12. 摄像机发生报警，但手机未收到报警推送？",
+								list: [
+									"(1)	请检查安心云APP是否开机启动，若被第三方安全软件关闭，请手动开启；",
+									"(2)	检查手机客户端上报警推送设置是否已开启。",
+								],
+							},
+							{
+								title: "13. 摄像机自动录像生成的文件可以在手机上直接删除吗？",
+								list: [
+									"不可以的。因为自动录像文件是存储在摄像机SD卡内。若SD卡空间不够，系统将自动删除最早生成的录像文件；如手动删除，则需将SD卡从摄像机取出并在手机或电脑端操作。",
+								],
+							}
+						]
+					};
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {},
+				methods: {
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

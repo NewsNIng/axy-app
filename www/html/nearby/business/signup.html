@@ -1,0 +1,481 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>商家入驻</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			body,
+			html,
+			.mui-content {
+				background-color: #f4f8fb;
+			}
+			
+			ul.group {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.mui-navigate-right:after,
+			.mui-push-right:after {
+				font-size: 15px;
+			}
+			/*去除ul上下横线*/
+			
+			ul.group:before,
+			ul.group:after {
+				height: 0;
+			}
+			
+			ul.group>li.mui-table-view-cell {
+				padding: 0;
+				margin: 0;
+			}
+			/*重写li边线*/
+			
+			ul.group>li.mui-table-view-cell:after {
+				left: 0;
+				background-color: #f2f2f3;
+			}
+			/*重写li a高度*/
+			
+			ul.group>li.mui-table-view-cell>a {
+				height: 1.186666rem;
+				padding: 0 0 0 0.346666rem;
+				margin: 0;
+				position: relative;
+			}
+			/*左侧文字添加颜色*/
+			
+			ul.group>li.mui-table-view-cell .leftname {
+				color: #333333;
+				position: absolute;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+			}
+			/*右侧文字*/
+			
+			ul.group span.mui-badge {
+				right: 0.666666rem;
+				color: #808080;
+				background-color: transparent;
+			}
+			
+			.app-btn-main {
+				width: 92%;
+				margin: 1.52rem 4% 1.44rem 4%;
+				padding: .2rem 0;
+			}
+			
+			.mui-table-view .mui-badge {
+				color: #9F9FA0 !important;
+			}
+			
+			.mui-badge.mui-ellipsis {
+				display: inline-block;
+				max-width: 70%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back mui-pull-left app-icon-back"></a>
+			<h1 class="mui-title">商家入驻</h1>
+		</header>
+
+		<div class="mui-content">
+
+			<template v-for="g,gi in infoList">
+				<ul class="mui-table-view group">
+					<li class="mui-table-view-cell" v-for="o,i in g" @tap="onItemTap(gi, i, o)">
+						<a class="mui-navigate-right">
+							<span class="app-font-size-28 mui-badge mui-ellipsis">{{o.value || o.tips}}</span>
+							<span class="app-font-size-30 leftname">{{o.name}}</span>
+						</a>
+					</li>
+
+				</ul>
+			</template>
+
+			<button type="button" @tap="onNextTap()" class="mui-btn app-btn-main app-font-size-36">{{isUpdate?"提交更改":"申请入驻"}}</button>
+		</div>
+
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/store.js"></script>
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			var getInputPage = function(g, i, ex) {
+					console.log(JSON.stringify(ex))
+					app.page.getInput(function(data) {
+						data.content && (this.infoList[g][i].value = data.content);
+					}.bind(this), ex);
+				},
+				getStoreTimePage = function(g, i, ex) {
+					var that = this;
+					var upload_store_time = plus.webview.getWebviewById('upload_store_time');
+					console.log(JSON.stringify(ex));
+					if(!upload_store_time) {
+						app.page.openForResultBy('upload_store_time.html', 'upload_store_time', function(data) {
+							that.infoList[1][1].value = data.week + " " + data.time;
+							that.infoList[1][1].startweek = data.startweek;
+							that.infoList[1][1].endtweek = data.endtweek;
+							that.infoList[1][1].starttime = data.starttime;
+							that.infoList[1][1].endtime = data.endtime;
+
+							that.infoList[1][2].onlinestate = data.onLine;
+							that.infoList[1][2].tips = data.onLine ? "正在营业" : "暂停营业";
+						}, ex);
+					} else {
+						upload_store_time.show('pop-in');
+					}
+				};
+
+			var fnArr = [
+				[
+					// 城市选择
+					function(g, i) {
+						app.page.getPosition(function(data) {
+							this.infoList[g][i].value = data.city;
+						}.bind(this));
+					},
+					// 商户名称
+					getInputPage,
+					// 商户地址
+					function(g, i) {
+						app.page.getMaps(function(data) {
+							this.infoList[g][i].value = data.address;
+							this.infoList[g][i].longitude = data.longitude;
+							this.infoList[g][i].latitude = data.latitude;
+						}.bind(this));
+					},
+					// 商户类型
+					function(g, i) {
+						app.page.getMailType(function(data) {
+							this.infoList[g][i].value = data.value;
+							this.infoList[g][i].oid = data.oid;
+						}.bind(this));
+					},
+				],
+				[
+					// 商户电话
+					getInputPage,
+					// 营业时间
+					getStoreTimePage,
+					// 营业状态
+					function(){}
+					//getStoreTimePage,
+				],
+				[
+					// 店铺照片
+					function(g, i, ex) {
+						var that = this;
+						var upload_store_pic = plus.webview.getWebviewById('upload_store_pic');
+						if(!upload_store_pic) {
+							app.page.openForResultBy('upload_store_pic.html', 'upload_store_pic', function(data) {
+								that.infoList[g][i].imgList = data.imgList;
+								that.infoList[g][i].value = "已选择" + data.imgList.filter(function(item) {
+									return item !== "";
+								}).length + "张";
+							}, ex);
+						} else {
+							upload_store_pic.show('pop-in');
+						}
+
+					}
+				],
+				[
+					// 商家介绍
+					function(g, i, ex) {
+						var that = this;
+						var upload_store_info = plus.webview.getWebviewById('upload_store_info');
+						if(!upload_store_info) {
+							app.page.openForResultBy('upload_store_info.html', 'upload_store_info', function(data) {
+								//								that.infoList[g][i].imgList = data.imgList;
+								that.infoList[g][i].t1 = data.t1;
+								//								that.infoList[g][i].t2 = data.t2;
+								that.infoList[g][i].value = "已填写信息";
+							}, ex);
+						} else {
+							upload_store_info.show('pop-in');
+						}
+					}
+				]
+			];
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						tapT: null,
+						updateId: -1,
+						isUpdate: false,
+						infoList: [
+							[{
+									name: "城市",
+									value: "深圳",
+									tips: '请选择城市',
+								}, {
+
+									name: "名称",
+									value: "",
+									tips: '输入商户名称',
+								},
+								{
+									name: "地址",
+									tips: '输入商户地址',
+									value: "",
+									longitude: 0,
+									latitude: 0,
+
+								}, {
+									name: "类型",
+									value: "",
+									tips: '输入商户类型',
+									oid: null,
+								}
+							],
+
+							[{
+								name: "商户电话",
+								tips: '输入商户电话',
+								value: "",
+								r: 'number',
+								regexpErrorMessage: "电话号码格式不正确！",
+							}, {
+								name: "营业时间",
+								value: "00:00-24:00",
+								tips: '',
+								startweek: 1,
+								endtweek: 7,
+								starttime: 0,
+								endtime: 24,
+							}, {
+								name: "营业状态",
+								value: "",
+								tips: '正在营业',
+								onlinestate: true,
+							}],
+							[{
+								name: "店铺照片",
+								imgList: ['', '', ''],
+								tips: '请选择',
+								value: '',
+							}],
+							[{
+								name: "商家介绍",
+								imgList: ["", "", ""],
+								t1: "",
+								t2: "",
+								tips: '请填写',
+								value: ""
+							}]
+						]
+					};
+				},
+				plusReady: function() {
+					var sourceInfo = this.$view.sourceInfo;
+					if(sourceInfo) {
+						this.updateId = sourceInfo.id;
+						this.isUpdate = true;
+						// 填充
+						this._generateSourceInfo(sourceInfo);
+					}
+
+				},
+
+				methods: {
+					onItemTap: function(gindex, index, o) {
+						// 防抖
+						if(this.tapT) {
+							return;
+						}
+						this.tapT = setTimeout(function() {
+							this.tapT = null;
+						}.bind(this), 200);
+						// 防抖end
+
+						var fn = fnArr[gindex][index];
+						
+						mui.extend(o, {
+							title: o.name,
+							//tips: o.value,
+							content: o.value,
+							r: o.r,
+							t1: o.t1,
+							t2: o.t2,
+							imgList: o.imgList,
+							rmsg: o.regexpErrorMessage
+						}, true);
+						
+						fn && fn.call(this, gindex, index, o);
+					},
+					onNextTap: function() {
+						var that = this;
+						// 收集信息
+						var o = this._generateInfo();
+						var methodName = "add";
+
+						if(this.isUpdate) {
+							o.id = this.updateId;
+							methodName = "update";
+						}
+
+						var imgList = this.infoList[2][0]['imgList'];
+						var hasimg = imgList.some(function(item) {
+							return !!item;
+						});
+
+						if(!hasimg) {
+							return mui.toast('请选择至少一张店铺照片');
+						}
+
+						// 简单验证空
+						for(var i in o) {
+
+							if(o[i] === undefined || o[i].toString().trim().length === 0) {
+								return mui.toast("请填写完整信息");
+							}
+						}
+
+						for(var j = 0; j < 3; j++) {
+							o["image" + (j + 1)] = imgList[j];
+						}
+
+						var w = plus.nativeUI.showWaiting('正在提交信息...');
+						new Promise(function(re, rj) {
+							// 提交入驻
+							dal.store[methodName](o, function(err, data) {
+								err ? rj(err) : re(data);
+							});
+
+						}).then(function(data) {
+							w.close();
+							var tw = app.page.setResult({});
+							mui.toast(that.isUpdate ? "更新成功" : "申请成功");
+
+							if(that.isUpdate) {
+								return tw.close();
+							}
+
+							mui.openWindow('signup_success.html', 'signup_success', {
+								extras: {
+									storeId: data.id, // TODO 入驻后有一个商品ID
+								}
+							});
+						}).catch(function(err) {
+							w.close();
+							mui.toast(err.message);
+						});
+
+					},
+					_generateInfo: function() {
+						var arr = this.infoList;
+						return {
+							account: window.localStorage.getItem('_account_'),
+							city: arr[0][0].value,
+							name: arr[0][1].value,
+							address: arr[0][2].value,
+							//type: arr[0][3].oid,
+							type: arr[0][3].value, // 由id改为字符串
+
+							telphone: arr[1][0].value,
+							startweek: arr[1][1].startweek,
+							endtweek: arr[1][1].endtweek,
+							starttime: arr[1][1].starttime,
+							endtime: arr[1][1].endtime,
+							onlinestate: +(arr[1][2].onlinestate),
+
+							//image1: arr[2][0]['imgList'][0],
+							//image2: arr[2][0]['imgList'][1],
+							//image3: arr[2][0]['imgList'][2],
+
+							introduction: arr[3][0].t1,
+
+							longitude: arr[0][2].longitude, // 经度
+							latitude: arr[0][2].latitude, // 纬度
+						};
+
+					},
+
+					_generateSourceInfo: function(info) {
+						var arr = this.infoList;
+
+						arr[0][0].value = info.city;
+						arr[0][1].value = info.name;
+						arr[0][2].value = info.address;
+						arr[0][3].value = info.type;
+
+						arr[1][0].value = info.telphone;
+
+						arr[1][1].startweek = info.startweek;
+						arr[1][1].endtweek = info.endtweek;
+						arr[1][1].starttime = info.starttime;
+						arr[1][1].endtime = info.endtime;
+
+						var week = ["", "一", "二", "三", "四", "五", "六", "日"];
+
+						var nowDate = new Date();
+
+						var sh = Math.floor(+info.starttime),
+							sm = +info.starttime % 1 * 60,
+							eh = Math.floor(+info.endtime),
+							em = +info.endtime % 1 * 60;
+
+						sm > 0 && (sm--);
+						em > 0 && (em--);
+
+						nowDate.setHours(sh, sm);
+						var shm = nowDate.toFormatString("hh:mm");
+
+						nowDate.setHours(eh, em);
+						var ehm = nowDate.toFormatString("hh:mm");
+
+						arr[1][1].value = "周" + week[info.startweek] + " - " + "周" + week[info.endtweek] + " " + shm + " - " + ehm;
+
+						arr[1][2].onlinestate = info.onlinestate;
+
+						arr[3][0].t1 = info.introduction;
+
+						arr[0][2].longitude = info.longitude; // 经度
+						arr[0][2].latitude = info.latitude; // 纬度
+
+						//image1: arr[2][0]['imgList'][0],
+						//image2: arr[2][0]['imgList'][1],
+						//image3: arr[2][0]['imgList'][2],
+
+						for(var i = 0; i < 3; i++) {
+							arr[2][0]['imgList'][i] = info['image' + (i + 1)];
+						}
+
+						var imgList = arr[2][0]['imgList'];
+						var imgLen = imgList.filter(function(item) {
+							return !!item;
+						}).length || 0;
+
+						arr[2][0].value = imgLen + "张";
+
+						if(info.introduction) {
+							arr[3][0].t1 = info.introduction;
+							arr[3][0].value = "已填写信息";
+						}
+
+					}
+				}
+
+			});
+		</script>
+	</body>
+
+</html>

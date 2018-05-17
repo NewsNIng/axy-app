@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>关于安心云</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<link rel="stylesheet" href="../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB !important;
+			}
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*icon logo*/
+			
+			.logo {
+				text-align: center;
+			}
+			
+			.logo>img {
+				width: 2.6rem;
+				margin: 0.986666rem auto 0.4rem auto;
+			}
+			
+			.logo>div {
+				margin-bottom: 0.8rem;
+			}
+			
+			
+			/*声明*/
+			.final{
+				position: fixed;
+				bottom: 0.533333rem;
+				left: 0;
+				width: 100%;
+				text-align: center;				
+			}
+			
+			
+			.mui-ios a.mui-active{
+				background-color: transparent !important;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div class="box">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">关于安心云</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="logo">
+					<img src="../../image/common/login_logo.png" />
+					<div class="app-font-size-38 app-color-9f9fa0">安心云</div>
+				</div>
+				<div class="menu-box app-font-size-28">
+
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" id="call">
+							<a class="">
+								<span class="app-color-333333">客服热线：0755-86521099</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell" id="mail">
+							<a class="">
+								<span class="app-color-333333">客服邮箱：sales@anxin-net.com</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell" id="version">
+							<a class="">
+								<span class="app-color-333333">当前版本：V </span>
+							</a>
+						</li>
+					</ul>
+					<!--<div class="app-color-9f9fa0 final">CopyRight©2017 Wincomm Technology Co. Ltd</div>-->
+				</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/system.js"></script>
+		<script type="text/javascript" src="../../js/common/rsmanager.js"></script>
+		
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js" ></script>
+		<script type="text/javascript">
+			mui.init({
+				gestureConfig: {
+					longtap: true
+				}
+			});
+
+			mui.plusReady(function() {
+				var version = document.getElementById("version");
+				// 获取前端版本号
+				app.device.getVersion(function(data) {
+					version.innerText = "当前版本：V " + data;
+				});
+				
+				// 点击检查更新
+				version.addEventListener('tap', function() {
+					checkUpdate();
+				});
+				
+				// 长按发现彩蛋
+				version.addEventListener('longtap', function() {
+					if(mui.os.ios){
+						return;
+					}
+					var nativeVersion = plus.runtime.version;
+					mui.toast(nativeVersion);
+				});
+
+			});
+
+			function checkUpdate() {
+				function version2number(version) {
+						return +(version.split('.').join(''));
+					}
+
+					// 获取当前应用版本
+					plus.runtime.getProperty(plus.runtime.appid, function(info) {
+						var appVersion = version2number(info.version);
+						dal.system.update(info.version, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+
+							if(!data) {
+								if(mui.os.ios){
+									return;
+								}
+								mui.toast("暂无更新");
+								return; 
+							}
+							var newAppVersion = version2number(data.version);
+
+							if(newAppVersion > appVersion) {
+								// 需要隐藏升级？
+								if(data.hide) {
+									rsmanager._install(data.path, function(succ) {}, true);
+									return;
+								}
+								// 弹出升级提示框
+								app.page.openUpdate(function(rs) {}, {
+									path: data.path, // 更新包地址
+									enforce: data.enforce, // 强制更新 不能关闭提示框
+									// title: "", // 更新提示框的标题内容 
+									version: data.version, // 版本号
+									message: data.message, // 更新内容
+								});
+								
+							} else {
+								if(mui.os.ios){
+									return;
+								}
+								mui.toast("您已经是最新版本，无需更新"); 
+							}
+
+						});
+
+					});
+			}
+		</script>
+	</body>
+
+</html>

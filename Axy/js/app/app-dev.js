@@ -28,6 +28,7 @@
 		"VH-104MG": 0x1044, // 4路混合DVR
 		"VH-104DG": 0x1045, // 4路DVR
 		"VH-104GN": 0x1046, // 4路NVR
+		"AX-801": 0x1101, // AI+智能音箱
 		"none": 0, // 未知
 
 	};
@@ -118,7 +119,6 @@
 	
 	// 是否是隐私（安全）模式
 	dev.isSafe = function(workmode){
-		// 不是通过按位移动来获取 是否安全模式...
 		var aaa = 0x01 << 28;
 		return (workmode & aaa) == aaa;
 	}

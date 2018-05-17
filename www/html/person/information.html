@@ -1,0 +1,477 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>个人主页</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../css/lib/mui.dtpicker.css" />
+		<link rel="stylesheet" href="../../css/app/module/poppicker.css" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<link rel="stylesheet" href="../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB !important;
+			}
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*end菜单*/
+			
+			.app-touch:active {
+				/*触摸半透膜*/
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*头像容器*/
+			
+			.avastr {
+				background-color: #FFFFFF;
+				padding: 0.466666rem 0 0.333333rem 0.64rem;
+				position: relative;
+			}
+			
+			.avastr img {
+				width: 1.6rem;
+				height: 1.6rem;
+				border-radius: 50%;
+			}
+			
+			.avastr:after {
+				right: 15px;
+				content: '\e583';
+			}
+			
+			.avastr:after {
+				font-family: Muiicons;
+				font-size: inherit;
+				line-height: 1;
+				position: absolute;
+				top: 50%;
+				display: inline-block;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+				text-decoration: none;
+				color: #bbb;
+				-webkit-font-smoothing: antialiased;
+			}
+			/*专辑*/
+			
+			.album>div {
+				width: 1.866666rem;
+				height: 1.866666rem;
+				background-color: #f5f8fa;
+				float: left;
+				margin-right: 0.4rem;
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+			}
+			
+			.album>div:last-child {
+				margin-right: 0;
+			}
+			
+			.album {
+				padding: 0.64rem 0.666666rem;
+			}
+			
+			.album:after {
+				content: "";
+				clear: both;
+				display: block;
+			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+			
+			.nick {
+				display: inline-block;
+				width: 7rem;
+				text-align: right;
+			}
+			
+			.mui-badge.nick {
+				border-radius: 0;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div class="box">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">个人主页</h1>
+			</header>
+
+			<div class="mui-content">
+
+				<div class="menu-box app-font-size-32">
+					<div class="avastr app-touch" @tap="onAvastrTap()">
+						<img class="img-lazy-load img-lazy-forever" :data-src="user.headimgurl" data-type="avatar" />
+					</div>
+
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" @tap="onAlbumTap()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">个人专辑</span>
+							</a>
+						</li>
+						<div class="album">
+							<div v-for="o,i in articleList" @tap="onAlbumImgTap(o)" class="img-lazy-load" :data-src="o.image1||o.image2||o.image3"></div>
+							<div v-for="o,i in albumNullLen"></div>
+						</div>
+					</ul>
+
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<a class="">
+								<span class="app-color-333333">用户ID</span>
+								<span class="mui-badge" v-text="user.account"></span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="onNickNameTap()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">昵称</span>
+								<span class="mui-badge nick mui-ellipsis" v-text="user.nickname"></span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="onGenderTap()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">性别</span>
+								<span class="mui-badge" v-text="user.gender"></span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="onBirthdayTap()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">生日</span>
+								<span class="mui-badge" v-text="user.birthday">选择生日</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="onCityTap()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">城市</span>
+								<span class="mui-badge" v-text="user.city"></span>
+							</a>
+						</li>
+					</ul>
+
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" @tap="onBindTap()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">帐号绑定</span>
+							</a>
+						</li>
+						<li class="mui-table-view-cell" @tap="onResetPwd()">
+							<a class="mui-navigate-right">
+								<span class="app-color-333333">修改密码</span>
+							</a>
+						</li>
+					</ul>
+
+				</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../js/dal/article.js"></script>
+		<script type="text/javascript" src="../../js/dal/system.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.dtpicker.js"></script>
+		<script type="text/javascript" src="../../js/data/city.data-3.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+			var sexPick, dtPick, cityPick;
+
+			new Vue({
+				el: '.box',
+				data: function() {
+					return {
+
+						updateUser: {},
+
+						user: {
+							"id": -1,
+							"account": "",
+							"gender": "",
+							"nickname": "",
+							"birthday": "",
+							"province": "",
+							"city": "",
+							"headimgurl": "",
+							"qqopenid": null,
+							"wxopenid": null,
+							"wbopenid": null
+						},
+						articleList: []
+					};
+				},
+
+				computed: {
+					albumNullLen: function() {
+						var l = 4 - (this.articleList && this.articleList.length) || 0;
+						l = l < 0 ? 0 : l;
+						return l;
+					}
+				},
+
+				plusReady: function() {
+					this.$view.setStyle({
+						scrollIndicator: 'none'
+					});
+				},
+				mounted: function() {
+					sexPick = new mui.PopPicker({
+						layer: 1
+					});
+					sexPick.setData([{
+						text: '男',
+						value: 0,
+					}, {
+						text: '女',
+						value: 1,
+					}]);
+					this.user = app.user.get();
+					this.updateUserInit();
+					this.$watch('user', function() {
+						// 用户信息更改后提交信息更新
+						this.updateUserAction();
+					}.bind(this), {
+						deep: true
+					});
+					this.updateLazyImage();
+					this.getArticleList();
+				},
+				methods: {
+					// 获取个人文章信息
+					getArticleList: function() {
+						dal.article.user.list(this.account, 1, function(err, data) {
+							if(err) {
+								return;
+							}
+							this.articleList = data;
+							this.updateLazyImage();
+						}.bind(this), 4);
+					},
+
+					// 需要更新的信息初始化
+					updateUserInit: function() {
+						this.updateUser = {
+							id: this.user.id,
+							account: this.user.account
+						}
+					},
+					updateUserAction: function() {
+						var that = this;
+						dal.user.update(this.updateUser, function(err, rs) {
+							if(err) {
+								console.log(JSON.stringify(err));
+								return mui.toast(err.message || "用户资料更新失败");
+							}
+							// 通知其它页面 用户更新了
+							new ni.Broadcast().emit("userinfo_update", {
+								userInfo: that.user
+							}, {
+								views: ['zeus','person']
+							});
+							// 初始化需要更新的信息列表
+							that.updateUserInit();
+							that.updateLazyImage();
+							mui.toast('修改成功');
+						});
+					},
+					updateLazyImage: function() {
+						this.$nextTick(function() {
+							imagelazyload();
+						});
+					},
+
+					// 头像点击
+					onAvastrTap: function() {
+						var that = this;
+						// 选取图片
+						this.$gallery(function(err, imgs) {
+							if(err) {
+								return err && mui.toast(err.message);
+							}
+							// 打开图片剪裁
+							app.page.cropper(function(data) {
+								plus.nativeUI.showWaiting("正在上传头像...")
+								// 上传到服务器
+								dal.system.uploadImg([data.src], function(err, rs) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast("头像更新失败");
+									}
+									that.user.headimgurl = rs[0];
+									that.updateUser.headimgurl = rs[0];
+								});
+
+							}, imgs[0]);
+
+						}, 1);
+					},
+
+					// 个人专辑点击
+					onAlbumTap: function() {
+						mui.openWindow('myself/discover.html', 'myself_discover', {
+							extras: {
+								uid: this.user.account
+							}
+						});
+					},
+
+					// 个人专辑快捷点击
+					onAlbumImgTap: function(o) {
+						var that = this;
+						app.page.openForResultBy('myself/discover_details.html', 'discover_details_edit', function(data) {
+							if(data.del) {
+								that.items.splice(index, 1);
+							}
+						}, {
+							oid: o.id
+						});
+					},
+
+					// 昵称修改
+					onNickNameTap: function() {
+						var that = this;
+						app.page.getInput(function(data) {
+							that.user.nickname = data.content;
+							that.updateUser.nickname = data.content;
+
+						}, {
+							title: '昵称',
+							content: that.user.nickname,
+							r: "nickname",
+							rmsg: "昵称必须为中英文、数字和下划线 最多长度18"
+
+						});
+					},
+
+					// 性别选择
+					onGenderTap: function() {
+						sexPick.show(function(items) {
+							this.user.gender = items[0].text;
+							this.updateUser.gender = items[0].text;
+						}.bind(this));
+					},
+					// 生日选择
+					onBirthdayTap: function() {
+						var d = new Date();
+						var options = {
+							type: "date",
+							beginYear: "1900",
+							endYear: d.getFullYear(),
+							endMonth: d.getMonth() + 1,
+							endDay: d.getDate(),
+							value: this.user.birthday, // 当前生日
+						};
+						var that = this;
+						dtPick = new mui.DtPicker(options);
+						dtPick.show(function(rs) {
+							/*
+							 * rs.value 拼合后的 value
+							 * rs.text 拼合后的 text
+							 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+							 * rs.m 月，用法同年
+							 * rs.d 日，用法同年
+							 * rs.h 时，用法同年
+							 * rs.i 分（minutes 的第二个字母），用法同年
+							 */
+							that.user.birthday = rs.text;
+							that.updateUser.birthday = rs.text;
+							/* 
+							 * 返回 false 可以阻止选择框的关闭
+							 * return false;
+							 */
+							/*
+							 * 释放组件资源，释放后将将不能再操作组件
+							 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+							 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+							 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+							 */
+							dtPick.dispose();
+							dtPick = null;
+						});
+
+					},
+					// 城市选择
+					onCityTap: function() {
+						var cityPick = new mui.PopPicker({
+							layer: 3
+						});
+						var that = this;
+						cityPick.setData(cityData3);
+						cityPick.show(function(items) {
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+							that.user.city = items[1].text;
+							that.updateUser.city = items[1].text;
+						});
+					},
+
+					// 帐号绑定点击
+					onBindTap: function() {
+						mui.openWindow('relation/bind.html');
+					},
+
+					// 修改密码
+					onResetPwd: function() {
+						mui.openWindow('relation/reset_pwd.html');
+					},
+
+				}
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,363 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>系统设置</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />-->
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*-left图片文字*/
+			
+			.menu-box a.mui-navigate-right {}
+			
+			.menu-box a.mui-navigate-right>img {
+				width: 0.48rem;
+				margin: 0 0.2rem;
+				vertical-align: middle;
+			}
+			
+			.menu-box a.mui-navigate-right>span {
+				vertical-align: middle;
+			}
+			
+			.center {
+				text-align: center !important;
+			}
+			/*end菜单*/
+			/*服务器地址 默认隐藏*/
+			/*#domain {
+				display: none;
+			}*/
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">系统设置</h1>
+		</header>
+		<div class="mui-content menu-box app-font-size-32">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="domain">
+					<a class="mui-navigate-right">
+						<span class="app-color-333333">服务器地址</span>
+						<span class="mui-badge domain"></span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" data-href="push.html">
+					<a class="mui-navigate-right">
+						<span class="app-color-333333">消息推送</span>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="safe">
+					<a class="mui-navigate-right">
+						<span class="app-color-333333">帐号保护</span>
+						<span class="mui-badge lockterminal">未开启</span>
+					</a>
+				</li>
+				<!--<li class="mui-table-view-cell" data-href="version.html">
+					<a class="mui-navigate-right">
+						<span class="app-color-333333">版本说明</span>
+					</a>
+				</li>-->
+			</ul>
+
+			<!--<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="app-color-333333">服务号推送</span>
+					</a>
+				</li>
+			</ul>-->
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="exit">
+					<a class="center">
+						<span class="app-color-ff3b30">退出帐号</span>
+					</a>
+				</li>
+			</ul>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../../js/dal/push.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>-->
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>-->
+
+		<script type="text/javascript">
+			mui.init();
+
+			var lockterminal, domain;
+
+			//			var domainPick;
+
+			mui.ready(function() {
+
+				//				domainPick = new mui.PopPicker({
+				//					layer: 1,
+				//					more: false,
+				//				});
+
+				mui('.mui-content').on('tap', '*[data-href]', function() {
+					mui.openWindow(this.dataset.href);
+				});
+				document.getElementById("exit").addEventListener('tap', onExit);
+
+				lockterminal = document.querySelector(".lockterminal");
+				domain = document.querySelector("#domain")
+
+				app.user.get(function(u) {
+					user = u;
+					if(u && u.lockterminal === 1) {
+						lockterminal.innerHTML = "已开启";
+						lockterminal.classList.add("app-color-main");
+					}
+				});
+
+				document.getElementById("safe").addEventListener('tap', function() {
+
+					if(!user || !user.bindmobile) {
+						mui.toast("请先绑定手机！");
+
+						app.page.openForResultBy("../relation/bind_tel.html", "bind_tel", function(data) {
+							if(data.tel) {
+								// 更改成功后修改页面中的tel
+								user.bindmobile = data.tel;
+							}
+						}, {
+							tel: ""
+						});
+
+						return;
+					}
+
+					app.page.openForResultBy('safe.html', 'safe', function(data) {
+						if(data.result) {
+							lockterminal.innerHTML = "已开启";
+							lockterminal.classList.add("app-color-main");
+						} else {
+							lockterminal.innerHTML = "已关闭";
+							lockterminal.classList.remove("app-color-main");
+						}
+					});
+				})
+
+				// 获取服务器地址
+
+				domain.querySelector(".domain").innerHTML = dal.isVihiDomain() ? dal.BASE_DOMAIN : dal.QQS_DOMAIN;
+
+				if(dal.isVihiDomain()) {
+
+					Rx.Observable.fromEvent(domain, "tap")
+						.mergeMapTo(Rx.Observable.create(function(ob) {
+							//							var data = [{
+							//								text: "默认：" + 　dal.BASE_DOMAIN,
+							//								value: dal.BASE_DOMAIN,
+							//							}, {
+							//								text: "全球锁：" + dal.QQS_DOMAIN,
+							//								value: dal.QQS_DOMAIN,
+							//							}];
+							//
+							//							domainPick.setData(data);
+							//							domainPick.pickers[0].setSelectedIndex(0);
+							//							domainPick.show(function(items) {
+							//								ob.next(items[0].value)
+							//
+							//							}, function(items) {});
+
+							app.page.getInput(function(data) {
+								ob.next(data.content);
+							}, {
+								title: "服务器地址",
+								tips: "请输入服务器地址",
+								r: "isqqsdomain",
+								rmsg: "服务器地址不合法"
+							});
+						})).mergeMap(function(url) {
+							return Rx.Observable.create(function(ob) {
+
+								if(dal.QQS_DOMAIN !== url) {
+									return mui.toast("服务器地址不合法");
+								}
+
+								mui.confirm("是否切换到【全球锁】服务器地址？", "", ["确认切换", "取消"], function(e) {
+									if(!e.index) {
+										ob.next(url)
+									}
+								});
+
+							})
+						})
+						.mergeMapTo(Rx.Observable.create(function(ob) {
+							plus.nativeUI.showWaiting("正在切换服务器地址...");
+							dal.user.syncsuser(function(err) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									return ob.error(err);
+								}
+								ob.next();
+							})
+						}))
+						.subscribe(function() {
+							mui.toast("您可能需要重新登录");
+							exit();
+						}, function(err) {
+							mui.toast(err.message);
+						});
+
+				}
+
+			});
+
+			function onExit() {
+
+				mui.confirm("您确定退出帐号吗？", "", ["退出帐号", "取消"], function(e) {
+					if(e.index === 0) {
+						exit();
+					}
+				});
+			}
+
+			function exit() {
+
+				var $plusready = Rx.Observable.create(function(ob) {
+					if(window.plus) {
+						ob.next();
+					} else {
+						document.addEventListener('plusready', function() {
+							ob.next();
+						}, false);
+					}
+				});
+
+				// 获取所有webview页面
+				var all = plus.webview.all();
+				// 获取当前webview页面
+				var index = plus.webview.currentWebview();
+				// 获取app启动页
+				var first = plus.webview.getLaunchWebview() || plus.webview.getWebviewById('main');
+				var id;
+				plus.nativeUI.showWaiting();
+				// 关闭除了当前和首页的 其它全部页面
+				for(var i = 0, l = all.length; i < l; i++) {
+					id = all[i].id;
+					if(id !== index.id && id !== first.id) {
+						plus.webview.close(all[i]);
+					}
+				}
+
+				var account = app.user.get().account;
+
+				// 记录最后一次登录的帐号
+				var login_type = window.localStorage.getItem('login_type');
+				// 只记录手动输入登录的帐号
+				if(login_type === 'pwd') {
+					window.localStorage.setItem('last_account', account || "");
+				} else {
+					window.localStorage.setItem('last_account', "");
+				}
+
+				// 清除本地用户数据
+				app.user.logout();
+				// 用户信息备份
+				var USER_INFO = new ni.Cache('app_user_info', {}, {
+					plus: true
+				});
+				USER_INFO.clear();
+				
+				window.localStorage.setItem('_pwd_', "");
+				window.localStorage.setItem('_domain_', "");
+
+				// 清除设备列表数据
+				$plusready.subscribe(function() {
+					new ni.Cache('dev_list', "", {
+						plus: true
+					}).clear();
+				});
+				
+				
+
+				// 清除第三方登录信息
+				plus.oauth.getServices(function(auths) {
+					// 逐个注销
+					(auths || []).forEach(function(item) {
+						if(item && item.authResult) {
+							item.logout(function() {});
+						}
+					});
+				});
+
+				$plusready
+					.mergeMap(function() {
+						// 拿取到本机pushid
+						var D = new ni.Cache("push_key", "", {
+							plus: true
+						});
+						return Rx.Observable.create(function(ob) {
+							// 清除pushid
+							dal.push.clearpush(D.data, account, function(err, data) {
+								ob.next();
+							});
+						});
+					})
+					.subscribe(function() {
+						plus.nativeUI.closeWaiting();
+						// 监听首页的加载完成，关闭本页面
+						first.addEventListener('loaded', function() {
+							plus.nativeUI.closeWaiting();
+							index.close('none');
+						});
+						// 首页重新运行
+						first.reload();
+						// 显示首页
+						first.show("slide-in-bottom", 250);
+						
+						app.user.get(function(){});
+					});
+
+			}
+		</script>
+	</body>
+
+</html>

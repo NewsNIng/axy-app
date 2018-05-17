@@ -1,0 +1,294 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择主机设备</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.menu-warp {
+				height: 3.066666rem;
+			}
+			
+			.select {
+				left: 0.346666rem;
+			}
+			
+			.select>img {
+				width: 0.426666rem;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.title {
+				height: 0.96rem;
+				line-height: 0.96rem;
+				padding-left: 0.346666rem;
+				color: #9F9FA0;
+			}
+			
+			.help {
+				position: fixed;
+				bottom: 60px;
+				left: 50%;
+				padding: 0.01rem 0;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				border-bottom: 1px solid #2BB8AA;
+				color: #2BB8AA;
+			}
+			
+			ul:not(.mui-pciker-list) {
+				margin-bottom: 2rem !important;
+			}
+			
+			.mui-table-view-cell,
+			.mui-table-view-cell>a {
+				height: 1.6rem !important;
+			}
+			
+			.mui-table-view-cell>a {
+				padding: 0.3rem !important;
+				padding-left: 1.04rem !important;
+				line-height: 0.6rem !important;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7 !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">选择设备</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="title app-font-size-24">
+					选择需要添加的设备ID
+				</div>
+				<ul class="mui-table-view app-font-size-28">
+					<template v-for="o,i in devs">
+						<li class="mui-table-view-cell" @tap="onSelectTap(o, i)">
+							<a>
+								<span class="mui-badge select"><img v-if="i === devActive" src="../../../image/smart/devices/add/select1.png"/><img v-if="i !== devActive" src="../../../image/smart/devices/add/select2.png"/></span>
+								<span class="name app-color-333333 app-font-size-34">{{_fixDevName(o.location) || o.devid}}<br /><span class="id app-color-9f9fa0 app-font-size-26">设备ID:{{o.devid}}</span></span>
+							</a>
+						</li>
+					</template>
+				</ul>
+			</div>
+			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+
+		<script type="text/javascript">
+			mui.init({
+				//处理窗口关闭前的业务 
+				beforeback: function() {
+					app.page.setResult({}).close();
+					return false;
+				},
+			});
+
+			var wayPick;
+
+			var vm = new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						devActive: -1,
+						//devs_: [],
+						devs: [],
+						// 过滤显示某些主机设备 存类型名称
+						//filter: []
+
+						accid: 0,
+
+						waych: 0,
+					};
+				},
+				computed: {
+					indexDev: function() {
+						return this.devs[this.devActive];
+					},
+					//					devs: function() {
+					//						var tempName;
+					//						return this.devs_.filter(function(item) {
+					//							if(item.online !== 1) {
+					//								return false;
+					//							}
+					//							tempName = app.dev.findName(item.type)
+					//							if(this.filter.indexOf(tempName) >= 0) {
+					//								return false;
+					//							}
+					//							return true;
+					//						}.bind(this));
+					//					}
+
+				},
+				mounted: function() {
+					wayPick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+
+				},
+				plusReady: function() {
+					//this.filter = this.$view.filter || [];
+
+					this.accid = this.$view.accid || 0;
+					
+					this.$view.addEventListener("popGesture", function() {
+						app.page.setResult({});
+					});
+
+					this.getDevList();
+				},
+				methods: {
+					onSelectTap: function(o, i) {
+						this.devActive = i;
+						// TODO 修复设备多通道问题
+
+						that = this;
+
+						this.waych = 0;
+
+						var type = app.dev.fixType(o.type);
+
+						Rx.Observable.create(function(ob) {
+							// 判断是否多通道
+							if(app.dev.isMoreWays(type)) {
+								// 获取设备的通道信息
+								plus.nativeUI.showWaiting("获取通道信息中...");
+								dal.devparam.chlist(o.devid, type, function(err, data) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast(err.message);
+									}
+
+									if(!data || !data.length) {
+										// 无通道直接下一步
+										return ob.next({
+											b: 0
+										});
+										return mui.toast("暂无通道信息");
+									}
+									data = data.map(function(item) {
+										return {
+											text: item.name || item.uuid,
+											value: item.no
+										}
+									});
+
+									// 动态设置设备通道
+									wayPick.setData(data);
+									// 重置弹出层到第一个通道位置
+									wayPick.pickers[0].setSelectedIndex(0);
+									// 显示通道选择器
+									wayPick.show(function(items) {
+										ob.next({
+											b: items[0].value
+										});
+									}, function(items) {
+										// 取消 或者 隐藏
+									});
+								});
+							} else {
+								ob.next({
+									b: 0
+								});
+							}
+						}).subscribe(function(data) {
+							that.waych = data.b
+							that.onNext();
+						});
+
+					},
+					onNext: function() {
+						if(this.devActive < 0) {
+							return mui.toast('请选择一个设备');
+						}
+
+						app.page.setResult({
+							devid: this.indexDev.devid,
+							type: this.indexDev.type,
+							waych: this.waych,
+						}).close();
+					},
+					// 主机列表
+					getDevList: function() {
+
+						//var D = new this.$Cache('dev_list', [], {
+						//							plus: true
+						//});
+						var that = this;
+						dal.devaccessory.accessorySupportDevList(this.accid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							that.devs = data;
+						});
+
+					},
+
+					_fixDevName: function(name) {
+						return app.dev.fixName(name);
+					},
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

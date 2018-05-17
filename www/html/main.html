@@ -1,0 +1,417 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!--mui css-->
+		<script type="text/javascript" src="../js/common/flexible.js"></script>
+		<link rel="stylesheet" href="../css/lib/mui.min.css" />
+		<link rel="stylesheet" href="../css/app/app.css" />
+		<style type="text/css">
+			nav {
+				box-shadow: 0px 0px 0px #ccc !important;
+				-webkit-box-shadow: 0px 0px 0px #ccc !important;
+				background: white !important;
+				padding-top: 5px !important;
+			}
+			
+			.mui-tab-item img {
+				width: 0.52rem;
+			}
+			
+			.mui-tab-item span.mui-tab-label {
+				margin-top: 0.133333rem;
+				/*font-size: 1.2rem !important;*/
+			}
+			
+			.mui-bar .mui-icon:active {
+				opacity: 1;
+			}
+			
+			.mui-tab-item.mui-active {
+				color: #929292 !important;
+			}
+			
+			/*img.icon2 {
+				opacity: 0;
+			}*/
+		</style>
+	</head>
+
+	<body>
+
+		<div id="warp">
+			<nav class="mui-bar mui-bar-tab">
+				<template v-for="o,i in items">
+					<a class="mui-tab-item" :class="{'app-color-active': i === index}" @tap="onTap(o, i)">
+						<!--<span class="mui-icon">-->
+						<img :class="'icon'+i" :src="'../image/main/'+ o.id + (i === index ? '_active' : '') +'.png'" />
+						<!--</span>-->
+						<div class="mui-tab-label app-font-size-20">{{o.name}}</div>
+					</a>
+				</template>
+
+			</nav>
+		</div>
+
+		<!--mui-->
+		<script type="text/javascript" src="../js/lib/mui.min.js"></script>
+		<!--vue-->
+		<script type="text/javascript" src="../js/lib/vue.min.js"></script>
+		<!--vue 5+插件-->
+		<script type="text/javascript" src="../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript" src="../js/dal/base.js"></script>
+		<script type="text/javascript" src="../js/dal/system.js"></script>
+		<script type="text/javascript" src="../js/common/rsmanager.js"></script>
+
+		<script type="text/javascript" src="../js/app/app.js"></script>
+		<script type="text/javascript" src="../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript" src="../js/common/android-back.js"></script>
+
+		<script type="text/javascript" src="../js/app/app-mall.js"></script>
+
+		<script>
+			// 4个子webview统一样式
+			var _styles = {
+				bottom: '50px',
+				top: '0px'
+			};
+			// 4个子webview参数
+			var _items = [{
+					url: './home/index.html',
+					id: 'home',
+					icon: 'mui-icon-home',
+					name: '主页',
+					styles: _styles,
+					extras: {},
+				}, {
+					url: './smart/index.html',
+					id: 'smart',
+					icon: 'mui-icon-phone',
+					name: '智慧生活',
+					styles: _styles,
+					extras: {},
+				},
+
+//				{
+//					url: '',
+//					id: 'mall',
+//					icon: 'mui-icon-phone',
+//					name: '商城',
+//					styles: {
+//						bottom: '0px',
+//						top: '0px'
+//					},
+//					extras: {},
+//				},
+
+				{
+					url: './nearby/index.html',
+					id: 'nearby',
+					icon: 'mui-icon-map',
+					name: '附近',
+					styles: _styles,
+					extras: {},
+				}, {
+					url: './person/index.html',
+					id: 'person',
+					icon: 'mui-icon-person',
+					name: '我的',
+					styles: _styles,
+					extras: {},
+				}
+			];
+
+			var _B;
+
+			new Vue({
+				el: "#warp",
+				data: function() {
+					return {
+						items: _items, // 页面数据
+						index: 0, // 默认下标
+					}
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {
+					
+					
+					_B = new ni.Broadcast();
+
+					zeus = plus.webview.getWebviewById('zeus');
+					if(zeus) {
+						zeus.reload();
+					} else {
+						zeus = plus.webview.create('zeus.html', 'zeus');
+					}
+
+					// plus ready !
+					// 这时候才能调用 plus 相关 API
+					this.group = new this.$WebviewGroupLow(plus.webview.currentWebview().id, {
+						items: this.items,
+						onChange: this.onChange.bind(this)
+					});
+					//仅支持竖屏显示
+					plus.screen.lockOrientation("portrait-primary");
+					plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
+
+					this._listenLogin();
+					this._listenTabar();
+
+					// 加载商城图标
+					//this._loadMallIcon();
+					
+					// 监听商城触发的登录事件
+//					_B.on("AppBridge_openLoginPage", function(){
+//						app.user.get(function(u){
+//							u && _B.emit("login_success", {
+//								userInfo: u
+//							}, {
+//								views: ["mall"]
+//							});
+//						});
+//					});
+
+				},
+				methods: {
+					// 加载商城图标
+					_loadMallIcon: function() {
+
+						var leftPos = Math.ceil((window.innerWidth - 58) / 2);
+
+						var view = new plus.nativeObj.View('mall_view', {
+							width: "58px",
+							height: "58px",
+							left: leftPos + "px",
+							bottom: "20px",
+						});
+ 
+						view.drawBitmap('../image/main/mall.png', {}, {}, "mall_icon");
+
+						view.addEventListener('click', function() {
+							this._openMall();
+						}.bind(this));
+
+						this.$view.append(view);
+						view.show();
+					},
+
+					// 打开商城
+					_openMall: function() {
+						app.mall.openHome();
+						
+//						if(app.mall.hasView()) {
+//							app.mall.getView().show('pop-in', 250);
+//							return;	
+//						}
+//						var v = app.mall.create();
+//						plus.nativeUI.showWaiting("正在加载...");
+//						v.addEventListener('loaded', function(){
+//							v.show('pop-in', 250);
+//							plus.nativeUI.closeWaiting();
+//						});
+						
+					},
+
+					// 点击 tab 图标时
+					onTap: function(o, index) {
+						if(this.index === index) {
+							return;
+						}
+
+						// 如果点击的是商城
+//						if(index === 2) {
+//							return;
+//						}
+
+						Rx.Observable.create(function(ob) {
+								// 个人中心登录拦截
+								if(index === 3) {
+									app.user.get(function(u) {
+										u && ob.next();
+
+									})
+								} else {
+									ob.next();
+								}
+							})
+							.subscribe(function() {
+								// 更新index下标
+								this.index = index;
+								// 控制webview切换
+								this.group.switchTab(o.id);
+								// 吐司
+								//mui.toast(o.name);
+							}.bind(this));
+
+					},
+					// 页面切换时
+					onChange: function(o) {
+						if(this.index === o.index) {
+							return;
+						}
+						this.index = o.index;
+						//console.log(o.index);
+					},
+
+					// 监听登录成功事件
+					_listenLogin: function() {
+						_B.on('login_success', function(data) {
+							// TODO 登录注册重置密码等页面需要关闭
+							var w = null;
+							['login', 'reg'].forEach(function(id) {
+								w = plus.webview.getWebviewById(id);
+								w && w.close();
+							});
+
+						});
+					},
+					// 监听tabar事件
+					_listenTabar: function() {
+						_B.on("tabar", function(data) {
+							var target = this.items[data.mindex];
+							var t = 0;
+							// 如果页面暂时还没打开过
+							if(!plus.webview.getWebviewById(target.id)) {
+								t = 1000;
+							}
+							// 跳转相应的页面
+							this.onTap(this.items[data.mindex], data.mindex);
+							// 转发事件
+							setTimeout(function() {
+								_B.emit("tabar", data, {
+									views: [target.id]
+								});
+							}, t);
+
+						}.bind(this));
+					}
+				}
+
+			});
+
+			setTimeout(function() {
+				mui.plusReady(function() {
+					function version2number(version) {
+						return +(version.split('.').join(''));
+					}
+
+					// 获取当前应用版本
+					plus.runtime.getProperty(plus.runtime.appid, function(info) {
+						var appVersion = version2number(info.version);
+						dal.system.update(info.version, function(err, data) {
+							if(err) {
+								return; // mui.toast(err.message);
+							}
+
+							if(!data) {
+								return;
+							}
+							var newAppVersion = version2number(data.version);
+
+							if(newAppVersion > appVersion) {
+								// 需要隐藏升级？
+								if(data.hide) {
+									rsmanager._install(data.path, function(succ) {}, true);
+									return;
+								}
+								// 弹出升级提示框
+								app.page.openUpdate(function(rs) {}, {
+									path: data.path, // 更新包地址
+									enforce: data.enforce, // 强制更新 不能关闭提示框
+									// title: "", // 更新提示框的标题内容 
+									version: data.version, // 版本号
+									message: data.message, // 更新内容
+								});
+
+								/**
+								rsmanager.install(filePath, function(succ) {
+									if(mui.os.ios){
+										plus.nativeUI.toast('您可能需要手动关闭应用并重启');
+									}else{
+										plus.runtime.restart();
+									}
+								}, {
+									hide: data.hide, // 是否隐藏更新
+									show: data.show, // 是否弹出提示框
+									enforce: data.enforce, // 强制更新 不能关闭提示框
+									title: data.title, // 更新提示框的标题内容 可以设置为app的版本号
+									message: data.message // 提示框显示内容，可以设置为app新版内容功能讲解  \n换行
+								});**/
+							} else {
+								//console.log("无需更新"); 
+							}
+
+						});
+
+					});
+
+				});
+
+				//plus.webview.create('zeus.html');
+			}, 0); //1s 后检查更新
+
+			// ====================检查带启动参数====================
+
+			// App 回到前台时
+			var resume$ = Rx.Observable.fromEvent(document, "resume");
+			// 设备准备完毕
+			var plusrd$ = Rx.Observable.create(function(ob) {
+				if(window.plus) {
+					ob.next();
+				} else {
+					document.addEventListener('plusready', function() {
+						ob.next();
+					});
+				}
+			});
+
+			var CheckArguments = (function() {
+				var prevS = "";
+				return function(s) {
+					return s && (s = JSON.stringify(s)) && prevS !== s && (prevS = s);
+				}
+			}());
+
+			var ACTION = {
+				//打开添加分享设备
+				"devshare": function(data) {
+					/*id: this.devInfo.devid,
+					devid: this.devInfo.devid,
+					location: this.devInfo.location,
+					code: code,
+					account: u.account*/
+					mui.openWindow('smart/add/family_menu.html', 'add_family', {
+						extras: {
+							code: data.code
+						}
+					});
+				}
+			};
+
+			// 设备准备完毕
+			plusrd$
+				// 或者每次切换回app为前台时(包括通过浏览器唤醒)
+				.merge(resume$)
+				// 获取 启动参数
+				.map(app.device.getArguments)
+				// 过滤跟上次 一样的 启动参数
+				.filter(CheckArguments)
+				// 订阅
+				.subscribe(function(data) {
+					// 执行相关动作
+					var ac = ACTION[data.type];
+					ac && ac(data);
+				});
+		</script>
+	</body>
+
+</html>

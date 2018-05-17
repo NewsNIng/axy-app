@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>连接设备</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+				width: 100%;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.dev_icon {
+				width: 100%;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: 50%;
+				position: relative;
+			}
+			
+			.dev_text {
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				margin-bottom: 0.4rem;
+				text-align: center;
+				color: #333333;
+				/*font-weight: bold;*/
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.time {
+				background-color: #06C1AE;
+				padding: 0.106666rem 0.346666rem;
+				float: left;
+				margin-left: 50%;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				color: white;
+			}
+			
+			.imgbg {
+				width: 100%;
+				padding: 1.5rem;
+			}
+			
+			.imgbg>img {
+				width: 100%;
+			}
+			
+			.unavailable {
+				background: #7FD4CC;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">连接设备</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="imgbg">
+					<img :src="bgp" />
+				</div>
+				<div class="dev_icon app-font-size-30">
+					<div class="dev_text app-font-size-34">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
+				</div>
+				<div class="time app-font-size-24" v-text="t+'s'"></div>
+
+			</div>
+			<div class="foot app-font-size-34" :class="{unavailable:!isConnected}" @tap="onNext()">完成</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+		<script type="text/javascript">
+			var P = plug.H5NativeBridge;
+
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						needConnDevNameArr: ["AX-903", "WG-100", "AX-904", "VH-104MG", "VH-104DG", "VH-104GN"],
+
+						t: 100,
+						timer: -1,
+
+						devid: "",
+						wifiname: "",
+						wifipwd: "",
+
+						setid: "",
+
+						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png',
+						type: -1,
+
+						isConnected: false,
+					};
+				},
+				mounted: function() {
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '4.png';
+					this.type = +window.localStorage.getItem('Lan_add_camera_type');
+
+					// get prev url params
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					// get devid or setid
+					this.devid = GetQueryString("devid");
+					this.setid = GetQueryString("setid");
+					// get wifiname & wifipwd
+					this.wifiname = GetQueryString("wifiname");
+					this.wifipwd = GetQueryString("wifipwd");
+					// start timer
+					this.startTimer();
+				},
+				computed: {
+					// 是否需要提示连接摄像头
+					needConn: function() {
+						var rs = this.needConnDevNameArr.indexOf(app.dev.findName(this.type));
+						if(rs >= 0) {
+							return true;
+						}
+						return false;
+					}
+				},
+				plusReady: function() {
+					this.bgp = window.localStorage.getItem('Lan_add_camera_img') + '4.png';
+					if(this.setid) {
+						// 声波	
+						this.addDeviceByVoice();
+					} else if(this.devid) {
+						// 内网 
+						this.addDeviceByHostLine();
+					} else {
+						//this.autoOver();
+					}
+				},
+				methods: {
+					// 通过声波ID进行验证
+					addDeviceByVoice: function() {
+						var setid = this.setid;
+						var list, i, item, l;
+						(function _() {
+							list = this._getLanDevHostList();
+							for(i = 0, l = list.length; i < l; i++) {
+								item = list[i];
+								if(item.setid === setid) {
+									this.devid = item.devid;
+									// 进行添加
+									this.addDeviceByHostLine();
+									return;
+								}
+							}
+							setTimeout(_.bind(this), 5000);
+
+						}).call(this);
+					},
+					// 获取内网主机列表
+					_getLanDevHostList: function() {
+						var rs = P.GetLanDevHostList();
+						return JSON.parse(rs || "{}").devlist || [];
+					},
+
+					// 通过设备ID进行添加 且 验证
+					addDeviceByHostLine: function() {
+						//						alert(this.devid);
+						dal.device.add(this.devid, function(err, data) {
+							if(err) {
+								if(this.setid) {
+									// 在此调用设备已使用时的弹窗(声波)
+									this._showUsed();
+									return;
+								} else {
+									return this.over(err.message || "连接失败，请重试");
+								}
+							} // 判断是否需要配置WIFI
+							if(!this.setid && this.wifiname && this.wifipwd) {
+								this.nativeSetWIFI(this.wifiname, this.wifipwd);
+							} else {
+								return this.over("设备添加成功", true);
+							}
+						}.bind(this));
+					},
+
+					startTimer: function() {
+						var that = this;
+						(function _() {
+							that.t--;
+							if(that.t <= 0) {
+								that.over("连接失败，请重试");
+							}
+							that.timer = setTimeout(_, 1000);
+						}());
+					},
+					onNext: function() {
+						if(!this.isConnected) {
+							return;
+						}
+
+						// TODO
+						// 跳转
+						mui.openWindow('add_completed.html', 'add_completed', {
+							extras: {
+								needConn: this.needConn,
+								devid: this.devid,
+							}
+						});
+						//						mui.back();
+						return;
+					},
+					over: function(msg, close) {
+						if(this.timer >= 0) {
+							window.clearTimeout(this.timer);
+							this.timer = -1;
+						}
+						mui.toast(msg);
+						if(close) {
+							// 连接成功
+							this.isConnected = true;
+							mui.toast("添加成功，请点击完成！");
+							return;
+							// return this.$view.close();***
+						}
+						this.$view.back();
+					},
+					// 配置WIFI
+					nativeSetWIFI: function(name, pwd) {
+						// 生成xml字符串
+						var xml = xmlFactory.CreatAnxinWifi(name, pwd);
+						// 调用原生 设备参数配置通道 WIFI
+						P.SetDeviceParamAsyn(this.devid, xml, function(data) {
+							//alert(JSON.stringify(data));
+						});
+						// 参数配置WIFI 可选, 无论成功失败
+						setTimeout(function() {
+							this.over("设备添加成功", true);
+						}.bind(this), 1000);
+					},
+					_showUsed: function() {
+						mui.confirm("可能是摄像机已被添加\n摄像机ID：" + this.devid + "\n请登录已绑定账号，删除摄像机后再重试", "操作受限", ['确认'], function(e) {
+							plus.webview.getWebviewById('voice1') && plus.webview.getWebviewById('voice1').close('none');
+							var view = plus.webview.currentWebview();
+							view.close();
+						});
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>
