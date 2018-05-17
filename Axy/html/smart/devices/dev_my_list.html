@@ -478,12 +478,12 @@
 											</div>
 
 										</div>
-										<div class="flex flex-item-center  " style="flex: 1; flex-direction: column;">
+										<div class="flex flex-item-center mui-ellipsis" style="flex: 1; flex-direction: column;">
 											<div class="flex flex-item-center" style="flex: 1;">
 												<p class="mui-ellipsis app-font-size-32 app-color-333333">{{oo.name}}</p>
-											</div>
-											<div class="flex flex-item-center" style="flex: 1; ">
-												<p class="mui-ellipsis app-font-size-30">{{_fixDevLocation(oo.devname) || oo.devid}}</p>
+											</div> 
+											<div class="flex flex-item-center " style="flex: 1; ">
+												<p class="app-font-size-30 mui-ellipsis-2">{{_fixDevLocation(oo.devname) || oo.devid}}</p>
 											</div>
 
 										</div>
@@ -529,7 +529,7 @@
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-acc.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-mall.js" ></script>
-		<!--<script type="text/javascript" src="../../../js/app/app-auth.js"></script>-->
+		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
@@ -629,7 +629,13 @@
 							"20": "btn_Warningsign@3x.png",
 							"21": "btn_Intelligentsocket@3x.png",
 							"22": "btn_Formaldehydedetector@3x.png",
+							"25": "btn_Intelligentlampcontrol@3x.png",
 							"32": "btn_Greetingdevice@3x.png",
+							"33": "btn_Intelligentlampcontrol@3x.png",
+							"34": "btn_Curtainscontroller@3x.png",
+							"35": "btn_Remotecontrol@3x.png",
+							"39": "btn_Intelligentdoorlock@3x.png",
+							"40": "btn_Intelligentdoorlock@3x.png",
 							"41": "btn_Acousto-opticalarm@3x.png",
 							"48": "btn_Emergencybutton@3x.png",
 							"52": "btn_Curtainscontroller@3x.png",
@@ -638,7 +644,9 @@
 							"129": "btn_Infrareddetector@3x (2).png",
 							"145": "btn_Stealthburglardetector@3x.png",
 							"160": "btn_Gasdetector@3x.png",
-							"161": "btn_Carbonmonoxidedetector@3x.png"
+							"161": "btn_Carbonmonoxidedetector@3x.png",
+							
+							
 						},
 
 					};
@@ -1108,11 +1116,17 @@
 
 					// 设备控制
 					onControlTap: function(o, i) {
-						if(o.online !== 1) {
-							return mui.toast("设备不在线");
-						}
-						this.controlIndex = i;
-						mui('#controll').popover('show');
+						var that = this;
+						app.auth.verify(app.auth.MCR, o.authorize).then(function(){
+							if(o.online !== 1) {
+								return mui.toast("设备不在线");
+							}
+							that.controlIndex = i;
+							mui('#controll').popover('show');
+						}).catch(function(e) {
+							mui.toast(e.message);
+						});
+						
 					},
 
 					// 设备分享

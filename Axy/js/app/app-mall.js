@@ -21,7 +21,7 @@
 
 	// 配置	
 	var config = {
-//		url: "http://47.106.92.195/shop/#home?t=" + +new Date(),
+//		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
 		url: "http://192.168.1.161:8080/#/home?t=" + +new Date(),
 		id: "mall",
 		routerCmdName: "router",
@@ -72,10 +72,11 @@
 	mall.create = function() {
 		return plus.webview.create(config.url, config.id, {
 			popGesture: "hide",
-			top: (window.immersed || 0) + 'px',
+			top: "0px",
+			//top: (window.immersed || 0) + 'px',
 			bottom: '0px',
 			background: "#06c1ae",
-			cachemode: "noCache",
+			//cachemode: "noCache",
 			
 		});
 	};

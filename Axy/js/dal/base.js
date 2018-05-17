@@ -11,9 +11,23 @@ var dal = {
 	BASE_URL_VERSION: "206",
 };
 
-dal.isVihiDomain = function(){
+dal.isVihiDomain = function() {
 	var domain = window.localStorage.getItem('_domain_') || "";
 	return dal.BASE_URL.indexOf(domain) >= 0
+};
+
+dal.errDir = {
+	"timeout": "请求超时",
+	"error": "网络连接错误，请检查！",
+	"abort": "网络连接中断，请检查！",
+	"parsererror": "解析错误",
+	"null": "请求为空"
+};
+
+dal.tokenCodeDir = {
+	"401": "TokenTimeOut", // token过期
+	"402": "UserUnAuthorized", // token失效
+	"403": "Forbidden", // token不存在
 };
 
 /**
@@ -35,30 +49,25 @@ function requestAdapter(type, url, params, callback) {
 	url = BASE_URL + url;
 	// 获取用户权限信息
 	params.account = params.account || window.localStorage.getItem('_account_') || "";
-	console.log("[" + type + "]" + url);
-	console.log(JSON.stringify(params));
-	var errDir = {
-		"timeout": "请求超时",
-		"error": "网络连接错误，请检查！",
-		"abort": "网络连接中断，请检查！",
-		"parsererror": "解析错误",
-		"null": "请求为空"
-	};
+	console.log("request: [" + type + "]" + url);
+	console.log("params: [json]" + JSON.stringify(params));
+	
 	var options = {
 		headers: {
 			token: window.localStorage.getItem('_token_') || "",
 			loginid: window.localStorage.getItem('_loginid_') || "",
 			imei: window.localStorage.getItem('_imei_') || "",
 			account: params.account,
-//			appversion: dal.BASE_URL_VERSION,
+			appversion: dal.BASE_URL_VERSION,
 		},
 		data: params,
 		type: type,
 		timeout: 60000,
 		success: function(data) {
 			var o = {};
-			console.log("[" + apiUrl + "]" + JSON.stringify(data));
-			if(data.code === "403") {
+			console.log("response: [" + apiUrl + "]" + JSON.stringify(data));
+			if(dal.tokenCodeDir[data.code]){
+			//if(data.code === "403") {
 				//alert("[" + apiUrl + "]" + JSON.stringify(data));
 				// token 验证失败 通知 zeus
 				var zeus = plus.webview.getWebviewById("zeus");
@@ -66,7 +75,7 @@ function requestAdapter(type, url, params, callback) {
 					console.log("ZEUS WINDOW NOFIND");
 					return
 				}
-				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', {})";
+				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', "+ JSON.stringify(data) +")";
 				zeus.evalJS(jsstr);
 				return;
 			}
@@ -81,7 +90,7 @@ function requestAdapter(type, url, params, callback) {
 			callback(o.err, o.data);
 		},
 		error: function(xhr, type, err) {
-			var errmsg = errDir[type] || "其它错误";
+			var errmsg = dal.errDir[type] || "其它错误";
 			//console.log("["+errmsg+"]" + url);
 			callback({
 				code: xhr.status,

@@ -11,6 +11,7 @@
 	var AUTH_NAME_DIR = {
 		LOGIN: "login", // 登录权限
 		MASTER: "master", // 是否主账号
+		MCR: "mcr", // 遥控器
 	};
 
 	// 权限对应处理
@@ -35,6 +36,19 @@
 				});
 			},
 		},
+		"mcr": {
+			exec: function(authorize) {
+				authorize = authorize || 0;
+				return new Promise(function(re, rj) {
+					var b = 0x01 << 4;
+					if(authorize & b == b){
+						re();
+					}else{
+						rj("您没有遥控器的权限");
+					}
+				});
+			},
+		}
 
 	};
 
@@ -68,18 +82,20 @@
 	auth.verifys = function(authList) {
 		var temp,
 			l = authList.length;
+		var returnArr = [];
 
 		return new Promise(function(re, rj) {
 			(function _(index) {
 
 				if(index >= l) {
-					return re();
+					return re.apply(null, returnArr);
 				}
 
 				temp = authList[index];
 
 				auth.verify(temp.name, temp.data)
-					.then(function() {
+					.then(function(data) {
+						returnArr.push(data);
 						_(index + 1);
 					})
 					.catch(rj);

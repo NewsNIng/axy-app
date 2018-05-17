@@ -21,13 +21,13 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-		//return;
+		return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		//return;
+		return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
@@ -436,5 +436,15 @@
 	pgn.NotifyWarningMsg = function(sf, ff){
 		return pg.asyncExec(N, 'NotifyWarningMsg', [], sf, ff);
 	}
-
+	//告警消息列表
+	pgn.GetAlarmListAsyn = function(devid, stime, endtime,username,pageIndex,pageSize, sf, ff){
+		return pg.asyncExec(N,'GetAlarmListAsyn', [devid,stime,endtime,username,pageIndex,pageSize], sf, ff)
+	}
+	//修改告警消息
+	pgn.UpdateAlarm = function(username,ids){
+		return pg.syncExec(N,'UpdateAlarm',[username,ids])
+	}
+	pgn.DelAlarmListAsyn = function(username,ids,sf,ff){
+		return pg.asyncExec(N,'DelAlarmListAsyn',[username,ids],sf,ff)
+	}
 }(window));

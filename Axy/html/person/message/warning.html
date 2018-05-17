@@ -64,14 +64,51 @@
 			
 			.card-room {
 				background-color: #F4F8FB;
-				padding: 0 0.346666rem;
+				padding: 0 0.346666rem 0.9rem;
 			}
 			
 			.card-room>.card {
 				width: 100%;
+				display: flex;
+				display: -webkit-flex; 
+				padding-top: 0.9rem;
+				position: relative;
+			}
+			.card-room>.card.no-date{
+				padding-top: 0.3rem;
+			}
+			.card-room>.card .left{
+				display: flex;
+				display: -webkit-flex;
+				align-items: center;
+				-webkit-align-items:center;
+				width: 0.8rem;
+			}
+			.card-room>.card .left span{
+				width: 0.506666rem;
+				height: 0.506666rem;
+				display: block;
+				background-position: center center;
+				background-repeat: no-repeat;
+				-webkit-background-size: cover;
+				background-size: cover;
+			}
+			.card-room>.card .left span.unchecked{
+				background-image: url(../../../image/person/message/btn_Unselected@3x.png);
+			}
+			.card-room>.card .left span.checked{
+				background-image: url(../../../image/person/message/btn_Alreadychosen@3x.png);
+			}
+			.card-room>.card .left span.no-read{
+				background-image: url(../../../image/person/message/icon_origin@3x.png);
+				width: 0.32rem;
+				height: 0.32rem;
+			}
+			.card-room>.card .right{
+				flex: 1;
+				-webkit-box-flex: 1;
 				background-color: #FFFFFF;
 			}
-			
 			.card-room>.card:before {
 				content: attr(data-time);
 				display: block;
@@ -79,17 +116,20 @@
 				color: #9F9FA0;
 				height: 0.906666rem;
 				line-height: 0.906666rem;
+				position: absolute;
+				top: 0rem;
+				z-index: 999;
 			}
 			
-			.card-room>.card>div:not(.menu) {
+			.card-room>.card .right>div:not(.menu) {
 				padding: 0.2rem 0.346666rem 0 0.346666rem;
 			}
 			
-			.card-room>.card>div:not(.menu) .mui-pull-right {
+			.card-room>.card .right>div:not(.menu) .mui-pull-right {
 				color: #A2A6B1;
 			}
 			
-			.card-room>.card>div.menu {
+			.card-room>.card .right>div.menu {
 				border-top: 1px #E4E5E6 solid;
 				margin-top: 0.2rem;
 				display: flex;
@@ -98,11 +138,11 @@
 				padding: 0.346666rem 0.826666rem;
 			}
 			
-			.card-room>.card>div.menu>div {
+			.card-room>.card .right>div.menu>div {
 				text-align: center;
 			}
 			
-			.card-room>.card>div.menu img {
+			.card-room>.card .right>div.menu img {
 				width: 0.906666rem;
 			}
 			
@@ -164,15 +204,55 @@
 			}
 			/*end video*/
 			/*bscroll-vertical-scrollbar*/
+			.app-header .edit{
+				float: right;
+				color: #fff;
+				font-size: 14px;
+				line-height: 44px;
+				padding: 0 10px;
+			}
+			.footer{
+				position: fixed;
+				height: 50px;
+				line-height: 50px;
+				/*line-height: 50px;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-between;
+				-webkit-justify-content: space-between;*/
+				width: 100%;
+				bottom: 0;
+				left: 0;
+				font-size: 14px;
+				background-color: #fff;
+				border-top: 1px solid #e5e6e7;
+				box-sizing: border-box;
+				padding: 0 0.266666rem;
+				color: #9f9fa0;
+				color: #2bb8aa;
+			}
+			.footer .button-read{
+				width: 100px;
+				float: left;
+			}
+			.footer .button-delete{
+				text-align: right;
+				width: 100px;
+				float: right;
+			}
+			.footer .can-operate{
+				color: #2bb8aa;
+			}
 		</style>
 
 	</head>
 
 	<body>
-
+		<div class="warn-container">
 		<header class="mui-bar mui-bar-nav app-header">
 			<a class="mui-action-back app-icon-back mui-pull-left"></a>
 			<h1 class="mui-title">告警消息</h1>
+			<span class="edit" @click="handleEdit">{{ isEdit ? '取消' : '编辑'}}</span>
 		</header>
 		<div class="mui-content">
 			<div class="tabroom app-color-333333" ref="tabroom">
@@ -197,29 +277,38 @@
 			<div class="wrapper" ref="wrapper">
 
 				<div class="app-font-size-28 card-room">
-					<div class="card" v-for="o,i in list" :data-time="new Date(o.atime.replace(/-/g, '/')).toFormatString('MM/dd')" @tap="onCardTap(o, i)" :key="o.devid">
-						<div>
-							<span class="app-color-333333">设备名称</span>
-							<span class="mui-pull-right">{{fixName(o.location)}}</span>
+					<div class="card"
+						 v-for="o,i in list" 
+						:data-time="compareTime(o.atime,i)"
+						 @tap="onCardTap(o, i)" 
+						 :key="o.devid"
+						 :class="[compareTime(o.atime,i) ? '' : 'no-date']">
+						<div class="left">
+							<span :class="[isEdit ? (o.checked ? 'checked' : 'unchecked') : (o.read ? '' : 'no-read')]"></span>
 						</div>
-						<div>
-							<span class="app-color-333333">设备ID</span>
-							<span class="mui-pull-right">{{o.devid}}</span>
-						</div>
-						<div>
-							<span class="app-color-333333">告警时间</span>
-							<span class="mui-pull-right">{{o.atime}}</span>
-						</div>
-						
-						<div v-if="o.areaname" style="padding-bottom: 0.2rem;">
-							<span class="app-color-333333">告警防区</span>
-							<span class="mui-pull-right">{{o.areaname}}</span>
-						</div>
-						<div v-else style="padding-bottom: 0.2rem;">
-							<span class="app-color-333333">防区ID</span>
-							<span class="mui-pull-right">{{to16(o.areaid)}}</span>
-						</div>
-						<transition name="menu-fade"> 
+						<div class="right">
+							<div>
+								<span class="app-color-333333">设备名称</span>
+								<span class="mui-pull-right">{{fixName(o.location)}}</span>
+							</div>
+							<div>
+								<span class="app-color-333333">设备ID</span>
+								<span class="mui-pull-right">{{o.devid}}</span>
+							</div>
+							<div>
+								<span class="app-color-333333">告警时间</span>
+								<span class="mui-pull-right">{{o.atime}}</span>
+							</div>
+							
+							<div v-if="o.areaname">
+								<span class="app-color-333333">告警防区</span>
+								<span class="mui-pull-right">{{o.areaname}}</span>
+							</div>
+							<div style="padding-bottom: 0.2rem;">
+								<span class="app-color-333333">防区ID</span>
+								<span class="mui-pull-right">{{to16(o.areaid)}}</span>
+							</div>
+							<transition name="menu-fade"> 
 
 							<div class="menu" v-show="o.showMenu">
 								<div @tap.stop="onVideoTap(o, i)">
@@ -253,11 +342,19 @@
 							</div>
 
 						</transition>
+						</div>
+						
 					</div>
 				</div>
 			</div>
-
+			<div class="footer" v-show="isEdit">
+				<div class="button-read" v-show="allRead" @click="handlerFooterClick(1)">全部已读</div>
+				<div class="button-read" v-show="canReadWithSingle" @click="handlerFooterClick(2)">已读</div>
+				<div class="button-delete" v-show="selectList.length > 0" @click="handlerFooterClick(3)">删除</div>
+				<div class="button-delete can-operate" v-show="selectList.length == 0" @click="handlerFooterClick(4)">全部删除</div>
+			</div>
 		</div>
+	</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
@@ -297,7 +394,7 @@
 			var dtPick, devPick;
 
 			new Vue({
-				el: ".mui-content",
+				el: ".warn-container",
 				data: function() {
 					return {
 
@@ -312,7 +409,10 @@
 						videosrc: "",
 
 						pimg: null,
-						devPickData: []
+						devPickData: [],
+						isEdit: false, //当前是否是编辑状态
+						user: app.user.get(),
+						pageSize: 10,
 					};
 				},
 
@@ -323,6 +423,29 @@
 						}
 						return this.dateTime.toFormatString('MM/dd');
 					},
+					selectList: function(){
+						return this.list.reduce(function(ret,item){
+							item.checked && ret.push(item)
+							return ret
+						},[])
+					},
+					//是否有未读消息
+					hasUnRead: function(){
+						return (this.list.filter(function(item){
+							return !item.read
+						}).length > 0)
+					},
+					//全部已读
+					allRead: function(){
+						return this.hasUnRead && this.selectList.length == 0
+					},
+					//已读是否显示，用户选择了未读消息时候显示
+					canReadWithSingle: function(){
+						var unReadListCheck = this.selectList.filter(function(item){
+							return !item.read
+						})
+						return this.hasUnRead && unReadListCheck.length > 0
+					}
 				},
 
 				mounted: function() {
@@ -423,10 +546,89 @@
 				},
 
 				methods: {
-
+					handlerFooterClick: function(type){//1全部已读，2已读，3删除，4全部删除
+						var ids = [],that = this;
+						if(type == 1){
+							ids = this.list.reduce(function(ret,item){
+								!item.read && (ret.push(item.id),item.read = true);
+								return ret;
+							},[])
+						}else if(type == 2){
+							ids = this.selectList.reduce(function(ret,item){
+								!item.read && (ret.push(item.id),item.read = true);
+								return ret;
+							},[])
+						}else if(type == 3){
+							ids = this.selectList.reduce(function(ret,item){
+								ret.push(item.id);
+								return ret;
+							},[])
+						}else if(type == 4){
+							ids = this.list.reduce(function(ret,item){
+								ret.push(item.id);
+								return ret;
+							},[])
+						}
+						if(type == 1 || type == 2){
+							this.UpdateAlarm(ids);
+						}else{
+							that.list = that.list.filter(function(item){
+										return ids.indexOf(item.id) == -1;
+									})
+							that.scroll && that.scroll.refresh()
+							this.DelAlarmListAsyn(ids,function(res){
+								if(res == 0){
+									that.list = that.list.filter(function(item){
+										return ids.indexOf(item.id) == -1;
+									})
+									that.scroll && that.scroll.refresh()
+								}
+							})
+						}
+						this.isEdit = false;
+						this.list.forEach(function(item){
+							that.$set(item,'checked',false)
+						})
+					},
+					//比较两个日期是否相同,i是索引,不相同就返回
+					compareTime: function(str1,i){
+						str1 = new Date(str1.replace(/-/g, '/')).toFormatString('MM/dd');
+						var prev = this.list[i-1],str2;
+						if(prev){
+							str2 = prev.atime;
+							str2 = new Date(str2.replace(/-/g,'/')).toFormatString('MM/dd');
+						}
+						return str1 == str2 ? '' : str1;
+					},
+					//点击编辑
+					handleEdit: function(){
+						this.isEdit = !this.isEdit;
+						
+					},
+					//删除告警消息
+					DelAlarmListAsyn: function(ids,sf,ff){
+						var username = this.user.account;
+						P.DelAlarmListAsyn(username,ids,sf,ff)
+					},
+					//标记为已读
+					UpdateAlarm: function(ids){
+						var username = this.user.account;
+						return P.UpdateAlarm(username,ids)
+					},
 					// 卡片点击
 					onCardTap: function(o, i) {
-						// 切换菜单
+						//判断当前是否是编辑状态处理操作
+						if(this.isEdit){
+							var currentChecked = !o.checked;
+							this.$set(o,'checked',currentChecked)
+							return
+						}
+						// 切换菜单,非编辑状态
+						if(!o.read){
+							o.read = true;
+							var id = o.id;
+							this.UpdateAlarm([id])
+						}
 						o.showMenu = !o.showMenu;
 						if(o.showMenu === false || o.info !== null) {
 							return;
@@ -560,6 +762,8 @@
 						}
 						var that = this;
 						dal.message.getAlarmList(this.n, this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "", function(err, data) {
+							
+							
 							plus.nativeUI.closeWaiting();
 							if(err) {
 								return mui.toast(err.message);
@@ -567,9 +771,10 @@
 							if(!data || data.length === 0) {
 								return;
 							}
-							data = data.map(function(item) {
+							data = data.map(function(item,i) {
 								item.showMenu = false;
 								item.info = null;
+								i % 2 == 0 ? item.read = true : item.read = false
 								return item;
 							});
 							console.log(JSON.stringify(data));
@@ -581,7 +786,48 @@
 
 						});
 					},
-
+					getMessageListFromNative: function(override){
+						plus.nativeUI.showWaiting("正在加载");
+						if(override){
+							this.list = [];
+							this.n = 1;
+						}
+						var that = this;
+						var account = this.user.account;
+						var stime = this.dateTime;
+						var endtime = Date.now();
+						if(stime){
+							stime.setHours(0);
+							endtime = new Date(stime.getTime());
+							endtime.setDate(endtime.getDate() + 1)
+							endtime = endtime.getTime()
+						}else{
+							stime = new Date(0);
+						}
+						stime = stime.getTime();
+						console.log(stime)
+						console.log(endtime)
+						P.GetAlarmListAsyn(this.devId,stime,endtime,account,this.n,this.pageSize,function(res){
+							plus.nativeUI.closeWaiting();
+							var data = res.data;
+							if(!data || data.length === 0) {
+								return;
+							}
+							data = data.map(function(item,i) {
+								item.showMenu = false;
+								item.info = null;
+								item.id = item.ID; //接口调整
+								i % 2 == 0 ? item.read = true : item.read = false
+								return item;
+							});
+							console.log(JSON.stringify(data));
+							that.list.push.apply(that.list, data || []);
+							that.$nextTick(function() {
+								that.scroll && (that.scroll.finishPullUp(), that.scroll.refresh());
+								that.pimg = mui.previewImage();
+							});
+						})
+					},
 					// 是否为视频
 					isVideo: function(path) {
 						return /\.(?:mp4|3gp)$/i.test(path);

@@ -304,10 +304,11 @@
 	 * @param {Object} ptzset
 	 * @param {Object} callback
 	 */
-	devaccessory.bindcam = function(devaccessoryinfo, newDevid, devtype, callback) {
+	devaccessory.bindcam = function(devaccessoryinfo, newDevid, devtype, chnID, callback) {
 		devaccessoryinfo.newDevid = newDevid;
 		devaccessoryinfo.devtype = devtype;
 		devaccessoryinfo.id = devaccessoryinfo.aid;
+		devaccessory.chnID = chnID;
 		return ra("post", "/devaccessory/bindcam", devaccessoryinfo, callback);
 	}
 

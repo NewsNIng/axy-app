@@ -293,6 +293,12 @@
 				});
 			});
 
+			// 保存顶级域名
+			var $SaveDomain = function(data) {
+				window.localStorage.setItem('_domain_', data.domain);
+				return data;
+			};
+
 			var _oLoginDir = {
 				sinaweibo: "login_weibo",
 				qq: "login_qq",
@@ -364,7 +370,7 @@
 					},
 					// 历史记录选项点击
 					onHistoryTap: function(o) {
-						if(this.username !== o){
+						if(this.username !== o) {
 							this.password = "";
 						}
 						this.username = o;
@@ -529,6 +535,8 @@
 							.map($getStateFn(true))
 							// 获取登录帐号的domain
 							.mergeMap($getTopDomain)
+							// 保存domin
+							.map($SaveDomain)
 							// 通过domain进行登录
 							.mergeMap($login)
 							// 修复用户数据
@@ -539,9 +547,9 @@
 							.mergeMap($loginLockCheck)
 							// 登录成功
 							.subscribe(function(data) {
-								
+
 								console.log(JSON.stringify(data));
-								
+
 								mui.toast("登录成功");
 
 								// 记录历史帐号
@@ -688,6 +696,8 @@
 							.map(authInfoAdapter)
 							.mergeMap($getAccountFn)
 							.mergeMap($getTopDomainFn)
+							// 保存domin
+							.map($SaveDomain)
 							.map($getWaitFn('正在登录...'))
 							.mergeMap($ologin)
 							.mergeMap($loginLockCheck)
