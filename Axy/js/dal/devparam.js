@@ -240,6 +240,7 @@
 		return ra("post", "/devparam/setPrivacy", {
 			devid: devid,
 			state: +state,
+			clientID: plus.device.uuid,
 		}, callback);
 	};
 	

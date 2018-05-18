@@ -7,13 +7,8 @@
 	"id": "H5E7D78BB",/*应用的标识，创建应用时自动生成，勿手动修改*/
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
-<<<<<<< HEAD
 		"name": "2.1.6",/*应用版本名称*/
 		"code": "20180517"
-=======
-		"name": "2.1.5",/*应用版本名称*/
-		"code": "20180426"
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -102,12 +97,7 @@
 
 		"OAuth": {},
 		"Messaging": {},
-<<<<<<< HEAD
-		"Share": {},
-		"Statistic": {}
-=======
 		"Share": {}
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 	},
 	"plus": {
 		"error": {
@@ -125,17 +115,6 @@
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
 		"distribute": {
 			"plugins": {
-<<<<<<< HEAD
-				"statics": {
-					"umeng": {
-						"appkey_ios": "53d1cdb256240b9ab503254c",
-						"channelid_ios": "Appstore",
-						"appkey_android": "53d1cdb256240b9ab503254c",
-						"channelid_android": "应用宝,360,百度,UC,豌豆荚,安卓市场"
-					}
-				},
-=======
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 				"share": {
 					"qq": {
 						"appid": "1104763696",
@@ -189,60 +168,7 @@
 				"keystore": "",/*Android应用打包使用的密钥库文件*/
 				"password": "",/*Android应用打包使用密钥库中证书的密码*/
 				"aliasname": "",/*Android应用打包使用密钥库中证书的别名*/
-				"permissions": [
-<<<<<<< HEAD
-					"<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-					"<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-					"<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-					"<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\"/>",
-					"<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>",
-					"<uses-permission android:name=\"android.permission.CAMERA\"/>",
-					"<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>",
-					"<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
-					"<uses-permission android:name=\"android.permission.SEND_SMS\"/>",
-					"<uses-permission android:name=\"android.permission.INTERNET\"/>",
-					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-					"<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
-					"<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
-					"<uses-feature android:name=\"android.hardware.camera\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
-					"<uses-permission android:name=\"android.permission.RECEIVE_USER_PRESENT\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_SMS\"/>",
-=======
-					"<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
-					"<uses-permission android:name=\"com.android.launcher.permission.INSTALL_SHORTCUT\"/>",
-					"<uses-permission android:name=\"android.permission.SEND_SMS\"/>",
-					"<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-					"<uses-permission android:name=\"android.permission.INTERNET\"/>",
-					"<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-					"<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
-					"<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-					"<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-					"<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
-					"<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-					"<uses-feature android:name=\"android.hardware.camera\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>",
-					"<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
-					"<uses-permission android:name=\"android.permission.WRITE_SMS\"/>",
-					"<uses-permission android:name=\"com.android.launcher.permission.UNINSTALL_SHORTCUT\"/>",
-					"<uses-permission android:name=\"android.permission.CAMERA\"/>",
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
-					"<uses-permission android:name=\"android.permission.READ_SMS\"/>"
-				]
+				"permissions": ["<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>","<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>","<uses-permission android:name=\"android.permission.SEND_SMS\"/>","<uses-permission android:name=\"android.permission.INTERNET\"/>","<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>","<uses-permission android:name=\"android.permission.READ_LOGS\"/>","<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>","<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>","<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\"/>","<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>","<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>","<uses-permission android:name=\"android.permission.WRITE_SMS\"/>","<uses-permission android:name=\"android.permission.READ_SMS\"/>"]
 			},
 			"orientation": [
 				"portrait-primary",
@@ -314,11 +240,7 @@
 				}
 			},
 			"debug": false
-<<<<<<< HEAD
-		},"ads":{"rp":false,"splash":false,"push":false},"adid":""
-=======
 		}
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 	},
 	"dependencies": {
 		"pages": {
@@ -367,13 +289,7 @@
 					"js/lib/Rx.min.js",
 					"js/app/app.js",
 					"js/common/android-back.js",
-<<<<<<< HEAD
-					"js/common/flexible.js",
-					"image/main/mall.png",
-					"js/app/app-mall.js"
-=======
 					"js/common/flexible.js"
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 				],
 				"refer": [
 					"html/zeus.html",
@@ -512,7 +428,8 @@
 					"html/common/login.html",
 					"html/smart/devices/dev_my_list.html",
 					"html/public/browser.html",
-					"html/smart/scenes/index2.html"
+					"html/smart/scenes/index2.html",
+					"html/smart/devices/dev_AX-801.html"
 				],
 				"priority": 0
 			},
@@ -530,20 +447,12 @@
 					"js/lib/vue-ni.js",
 					"js/extend/String.js",
 					"html/nearby/pages/list.html",
-<<<<<<< HEAD
-					"html/nearby/pages/theme.html",
-					"html/nearby/pages/discover.html"
-=======
 					"html/nearby/pages/theme.html"
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 				],
 				"refer": [
 					"html/public/position.html",
 					"html/nearby/business/signup.html",
-<<<<<<< HEAD
-=======
 					"html/nearby/pages/discover.html",
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 					"html/nearby/menu.html",
 					"html/search/index.html"
 				],
@@ -572,13 +481,7 @@
 					"js/app/app-rules.js",
 					"js/lib/Rx.min.js",
 					"js/app/app-page.js",
-<<<<<<< HEAD
-					"js/dal/system.js",
-					"image/smart/devices/others/down.png",
-					"js/lib/better-scroll.min.js"
-=======
 					"js/dal/system.js"
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 				],
 				"refer": [
 					"html/common/register.html",
@@ -766,12 +669,7 @@
 					"html/smart/devices/dev_select_id.html",
 					"html/smart/add/scan_code.html",
 					"html/smart/add/scan_code_904.html",
-<<<<<<< HEAD
-					"html/smart/add/scan_bind_dev.html",
-					"html/smart/add/add_completed.html"
-=======
 					"html/smart/add/scan_bind_dev.html"
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 				],
 				"priority": 0
 			},
@@ -934,13 +832,7 @@
 					"html/smart/devices/dev_40.html",
 					"html/smart/devices/dev_AX-904.html",
 					"html/smart/devices/dev_VH-104_setting.html",
-<<<<<<< HEAD
-					"html/smart/devices/dev_34.html",
-					"html/smart/devices/dev_0.html",
-					"html/smart/devices/dev_32.html"
-=======
 					"html/smart/devices/dev_34.html"
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 				],
 				"priority": 0
 			},
@@ -1040,13 +932,7 @@
 				"priority": 0
 			},
 			"html/zeus.html": {
-<<<<<<< HEAD
-				"resources": [
-					"html/smart/devices/dev_error.html"
-				],
-=======
 				"resources": [],
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 				"refer": [
 					"html/common/login.html",
 					"html/common/authorized.html"
@@ -1278,12 +1164,7 @@
 					"html/smart/devices/dev_160.html",
 					"html/smart/devices/dev_22.html",
 					"html/smart/devices/dev_34.html",
-<<<<<<< HEAD
-					"html/smart/devices/dev_129.html",
-					"html/smart/devices/dev_my_list.html"
-=======
 					"html/smart/devices/dev_129.html"
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
 				],
 				"priority": 0
 			},
@@ -1392,12 +1273,19 @@
 					"html/smart/add/blue_connect_camera2.html"
 				],
 				"priority": 0
-<<<<<<< HEAD
 			},
-			"html/person/about.html": {
+			"html/smart/devices/dev_AX-801_helper.html": {
 				"resources": [],
 				"refer": [
-					"html/public/updateWindow.html"
+					"html/smart/devices/dev_AX-801_alarm_clock.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-801.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_AX-801_setting.html",
+					"html/smart/devices/dev_AX-801_helper.html"
 				],
 				"priority": 0
 			},
@@ -1407,8 +1295,14 @@
 					"html/person/devshare/index.html"
 				],
 				"priority": 0
-=======
->>>>>>> 774cfc5e97d284ae5e106e0226b566d39ba29d16
+			},
+			"html/smart/devices/dev_AX-801_setting.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_AX-801_log.html",
+					"html/public/alarmParam.html"
+				],
+				"priority": 0
 			}
 		},
 		"idle": {
