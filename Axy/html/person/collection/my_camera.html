@@ -390,7 +390,6 @@
 						var dir = [],
 							temp, arr = [];
 						this.record_.forEach(function(item) {
-							item.isSelect = false;
 							temp = new Date(item.time.replace(/-/g, '/'));
 							temp = temp.toFormatString('yyyy-MM-dd');
 							if(!dir[temp]) {
@@ -526,7 +525,7 @@
 						mui.confirm("确定需要删除所选择的图片吗？", "", ["删除", "取消"], function(e) {
 							if(e.index === 0){
 								// 原生删除
-								p.DeleteRecordByIdSync(that._getSelectIdItems());
+								P.DeleteRecordByIdSync(that._getSelectIdItems());
 								// 页面删除元素
 								that._clearSelectItems();
 								mui.toast("删除成功");
@@ -576,21 +575,6 @@
 						this._setAllSelect(false);
 						o.isSelect = true;
 						this.editing = true;
-						return;
-						//var el = e.target;
-						//el.classList.add('shake');
-						console.log(JSON.stringify(o));
-						o.isSelect = true;
-						// 振动
-						window.plus && plus.device.vibrate(100);
-						mui.confirm("是否删除该文件？", "温馨提示", ["删除", "取消"], function(e) {
-							//el.classList.remove('shake');
-							o.isSelect = false;
-							if(e.index !== 0) {
-								return;
-							}
-							// TODO 删除操作 
-						});
 					},
 
 					// 设备选择
@@ -665,7 +649,10 @@
 
 						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "");
 						rs = JSON.parse(rs);
-						this.record_ = rs.data.record;
+						this.record_ = rs.data.record.map(function(item){
+							item.isSelect = false;
+							return item;
+						});
 						this.$nextTick(function() {
 							mui.previewImage();
 						});
