@@ -36,11 +36,11 @@ Vue && Vue.component('warn-msg', {
 			app.user.has() && ob.next();
 		});
 
-		var GetMessageList$ = Rx.Observable.fromPromise(that.getMessageList());
+		
 
 		Listen$.merge(NotifyWarningMsg$.debounceTime(3e3))
 
-			.mergeMapTo(GetMessageList$)
+			.mergeMap(that.getMessageList)
 
 			.subscribe(function(data) {
 
@@ -81,7 +81,7 @@ Vue && Vue.component('warn-msg', {
 		//		},
 
 		getMessageList: function() {
-			return new Promise(function(resolve, reject) {
+			return Rx.Observable.create(function(ob){
 				var username = app.user.get().account;
 				plug.H5NativeBridge.GetNoReadAlarmListAsyn(username, 10, function(data) {
 					data = JSON.parse(data);
@@ -90,9 +90,9 @@ Vue && Vue.component('warn-msg', {
 					if(!data || data.length == 0) {
 						return;
 					}
-					resolve(data);
+					ob.next(data);
 				})
-			})
+			});
 		},
 		onTap: function(o) {
 			mui.openWindow('../person/message/index.html');
