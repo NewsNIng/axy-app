@@ -108,6 +108,8 @@
 				flex: 1;
 				-webkit-box-flex: 1;
 				background-color: #FFFFFF;
+				position: relative;
+				overflow: hidden;
 			}
 			.card-room>.card:before {
 				content: attr(data-time);
@@ -124,7 +126,25 @@
 			.card-room>.card .right>div:not(.menu) {
 				padding: 0.2rem 0.346666rem 0 0.346666rem;
 			}
-			
+			.card-room>.card .button{
+				position: absolute;
+				right: 0;
+				background-color: #f40;
+				height: 100%;
+				top: 0;
+				width: 50px;
+				white-space: nowrap;
+				font-size: 12px;
+				color: #fff;
+				display: flex;
+				display: -webkit-flex;
+				align-items: center;
+				-webkit-align-items: center;
+				transform: translateX(100%);
+				-webkit-transform: translateX(100%);
+				transition: all 0.3s;
+				-webkit-transition: 0.3s;
+			}
 			.card-room>.card .right>div:not(.menu) .mui-pull-right {
 				color: #A2A6B1;
 			}
@@ -282,7 +302,10 @@
 						:data-time="compareTime(o.atime,i)"
 						 @tap="onCardTap(o, i)" 
 						 :key="o.devid"
-						 :class="[compareTime(o.atime,i) ? '' : 'no-date']">
+						 :class="[compareTime(o.atime,i) ? '' : 'no-date']"
+						 @touchstart="_touchstart"
+						 @touchmove="_touchmove"
+						 @touchend="_touchend">
 						<div class="left">
 							<span :class="[isEdit ? (o.checked ? 'checked' : 'unchecked') : (o.read ? '' : 'no-read')]"></span>
 						</div>
@@ -341,7 +364,8 @@
 								</div>
 							</div>
 
-						</transition>
+							</transition>
+							<div class="button delete_button" @touchstart.stop="deleteAlarmSingle(o.id)"><span>删除</span></div>
 						</div>
 						
 					</div>
@@ -413,6 +437,11 @@
 						isEdit: false, //当前是否是编辑状态
 						user: app.user.get(),
 						pageSize: 10,
+						startX: 0,
+						startY: 0,
+						moveX: 0,
+						disX: 0,
+						maxMoveX: 50,
 					};
 				},
 
@@ -546,6 +575,81 @@
 				},
 
 				methods: {
+					_touchstart: function(e){
+						this._resetSlide(e.currentTarget.querySelector('.button'));
+						var canDelete = e.currentTarget.querySelector('.menu').style.display == 'none' && !this.isEdit
+						this.canDelete = canDelete;
+						
+						if(!this.canDelete){
+							return
+						}
+						this.startX = e.touches[0].clientX;
+						this.startY = e.touches[0].clientY;
+					},
+					_touchmove: function(e){
+						if(!this.canDelete){
+							return
+						}
+						var ele = e.currentTarget.querySelector('.button');
+						var isactive = ele.classList.contains('active'),hasDix = 0;
+						
+						this.moveX = e.touches[0].clientX;
+						this.moveY = e.touches[0].clientY;
+						this.disX = this.startX - this.moveX;
+						this.disY = this.startY - this.moveY;
+						
+						if(isactive){
+							hasDix = -this.maxMoveX
+							if(this.disX > this.maxMoveX + hasDix){
+								this.disX = this.maxMoveX + hasDix
+							}
+						}else{
+							hasDix = 0;
+							if(this.disX > this.maxMoveX){
+								this.disX = this.maxMoveX
+							}
+						}
+						ele.style.transition = 'all 0s';
+						ele.WebkitTransition = 'all 0s';
+						ele.style.transform = 'translateX('+(-this.disX+this.maxMoveX+hasDix)+'px)';
+						ele.style.WebkitTransform = 'translateX('+(-this.disX+this.maxMoveX+hasDix)+'px)';
+					},
+					_touchend: function(e){
+						if(!this.canDelete){
+							return
+						}
+						var ele = e.currentTarget.querySelector('.button'); 
+						if(this.moveX == 0) {
+							return 
+						}
+						
+						if(this.startX - this.moveX > this.maxMoveX / 3){
+							this.disX = this.maxMoveX
+							ele.classList.add('active')
+							this.hasDeleteButton = true;
+						}else{
+							this.disX = 0;
+							ele.classList.remove('active')
+							this.hasDeleteButton = false;
+						}
+						ele.style.transition = 'all 0.3s';
+						ele.WebkitTransition = 'all 0.3s';
+						ele.style.transform = 'translateX('+(-this.disX+this.maxMoveX)+'px)';
+						ele.style.WebkitTransform = 'translateX('+(-this.disX+this.maxMoveX)+'px)';
+						this.startX = 0;
+						this.moveX = 0;
+					},
+					_resetSlide: function(currentele){
+						var buttons = document.querySelectorAll('.delete_button'),ele;
+						for(var i = 0, len = buttons.length; i < len; i++){
+							ele = buttons[i];
+							if(!(currentele == ele)){
+								ele.style.transform = 'translateX('+(this.maxMoveX)+'px)';
+								ele.style.WebkitTransform = 'translateX('+(this.maxMoveX)+'px)';
+							}
+						}
+						this.hasDeleteButton = false;
+					},
 					handlerFooterClick: function(type){//1全部已读，2已读，3删除，4全部删除
 						var ids = [],that = this;
 						if(type == 1){
@@ -605,6 +709,17 @@
 						this.isEdit = !this.isEdit;
 						
 					},
+					deleteAlarmSingle: function(id){
+						alert(id)
+						this.DelAlarmListAsyn([id],function(res){
+							if(res == 0){
+								that.list = that.list.filter(function(item){
+									return item.id !== id;
+								})
+								that.scroll && that.scroll.refresh()
+							}
+						})
+					},
 					//删除告警消息
 					DelAlarmListAsyn: function(ids,sf,ff){
 						var username = this.user.account;
@@ -617,6 +732,8 @@
 					},
 					// 卡片点击
 					onCardTap: function(o, i) {
+						//判断当前是含有删除状态
+						this._resetSlide();
 						//判断当前是否是编辑状态处理操作
 						if(this.isEdit){
 							var currentChecked = !o.checked;
@@ -754,7 +871,7 @@
 					},
 
 					// 获取告警消息列表
-					getMessageList: function(override) {
+					getMessageListByAjax: function(override) {
 						plus.nativeUI.showWaiting("正在加载");
 						if(override) {
 							this.list = [];
@@ -786,7 +903,7 @@
 
 						});
 					},
-					getMessageListFromNative: function(override){
+					getMessageList: function(override){
 						plus.nativeUI.showWaiting("正在加载");
 						if(override){
 							this.list = [];
