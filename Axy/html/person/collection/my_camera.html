@@ -303,6 +303,7 @@
 							<div class="app-font-size-24 app-color-333333 tips">{{o.day}}</div>
 							<div class="imgroom app-font-size-24 app-color-white" :class="{'editing': editing}">
 								<template v-for="oo,ii in o.list">
+									<span>{{oo.id}}</span>
 									<template v-if="oo.fileType === 2">
 										<div @longtap="onLongTap(oo, ii)" @tap="onItemTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" class="video" :class="{isSelect: oo.isSelect}" @tap="onVideoTap(oo)"></div>
 									</template>
@@ -347,11 +348,13 @@
 				//处理窗口关闭前的业务
 				beforeback: function() {
 					if(vm.editing) {
-						vm.editing = false;
+						vm.editing = false; 
 						return false;
 					}
 				},
 			});
+			
+			
 
 			var P = plug.H5NativeBridge;
 
@@ -368,22 +371,7 @@
 						// 编辑模式
 						editing: false,
 
-						record_: [{
-								"carmraID": "VH-104GN-2017061500043",
-								"fileName": "/sdcard/CameraFamily/photo/2017-11-24_13-52-52_935.mp4",
-								"time": "2017-11-24 13:52:52",
-								"thumbnailImage": "/sdcard/CameraFamily/photo/device_VH-104GN-2017061500043.jpg",
-								"fileType": 2,
-								"isSelect": true,
-							},
-							{
-								"carmraID": "VH-104GN-2017061500043",
-								"fileName": "https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256",
-								"time": "2017-11-24 13:52:52",
-								"thumbnailImage": "https://sfault-avatar.b0.upaiyun.com/125/535/1255358193-5824870aaf3cb_huge256",
-								"fileType": 1,
-								"isSelect": false,
-							}
+						record_: [
 						],
 
 						videoplay: false,
@@ -402,6 +390,7 @@
 						var dir = [],
 							temp, arr = [];
 						this.record_.forEach(function(item) {
+							item.isSelect = false;
 							temp = new Date(item.time.replace(/-/g, '/'));
 							temp = temp.toFormatString('yyyy-MM-dd');
 							if(!dir[temp]) {
@@ -517,10 +506,31 @@
 						});
 					},
 					
+					// 获取已选择的项 的id数组
+					_getSelectIdItems: function(){
+						return this._getSelectItems().map(function(item){
+							return item.id || "";
+						});
+					},
+					
+					// 移除已选择的项
+					_clearSelectItems: function(){
+						this.record_ = this.record_.filter(function(item) {
+							return !item.isSelect;
+						});
+					},
+					
 					// 点击删除按钮
 					onDelete: function() {
+						var that = this;
 						mui.confirm("确定需要删除所选择的图片吗？", "", ["删除", "取消"], function(e) {
-							console.log(e.index);
+							if(e.index === 0){
+								// 原生删除
+								p.DeleteRecordByIdSync(that._getSelectIdItems());
+								// 页面删除元素
+								that._clearSelectItems();
+								mui.toast("删除成功");
+							}
 						});
 					},
 
@@ -653,9 +663,9 @@
 					// 获取本地 录像/图片列表
 					getRecord: function() {
 
-						//var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "");
-						//rs = JSON.parse(rs);
-						//this.record_ = rs.data.record;
+						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "");
+						rs = JSON.parse(rs);
+						this.record_ = rs.data.record;
 						this.$nextTick(function() {
 							mui.previewImage();
 						});
