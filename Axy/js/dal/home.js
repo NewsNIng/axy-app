@@ -31,9 +31,11 @@
 			return ra('get', '/home/theme/'+ id, {}, callback);
 		}
 	}
-	
-	
-	
+	home.getGoodsRecommandList = function(callback){
+		return ra('get', '/home/guesslike', {
+			BASE_URL: 'http://47.106.92.195/vihiManager/shopapi'
+		}, callback);
+	}
 	_.home = home;
 	
 }(window.dal, window.requestAdapter));
