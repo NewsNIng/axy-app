@@ -456,4 +456,6 @@
 	pgn.DelAlarmListAsyn = function(username,ids,sf,ff){
 		return pg.asyncExec(N,'DelAlarmListAsyn',[username,ids],sf,ff)
 	}
+	
+	
 }(window));

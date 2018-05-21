@@ -6,7 +6,7 @@ Vue && Vue.component('warn-msg', {
 		return {
 			animate: false,
 			items: [{
-				ID:1,
+				ID: 1,
 				location: 'jsian',
 				accessoryName: '9999',
 				accessoryID: '3ii',
@@ -15,18 +15,8 @@ Vue && Vue.component('warn-msg', {
 			st: null,
 		}
 	},
-	created: function() {
+	plusReady: function() {
 		var that = this;
-		// 设备就绪流
-		var pready$ = Rx.Observable.create(function(ob) {
-			if(window.plus) {
-				ob.next();
-			} else {
-				document.addEventListener('plusready', function() {
-					ob.next();
-				});
-			}
-		});
 
 		var NotifyWarningMsg$ = Rx.Observable.create(function(ob) {
 			// 原生通知告警信息刷新
@@ -34,29 +24,26 @@ Vue && Vue.component('warn-msg', {
 				ob.next(data);
 			});
 		});
-		
-		
 
- 
-		Rx.Observable.create(function(ob) {
-				_B.on('login_success', function() {
-					ob.next();
-				});
-				_B.on('home_reload', function() {
-					ob.next();
-				});
+		var Listen$ = Rx.Observable.create(function(ob) {
+			_B.on('login_success', function() {
+				ob.next();
+			});
+			_B.on('home_reload', function() {
+				ob.next();
+			});
 
-				app.user.has() && ob.next();
-			})
-			
-			.merge(pready$.mergeMapTo(NotifyWarningMsg$).debounceTime(3e3))
-		
-			.mergeMap(function() {
-				return Rx.Observable.fromPromise(that.getMessageList())
-			})
+			app.user.has() && ob.next();
+		});
+
+		var GetMessageList$ = Rx.Observable.fromPromise(that.getMessageList());
+
+		Listen$.merge(NotifyWarningMsg$.debounceTime(3e3))
+
+			.mergeMapTo(GetMessageList$)
 
 			.subscribe(function(data) {
-				
+
 				that.items = data;
 
 				if(data.length > 1) {
@@ -74,34 +61,33 @@ Vue && Vue.component('warn-msg', {
 			});
 
 	},
-	
 
 	methods: {
 		// 获取告警列表
-//		getMessageList: function() {
-//			return new Promise(function(resolve, reject) {
-//				dal.message.getAlarmList(1, "", "", function(err, data) {
-//
-//					if(err) {
-//						return reject(err);
-//					}
-//					if(!data || data.length === 0) {
-//						return;
-//					}
-//					resolve(data);
-//				});
-//			});
-//
-//		},
-		
-		getMessageList: function(){
-			return new Promise(function(resolve,reject){
+		//		getMessageList: function() {
+		//			return new Promise(function(resolve, reject) {
+		//				dal.message.getAlarmList(1, "", "", function(err, data) {
+		//
+		//					if(err) {
+		//						return reject(err);
+		//					}
+		//					if(!data || data.length === 0) {
+		//						return;
+		//					}
+		//					resolve(data);
+		//				});
+		//			});
+		//
+		//		},
+
+		getMessageList: function() {
+			return new Promise(function(resolve, reject) {
 				var username = app.user.get().account;
-				plug.H5NativeBridge.GetNoReadAlarmListAsyn(username,10,function(data){
+				plug.H5NativeBridge.GetNoReadAlarmListAsyn(username, 10, function(data) {
 					data = JSON.parse(data);
 					if(data.code != 0) return;
 					data = data.data;
-					if(!data || data.length == 0){
+					if(!data || data.length == 0) {
 						return;
 					}
 					resolve(data);
