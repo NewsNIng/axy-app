@@ -1,0 +1,252 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择设备</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.mui-content {
+				padding-bottom: 0;
+				margin-top: 0.293333rem !important;
+			}
+			
+			.mui-icon>img {
+				width: 0.613333rem;
+			}
+			
+			.mui-navigate-right {
+				position: relative;
+			}
+			
+			.mui-navigate-right>span {
+				margin-left: 0.826666rem;
+			}
+			
+			.mui-navigate-right>img {
+				position: absolute;
+				/*float: left;*/
+				left: 0.346666rem;
+				width: 0.48rem;
+			}
+			
+			
+			
+		</style>
+
+
+		<style type="text/css">
+			/*mask*/
+			
+			.com-dev-mask {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 98;
+			}
+			
+			.com-dev{
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				min-height: 30%;
+				background-color: #FFFFFF;
+				z-index: 99;
+			}
+			
+			/*end mask*/
+		</style>
+		
+	
+	</head>
+
+	<body>
+		<div id="box">
+			
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">选择设备</h1>
+				<a class="mui-icon mui-pull-right">
+					<img src="../../../image/smart/scenes/complete_icon.png" />
+				</a>
+			</header>
+			
+			<!--<div class="mask" v-show="mask" @tap="mask=false">
+				<div class="menu menu0" v-show="menus[0]">
+				
+				</div>
+			</div>-->
+			
+			
+			<div class="mui-content">
+				
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell" v-for="o,i in devList">
+						<a class="mui-navigate-right" @tap="onClickTap(i)">
+							<img :src="o.img" />
+							
+							<span v-text="o.name"></span>
+							<span class="mui-badge" v-text="o.state"></span>
+						</a>
+					</li>
+				</ul>
+				
+				<dev-mask :show="true">
+					<dev-360 :show="false"></dev-360>
+					<dev-men :show="true"></dev-men>
+				</dev-mask>
+				
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+	<script type="text/javascript">
+			
+		
+		
+			// 遮罩组件
+			Vue.component('dev-mask', {
+				template: '<div class="com-dev-mask" v-show="show" @tap="show=false"><slot></slot></div>',
+				data: function(){
+					return {
+						
+					}
+				},
+				mounted: function(){
+					
+				},
+				props: {
+					show: {
+						default: false
+					}
+				}
+			});
+			
+			// 操作菜单容器组件
+			Vue.component('dev-btns', {
+				template: '<div class="com-dev-btns"><div><slot></slot></div><button @tap.stop="save()">保存</button><button @tap.stop="cancel()">取消</button></div>',
+				
+				methods: {
+					save: function(){
+						this.$emit('action', true);
+					},
+					cancel: function(){
+						this.$emit('action', false);
+					}
+				}
+			});
+			
+			
+			
+			// 摄像头设置组件
+			Vue.component('dev-360', {
+				template: '<div class="com-dev" v-if="show">我是360摄像机<dev-btns @action="onAction"></dev-btns></div>',
+				data: function(){
+					return {
+						
+					}
+				},
+				mounted: function(){
+					
+				},
+				props: {
+					show: {
+						default: false
+					}
+				},
+				methods: {
+					onAction: function(d){
+						alert(d);
+					}
+				}
+			});
+			Vue.component('dev-men', {
+				template: '<div class="com-dev" v-if="show">我是们<dev-btns @action="onAction"></dev-btns></div>',
+				data: function(){
+					return {
+						
+					}
+				},
+				mounted: function(){
+					
+				},
+				props: {
+					show: {
+						default: false
+					}
+				},
+				methods: {
+					onAction: function(d){
+						alert(d);
+					}
+				}
+			});
+		</script>
+
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#box',
+				data: function() {
+					return {
+						// 遮罩控制
+						mask: false,
+						
+						menus: [false,],
+						
+						devList: [{
+							img: "../../../image/smart/scenes/dev_icons/btn_Videocamera@3x.png",
+							name: "AX-360摄像机",
+							state: "已撤防",
+						}, {
+							img: "../../../image/smart/scenes/dev_icons/btn_Intelligentdoorlock@3x.png",
+							name: "智能门锁",
+							state: "关闭",
+						}],
+					};
+				},
+				plusReady: function() {},
+				methods: {
+					onClickTap: function(i) {
+						this.mask = true;
+						this.menus[i] = true;
+					}
+				}
+			});
+		</script>
+		
+		
+		
+	</body>
+
+</html>

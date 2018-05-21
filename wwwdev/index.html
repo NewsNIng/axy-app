@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    
+</head>
+<body>
+	<script type="text/javascript" src="js/app/app-page.js" ></script>
+	
+	
+	<script>
+		
+		if(window.plus){
+			setTimeout(plusReady);
+		}else{
+			document.addEventListener('plusready', plusReady, false);
+		}
+		
+		function plusReady(){
+			//记录IMEI
+			var IMEI = plus.device.uuid;
+			window.localStorage.setItem("_imei_", IMEI);
+			
+			// 暂时去除引导页 直接 进入 主页
+			return openMain();
+			
+			if(plus.runtime.version == plus.storage.getItem("FirstTimeFlag")){
+				// 打开主页
+				openMain();
+			}else{
+				// 打开引导页
+				app.page.openForResultBy('html/common/guide.html', 'guide', function(){
+					openMain();
+				});
+			}
+		}
+		
+		function openMain(){
+			var w = plus.webview.currentWebview();
+			plus.webview.create('html/main.html', 'main').show('none', 0, function(){
+				setTimeout(function(){
+					w.close('none');
+				}, 3000);
+			});
+		}
+	</script>
+</body>
+</html>

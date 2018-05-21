@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能场景</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+				height: 100%;
+				padding-bottom: 0;
+				overflow: hidden;
+			}
+			
+			.mui-content {
+				padding-bottom: 0.586666rem;
+			}
+			
+			#box {
+				height: 100%;
+			}
+			
+			.attention_item {
+				height: 2.373333rem;
+				padding-left: 0.346666rem;
+				position: relative;
+				background-color: white;
+				line-height: 0;
+			}
+			
+			.attention_item>img {
+				width: 1.573333rem;
+				color: #333333;
+				display: inline-block;
+			}
+			
+			.attention_item:after {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				left: 0.346666rem;
+				height: 1px;
+				content: '';
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				background-color: #E5E6E7;
+			}
+			
+			.attention_item:last-child:after {
+				height: 0;
+			}
+			
+			.vertical_center {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.red {
+				color: red;
+			}
+			
+			.name {
+				float: left;
+				padding-left: 1.92rem;
+			}
+			
+			.attention_icon {
+				float: right;
+				margin-right: 0.346666rem;
+				color: #9F9FA0;
+				border: 1px solid #9F9FA0;
+				padding: 0.3rem 0.266666rem;
+				border-radius: 15px;
+			}
+			
+			.null {
+				height: 100%;
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">我的关注</h1>
+			</header>
+			<div class="mui-content mui-scroll-wrapper app-font-size-28">
+				<div class="attention_item" v-for="o,i in attentions" v-if="o">
+					<img class="vertical_center" :src="o.headimgurl" />
+					<span class="name vertical_center app-font-size-28" v-text="o.nickname"></span>
+					<!--<img class="attention_icon vertical_center" @tap="unBindTap(o.account,i)" src="../../../image/person/collection/btn_Alreadypaidattentionto@3x.png" />-->
+					<div class="attention_icon vertical_center" @tap="unBindTap(o.account,i)">已关注</div>
+				</div>
+				<div class="null" v-show="attentions.length === 0">
+
+				</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#box',
+				data: function() {
+					return {
+						attentions: [
+//							{
+//								"nickname": "上海风云",
+//								"account": "13545826660",
+//								"headimgurl": "http://vihiapp.oss-cn-shenzhen.aliyuncs.com/6d95cd92-c355-4cad-9ab8-3d9c5b00476c.jpg"
+//							}, {
+//								"nickname": "啦兔兔",
+//								"account": "2018011015580426327327",
+//								"headimgurl": "http://vihiapp.oss-cn-shenzhen.aliyuncs.com/4ef6c4b1-531d-449f-92d0-c4adfc66998e.jpg"
+//							}
+						],
+
+						n: 0,
+					};
+				},
+
+				mounted: function() {
+					that = this;
+					this.$pullRefresh = mui(".mui-scroll-wrapper");
+					//										this._getList(function(data) {
+					//											console.log(JSON.stringify(data));
+					//											that.attentions = data;
+					//										});
+					mui.init({
+						pullRefresh: {
+							container: ".mui-scroll-wrapper", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+							up: {
+								callback: this._up,
+							}
+						}
+					});
+					this._up();
+				},
+				plusReady: function() {},
+				methods: {
+					_getList: function(f) {
+						dal.user.focus.list(this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							f(data);
+						});
+					},
+					_unfollow: function(account, f) {
+						dal.user.focus.delete(account, function(err, data) {
+							if(err) {
+								return mui.toast(err.massage);
+							}
+							f(data);
+						});
+					},
+					unBindTap: function(account, index) {
+						var that = this;
+						mui.confirm("取关后你将无法实时了解TA的动态，是否取消关注？", "温馨提示", ['确认', '取消'], function(e) {
+							if(!e.index) {
+								that._unfollow(account, function(data) {
+									that.attentions.splice(index, 1);
+								});
+							}
+						});
+					},
+					_up: function() {
+						console.log("up");
+						this.n++;
+						this._getList(function(data) {
+							console.log(JSON.stringify(data));
+							if(!data || !data.length) {
+								mui.toast('没有更多啦~~');
+								this.$pullRefresh.pullRefresh().endPullupToRefresh();
+							} else {
+								this.attentions.push.apply(this.attentions, data);
+							}
+							this.$pullRefresh.pullRefresh().endPullupToRefresh();
+						}.bind(this));
+					},
+				},
+			});
+		</script>
+	</body>
+
+</html>

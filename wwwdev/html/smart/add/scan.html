@@ -1,0 +1,342 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>扫码</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/lib/icons-extra.css" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: white;
+			}
+			
+			.scanRoom {
+				width: 7.2rem;
+				height: 7.2rem;
+				margin: 1.3rem auto;
+				background-color: #FFFFFF;
+				text-align: center;
+				line-height: 7.2rem;
+			}
+			
+			.tips {
+				padding-top: 2rem;
+				text-align: center;
+			}
+			
+			.add_btn {
+				display: inline-block;
+				width: auto;
+				color: #06C1AE;
+				border-bottom: 1px solid #06C1AE;
+				padding-bottom: 3px;
+				margin-bottom: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">扫码</h1>
+				<a @tap="flash=!flash" class="mui-icon mui-icon-extra mui-icon-extra-lamp mui-pull-right" style="color:white"></a>
+			</header>
+
+			<div class="mui-content">
+				<div class="scanRoom app-font-size-38 app-color-main" id="axy" @tap="resetScan()">
+					<span v-show="!frist">正在载入...</span>
+				</div>
+
+				<div class="tips app-font-size-28">
+					<div class="add_btn" @tap="onAddTap()">扫码没反应？试试序列号添加</div>
+					<div class="app-color-dark">请扫描机身或者说明书的二维码进行添加</div>
+				</div>
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init({
+				//处理窗口关闭前的业务
+				beforeback: function() {
+					app.page.setResult({}).close();
+					return false;
+				},
+			});
+
+			var barcodeid = 0;
+
+			var _B = new ni.Broadcast();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						flash: false, // 闪光灯状态
+						frist: true, // 是否首次
+						scan: null,
+						t: -1,
+						isDev: false,
+						isSmart: false,
+					};
+				},
+				watch: {
+					flash: function(v) {
+						this.scan && this.scan.setFlash(v);
+					}
+				},
+				mounted: function() {
+
+				},
+
+				plusReady: function() {
+
+					this.isDev = this.$view.isDev;
+					this.isSmart = this.$view.isSmart;
+					this.name = this.$view.name;
+
+					setTimeout(function() {
+						this.resetScan();
+					}.bind(this), 200);
+				},
+				methods: {
+					// 手动添加设备号
+					onAddTap: function() {
+						this.flash = false;
+
+						var url = 'scan_code.html';
+						if(this.name === 'AX-904') {
+							// GPRS 特殊处理
+							url = 'scan_code_904.html';
+						}
+
+						//this.closeScan();
+						//this.stopScan();
+						// 手动输入序列号 
+						app.page.openForResultBy(url, 'scan_code', function(data) {
+							if(data.code) {
+								var errmsg = app.rules.testBy(/^(?!25)/, data.code, "非配件设备码");
+								if(errmsg) {
+									// 25开头 是电管家 
+									this.isDev = true;
+									//return mui.toast(errmsg);
+								}
+								// 验证
+								this._addDevice(data.code);
+							} else {
+								// 重置扫码
+								setTimeout(function() {
+									this.startScan();
+								}.bind(this), 200);
+							}
+						}.bind(this), {
+							//							//tips: '请输入设备序列号',
+							//							//title: '手动输入',
+							//content: '8100120D',
+							// r: '',
+						});
+
+					},
+					// 发送添加设备请求
+					_addDevice: function(id) {
+						var that = this;
+						// 如果当前不是配件添加，是主机添加
+						if(this.isDev) {
+							var w = plus.nativeUI.showWaiting();
+							dal.device.add(id, function(err, data) {
+								w && (w.close(), w = null);
+								if(err) {
+									app.page.setResult({
+										result: false
+									}).close();
+									return mui.toast(err.message || '添加失败')
+								}
+								// 通知设备更新 TODO
+								_B.emit('device_update', {}, {
+									views: ['zeus', 'dev_my_list']
+								});
+
+								var cw = plus.webview.currentWebview();
+								var completedWindow = plus.webview.create('add_completed.html', 'add_completed', {}, {
+									devid: id,
+								}).show('pop-in', 220, function() {
+									cw.close('none');
+								});
+							});
+						}
+						// 配件添加
+						else {
+
+							Rx.Observable
+								// 获取配件的初始化信息
+								.create(function(observer) {
+									plus.nativeUI.showWaiting("获取配件的初始化信息");
+									dal.devaccessory.initbyid(id, function(err, data) {
+										plus.nativeUI.closeWaiting();
+										if(err) {
+											return mui.toast(err.message);
+										}
+										observer.next(data);
+									});
+								})
+								// 打开选择主机设备
+								.mergeMap(function(data1) {
+
+									return Rx.Observable.create(function(observer) {
+										var t;
+										app.page.openForResultBy('scan_bind_dev.html', 'scan_bind_dev', function(data) {
+											if(!data.devid) {
+												if(t) {
+													clearTimeout(t)
+												}
+												t = setTimeout(function() {
+													that.resetScan();
+													t = null;
+												}, 200);
+												return;
+											}
+											observer.next({
+												acc: data1,
+												dev: data,
+												
+											});
+										}, {
+											result: true,
+
+											accid: data1.aid,
+
+											//											filter: that.isSmart ? [
+											//												"AX-903",
+											//												"AX-904",
+											//												"VH-104GN",
+											//												"VH-104MG",
+											//												"VH-104DG",
+											//											]: [
+											//												"WG-100",
+											//												"AX-903",
+											//												//"AX-904"
+											//											]
+										});
+									});
+
+								})
+								// 新增配件
+								.mergeMap(function(rs) {
+									console.log("==============" + JSON.stringify(rs))
+									plus.nativeUI.showWaiting("正在添加配件");
+									return Rx.Observable.create(function(ob) {
+										// TODO 需要添加通道信息 waych
+										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, rs.dev.waych, function(err, data) {
+											plus.nativeUI.closeWaiting();
+											if(err) {
+												ob.next({
+													result: false
+												});
+												return mui.toast(err.message);
+											}
+
+											ob.next({
+												result: true,
+												acc: rs.acc,
+												dev: {
+													devid: rs.dev.devid,
+													type: rs.dev.type
+												}
+											});
+										});
+									});
+								})
+								// 添加配件结果
+								.subscribe(function(data) {
+									//									console.log(JSON.stringify(data));
+									if(data.result) {
+										// 通知配件更新 TODO
+										_B.emit('acc_update', {}, {
+											views: ['zeus', 'dev_my_list']
+										});
+									}
+									setTimeout(function(){
+										app.page.setResult({
+											data: data
+										}).close();	
+									}, 200);
+									
+								});
+
+						}
+
+					},
+
+					// 通过序列号获取过滤列表
+					_getFilterList: function(code) {
+
+					},
+
+					resetScan: function(frist) {
+						if(this.t && this.t >= 0) {
+							return;
+						}
+						this.closeScan();
+						this.initScan();
+						this.startScan();
+						this.t = setTimeout(function() {
+							window.clearTimeout(this.t);
+							this.t = -1;
+						}.bind(this), 1000);
+
+					},
+					initScan: function() {
+						//						var _arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+						var _arr = [0, 10];
+						var scan = new plus.barcode.Barcode('axy', _arr, {
+							frameColor: '#06C1AE',
+							scanbarColor: '#06C1AE',
+						});
+						scan.onmarked = this.onMarked.bind(this);
+						this.scan = scan;
+					},
+					onMarked: function(type, result, file) {
+						this._addDevice(result);
+					},
+					startScan: function() {
+						this.scan && (this.scan.start(), this.frist = false);
+					},
+					stopScan: function() {
+						this.scan && this.scan.cancel();
+					},
+					closeScan: function() {
+						this.scan && (this.scan.close(), this.scan = null, this.t = -1);
+					}
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

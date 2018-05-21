@@ -1,0 +1,340 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>迎宾器</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.img-wrap {
+				height: 0;
+				padding-bottom: 7rem;
+				/*background-image: url(../../../image/smart/devices/gas/btn_Formaldehydedetector@3x.png);*/
+				background-repeat: no-repeat;
+				background-size: 50%;
+				background-position: bottom;
+			}
+			
+			.menu-warp {
+				height: 3.066666rem;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7 !important;
+			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav mui-bar-transparent app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title" v-text="devInfo.accessory.name"></h1>
+			</header>
+
+			<div class="mui-content noImmersed">
+				<div @tap="toggleSwitch()" class="img-wrap" :style="'background-image: url(' + (state? '../../../image/smart/devices/icon/btn_Yingbindevice@3x.png' : '../../../image/smart/devices/icon/btn_Yingbindevice1@3x.png') + ')'">
+				</div>
+				<div class="menu-warp app-font-size-24 app-color-dark"></div>
+
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>配件ID</span>
+							<span class="mui-badge" v-text="devInfo.accessory.id"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onNameTap()">
+						<a class="mui-navigate-right">
+							<span>配件名称</span>
+							<span class="mui-badge" v-text="devInfo.accessory.name"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>绑定主机</span>
+							<span class="mui-badge" v-text="devInfo.devName || devInfo.accessory.devid"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>防区类型</span>
+							<span class="mui-badge" v-text="zonetypes[devInfo.accessory.zonetype]"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onAlarmTap()">
+						<a class="mui-navigate-right">
+							<span>告警抓拍延迟时间</span>
+							<span class="mui-badge" v-text="devInfo.accessory.delay+'s'"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a>
+							<span>启用此配件</span>
+							<span class="mui-badge">
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': devInfo.accessory.enable}" ref="switch1">
+									<div class="mui-switch-handle"></div>
+								</div>
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<!--<footer class="app-font-size-28">
+				<div class="app-color-main-dark">删除设备</div>
+				<div>解绑主机</div>
+			</footer>-->
+			<dev-footer :accessory="devInfo.accessory" :devtype="devInfo.devType" @del="onDelDevice" @unbind="onDevUnBind">
+
+			</dev-footer>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_ms_alarm.js"></script>
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						// 告警延迟时间
+						alarmDelayTime: 0,
+						// 弹框
+						pick: null,
+						state: true, // 当前状态
+						
+						// 防区类型
+						zonetypes: ["出入防区",
+							"活动防区",
+							"周边防区",
+							"求助防区",
+							"火警防区",
+							"煤气防区",
+							"系统防区",
+							"挟持防区",
+							"欠压防区",
+							"掉线防区",
+							"交流掉线",
+							"24小时防区"
+						],
+
+						// 设备信息
+						devInfo: {
+							"accessory": {
+								"id": "14255286",
+								"devid": "VH-104GN-2017061500015",
+								"name": "",
+								"action": 41990,
+								"type": 20,
+								"delay": 0,
+								"zonetype": 0,
+								"chnID": 0,
+								"externChn": true,
+								"x": 0,
+								"y": 0,
+								"ptzset": 0,
+								"xmlDescrition": "",
+								"enableDelete": true,
+								"enable": true
+							},
+							"devName": "",
+							"devType": 4166,
+							"statusCode": 0
+						},
+					};
+				},
+				mounted: function() {
+					this.$refs.switch1.addEventListener("toggle", function(event) {
+						if(this.isErr) {
+							this.isErr = false;
+							return;
+						}
+						var that = this;
+						// 发送更改请求
+						plus.nativeUI.showWaiting();
+						this.devInfo.accessory.enable = event.detail.isActive;
+						that._updataActionByEnable(that.devInfo.accessory.enable);
+						dal.devaccessory.enable(this.devInfo.accessory, this.devInfo.devType, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log(err + "," + data);
+							if(err) {
+								that.isErr = true;
+								mui(that.$refs.switch1).switch().toggle();
+								that.devInfo.accessory.enable = !that.devInfo.accessory.enable;
+								that._updataActionByEnable(that.devInfo.accessory.enable);
+								return mui.toast(err.message);
+							}
+							mui.toast("操作成功！");
+//							that._updataActionByEnable(that.devInfo.accessory.enable);
+							that._updataUi();
+						})
+					}.bind(this));
+
+					this.pick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+					this.pick.setData(pick_data);
+				},
+				plusReady: function() {
+					plus.navigator.setStatusBarStyle('dark');
+					this.devInfo = this.$view.info;
+					console.log(JSON.stringify(this.devInfo));
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close('none');
+						plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
+						var view = plus.webview.currentWebview();
+						plus.navigator.setStatusBarStyle('light');
+						view.close();
+					}.bind(this);
+				},
+				methods: {
+					// 切换开关
+					toggleSwitch: function() {
+						this.state = !this.state;
+					},
+					// 删除配件
+					onDelDevice: function() {
+						app.page.setResult({
+							action: "del"
+						}).close();
+
+						console.log("deldevice");
+					},
+					// 解绑配件
+					onDevUnBind: function() {
+						app.page.setResult({
+							action: "unbind"
+						}).close();
+						// TODO 可能需要重新选择主机
+						console.log("editdevice");
+					},
+					// 告警延迟时间
+					onAlarmTap: function() {
+						var that = this;
+
+						this.pick.pickers[0].setSelectedValue(this.devInfo.accessory.delay);
+
+						var fn = function(s) {
+							// 发起请求
+							plus.nativeUI.showWaiting();
+							dal.devaccessory.delay(that.devInfo.accessory, that.devInfo.devType, s, function(err, data) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("修改成功！");
+								that.devInfo.accessory.delay = s;
+								that._updataUi();
+							});
+						};
+
+						this.pick.show(function(items) {
+							fn(items[0].value);
+						}, function(items) {
+
+						});
+					},
+					//修改名称
+					onNameTap: function() {
+						var that = this;
+						app.page.getInput(function(data1) {
+							plus.nativeUI.showWaiting();
+							dal.devaccessory.name(that.devInfo.accessory.id, that.devInfo.accessory.type, that.devInfo.accessory.devid, that.devInfo.devType, data1.content, that.devInfo.accessory.name, that.devInfo.accessory.action, that.devInfo.accessory.delay, that.devInfo.accessory.zonetype, that.devInfo.accessory.chnID, that.devInfo.accessory.externChn, that.devInfo.accessory.x, that.devInfo.accessory.y, that.devInfo.accessory.ptzset, function(err, data) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									return mui.toast(err.message);
+								}
+								mui.toast("修改成功！");
+								that.devInfo.accessory.name = data1.content;
+								that._updataUi();
+							});
+						}, {
+							title: "配件名称",
+							content: that.devInfo.accessory.name,
+							r: "nonEmpty", 
+							rmsg: "配件名称不能为空",
+							maxLength: 30,
+							mLengthMsg: "最长不超过30个字符！",
+						});
+					},
+					// 更新缓存数据
+					_updataUi: function() {
+						that = this;
+						app.page.setResult({
+							action: "update",
+							info: that.devInfo
+						});
+					},
+					// 根据Enable更新Action的值
+					_updataActionByEnable: function(isOn) {
+						var action = this.devInfo.accessory.action;
+						console.log(action);
+						if(isOn) {
+							action = action | ((0x00000001 << 15));
+						} else {
+							action = action & (~(1 << 15));
+						}
+						this.devInfo.accessory.action = (action>>>0);
+						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

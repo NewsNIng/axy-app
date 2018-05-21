@@ -1,0 +1,38 @@
+.mui-poppicker-header,
+.mui-dtpicker-header {
+  background-color: #FFFFFF;
+}
+.mui-poppicker-header .mui-btn,
+.mui-dtpicker-header .mui-btn {
+  background-color: #FFFFFF;
+  border: none;
+  color: #333333;
+  padding: 5px 20px;
+}
+.mui-poppicker-header .mui-btn.mui-poppicker-btn-ok,
+.mui-dtpicker-header .mui-btn.mui-poppicker-btn-ok,
+.mui-poppicker-header .mui-btn.mui-btn-blue,
+.mui-dtpicker-header .mui-btn.mui-btn-blue {
+  color: #2BB8AA;
+}
+.mui-poppicker,
+.mui-dtpicker {
+  border: none;
+}
+.mui-poppicker-body,
+.mui-dtpicker-body {
+  border: none;
+}
+.mui-picker {
+  background-color: #FAFAFA;
+}
+.mui-picker-rule-ft {
+  border: none;
+}
+.mui-pciker-list li.highlight {
+  color: #2BB8AA;
+}
+.mui-dtpicker-title h5 {
+  background-color: #FFFFFF;
+  border: none;
+}

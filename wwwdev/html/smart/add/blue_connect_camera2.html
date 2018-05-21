@@ -1,0 +1,297 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>连接蓝牙设备第二步</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+				width: 100%;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.dev_text {
+				width: 100%;
+				margin-bottom: 0.4rem;
+				text-align: center;
+				color: #333333;
+				/*font-weight: bold;*/
+			}
+			
+			.help {
+				position: fixed;
+				bottom: 60px;
+				left: 50%;
+				padding: 0.01rem 0;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				border-bottom: 1px solid #2BB8AA;
+				color: #2BB8AA;
+			}
+			
+			.red {
+				color: red;
+			}
+			
+			.imgbg {
+				width: 100%;
+				padding: 1.5rem;
+			}
+			
+			.imgbg>img {
+				width: 100%;
+			}
+			/*=== 密码设置 ===*/
+			
+			.mask {
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				z-index: 99;
+				background-color: rgba(0, 0, 0, 0.66);
+			}
+			
+			.message-box {
+				position: absolute;
+				overflow: hidden;
+				left: 50%;
+				top: 50%;
+				width: 80%;
+				background-color: #E4E5E6;
+				transform: translate3d(-50%, -50%, 0);
+				-webkit-transform: translate3d(-50%, -50%, 0);
+				z-index: 100;
+				border-radius: 10px;
+			}
+			
+			.message-box-body {
+				padding: 0.733333rem;
+			}
+			
+			.message-box-body .app-font-size-24 {
+				margin-bottom: 0.6rem;
+			}
+			
+			.message-box-body input {
+				border: 1px #adadad solid;
+				border-radius: 4px;
+				background-color: #E4E5E6;
+				width: 100%;
+				height: 0.906666rem;
+				line-height: 0.906666rem;
+				margin-bottom: 0;
+			}
+			
+			.message-box-footer {
+				background-color: #06C1AE;
+				height: 1.306666rem;
+				line-height: 1.306666rem;
+				text-align: center;
+				color: #FFFFFF;
+			}
+			/*=== 密码设置 End ===*/
+		</style>
+	</head>
+
+	<body>
+
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">连接摄像机</h1>
+			</header>
+
+			<div class="mask" v-if="mask">
+				<div class="message-box">
+					<div class="message-box-body">
+						<div class="app-font-size-24">为保障您的隐私安全，请设置访问视频密码。</div>
+						<input v-model="pwd" class="app-font-size-28" type="password" value="" placeholder="请设置4~8位访问密码" />
+						<input v-model="pwd2" style="margin-top: 0.533333rem;" class="app-font-size-28" type="password" value="" placeholder="请再次输入密码" />
+					</div>
+					<div class="message-box-footer app-font-size-32" @tap="onSubmit()">
+						确定
+					</div>
+				</div>
+			</div>
+
+			<div class="mui-content">
+				<div class="imgbg">
+					<img src="../../../image/smart/devices/dev_icon/AX-203@3x.png" />
+				</div>
+				<div class="dev_icon app-font-size-30">
+
+					<div class="dev_text app-font-size-34">
+						将手机靠近智能主机，点击“下一步”
+						<br /> 开始蓝牙连接；
+					</div>
+				</div>
+
+			</div>
+
+			<div class="foot app-font-size-34">
+				<div @tap="onPrev()" style="width: 50%; float: left;background-color: #F4F8FB;" class="app-color-9f9fa0">上一步</div>
+				<div @tap="onNext()" style="width: 50%;float: left;">下一步</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+		<script type="text/javascript" src="../../../js/app/app-rules.js"></script>
+
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+
+		<script type="text/javascript">
+			var P = plug.H5NativeBridge;
+
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						wifiname: "",
+						wifipwd: "",
+						uuid: "",
+						cid: "",
+						cuid: "",
+
+						pwd: "1234",
+						pwd2: "1234",
+						mask: false,
+					};
+				},
+
+				watch: {
+					pwd: '_pwdcheck',
+					pwd2: '_pwdcheck',
+				},
+
+				mounted: function() {
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					this.wifiname = GetQueryString("wifiname");
+					this.wifipwd = GetQueryString("wifipwd");
+					this.uuid = GetQueryString("uuid");
+					this.cid =  GetQueryString("cid");
+				},
+				
+				plusReady: function(){
+					this.genCuid();
+				},
+				
+				methods: {
+					genCuid: function(){
+						var ID = new ni.Cache("blueuuid", "", {
+							plus: true
+						});
+						
+						if(!ID.data){
+							ID.data = (function(){
+							  function S4() {
+							    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+							  }
+							  return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
+							})();
+						}
+						
+						this.cuid = ID.data;
+						
+					},
+					
+					
+					onPrev: function() {
+						mui.back();
+					},
+					onNext: function() {
+						this.mask = true;
+					},
+
+					// 确定密码
+					onSubmit: function() {
+
+						if(this.pwd.length < 4) {
+							return mui.toast("密码至少设置为4位");
+						}
+
+						if(this.pwd !== this.pwd2) {
+							return mui.toast("两次输入的密码不一样");
+						}
+
+						this.mask = false;
+						// 设备WiFi配置
+
+						P.updateWiFiConfiguration(this.uuid, this.wifiname, this.wifipwd, this.pwd, function(rs){
+							console.log(rs);
+						}, function(){
+							
+						});
+
+						var url = "blue_connect_camera3.html?cid=" + this.cid + "&pwd=" + this.pwd + "&cuid=" + this.cuid;
+						this.$view.loadURL(url);
+
+					},
+
+					_pwdcheck: function(newValue, oldValue) {
+						var tlist = [{
+								type: /^[0-9\s]*$/,
+								value: newValue,
+								message: "密码只能是数字"
+							},
+							{
+								type: /^[^0]*$/,
+								value: newValue,
+								message: "密码不能为0开头"
+							},
+							{
+								type: function(v) {
+									return v.length <= 8;
+								},
+								value: newValue,
+								message: "密码不能超过8位"
+							}
+						];
+
+						var msg = app.rules.testLists(tlist);
+						if(msg) {
+							mui.toast(msg);
+							return this.pwd = oldValue;
+						}
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

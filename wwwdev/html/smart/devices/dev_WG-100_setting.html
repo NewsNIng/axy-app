@@ -1,0 +1,513 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能网关设置</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.img-wrap {
+				height: 6.133333rem;
+				/*padding-bottom: 6.133333rem;*/
+				background-image: url(../../../image/smart/devices/gateway/bg@3x.png);
+				background-repeat: no-repeat;
+				background-size: 100%;
+				background-position: bottom;
+			}
+			
+			.img-wrap>img {
+				width: 100%;
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.menu-warp {
+				display: flex;
+				display: -webkit-flex;
+				padding: 0.693333rem 0.5rem;
+				justify-content: space-between;
+				background-color: white;
+				margin-bottom: 0.266666rem;
+			}
+			
+			.menu-warp>div {
+				/*border: 1px solid #ccc;*/
+				flex: 1;
+				height: auto;
+				/*width: rem;*/
+				text-align: center;
+			}
+			
+			.menu-warp>div>img {
+				width: 1.466666rem;
+			}
+			
+			header img {
+				width: 0.48rem;
+				/*margin-right: 0.346666rem;*/
+			}
+			
+			.mui-icon {
+				/*padding: 0 !important;*/
+				margin-right: 0 !important;
+				padding-right: 0 !important;
+			}
+			
+			@keyframes ripple {
+				0% {
+					left: 50%;
+					top: 35%;
+					transform: translate3d(-50%, -50%, 0);
+					-webkit-transform: translate3d(-50%, -50%, 0);
+					opacity: 0.75;
+					width: 1.6rem;
+					height: 1.6rem;
+				}
+				100% {
+					transform: translate3d(-50%, -50%, 0);
+					-webkit-transform: translate3d(-50%, -50%, 0);
+					left: 50%;
+					top: 35%;
+					opacity: 0;
+					width: 3rem;
+					height: 3rem;
+				}
+			}
+			
+			.send_sound_wave>* {}
+			
+			.send_sound_wave {
+				position: relative;
+				background-color: transparent;
+			}
+			
+			.send_sound_wave:active:after {
+				content: ' ';
+				position: absolute;
+				z-index: 0;
+				width: 1.6rem;
+				height: 1.6rem;
+				background-color: #2BB8AA;
+				border-radius: 50%;
+				box-shadow: 0 0 10px rgba(0, 0, 0, .35) inset;
+				animation-name: 'ripple';
+				/*动画属性名，也就是我们前面keyframes定义的动画名*/
+				animation-duration: 1s;
+				/*动画持续时间*/
+				animation-timing-function: ease;
+				/*动画频率，和transition-timing-function是一样的*/
+				animation-delay: 0s;
+				/*动画延迟时间*/
+				animation-iteration-count: infinite;
+				/*定义循环资料，infinite为无限次*/
+				animation-direction: normal;
+				-webkit-animation-name: 'ripple';
+				/*动画属性名，也就是我们前面keyframes定义的动画名*/
+				-webkit-animation-duration: 1s;
+				/*动画持续时间*/
+				-webkit-animation-timing-function: ease;
+				/*动画频率，和transition-timing-function是一样的*/
+				-webkit-animation-delay: 0s;
+				/*动画延迟时间*/
+				-webkit-animation-iteration-count: infinite;
+				/*定义循环资料，infinite为无限次*/
+				-webkit-animation-direction: normal;
+				/*定义动画方式*/
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7 !important;
+			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+			
+			
+			.mui-switch.mui-disabled {
+				opacity: 1;
+				pointer-events: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">设置</h1>
+
+			</header>
+
+			<div class="mui-content">
+
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							<span>设备ID</span>
+							<span class="mui-badge" v-text="devInfo.devid"></span>
+						</a>
+					</li>
+
+					<li class="mui-table-view-cell" @tap="onNameTap()">
+						<a class="mui-navigate-right">
+							<span>设备名称</span>
+							<span class="mui-badge" v-text="devInfo.location || devInfo.devid"></span>
+						</a>
+					</li>
+					
+					<li class="mui-table-view-cell" @tap="onInfoTap()">
+						<a class="mui-navigate-right">
+							<span>基本信息</span>
+						</a>
+					</li>
+					
+					
+					<li class="mui-table-view-cell" @tap="onAutoArm()">
+						<a class="mui-navigate-right">
+							<span>自动布防计划</span>
+							<span class="mui-badge "></span>
+						</a>
+					</li>
+					<li v-show="otherInfo.on !== null" class="mui-table-view-cell" @tap="onOnToggle()">
+						<a class="">
+							<span>状态指示灯</span>
+							<span class="mui-badge">
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': otherInfo.on}" >
+									<div class="mui-switch-handle"></div>
+								</div>
+							</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onWifiSetTap()">
+						<a class="mui-navigate-right">
+							<span>WIFI配置</span>
+							<span class="mui-badge "></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onAlarmParam()">
+						<a class="mui-navigate-right">
+							<span>告警时间设置</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onLogTap()">
+						<a class="mui-navigate-right">
+							<span>摄像机日志</span>
+						</a>
+					</li>
+				</ul>
+
+			</div>
+
+			<footer class="app-font-size-28">
+				<div @tap="onDel()" class="app-color-main-dark">删除设备</div>
+				<div @tap="onReboot()">重启设备</div>
+			</footer>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js" defer></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-auth.js" ></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			var _B = new ni.Broadcast();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						devid: -1,
+
+						// 弹框
+						pick: null,
+						statusLight: true, // 是否开启状态指示灯,
+						devInfo: {
+							"id": 0,
+							"streamfwdport": 0,
+							"location": "",
+							"devid": "",
+							"relation": 0,
+							"binding": "",
+							"streamfwd": "vh.anxin-net.com",
+							"workmode": 0,
+							"type": 0,
+							"signalfwd": "vh.anxin-net.com",
+							"signalfwdport": 0,
+							"online": 0,
+
+						},
+						otherInfo: {
+							on: null,
+						}
+
+					};
+				},
+				mounted: function() {
+
+					this.pick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+					this.pick.setData(pick_data[1]);
+				},
+				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
+					this.devid = this.$view.devInfo.devid;
+
+					this._getOpenled();
+
+					var oldback = mui.back;
+
+				},
+				methods: {
+
+					// 设备名称
+					onNameTap: function(name) {
+						var that = this;
+						app.page.getInput(function(data) {
+							data.content = data.content.trim().length === 0 ? that.devInfo.devid: data.content;
+							dal.devparam.devname(that.devInfo.devid, that.devInfo.type, data.content, function(err, rs) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.devInfo.location = data.content;
+								mui.toast('名称更新成功');
+								// 通知上层
+								_B.emit("update", {
+									info: that.devInfo
+								}, {
+									views: ['dev_my_list', 'home']
+								});
+							});
+						}, {
+							title: "设备名称",
+							content: that.devInfo.location,
+						});
+					},
+					// 自动布防计划
+					onAutoArm: function() {
+						mui.openWindow('camera_settings_arming.html', 'arming', {
+							extras: {
+								info: this.devInfo
+							}
+						});
+					},
+					// 获取指示灯 
+					_getOpenled: function() {
+						var that = this;
+						dal.devparam.getOpenled(this.devInfo.devid, this.devInfo.type, function(err, rs) {
+							that.otherInfo.on = !rs.on;
+						});
+					},
+					// 状态指示灯
+					onOnToggle: function() {
+						var that = this;
+						var want = !that.otherInfo.on;
+						that.otherInfo.on = want;
+						plus.nativeUI.showWaiting();
+						dal.devparam.openled(this.devInfo.devid, this.devInfo.type, want, function(err, rs) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								that.otherInfo.on = !want;
+								return mui.toast(err.message);
+							}
+						});
+					},
+
+					// 删除设备
+					onDelDevice: function() {
+						console.log("deldevice");
+					},
+					// 告警时间跳转
+					onAlarmParam: function() {
+						var that = this;
+
+						app.page.getAlarmParam(function(data) {
+							//data.intervalTime
+							//data.continuedTime
+						}, {
+							//intervalTime: 0,
+							//continuedTime: 0,
+							type: that.devInfo.type,
+							devid: that.devInfo.devid,
+						});
+					},
+					
+					// 基本信息跳转
+					onInfoTap: function() {
+						mui.openWindow('camera_settings_info.html', 'camera_settings_info', {
+							extras: {
+								info: this.devInfo
+							}
+						});
+					},
+
+					// 删除设备
+					onDel: function() {
+						plus.nativeUI.showWaiting();
+
+						var dev = this.devInfo;
+						var methodName = 'delete';
+						var that = this;
+						if(dev.relation === 2) {
+							methodName += 'share';
+						}
+
+						// 弹窗确认
+						var $alert = Rx.Observable.create(function(ob) {
+							mui.confirm("确定要删除设备吗？\n删除前设备将会重启", "", ["删除", "取消"], function(e) {
+								if(e.index === 0) {
+									ob.next(dev);
+								} else {
+									ob.error(new Error("您取消了删除"));
+								}
+							});
+						});
+						// 重启设备
+						var $rebootFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									/*if(err) {
+										return ob.error(err);
+									}*/
+									dev.methodName = methodName;
+									ob.next(dev);
+								});
+							})
+						}
+
+						// 删除设备
+						var $deleteFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.device[dev.methodName](dev.devid, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(dev);
+								});
+							})
+						}
+						// 是否主账号
+						var $isMaster = Rx.Observable.fromPromise(app.auth.verify(app.auth.MASTER, app.user.get()));
+						
+						$isMaster.mergeMapTo($alert)
+							.mergeMap($rebootFn)
+							.mergeMap($deleteFn)
+							.subscribe(function(dev) {
+								mui.toast("设备删除成功");
+								plus.nativeUI.closeWaiting();
+								_B.emit("delete", {}, {
+									views: [that.$view.opener()]
+								});
+								_B.emit("device_update", {}, {
+									views: ["home"]
+								});
+								that.$view.close();
+							}, function(err) {
+								plus.nativeUI.closeWaiting();
+								mui.toast(err.message);
+							});
+
+					},
+
+					// 重启设备
+					onReboot: function(msg) {
+						var dev = this.devInfo;
+						mui.confirm(msg || "确定要重启设备吗？", "", ["重启", "取消"], function(e) {
+							if(e.index === 0) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									if(err) {
+										return mui.toast('重启设备失败');
+									}
+									return mui.toast('重启设备成功');
+								});
+							}
+						});
+					},
+
+					// 打开wifi设置
+					onWifiSetTap: function() {
+
+						var that = this;
+
+						Rx.Observable.create(function(ob) {
+							app.page.openForResultBy('../add/connect_wifi.html', 'wifiset', function(data) {
+								dal.devparam.wifi(that.devInfo.devid, that.devInfo.type, data.name, data.pwd, function(err, data) {
+									if(err) {
+										return mui.toast(err.message);
+									}
+									console.log(JSON.stringify(data));
+									ob.next();
+								});
+							});
+						}).subscribe(function() {
+							that.onReboot("配置WIFI成功，是否现在重启设备？");
+						});
+
+					},
+					// 布撤防日志
+					onLogTap: function() {
+						mui.openWindow('camera_settings_log.html', 'camera_settings_log', {
+							extras: {
+								info: this.devInfo
+							}
+						});
+					},
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

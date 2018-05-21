@@ -1,0 +1,335 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			header {
+				padding-left: 0.346666rem !important;
+				padding-right: 0.346666rem !important;
+			}
+			
+			header a img {
+				width: 0.48rem;
+			}
+			
+			.mui-bar-nav~.mui-content {
+				padding-top: 0;
+			}
+			
+			.mui-content {
+				background-color: white;
+				/*position: relative;*/
+			}
+			
+			.mui-content>img {
+				width: 100%;
+				height: 6.893333rem;
+			}
+			
+			.user_icon {
+				top: 1.573333rem;
+			}
+			
+			.user_icon>img {
+				width: 2rem;
+				height: 2rem;
+				border: 0.066666rem solid white;
+				border-radius: 50%;
+			}
+			
+			.user_icon,
+			.user_name,
+			.attention,
+			.fans {
+				position: absolute;
+				left: 50%;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+			}
+			
+			.user_name {
+				color: white;
+				font-weight: 500;
+				top: 3.893333rem;
+			}
+			
+			.attention {
+				/*float: right;*/
+				top: 4.986666rem;
+				/*border: 1px solid #ff3b30;*/
+				border-radius: 3px;
+				background-color: white;
+				color: #f82746;
+				text-align: center;
+				min-width: 1.866666rem;
+				height: 0.666666rem;
+				line-height: 0.666666rem;
+				font-weight: bold;
+			}
+			
+			.attention.active {
+				color: #FFFFFF;
+				background-color: #F82746;
+			}
+			
+			.fans {
+				top: 6.133333rem;
+				color: white;
+			}
+			
+			.TA {
+				height: 0.933333rem;
+				line-height: 0.933333rem;
+				color: #9F9FA0;
+				background-color: #F4F8FB;
+				padding-left: 0.346666rem;
+			}
+			
+			.dynamic {
+				padding: 0 0 0.346666rem 0.346666rem;
+				overflow: hidden;
+				background-color: white;
+			}
+			
+			.dynamic_item {
+				float: left;
+				width: 2.88rem;
+				margin: 0.346666rem 0.333333rem 0.08rem 0;
+				font-weight: 400;
+				text-align: center;
+			}
+			
+			.dynamic_item>.img {
+				width: 2.88rem;
+				height: 2.88rem;
+				background-position: center;
+				background-size: cover;
+				margin-bottom: 0.266666rem;
+			}
+			
+			.blur {
+				-webkit-filter: blur(10px);
+				filter: blur(10px);
+				background-color: #EDEDED; 
+				padding-top: 70%;
+				background-position: center;
+				background-size: cover;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="wrapper">
+			<header class="mui-bar mui-bar-nav app-header mui-bar-transparent">
+				<a class="mui-action-back mui-pull-left app-icon-back"></a>
+			</header>
+
+			<div class="mui-content noImmersed">
+
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<div style="width: 100%; text-align: center;">
+							<div :data-src="userInfo.headimgurl" class="img-lazy-load blur" data-type="avastr"></div>
+						</div>
+						
+						<div class="user_icon app-font-size-26"><img :data-src="userInfo.headimgurl" class="img-lazy-load" data-type="avastr" /></div>
+						<div class="user_name app-font-size-38" style="display: inline;" v-text="userInfo.nickname"></div>
+						<div class="attention app-font-size-26" :class="focus?'active':''" @tap="onFocusTap()">{{focus?'已':'+ '}}关注</div>
+						<div class="fans app-font-size-26" v-text="focuscount+'人已关注'"></div>
+						<div class="TA app-font-size-26">TA的动态</div>
+						<div class="dynamic">
+							<template v-for="o in dynamic" :key="o.id">
+								<div class="dynamic_item app-font-size-28 " @tap="onClickTap(o.id)">
+
+									<div class="img" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
+
+									<div class="mui-ellipsis">{{o.title}}</div>
+								</div>
+							</template>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<!--<button style="width: 100%;height: 1.173333rem;" type="button" class="mui-btn app-btn-main app-font-size-32">查看更多</button>-->
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/user.js"></script>
+		<script type="text/javascript" src="../../js/dal/article.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
+		<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '.wrapper',
+				data: function() {
+					return {
+						img: "",
+						userName: "",
+						userIcon: "",
+						isAttention: false,
+
+						dynamic: [],
+						//						focus: false,
+						focuscount: 0,
+						isfocus: 0,
+						userInfo: {
+							"id": 2,
+							"account": "",
+							"gender": "",
+							"nickname": "",
+							"birthday": "",
+							"province": "",
+							"city": "",
+							"headimgurl": "",
+							"qqopenid": null,
+							"wxopenid": null,
+							"wbopenid": null
+						},
+						n: 1
+					};
+				},
+				computed: {
+					focus: function() {
+						return this.isfocus !== 0;
+					}
+				},
+
+				mounted: function() {
+
+					this.$pullRefresh = mui(".mui-scroll-wrapper");
+					mui.init({
+						pullRefresh: {
+							container: ".mui-scroll-wrapper",
+							up: {
+								callback: this.up
+							}
+						}
+					});
+
+				},
+
+				plusReady: function() {
+
+					this.uid = this.$view.uid;
+					this.from = app.user.get().account || "null";
+					this.getInfo();
+					this.getList();
+					imagelazyload();
+
+				},
+				methods: {
+					getInfo: function() {
+						dal.user.get(this.from, this.uid, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.isfocus = data.isfocus;
+							this.focuscount = data.focuscount;
+							//							alert(JSON.stringify(this.focuscount));
+							this.userInfo = data.user;
+							this.$nextTick(function() {
+								imagelazyload();
+							});
+						}.bind(this));
+					},
+
+					up: function() {
+						this.n++;
+						this.getList();
+					},
+					getList: function() {
+						dal.article.user.list(this.uid, this.n, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+
+							if(!data || data.length === 0) {
+								this.n > 1 && mui.toast('没有更多了~');
+								return this.$pullRefresh.pullRefresh().disablePullupToRefresh();
+							}
+
+							this.dynamic.push.apply(this.dynamic, data);
+
+						}.bind(this), 9);
+					},
+					onFocusTap: function() {
+						app.user.get(function(u) {
+							if(!u) {
+								return false;
+							}
+
+							if(this.from === this.uid) {
+								return mui.toast("您不能关注自己！");
+							}
+
+							this.changeFocus();
+						}.bind(this));
+
+					},
+					changeFocus: function() {
+						var that = this;
+						var methodName = 'add';
+						if(this.focus) {
+							methodName = 'delete';
+						}
+//						alert(methodName+","+this.focus);
+						plus.nativeUI.showWaiting();
+						dal.user.focus[methodName](this.uid, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							if(that.focus) {
+								that.focuscount--;
+							} else {
+								that.focuscount++;
+							}
+							that.isfocus = +!that.isfocus;
+							app.page.setResult({
+								isfocus:that.isfocus
+							});
+						});
+					},
+					_getImg: function(img1, img2, img3) {
+						return img1 || img2 || img3;
+					},
+					onClickTap: function(oid) {
+						mui.openWindow('../nearby/discover/discover_details.html', 'discover_details', {
+							extras: {
+								oid: oid
+							},
+							createNew: true
+						});
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

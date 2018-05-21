@@ -1,0 +1,1035 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>设备列表</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB !important;
+				padding-bottom: 0;
+			}
+			
+			header>h1>span {
+				margin: 0 0.693333rem;
+			}
+			
+			header>h1>span {
+				color: #d6f2ef;
+			}
+			
+			header>h1>span.active {
+				font-weight: bold;
+				color: #FFFFFF;
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn).mui-active {
+				background-color: initial;
+			}
+			
+			ul.a1 {
+				margin: 0.346666rem !important;
+				border-radius: 3px;
+				box-shadow: 0 2px 3px #ededed;
+			}
+			
+			ul.a1 span.left>img {
+				width: 0.48rem;
+				vertical-align: middle;
+			}
+			
+			ul.a1 span.left>span {
+				margin-left: 0.15rem;
+				vertical-align: middle;
+			}
+			
+			.nolog {
+				text-align: center;
+			}
+			
+			.nolog>.nolog_divimg {
+				background-image: url(../../../image/other/icon_Nolog@3x.png);
+				background-size: cover;
+				background-position: center;
+				width: 4rem;
+				height: 3.12rem;
+				margin: 2.986666rem auto 1.413333rem auto;
+			}
+			
+			.nolog .app-btn-main {
+				padding: 0;
+				width: 8.373333rem;
+				margin: 1.226666rem auto;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+			}
+			
+			.card {
+				background-color: #FFFFFF;
+				padding: 0.346666rem;
+				padding-bottom: 0;
+				margin-bottom: 0.266666rem;
+			}
+			
+			.imgdiv {
+				height: 4.666666rem;
+				width: 9.306666rem;
+				background-image: url(../../../image/smart/devices/bg/camera@3x.png);
+				background-size: cover;
+				/*background-position: center;*/
+				background-repeat: no-repeat;
+				position: relative;
+			}
+			
+			.imgdiv.WG-100 {
+				background-image: url(../../../image/smart/devices/bg/wg_100@3xweb.png);
+			}
+			
+			.imgdiv.AX-903 {
+				background-image: url(../../../image/smart/devices/bg/903@3xweb.png);
+			}
+			
+			.imgdiv.AX-904 {
+				background-image: url(../../../image/smart/devices/bg/904@3xweb.png);
+			}
+			
+			.imgdiv.VH-104GN {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			/*.imgdiv.AX-203 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-203A {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-360 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-403 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-503 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}
+			.imgdiv.AX-603 {
+				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
+			}*/
+			
+			.imgdiv.WG-100,
+			.imgdiv.AX-903,
+			.imgdiv.AX-904 {
+				/*pointer-events: none;*/
+			}
+			/*是否在线*/
+			
+			.imgdiv>span.imgdiv-line {
+				display: inline-block;
+				text-align: center;
+				width: 0.88rem;
+				height: 0.453333rem;
+				background-color: #9F9FA0;
+				color: #FFFFFF;
+				border-radius: 5px;
+				position: absolute;
+				top: 0.266666rem;
+				left: 0.266666rem;
+				z-index: 9;
+			}
+			/*兼容5s屏幕*/
+			
+			@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) {
+				.imgdiv>span.imgdiv-line {
+					line-height: 0.453333rem;
+				}
+				header>h1>span {
+					margin: 0 0.3rem;
+				}
+			}
+			/*布防状态*/
+			
+			.imgdiv>span.imgdiv-state {
+				display: inline-block;
+				text-align: center;
+				color: #FFFFFF;
+				border-radius: 5px;
+				position: absolute;
+				top: 0.177777rem;
+				right: 0.177777rem;
+				z-index: 9;
+			}
+			/*903无布撤防状态*/
+			
+			.AX-903 .imgdiv-state {
+				display: none !important;
+			}
+			
+			.imgdiv>span.imgdiv-state>img {
+				width: 0.666666rem;
+			}
+			
+			.imgdiv>span.online {
+				background-color: #06C1AE;
+			}
+			
+			.menudiv {
+				display: flex;
+				display: -webkit-flex;
+				align-items: center;
+				padding: 0.25rem 0.133333rem;
+			}
+			
+			.menudiv>span {
+				flex-grow: 1;
+				max-width: 50% !important;
+				white-space: nowrap;
+				overflow: hidden;
+				order: -2;
+				
+			}
+			
+			.menudiv img {
+				margin-left: 0.4rem;
+				width: 0.773333rem;
+				height: 0.773333rem;
+			}
+			/*903无控制器*/
+			
+			.menudiv.AX-903 .menudiv-controller {
+				order: -1;
+				opacity: 0;
+				pointer-events: none;
+			}
+			/*被分享设备无设置和分享按钮*/
+			
+			.menudiv.relation-share .menudiv-share,
+			.menudiv.relation-share .menudiv-setting {
+				display: none;
+				/*opacity: 0;*/
+				pointer-events: none;
+				order: -1;
+			}
+			/*删除按钮*/
+			
+			.menudiv-delete {
+				display: none;
+			}
+			
+			.menudiv.relation-share .menudiv-delete {
+				display: block;
+			}
+			/*控制弹窗*/
+			
+			#controll {
+				position: fixed;
+				border-radius: 0;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				background-color: #F4F8FB;
+			}
+			
+			#controll .qmenu {
+				padding: 1.253333rem 0.5rem;
+				background-color: #FFFFFF;
+				text-align: center;
+				display: flex;
+				display: -webkit-flex;
+			}
+			
+			#controll div.qmenu>div {
+				text-align: center;
+				margin: 0;
+				padding: 0;
+				display: inline-block;
+				flex: 1;
+				/*width: 25%;*/
+				/*float: left;*/
+			}
+			
+			#controll>div.qmenu img {
+				width: 1.466666rem;
+				margin: 0 0.2rem;
+				margin-bottom: 0.3rem;
+			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="controll" class="mui-popover">
+			<div class="qmenu">
+
+				<div @tap="onTap(1,$event, '求救')">
+					<img src="../../../image/smart/devices/btn_sos@3x.png" />
+					<h5 class="app-font-size-24">求救</h5>
+				</div>
+				<div @tap="onTap(8,$event, '布防')">
+					<img src="../../../image/smart/devices/others/btn_protection@3x.png" />
+					<h5 class="app-font-size-24">布防</h5>
+				</div>
+				<div @tap="onTap(4,$event, '撤防')">
+					<img src="../../../image/smart/devices/others/btn_Disarm@3x.png" />
+					<h5 class="app-font-size-24">撤防</h5>
+				</div>
+				<div @tap="onTap(2,$event, '静音')">
+					<img src="../../../image/smart/devices/btn_Mute@3x.png" />
+					<h5 class="app-font-size-24">静音</h5>
+				</div>
+
+			</div>
+
+			<div class="app-font-size-28" style="height: 1.333333rem;line-height: 1.333333rem;clear: both;text-align: center; margin-top: 0.266666rem;background-color: #FFFFFF;">
+				<a href="#controll" class="app-color-333333">取消</a>
+			</div>
+
+		</div>
+
+		<div id="box">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title app-font-size-34">
+					<!--v-text="'智能主机'+netDivList.length+'个'"-->
+					<span @tap="onActive(0)" :class="{active: active === 0}" >智能主机</span>
+					<span @tap="onActive(1)" :class="{active: active === 1}">智能配件</span>
+				</h1>
+				<a class="app-icon-plus mui-pull-right" @tap="onAddTap()"></a>
+			</header>
+
+			<div class="mui-content">
+				<template v-if="netDivList.length">
+
+					<div class="app-font-size-28 a0" v-show="active === 0">
+						<div class="card" v-for="o,i in netDivList">
+							<div class="imgdiv" ref="devimgel" v-devbg :key="o.devid" :class="_getDevName(o.type)" :data-devid="o.devid" @tap="onCmTap(o, i, $event)">
+								<span class="app-font-size-20 imgdiv-line" :class="o.online === 1 ? 'online': ''">{{o.online === 1 ? '在线': '离线'}}</span>
+								<!--{{o.workmode}}-->
+								<span class="imgdiv-state">
+									<template v-if="_isArm(o.workmode)">
+										<img src="../../../image/smart/devices/state/btn_protection@3x.png"/>	
+									</template>
+									<template v-else>
+										<img src="../../../image/smart/devices/state/btn_removal@3x.png"/>	
+									</template>
+									
+								</span>
+							</div>
+							<div class="menudiv" :class="_getDevName(o.type) + ' ' + _getDevRelation(o.relation) + ' ' + _getDevAuthorize(o.authorize)">
+								
+								<span class="app-color-main">{{_fixDevLocation(o.location) || o.devid}}</span>
+								<img class="menudiv-controller" @tap="onControlTap(o, i)" src="../../../image/smart/camera/controller.png" />
+
+								<img v-if="o.type !== 23 && o.type !== 128 && o.type !== 144" class="menudiv-album" @tap="onAlbmTap(o,i)" src="../../../image/smart/camera/history.png" />
+
+								<img class="menudiv-share" @tap="onShareTap(o,i)" src="../../../image/smart/camera/share.png" />
+								<img class="menudiv-setting" @tap="onSettingTap(o, i)" src="../../../image/smart/camera/setting.png" />
+								<img class="menudiv-delete" @tap="onDeleteTap(o, i)" src="../../../image/smart/camera/close.png" />
+							</div>
+
+						</div>
+					</div>
+					<div v-show="active === 1">
+						<ul class="mui-table-view app-font-size-28 a1" v-for="o,i in devaccessroyList">
+							<li class="mui-table-view-cell" @tap="onZoneTap(o, i)">
+								<a class="mui-navigate-right">
+									<span class="left app-font-size-28 app-color-333333">
+								<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-if="iconList[o.type] == null"/>
+								<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[o.type]" v-if="!(iconList[o.type] == null)"/>
+								<span>{{o.name}}</span>
+									</span>
+									<span class="mui-badge" :class="o.enable && 'app-color-main'">{{o.enable ? "已启用" : "未启用"}}</span>
+								</a>
+							</li>
+							<li class="mui-table-view-cell">
+								<a>
+									<span class="app-font-size-28 app-color-9f9fa0">
+								主机: {{_fixDevLocation(o.devname) || o.devid}}
+							</span>
+									<span class="mui-badge app-color-main">{{_getStateByCode(o.statecode)}}</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</template>
+				<template v-else-if="isGeted">
+					<div class="nolog">
+						<div class="nolog_divimg"></div>
+						<div class="app-font-size-30 app-color-9f9fa0">
+							这里空空如也， 快去商城挑挑看吧 ~
+						</div>
+						<button type="button" class="mui-btn app-btn-main app-font-size-34" @tap="onGoShop()">去商城逛逛</button>
+					</div>
+				</template>
+			</div>
+		</div>
+
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<!--<script type="text/javascript" src="../../../js/app/app-auth.js"></script>-->
+
+		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+
+		<script type="text/javascript">
+			var getScrrenHotBgFn = mui.os.ios ? app.ios.getScreenshotByDevId : app.android.getScreenshotByDevId;
+
+			Vue.directive('devbg', {
+				inserted: function(el) {
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid, true).then(function(path) {
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				},
+				update: function(el) {
+					var devid = el.dataset.devid;
+					getScrrenHotBgFn(devid, true).then(function(path) {
+						el.style.backgroundImage = "url(" + path + ")";
+					})
+				},
+			})
+
+			mui.init();
+			var devManager, runManager;
+
+			var _B = new ni.Broadcast();
+
+			var P = plug.H5NativeBridge;
+
+			var DEVD;
+
+			var wayPick;
+
+			var __stateCodearr = ["正常", "失联", "失压"];
+
+			var __relationarr = ["self", "none", "share"];
+
+			var menuV = new Vue({
+				el: '#controll',
+				methods: {
+					onTap: function(state, e, text) {
+						plus.nativeUI.showWaiting();
+						var dev = listV.controlDev;
+
+						Rx.Observable.create(function(ob) {
+							dal.devparam.remotecontrol(dev.devid, dev.type, state, function(err, rs) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									console.log(JSON.stringify(err));
+									return mui.toast(text + "失败, 请检查设备");
+								}
+								mui.toast(text + "成功");
+								mui('#controll').popover('hide');
+								ob.next(state);
+							});
+						}).subscribe(function(state) {
+							var o = {
+								// 布防
+								"8": function() {
+									dev.workmode = app.dev.getArmBit(); // 0x01 << 30
+								},
+								// 撤防
+								"4": function() {
+									dev.workmode = 0;
+								}
+							};
+
+							o[state] && o[state]();
+						});
+
+					}
+				}
+
+			});
+
+			var listV = new Vue({
+				el: '#box',
+				data: function() {
+					return {
+						active: 0,
+						controlIndex: -1,
+						netDivList: [],
+
+						tapIndex: -1,
+						// 是否获取过数据
+						isGeted: false,
+
+						// 配件列表
+						devaccessroyList: [],
+
+						iconList: {
+							"20": "btn_Warningsign@3x.png",
+							"21": "btn_Intelligentsocket@3x.png",
+							"22": "btn_Formaldehydedetector@3x.png",
+							"32": "btn_Greetingdevice@3x.png",
+							"41": "btn_Acousto-opticalarm@3x.png",
+							"48": "btn_Emergencybutton@3x.png",
+							"52": "btn_Curtainscontroller@3x.png",
+							"65": "btn_Infrareddetector@3x.png",
+							"80": "btn_Smokedetector@3x.png",
+							"129": "btn_Infrareddetector@3x (2).png",
+							"145": "btn_Stealthburglardetector@3x.png",
+							"160": "btn_Gasdetector@3x.png",
+							"161": "btn_Carbonmonoxidedetector@3x.png"
+						},
+
+					};
+				},
+
+				computed: {
+					controlDev: function() {
+						return this.netDivList[this.controlIndex];
+					}
+				},
+
+				mounted: function() {
+					wayPick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+
+				},
+
+				plusReady: function() {
+					var that = this;
+					this.$view.setStyle({
+						scrollIndicator: "none"
+					});
+
+					this.$view.setPullToRefresh({
+						support: true,
+						style: "circle",
+						offset: 45 + immersed + "px",
+						height: '50px',
+						range: '200px'
+					}, this._down.bind(this));
+
+					DEVD = new ni.Cache('dev_list', [], {
+						plus: true
+					});
+
+					Rx.Observable
+						// 入口
+						.create(function(ob) {
+							// 获取到数据更新通知时
+							_B.on('device_update', function() {
+								ob.next();
+							});
+							ob.next();
+						})
+						// 获取数据
+						.mergeMap(function() {
+							return Rx.Observable
+								.create(function(ob) {
+									// 207版本 去除拿取缓存 
+									//if(!DEVD.data || !DEVD.data.length) {
+									// 网络获取
+									dal.device.list(1, function(err, data) {
+										if(err) {
+											return;
+										}
+										ob.next(data || []);
+									}, 1000);
+									//} else {
+									//// 本地获取
+									//ob.next(DEVD.data);
+									//}
+
+								});
+						})
+						.map(function(data) {
+							// 数据不为空时 向原生发送数据
+							if(data && data.length > 0) {
+								DEVD.data = data;
+								P.InitNativeDevList(data);
+							}
+							return data;
+						})
+						.merge(Rx.Observable.create(function(ob) {
+							_B.on('device_update_timer', function(o) {
+								ob.next(o.devlist);
+							});
+						}))
+						// 数据处理
+						.subscribe(function(devData) {
+							that.isGeted = true;
+							that.netDivList = devData;
+						});
+
+					this.$nextTick(function() {
+						mui('.mui-switch')['switch']();
+					});
+
+					_B.on('delete', function() {
+						this.netDivList.splice(this.tapIndex, 1);
+					}.bind(this));
+
+					_B.on('update', function(data) {
+						this.$set(this.netDivList, this.tapIndex, data.info);
+					}.bind(this));
+
+					Rx.Observable.create(function(ob) {
+						that.$watch("active", function(index) {
+							if(index === 1 && that.devaccessroyList.length === 0) {
+								ob.next(false);
+							}
+						})
+					}).merge(Rx.Observable.create(function(ob) {
+						_B.on('zone_update', function() {
+							ob.next(true);
+						});
+					})).subscribe(function(hidewatting) {
+						// 获取配件列表
+						that.getDevaccessroyData(hidewatting);
+					});
+
+					mui.back = function() {
+						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
+						var view = plus.webview.currentWebview();
+						view.close();
+					}.bind(this)
+
+				},
+				methods: {
+					_down: function() {
+
+						var that = this;
+
+						if(that.active === 0) {
+							// 网络获取 最新设备信息
+							dal.device.list(1, function(err, data) {
+
+								if(err) {
+									return that.$view.endPullToRefresh();;
+								}
+								// 数据不为空时 向原生发送数据
+								if(data && data.length > 0) {
+									DEVD.data = data;
+									P.InitNativeDevList(data);
+									that.netDivList = [];
+									that.netDivList = data;
+									//that.active = 0;
+									// 配件列表置空
+									//that.devaccessroyList = [];
+								}
+								that.$view.endPullToRefresh();
+							}, 1000);
+						} else {
+							// 获取配件列表
+
+							dal.devaccessory.allacc(function(err, data) {
+								that.$view.endPullToRefresh();
+								if(err) {
+									return mui.toast(err.message);
+								}
+								this.devaccessroyList = data;
+
+							}.bind(this));
+						}
+
+					},
+
+					// 摄像机点击
+					onCmTap: function(o, i, e) {
+						var that = this;
+						var el = e.target;
+
+						if(o.online !== 1) {
+							return mui.toast("设备不在线");
+						}
+
+						this.tapIndex = i;
+
+						var name = app.dev.findName(o.type);
+
+						var url, pageid;
+						switch(name) {
+							case "WG-100":
+								{
+									url = "dev_WG-100.html";
+									pageid = "dev_WG-100";
+									break;
+								}
+
+							case "AX-903":
+								{
+									url = "dev_AX-903.html";
+									pageid = "dev_AX-903";
+									break;
+								}
+
+							case "AX-904":
+								{
+									url = "dev_AX-904.html";
+									pageid = "dev_AX-904";
+									break;
+								}
+
+							default:
+								{
+									url = "";
+									break;
+								}
+
+						}
+
+						if(url) {
+							mui.openWindow(url, pageid, {
+								extras: {
+									devInfo: o
+								}
+							});
+							return;
+						}
+						var type = app.dev.fixType(o.type);
+						Rx.Observable.create(function(ob) {
+							if(app.dev.isGPRS(o.workmode)){
+								return mui.toast("当前设备处于GPRS模式，暂不能播放");
+							}
+							if(app.dev.isMoreWays(type)) {
+								// 获取设备的通道信息
+								plus.nativeUI.showWaiting("获取通道信息中...");
+								dal.devparam.chlist(o.devid, type, function(err, data) {
+									plus.nativeUI.closeWaiting();
+									if(err) {
+										return mui.toast(err.message);
+									}
+
+									if(!data || !data.length) {
+										return mui.toast("暂无通道信息");
+									}
+
+									data = data.map(function(item) {
+										return {
+											text: item.name,
+											value: item.no
+										}
+									});
+									// 动态设置设备通道
+									wayPick.setData(data);
+									// 重置弹出层到第一个通道位置
+									wayPick.pickers[0].setSelectedIndex(0);
+									// 显示通道选择器
+									wayPick.show(function(items) {
+										ob.next({
+											b: items[0].value
+										});
+									}, function(items) {
+										// 取消 或者 隐藏
+									});
+								});
+							} else {
+								ob.next({
+									b: 0
+								});
+							}
+						}).subscribe(function(data) {
+							var w1 = data.b;
+							var w2 = type === 0x1046 ? 1 : 0;
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
+								getScrrenHotBgFn(o.devid).then(function(path) {
+									that.$refs.devimgel[that.tapIndex].style.backgroundImage = "url(" + path + ")";
+								})
+							});
+						});
+
+					},
+
+					// 计算关系显示菜单 
+					_getDevRelation: function(relation) {
+						return 'relation-' + __relationarr[relation];
+					},
+					// 计算权限显示菜单
+					_getDevAuthorize: function(authorize) {
+
+					},
+
+					// 空空如也 
+					onGoShop: function() {
+
+					},
+					// 标签切换
+					onActive: function(index) {
+						this.active = index;
+
+					},
+					// 添加配件点击
+					onAddTap: function() {
+						// 验证登录
+						app.user.get(function(u) {
+							u && mui.openWindow('../../smart/add/add_device.html', 'add/add_device.html');
+						});
+					},
+					// 智能配件点击
+					onZoneTap: function(o, i) {
+						//						console.log(o.type);
+
+						var that = this;
+						Rx.Observable.create(function(ob) {
+							// 检查本地是否有相关配件页面
+							var pageUrl = '_www/html/smart/devices/dev_' + o.type + '.html';
+							pageUrl = plus.io.convertLocalFileSystemURL(pageUrl);
+							if(mui.os.ios) {
+								pageUrl = 'file://' + pageUrl;
+							}
+							plus.io.resolveLocalFileSystemURL(pageUrl, function() {
+								ob.next(pageUrl);
+							}, function(err) {
+								// 页面不存在
+								console.log(o.type);
+								mui.toast('尚未支持该配件');
+							});
+						}).subscribe(function(pageUrl) {
+
+							var actionDir = {
+								del: function() {
+									that.devaccessroyList.splice(i, 1);
+								},
+								update: function(info) {
+									that.$set(that.devaccessroyList, i, info.accessory);
+								},
+								unbind: function() {
+									that.devaccessroyList.splice(i, 1);
+								}
+							}
+
+							// TODO 修复数据结构问题
+							o.id = o.aid;
+							var info = {
+								accessory: o,
+								devName: that._fixDevLocation(o.devname),
+								devType: o.devtype,
+								statusCode: o.statecode
+							};
+
+							app.page.openForResultBy(pageUrl, 'dev_' + o.type, function(data) {
+								actionDir[data.action](data.info);
+							}, {
+								info: info
+							});
+						});
+
+					},
+
+					_getDevName: function(type) {
+						return app.dev.findName(type);
+					},
+					_fixDevLocation: function(name) {
+						return app.dev.fixName(name);
+					},
+
+					// 设备设置
+					onSettingTap: function(o, i) {
+						this.tapIndex = i;
+
+						var name = app.dev.findName(o.type);
+
+						var url, pageid;
+						switch(name) {
+							case "WG-100":
+								{
+									url = "dev_WG-100_setting.html";
+									pageid = "dev_WG-100_setting";
+									break;
+								}
+
+							case "AX-903":
+								{
+									url = "dev_AX-903_setting.html";
+									pageid = "dev_AX-903_setting";
+									break;
+								}
+
+							case "AX-904":
+								{
+									url = "dev_AX-904.html";
+									pageid = "dev_AX-904";
+									break;
+								}
+							case "VH-104GN":
+								{
+									url = "dev_VH-104_setting.html";
+									pageid = "dev_VH-104_setting";
+									break;
+								}
+
+							default:
+								{
+									url = "camera_settings.html";
+									pageid = "camera_settings";
+									break;
+								}
+
+						}
+
+						url && mui.openWindow(url, pageid, {
+							extras: {
+								devInfo: o
+							}
+						});
+					},
+
+					// 设备分享删除
+					onDeleteTap: function(o, i) {
+						plus.nativeUI.showWaiting();
+
+						var dev = o;
+						var methodName = 'deleteshare';
+						var that = this;
+
+						// 弹窗确认
+						var $alert = Rx.Observable.create(function(ob) {
+							mui.confirm("确定把这台分享设备移除列表吗？", "", ["移除", "取消"], function(e) {
+								if(e.index === 0) {
+									ob.next(dev);
+								}else{
+									ob.error(new Error(""));
+								}
+							});
+						});
+
+						// 删除设备
+						var $deleteFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.device[methodName](dev.devid, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(dev);
+								});
+							})
+						};
+
+						$alert
+							.mergeMap($deleteFn)
+							.subscribe(function(dev) {
+								mui.toast("设备移除成功");
+								plus.nativeUI.closeWaiting();
+
+								_B.emit("device_update", {}, {
+									views: ["home"]
+								});
+
+								that.netDivList.splice(i, 1);
+
+							}, function(err) {
+								plus.nativeUI.closeWaiting();
+								err.message && mui.toast(err.message);
+							});
+					},
+
+					// 设备控制
+					onControlTap: function(o, i) {
+						if(o.online !== 1) {
+							return mui.toast("设备不在线");
+						}
+						this.controlIndex = i;
+						mui('#controll').popover('show');
+					},
+
+					// 设备分享
+					onShareTap: function(o, i) {
+						mui.openWindow("../../person/devshare/share.html", 'dev_share', {
+							extras: {
+								devInfo: o
+							}
+						});
+					},
+
+					// 设备录像
+					onAlbmTap: function(o, i) {
+						//						alert(JSON.stringify(o));
+						mui.openWindow("../../person/collection/my_camera.html", 'my_camera', {
+							extras: {
+								devInfo: o
+							}
+						});
+					},
+
+					// 获取配件列表数据
+					getDevaccessroyData: function(hide, fn) {
+						var waitTitle = hide ? "正在更新配件信息..." : "正在获取配件...";
+						plus.nativeUI.showWaiting(waitTitle, {
+							//back: hide ? 'transmit' : 'close',
+						});
+
+						dal.devaccessory.allacc(function(err, data) {
+							plus.nativeUI.closeWaiting();
+							fn && fn();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							console.log(JSON.stringify(data));
+							this.devaccessroyList = data;
+
+						}.bind(this));
+					},
+
+					onSwipe: function(e, o) {
+						console.log(JSON.stringify(e));
+					},
+
+					_getDevImg: function(devid, iospath) {
+						if(this.$os.android) {
+							return app.android.getScreenshotByDevId(devid);
+						} else if(this.$os.ios) {
+							return "file://" + iospath;
+						}
+					},
+
+					_getStateByCode: function(code) {
+						return __stateCodearr[code];
+					},
+					_isArm: function(mode) {
+						return app.dev.isArm(mode);
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

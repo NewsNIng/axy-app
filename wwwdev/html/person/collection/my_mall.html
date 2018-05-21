@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>我的商城</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">我的商城</h1>
+			</header>
+			<div class="mui-content mui-scroll-wrapper app-font-size-32">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" @tap="openOrder">
+							<span class="app-color-333333">我的订单</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="openShopCart">
+						<a class="mui-navigate-right">
+							<span class="app-color-333333">购物车</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="openAddress">
+						<a class="mui-navigate-right">
+
+							<span class="app-color-333333">收货地址</span>
+						</a>
+					</li>
+					<!--<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+
+							<span class="app-color-333333">关于商城</span>
+						</a>
+					</li>-->
+
+				</ul>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/user.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-mall.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#box',
+				data: function() {
+					return {
+
+					};
+				},
+
+				mounted: function() {
+
+				},
+				plusReady: function() {},
+				methods: {
+					// 打开购物车
+					openShopCart: function() {
+						app.mall.openShopCart();
+					},
+					// 订单
+					openOrder: function(){
+						app.mall.openOrder();
+					},
+					// 收获地址
+					openAddress: function(){
+						app.mall.openAddress();
+					}
+				},
+			});
+		</script>
+	</body>
+
+</html>

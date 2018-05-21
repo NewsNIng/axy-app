@@ -1,0 +1,341 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>GPRS报警主机设置</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.img-wrap {
+				height: 0;
+				padding-bottom: 7.866666rem;
+				background-repeat: no-repeat;
+				background-size: 60%;
+				background-position: bottom;
+			}
+			
+			.menu-warp {
+				height: 2.986666rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">设置</h1>
+			</header>
+
+			<div class="mui-content">
+
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>设备ID</span>
+							<span class="mui-badge" v-text="devInfo.devid"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onNameTap()">
+						<a class="mui-navigate-right">
+							<span>设备名称</span>
+							<span class="mui-badge" v-text="devInfo.location || devInfo.devid"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onLogTap()">
+						<a class="mui-navigate-right">
+							<span>摄像机日志</span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>GPRS模块</span>
+							<span v-if="baseInfo.id" class="mui-badge" v-text="baseInfo.gprsExist ? '存在':'不存在'"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>GPRS模式</span>
+							<span v-if="baseInfo.id" class="mui-badge" v-text="baseInfo.gprsMode ? '是':'否'"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>GPRS信号强度</span>
+							<span v-if="baseInfo.id" class="mui-badge" v-text="(gprs.signal || 0) + '%'"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>应用程序版本</span>
+							<span class="mui-badge" v-text="baseInfo.appVersion"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="">
+							<span>硬件版本</span>
+							<span class="mui-badge" v-text="baseInfo.hdVersion"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<footer class="app-font-size-28">
+				<div @tap="onDel()" class="app-color-main-dark">删除设备</div>
+				<div @tap="onReboot()">重启设备</div>
+			</footer>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-auth.js" ></script>
+		
+		<script type="text/javascript">
+			mui.init();
+			
+			var _B = new ni.Broadcast();
+			
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						devInfo: {
+							"streamfwdport": 0,
+							"location": "",
+							"devid": "",
+							"relation": 0,
+							"streamfwd": "",
+							"type": 0,
+							"signalfwd": "",
+							"signalfwdport": 0,
+							"online": 0
+						},
+						baseInfo: {
+							id: 0,
+							gprfSignal: 0,
+						},
+						gprs: {
+							"signal": 0,
+						}
+					};
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {
+					this.devInfo = this.$view.devInfo;
+
+					plus.nativeUI.showWaiting();
+					this.getBaseInfo() 
+					.mergeMap(this.gprsParam)
+					.subscribe(plus.nativeUI.closeWaiting, function(err) {
+						mui.toast(err.message);
+					});
+
+				},
+				methods: {
+					// 获取GPRS信号强度
+					gprsParam: function() {
+
+						var that = this;
+						return Rx.Observable.create(function(ob) {
+							dal.devparam.gprsParam(that.devInfo.devid, that.devInfo.type, function(err, rs) {
+								if(err) {
+									return ob.error(err);
+								}
+								that.gprs = rs;
+								ob.next();
+							});
+						});
+
+					},
+
+					// 获取基础信息
+					getBaseInfo: function() {
+						var that = this;
+						return Rx.Observable.create(function(ob) {
+							dal.devparam.basicinfo(that.devInfo.devid, that.devInfo.type, function(err, rs) {
+								if(err) {
+									return ob.error(err);
+								}
+								console.log(JSON.stringify(rs))
+								that.baseInfo = rs;
+								ob.next();
+							});
+						});
+					},
+
+					// 日志点击
+					onLogTap: function() {
+						mui.openWindow('camera_settings_log.html', 'camera_settings_log', {
+							extras: {
+								info: this.devInfo
+							}
+						});
+					},
+
+					// 切换开关
+					toggleSwitch: function() {
+						this.state = !this.state;
+					},
+					// 设备名称
+					onNameTap: function(name) {
+						var that = this;
+						
+						app.page.getInput(function(data) {
+							data.content = data.content.trim().length === 0 ? that.devInfo.devid: data.content; 
+							dal.devparam.devname(that.devInfo.devid, that.devInfo.type, data.content, function(err, rs) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.devInfo.location = data.content;
+								mui.toast('名称更新成功');
+								// 通知上层
+								_B.emit("update", {
+									info: that.devInfo
+								}, {
+									views: ['dev_my_list', 'home']
+								});
+							});
+						}, {
+							title: "GPRS名称",
+							content: that.fixName(that.devInfo.location),
+							//							r: "devName",
+							maxLength: 30,
+							mLengthMsg: "最长不超过30个字符！",
+						});
+						
+						
+					},
+					// 重启设备
+					onReboot: function() {
+						var dev = this.devInfo;
+						mui.confirm("确定要重启设备吗？", "", ["重启", "取消"], function(e) {
+							if(e.index === 0) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									if(err) {
+										return mui.toast('重启设备失败');
+									}
+									return mui.toast('重启设备成功');
+								});
+							}
+						});
+					},
+
+					// 删除设备
+					onDel: function() {
+						plus.nativeUI.showWaiting();
+
+						var dev = this.devInfo;
+						var methodName = 'delete';
+						var that = this;
+						if(dev.relation === 2) {
+							methodName += 'share';
+						}
+
+						// 弹窗确认
+						var $alert = Rx.Observable.create(function(ob) {
+							mui.confirm("确定要删除设备吗？\n删除前设备将会重启", "", ["删除", "取消"], function(e) {
+								if(e.index === 0) {
+									ob.next(dev);
+								} else {
+									ob.error(new Error("您取消了删除"));
+								}
+							});
+						});
+						// 重启设备
+						var $rebootFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									/*if(err) {
+										return ob.error(err);
+									}*/ 
+									dev.methodName = methodName;
+									ob.next(dev);
+								});
+							})
+						}
+
+						// 删除设备
+						var $deleteFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.device[dev.methodName](dev.devid, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(dev);
+								});
+							})
+						}
+
+						// 是否主账号
+						var $isMaster = Rx.Observable.fromPromise(app.auth.verify(app.auth.MASTER, app.user.get()));
+						
+						$isMaster.mergeMapTo($alert)
+							.mergeMap($rebootFn)
+							.mergeMap($deleteFn)
+							.subscribe(function(dev) {
+								mui.toast("设备删除成功");
+								plus.nativeUI.closeWaiting();
+								_B.emit("delete", {}, {
+									views: [that.$view.opener()]
+								});
+								_B.emit("device_update", {}, {
+									views: ["home"]
+								});
+								that.$view.close();
+							}, function(err) {
+								plus.nativeUI.closeWaiting();
+								mui.toast(err.message);
+							});
+
+					},
+					
+					fixName: function(str) {
+						return app.dev.fixName(str);
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

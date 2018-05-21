@@ -1,0 +1,415 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>告警参数</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: white;
+			}
+			
+			.mui-content {
+				margin-bottom: 1.173333rem;
+			}
+			
+			.title {
+				height: 1rem;
+				line-height: 1rem;
+				background-color: #F4F8FB;
+				color: #9F9FA0;
+				padding-left: 0.346666rem;
+			}
+			
+			.mui-grid-view {
+				background-color: white !important;
+			}
+			
+			.mui-table-view-cell>a {
+				position: relative;
+			}
+			
+			.mui-table-view-cell>a>img {
+				width: 100%;
+				max-height: 2.5rem;
+			}
+			
+			.mui-table-view-cell>a>div {
+				position: absolute;
+				bottom: 0.346666rem;
+				color: #9F9FA0 !important;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">添加设备</h1>
+			</header>
+
+			<div class="mui-content app-font-size-26">
+				<div class="title" v-text="hostDevs.title"></div>
+
+				<ul class="mui-table-view mui-grid-view mui-grid-9">
+					<template v-for="o,i in hostDevs.devs">
+						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap1(o)">
+							<a>
+								<img :src="o.img" />
+								<div class="mui-media-body app-font-size-26">{{o.name}}</div>
+							</a>
+						</li>
+					</template>
+
+				</ul>
+				<div class="title" v-text="ctrl_fit.title"></div>
+
+				<ul class="mui-table-view mui-grid-view mui-grid-9">
+					<template v-for="o,i in ctrl_fit.devs">
+						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap2(o)">
+							<a>
+								<img :src="o.img" />
+								<div class="mui-media-body app-font-size-26">{{o.name}}</div>
+							</a>
+						</li>
+					</template>
+				</ul>
+				<div class="title" v-text="safe_fit.title"></div>
+
+				<ul class="mui-table-view mui-grid-view mui-grid-9">
+
+					<template v-for="o,i in safe_fit.devs">
+						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap3(o)">
+							<a>
+								<img :src="o.img" />
+								<div class="mui-media-body app-font-size-26">{{o.name}}</div>
+							</a>
+						</li>
+					</template>
+
+				</ul>
+			</div>
+			<div class="foot app-font-size-34" @tap="onFamilyTap()">连接家人的摄像机</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript">
+			mui.init();
+
+			/**
+			 * type 0 声波
+			 * type 1内网
+			 * type 2扫码
+			 * type 3蓝牙
+			 */
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						hostDevs: {
+							isWifi: false, // 是否是WIFI环境
+
+							title: "智能主机",
+							devs: [{
+								img: "../../../image/smart/devices/dev_icon/AX-360@3x.png",
+								name: "AX-360",
+								type: 0
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
+								name: "AX-203",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-203A-D@3x.png",
+								name: "AX-203A/D",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
+								name: "AX-403A",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-503-HD@3x.png",
+								name: "AX-503/HD",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-603@3x.png",
+								name: "AX-603",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/dlaqzj@3x.png",
+								name: "电力安全主机",
+								type: 2
+							}, {
+								img: "../../../image/smart/devices/dev_icon/WG-100@3x.png",
+								name: "WG-100",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-904@3x.png",
+								name: "AX-904",
+								type: 2
+							}, {
+								img: "../../../image/smart/devices/dev_icon/VH104D-N-MG@3x.png",
+								name: "VH-104GN",
+								type: 1,
+								noWifi: true
+							},
+//							{
+//								img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
+//								name: "AX-203B",
+//								type: 3
+//							}, {
+//								img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
+//								name: "AX-403B",
+//								type: 3,
+//							},
+							]
+						},
+						ctrl_fit: {
+							title: "智能控制配件",
+							devs: [{
+									img: "../../../image/smart/devices/dev_icon/znms@3x.png",
+									name: "智能门锁",
+								}, {
+									img: "../../../image/smart/devices/dev_icon/zncz@3x.png",
+									name: "智能插座",
+								}, {
+									img: "../../../image/smart/devices/dev_icon/zndk@3x.png",
+									name: "智能灯控",
+								}, {
+									img: "../../../image/smart/devices/dev_icon/clkzq@3x.png",
+									name: "窗帘控制器",
+								},
+								//							{
+								//								img: "../../../image/smart/devices/dev_icon/clsjq@3x.png",
+								//								name: "窗帘升降器",
+								//							},
+								{
+									img: "../../../image/smart/devices/dev_icon/mjzj@3x.png",
+									name: "门禁主机",
+								}, {
+									img: "../../../image/smart/devices/dev_icon/hwyk@3x.png",
+									name: "红外遥控模块",
+								},
+							],
+						},
+						safe_fit: {
+							title: "智能安全配件",
+							devs: [{
+								img: "../../../image/smart/devices/dev_icon/ykq@3x.png",
+								name: "遥控器",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/jjan@3x.png",
+								name: "紧急按钮",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/sgbj@3x.png",
+								name: "声光报警器",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/mctc@3x.png",
+								name: "门磁探测器",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/ywtc@3x.png",
+								name: "烟雾探测器",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/rqtc@3x.png",
+								name: "燃气探测器",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/hwml@3x.png",
+								name: "红外幕帘",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/yyht@3x.png",
+								name: "一氧化碳探测器",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/jqtcq@3x.png",
+								name: "甲醛探测器",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/yxfd@3x.png",
+								name: "隐形防盗探测器",
+							}, {
+								img: "../../../image/smart/devices/dev_icon/ybq@3x.png",
+								name: "迎宾器",
+							}, ],
+
+							devCache: null
+						},
+					};
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {
+					this.isWifi = app.net.getType() === 'wifi';
+					// 监听网络变化
+					app.net.listen(function(type) {
+						this.isWifi = type === 'wifi';
+					}.bind(this));
+
+					this.devCache = new ni.Cache("dev_list", [], {
+						plus: true
+					});
+				},
+				methods: {
+
+					// 点击连接家人的摄像机
+					onFamilyTap: function() {
+						mui.openWindow('family_menu.html');
+					},
+
+					// 主机
+					onItemTap1: function(o) {
+						var that = this;
+						// 验证是否主帐号
+						var u = app.user.get();
+						app.auth.verify(app.auth.MASTER, u).then(function() {
+							//						alert(JSON.stringify(o));
+							if(o.type === 0) {
+								that._voiceDevLine();
+							} else if(o.type === 1) {
+								that._hostNetLine(o);
+							} else if(o.type === 2) {
+								that._scanCodeLine({
+									isDev: true,
+									isSmart: false,
+									name: o.name
+								});
+							}else if(o.type === 3){
+								that._bluetoothLine();
+							}
+						}).catch(function(e) {
+							mui.toast(e.message);
+						});
+
+					},
+					// 控制配件
+					onItemTap2: function(o) {
+						var l = this.devCache.data.length;
+						if(!l || l === 0) {
+							return mui.toast('请先添加主机');
+						}
+						this._scanCodeLine({
+							isDev: false,
+							isSmart: true,
+							name: o.name
+						});
+					},
+					// 安全配件
+					onItemTap3: function(o) {
+						var l = this.devCache.data.length;
+						if(!l || l === 0) {
+							return mui.toast('请先添加主机');
+						}
+						this._scanCodeLine({
+							isDev: false,
+							isSmart: false,
+							name: o.name
+						});
+					},
+					
+					// 蓝牙连接设备
+					_bluetoothLine: function(o){
+						// 第一步设置设备WIFI
+						app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
+							var url = "blue_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
+							mui.openWindow(url, 'blue1');
+						});
+					},
+
+					// 声波连接设备
+					_voiceDevLine: function() {
+						if(!this.isWifi) {
+							return mui.toast('请连接WIFI');
+						}
+						app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
+							var url = "sonic_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
+							mui.openWindow(url, 'voice1');
+						});
+					},
+
+					// 内网连接设备
+					_hostNetLine: function(o) {
+						if(!this.isWifi) {
+							return mui.toast('请连接WIFI');
+						}
+						// 保存当前设备img地址
+						window.localStorage.setItem('Lan_add_camera_img', o.img);
+						// 保存这个设备的type
+						window.localStorage.setItem('Lan_add_camera_type', o.type);
+						mui.openWindow('Lan_add_camera.html', 'Lan_add_camera', {
+							extras: {
+								ex: {
+									noWifi: !!o.noWifi
+								}
+							}
+						});
+					},
+
+					// 扫码获取设备ID
+					_scanCodeLine: function(o) {
+						app.page.openForResultBy('scan.html', 'scan', function(data) {
+							// 获取扫码结果
+							if(!data.data) {
+								return;
+							}
+							if(data.data.result) {
+								//获取配件信息
+
+								// 跳转
+								mui.openWindow('add_completed.html', 'add_completed', {
+									createNew: true,
+									extras: {
+										needConn: false,
+										//配件id
+										//										devid: this.devid,
+										isFitting: true,
+										info: data,
+									}
+								});
+							}
+						}, o);
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

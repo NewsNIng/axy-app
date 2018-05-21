@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>告警参数</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../css/app/app.poppicker.css" />-->
+		<link rel="stylesheet" href="../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<link rel="stylesheet" href="../../css/app/module/poppicker.css" />
+		<link rel="stylesheet" href="../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.mui-content>ul {
+				margin-top: 0.266666rem !important;
+				margin-bottom: 0 !important;
+			}
+			
+			.mui-table-view:after,
+			.mui-table-view:before {
+				height: 0;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #F2F2F3;
+			}
+			
+			.mui-badge {
+				background-color: white;
+				color: #808080;
+			}
+			
+			.mui-icon>img {
+				width: 0.586666rem;
+			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">告警参数</h1>
+				<!--<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
+					<img src="../../image/smart/scenes/complete_icon.png" />
+				</a>-->
+			</header>
+
+			<div class="mui-content">
+				<div class="menu-warp app-font-size-24 app-color-dark"></div>
+
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell" @tap="onPickTap(0)">
+						<a class="mui-navigate-right">
+							<span>告警时间间隔</span>
+							<span class="mui-badge" v-text="intervalTimeText"></span>
+						</a>
+					</li>
+					<li class="mui-table-view-cell" @tap="onPickTap(1)">
+						<a class="mui-navigate-right">
+							<span>告警声音播放时间</span>
+							<span class="mui-badge" v-text="continuedTimeText"></span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../js/dal/devparam.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/app/app-dev.js"></script>
+
+		<!--<script type="text/javascript" src="../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../js/data/time_ms_1-6.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						index: -1, // 设置项下标
+						pick: null,
+
+						recTime: -1,
+						en: -1,
+						intervalTime: -1,
+						continuedTime: -1,
+
+						type: -1,
+						devid: "",
+						isMoreWays: false, // 默认单通道
+					};
+				},
+
+				computed: {
+					intervalTimeText: function() {
+						return this.intervalTime === -1 ? "" : this.intervalTime + 's';
+					},
+					continuedTimeText: function() {
+						return this.continuedTime === -1 ? "" : this.continuedTime + 's';
+					}
+				},
+
+				mounted: function() {
+					this.pick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+					//					pick_data[1].push({
+					//						"text": "60秒",
+					//						"value": 60
+					//					})
+					this.pick.setData(pick_data[0]);
+				},
+				plusReady: function() {
+					var that = this;
+					plus.nativeUI.showWaiting();
+					var v = this.$view;
+					this.type = v.type;
+					this.devid = v.devid;
+					this.isMoreWays = app.dev.isMoreWays(this.type);
+					dal.devparam.getAlarm(this.devid, this.type, function(err, data) {
+						console.log(JSON.stringify(data));
+						plus.nativeUI.closeWaiting();
+						if(err) {
+							return mui.toast(err.message);
+						}
+						this.en = data.en;
+						this.recTime = data.recTime;
+						this.intervalTime = data.interval && data.interval > 60 ? data.interval : 60;
+						this.continuedTime = data.durationTime && data.durationTime > (that.isMoreWays?60:10) ? data.durationTime : (that.isMoreWays?60:10);
+//						console.log(data.interval + "," + data.durationTime);
+					}.bind(this)); //					this.intervalTime = v.intervalTime;
+					//					this.continuedTime = v.continuedTime;
+				},
+				methods: {
+					onPickTap: function(i) {
+						var that = this;
+//						alert(i);
+						var p = 'intervalTime';
+						if(i === 1) {
+							p = 'continuedTime';
+						}
+						if(this.isMoreWays){
+							i = i + 2;
+						}
+						this.pick.setData(pick_data[i]);
+						//						alert(this.intervalTime+","+this.continuedTime);
+						this.pick.pickers[0].setSelectedValue(that[p]);
+
+						var fn = function(s) {
+							that[p] = s;
+//							alert(p);
+//							alert(that.continuedTime);
+							that.onSaveTap();
+						};
+
+						this.pick.show(function(items) {
+							fn(items[0].value);
+						}, function(items) {
+
+						});
+					},
+					onSaveTap: function() {
+						plus.nativeUI.showWaiting();
+//						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.intervalTime, this.continuedTime, function(err, data) {
+						dal.devparam.setAlarm(this.devid, this.type, this.en, this.recTime, this.intervalTime, this.continuedTime, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log("data==>" + JSON.stringify(data));
+							console.log("err==>" + JSON.stringify(err));
+							if(err) {
+								return mui.toast(err.message);
+							}
+							mui.toast("修改成功！");
+							//							alert("err==>" + err + "\tdata==>" + data);
+							app.page.setResult({
+								//								intervalTime: this.intervalTime,
+								//								continuedTime: this.continuedTime
+							}).close();
+						});
+
+					},
+
+				}
+			});
+		</script>
+	</body>
+
+</html>
