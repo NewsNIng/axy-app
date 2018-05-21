@@ -1,6 +1,6 @@
 Vue && Vue.component('warn-msg', {
 
-	template: '<div class="home-warnmsg" v-if="items.length" ><img src="../../image/home/icon_Alarmnews@3x.png" /><transition-group name="flip-list" tag="div"><div class="home-warnmsg-item" v-for="o,i in items" :key="o.id" @tap="onTap(o)"><span class="app-font-size-26 mui-ellipsis">{{_fixDevLocation(o.location) +　" " + (o.areaname || o.areaid)}}</span><span class="app-font-size-26 home-warnmsg-item-right">{{_fixTimeAgo(o.atime)}}</span></div></transition-group></div>',
+	template: '<div class="home-warnmsg" v-if="items.length" ><img src="../../image/home/icon_Unreadmessage@3x.png" /><transition-group name="flip-list" tag="div"><div class="home-warnmsg-item" v-for="o,i in items" :key="o.id" @tap="onTap(o)"><span class="app-font-size-26 mui-ellipsis">{{_fixDevLocation(o.location) +　" " + (o.areaname || o.areaid)}}</span><span class="app-font-size-26 home-warnmsg-item-right">{{_fixTimeAgo(o.atime)}}</span></div></transition-group></div>',
 
 	data: function() {
 		return {
@@ -11,18 +11,9 @@ Vue && Vue.component('warn-msg', {
 			st: null,
 		}
 	},
-	created: function() {
+
+	plusReady: function() {
 		var that = this;
-		// 设备就绪流
-		var pready$ = Rx.Observable.create(function(ob) {
-			if(window.plus) {
-				ob.next();
-			} else {
-				document.addEventListener('plusready', function() {
-					ob.next();
-				});
-			}
-		});
 
 		var NotifyWarningMsg$ = Rx.Observable.create(function(ob) {
 			// 原生通知告警信息刷新
@@ -30,29 +21,28 @@ Vue && Vue.component('warn-msg', {
 				ob.next(data);
 			});
 		});
-		
-		
 
+		var listenUser$ = Rx.Observable.create(function(ob) {
+			_B.on('login_success', function() {
+				ob.next();
+			});
+			_B.on('home_reload', function() {
+				ob.next();
+			});
 
-		Rx.Observable.create(function(ob) {
-				_B.on('login_success', function() {
-					ob.next();
-				});
-				_B.on('home_reload', function() {
-					ob.next();
-				});
-
-				app.user.has() && ob.next();
-			})
-			
-			.merge(pready$.mergeMapTo(NotifyWarningMsg$).debounceTime(3e3))
+			app.user.has() && ob.next();
+		});
 		
-			.mergeMap(function() {
-				return Rx.Observable.fromPromise(that.getMessageList())
-			})
+		var getMessageList$ = Rx.Observable.fromPromise(that.getMessageList());
+
+		listenUser$
+
+			.merge(NotifyWarningMsg$.debounceTime(3e3))
+
+			.mergeMapTo(getMessageList$)
 
 			.subscribe(function(data) {
-				
+
 				that.items = data;
 
 				if(data.length > 1) {
@@ -70,26 +60,36 @@ Vue && Vue.component('warn-msg', {
 			});
 
 	},
-	
 
 	methods: {
 		// 获取告警列表
+		//		getMessageList: function() {
+		//			return new Promise(function(resolve, reject) {
+		//				dal.message.getAlarmList(1, "", "", function(err, data) {
+		//
+		//					if(err) {
+		//						return reject(err);
+		//					}
+		//					if(!data || data.length === 0) {
+		//						return;
+		//					}
+		//					resolve(data);
+		//				});
+		//			});
+		//
+		//		},
+
 		getMessageList: function() {
 			return new Promise(function(resolve, reject) {
-				dal.message.getAlarmList(1, "", "", function(err, data) {
-
-					if(err) {
-						return reject(err);
-					}
-					if(!data || data.length === 0) {
+				var username = app.user.get().account;
+				username && plug.H5NativeBridge.GetNoReadAlarmListAsyn(username, 10, function(data) {
+					if(!data || data.length == 0) {
 						return;
 					}
 					resolve(data);
-				});
-			});
-
+				})
+			})
 		},
-
 		onTap: function(o) {
 			mui.openWindow('../person/message/index.html');
 		},
