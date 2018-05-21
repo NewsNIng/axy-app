@@ -21,13 +21,13 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-		return;
+		//return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		return;
+		//return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
@@ -392,6 +392,15 @@
 	 */
 	pgn.GetLocalRecordInfoSync = function(deviceID, createTime){
 		return pg.syncExec(N, 'GetLocalRecordInfoSync', [deviceID, createTime]);
+	};
+	
+	
+	/**
+	 * 删除图片
+	 * @param {Array} ids 图片id数组
+	 */
+	pgn.DeleteRecordByIdSync = function(ids){
+		return pg.syncExec(N, 'DeleteRecordByIdSync', [ids]);
 	};
 	
 	/**
