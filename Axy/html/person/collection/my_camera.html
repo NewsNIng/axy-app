@@ -348,11 +348,13 @@
 				//处理窗口关闭前的业务
 				beforeback: function() {
 					if(vm.editing) {
-						vm.editing = false;
+						vm.editing = false; 
 						return false;
 					}
 				},
 			});
+			
+			
 
 			var P = plug.H5NativeBridge;
 
