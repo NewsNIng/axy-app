@@ -1,5 +1,6 @@
 var dal = {
 	BASE_URL_DEV: "http://192.168.1.213:8080/vihiManager/vihiapi",
+	BASE_URL_TEST: "http://47.106.92.195/vihiManager/vihiapi",
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
 	BASE_DOMAIN: "vh.anxin-net.com",
 	QQS_DOMAIN: "qqs.isee110.com",
@@ -8,7 +9,7 @@ var dal = {
 	BASE_URL_TOP: "http://www.isee110.com/api",
 	BASE_SHARE_URL: "http://vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
 	//BASE_SHARE_URL: "http://192.168.1.103:8080/module/index.html",
-	BASE_URL_VERSION: "206",
+	BASE_URL_VERSION: "216",
 };
 
 dal.isVihiDomain = function() {
@@ -49,6 +50,7 @@ function requestAdapter(type, url, params, callback) {
 	url = BASE_URL + url;
 	// 获取用户权限信息
 	params.account = params.account || window.localStorage.getItem('_account_') || "";
+	console.log("==========");
 	console.log("request: [" + type + "]" + url);
 	console.log("params: [json]" + JSON.stringify(params));
 	
@@ -66,9 +68,11 @@ function requestAdapter(type, url, params, callback) {
 		success: function(data) {
 			var o = {};
 			console.log("response: [" + apiUrl + "]" + JSON.stringify(data));
+			console.log("==========");
 			if(dal.tokenCodeDir[data.code]){
+				
 			//if(data.code === "403") {
-				//alert("[" + apiUrl + "]" + JSON.stringify(data));
+				// alert("[" + apiUrl + "]" + JSON.stringify(data));
 				// token 验证失败 通知 zeus
 				var zeus = plus.webview.getWebviewById("zeus");
 				if(!zeus) {
@@ -77,6 +81,7 @@ function requestAdapter(type, url, params, callback) {
 				}
 				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', "+ JSON.stringify(data) +")";
 				zeus.evalJS(jsstr);
+				
 				return;
 			}
 			if(data.code !== "0000" && data.code !== "0") {

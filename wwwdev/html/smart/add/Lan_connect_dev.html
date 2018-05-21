@@ -29,7 +29,6 @@
 				background-position: center;
 				background-size: 50%;
 				position: relative;
-				
 			}
 			
 			.dev_text {
@@ -43,14 +42,24 @@
 				color: #333333;
 			}
 			
-			.foot {
+			.foot1,
+			.foot2 {
 				position: fixed;
-				width: 100%;
+				width: 50%;
 				height: 1.173333rem;
 				line-height: 1.173333rem;
 				color: white;
 				text-align: center;
 				bottom: 0;
+			}
+			
+			.foot1 {
+				background-color: #E5E6E7;
+				color: #06C1AE;
+			}
+			
+			.foot2 {
+				right: 0;
 				background-color: #06c1ae;
 			}
 			
@@ -74,16 +83,20 @@
 			.imgbg>img {
 				width: 100%;
 			}
-
 			
-			.mui-popover .mui-scroll-wrapper{
+			.mui-popover .mui-scroll-wrapper {
 				position: relative;
 				margin: 0;
 				border: 0;
 				background-clip: initial;
 			}
-			.mui-scroll-wrapper .mui-scroll{
+			
+			.mui-scroll-wrapper .mui-scroll {
 				position: relative;
+			}
+			
+			#popover_tip .tip-card-body {
+				height: 11.5rem;
 			}
 		</style>
 	</head>
@@ -123,7 +136,8 @@
 			</div>
 
 			<a href="#popover_tip" class="help app-font-size-28">戳这里查看如何连接网络~</a>
-			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
+			<div class="foot1 app-font-size-34" @tap="onBack()">上一步</div>
+			<div class="foot2 app-font-size-34" @tap="onNext()">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -145,7 +159,7 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
-			
+
 			mui('.mui-scroll-wrapper').scroll()
 
 			new Vue({
@@ -160,6 +174,9 @@
 				},
 				plusReady: function() {},
 				methods: {
+					onBack: function() {
+						mui.back();
+					},
 					onNext: function() {
 						this.$view.loadURL('Lan_select_dev_id.html');
 					}

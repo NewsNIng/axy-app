@@ -170,14 +170,16 @@
 			
 			.mui-popover .mui-popover-arrow:after {
 				border-radius: 0;
+				top: 19px !important;
 			}
 			
 			.mui-popover .mui-popover-arrow {
-				top: -0.586666rem;
+				top: -0.586666rem !important;
 				left: 1.4rem !important;
 				transform: translateX(-50%);
 				-webkit-transform: translateX(-50%);
 			}
+			
 			.newPopover {
 				top: 2.83rem !important;
 			}
@@ -371,7 +373,7 @@
 					document.getElementById("topPopover2").className += ' newPopover';
 					document.getElementById("topPopover3").className += ' newPopover';
 					document.getElementById("topPopover4").className += ' newPopover';
-//					document.styleSheets[0].addRule('.newPopover','top: 2.8rem !important');
+					//					document.styleSheets[0].addRule('.newPopover','top: 2.8rem !important');
 					var wrapper = this.$refs.wrapper;
 					var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
 						this.$refs.tabroom.offsetHeight -

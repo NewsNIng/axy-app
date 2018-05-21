@@ -223,8 +223,7 @@
 											}
 											observer.next({
 												acc: data1,
-												dev: data,
-												
+												dev: data
 											});
 										}, {
 											result: true,
@@ -281,12 +280,9 @@
 											views: ['zeus', 'dev_my_list']
 										});
 									}
-									setTimeout(function(){
-										app.page.setResult({
-											data: data
-										}).close();	
-									}, 200);
-									
+									app.page.setResult({
+										data: data
+									}).close();
 								});
 
 						}

@@ -19,15 +19,41 @@
 				overflow-x: hidden;
 			}
 			
+			.mui-content {
+			    margin-bottom: 1.6rem;
+			}
+			
 			.conditions_item {
-				height: 1.386666rem;
+				height: 1.6rem;
 				padding-left: 0.346666rem;
 				background-color: white;
+				position: relative;
 				/*border-bottom: 1px solid #E5E6E7;*/
+			}
+			
+			.conditions_item:after {
+				content: "";
+				position: absolute;
+				height: 1px;
+				left: 0.346666rem;
+				right: 0;
+				bottom: 0;
+				background-color: #E5E6E7;
+			}
+			
+			.conditions_item:last-child:after {
+				height: 0;
 			}
 			
 			.conditions_item:active {
 				background-color: #EFEFEF;
+			}
+			
+			.condition_title {
+				padding-left: 0.346666rem;
+				height: 1.066666rem;
+				line-height: 1.066666rem;
+				color: #555555;
 			}
 			
 			.conditions_icon,
@@ -73,7 +99,7 @@
 				/*min-height: 30%;*/
 				z-index: 99;
 				/*				background-color: #FFFFFF;*/
-				background-color: #FBFCFD;
+				background-color: #F4F8FB;
 				/*max-height: 50%;*/
 			}
 			
@@ -82,6 +108,10 @@
 				height: 1.386666rem;
 				padding: 0;
 				line-height: 1.386666rem;
+			}
+			
+			.com-dev ul:last-child {
+				margin-top: 0.266666rem;
 			}
 			
 			.mui-table-view-cell>a {
@@ -112,9 +142,7 @@
 			}
 			
 			.mui-table-view:before {
-				left: 15px;
-				right: 15px;
-				background-color: #E4E5E6;
+				height: 0;
 			}
 			
 			.mui-poppicker-header .mui-btn {
@@ -148,7 +176,7 @@
 
 					</ul>
 					<ul class="mui-table-view app-font-size-30">
-						<li class="mui-table-view-cell cancel" @tap="onCancelTap()">
+						<li class="mui-table-view-cell" @tap="onCancelTap()">
 							<a class="">
 								<span>取消</span>
 							</a>
@@ -157,13 +185,14 @@
 				</div>
 			</div>
 			<div class="mui-content">
-				<template v-for="o,i in conditions">
-					<div class="conditions_item app-font-size-28" @tap="onSelectDevTap(i,o.img)">
-						<img class="conditions_icon" :src="o.img" />
+				<div v-for="o in conditions">
+				<div class="condition_title app-font-size-28" v-text="o.title"></div>
+					<div class="conditions_item app-font-size-28" v-for="o1,i in o.list" @tap="onSelectDevTap(i,o1.img)">
+						<img class="conditions_icon" :src="o1.img" />
 						<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-						<div class="title app-font-size-28">{{o.name}}</div>
+						<div class="title app-font-size-28">{{o1.name}}</div>
 					</div>
-					<div v-if="i !== conditions.length - 1" style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
+					<!--<div v-if="i !== conditions.length - 1" style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>-->
 				</template>
 			</div>
 		</div>
@@ -181,8 +210,6 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
-		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
-		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
@@ -197,20 +224,59 @@
 					return {
 
 						conditions: [{
-							img: "../../../image/smart/scenes/icon_Lock@3x.png",
-							name: "智能门锁"
-						}, {
-							img: "../../../image/smart/scenes/icon_Timing start@3x.png",
-							name: "定时启动"
-						}, {
-							img: "../../../image/smart/scenes/icon_Environmental induction@3x.png",
-							name: "环境感应"
-						}, {
-							img: "../../../image/smart/scenes/icon_Human body induction@3x.png",
-							name: "人体感应"
-						}, {
-							img: "../../../image/smart/scenes/incon_Carbon monoxide@3x.png",
-							name: "一氧化碳感应"
+							title: "定时类",
+							list: [{
+								img: "../../../image/smart/scenes/icon_Lock@3x.png",
+								name: "智能门锁"
+							}, {
+								img: "../../../image/smart/scenes/icon_Timing start@3x.png",
+								name: "定时启动"
+							}, {
+								img: "../../../image/smart/scenes/icon_Environmental induction@3x.png",
+								name: "环境感应"
+							}, {
+								img: "../../../image/smart/scenes/icon_Human body induction@3x.png",
+								name: "人体感应"
+							}, {
+								img: "../../../image/smart/scenes/incon_Carbon monoxide@3x.png",
+								name: "一氧化碳感应"
+							}]
+						},{
+							title: "安防类",
+							list: [{
+								img: "../../../image/smart/scenes/icon_Lock@3x.png",
+								name: "智能门锁"
+							}, {
+								img: "../../../image/smart/scenes/icon_Timing start@3x.png",
+								name: "定时启动"
+							}, {
+								img: "../../../image/smart/scenes/icon_Environmental induction@3x.png",
+								name: "环境感应"
+							}, {
+								img: "../../../image/smart/scenes/icon_Human body induction@3x.png",
+								name: "人体感应"
+							}, {
+								img: "../../../image/smart/scenes/incon_Carbon monoxide@3x.png",
+								name: "一氧化碳感应"
+							}]
+						},{
+							title: "环境类",
+							list: [{
+								img: "../../../image/smart/scenes/icon_Lock@3x.png",
+								name: "智能门锁"
+							}, {
+								img: "../../../image/smart/scenes/icon_Timing start@3x.png",
+								name: "定时启动"
+							}, {
+								img: "../../../image/smart/scenes/icon_Environmental induction@3x.png",
+								name: "环境感应"
+							}, {
+								img: "../../../image/smart/scenes/icon_Human body induction@3x.png",
+								name: "人体感应"
+							}, {
+								img: "../../../image/smart/scenes/incon_Carbon monoxide@3x.png",
+								name: "一氧化碳感应"
+							}]
 						}],
 
 						selectImg: "",
@@ -278,7 +344,7 @@
 								that.devDelay = m * 60 + s; // 单位 秒
 								that.devDelayText = m + '分' + s + '秒';
 								app.page.setResult({
-									title: "定时启动"+' ('+m + '分' + s + '秒)',
+									title: "定时启动" + ' (' + m + '分' + s + '秒)',
 									img: img,
 								}).close();
 							};

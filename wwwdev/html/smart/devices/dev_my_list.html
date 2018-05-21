@@ -972,19 +972,19 @@
 						var that = this;
 						// 判断是否有 权限
 						//var authDir = DEVICE_AUTH.data;
-						var authorization = o.authorize;//authDir[o.devid] || 0;
-
-						var authName = app.auth.ACC_SMART;
-						if(app.acc.isTypeSafe(o.type)) {
-							authName = app.auth.ACC_SAFE;
-						}
-						Rx.Observable.create(function(ob) {
-							app.auth.verify(authName, authorization).then(function() {
-								ob.next();
-							}).catch(function(err) {
-								mui.toast(err.message);
-							});
-						}).mergeMapTo(
+//						var authorization = o.authorize;//authDir[o.devid] || 0;
+//
+//						var authName = app.auth.ACC_SMART;
+//						if(app.acc.isTypeSafe(o.type)) {
+//							authName = app.auth.ACC_SAFE;
+//						}
+//						Rx.Observable.create(function(ob) {
+//							app.auth.verify(authName, authorization).then(function() {
+//								ob.next();
+//							}).catch(function(err) {
+//								mui.toast(err.message);
+//							});
+//						}).mergeMapTo(
 							Rx.Observable.create(function(ob) {
 								// 检查本地是否有相关配件页面
 								var pageUrl = '_www/html/smart/devices/dev_' + o.type + '.html';
@@ -1000,7 +1000,8 @@
 									mui.toast('尚未支持该配件');
 								});
 							})
-						).subscribe(function(pageUrl) {
+//						)
+			.subscribe(function(pageUrl) {
 
 							var actionDir = {
 								del: function() {
@@ -1100,7 +1101,7 @@
 
 						// 弹窗确认
 						var $alert = Rx.Observable.create(function(ob) {
-							mui.confirm("确定把这台分享设备移除列表吗？", "", ["移除", "取消"], function(e) {
+							mui.confirm("删除后，将无权限访问亲友分享的设备。确定要继续吗？", "", ["继续删除", "再等等"], function(e) {
 								if(e.index === 0) {
 									ob.next(dev);
 								} else {

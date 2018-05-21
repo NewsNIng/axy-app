@@ -272,6 +272,8 @@
 							</li>
 
 						</ul>
+						
+					
 					</div>
 
 					<div class="xian app-color-9f9fa0" data-content="分享至"></div>
@@ -280,6 +282,10 @@
 						<img @tap="onShare('weixin')" src="../../../image/person/devshare/wx@3x.png" />
 						<img @tap="onShare('msg')" src="../../../image/person/devshare/sms@3x.png" />
 					</div>
+					
+					<div v-if="shareCount>0" class="app-color-9f9fa0" style="text-align: center;margin:5px auto 40px auto;">已分享给
+						<span @tap="onLookShareList()" class="app-font-size-36 app-color-main" v-text="shareCount">0</span>
+						位用户</div>
 				</div>
 			</div>
 
@@ -353,53 +359,10 @@
 							base: [],
 							hight: []
 						},
-
-						//						menus: [{
-						//								name: "视频查看",
-						//								selected: true,
-						//								bitleft: 1 << 0,
-						//								imgindex: 1,
-						//							},
-						//							{
-						//								name: "告警提醒",
-						//								selected: true,
-						//								bitleft: 1 << 1,
-						//								imgindex: 3,
-						//							},
-						//							{
-						//								name: "遥控器操作",
-						//								selected: false,
-						//								bitleft: 1 << 2,
-						//								imgindex: 7,
-						//							},
-						//							{
-						//								name: "智能安全",
-						//								selected: false,
-						//								bitleft: 1 << 3,
-						//								imgindex: 0,
-						//							},
-						//							{
-						//								name: "智能控制",
-						//								selected: false,
-						//								bitleft: 1 << 4,
-						//								imgindex: 2,
-						//							},
-						//
-						//							{
-						//								name: "云台",
-						//								selected: false,
-						//								bitleft: 1 << 5,
-						//								imgindex: 9,
-						//							},
-						//
-						//							{
-						//								name: "查看电管家",
-						//								selected: false,
-						//								bitleft: 1 << 6,
-						//								imgindex: 8,
-						//							},
-						//						],
-
+						
+						// 已被分享用户列表
+						hasShareUserList: [],
+						
 						QRcode: null,
 					};
 				},
@@ -417,6 +380,11 @@
 							}
 							return n;
 						}, 0);
+					},
+					
+					// 总共分享人数
+					shareCount: function(){
+						return this.hasShareUserList.length;
 					}
 				},
 
@@ -444,9 +412,30 @@
 					// 动态获取权限
 					this.menus = devauthdata[devname];
 					
-					console.log(JSON.stringify(this.devInfo));
+					this._getDevShareInfo();
 				},
 				methods: {
+					// 点击查看详细用户列表
+					onLookShareList: function(){
+						mui.openWindow('index.html', "dev_share_list", {
+							extras: {
+								devid: this.devInfo.devid 
+							}
+						});
+					},
+					
+					// 获取当前设备已被分享的信息
+					_getDevShareInfo: function(){
+						var that = this;
+						dal.device.shareListByDevid(this.devInfo.devid, function(err, data){
+							if(err){
+								return mui.toast(err.message);
+							}
+							that.hasShareUserList = data || [];
+						});
+					},
+					
+					
 					//权限点击
 					onSelectTap: function(o) {
 						o.selected = !o.selected;
