@@ -21,8 +21,8 @@
 
 	// 配置	
 	var config = {
-		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
-//		url: "http://192.168.1.161:8080/#/home?t=" + +new Date(),
+//		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
+		url: "http://192.168.1.161:8080/#/home?t=" + +new Date(),
 		id: "mall",
 		routerCmdName: "router",
 	};
@@ -59,6 +59,17 @@
 			path: '/user/address',
 			query: {
 				goindex: true
+			}
+		},
+		
+		//商品详情页
+		TODETAIL: function(goodscode){
+			return {
+				path: '/detail',
+				query: {
+					goindex: true,
+					id: goodscode
+				}
 			}
 		}
 
@@ -153,7 +164,10 @@
 	mall.openHome = function(){
 		this.sendRouterCmd(routerCmd.HOME);
 	}
-
+	
+	mall.openDetail = function(goodscode){
+		this.sendRouterCmd(routerCmd.TODETAIL(goodscode))
+	}
 	app.mall = mall;
 
 }(window.app || (window.app = {}), ni.Broadcast));
