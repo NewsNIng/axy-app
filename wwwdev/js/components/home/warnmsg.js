@@ -5,13 +5,7 @@ Vue && Vue.component('warn-msg', {
 	data: function() {
 		return {
 			animate: false,
-			items: [{
-				ID: 1,
-				location: 'jsian',
-				accessoryName: '9999',
-				accessoryID: '3ii',
-				ntime: 195632563555,
-			}],
+			items: [],
 			st: null,
 		}
 	},
@@ -111,6 +105,7 @@ Vue && Vue.component('warn-msg', {
 			return app.dev.fixName(s);
 		},
 		_fixTimeAgo: function(s) {
+			s = s * 1000;
 			return new Date().ago(s);
 		},
 	},

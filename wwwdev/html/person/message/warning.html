@@ -710,7 +710,6 @@
 						
 					},
 					deleteAlarmSingle: function(id){
-						alert(id)
 						this.DelAlarmListAsyn([id],function(res){
 							if(res == 0){
 								that.list = that.list.filter(function(item){
@@ -921,9 +920,8 @@
 						}else{
 							stime = new Date(0);
 						}
-						stime = stime.getTime();
-						console.log(stime)
-						console.log(endtime)
+						stime = parseInt(stime.getTime() / 1000);
+						endtime = parseInt(endtime / 1000);
 						P.GetAlarmListAsyn(this.devId,stime,endtime,account,this.n,this.pageSize,function(res){
 							plus.nativeUI.closeWaiting();
 							var data = res.data;
@@ -934,10 +932,9 @@
 								item.showMenu = false;
 								item.info = null;
 								item.id = item.ID; //接口调整
-								i % 2 == 0 ? item.read = true : item.read = false
+								item.atime = (new Date(item.ntime * 1000)).toFormatString('yyyy-MM-dd hh:mm:ss');
 								return item;
 							});
-							console.log(JSON.stringify(data));
 							that.list.push.apply(that.list, data || []);
 							that.$nextTick(function() {
 								that.scroll && (that.scroll.finishPullUp(), that.scroll.refresh());
