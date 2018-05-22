@@ -693,7 +693,7 @@
 									})
 							that.scroll && that.scroll.refresh()
 							this.DelAlarmListAsyn(ids,function(res){
-								if(res == 0){
+								if(res.code == 0){
 									that.list = that.list.filter(function(item){
 										return ids.indexOf(item.id) == -1;
 									})
@@ -723,7 +723,7 @@
 					},
 					deleteAlarmSingle: function(id){
 						this.DelAlarmListAsyn([id],function(res){
-							if(res == 0){
+							if(res.code == 0){
 								that.list = that.list.filter(function(item){
 									return item.id !== id;
 								})
