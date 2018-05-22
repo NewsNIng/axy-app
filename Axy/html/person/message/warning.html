@@ -427,19 +427,7 @@
 						devId: "",
 
 						n: 1,
-						list:  [{
-		"location": "AX-203-2017062100021",
-		"channel": 0,
-		"accessoryID": 2684354701,
-		"accessoryName": "Fuel Gas Detector",
-		"read": false,
-		"ftype": 34,
-		"devid": "AX-203-2017062100021",
-		"id": 0,
-		"atime": (new Date(1525941676 * 1000)).toFormatString('yyyy-MM-dd'),
-		"showMenu": true,
-		"checked": false,
-	}],
+						list:  [],
 
 						videoplay: false,
 						videosrc: "",
@@ -693,6 +681,7 @@
 									})
 							that.scroll && that.scroll.refresh()
 							this.DelAlarmListAsyn(ids,function(res){
+								res = JSON.parse(res);
 								if(res.code == 0){
 									that.list = that.list.filter(function(item){
 										return ids.indexOf(item.id) == -1;
@@ -708,11 +697,11 @@
 					},
 					//比较两个日期是否相同,i是索引,不相同就返回
 					compareTime: function(str1,i){
-						str1 = new Date(str1.replace(/-/g, '/')).toFormatString('MM/dd');
+						str1 = new Date(str1.replace(/-/g, '/')).toFormatString('yyyy/MM/dd');
 						var prev = this.list[i-1],str2;
 						if(prev){
 							str2 = prev.atime;
-							str2 = new Date(str2.replace(/-/g,'/')).toFormatString('MM/dd');
+							str2 = new Date(str2.replace(/-/g,'/')).toFormatString('yyyy/MM/dd');
 						}
 						return str1 == str2 ? '' : str1;
 					},
@@ -722,7 +711,9 @@
 						
 					},
 					deleteAlarmSingle: function(id){
+						var that = this;
 						this.DelAlarmListAsyn([id],function(res){
+							res = JSON.parse(res)
 							if(res.code == 0){
 								that.list = that.list.filter(function(item){
 									return item.id !== id;
@@ -946,7 +937,7 @@
 								item.showMenu = false;
 								item.info = null;
 								item.id = item.ID; //接口调整
-								item.atime = (new Date(item.ntime * 1000)).toFormatString('yyyy-MM-dd');
+								item.atime = (new Date(item.ntime * 1000)).toFormatString('yyyy-MM-dd hh:mm:ss');
 								return item;
 							});
 							that.list.push.apply(that.list, data || []);
