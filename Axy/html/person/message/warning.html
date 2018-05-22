@@ -323,13 +323,13 @@
 								<span class="mui-pull-right">{{o.atime}}</span>
 							</div>
 							
-							<div v-if="o.areaname">
+							<div v-if="o.accessoryName">
 								<span class="app-color-333333">告警防区</span>
-								<span class="mui-pull-right">{{o.areaname}}</span>
+								<span class="mui-pull-right">{{o.accessoryName}}</span>
 							</div>
 							<div style="padding-bottom: 0.2rem;">
 								<span class="app-color-333333">防区ID</span>
-								<span class="mui-pull-right">{{to16(o.areaid)}}</span>
+								<span class="mui-pull-right">{{to16(o.accessoryID)}}</span>
 							</div>
 							<transition name="menu-fade"> 
 
@@ -427,7 +427,19 @@
 						devId: "",
 
 						n: 1,
-						list: [],
+						list:  [{
+		"location": "AX-203-2017062100021",
+		"channel": 0,
+		"accessoryID": 2684354701,
+		"accessoryName": "Fuel Gas Detector",
+		"read": false,
+		"ftype": 34,
+		"devid": "AX-203-2017062100021",
+		"id": 0,
+		"atime": (new Date(1525941676 * 1000)).toFormatString('yyyy-MM-dd'),
+		"showMenu": true,
+		"checked": false,
+	}],
 
 						videoplay: false,
 						videosrc: "",
@@ -924,6 +936,8 @@
 						endtime = parseInt(endtime / 1000);
 						P.GetAlarmListAsyn(this.devId,stime,endtime,account,this.n,this.pageSize,function(res){
 							plus.nativeUI.closeWaiting();
+							res = JSON.parse(res);
+							if(res.code != 0) return;
 							var data = res.data;
 							if(!data || data.length === 0) {
 								return;
@@ -932,7 +946,7 @@
 								item.showMenu = false;
 								item.info = null;
 								item.id = item.ID; //接口调整
-								item.atime = (new Date(item.ntime * 1000)).toFormatString('yyyy-MM-dd hh:mm:ss');
+								item.atime = (new Date(item.ntime * 1000)).toFormatString('yyyy-MM-dd');
 								return item;
 							});
 							that.list.push.apply(that.list, data || []);
