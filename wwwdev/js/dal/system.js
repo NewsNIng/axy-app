@@ -51,15 +51,13 @@
 		return ra('get', '/getserver.do', {
 			account: account,
 			BASE_URL: _.BASE_URL_TOP
-		}, function(err, data) {
+		}, function(err, url) {
 
-//			if(!err) {
-//				data = dal.BASE_URL_DEV
-//				//data = dal.BASE_URL_TEST
-//				console.log("=========================" + data);
-//			} 
-			callback(err, data);
-	}); 
+//			url = dal.BASE_URL_DEV
+			url = dal.BASE_URL_TEST
+
+			callback(err, url);
+		});
 	}
 
 	// 获取第三方登录所关联的账户
