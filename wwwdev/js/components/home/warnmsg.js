@@ -26,7 +26,7 @@ Vue && Vue.component('warn-msg', {
 			_B.on('home_reload', function() {
 				ob.next();
 			});
-
+			plus.webview.currentWebview().addEventListener('show', ob.next);
 			app.user.has() && ob.next();
 		});
 
