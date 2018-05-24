@@ -93,7 +93,7 @@
 	 * 获取告警消息详情4.0版本，id是本地的
 	 */
 	message.getAlarmByLocal = function(aid, callback){
-		return ra('get', '/alarm/device/getinfo' + aid , {}, callback)
+		return ra('get', '/alarm/device/getinfo/' + aid , {}, callback)
 	}
 	/**
 	 * 获取最新消息预览
