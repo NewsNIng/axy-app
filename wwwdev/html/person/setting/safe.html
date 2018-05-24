@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>帐号保护</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			/*菜单*/
+			
+			.menu-box {}
+			
+			.menu-box>ul {
+				margin-top: 0.266666rem !important;
+			}
+			
+			.menu-box a.mui-navigate-right.mui-active {
+				background-color: rgba(43, 184, 170, .1);
+			}
+			/*-线条*/
+			
+			.menu-box .mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			/*-left图片文字*/
+			
+			.menu-box a.mui-navigate-right {}
+			
+			.menu-box a.mui-navigate-right>img {
+				width: 0.48rem;
+				margin: 0 0.2rem;
+				vertical-align: middle;
+			}
+			
+			.menu-box a.mui-navigate-right>span {
+				vertical-align: middle;
+			}
+			/*end菜单*/
+		</style>
+
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav app-header">
+			<a class="mui-action-back app-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">帐号保护</h1>
+		</header>
+
+		<div class="mui-content menu-box app-font-size-28">
+
+			<!--以验证-->
+			<div v-if="ismaster">
+				<div class="app-font-size-28 app-color-9f9fa0" style="padding: 0.346666rem;">
+					开启帐号保护后，如果在不常用的手机上登录，需验证您的手机。
+				</div>
+
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell app-font-size-32">
+						<a>
+							<span class="app-color-333333">帐号保护</span>
+							<span class="mui-badge">
+								<div ref="safeSwitch" @toggle="onToggle($event)" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active': state}">
+								  <div class="mui-switch-handle"></div>
+								</div>
+							</span>
+						</a>
+					</li>
+				</ul>
+
+				<ul class="mui-table-view">
+					<template v-for="o,i in authList">
+						<li class="mui-table-view-cell app-font-size-32">
+							<a>
+								<span class="app-color-333333">{{o.description || "未知"}}</span>
+								<span v-if="imei === o.imei" class="mui-badge">本机</span>
+								<button v-else type="button" class="mui-btn app-btn-main-ghost" @tap="outImei(o.id, i)">下线</button>
+							</a>
+						</li>
+						<div class="app-font-size-28 app-color-9f9fa0" style="padding: 0.4rem;">
+							<div>
+								<span>最近登录时间</span>
+								<span class="mui-pull-right">{{_toTimeString(o.lasttime)}}</span>
+							</div>
+							<div style="margin-top: 0.266666rem;">
+								<span>最近登录地点</span>
+								<span class="mui-pull-right">{{o.loginip}}</span>
+							</div>
+						</div>
+					</template>
+				</ul>
+			</div>
+
+			<!--非本机验证-->
+			<div v-else>
+				<div class="app-font-size-32 app-color-333333" style="background-color: #FFFFFF; margin-top: 0.266666rem;padding: 0.48rem 0.36rem 1.6rem 0.346666rem;">
+					由于当前手机与帐号注册时所使用的手机不一致，您暂时无权操作帐号保护相关功能。为保障注册用户的隐私安全，建议您申请将此手机作为注册手机，并获得管理终端管理权限。
+				</div>
+				<button @tap="onSubmit()" style="width: 8.373333rem; margin: 1.146666rem 0.813333rem; height: 1.16rem;" type="button" class="mui-btn app-btn-main app-font-size-34">提交申请</button>
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/protect.js"></script>
+		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						ismaster: false,
+						state: false,
+						account: "",
+						imei: "",
+						authList: []
+					};
+				},
+				mounted: function() {
+					var that = this;
+					app.user.get(function(u) {
+						u && (that.user = u, that.account = u.account);
+						if(u && u.ismaster) {
+							that.ismaster = true;
+							that.state = u.lockterminal !== 0;
+							that.getAuthList();
+
+						}
+
+					});
+				},
+				plusReady: function() {
+					this.imei = plus.device.uuid;
+				},
+				watch: {
+					ismaster: function() {
+						// TODO 测试页面改动 数据接入后去除
+						this.$nextTick(function() {
+							mui('.mui-switch')['switch']();
+						});
+
+					},
+				},
+				methods: {
+					onToggle: function(e) {
+						var that = this;
+						Rx.Observable.create(function(ob) {
+								if(!e.detail.isActive) {
+									mui.confirm("关闭帐号保护后，将降低您帐号的安全性，确定要关闭吗？", "", ["残忍关闭", "取消"], function(e) {
+										if(e.index !== 0) {
+											mui(that.$refs.safeSwitch).switch().toggle(false);
+										} else {
+											ob.next({
+												state: false
+											});
+										}
+									});
+								} else {
+									ob.next({
+										state: true
+									});
+								}
+							})
+							.mergeMap(function(data) {
+								var state = data.state;
+								if(state === that.state) {
+									return
+								}
+
+								return Rx.Observable.create(function(ob) {
+									// 打开or关闭
+									dal.protect._switch(+state, function(err, data) {
+										if(err) {
+											return mui.toast(err.message);
+										}
+										that.state = state;
+										mui.toast("帐号保护已" + (state ? "开启" : "关闭"));
+										ob.next(state);
+									});
+								});
+							})
+							.subscribe(function(state) {
+								// 通知上层
+								app.page.setResult({
+									result: state
+								});
+								that.user.lockterminal = +state;
+								// 更新本地用户信息
+								new ni.Broadcast().emit('userinfo_update', {
+									userInfo: that.user
+								}, {
+									views: ['zeus']
+								});
+
+							});
+					},
+					// 提交申请
+					onSubmit: function() {
+						plus.webview.currentWebview().loadURL('setsafe.html');
+					},
+
+					// 获取授权列表
+					getAuthList: function() {
+						var that = this;
+						dal.protect.list(this.account, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							that.authList = data;
+						});
+					},
+
+					// T掉
+					outImei: function(id, index) {
+						var that = this;
+						new Promise(function(resolve, reject) {
+							mui.confirm("确定移除该设备的登录权限么？", "温馨提示", ['确定移除', '取消'], function(e) {
+								!e.index && resolve();
+							});
+						}).then(function() {
+							plus.nativeUI.showWaiting();
+							dal.protect.delete(id, function(err, rs) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.authList.splice(index, 1);
+								mui.toast("删除成功！");
+							});
+						});
+
+					},
+
+					_toTimeString: function(x) {
+						return new Date(x).toFormatString('yyyy/MM/dd hh:mm:ss');
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

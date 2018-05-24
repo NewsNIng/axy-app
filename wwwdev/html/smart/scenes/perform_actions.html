@@ -1,0 +1,326 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能场景</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+				overflow: hidden;
+			}
+			
+			.mui-icon>img {
+				width: 0.613333rem;
+			}
+			
+			.actions_item {
+				height: 1.333333rem;
+				padding-left: 0.346666rem;
+				background-color: white;
+				/*border-bottom: 1px solid #E5E6E7;*/
+			}
+			
+			.actions_item:active {
+				background-color: #EFEFEF;
+			}
+			
+			.actions_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.actions_icon {
+				float: left;
+				width: 0.48rem;
+			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
+			}
+			
+			.title {
+				padding-left: 0.826666rem;
+				color: #333333;
+			}
+			
+			.gray {
+				color: #9F9FA0;
+			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			.com-dev-mask {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 98;
+			}
+			
+			.com-dev {
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				/*min-height: 30%;*/
+				z-index: 99;
+				/*				background-color: #FFFFFF;*/
+				background-color: #F4F8FB;
+				/*max-height: 50%;*/
+			}
+			
+			.com-dev .mui-table-view-cell {
+				text-align: center;
+				height: 1.386666rem;
+				padding: 0;
+				line-height: 1.386666rem;
+			}
+			
+			.com-dev ul:last-child {
+				margin-top: 0.266666rem;
+			}
+			
+			.mui-table-view-cell>a {
+				height: 100%;
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn) {
+				margin: 0;
+			}
+			
+			.mui-table-view:after {
+				height: 0;
+			}
+			
+			.mui-table-view-cell:after {
+				right: 15px;
+				background-color: #E4E5E6;
+			}
+			
+			.mui-table-view:before {
+				height: 0;
+			}
+			
+			.scroll {
+				max-height: 6.826666rem !important;
+				overflow-x: hidden;
+				overflow-y: scroll;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">执行动作</h1>
+				<!--<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
+					<img src="../../../image/smart/scenes/complete_icon.png" />
+				</a>-->
+			</header>
+			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
+				<div class="com-dev app-font-size-28">
+					<ul class="mui-table-view app-font-size-30 scroll">
+						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in scenes">
+							<a class="">
+								<span>{{o.name}}</span>
+							</a>
+						</li>
+					</ul>
+					<ul class="mui-table-view app-font-size-30">
+						<li class="mui-table-view-cell" @tap="onCancelTap()">
+							<a class="">
+								<span>取消</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="mui-content">
+				<div class="actions_item app-font-size-28" @tap="onSelectDev()">
+					<img class="actions_icon" :src="icon" />
+
+					<template v-if="devText">
+						<span class="mui-pull-right app-color-9f9fa0" style="line-height: 1.3896666rem;margin-right:0.346666rem;">{{devText}}</span>
+					</template>
+					<template v-else>
+						<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					</template>
+
+					<div class="title app-font-size-28" v-text="name"></div>
+
+				</div>
+				<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
+
+				<div class="actions_item app-font-size-28">
+					<img class="actions_icon" src="../../../image/smart/scenes/btn_Scenepattern@3x.png" />
+
+					<template v-if="devDelay">
+						<span class="mui-pull-right app-color-9f9fa0" style="line-height: 1.3896666rem;margin-right:0.346666rem;">{{devDelayText}}</span>
+					</template>
+					<template v-else>
+						<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					</template>
+
+					<div @tap="onScenesTap()" class="title app-font-size-28">场景模式</div>
+				</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#box',
+				data: function() {
+					return {
+						pick: null,
+						mask: false, // 遮罩控制
+						scenes: [{
+							name: '回家模式',
+						}, {
+							name: '离家模式',
+						}, {
+							name: '回店模式',
+						}, {
+							name: '离店模式',
+						}, {
+							name: '离家模式',
+						}, {
+							name: '回店模式',
+						}, {
+							name: '离店模式',
+						}, {
+							name: '离家模式',
+						}, {
+							name: '回店模式',
+						}, {
+							name: '离店模式',
+						}],
+						name: '选择设备',
+						icon: '../../../image/smart/scenes/btn_Selection device@3x.png',
+						devText: '',
+						devDelay: 0,
+						devDelayText: '',
+					};
+				},
+
+				mounted: function() {
+					this.pick = new mui.PopPicker({
+						layer: 2,
+						more: true
+					});
+					this.pick.setData(pick_data);
+				},
+				plusReady: function() {},
+				methods: {
+					onPickTap: function() {
+
+						var that = this;
+						var fn = function(m, s) {
+							that.devDelay = m * 60 + s; // 单位 秒
+							that.devDelayText = m + '分' + s + '秒';
+						};
+
+						this.pick.show(function(items) {
+							fn(items[0].value, items[1].value);
+						}, function(items) {
+							fn(items[0].value, items[1].value);
+						});
+					},
+					onSelectDev: function() {
+						app.page.openForResultBy('select_device.html', 'select_device', function(data) {
+							this.name = data.dev.name;
+							this.icon = data.dev.img;
+							this.devText = data.text;
+							app.page.setResult({
+								dev: {
+									icon: this.icon,
+									name: this.name,
+									text: this.devText,
+								}
+							}).close();
+						}.bind(this));
+					},
+					onSaveTap: function() {
+						if(this.devText === "") {
+							mui.toast("请选择设备！");
+							return;
+						}
+						app.page.setResult({
+							dev: {
+								icon: this.icon,
+								name: this.name,
+								text: this.devText,
+							}
+						}).close();
+					},
+					onCancelTap: function() {
+						this.mask = false;
+					},
+					onSelectedTap: function(o) {
+						this.mask = false;
+						//						app.page.setResult({
+						//							title: o.name,
+						//							img: this.selectImg,
+						//						}).close();
+					},
+					onScenesTap: function(i, img) {
+						this.mask = true;
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

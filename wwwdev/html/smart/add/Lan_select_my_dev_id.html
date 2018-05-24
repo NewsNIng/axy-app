@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择设备ID</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.menu-warp {
+				height: 3.066666rem;
+			}
+			
+			.select {
+				left: 0.346666rem;
+			}
+			
+			.select>img {
+				width: 0.426666rem;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.title {
+				height: 0.96rem;
+				line-height: 0.96rem;
+				padding-left: 0.346666rem;
+				color: #9F9FA0;
+			}
+			
+			.name {
+				padding-left: 0.693333rem;
+			}
+			
+			.help {
+				position: fixed;
+				bottom: 60px;
+				left: 50%;
+				padding: 0.01rem 0;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				border-bottom: 1px solid #2BB8AA;
+				color: #2BB8AA;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">绑定主机</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="title app-font-size-24">
+					选择需要绑定的设备ID
+				</div>
+				<ul class="mui-table-view app-font-size-28">
+					<template v-for="o,i in devs">
+						<li class="mui-table-view-cell" @tap="onSelectTap(o, i)">
+							<a>
+								<span class="mui-badge select"><img v-if="i === devActive" src="../../../image/smart/devices/add/select1.png"/><img v-if="i !== devActive" src="../../../image/smart/devices/add/select2.png"/></span>
+								<span class="name">{{o.location}}</span>
+							</a>
+						</li>
+					</template>
+				</ul>
+			</div>
+			<div class="foot app-font-size-34" @tap="onNext()">下一步</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>-->
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
+		
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript">
+			mui.init();
+
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						devActive: 0,
+						devs: []
+					};
+				},
+				computed: {
+					indexDev: function() {
+						return this.devs[this.devActive];
+					}
+				},
+
+				mounted: function() {
+					this.getMyDevList();
+				},
+				// plusReady: function() {},
+				methods: {
+					onSelectTap: function(o, i) {
+						this.devActive = i;
+						
+					},
+					onNext: function() {
+						app.page.setResult({
+							devid: this.indexDev.devid
+						}).colse();
+					}
+					// 我的主机列表
+					getMyDevList: function(){
+						dal.device.list(1, function(err, rs){
+							if(err){
+								return mui.toast(err.message); 
+							}
+							this.devs = rs;
+						}.bind(this), 666);
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

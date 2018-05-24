@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>键入信息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<style type="text/css">
+			html,
+			body,
+			.mui-content,
+			.cityRoom {
+				background-color: #F4F8FB;
+			}
+			
+			textarea {
+				width: 100%;
+				border: 0 !important;
+			}
+			
+			.input {
+				margin-top: 0.266666rem;
+				height: 1.2rem;
+				line-height: 1.2rem;
+				padding: 0 !important;
+				padding-left: 0.346666rem !important;
+			}
+			
+			.input::-webkit-input-placeholder {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .input::-webkit-input-placeholder {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .input::-webkit-input-placeholder {
+				font-size: 45px !important;
+			}
+			
+			.save_icon {
+				position: absolute;
+				height: 0.6rem;
+				top: 50%;
+				right: 0.346666rem;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.app-header .app-icon-back {
+				border: none;
+			}
+			
+			header {
+				position: relative;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left app-color-white"></a>
+				<h1 class="mui-title" v-text="'编辑' + title"></h1>
+				<span style="line-height: 44px;padding-left: 10px;" class="mui-pull-right app-color-white app-font-size-28" @tap="onOkTap()">
+					<!--确定-->
+					<template v-if="isIconSave">
+						<img class="save_icon" src="../../image/smart/scenes/btn_Preservation@3x.png"/>
+					</template>
+					<template v-else>
+						确定
+					</template>
+				</span>
+			</header>
+			<div class="mui-content">
+				<textarea class="input app-font-size-28" rows="3" cols="" :placeholder="tips" v-model="content"></textarea>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+		<script type="text/javascript" src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						title: "",
+						tips: "请输入内容...",
+						content: "",
+						regexpType: "",
+						isIconSave: false,
+						maxLength: -1,
+						mLengthMsg: "长度超出限制",
+					};
+				},
+				watch: {
+					content: function(curVal, oldVal) {　　　　　　　　　　
+
+						if(this.maxLength > 0 && curVal.length > this.maxLength) {
+							this.content = oldVal;
+							mui.toast(this.mLengthMsg);
+						}
+					},
+				},
+				plusReady: function() {
+					var v = this.$view;
+					this.title = v.title || "编辑";
+					this.tips = v.tips || "请输入内容...";
+					this.content = v.content || '';
+					this.regexpType = v.r;
+					this.regexpErrorMessage = v.rmsg || "请输入正确格式的内容";
+					this.isIconSave = v.isIconSave || false;
+					this.maxLength = v.maxLength || 18;
+					this.mLengthMsg = v.mLengthMsg || "长度超出限制";
+					//					alert(this.content.length);
+					//					this.type = v.type || 'text';
+				},
+				methods: {
+					onOkTap: function() {
+						var errmsg = "";
+						
+						this.content = this.filteremoji(this.content);
+						
+						if(this.regexpType) {
+							errmsg = app.rules.testBy(this.regexpType, this.content, this.regexpErrorMessage);
+						}
+						if(errmsg) {
+							//							return mui.alert(errmsg);
+							return mui.toast(errmsg);
+						}
+						app.page.setResult({
+							content: this.content
+						}).close();
+					},
+					// 过滤表情字符
+					filteremoji: function(content) {
+						var ranges = [
+							'\ud83c[\udf00-\udfff]',
+							'\ud83d[\udc00-\ude4f]',
+							'\ud83d[\ude80-\udeff]'
+						];
+						emojireg = content.replace(new RegExp(ranges.join('|'), 'g'), '');
+						return emojireg;
+					}
+				}
+			})
+			document.querySelector('.input').onkeydown = function(e) {
+//				console.log(JSON.stringify(e.keyCode));
+				var code;
+				if(!e){
+					var e = window.event;
+				}
+				if(e.keyCode){
+					code = e.keyCode;
+				} else if(e.which){
+					code = e.which;
+				}
+				if(code == 13 && window.event) {
+					this.blur();
+					e.returnValue = false;
+				} else if(code == 13) {
+					e.preventDefault();
+				}
+			}
+		</script>
+	</body>
+
+</html>

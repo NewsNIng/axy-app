@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>扫一扫</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				height: 100%;
+				background-color: transparent;
+			}
+			
+			body {
+				background-color: rgba(0, 0, 0, 0.3);
+			}
+			
+			.scanRoom {
+				width: 7.2rem;
+				height: 7.2rem;
+				margin: 1.3rem auto;
+				/*background-color: #FFFFFF;*/
+				text-align: center;
+				line-height: 7.2rem;
+			}
+			
+			.tips {
+				padding-top: 2rem;
+				text-align: left;
+				width: 7.2rem;
+				margin: 0 auto;
+				color: #FFFFFF;
+			}
+			
+			.add_btn {
+				display: inline-block;
+				width: auto;
+				color: #06C1AE;
+				border-bottom: 1px solid #06C1AE;
+				padding-bottom: 3px;
+				margin-bottom: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">扫一扫</h1>
+				<span @tap="onPicTap()" class="app-font-size-28 mui-pull-right" style="height: 44px; line-height: 44px;color: white;">相册</span>
+			</header>
+
+			<div class="mui-content">
+				<div class="scanRoom app-font-size-38 app-color-main" id="axy" @tap="resetScan()">
+					<span v-show="!frist">点击重试</span>
+				</div>
+
+				<div class="tips app-font-size-28">
+					此二维码仅可以使用一次，有效期30分钟。
+					<br /> 如二维码失效，请让家人重新生成。
+				</div>
+			</div>
+
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript">
+			mui.init();
+			var _arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						frist: true, // 是否首次
+						scan: null,
+						t: -1,
+					};
+				},
+				watch: {
+
+				},
+				mounted: function() {
+
+				},
+
+				plusReady: function() {
+					setTimeout(function() {
+						this.resetScan();
+					}.bind(this), 200);
+				},
+				methods: {
+					// 手动添加设备号
+					onPicTap: function() {
+						// this.flash = false;
+						this.closeScan();
+						// 选择图片二维码
+						this.$gallery(function(err, imgs) {
+							plus.barcode.scan(imgs[0], this.onMarked.bind(this), function(err) {
+								return mui.toast('无法识别');
+							}, _arr);
+						}.bind(this), 1);
+
+					},
+					resetScan: function() {
+						if(this.t && this.t >= 0) {
+							return;
+						}
+						this.closeScan();
+						this.initScan();
+						this.startScan();
+						this.t = setTimeout(function() {
+							window.clearTimeout(this.t);
+							this.t = -1;
+						}.bind(this), 1000);
+
+					},
+					initScan: function() {
+
+						var scan = new plus.barcode.Barcode('axy', _arr, {
+							frameColor: '#06C1AE',
+							scanbarColor: '#06C1AE',
+						});
+						scan.onmarked = this.onMarked.bind(this);
+						this.scan = scan;
+					},
+					onMarked: function(type, result, file) {
+						if(!(/\d{8}/.test(result))) {
+							this.startScan();
+							return mui.toast("扫描结果错误");
+						}
+						app.page.setResult({
+							code: result
+						}).close();
+					},
+					startScan: function() {
+						this.scan && (this.scan.start(), this.frist = false);
+					},
+					stopScan: function() {
+						this.scan && this.scan.cancel();
+					},
+					closeScan: function() {
+						this.scan && (this.scan.close(), this.scan = null, this.t = -1);
+					}
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>营业时间</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.tips {
+				padding: 0.346666rem;
+				background-color: #F4F8FB;
+				color: #b4b4b7;
+			}
+			
+			ul.group {
+				margin-top: 0!important;
+			}
+			
+			.mui-navigate-right:after,
+			.mui-push-right:after {
+				font-size: 15px;
+			}
+			/*去除ul上下横线*/
+			
+			ul.group:before,
+			ul.group:after {
+				height: 0;
+			}
+			
+			ul.group>li.mui-table-view-cell {
+				padding: 0;
+				margin: 0;
+			}
+			/*重写li边线*/
+			
+			ul.group>li.mui-table-view-cell:after {
+				left: 0;
+				background-color: #f2f2f3;
+			}
+			/*重写li a高度*/
+			
+			ul.group>li.mui-table-view-cell>a {
+				height: 1.186666rem;
+				padding: 0 0 0 0.346666rem;
+				margin: 0;
+				position: relative;
+				line-height: 1.186666rem;
+			}
+			/*左侧文字添加颜色*/
+			
+			ul.group>li.mui-table-view-cell .leftname {
+				color: #333333;
+				position: absolute;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+				transform: translateY(-50%);
+			}
+			/*右侧文字*/
+			
+			ul.group span.mui-badge {
+				right: 0.666666rem;
+				color: #808080;
+				background-color: transparent;
+			}
+			
+			.app-switch-main {
+				height: 22px;
+				width: 39px;
+			}
+			
+			.mui-switch-handle {
+				height: 20px !important;
+				width: 20px !important;
+			}
+			
+			.leftname {
+				transition-duration: 250ms;
+				transition-property: color;
+			}
+			
+			.allDay .sd {
+				pointer-events: none;
+			}
+			
+			.allDay .sd .leftname {
+				color: #808080 !important;
+			}
+			
+			.mui-poppicker-header .mui-btn {
+				font-size: 15px !important;
+			}
+			
+			[data-dpr="2"] .mui-poppicker-header .mui-btn {
+				font-size: 30px !important;
+			}
+			
+			[data-dpr="3"] .mui-poppicker-header .mui-btn {
+				font-size: 45px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back mui-pull-left app-icon-back"></a>
+				<h1 class="mui-title">营业时间</h1>
+				<span @tap="onSaveTap()" class="app-color-white mui-pull-right app-font-size-30" style="line-height: 44px;">保存</span>
+			</header>
+			<div class="mui-content">
+				<div class="tips app-font-size-26">
+					添加每周营业日
+				</div>
+				<div>
+					<ul class="mui-table-view group">
+						<li class="mui-table-view-cell" @tap="onWeekTap()">
+							<a class="mui-navigate-right">
+								<span class="app-font-size-26 mui-badge" v-text="week_str"></span>
+								<span class="app-font-size-26 leftname">每周营业日</span>
+							</a>
+						</li>
+
+					</ul>
+				</div>
+
+				<div class="tips app-font-size-26">
+					添加营业时间
+				</div>
+				<div>
+					<ul class="mui-table-view group" :class="allDay?'allDay':''">
+						<li class="mui-table-view-cell">
+							<a class="">
+								<span class="app-font-size-26 mui-badge" style="right: 15px;">
+								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': allDay}" ref="switch">
+								  <div class="mui-switch-handle"></div>
+								</div>
+							</span>
+								<span class="app-font-size-26 leftname">全天24小时</span>
+							</a>
+						</li>
+						<li style="height: 0.266666rem;background-color: #F4F8FB;"></li>
+						<li class="mui-table-view-cell sd" @tap="onTimeTap()">
+							<a class="mui-navigate-right">
+								<span class="app-font-size-26 mui-badge" v-text="time_str"></span>
+								<span class="app-font-size-26 leftname">营业时段</span>
+							</a>
+						</li>
+
+					</ul>
+				</div>
+
+			</div>
+
+		</div>
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		<script src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_slot.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_week.js"></script>
+		</script>
+
+		<script type="text/javascript">
+			mui.init({
+				//处理窗口关闭前的业务
+				beforeback: function() {
+					mui.confirm("操作将清除您已输入的信息，确认退出么？", "温馨提示", ['确认退出', '取消'], function(e) {
+						!e.index && plus.webview.currentWebview().close();
+					});
+					return false;
+				},
+			});
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						allDay: false, // 是否全天
+						startweek: 1,
+						endtweek: 7,
+
+						starttime: 0,
+						endtime: 24,
+
+						week_str: '',
+						week_index: 0,
+						time_str: '',
+						time_index: 0,
+					};
+				},
+				watch: {
+					allDay: function(nv) {
+						if(nv) {
+							this.starttime = 0;
+							this.endtime = 24;
+						}
+					}
+				},
+				computed: {
+					onLine: function() {
+						var d = new Date();
+						// 判断当天
+						var week = (d.getDay() + 6) % 7 + 1;
+						if(week < this.startweek || week > this.endtweek) {
+							return false;
+						}
+						// 是否全天
+						if(this.allDay) {
+							return true;
+						}
+						// 判断时间点
+						var h = d.getHours();
+						if(h < this.starttime || h > this.endtime) {
+							return false;
+						}
+						return true;
+					}
+				},
+				mounted: function() {
+					this.$refs.switch.addEventListener("toggle", function(event) {
+						this.allDay = event.detail.isActive;
+					}.bind(this));
+
+				},
+				plusReady: function() {
+					/*name: "营业时间",
+					value: "00:00-24:00",
+					tips: '',
+					startweek: 1,
+					endtweek: 7,
+					starttime: 0,
+					endtime: 24,*/
+
+					this.starttime = this.$view.starttime;
+					this.endtime = this.$view.endtime;
+					if(this.endtime - this.starttime === 24) {
+						this.allDay = true;
+					}
+
+					// 周
+					this.pick_week = new mui.PopPicker({
+						layer: 2,
+						more: true
+					});
+					this.pick_week.setData([pick_data_week, pick_data_week]);
+
+					this.pick_week.pickers[0].setSelectedValue(this.$view.startweek);
+					this.pick_week.pickers[1].setSelectedValue(this.$view.endtweek);
+
+					this.week_str = pick_data_week[this.$view.startweek - 1].text + ' - ' + pick_data_week[this.$view.endtweek - 1].text;
+
+					// 时
+					this.pick = new mui.PopPicker({
+						layer: 2,
+						more: true
+					});
+					this.pick.setData([pick_data, pick_data]);
+
+					this.pick.pickers[0].setSelectedValue(this.$view.starttime);
+					this.pick.pickers[1].setSelectedValue(this.$view.endtime);
+
+					this.time_str = pick_data[this.$view.starttime * 2].text + ' - ' + pick_data[this.$view.endtime * 2].text; 
+
+				},
+				methods: {
+					onSaveTap: function() {
+						app.page.setResult({
+							startweek: this.startweek,
+							endtweek: this.endtweek,
+							starttime: this.starttime,
+							endtime: this.endtime,
+							week: this.week_str,
+							time: this.time_str,
+							onLine: this.onLine
+						}).close();
+					},
+					// 营业周点击
+					onWeekTap: function() {
+						this.pick_week.show(function(items) {
+							if(items[1].value < items[0].value){
+								return mui.toast("营业周设置不正确");
+							}
+							this.week_str = items[0].text + ' - ' + items[1].text;
+							this.startweek = items[0].value;
+							this.endtweek = items[1].value;
+						}.bind(this));
+					},
+					// 营业时段点击
+					onTimeTap: function() {
+						this.pick.show(function(items) {
+							if(items[1].value < items[0].value){
+								return mui.toast("营业时段设置不正确"); 
+							}
+							this.time_str = items[0].text + ' - ' + items[1].text;
+							this.starttime = items[0].value;
+							this.endtime = items[1].value;
+						}.bind(this));
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>
