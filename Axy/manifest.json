@@ -453,7 +453,8 @@
 					"html/common/login.html",
 					"html/smart/devices/dev_my_list.html",
 					"html/public/browser.html",
-					"html/smart/scenes/index2.html"
+					"html/smart/scenes/index2.html",
+					"html/smart/devices/dev_AX-801.html"
 				],
 				"priority": 0
 			},
@@ -671,7 +672,9 @@
 				"resources": [],
 				"refer": [
 					"html/smart/scenes/trigger_conditions.html",
-					"html/smart/scenes/perform_actions.html"
+					"html/smart/scenes/perform_actions.html",
+					"html/smart/scenes/select_device.html",
+					"html/smart/scenes/select_scenes_icon.html"
 				],
 				"priority": 0
 			},
@@ -693,7 +696,8 @@
 					"html/smart/devices/dev_select_id.html",
 					"html/smart/add/scan_code.html",
 					"html/smart/add/scan_code_904.html",
-					"html/smart/add/scan_bind_dev.html"
+					"html/smart/add/scan_bind_dev.html",
+					"html/smart/add/select_light_type.html"
 				],
 				"priority": 0
 			},
@@ -1033,7 +1037,8 @@
 				"resources": [],
 				"refer": [
 					"html/smart/scenes/edit_scenes.html",
-					"html/public/input.html"
+					"html/public/input.html",
+					"html/smart/scenes/index_linkage.html"
 				],
 				"priority": 0
 			},
@@ -1295,6 +1300,42 @@
 				"resources": [],
 				"refer": [
 					"html/smart/add/blue_connect_camera2.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-801_alarm_clock.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_AX_801_select_ring.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-801_helper.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_AX-801_alarm_clock.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-801.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/devices/dev_AX-801_helper.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/index_linkage.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/create_linkage.html"
+				],
+				"priority": 0
+			},
+			"html/smart/scenes/create_linkage.html": {
+				"resources": [],
+				"refer": [
+					"html/smart/scenes/trigger_conditions.html",
+					"html/smart/scenes/perform_actions.html"
 				],
 				"priority": 0
 			}

@@ -41,6 +41,9 @@
 		var s = accNameDir[type];
 		return s || "未知类型";
 	};
+	acc.islight = function(type){
+		return type === 0x19||type === 0x21;
+	}
 
 	app.acc = acc;
 
