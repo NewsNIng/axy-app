@@ -839,7 +839,7 @@
 					// 点击消息按钮
 					onMessageTap: function() {
 						app.user.get(function(u) {
-							u && mui.openWindow('../person/message/index.html');
+							u && mui.openWindow('../person/message/index.html', "message_center");
 						});
 
 					},

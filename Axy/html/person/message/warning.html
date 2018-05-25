@@ -405,7 +405,17 @@
 		<script type="text/javascript" src="../../../js/dal/message.js"></script>
 
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				//处理窗口关闭前的业务
+				beforeback: function() {
+					// 通知 home 和  message_center 更新
+					new ni.Broadcast().emit("update_warn_message", {
+						
+					}, {
+						views: ["home", "message_center"]
+					})
+				},
+			});
 
 			var P = plug.H5NativeBridge;
 			var D;

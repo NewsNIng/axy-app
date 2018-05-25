@@ -29,9 +29,14 @@ Vue && Vue.component('warn-msg', {
 			plus.webview.currentWebview().addEventListener('show', function(){
 				ob.next();
 			});
+			
+			new ni.Broadcast().on('update_warn_message',function(){
+				ob.next();
+			})
+
 			app.user.has() && ob.next();
 		});
-
+		
 		
 
 		Listen$.merge(NotifyWarningMsg$.debounceTime(3e3))
@@ -91,7 +96,7 @@ Vue && Vue.component('warn-msg', {
 			});
 		},
 		onTap: function(o) {
-			mui.openWindow('../person/message/index.html');
+			mui.openWindow('../person/message/index.html', "message_center");
 		},
 
 		scroll: function() {
