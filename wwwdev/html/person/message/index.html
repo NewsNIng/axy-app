@@ -132,7 +132,7 @@
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
-
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js" ></script>
 		<script type="text/javascript">
 			mui.init();
 			mui.ready(function() {
@@ -208,6 +208,7 @@
 						var endtime = Date.now();
 						stime = parseInt(stime.getTime() / 1000);
 						endtime = parseInt(endtime / 1000);
+						alert(3)
 						P.GetAlarmListAsyn('',stime,endtime,account,1,1,function(res){
 							res = JSON.parse(res);
 							if(res.code != 0) return;
@@ -217,7 +218,6 @@
 							}
 							data = data.map(function(item,i) {
 								item.id = item.ID; //接口调整
-								item.ntime = (new Date(item.ntime * 1000)).toFormatString('yyyy-MM-dd hh:mm:ss');
 								return item;
 							});
 							that.alarmMsgNative = data[0];
