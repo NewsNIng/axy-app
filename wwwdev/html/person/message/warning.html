@@ -70,21 +70,24 @@
 			.card-room>.card {
 				width: 100%;
 				display: flex;
-				display: -webkit-flex; 
+				display: -webkit-flex;
 				padding-top: 0.9rem;
 				position: relative;
 			}
-			.card-room>.card.no-date{
+			
+			.card-room>.card.no-date {
 				padding-top: 0.3rem;
 			}
-			.card-room>.card .left{
+			
+			.card-room>.card .left {
 				display: flex;
 				display: -webkit-flex;
 				align-items: center;
-				-webkit-align-items:center;
+				-webkit-align-items: center;
 				width: 0.8rem;
 			}
-			.card-room>.card .left span{
+			
+			.card-room>.card .left span {
 				width: 0.506666rem;
 				height: 0.506666rem;
 				display: block;
@@ -93,24 +96,29 @@
 				-webkit-background-size: cover;
 				background-size: cover;
 			}
-			.card-room>.card .left span.unchecked{
+			
+			.card-room>.card .left span.unchecked {
 				background-image: url(../../../image/person/message/btn_Unselected@3x.png);
 			}
-			.card-room>.card .left span.checked{
+			
+			.card-room>.card .left span.checked {
 				background-image: url(../../../image/person/message/btn_Alreadychosen@3x.png);
 			}
-			.card-room>.card .left span.no-read{
+			
+			.card-room>.card .left span.no-read {
 				background-image: url(../../../image/person/message/icon_origin@3x.png);
 				width: 0.32rem;
 				height: 0.32rem;
 			}
-			.card-room>.card .right{
+			
+			.card-room>.card .right {
 				flex: 1;
 				-webkit-box-flex: 1;
 				background-color: #FFFFFF;
 				position: relative;
 				overflow: hidden;
 			}
+			
 			.card-room>.card:before {
 				content: attr(data-time);
 				display: block;
@@ -126,7 +134,8 @@
 			.card-room>.card .right>div:not(.menu) {
 				padding: 0.2rem 0.346666rem 0 0.346666rem;
 			}
-			.card-room>.card .button{
+			
+			.card-room>.card .button {
 				position: absolute;
 				right: 0;
 				background-color: #f40;
@@ -145,6 +154,7 @@
 				transition: all 0.3s;
 				-webkit-transition: 0.3s;
 			}
+			
 			.card-room>.card .right>div:not(.menu) .mui-pull-right {
 				color: #A2A6B1;
 			}
@@ -224,14 +234,16 @@
 			}
 			/*end video*/
 			/*bscroll-vertical-scrollbar*/
-			.app-header .edit{
+			
+			.app-header .edit {
 				float: right;
 				color: #fff;
 				font-size: 14px;
 				line-height: 44px;
 				padding: 0 10px;
 			}
-			.footer{
+			
+			.footer {
 				position: fixed;
 				height: 50px;
 				line-height: 50px;
@@ -251,16 +263,19 @@
 				color: #9f9fa0;
 				color: #2bb8aa;
 			}
-			.footer .button-read{
+			
+			.footer .button-read {
 				width: 100px;
 				float: left;
 			}
-			.footer .button-delete{
+			
+			.footer .button-delete {
 				text-align: right;
 				width: 100px;
 				float: right;
 			}
-			.footer .can-operate{
+			
+			.footer .can-operate {
 				color: #2bb8aa;
 			}
 		</style>
@@ -269,116 +284,108 @@
 
 	<body>
 		<div class="warn-container">
-		<header class="mui-bar mui-bar-nav app-header">
-			<a class="mui-action-back app-icon-back mui-pull-left"></a>
-			<h1 class="mui-title">告警消息</h1>
-			<span class="edit" @click="handleEdit">{{ isEdit ? '取消' : '编辑'}}</span>
-		</header>
-		<div class="mui-content">
-			<div class="tabroom app-color-333333" ref="tabroom">
-				<div @tap="onDevTap()" class="app-color-main">
-					<span class="app-font-size-28">{{fixName(devName) || '全部设备'}}</span>
-					<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">告警消息</h1>
+				<span class="edit" @click="handleEdit">{{ isEdit ? '取消' : '编辑'}}</span>
+			</header>
+			<div class="mui-content">
+				<div class="tabroom app-color-333333" ref="tabroom">
+					<div @tap="onDevTap()" class="app-color-main">
+						<span class="app-font-size-28">{{fixName(devName) || '全部设备'}}</span>
+						<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
+					</div>
+
+					<div @tap="onDateTap()">
+						<span class="app-font-size-28">{{dateText}}</span>
+						<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
+					</div>
+
 				</div>
 
-				<div @tap="onDateTap()">
-					<span class="app-font-size-28">{{dateText}}</span>
-					<span class="app-font-size-36 mui-icon mui-icon mui-icon-arrowdown"></span>
-				</div>
-
-			</div>
-			
-			<div class="video-root" v-if="videoplay" @tap.self="videoplay=false">
-				<div class="video-room">
-					<video :src="videosrc" controls autoplay playsinline webkit-playsinline></video>
-				</div>
-			</div>
-
-			<div class="wrapper" ref="wrapper">
-
-				<div class="app-font-size-28 card-room">
-					<div class="card"
-						 v-for="o,i in list" 
-						:data-time="compareTime(o.atime,i)"
-						 @tap="onCardTap(o, i)" 
-						 :key="o.devid"
-						 :class="[compareTime(o.atime,i) ? '' : 'no-date']"
-						 @touchstart="_touchstart"
-						 @touchmove="_touchmove"
-						 @touchend="_touchend">
-						<div class="left">
-							<span :class="[isEdit ? (o.checked ? 'checked' : 'unchecked') : (o.read ? '' : 'no-read')]"></span>
-						</div>
-						<div class="right">
-							<div>
-								<span class="app-color-333333">设备名称</span>
-								<span class="mui-pull-right">{{fixName(o.location)}}</span>
-							</div>
-							<div>
-								<span class="app-color-333333">设备ID</span>
-								<span class="mui-pull-right">{{o.devid}}</span>
-							</div>
-							<div>
-								<span class="app-color-333333">告警时间</span>
-								<span class="mui-pull-right">{{o.atime}}</span>
-							</div>
-							
-							<div v-if="o.accessoryName">
-								<span class="app-color-333333">告警防区</span>
-								<span class="mui-pull-right">{{o.accessoryName}}</span>
-							</div>
-							<div style="padding-bottom: 0.2rem;">
-								<span class="app-color-333333">防区ID</span>
-								<span class="mui-pull-right">{{to16(o.accessoryID)}}</span>
-							</div>
-							<transition name="menu-fade"> 
-
-							<div class="menu" v-show="o.showMenu">
-								<div @tap.stop="onVideoTap(o, i)">
-									<img :src="'../../../image/person/message/alarm'+ (o.info && o.info.video ? '' : '_1') +'@3x.png'" />
-									<div class="app-font-size-28" :class="o.info && o.info.video ? 'app-color-main': 'app-color-9f9fa0'">告警录像</div>
-								</div>
-
-								<div @tap.stop="onImageTap(o, i)">
-									<img :src="'../../../image/person/message/screenshots'+ (o.info && o.info.image ? '' : '_1') +'@3x.png'" />
-									<div class="app-font-size-28" :class="o.info && o.info.image ? 'app-color-main': 'app-color-9f9fa0'">抓拍截图</div>
-									<template v-if="o.info && o.info.image">
-										<div ref="preimgs" :data-preview-src="o.info.image.fname" :data-preview-group="i"></div>
-									</template>
-									<template v-else>
-										<div ref="preimgs"></div>
-									</template>
-
-								</div>
-
-								<div @tap.stop="onViewTap(o, i)">
-									<template v-if="canPlay(o)">
-										<img src="../../../image/person/message/video@3x.png" />
-										<div class="app-font-size-28 app-color-main">实时视频</div>	
-									</template>
-									<template v-else>
-										<img src="../../../image/person/message/video_1@3x.png" />
-										<div class="app-font-size-28 app-color-9f9fa0">实时视频</div>	
-									</template>
-									
-								</div>
-							</div>
-
-							</transition>
-							<div class="button delete_button" @touchstart.stop="deleteAlarmSingle(o.id)"><span>删除</span></div>
-						</div>
-						
+				<div class="video-root" v-if="videoplay" @tap.self="videoplay=false">
+					<div class="video-room">
+						<video :src="videosrc" controls autoplay playsinline webkit-playsinline></video>
 					</div>
 				</div>
-			</div>
-			<div class="footer" v-show="isEdit">
-				<div class="button-read" v-show="allRead" @click="handlerFooterClick(1)">全部已读</div>
-				<div class="button-read" v-show="canReadWithSingle" @click="handlerFooterClick(2)">已读</div>
-				<div class="button-delete" v-show="selectList.length > 0" @click="handlerFooterClick(3)">删除</div>
-				<div class="button-delete can-operate" v-show="selectList.length == 0" @click="handlerFooterClick(4)">全部删除</div>
+
+				<div class="wrapper" ref="wrapper">
+
+					<div class="app-font-size-28 card-room">
+						<div class="card" v-for="o,i in list" :data-time="compareTime(o.atime,i)" @tap="onCardTap(o, i)" :key="o.devid" :class="[compareTime(o.atime,i) ? '' : 'no-date']" @touchstart="_touchstart" @touchmove="_touchmove" @touchend="_touchend">
+							<div class="left">
+								<span :class="[isEdit ? (o.checked ? 'checked' : 'unchecked') : (o.read ? '' : 'no-read')]"></span>
+							</div>
+							<div class="right">
+								<div>
+									<span class="app-color-333333">设备名称</span>
+									<span class="mui-pull-right">{{fixName(o.location)}}</span>
+								</div>
+								<div>
+									<span class="app-color-333333">设备ID</span>
+									<span class="mui-pull-right">{{o.devid}}</span>
+								</div>
+								<div>
+									<span class="app-color-333333">告警时间</span>
+									<span class="mui-pull-right">{{o.atime}}</span>
+								</div>
+
+								<div v-if="o.accessoryName">
+									<span class="app-color-333333">告警防区</span>
+									<span class="mui-pull-right">{{o.accessoryName}}</span>
+								</div>
+								<div style="padding-bottom: 0.2rem;">
+									<span class="app-color-333333">防区ID</span>
+									<span class="mui-pull-right">{{to16(o.accessoryID)}}</span>
+								</div>
+								<transition name="menu-fade">
+
+									<div class="menu" v-show="o.showMenu">
+										<div @tap.stop="onVideoTap(o, i)">
+											<img :src="'../../../image/person/message/alarm'+ (o.info && o.info.video ? '' : '_1') +'@3x.png'" />
+											<div class="app-font-size-28" :class="o.info && o.info.video ? 'app-color-main': 'app-color-9f9fa0'">告警录像</div>
+										</div>
+
+										<div @tap.stop="onImageTap(o, i)">
+											<img :src="'../../../image/person/message/screenshots'+ (o.info && o.info.image ? '' : '_1') +'@3x.png'" />
+											<div class="app-font-size-28" :class="o.info && o.info.image ? 'app-color-main': 'app-color-9f9fa0'">抓拍截图</div>
+											<template v-if="o.info && o.info.image">
+												<div ref="preimgs" :data-preview-src="o.info.image.fname" :data-preview-group="i"></div>
+											</template>
+											<template v-else>
+												<div ref="preimgs"></div>
+											</template>
+
+										</div>
+
+										<div @tap.stop="onViewTap(o, i)">
+											<template v-if="canPlay(o)">
+												<img src="../../../image/person/message/video@3x.png" />
+												<div class="app-font-size-28 app-color-main">实时视频</div>
+											</template>
+											<template v-else>
+												<img src="../../../image/person/message/video_1@3x.png" />
+												<div class="app-font-size-28 app-color-9f9fa0">实时视频</div>
+											</template>
+
+										</div>
+									</div>
+
+								</transition>
+								<div class="button delete_button" @touchstart.stop="deleteAlarmSingle(o.id)"><span>删除</span></div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="footer" v-show="isEdit">
+					<div class="button-read" v-show="allRead" @click="handlerFooterClick(1)">全部已读</div>
+					<div class="button-read" v-show="canReadWithSingle" @click="handlerFooterClick(2)">已读</div>
+					<div class="button-delete" v-show="selectList.length > 0" @click="handlerFooterClick(3)">删除</div>
+					<div class="button-delete can-operate" v-show="selectList.length == 0" @click="handlerFooterClick(4)">全部删除</div>
+				</div>
 			</div>
 		</div>
-	</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
@@ -410,7 +417,7 @@
 				beforeback: function() {
 					// 通知 home 和  message_center 更新
 					new ni.Broadcast().emit("update_warn_message", {
-						
+
 					}, {
 						views: ["home", "message_center"]
 					})
@@ -437,7 +444,7 @@
 						devId: "",
 
 						n: 1,
-						list:  [],
+						list: [],
 
 						videoplay: false,
 						videosrc: "",
@@ -462,25 +469,25 @@
 						}
 						return this.dateTime.toFormatString('MM/dd');
 					},
-					selectList: function(){
-						return this.list.reduce(function(ret,item){
+					selectList: function() {
+						return this.list.reduce(function(ret, item) {
 							item.checked && ret.push(item)
 							return ret
-						},[])
+						}, [])
 					},
 					//是否有未读消息
-					hasUnRead: function(){
-						return (this.list.filter(function(item){
+					hasUnRead: function() {
+						return(this.list.filter(function(item) {
 							return !item.read
 						}).length > 0)
 					},
 					//全部已读
-					allRead: function(){
+					allRead: function() {
 						return this.hasUnRead && this.selectList.length == 0
 					},
 					//已读是否显示，用户选择了未读消息时候显示
-					canReadWithSingle: function(){
-						var unReadListCheck = this.selectList.filter(function(item){
+					canReadWithSingle: function() {
+						var unReadListCheck = this.selectList.filter(function(item) {
 							return !item.read
 						})
 						return this.hasUnRead && unReadListCheck.length > 0
@@ -528,7 +535,7 @@
 						layer: 1
 					});
 
-				}, 
+				},
 
 				plusReady: function() {
 
@@ -574,9 +581,12 @@
 					mui.back = function() {
 						if(this.videoplay) {
 							this.videoplay = false;
-						} else if(this.pimg.isShown()) {
+						} else if(this.pimg && this.pimg.isShown()) {
 							this.pimg.close();
 						} else {
+							new ni.Broadcast().emit("update_warn_message", {}, {
+								views: ["home", "message_center"]
+							})
 							this.$view.close();
 						}
 						return false;
@@ -585,115 +595,118 @@
 				},
 
 				methods: {
-					_touchstart: function(e){
+					_touchstart: function(e) {
 						this._resetSlide(e.currentTarget.querySelector('.button'));
 						var canDelete = e.currentTarget.querySelector('.menu').style.display == 'none' && !this.isEdit
 						this.canDelete = canDelete;
-						
-						if(!this.canDelete){
+
+						if(!this.canDelete) {
 							return
 						}
 						this.startX = e.touches[0].clientX;
 						this.startY = e.touches[0].clientY;
 					},
-					_touchmove: function(e){
-						if(!this.canDelete){
+					_touchmove: function(e) {
+						if(!this.canDelete) {
 							return
 						}
 						var ele = e.currentTarget.querySelector('.button');
-						var isactive = ele.classList.contains('active'),hasDix = 0;
-						
+						var isactive = ele.classList.contains('active'),
+							hasDix = 0;
+
 						this.moveX = e.touches[0].clientX;
 						this.moveY = e.touches[0].clientY;
 						this.disX = this.startX - this.moveX;
 						this.disY = this.startY - this.moveY;
-						
-						if(isactive){
+
+						if(isactive) {
 							hasDix = -this.maxMoveX
-							if(this.disX > this.maxMoveX + hasDix){
+							if(this.disX > this.maxMoveX + hasDix) {
 								this.disX = this.maxMoveX + hasDix
 							}
-						}else{
+						} else {
 							hasDix = 0;
-							if(this.disX > this.maxMoveX){
+							if(this.disX > this.maxMoveX) {
 								this.disX = this.maxMoveX
 							}
 						}
 						ele.style.transition = 'all 0s';
 						ele.WebkitTransition = 'all 0s';
-						ele.style.transform = 'translateX('+(-this.disX+this.maxMoveX+hasDix)+'px)';
-						ele.style.WebkitTransform = 'translateX('+(-this.disX+this.maxMoveX+hasDix)+'px)';
+						ele.style.transform = 'translateX(' + (-this.disX + this.maxMoveX + hasDix) + 'px)';
+						ele.style.WebkitTransform = 'translateX(' + (-this.disX + this.maxMoveX + hasDix) + 'px)';
 					},
-					_touchend: function(e){
-						if(!this.canDelete){
+					_touchend: function(e) {
+						if(!this.canDelete) {
 							return
 						}
-						var ele = e.currentTarget.querySelector('.button'); 
+						var ele = e.currentTarget.querySelector('.button');
 						if(this.moveX == 0) {
-							return 
+							return
 						}
-						
-						if(this.startX - this.moveX > this.maxMoveX / 3){
+
+						if(this.startX - this.moveX > this.maxMoveX / 3) {
 							this.disX = this.maxMoveX
 							ele.classList.add('active')
 							this.hasDeleteButton = true;
-						}else{
+						} else {
 							this.disX = 0;
 							ele.classList.remove('active')
 							this.hasDeleteButton = false;
 						}
 						ele.style.transition = 'all 0.3s';
 						ele.WebkitTransition = 'all 0.3s';
-						ele.style.transform = 'translateX('+(-this.disX+this.maxMoveX)+'px)';
-						ele.style.WebkitTransform = 'translateX('+(-this.disX+this.maxMoveX)+'px)';
+						ele.style.transform = 'translateX(' + (-this.disX + this.maxMoveX) + 'px)';
+						ele.style.WebkitTransform = 'translateX(' + (-this.disX + this.maxMoveX) + 'px)';
 						this.startX = 0;
 						this.moveX = 0;
 					},
-					_resetSlide: function(currentele){
-						var buttons = document.querySelectorAll('.delete_button'),ele;
-						for(var i = 0, len = buttons.length; i < len; i++){
+					_resetSlide: function(currentele) {
+						var buttons = document.querySelectorAll('.delete_button'),
+							ele;
+						for(var i = 0, len = buttons.length; i < len; i++) {
 							ele = buttons[i];
-							if(!(currentele == ele)){
-								ele.style.transform = 'translateX('+(this.maxMoveX)+'px)';
-								ele.style.WebkitTransform = 'translateX('+(this.maxMoveX)+'px)';
+							if(!(currentele == ele)) {
+								ele.style.transform = 'translateX(' + (this.maxMoveX) + 'px)';
+								ele.style.WebkitTransform = 'translateX(' + (this.maxMoveX) + 'px)';
 							}
 						}
 						this.hasDeleteButton = false;
 					},
-					handlerFooterClick: function(type){//1全部已读，2已读，3删除，4全部删除
-						var ids = [],that = this;
-						if(type == 1){
-							ids = this.list.reduce(function(ret,item){
-								!item.read && (ret.push(item.id),item.read = true);
+					handlerFooterClick: function(type) { //1全部已读，2已读，3删除，4全部删除
+						var ids = [],
+							that = this;
+						if(type == 1) {
+							ids = this.list.reduce(function(ret, item) {
+								!item.read && (ret.push(item.id), item.read = true);
 								return ret;
-							},[])
-						}else if(type == 2){
-							ids = this.selectList.reduce(function(ret,item){
-								!item.read && (ret.push(item.id),item.read = true);
+							}, [])
+						} else if(type == 2) {
+							ids = this.selectList.reduce(function(ret, item) {
+								!item.read && (ret.push(item.id), item.read = true);
 								return ret;
-							},[])
-						}else if(type == 3){
-							ids = this.selectList.reduce(function(ret,item){
+							}, [])
+						} else if(type == 3) {
+							ids = this.selectList.reduce(function(ret, item) {
 								ret.push(item.id);
 								return ret;
-							},[])
-						}else if(type == 4){
-							ids = this.list.reduce(function(ret,item){
+							}, [])
+						} else if(type == 4) {
+							ids = this.list.reduce(function(ret, item) {
 								ret.push(item.id);
 								return ret;
-							},[])
+							}, [])
 						}
-						if(type == 1 || type == 2){
+						if(type == 1 || type == 2) {
 							this.UpdateAlarm(ids);
-						}else{
-							that.list = that.list.filter(function(item){
-										return ids.indexOf(item.id) == -1;
-									})
+						} else {
+							that.list = that.list.filter(function(item) {
+								return ids.indexOf(item.id) == -1;
+							})
 							that.scroll && that.scroll.refresh()
-							this.DelAlarmListAsyn(ids,function(res){
+							this.DelAlarmListAsyn(ids, function(res) {
 								res = JSON.parse(res);
-								if(res.code == 0){
-									that.list = that.list.filter(function(item){
+								if(res.code == 0) {
+									that.list = that.list.filter(function(item) {
 										return ids.indexOf(item.id) == -1;
 									})
 									that.scroll && that.scroll.refresh()
@@ -701,31 +714,32 @@
 							})
 						}
 						this.isEdit = false;
-						this.list.forEach(function(item){
-							that.$set(item,'checked',false)
+						this.list.forEach(function(item) {
+							that.$set(item, 'checked', false)
 						})
 					},
 					//比较两个日期是否相同,i是索引,不相同就返回
-					compareTime: function(str1,i){
+					compareTime: function(str1, i) {
 						str1 = new Date(str1.replace(/-/g, '/')).toFormatString('yyyy/MM/dd');
-						var prev = this.list[i-1],str2;
-						if(prev){
+						var prev = this.list[i - 1],
+							str2;
+						if(prev) {
 							str2 = prev.atime;
-							str2 = new Date(str2.replace(/-/g,'/')).toFormatString('yyyy/MM/dd');
+							str2 = new Date(str2.replace(/-/g, '/')).toFormatString('yyyy/MM/dd');
 						}
 						return str1 == str2 ? '' : str1;
 					},
 					//点击编辑
-					handleEdit: function(){
+					handleEdit: function() {
 						this.isEdit = !this.isEdit;
-						
+
 					},
-					deleteAlarmSingle: function(id){
+					deleteAlarmSingle: function(id) {
 						var that = this;
-						this.DelAlarmListAsyn([id],function(res){
+						this.DelAlarmListAsyn([id], function(res) {
 							res = JSON.parse(res)
-							if(res.code == 0){
-								that.list = that.list.filter(function(item){
+							if(res.code == 0) {
+								that.list = that.list.filter(function(item) {
 									return item.id !== id;
 								})
 								that.scroll && that.scroll.refresh()
@@ -733,27 +747,27 @@
 						})
 					},
 					//删除告警消息
-					DelAlarmListAsyn: function(ids,sf,ff){
+					DelAlarmListAsyn: function(ids, sf, ff) {
 						var username = this.user.account;
-						P.DelAlarmListAsyn(username,ids,sf,ff)
+						P.DelAlarmListAsyn(username, ids, sf, ff)
 					},
 					//标记为已读
-					UpdateAlarm: function(ids){
+					UpdateAlarm: function(ids) {
 						var username = this.user.account;
-						return P.UpdateAlarm(username,ids)
+						return P.UpdateAlarm(username, ids)
 					},
 					// 卡片点击
 					onCardTap: function(o, i) {
 						//判断当前是含有删除状态
 						this._resetSlide();
 						//判断当前是否是编辑状态处理操作
-						if(this.isEdit){
+						if(this.isEdit) {
 							var currentChecked = !o.checked;
-							this.$set(o,'checked',currentChecked)
+							this.$set(o, 'checked', currentChecked)
 							return
 						}
 						// 切换菜单,非编辑状态
-						if(!o.read){
+						if(!o.read) {
 							o.read = true;
 							var id = o.id;
 							this.UpdateAlarm([id])
@@ -810,13 +824,10 @@
 					// 点击观看实时视频视图
 					onViewTap: function(o, i) {
 						//var sortDevid = app.dev.findNameByDevid(o.devid);
-						if(!this.canPlay(o)){
+						if(!this.canPlay(o)) {
 							return;
 						}
-						
-						
-						
-						
+
 						console.log(JSON.stringify(o));
 
 						// TODO 需要获取到通道信息
@@ -891,8 +902,7 @@
 						}
 						var that = this;
 						dal.message.getAlarmList(this.n, this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "", function(err, data) {
-							
-							
+
 							plus.nativeUI.closeWaiting();
 							if(err) {
 								return mui.toast(err.message);
@@ -900,7 +910,7 @@
 							if(!data || data.length === 0) {
 								return;
 							}
-							data = data.map(function(item,i) {
+							data = data.map(function(item, i) {
 								item.showMenu = false;
 								item.info = null;
 								i % 2 == 0 ? item.read = true : item.read = false
@@ -915,9 +925,9 @@
 
 						});
 					},
-					getMessageList: function(override){
+					getMessageList: function(override) {
 						plus.nativeUI.showWaiting("正在加载");
-						if(override){
+						if(override) {
 							this.list = [];
 							this.n = 1;
 						}
@@ -925,17 +935,17 @@
 						var account = this.user.account;
 						var stime = this.dateTime;
 						var endtime = Date.now();
-						if(stime){
+						if(stime) {
 							stime.setHours(0);
 							endtime = new Date(stime.getTime());
 							endtime.setDate(endtime.getDate() + 1)
 							endtime = endtime.getTime()
-						}else{
+						} else {
 							stime = new Date(0);
 						}
 						stime = parseInt(stime.getTime() / 1000);
 						endtime = parseInt(endtime / 1000);
-						P.GetAlarmListAsyn(this.devId,stime,endtime,account,this.n,this.pageSize,function(res){
+						P.GetAlarmListAsyn(this.devId, stime, endtime, account, this.n, this.pageSize, function(res) {
 							plus.nativeUI.closeWaiting();
 							res = JSON.parse(res);
 							if(res.code != 0) return;
@@ -943,7 +953,7 @@
 							if(!data || data.length === 0) {
 								return;
 							}
-							data = data.map(function(item,i) {
+							data = data.map(function(item, i) {
 								item.showMenu = false;
 								item.info = null;
 								item.id = item.ID; //接口调整
@@ -975,11 +985,11 @@
 					fixName: function(str) {
 						return app.dev.fixName(str);
 					},
-					
-					canPlay: function(o){
+
+					canPlay: function(o) {
 						return app.dev.canPlay(o.type);
 					},
-					to16: function(n){
+					to16: function(n) {
 						return n.toString(16).toUpperCase();
 					},
 				}

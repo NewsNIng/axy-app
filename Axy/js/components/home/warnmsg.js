@@ -88,9 +88,6 @@ Vue && Vue.component('warn-msg', {
 					data = JSON.parse(data);
 					if(data.code != 0) return;
 					data = data.data;
-					if(!data || data.length == 0) {
-						return;
-					}
 					ob.next(data);
 				})
 			});
