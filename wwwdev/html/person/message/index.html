@@ -133,6 +133,7 @@
 		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js" ></script>
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
 		<script type="text/javascript">
 			mui.init();
 			mui.ready(function() {
@@ -208,8 +209,7 @@
 						var endtime = Date.now();
 						stime = parseInt(stime.getTime() / 1000);
 						endtime = parseInt(endtime / 1000);
-						alert(3)
-						P.GetAlarmListAsyn('',stime,endtime,account,1,1,function(res){
+						plug.H5NativeBridge.GetAlarmListAsyn('',stime,endtime,account,1,1,function(res){
 							res = JSON.parse(res);
 							if(res.code != 0) return;
 							var data = res.data;
