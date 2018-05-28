@@ -227,7 +227,7 @@
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_ms_alarm.js"></script>
-		
+
 		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
 		<img src="" />
@@ -314,7 +314,7 @@
 								return mui.toast(err.message);
 							}
 							mui.toast("操作成功！");
-//							that._updataActionByEnable(that.devInfo.accessory.enable);
+							//							that._updataActionByEnable(that.devInfo.accessory.enable);
 							that._updataUi();
 						})
 					}.bind(this));
@@ -340,8 +340,25 @@
 						plus.navigator.setStatusBarStyle('light');
 						view.close();
 					}.bind(this)
+					
+					this.getBaseState();
 				},
 				methods: {
+					// 获取基础数据
+					getBaseState: function() {
+						var that = this;
+						var devid = this.devInfo.accessory.devid,
+							devtype = this.devInfo.devType,
+							id = this.devInfo.accessory.id || this.devInfo.accessory.aid;
+
+						dal.devaccessory.getinfo(devid, devtype, id, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							mui.extend(that.devInfo.accessory, data);
+						});
+					},
+
 					// 切换开关
 					toggleSwitch: function() {
 						this.state = !this.state;
@@ -405,7 +422,7 @@
 						}, {
 							title: "配件名称",
 							content: that.devInfo.accessory.name,
-							r: "nonEmpty", 
+							r: "nonEmpty",
 							rmsg: "配件名称不能为空",
 							maxLength: 30,
 							mLengthMsg: "最长不超过30个字符！",
@@ -431,8 +448,8 @@
 						} else {
 							action = action & (~(1 << 15));
 						}
-						this.devInfo.accessory.action = (action>>>0);
-						console.log("isOn==>" + isOn + "，action==>" + action+"，action===>"+(action>>>0));
+						this.devInfo.accessory.action = (action >>> 0);
+						console.log("isOn==>" + isOn + "，action==>" + action + "，action===>" + (action >>> 0));
 					},
 				}
 			});

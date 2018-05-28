@@ -88,8 +88,8 @@
 							if(err.code === '0110') {
 								// 验证失败
 								ob.error();
-							} else if(logincount < 5) {
-								// 递归
+							} else if(logincount < 3) {
+								// 递归重试登录   指数化退避
 								logincount = logincount + 1;
 								setTimeout(_loginFn.bind(null, ob, logincount), Math.pow(2, logincount) * 100);
 							}
@@ -97,6 +97,9 @@
 						}
 						if(data.lockterminal === 0 || data.validation === 1) {
 							// 验证通过
+							_B.emit("hide_login_success", {}, {
+								views: ["home"]
+							});
 							ob.next(data);
 						} else {
 							ob.error();
@@ -171,7 +174,7 @@
 				if(!rs.data || !rs.data.clientId) {
 					return
 				}
-				ob.next(rs.data.clientId);
+				ob.next(rs.data);
 
 			});
 
@@ -226,6 +229,7 @@
 			});
 
 			var Success$fn = function(user) {
+				
 				user = FixUserData(user);
 				var account = user.account;
 
@@ -259,6 +263,10 @@
 				getDevListTimer$ = $getDevListTimer
 					// 或者收到通知
 					.merge($listenDevListUpdate)
+					// 过滤非登录
+					//.filter(function(){
+						//return app.user.get().account;
+					//})
 					// 获取ajax数据
 					.mergeMapTo($getDevListByAjax)
 					// 订阅
@@ -318,6 +326,7 @@
 				.subscribe(function(data) {
 					// 如果 是 token 过期
 					if(data.message === "TokenTimeOut") {
+						
 						// 重新登录
 						$login
 							// 执行
@@ -374,10 +383,10 @@
 			};
 
 			// 设备推送开关同步
-			var SyncHronous = function(account, id) {
-				PUSH_ID.data = id;
-
-				dal.push.synchronous(account, id, mui.os.ios ? 67 : 36, function(err, data) {
+			var SyncHronous = function(account, pushData) {
+				PUSH_ID.data = pushData.clientId;
+				var type = mui.os.ios ?  67 : (pushData.type||36); 
+				dal.push.synchronous(account, id, type, function(err, data) {
 					/*if(err) {
 						return mui.toast(err.message);
 					}

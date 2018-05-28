@@ -53,7 +53,7 @@
 	// 通过type查找配件名称
 	acc.findName = function(type){
 		var s = accNameDir[type];
-		return s || "未知类型";
+		return s || ("未知类型"+type);
 	};
 	
 	// 是否是智能控制配件

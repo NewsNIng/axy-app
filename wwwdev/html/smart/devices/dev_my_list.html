@@ -537,6 +537,7 @@
 		<script type="text/javascript" src="../../../js/app/app-acc.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-mall.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-statis.js" ></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugDevManager.js"></script>
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
@@ -602,11 +603,24 @@
 								// 布防
 								"8": function() {
 									dev.workmode = app.dev.getArmBit(); // 0x01 << 30
+									// [事件]布防
+									app.statis.emit("arm");
 								},
 								// 撤防
 								"4": function() {
 									dev.workmode = 0;
-								}
+									// [事件]撤防
+									app.statis.emit("disarm");
+								},
+								// SOS
+								"1": function(){
+									// [事件]紧急求救
+									app.statis.emit("SOS");
+								},
+								// 静音
+								"2": function(){
+									
+								},
 							};
 
 							o[state] && o[state]();
@@ -938,6 +952,10 @@
 									that.$refs.devimgel[that.tapIndex].style.backgroundImage = "url(" + path + ")";
 								})
 							});
+							
+							// [事件]观看视频
+							app.statis.emit("watch_video");
+							
 						});
 
 					},

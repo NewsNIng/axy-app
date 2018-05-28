@@ -263,6 +263,7 @@
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
+		<script type="text/javascript" src="../../js/app/app-statis.js" ></script>
 
 		<script type="text/javascript" src="../../js/lib/better-scroll.min.js"></script>
 
@@ -569,6 +570,11 @@
 								setTimeout(function() {
 									mui.back();
 								}, 250);
+								
+								// [事件]登录
+								app.statis.emit("login", {
+									loginType: "tel"
+								});
 
 							}, function(err) {
 								$getStateFn(false)();
@@ -722,6 +728,11 @@
 								setTimeout(function() {
 									mui.back();
 								}, 250);
+								
+								// [事件]登录
+								app.statis.emit("login", {
+									loginType: type
+								});
 
 							}, function(err) {
 								w && w.close();
