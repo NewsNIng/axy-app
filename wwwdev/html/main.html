@@ -75,6 +75,7 @@
 		<script type="text/javascript" src="../js/common/android-back.js"></script>
 
 		<script type="text/javascript" src="../js/app/app-mall.js"></script>
+		<script type="text/javascript" src="../js/app/app-statis.js" ></script>
 
 		<script>
 			// 4个子webview统一样式
@@ -209,6 +210,11 @@
 					// 打开商城
 					_openMall: function() {
 						app.mall.openHome();
+						
+						// [事件]进入商城
+						app.statis.emit("shop", {
+							from: "home"
+						});
 						
 //						if(app.mall.hasView()) {
 //							app.mall.getView().show('pop-in', 250);

@@ -137,7 +137,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
-
+		<script type="text/javascript" src="../../../js/app/app-acc.js" ></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -146,6 +146,8 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-statis.js" ></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -194,6 +196,17 @@
 					
 					plus.nativeUI.closeWaiting();
 					
+					
+					
+					
+					// [事件]添加设备或配件 
+					var devName = "";
+					if(this.isFitting){
+						devName = app.acc.findName(this.info.data.acc.type);
+					}else{
+						devName = app.dev.findName(this.info.data.dev.type);
+					}
+					app.statis.emit("add", {name: devName});
 					
 				},
 				methods: {

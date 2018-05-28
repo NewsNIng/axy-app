@@ -7,7 +7,7 @@
 	
 	var SENDMODE = "";
 	
-
+	
 	function initPlus() {
 		IMEI = plus.device.uuid;
 		PUSH_ID = new ni.Cache('push_key', "", {
