@@ -5,13 +5,7 @@ Vue && Vue.component('warn-msg', {
 	data: function() {
 		return {
 			animate: false,
-			items: [{
-				ID: 1,
-				location: 'jsian',
-				accessoryName: '9999',
-				accessoryID: '3ii',
-				ntime: 195632563555,
-			}],
+			items: [],
 			st: null,
 		}
 	},
@@ -32,10 +26,17 @@ Vue && Vue.component('warn-msg', {
 			_B.on('home_reload', function() {
 				ob.next();
 			});
+			plus.webview.currentWebview().addEventListener('show', function(){
+				ob.next();
+			});
+			
+			new ni.Broadcast().on('update_warn_message',function(){
+				ob.next();
+			})
 
 			app.user.has() && ob.next();
 		});
-
+		
 		
 
 		Listen$.merge(NotifyWarningMsg$.debounceTime(3e3))
@@ -87,15 +88,12 @@ Vue && Vue.component('warn-msg', {
 					data = JSON.parse(data);
 					if(data.code != 0) return;
 					data = data.data;
-					if(!data || data.length == 0) {
-						return;
-					}
 					ob.next(data);
 				})
 			});
 		},
 		onTap: function(o) {
-			mui.openWindow('../person/message/index.html');
+			mui.openWindow('../person/message/index.html', "message_center");
 		},
 
 		scroll: function() {
@@ -111,6 +109,7 @@ Vue && Vue.component('warn-msg', {
 			return app.dev.fixName(s);
 		},
 		_fixTimeAgo: function(s) {
+			s = s * 1000;
 			return new Date().ago(s);
 		},
 	},

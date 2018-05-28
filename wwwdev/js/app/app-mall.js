@@ -60,6 +60,17 @@
 			query: {
 				goindex: true
 			}
+		},
+		
+		//商品详情页
+		TODETAIL: function(goodscode){
+			return {
+				path: '/detail',
+				query: {
+					goindex: true,
+					id: goodscode
+				}
+			}
 		}
 
 	};
@@ -153,7 +164,10 @@
 	mall.openHome = function(){
 		this.sendRouterCmd(routerCmd.HOME);
 	}
-
+	
+	mall.openDetail = function(goodscode){
+		this.sendRouterCmd(routerCmd.TODETAIL(goodscode))
+	}
 	app.mall = mall;
 
 }(window.app || (window.app = {}), ni.Broadcast));

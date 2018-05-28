@@ -179,9 +179,7 @@
 			});
 
 			// 获取设备列表计时器
-			var $getDevListTimer = Rx.Observable.create(function(_) {
-					_.next();
-				})
+			var $getDevListTimer = Rx.Observable.empty().startWith(1)
 				.delay(3e3)
 				.merge(Rx.Observable.interval(30e3));
 
