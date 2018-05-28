@@ -53,11 +53,8 @@
 			BASE_URL: _.BASE_URL_TOP
 		}, function(err, data) {
 
-//			if(!err) {
-//				data = dal.BASE_URL_DEV
-//				//data = dal.BASE_URL_TEST
-//				console.log("=========================" + data);
-//			} 
+			//data = dal.BASE_URL_DEV
+			data = dal.BASE_URL_TEST
 			callback(err, data);
 	}); 
 	}

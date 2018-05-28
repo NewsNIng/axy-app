@@ -541,6 +541,7 @@
 		<script type="text/javascript" src="../../js/app/app-dev.js"></script>
 		<script type="text/javascript" src="../../js/app/app-mall.js"></script>
 		<!--<script type="text/javascript" src="../../js/app/app-auth.js"></script>-->
+		<script type="text/javascript" src="../../js/app/app-statis.js"></script>
 
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
@@ -685,6 +686,13 @@
 						}
 					});
 
+					this.$hideLoginSuccess = Rx.Observable.create(function(ob) {
+						_B.on("hide_login_success", function() {
+							// 自动登录成功
+							ob.next();
+						});
+					});
+
 					//					mui.init({
 					//						pullRefresh: {
 					//							container: ".mui-scroll-wrapper",
@@ -697,7 +705,7 @@
 					//							}
 					//						}
 					//					});
-					this.getGoodsRecommandList();//获取推荐设备商品
+					this.getGoodsRecommandList(); //获取推荐设备商品
 				},
 				plusReady: function() {
 					var that = this;
@@ -726,7 +734,7 @@
 						// 延迟666ms
 						.delay(666);
 
-					this.$isLogin.merge($onLogin).subscribe(function() {
+					this.$hideLoginSuccess.merge($onLogin).subscribe(function() {
 						// 获取第一个设备
 						that.getDeviceOne();
 					});
@@ -981,6 +989,9 @@
 									that.$refs.devimgel.style.backgroundImage = "url(" + path + ")";
 								})
 							});
+
+							// [事件]观看视频
+							app.statis.emit("watch_video");
 						});
 
 					},
@@ -1082,17 +1093,17 @@
 						});
 					},
 					//设备推荐
-					getGoodsRecommandList: function(){
-						dal.home.getGoodsRecommandList(function(err,res){
-							if(!err){
+					getGoodsRecommandList: function() {
+						dal.home.getGoodsRecommandList(function(err, res) {
+							if(!err) {
 								this.goodsList = res
 							}
 						}.bind(this))
 					},
-					onGoodsMore: function(){
+					onGoodsMore: function() {
 						app.mall.openHome()
 					},
-					onGoodsTap: function(o){
+					onGoodsTap: function(o) {
 						var goodscode = o.goodscode;
 						app.mall.openDetail(goodscode)
 					},

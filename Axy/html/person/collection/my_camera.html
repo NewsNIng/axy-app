@@ -331,6 +331,7 @@
 
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-statis.js" ></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
@@ -495,6 +496,9 @@
 					this.$watch('dateTime', this.getRecord);
 
 					this.getRecord();
+					
+					// [事件]查看相册
+					app.statis.emit("picture");
 				},
 
 				methods: {
@@ -673,6 +677,9 @@
 							intent.setDataAndType(uri, "video/*");
 							this.main.startActivity(intent);
 						}
+						
+						// [事件]视频回放
+						app.statis.emit("playback");
 
 					},
 

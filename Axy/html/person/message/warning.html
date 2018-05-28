@@ -403,6 +403,8 @@
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/message.js"></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-statis.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -571,7 +573,10 @@
 						}
 						return false;
 					}.bind(this)
-
+					
+					
+					// [事件]查看告警消息
+					app.statis.emit("alarm");
 				},
 
 				methods: {

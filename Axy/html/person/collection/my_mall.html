@@ -70,7 +70,8 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-mall.js"></script>
-
+		<script type="text/javascript" src="../../../js/app/app-statis.js" ></script>
+		
 		<script type="text/javascript">
 			mui.init();
 
@@ -90,14 +91,26 @@
 					// 打开购物车
 					openShopCart: function() {
 						app.mall.openShopCart();
+						// [事件]进入商城
+						app.statis.emit("shop", {
+							from: "cart"
+						});
 					},
 					// 订单
 					openOrder: function(){
 						app.mall.openOrder();
+						// [事件]进入商城
+						app.statis.emit("shop", {
+							from: "order"
+						});
 					},
 					// 收获地址
 					openAddress: function(){
 						app.mall.openAddress();
+						// [事件]进入商城
+						app.statis.emit("shop", {
+							from: "address"
+						});
 					}
 				},
 			});
