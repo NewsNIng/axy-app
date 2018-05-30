@@ -70,6 +70,7 @@
 			.imgroom {
 				padding: 0.3rem 0.066666rem;
 				position: relative;
+				overflow: hidden;
 			}
 			
 			.imgroom>div {
@@ -654,7 +655,7 @@
 					// 获取本地 录像/图片列表
 					getRecord: function() {
 						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "");
-						rs = JSON.parse(rs);		
+						rs = JSON.parse(rs);
 						this.record_ = rs.data.record.map(function(item) {
 							item.isSelect = false;
 							return item;
