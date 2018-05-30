@@ -307,7 +307,7 @@
 								<template v-for="oo,ii in o.list">
 									<span>{{oo.id}}</span>
 									<template v-if="oo.fileType === 2">
-										<div @longtap="onLongTap(oo, ii)" @tap="onItemTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" class="video" :class="{isSelect: oo.isSelect}" @tap="onVideoTap(oo)"></div>
+										<div @longtap="onLongTap(oo, ii)" @tap="onItemTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" class="video" :class="{isSelect: oo.isSelect}"></div>
 									</template>
 									<template v-else>
 										<div @longtap="onLongTap(oo, ii)" @tap="onItemTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" :class="{isSelect: oo.isSelect}" :data-preview-src="fixPath(oo.fileName)" data-preview-group="1"></div>
@@ -564,6 +564,10 @@
 					//  图片/视频 单击
 					onItemTap: function(o, i, e) {
 						if(!this.editing) {
+							// 如果是视频的话就去播放
+							if(o.fileType === 2){
+								this.onVideoTap(o);
+							}
 							return;
 						}
 						o.isSelect = !o.isSelect;
@@ -648,10 +652,8 @@
 
 					// 获取本地 录像/图片列表
 					getRecord: function() {
-
 						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "");
-						rs = JSON.parse(rs);
-						
+						rs = JSON.parse(rs);		
 						this.record_ = rs.data.record.map(function(item) {
 							item.isSelect = false;
 							return item;
