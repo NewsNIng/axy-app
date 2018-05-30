@@ -157,7 +157,11 @@
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				beforeback: function(){
+					P.stopScan4GenDevice();
+				}
+			});
 
 			var P = plug.H5NativeBridge;
 
