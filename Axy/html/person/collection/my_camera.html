@@ -527,6 +527,7 @@
 							if(e.index === 0) {
 								// 原生删除
 								var res = P.DeleteRecordByIdSync(that._getSelectIdItems());
+								res = JSON.parse(res);
 								// 页面删除元素
 								if(res.code != 0) {
 									return mui.toast('删除失败')
@@ -651,7 +652,6 @@
 
 						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "");
 						rs = JSON.parse(rs);
-						
 						this.record_ = rs.data.record.map(function(item) {
 							item.isSelect = false;
 							return item;
