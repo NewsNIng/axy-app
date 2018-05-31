@@ -224,9 +224,19 @@
 											}
 											if(app.acc.islight(data1.type)) {
 												app.page.openForResultBy('select_light_type.html', 'select_light_type', function(data2) {
-													console.log('before'+data1.action.toString(2));
-													data2.type && (data1.action = (data1.action & 0xffe7) | (data2.type<<3));
-													console.log('after'+data1.action.toString(2));
+													if(!data2.type) {
+														if(t) {
+															clearTimeout(t)
+														}
+														t = setTimeout(function() {
+															that.resetScan();
+															t = null;
+														}, 200);
+														return;
+													}
+													console.log('before' + data1.action.toString(2));
+													data2.type && (data1.action = (data1.action & 0xffe7) | (data2.type << 3));
+													console.log('after' + data1.action.toString(2));
 													observer.next({
 														acc: data1,
 														dev: data
@@ -266,7 +276,7 @@
 									return Rx.Observable.create(function(ob) {
 										// TODO 需要添加通道信息 waych
 										dal.devaccessory.bindcam(rs.acc, rs.dev.devid, rs.dev.type, rs.dev.waych, function(err, data) {
-											alert(err.message);
+											//											alert(err.message);
 											plus.nativeUI.closeWaiting();
 											if(err) {
 												ob.next({
@@ -288,7 +298,7 @@
 								})
 								// 添加配件结果
 								.subscribe(function(data) {
-																		console.log(JSON.stringify(data));
+									console.log(JSON.stringify(data));
 									if(data.result) {
 										// 通知配件更新 TODO
 										_B.emit('acc_update', {}, {

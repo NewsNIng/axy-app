@@ -45,6 +45,7 @@
 			
 			.add_conditions {
 				height: 1.653333rem;
+				position: relative;
 			}
 			
 			.add_icon,
@@ -238,6 +239,40 @@
 			.action_list>.action_item:nth-child(n+4)>span {
 				color: white;
 			}
+			
+			.list-item {
+				display: inline-block;
+			}
+			
+			.list-enter-active,
+			.list-leave-active {
+				transition: all 0.8s;
+			}
+			
+			.list-enter,
+			.list-leave-to
+			/* .list-leave-active for below version 2.1.8 */
+			
+			{
+				opacity: 0;
+				transform: translateX(-100%);
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			
+			.add_conditions:before {
+				position: absolute;
+				right: 0;
+				top: 0;
+				left: 0;
+				height: 1px;
+				content: '';
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				background-color: #E5E6E7;
+			}
 		</style>
 	</head>
 
@@ -280,8 +315,8 @@
 
 				<!--<div style="height: 1px; background-color: #E5E6E7;" v-if="actionList.length === 0"></div>-->
 
-				<template v-for="o,i in actionList" v-if="actionList.length > 0">
-					<div class="trigger_comply app-font-size-28 mui-table-view-cell">
+				<transition-group name="list" tag="div">
+					<div class="trigger_comply app-font-size-28 mui-table-view-cell" v-for="o,i in actionList" :key="o.randomId"> 
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
 						</div>
@@ -290,7 +325,7 @@
 							<div class="title app-font-size-28" v-text="o.text+' | '+o.title"></div>
 						</div>
 					</div>
-				</template>
+				</transition-group>
 				<div></div>
 				<div class="add_conditions app-font-size-28" @tap="onActionTap()">
 					<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
@@ -430,6 +465,7 @@
 								title: data.dev.name,
 								img: data.dev.icon,
 								text: data.dev.text,
+								randomId: data.dev.randomId,
 							});
 						}.bind(this));
 
@@ -437,8 +473,6 @@
 					onDelete: function(i, e) {
 						mui.swipeoutClose(e.target.parentNode.parentNode);
 						this.actionList.splice(i, 1);
-
-						//this.complys.$remove
 					},
 					// 保存按钮
 					onSaveTap: function() {

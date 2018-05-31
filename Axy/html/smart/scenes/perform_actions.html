@@ -135,6 +135,52 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
+			
+			.actions_item {
+				height: 1.6rem;
+				padding-left: 0.346666rem;
+				background-color: white;
+				position: relative;
+				/*border-bottom: 1px solid #E5E6E7;*/
+			}
+			
+			.actions_item:after {
+				content: "";
+				position: absolute;
+				height: 1px;
+				left: 0.346666rem;
+				right: 0;
+				bottom: 0;
+				background-color: #E5E6E7;
+			}
+			
+			.actions_item:last-child:after {
+				height: 0;
+			}
+			
+			.actions_item:active {
+				background-color: #EFEFEF;
+			}
+			
+			.actions_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.actions_icon {
+				float: left;
+				width: 0.48rem;
+			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
+			}
 		</style>
 	</head>
 
@@ -143,7 +189,7 @@
 
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">执行动作</h1>
+				<h1 class="mui-title">选择动作</h1>
 				<!--<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
 					<img src="../../../image/smart/scenes/complete_icon.png" />
 				</a>-->
@@ -151,7 +197,7 @@
 			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
 				<div class="com-dev app-font-size-28">
 					<ul class="mui-table-view app-font-size-30 scroll">
-						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in scenes">
+						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in data[index]">
 							<a class="">
 								<span>{{o.name}}</span>
 							</a>
@@ -167,32 +213,11 @@
 				</div>
 			</div>
 			<div class="mui-content">
-				<div class="actions_item app-font-size-28" @tap="onSelectDev()">
-					<img class="actions_icon" :src="icon" />
-
-					<template v-if="devText">
-						<span class="mui-pull-right app-color-9f9fa0" style="line-height: 1.3896666rem;margin-right:0.346666rem;">{{devText}}</span>
+				<div v-for="o,i in actions" class="actions_item" @tap="onSelectDevTap(i, o.img, o.name)">
+					<img class="actions_icon" :src="o.img" />
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					<div class="title app-font-size-28">{{o.name}}</div>
 					</template>
-					<template v-else>
-						<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-					</template>
-
-					<div class="title app-font-size-28" v-text="name"></div>
-
-				</div>
-				<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
-
-				<div class="actions_item app-font-size-28">
-					<img class="actions_icon" src="../../../image/smart/scenes/btn_Scenepattern@3x.png" />
-
-					<template v-if="devDelay">
-						<span class="mui-pull-right app-color-9f9fa0" style="line-height: 1.3896666rem;margin-right:0.346666rem;">{{devDelayText}}</span>
-					</template>
-					<template v-else>
-						<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-					</template>
-
-					<div @tap="onScenesTap()" class="title app-font-size-28">场景模式</div>
 				</div>
 			</div>
 		</div>
@@ -226,6 +251,8 @@
 					return {
 						pick: null,
 						mask: false, // 遮罩控制
+						index: -1, // 弹框索引
+						actionText: '', //
 						scenes: [{
 							name: '回家模式',
 						}, {
@@ -247,76 +274,134 @@
 						}, {
 							name: '离店模式',
 						}],
-						name: '选择设备',
-						icon: '../../../image/smart/scenes/btn_Selection device@3x.png',
-						devText: '',
-						devDelay: 0,
-						devDelayText: '',
+						actions: [{
+							img: "../../../image/smart/scenes/execute.png",
+							name: "布防"
+						}, {
+							img: "../../../image/smart/scenes/execute.png",
+							name: "撤防"
+						}, {
+							img: "../../../image/smart/scenes/execute.png",
+							name: "声光铃响"
+						}, {
+							img: "../../../image/smart/scenes/execute.png",
+							name: "触发指定场景"
+						}, {
+							img: "../../../image/smart/scenes/execute.png",
+							name: "开灯"
+						}, {
+							img: "../../../image/smart/scenes/execute.png",
+							name: "关灯"
+						}, {
+							img: "../../../image/smart/scenes/execute.png",
+							name: "开窗帘"
+						}, {
+							img: "../../../image/smart/scenes/execute.png",
+							name: "关窗帘"
+						}, {
+							img: "../../../image/smart/scenes/execute.png",
+							name: "开插座"
+						}, {
+							img: "../../../image/smart/scenes/execute.png",
+							name: "关插座"
+						}],
+						data: [
+							[{
+								name: '12345678'
+							}, {
+								name: '12345679'
+							}], // 布防
+							[{
+								name: '12345678'
+							}, {
+								name: '12345679'
+							}], // 撤防
+							[{
+								name: '12345678'
+							}, {
+								name: '12345679'
+							}], // 声光铃响
+							[{
+								name: '回家模式',
+							}, {
+								name: '离家模式',
+							}, {
+								name: '回店模式',
+							}, {
+								name: '离店模式',
+							}], // 触发指定场景
+							[{
+								name: '12345678'
+							}, {
+								name: '12345679'
+							}], // 开灯
+							[{
+								name: '12345678'
+							}, {
+								name: '12345679'
+							}], // 关灯
+							[{
+								name: '12345678'
+							}, {
+								name: '12345679'
+							}], // 开窗帘
+							[{
+								name: '12345678'
+							}, {
+								name: '12345679'
+							}], // 关窗帘
+							[{
+								name: '12345678'
+							}, {
+								name: '12345679'
+							}], // 开插座
+							[{
+								name: '12345678'
+							}, {
+								name: '12345679'
+							}], // 关插座
+						],
 					};
 				},
 
 				mounted: function() {
-					this.pick = new mui.PopPicker({
-						layer: 2,
-						more: true
-					});
-					this.pick.setData(pick_data);
+
 				},
-				plusReady: function() {},
+				plusReady: function() {
+					var isScenes = this.$view.isScenes;
+					if(isScenes){
+						this.actions.splice(3,1);
+						this.data.splice(3,1);
+					}
+				},
 				methods: {
-					onPickTap: function() {
-
-						var that = this;
-						var fn = function(m, s) {
-							that.devDelay = m * 60 + s; // 单位 秒
-							that.devDelayText = m + '分' + s + '秒';
-						};
-
-						this.pick.show(function(items) {
-							fn(items[0].value, items[1].value);
-						}, function(items) {
-							fn(items[0].value, items[1].value);
-						});
-					},
-					onSelectDev: function() {
-						app.page.openForResultBy('select_device.html', 'select_device', function(data) {
-							this.name = data.dev.name;
-							this.icon = data.dev.img;
-							this.devText = data.text;
-							app.page.setResult({
-								dev: {
-									icon: this.icon,
-									name: this.name,
-									text: this.devText,
-								}
-							}).close();
-						}.bind(this));
-					},
-					onSaveTap: function() {
-						if(this.devText === "") {
-							mui.toast("请选择设备！");
-							return;
-						}
-						app.page.setResult({
-							dev: {
-								icon: this.icon,
-								name: this.name,
-								text: this.devText,
-							}
-						}).close();
-					},
 					onCancelTap: function() {
 						this.mask = false;
 					},
 					onSelectedTap: function(o) {
 						this.mask = false;
-						//						app.page.setResult({
-						//							title: o.name,
-						//							img: this.selectImg,
-						//						}).close();
+						if(true) {
+							app.page.setResult({
+								dev: {
+									name: o.name,
+									icon: '../../../image/smart/scenes/execute.png',
+									text: this.actionText,
+									randomId: Math.random().toString().split(".")[1]
+								}
+							}).close();
+						}
 					},
 					onScenesTap: function(i, img) {
 						this.mask = true;
+					},
+					onSelectDevTap: function(i, img, name) {
+						//						if(i === 0) {
+						//							
+						//						};
+						this.index = i;
+						this.actionText = name;
+						this.mask = true;
+						this.selectImg = img;
 					},
 				}
 			});
