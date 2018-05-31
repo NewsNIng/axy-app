@@ -476,7 +476,8 @@
 	"html/smart/scenes/index2.html": {
 		"refer": [
 			"html/smart/scenes/edit_scenes.html",
-			"html/public/input.html"
+			"html/public/input.html",
+			"html/smart/scenes/index_linkage.html"
 		],
 		"resources": []
 	},
@@ -693,7 +694,8 @@
 	},
 	"html/smart/devices/dev_AX-801_helper.html": {
 		"refer": [
-			"html/smart/devices/dev_AX-801_alarm_clock.html"
+			"html/smart/devices/dev_AX-801_alarm_clock.html",
+			"html/smart/devices/dev_AX-801_broadcast.html"
 		],
 		"resources": []
 	},

@@ -1354,7 +1354,8 @@
 			"html/smart/devices/dev_AX-801_helper.html": {
 				"resources": [],
 				"refer": [
-					"html/smart/devices/dev_AX-801_alarm_clock.html"
+					"html/smart/devices/dev_AX-801_alarm_clock.html",
+					"html/smart/devices/dev_AX-801_broadcast.html"
 				],
 				"priority": 0
 			},
