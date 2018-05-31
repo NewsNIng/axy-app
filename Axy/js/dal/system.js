@@ -55,7 +55,7 @@
 
 //			url = dal.BASE_URL_DEV
 			//url = dal.BASE_URL_TEST
-
+url = dal.BASE_URL_DEV;
 			callback(err, url);
 		});
 	}
