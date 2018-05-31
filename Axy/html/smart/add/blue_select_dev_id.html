@@ -157,11 +157,7 @@
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
-			mui.init({
-				beforeback: function(){
-					P.stopScan4GenDevice();
-				}
-			});
+			mui.init();
 
 			var P = plug.H5NativeBridge;
 
@@ -170,22 +166,7 @@
 				data: function() {
 					return {
 						devActive: -1,
-						devs: [{
-								"bname": "Z0DS1Z90NH00051L",
-								"uuid": "36C4204993974D028EEB13A64A80D0E6",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH0000CL",
-								"uuid": "21b3104993974D028EEB13A64A80D0d5",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH00051L",
-								"uuid": "36C4204993974D028EEB13A64A80D0E6",
-								"type": "0"
-							},
-						],
+						devs: [],
 						filter: "",
 						wifiname: "",
 						wifipwd: "",
@@ -236,6 +217,9 @@
 					this.getBlueDevList();
 				},
 				methods: {
+					
+					
+					
 					onSelectTap: function(i) {
 						this.devActive = i;
 					},
@@ -259,11 +243,12 @@
 					},
 					// 内网蓝牙列表
 					getBlueDevList: function() {
+						
 						var that = this;
+						
 						
 						var blueScan$ = Rx.Observable.create(function(ob) {
 							P.scan4GenOnCIDFilter(that.filter, function(data) {
-								alert(data)
 								ob.next(data);
 							}, function(err){
 								ob.error(err);
@@ -273,12 +258,9 @@
 						
 						blueScan$
 						.filter(function(rs){return !!rs})
-						.map(function(rs){return JSON.parse(rs)})
+						.map(JSON.parse)
 						.subscribe(function(rs){
-							setTimeout(function(){
-								that.devs = rs.devices || [];
-							},0)
-							
+							that.devs = rs.devices || [];
 						})
 						
 					},

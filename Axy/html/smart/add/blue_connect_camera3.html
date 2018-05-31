@@ -220,11 +220,10 @@
 								}
 								
 								
-								
 								// 如果错误 则 继续监测
-								if(!data || data.code != "0"){
+								if(data != "0"){
 									if(that.timer >= 0){
-										return startCheck();
+										return setTimeout(startCheck, 2000);
 									}
 								}else{
 									// 添加设备

@@ -6,9 +6,11 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<!--mui css-->
+		<script src="html5plus://ready"></script>
 		<script type="text/javascript" src="../js/common/flexible.js"></script>
 		<link rel="stylesheet" href="../css/lib/mui.min.css" />
 		<link rel="stylesheet" href="../css/app/app.css" />
+		
 		<style type="text/css">
 			nav {
 				box-shadow: 0px 0px 0px #ccc !important;
@@ -38,6 +40,8 @@
 				opacity: 0;
 			}
 		</style>
+		
+		
 	</head>
 
 	<body>
@@ -139,10 +143,7 @@
 						index: 0, // 默认下标
 					}
 				},
-				mounted: function() {
-
-				},
-				plusReady: function() {
+				created: function() {
 					
 					plus.nativeUI.closeWaiting();
 					
@@ -187,9 +188,11 @@
 				methods: {
 					// 加载商城图标
 					_loadMallIcon: function() {
-
-						var leftPos = Math.ceil((window.innerWidth - 58) / 2);
-
+						var that = this;
+						var $view = plus.webview.currentWebview();
+						
+						var leftPos = Math.ceil((plus.screen.resolutionWidth - 58) / 2);
+						
 						var view = new plus.nativeObj.View('mall_view', {
 							width: "58px",
 							height: "58px",
@@ -200,11 +203,21 @@
 						view.drawBitmap('../image/main/mall2.png', {}, {}, "mall_icon");
 
 						view.addEventListener('click', function() {
-							this._openMall();
-						}.bind(this));
+							that._openMall();
+						});
 
-						this.$view.append(view);
-						view.show();
+
+						Rx.Observable.create(function(ob){
+							$view.addEventListener("loaded", function(){
+								ob.next(100);
+							});
+						})
+						.merge(Rx.Observable.timer(2e3))
+						.first()
+						.subscribe(function(data){
+							$view.append(view);
+							view.show();		
+						});
 					},
 
 					// 打开商城

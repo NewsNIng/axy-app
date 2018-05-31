@@ -28,7 +28,6 @@
 	
 	
 	
-	
 	app.statis = statis;
 	
 }(window.app || (window.app = {})));

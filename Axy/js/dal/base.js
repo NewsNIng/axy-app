@@ -1,5 +1,5 @@
 var dal = {
-	BASE_URL_DEV: "http://192.168.1.213:8080/vihiManager/vihiapi",
+	BASE_URL_DEV: "http://192.168.1.115:8080/vihiapi",
 	BASE_URL_TEST: "http://47.106.92.195/vihiManager/vihiapi",
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
 	BASE_DOMAIN: "vh.anxin-net.com",
@@ -10,6 +10,7 @@ var dal = {
 	BASE_SHARE_URL: "http://vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
 	//BASE_SHARE_URL: "http://192.168.1.103:8080/module/index.html",
 	BASE_URL_VERSION: "216",
+	
 };
 
 dal.isVihiDomain = function() {
@@ -52,8 +53,7 @@ function requestAdapter(type, url, params, callback) {
 	params.account = params.account || window.localStorage.getItem('_account_') || "";
 
 	var randomID = (Math.random() * 10000).toFixed(0);
- 
-	console.log("[" + apiUrl + "]请求: [" + type + "] " + "编号: [" + randomID + "] AppUrl: [" + window.location.href.split("/www/")[1] + "]");
+	console.log("[" + apiUrl + "]请求: [" + randomID + "][" + type + "] " + " AppUrl: [" + window.location.href.split("/www/")[1] + "]");
 	console.log("[" + apiUrl + "]时间: [" + new Date().getTime() + "] 地址: [" + url + "]");
 	console.log("[" + apiUrl + "]参数: [json]" + JSON.stringify(params));
 
@@ -98,6 +98,7 @@ function requestAdapter(type, url, params, callback) {
 			callback(o.err, o.data);
 		},
 		error: function(xhr, type, err) {
+			console.log("[" + apiUrl + "]错误: [" + randomID + "] "+ xhr.status);
 			var errmsg = dal.errDir[type] || "其它错误";
 			//console.log("["+errmsg+"]" + url);
 			callback({

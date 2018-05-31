@@ -5,6 +5,7 @@
 		<meta charset="UTF-8">
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="html5plus://ready"></script>
 		<script type="text/javascript" src="../../js/common/flexible.js"></script>
 		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../css/app/app.css" />
@@ -252,9 +253,6 @@
 					}
 				},
 				mounted: function() {
-
-				},
-				plusReady: function() {
 					// plus ready !
 					// 这时候才能调用 plus 相关 API
 					_styles.top = document.body.offsetHeight + immersed + 'px';
@@ -278,6 +276,9 @@
 					this._preload();
 
 					this._listenMore();
+				},
+				plusReady: function() {
+					
 				},
 				methods: {
 					
