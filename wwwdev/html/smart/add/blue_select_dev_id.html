@@ -166,22 +166,7 @@
 				data: function() {
 					return {
 						devActive: -1,
-						devs: [{
-								"bname": "Z0DS1Z90NH00051L",
-								"uuid": "36C4204993974D028EEB13A64A80D0E6",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH0000CL",
-								"uuid": "21b3104993974D028EEB13A64A80D0d5",
-								"type": "0"
-							},
-							{
-								"bname": "Z0DS1Z90NH00051L",
-								"uuid": "36C4204993974D028EEB13A64A80D0E6",
-								"type": "0"
-							},
-						],
+						devs: [],
 						filter: "",
 						wifiname: "",
 						wifipwd: "",
@@ -232,6 +217,9 @@
 					this.getBlueDevList();
 				},
 				methods: {
+					
+					
+					
 					onSelectTap: function(i) {
 						this.devActive = i;
 					},
@@ -255,7 +243,9 @@
 					},
 					// 内网蓝牙列表
 					getBlueDevList: function() {
+						
 						var that = this;
+						
 						
 						var blueScan$ = Rx.Observable.create(function(ob) {
 							P.scan4GenOnCIDFilter(that.filter, function(data) {
@@ -268,12 +258,9 @@
 						
 						blueScan$
 						.filter(function(rs){return !!rs})
-						.map(function(rs){return JSON.parse(rs)})
-						.filter(function(rs){return rs.devices && rs.devices.length})
-						.map(function(rs){return rs.devices})
-						.subscribe(function(devices){
-							console.log(JSON.stringify(devices));
-							that.devs = devices;
+						.map(JSON.parse)
+						.subscribe(function(rs){
+							that.devs = rs.devices || [];
 						})
 						
 					},
