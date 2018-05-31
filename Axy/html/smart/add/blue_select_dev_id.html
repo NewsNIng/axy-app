@@ -276,7 +276,7 @@
 						.map(function(rs){return JSON.parse(rs)})
 						.subscribe(function(rs){
 							setTimeout(function(){
-								that.devs = rs.devices;
+								that.devs = rs.devices || [];
 							},0)
 							
 						})
