@@ -239,8 +239,23 @@
 						plus.navigator.setStatusBarStyle('light');
 						view.close();
 					}.bind(this);
+					this.getBaseState();
 				},
 				methods: {
+					// 获取基础数据
+					getBaseState: function() {
+						var that = this;
+						var devid = this.devInfo.accessory.devid,
+							devtype = this.devInfo.devType,
+							id = this.devInfo.accessory.id || this.devInfo.accessory.aid;
+
+						dal.devaccessory.getinfo(devid, devtype, id, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							mui.extend(that.devInfo.accessory, data);
+						});
+					},
 					// 切换开关
 					toggleSwitch: function() {
 						this.state = !this.state;

@@ -330,6 +330,11 @@
 							this.ready && P.WG100Call();
 							plus.device.vibrate(50);
 							mui.toast("通话");
+							
+							//[事件]语音喊话
+							app.statis.emit("voice_yelling", {
+								from: "WG-100"
+							});
 						},
 
 						// 松手监听

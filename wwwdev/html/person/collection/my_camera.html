@@ -70,6 +70,7 @@
 			.imgroom {
 				padding: 0.3rem 0.066666rem;
 				position: relative;
+				overflow: hidden;
 			}
 			
 			.imgroom>div {
@@ -217,6 +218,8 @@
 				height: 45px;
 				display: flex;
 				display: -webkit-flex;
+				z-index: 9999;
+				background-color: #fff;
 			}
 			
 			footer>div {
@@ -270,7 +273,7 @@
 
 					<span v-text="isAllSelect?'取消全选':'全选'">全选</span>
 					<span class="app-color-9f9fa0">({{selectCount}})</span>
-					
+
 				</div>
 				<div class="app-color-white" style="background-color: #06C1AE;" @tap="onDelete()">删除</div>
 			</footer>
@@ -303,9 +306,8 @@
 							<div class="app-font-size-24 app-color-333333 tips">{{o.day}}</div>
 							<div class="imgroom app-font-size-24 app-color-white" :class="{'editing': editing}">
 								<template v-for="oo,ii in o.list">
-									<span>{{oo.id}}</span>
 									<template v-if="oo.fileType === 2">
-										<div @longtap="onLongTap(oo, ii)" @tap="onItemTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" class="video" :class="{isSelect: oo.isSelect}" @tap="onVideoTap(oo)"></div>
+										<div @longtap="onLongTap(oo, ii)" @tap="onItemTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" class="video" :class="{isSelect: oo.isSelect}"></div>
 									</template>
 									<template v-else>
 										<div @longtap="onLongTap(oo, ii)" @tap="onItemTap(oo, ii, $event)" :style="{backgroundImage: 'url('+ fixPath(oo.thumbnailImage) +')'}" :class="{isSelect: oo.isSelect}" :data-preview-src="fixPath(oo.fileName)" data-preview-group="1"></div>
@@ -331,6 +333,7 @@
 
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-statis.js"></script>
 
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 		<script type="text/javascript" src="../../../js/extend/Date.js"></script>
@@ -348,13 +351,11 @@
 				//处理窗口关闭前的业务
 				beforeback: function() {
 					if(vm.editing) {
-						vm.editing = false; 
+						vm.editing = false;
 						return false;
 					}
 				},
 			});
-			
-			
 
 			var P = plug.H5NativeBridge;
 
@@ -371,8 +372,7 @@
 						// 编辑模式
 						editing: false,
 
-						record_: [
-						],
+						record_: [],
 
 						videoplay: false,
 						videosrc: "",
@@ -387,7 +387,7 @@
 						return(this.dateTime.getMonth() + 1) + "/" + this.dateTime.getDate();
 					},
 					record: function() {
-						var dir = [],
+						var dir = {},
 							temp, arr = [];
 						this.record_.forEach(function(item) {
 							temp = new Date(item.time.replace(/-/g, '/'));
@@ -397,18 +397,16 @@
 							}
 							dir[temp].push(item);
 						});
-
 						for(var i in dir) {
 							arr.push({
 								day: i,
 								list: dir[i],
 							});
 						}
-
-						arr = arr.sort(function(a, b) {
-							return a.day < b.day;
-						});
-
+						arr = arr.sort(function(a, b){
+//							return (new Date(a.day).getTime() - new Date(b.day).getTime())
+							return Date.parse(a.day) - Date.parse(b.day);
+						})
 						return arr;
 					},
 
@@ -417,9 +415,9 @@
 							return item.isSelect;
 						});
 					},
-					selectCount: function(){
+					selectCount: function() {
 						return this.record_.reduce(function(count, item) {
-							if(item.isSelect){
+							if(item.isSelect) {
 								count = count + 1;
 							}
 							return count;
@@ -465,7 +463,7 @@
 						plus: true
 					});
 
-					var devPickData = D.data || []; 
+					var devPickData = D.data || [];
 					devPickData = devPickData.filter(function(item) {
 						return item.type !== 23 && item.type !== 128 && item.type !== 144;
 					});
@@ -495,38 +493,45 @@
 					this.$watch('dateTime', this.getRecord);
 
 					this.getRecord();
+
+					// [事件]查看相册
+					app.statis.emit("picture");
 				},
 
 				methods: {
 					// 获取已选择的项
-					_getSelectItems: function(){
+					_getSelectItems: function() {
 						return this.record_.filter(function(item) {
 							return item.isSelect;
 						});
 					},
-					
+
 					// 获取已选择的项 的id数组
-					_getSelectIdItems: function(){
-						return this._getSelectItems().map(function(item){
+					_getSelectIdItems: function() {
+						return this._getSelectItems().map(function(item) {
 							return item.id || "";
 						});
 					},
-					
+
 					// 移除已选择的项
-					_clearSelectItems: function(){
+					_clearSelectItems: function() {
 						this.record_ = this.record_.filter(function(item) {
 							return !item.isSelect;
 						});
 					},
-					
+
 					// 点击删除按钮
 					onDelete: function() {
 						var that = this;
 						mui.confirm("确定需要删除所选择的图片吗？", "", ["删除", "取消"], function(e) {
-							if(e.index === 0){
+							if(e.index === 0) {
 								// 原生删除
-								P.DeleteRecordByIdSync(that._getSelectIdItems());
+								var res = P.DeleteRecordByIdSync(that._getSelectIdItems());
+								res = JSON.parse(res);
 								// 页面删除元素
+								if(res.code != 0) {
+									return mui.toast('删除失败')
+								}
 								that._clearSelectItems();
 								mui.toast("删除成功");
 							}
@@ -560,11 +565,13 @@
 					//  图片/视频 单击
 					onItemTap: function(o, i, e) {
 						if(!this.editing) {
+							// 如果是视频的话就去播放
+							if(o.fileType === 2){
+								this.onVideoTap(o);
+							}
 							return;
 						}
 						o.isSelect = !o.isSelect;
-
-						console.log(o.isSelect);
 						// 如果是编辑模式，则阻止点击预览
 						e.stopPropagation();
 					},
@@ -646,10 +653,10 @@
 
 					// 获取本地 录像/图片列表
 					getRecord: function() {
-
 						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "");
 						rs = JSON.parse(rs);
-						this.record_ = rs.data.record.map(function(item){
+						
+						this.record_ = rs.data.record.map(function(item) {
 							item.isSelect = false;
 							return item;
 						});
@@ -673,6 +680,9 @@
 							intent.setDataAndType(uri, "video/*");
 							this.main.startActivity(intent);
 						}
+
+						// [事件]视频回放
+						app.statis.emit("playback");
 
 					},
 

@@ -326,7 +326,8 @@
 					"js/app/app.js",
 					"js/common/android-back.js",
 					"js/common/flexible.js",
-					"image/main/mall.png"
+					"image/main/mall.png",
+					"html/smart/devices/dev_error.html"
 				],
 				"refer": [
 					"html/zeus.html",
@@ -350,7 +351,8 @@
 					"js/common/flexible.js",
 					"js/app/app.js",
 					"js/lib/vue-ni.js",
-					"js/config.js"
+					"js/config.js",
+					"html/smart/devices/dev_error.html"
 				],
 				"refer": [
 					"html/common/login.html",
@@ -518,7 +520,12 @@
 					"js/app/app-rules.js",
 					"js/lib/Rx.min.js",
 					"js/app/app-page.js",
-					"js/dal/system.js"
+					"js/dal/system.js",
+					"image/common/agree_selected.png",
+					"js/app/app-statis.js",
+					"image/smart/devices/others/down.png",
+					"image/common/agree_noselect.png",
+					"js/lib/better-scroll.min.js"
 				],
 				"refer": [
 					"html/common/register.html",

@@ -50,10 +50,13 @@ function requestAdapter(type, url, params, callback) {
 	url = BASE_URL + url;
 	// 获取用户权限信息
 	params.account = params.account || window.localStorage.getItem('_account_') || "";
-	console.log("==========");
-	console.log("request: [" + type + "]" + url);
-	console.log("params: [json]" + JSON.stringify(params));
-	
+
+	var randomID = (Math.random() * 10000).toFixed(0);
+ 
+	console.log("[" + apiUrl + "]请求: [" + type + "] " + "编号: [" + randomID + "] AppUrl: [" + window.location.href.split("/www/")[1] + "]");
+	console.log("[" + apiUrl + "]时间: [" + new Date().getTime() + "] 地址: [" + url + "]");
+	console.log("[" + apiUrl + "]参数: [json]" + JSON.stringify(params));
+
 	var options = {
 		headers: {
 			token: window.localStorage.getItem('_token_') || "",
@@ -67,11 +70,11 @@ function requestAdapter(type, url, params, callback) {
 		timeout: 60000,
 		success: function(data) {
 			var o = {};
-			console.log("response: [" + apiUrl + "]" + JSON.stringify(data));
-			console.log("==========");
-			if(dal.tokenCodeDir[data.code]){
-				
-			//if(data.code === "403") {
+			console.log("[" + apiUrl + "]返回: [" + randomID + "] 时间: [" + new Date().getTime() + "]" + JSON.stringify(data));
+
+			if(dal.tokenCodeDir[data.code]) {
+
+				//if(data.code === "403") {
 				// alert("[" + apiUrl + "]" + JSON.stringify(data));
 				// token 验证失败 通知 zeus
 				var zeus = plus.webview.getWebviewById("zeus");
@@ -79,9 +82,9 @@ function requestAdapter(type, url, params, callback) {
 					console.log("ZEUS WINDOW NOFIND");
 					return
 				}
-				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', "+ JSON.stringify(data) +")";
+				var jsstr = "ni.Broadcast && ni.Broadcast._emitSelf && ni.Broadcast._emitSelf('token_error', " + JSON.stringify(data) + ")";
 				zeus.evalJS(jsstr);
-				
+
 				return;
 			}
 			if(data.code !== "0000" && data.code !== "0") {

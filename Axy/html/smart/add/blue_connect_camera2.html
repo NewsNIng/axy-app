@@ -168,6 +168,8 @@
 
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
 		<script type="text/javascript">
 			var P = plug.H5NativeBridge;
 
@@ -181,7 +183,7 @@
 						wifipwd: "",
 						uuid: "",
 						cid: "",
-						cuid: "",
+						//						cuid: "",
 
 						pwd: "1234",
 						pwd2: "1234",
@@ -204,33 +206,15 @@
 					this.wifiname = GetQueryString("wifiname");
 					this.wifipwd = GetQueryString("wifipwd");
 					this.uuid = GetQueryString("uuid");
-					this.cid =  GetQueryString("cid");
+					this.cid = GetQueryString("cid");
 				},
-				
-				plusReady: function(){
-					this.genCuid();
+
+				plusReady: function() {
+					//this.genCuid();
 				},
-				
+
 				methods: {
-					genCuid: function(){
-						var ID = new ni.Cache("blueuuid", "", {
-							plus: true
-						});
-						
-						if(!ID.data){
-							ID.data = (function(){
-							  function S4() {
-							    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-							  }
-							  return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
-							})();
-						}
-						
-						this.cuid = ID.data;
-						
-					},
-					
-					
+
 					onPrev: function() {
 						mui.back();
 					},
@@ -241,6 +225,8 @@
 					// 确定密码
 					onSubmit: function() {
 
+						var that = this;
+
 						if(this.pwd.length < 4) {
 							return mui.toast("密码至少设置为4位");
 						}
@@ -250,16 +236,33 @@
 						}
 
 						this.mask = false;
-						// 设备WiFi配置
 
-						P.updateWiFiConfiguration(this.uuid, this.wifiname, this.wifipwd, this.pwd, function(rs){
-							console.log(rs);
-						}, function(){
-							
+						// 页面最大延迟
+						var timeout$ = Rx.Observable.create(function(ob) {
+							setTimeout(ob.next.bind(ob), 5000);
+						});
+						
+						// 设备WiFi配置
+						var updateWifiConn$ = Rx.Observable.create(function(ob) {
+							P.updateWiFiConfiguration(that.uuid, that.wifiname, that.wifipwd, that.pwd, function(rs) {
+								// TODO
+								// iOS 会有回调
+								rs = JSON.parse(rs);
+								if(rs && rs.code == "0") {
+									ob.next();
+								}
+							}, function(err) {
+								ob.error();
+							});
 						});
 
-						var url = "blue_connect_camera3.html?cid=" + this.cid + "&pwd=" + this.pwd + "&cuid=" + this.cuid;
-						this.$view.loadURL(url);
+						plus.nativeUI.showWaiting();
+						Rx.Observable.merge(timeout$, updateWifiConn$)
+							.subscribe(function() {
+								plus.nativeUI.closeWaiting();
+								var url = "blue_connect_camera3.html?cid=" + this.cid + "&pwd=" + this.pwd;
+								that.$view.loadURL(url);
+							});
 
 					},
 

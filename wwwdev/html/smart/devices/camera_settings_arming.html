@@ -323,6 +323,7 @@
 		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-statis.js" ></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
@@ -504,6 +505,15 @@
 								return mui.toast('操作失败');
 							}
 							mui.toast("更新成功");
+							
+							// [事件]自动布防计划
+							app.statis.emit("auto_arm", {
+								type: {
+									"-2": "del",
+									"-1": "add",
+								}[this.actionType] || "update"
+							});
+							
 						}.bind(this));
 					},
 
@@ -516,6 +526,7 @@
 						this.mask = true;
 						this.index = 1;
 						this.actionType = -1;
+						
 					},
 					// 编辑布防
 					onEditTap: function(o, i) {
@@ -526,7 +537,7 @@
 						this.weeks = this._two2bool(o.recycle).slice(1).reverse();
 						this.startTime = o.start.substr(0, 5);
 						this.endTime = o.end.substr(0, 5);
-
+						
 					},
 
 					// 长按删除
