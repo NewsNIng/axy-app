@@ -2,6 +2,14 @@
 (function(_, ra) {
 	var devparam = {};
 
+	function plusReady(fn) {
+		if(window.plus) {
+			setTimeout(fn);
+		} else {
+			document.addEventListener("plusready", fn);
+		}
+	}
+
 	/**
 	 * 获取设备详细信息
 	 * @param {String} devid 设备id
@@ -67,10 +75,15 @@
 		return ra('post', '/devparam/reboot', {
 			devid: devid,
 			type: type,
-		}, callback);
+		}, function(){
+			// [事件] 重启设备
+			plusReady(function(){
+				plus.statistic.eventTrig("restart", {});	
+			});
+			callback.apply(callback, arguments);
+		});
 	};
-	
-	
+
 	devparam.wifi = function(devid, type, ssid, passw, callback) {
 		return ra('post', '/devparam/wifi', {
 			devid: devid,
@@ -95,9 +108,18 @@
 			devid: devid,
 			type: type,
 			location: location
-		}, callback);
+		}, function(){
+			// [事件] 修改设备或配件名称
+			plusReady(function(){
+				plus.statistic.eventTrig("modify", {
+					type: "devive"
+				});	
+			});
+			
+			callback.apply(callback, arguments);
+		});
 	};
-	
+
 	/**
 	 * 更改设备名称 location
 	 * @param {String} devid
@@ -110,10 +132,6 @@
 			location: location
 		}, callback);
 	};
-	
-	
-	
-	
 
 	/**
 	 *  设备布撤防,SOS，静音
@@ -204,46 +222,43 @@
 			type: type
 		}, callback);
 	};
-	
+
 	/**
 	 * 设备GPRS信号强度
 	 * @param {String} devid 
 	 * @param {Number} type
 	 */
-	devparam.gprsParam = function(devid, type, callback){
+	devparam.gprsParam = function(devid, type, callback) {
 		return ra("get", "/devparam/gprsParam", {
 			devid: devid,
 			type: type
 		}, callback);
 	};
-	
-	
+
 	/**
 	 * 设备WIFI参数
 	 * @param {String} devid 
 	 * @param {Number} type
 	 */
-	devparam.getwifi = function(devid, type, callback){
+	devparam.getwifi = function(devid, type, callback) {
 		return ra("get", "/devparam/getwifi", {
 			devid: devid,
 			type: type
 		}, callback);
 	};
-	
-	
+
 	/**
 	 * 360开关隐私模式
 	 * @param {String} devid
 	 * @param {Boolean} state
 	 */
-	devparam.setPrivacy = function(devid, state, callback){
+	devparam.setPrivacy = function(devid, state, callback) {
 		return ra("post", "/devparam/setPrivacy", {
 			devid: devid,
 			state: +state,
 			clientID: plus.device.uuid,
 		}, callback);
 	};
-	
 
 	_.devparam = devparam;
 

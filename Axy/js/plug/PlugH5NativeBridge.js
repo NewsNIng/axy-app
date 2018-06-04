@@ -5,9 +5,9 @@
 	};
 	
 	if(w.plus) {
-		setTimeout(_plusFn);
+		_plusFn();
 	} else {
-		document.addEventListener("plusready", _plusFn, true);
+		document.addEventListener("plusready", _plusFn, false);
 	}
 
 	pg.fun2ok = function(fn) {
@@ -21,13 +21,14 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-		//return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
+		return;
+		
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		//return;
+		return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 

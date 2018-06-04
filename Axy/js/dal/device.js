@@ -2,12 +2,11 @@
 (function(_, ra) {
 
 	var IMEI = "";
-	
+
 	var PUSH_ID = {};
-	
+
 	var SENDMODE = "";
-	
-	
+
 	function initPlus() {
 		IMEI = plus.device.uuid;
 		PUSH_ID = new ni.Cache('push_key', "", {
@@ -16,15 +15,16 @@
 		SENDMODE = plus.os.name === 'iOS' ? 67 : 36
 	}
 	
-
-	if(window.plus) {
-		initPlus();
-	} else {
-		document.addEventListener('plusready', function() {
-			initPlus();
-		});
+	function plusReady(fn) {
+		if(window.plus) {
+			setTimeout(fn);
+		} else {
+			document.addEventListener("plusready", fn);
+		}
 	}
 
+	plusReady(initPlus);
+	
 	var device = {};
 
 	/**
@@ -34,7 +34,7 @@
 	device.add = function(devid, callback) {
 		return ra("post", "/device/add", {
 			devid: devid,
-			target : PUSH_ID.data || "",
+			target: PUSH_ID.data || "",
 			sendmode: SENDMODE,
 		}, callback);
 	};
@@ -56,7 +56,11 @@
 	 * 设备删除
 	 */
 	device.delete = function(devid, callback) {
-		return ra('post', '/device/delete/' + devid, {}, callback);
+		return ra('post', '/device/delete/' + devid, {}, function() {
+			// [事件] 删除设备
+			app && app.statis && app.statis.emit("delete", {});
+			callback.apply(callback, arguments);
+		});
 	}
 
 	/**
@@ -64,7 +68,11 @@
 	 */
 	device.deleteshare = function(devid, callback) {
 		var account = window.localStorage.getItem("_account_");
-		return ra('post', '/device/delete/share/' + devid + '/user/' + account, {}, callback);
+		return ra('post', '/device/delete/share/' + devid + '/user/' + account, function(data) {
+			// [事件] 删除设备
+			app && app.statis && app.statis.emit("delete", {});
+			callback.apply(callback, arguments);
+		});
 	}
 	device.logs = {
 		/**
@@ -109,7 +117,7 @@
 				binding: binding
 			}, callback);
 		},
-		// 绑定摄像头主机
+		// 解绑摄像头主机
 		unbinding: function(devid, callback) {
 			return ra('post', '/device/electric/clearbinding', {
 				devid: devid,
@@ -145,8 +153,8 @@
 	device.shareList = function(callback) {
 		return ra("get", "/share/list", {}, callback);
 	};
-	
-	device.shareListByDevid = function(devid, callback){
+
+	device.shareListByDevid = function(devid, callback) {
 		return ra("get", "/share/list", {
 			devid: devid,
 		}, callback);

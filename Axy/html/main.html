@@ -198,25 +198,35 @@
 							height: "58px",
 							left: leftPos + "px",
 							bottom: "5px",
+							
 						});
  
-						view.drawBitmap('../image/main/mall2.png', {}, {}, "mall_icon");
-
 						view.addEventListener('click', function() {
 							that._openMall();
 						});
-
-
+						
+						$view.append(view);
+						view.show();
+						setTimeout(function(){
+							view.drawBitmap('../image/main/mall2.png', {}, {}, "mall_icon");	
+						}, mui.os.ios? 500: 0);
+						
+						
+						
+						
+						return;
+						
 						Rx.Observable.create(function(ob){
 							$view.addEventListener("loaded", function(){
-								ob.next(100);
+								ob.next();
 							});
 						})
-						.merge(Rx.Observable.timer(2e3))
+						.merge(Rx.Observable.timer(1e3))
 						.first()
+						.delay(mui.os.ios ? 200: 10)
 						.subscribe(function(data){
-							$view.append(view);
-							view.show();		
+							
+							
 						});
 					},
 
