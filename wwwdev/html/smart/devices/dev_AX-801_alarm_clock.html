@@ -22,6 +22,7 @@
 			.mui-content {
 				background-color: #F4F8FB;
 			}
+			
 			.mui-content {
 				padding-bottom: 1.333333rem;
 			}
@@ -299,6 +300,12 @@
 								<span class="mui-badge" v-text="durationTime+'秒'"></span>
 							</a>
 						</li>
+						<li class="mui-table-view-cell" @tap="onRingTap()">
+							<a class="mui-navigate-right">
+								<span>铃声</span>
+								<span class="mui-badge" v-text="ringtones"></span>
+							</a>
+						</li>
 						<li class="mui-table-view-cell">
 							<a>
 								<span>稍后提醒</span>
@@ -377,6 +384,7 @@
 						mask: false, // 遮罩控制
 						index: -1, //是否弹框
 						plans: [],
+						ringtones: '欢乐时光',
 						alarmClocks: [{
 								"id": 0,
 								"time": "9:00",
@@ -613,6 +621,18 @@
 							});
 
 						}
+					},
+					onRingTap: function() {
+//						mui.openWindow('dev_AX_801_select_ring.html', 'dev_AX_801_select_ring', {
+//							extras: {
+//								ringtones: this.ringtones,
+//							}
+//						});
+						app.page.openForResultBy('dev_AX_801_select_ring.html','dev_AX_801_select_ring',function(data) {
+							this.ringtones = data.ringtones;
+						}.bind(this),{
+							ringtones: this.ringtones,
+						});
 					},
 				}
 			});

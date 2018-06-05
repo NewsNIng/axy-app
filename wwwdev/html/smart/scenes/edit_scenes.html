@@ -320,7 +320,8 @@
 						saveAlbe: false,
 						isEdit: false,
 						model_index: -1,
-						devIcon: '../../../image/smart/scenes/select_dev_icons/btn_Videocamera@3x.png',
+						//						devIcon: '../../../image/smart/scenes/select_dev_icons/btn_Videocamera@3x.png',
+						devIcon: '../../../image/smart/scenes/execute.png',
 						sceneInfo: {
 							"basicinfo": {
 								"icon": 1,
@@ -536,25 +537,21 @@
 
 					// 执行动作添加
 					onActionTap: function() {
-						app.page.openForResultBy('select_device.html', 'select_device', function(data) {
-							//							this.actionList.push({
-							//								title: data.dev.name,
-							//								img: data.dev.img,
-							//								text: data.text,
-							//							});
-							console.log(data.dev.img);
+						app.page.openForResultBy('perform_actions.html', 'perform_actions', function(data) {
 							this.sceneInfo.linkaction.push({
-								"index": 0,
+								"index": data.dev.randomId,
 								"triggerid": "255",
 								"flage": 0,
 								"linkageid": 115,
-								"name": data.text,
+								"name": data.dev.text + '|' + data.dev.name,
 								"enable": 1,
 								"smartid": data.dev.name,
 								"feature": 1
 							});
 							this.changeSave();
-						}.bind(this));
+						}.bind(this), {
+							isScenes: true
+						});
 
 					},
 
@@ -608,7 +605,7 @@
 						plus.nativeUI.showWaiting();
 						dal.scene.list(function(err, data) {
 							plus.nativeUI.closeWaiting();
-														console.log(JSON.stringify(err) + "," + JSON.stringify(data));
+							console.log(JSON.stringify(err) + "," + JSON.stringify(data));
 							if(err) {
 								return mui.toast(err.message);
 							}

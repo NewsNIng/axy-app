@@ -237,12 +237,11 @@
 							<span>自动布防计划</span>
 						</a>
 					</li>
-					<li class="mui-table-view-cell" @tap="onRecordTap()">
+					<li v-if="isGPRS" class="mui-table-view-cell" @tap="onRecordTap()">
 						<a class="mui-navigate-right">
 							<span>自动录像计划</span>
 						</a>
 					</li>
-
 					<li class="mui-table-view-cell" @tap="onAlarmParam()">
 						<a class="mui-navigate-right">
 							<span>告警时间设置 </span>
@@ -271,6 +270,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-statis.js" ></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -310,7 +310,8 @@
 							"type": 0,
 							"signalfwd": "",
 							"signalfwdport": 0,
-							"online": 0
+							"online": 0,
+							"workmode": 0,
 						},
 
 						upside: -1,
@@ -344,7 +345,10 @@
 					},
 					upsideIndex: function() {
 						return +!this.upside;
-					}
+					},
+					isGPRS: function(){
+						return app.dev.isGPRS(this.devInfo.workmode);
+					},
 				},
 				mounted: function() {
 				},

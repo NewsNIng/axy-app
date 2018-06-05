@@ -166,7 +166,12 @@
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				//处理窗口关闭前的业务
+			    beforeback: function() {
+			    	plus.webview.currentWebview().close();
+			    },
+			});
 
 			var P = plug.H5NativeBridge;
 

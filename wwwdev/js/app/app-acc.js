@@ -66,6 +66,10 @@
 		return !acc.isTypeSmart(type);
 	};
 
+	acc.islight = function(type){
+		return type === 0x19||type === 0x21;
+	};
+
 	app.acc = acc;
 
 }(window.app || (window.app = {})))

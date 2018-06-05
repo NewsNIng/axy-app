@@ -3,19 +3,26 @@
 (function(_, ra) {
 	var devaccessory = {};
 
+	function plusReady(fn) {
+		if(window.plus) {
+			setTimeout(fn);
+		} else {
+			document.addEventListener("plusready", fn);
+		}
+	}
+
 	// 获取所有配件列表
 	devaccessory.allacc = function(callback) {
 		return ra("get", "/devaccessory/allacc", {}, callback);
 	};
-	
+
 	// 获取配件支持的我的设备列表
-	devaccessory.accessorySupportDevList = function(aid, callback){
+	devaccessory.accessorySupportDevList = function(aid, callback) {
 		return ra("get", "/devaccessory/accessorySupportDevList", {
 			aid: aid
 		}, callback);
 	}
-	
-	
+
 	/**
 	 * 获取配件状态
 	 * @param {Object} id
@@ -233,7 +240,15 @@
 			x: x,
 			y: y,
 			ptzset: ptzset
-		}, callback);
+		}, function() {
+			// [事件] 修改设备或配件名称
+			plusReady(function() {
+				plus.statistic.eventTrig("modify", {
+					type: "devaccessory"
+				});
+			});
+			callback.apply(callback, arguments);
+		});
 	}
 
 	/**

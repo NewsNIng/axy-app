@@ -10,6 +10,19 @@
 	};
 	
 	
+	// 安全处理 plusready
+	function safeRunPlusReady(fn){
+		return function(){
+			if(window.plus){
+				fn.apply(fn, arguments);
+			}else{
+				document.addEventListener("plusready", function(){
+					fn.apply(fn, arguments);
+				});
+			}
+		}
+	}
+	
 	/**
 	 * 触发事件
 	 * @param {String} eventName 事件名称
@@ -25,6 +38,11 @@
 			plus.statistic.eventTrig(eventName, data);	
 		}
 	};
+	
+	statis.emit = safeRunPlusReady(statis.emit);
+	
+	
+	
 	
 	
 	
