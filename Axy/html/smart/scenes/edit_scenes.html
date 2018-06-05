@@ -214,36 +214,33 @@
 
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">编辑场景</h1>
+				<h1 class="mui-title">{{isNewSence ? '新增场景' : '编辑场景'}}</h1>
 				<a class="mui-icon mui-pull-right" @tap="onSaveTap()" v-if="saveAlbe">
 					<img src="../../../image/smart/scenes/save_icon.png" />
 				</a>
 			</header>
 
-			<!--<div class="foot app-font-size-34" :class="{}" v-if="actionList.length > 0" @tap="onActionTap()">添加执行任务</div>-->
-			<!--<div class="foot app-font-size-34" :class="{}" @tap="onActionTap()">添加执行任务</div>-->
-
 			<div class="mui-content">
-				<!--<input :readonly="sceneInfo.basicinfo.type < 5" type="text" class="scenesName app-font-size-28" placeholder="请输入场景名称" v-model="sceneInfo.basicinfo.name">-->
+				<!--<input :readonly="sceneInfo.basiceinfo.type < 5" type="text" class="scenesName app-font-size-28" placeholder="请输入场景名称" v-model="sceneInfo.basiceinfo.name">-->
 				<ul class="mui-table-view app-font-size-28">
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>场景名称</span>
-							<span class="mui-badge" v-text="sceneInfo.basicinfo.name"></span>
+							<span class="mui-badge" v-text="sceneInfo.basiceinfo.name"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onScenesIconTap()">
 						<a class="mui-navigate-right">
 							<span>场景图标</span>
 							<span class="mui-badge">
-								<img class="scenesIcon" :src="'../../../image/smart/scenes/scenes_icons/'+sceneInfo.basicinfo.icon+'.png'"/>
+								<img class="scenesIcon" :src="'../../../image/smart/scenes/scenes_icons/'+sceneInfo.basiceinfo.icon+'.png'"/>
 							</span>
 						</a>
 					</li>
 				</ul>
 				<div class="mui-input-row messagePush app-font-size-28">
 					<label>消息推送</label>
-					<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': sceneInfo.basicinfo.push}" ref="switch1">
+					<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': sceneInfo.basiceinfo.push}" ref="switch1">
 						<div class="mui-switch-handle"></div>
 					</div>
 				</div>
@@ -251,17 +248,17 @@
 
 				<transition-group name="list" tag="div">
 
-					<!--<template v-for="o,i in sceneInfo.linkaction" :key="o.index" v-if="sceneInfo.linkaction.length > 0">-->
+					<!--<template v-for="o,i in sceneInfo.actionlist" :key="o.index" v-if="sceneInfo.actionlist.length > 0">-->
 
 					<!--<div v-if="false"></div>-->
 
-					<div v-for="o,i in sceneInfo.linkaction" :key="o.index" v-if="sceneInfo.linkaction.length > 0" class="trigger_comply app-font-size-28 mui-table-view-cell">
+					<div v-for="o,i in sceneInfo.actionlist" :key="o.index" v-if="sceneInfo.actionlist.length > 0" class="trigger_comply app-font-size-28 mui-table-view-cell">
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
 						</div>
 						<div class="mui-slider-handle">
 							<img class="item_icon" :src="devIcon" />
-							<div class="title app-font-size-28" v-text="o.name"></div>
+							<div class="title app-font-size-28" >{{o.name}}</div>
 						</div>
 					</div>
 					<!--</template>-->
@@ -303,17 +300,8 @@
 				data: function() {
 					return {
 						name: "场景开关", // 场景名称
-
+						isNewSence: false,
 						conditionList: [], // 条件列表
-						actionList: [{
-							title: '123',
-							img: null,
-							text: '456'
-						}, {
-							title: '123',
-							img: null,
-							text: '456'
-						}], // 动作列表
 						scenesIcon: "10",
 						//						isCustom: true,
 						linkageId: null,
@@ -323,16 +311,16 @@
 						//						devIcon: '../../../image/smart/scenes/select_dev_icons/btn_Videocamera@3x.png',
 						devIcon: '../../../image/smart/scenes/execute.png',
 						sceneInfo: {
-							"basicinfo": {
-								"icon": 1,
+							"basiceinfo": {
+								"icon": 2,
 								"linkageid": 115,
-								"name": "回家模式test",
+								"name": "回家模式test111",
 								"state": 1,
 								"delay": 0,
 								"type": 6,
 								"push": 1
 							},
-							"linkaction": [{
+							"actionlist": [{
 								"index": 0,
 								"triggerid": "255",
 								"flage": 0,
@@ -341,176 +329,33 @@
 								"enable": 1,
 								"smartid": "AX-403A-2016061400005",
 								"feature": 1
-							}, ]
+							}]
 						},
-						scenes: [{
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 1,
-								"linkageid": 111,
-								"name": "回家模式",
-								"push": "1",
-								"state": "1",
-								"type": 1
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 2,
-								"linkageid": 111,
-								"name": "离家模式",
-								"push": "1",
-								"state": "1",
-								"type": 2
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 3,
-								"linkageid": 111,
-								"name": "回店模式",
-								"push": "1",
-								"state": "1",
-								"type": 3
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 4,
-								"linkageid": 111,
-								"name": "离店模式",
-								"push": "1",
-								"state": "1",
-								"type": 4
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
-						}],
-
 					};
 				},
 				mounted: function() {
 					this.$refs.switch1.addEventListener("toggle", function(event) {
-						this.sceneInfo.basicinfo.push = event.detail.isActive ? 1 : 0;
+						this.sceneInfo.basiceinfo.push = event.detail.isActive ? 1 : 0;
 						this.changeSave();
 					}.bind(this));
 				},
 				plusReady: function() {
 					this.name = this.$view.name || '场景开关';
-					this.linkageId = this.$view.linkageid;
+					this.seceneId = this.$view.seceneId;
 					this.model_index = this.$view.model_index;
 					this.isEdit = !!this.linkageId || (this.model_index >= 0);
 					this.saveAlbe = !this.isEdit;
 					if(this.model_index >= 0) {
 						this._getAllInfo();
-						//						this._getInfoByType();
-					} else if(this.isEdit) {
-						this._getInfo(this.linkageId);
+					} else if(this.seceneId) {
+						this._getInfo(this.seceneId);
 					}
+					this.isNewSence = this.$view.seceneId === undefined
 				},
 				methods: {
 					// 保存按钮
 					onSaveTap: function() {
 						// 发送请求保存新场景
-						//						alert(JSON.stringify(this.sceneInfo));
 						plus.nativeUI.showWaiting();
 						if(this.isEdit) {
 							dal.scene.updata(this.sceneInfo, function(err, data) {
@@ -538,7 +383,7 @@
 					// 执行动作添加
 					onActionTap: function() {
 						app.page.openForResultBy('perform_actions.html', 'perform_actions', function(data) {
-							this.sceneInfo.linkaction.push({
+							this.sceneInfo.actionlist.push({
 								"index": data.dev.randomId,
 								"triggerid": "255",
 								"flage": 0,
@@ -556,32 +401,32 @@
 					},
 
 					onDelete: function(i, e) {
-						this.sceneInfo.linkaction.splice(i, 1);
+						this.sceneInfo.actionlist.splice(i, 1);
 						this.changeSave();
 					},
 
 					onScenesIconTap: function() {
-						if(this.sceneInfo.basicinfo.type < 5) {
+						if(this.sceneInfo.basiceinfo.type < 5) {
 							return;
 						}
 						app.page.openForResultBy('select_scenes_icon.html', 'select_scenes_icon', function(data) {
-							this.sceneInfo.basicinfo.icon = data.scenesIcon;
+							this.sceneInfo.basiceinfo.icon = data.scenesIcon;
 							this.changeSave();
 						}.bind(this));
 					},
 					onNameTap: function() {
 						var that = this;
-						if(that.sceneInfo.basicinfo.type < 5) {
+						if(that.sceneInfo.basiceinfo.type < 5) {
 							return;
 						}
 						app.page.getInput(function(data) {
 							//							plus.nativeUI.showWaiting();
-							//							alert(that.sceneInfo.basicinfo.name + "," + data.content);
-							that.sceneInfo.basicinfo.name = data.content;
+							//							alert(that.sceneInfo.basiceinfo.name + "," + data.content);
+							that.sceneInfo.basiceinfo.name = data.content;
 							this.changeSave();
 						}, {
 							title: "场景名称",
-							content: that.sceneInfo.basicinfo.name,
+							content: that.sceneInfo.basiceinfo.name,
 							r: "nonEmpty",
 							rmsg: "场景名称不能为空",
 							maxLength: 15,
@@ -593,11 +438,10 @@
 						plus.nativeUI.showWaiting();
 						dal.scene.getInfo(linkageId, function(err, data) {
 							plus.nativeUI.closeWaiting();
-							//							console.log(JSON.stringify(err) + "," + JSON.stringify(data));
 							if(err) {
 								return mui.toast(err.message);
 							}
-							this.sceneInfo = data;
+//							this.sceneInfo = data;
 						}.bind(this));
 					},
 
@@ -616,8 +460,7 @@
 
 					_getInfoByType: function() {
 						this.scenes.forEach(function(o) {
-							if(o.basicinfo.type === this.model_index) {
-								//								console.log(JSON.stringify(this.sceneInfo)+","+JSON.stringify(o));
+							if(o.basiceinfo.type === this.model_index) {
 								this.sceneInfo = o;
 								return;
 							}
