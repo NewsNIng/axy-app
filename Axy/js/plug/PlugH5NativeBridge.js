@@ -21,9 +21,8 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
+	 return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
-		return;
-		
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 

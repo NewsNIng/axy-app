@@ -1290,7 +1290,8 @@
 					"html/smart/devices/camera_settings_info.html",
 					"html/smart/devices/dev_VH-104_setting_info.html",
 					"html/smart/devices/camera_settings_log.html",
-					"html/public/alarmParam.html"
+					"html/public/alarmParam.html",
+					"html/public/input.html"
 				],
 				"priority": 0
 			},
@@ -1364,6 +1365,17 @@
 				"refer": [
 					"html/smart/devices/dev_AX-801_setting.html",
 					"html/smart/devices/dev_AX-801_helper.html"
+				],
+				"priority": 0
+			},
+			"html/smart/devices/dev_AX-801_setting.html": {
+				"resources": [],
+				"refer": [
+					"html/public/input.html",
+					"html/smart/devices/dev_AX-801_log.html",
+					"html/public/alarmParam.html",
+					"html/smart/devices/dev_AX-801_arming.html",
+					"html/smart/devices/dev_AX-801_info.html"
 				],
 				"priority": 0
 			}

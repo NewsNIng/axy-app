@@ -136,6 +136,7 @@
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../js/app/app-mall.js" ></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -164,12 +165,12 @@
 								text: "智能场景",
 								img: '../../image/smart/btn_Intelligentscene@3x.png',
 								href: 'scenes/index2.html',
-//								href: "",
+								//								href: "",
 							},
 							{
 								text: "智能商城",
 								img: '../../image/smart/btn_Intelligentcommercialcity@3x.png',
-								href: '',
+								href: 'mall',
 							},
 							{
 								text: "体验馆",
@@ -220,6 +221,17 @@
 						if(!o.href) {
 							return mui.toast("该功能尚未开放...");
 						}
+
+						if(o.href === "mall") {
+							app.mall.openHome();
+						
+							// [事件]进入商城
+							app.statis.emit("shop", {
+								from: "home"
+							});
+							return;
+						}
+
 						// 验证登录
 						app.user.get(function(u) {
 							u && mui.openWindow(o.href, o.id || o.href);
