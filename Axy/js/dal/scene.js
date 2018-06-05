@@ -5,13 +5,13 @@
 
 	// 获取所有场景列表
 	scene.list = function(callback) {
-		return ra("get", "/scene/listallinfo", {}, callback);
+		return ra("get", "/scene/list", {}, callback);
 	};
 	
 	// 获取场景详情
-	scene.getInfo = function(linkageid, callback) {
+	scene.getInfo = function(seceneId, callback) {
 		return ra("get", "/scene/get", {
-			linkageid: linkageid,
+			seceneId: seceneId,
 		}, callback);
 	};
 	
@@ -23,6 +23,11 @@
 		return ra("post", "/scene/updata", sceneInfo, callback);
 	}
 	
+	scene.delete = function(sceneId, callback){
+		return ra('get', '/scene/delete',{
+			sceneId: sceneId
+		}, callback)
+	}
 	
 	_.scene = scene;
 

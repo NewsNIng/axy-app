@@ -206,11 +206,7 @@
 					"<uses-permission android:name=\"android.permission.READ_SMS\"/>"
 				]
 			},
-			"orientation": [
-				"portrait-primary",
-				"portrait-secondary",
-				"landscape-primary"
-			],/*应用支持的方向，portrait-primary：竖屏正方向；portrait-secondary：竖屏反方向；landscape-primary：横屏正方向；landscape-secondary：横屏反方向*/
+			"orientation": ["portrait-primary"],/*应用支持的方向，portrait-primary：竖屏正方向；portrait-secondary：竖屏反方向；landscape-primary：横屏正方向；landscape-secondary：横屏反方向*/
 			"icons": {
 				"ios": {
 					"prerendered": true, /*应用图标是否已经高亮处理，在iOS6及以下设备上有效*/

@@ -87,7 +87,7 @@ function requestAdapter(type, url, params, callback) {
 
 				return;
 			}
-			if(data.code !== "0000" && data.code !== "0") {
+			if(data.code != "0000" && data.code != "0") {
 				o.err = {
 					code: data.code,
 					message: data.message
