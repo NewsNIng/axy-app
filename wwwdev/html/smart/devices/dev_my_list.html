@@ -576,6 +576,8 @@
 
 			var DEVD;
 			//, DEVICE_AUTH;
+			
+			var ACC;
 
 			var wayPick;
 
@@ -724,6 +726,10 @@
 					DEVD = new ni.Cache('dev_list', [], {
 						plus: true
 					});
+					
+					ACC = new ni.Cache('acc_list', "", {
+						plus: true
+					});
 
 					// 设备列表 权限 字典
 					//DEVICE_AUTH = new ni.Cache('dev_list_auth', {}, {
@@ -845,7 +851,8 @@
 									return mui.toast(err.message);
 								}
 								this.devaccessroyList = data;
-
+								// 缓存配件信息到本地
+								this._saveACCData(data);
 							}.bind(this));
 						}
 
@@ -1208,7 +1215,9 @@
 							}
 							console.log(JSON.stringify(data));
 							this.devaccessroyList = data;
-
+							
+							// 缓存配件信息到本地
+							this._saveACCData(data);
 						}.bind(this));
 					},
 
@@ -1229,6 +1238,11 @@
 
 					_isArm: function(mode) {
 						return app.dev.isArm(mode);
+					},
+					
+					// 保存配件信息至本地
+					_saveACCData: function(data){
+						ACC.data = data;
 					},
 				}
 			});

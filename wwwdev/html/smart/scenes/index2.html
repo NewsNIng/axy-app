@@ -153,7 +153,7 @@
 
 			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
 				<slot></slot>
-				<div class="com-dev app-font-size-28" v-show="mask">
+				<div class="com-dev app-font-size-28">
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell" @tap="onEditTap()">编辑场景</li>
 						<li class="mui-table-view-cell" @tap="onDelTap()">删除场景</li>
@@ -165,11 +165,11 @@
 			</div>
 
 			<div class="mui-content">
-				<template v-for="o,i in scenes" v-if="o.basicinfo.type !== 6">
+				<template v-for="o,i in scenes" v-if="o.type !== 6">
 
-					<div class="app-font-size-30" @tap="onClickTap(o, i, o.basicinfo.icon)">
+					<div class="app-font-size-30" @tap="onClickTap(o, i, o.icon)">
 						<span class="setting_icon" @tap.stop="onSetting(i)"><img src="../../../image/smart/scenes/btn_Setup@3x.png"/></span>
-						<img :src="'../../../image/smart/scenes/scenes_icons/'+o.basicinfo.icon+(isLoading&(i === loading)?'.gif':'.png')" />{{o.basicinfo.name}}</div>
+						<img :src="'../../../image/smart/scenes/scenes_icons/'+o.icon+(isLoading && i === loading ?'.gif' : '.png')" />{{o.name}}</div>
 				</template>
 			</div>
 			<div class="foot" @tap="onLinkageTap()">
@@ -212,180 +212,16 @@
 						mask: false, // 遮罩控制
 						index: -1, // 当前操作对象
 						scenes: [{
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 1,
-								"linkageid": 111,
-								"name": "回家模式",
-								"push": "1",
-								"state": "1",
-								"type": 1
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 2,
-								"linkageid": 111,
-								"name": "离家模式",
-								"push": "1",
-								"state": "1",
-								"type": 2
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 3,
-								"linkageid": 111,
-								"name": "回店模式",
-								"push": "1",
-								"state": "1",
-								"type": 3
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 4,
-								"linkageid": 111,
-								"name": "离店模式",
-								"push": "1",
-								"state": "1",
-								"type": 4
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 10,
-								"linkageid": 111,
-								"name": "测试联动",
-								"push": "1",
-								"state": "1",
-								"type": 6
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}],
-							"trigger": [{
-								"condition": 8,
-								"enable": 1,
-								"feature": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400006|撤防",
-								"smartid": "AX-403A-2016061400006",
-								"triggerid": "AX-403A-2016061400006"
-							}]
+							"extend": "",
+							"delay": 1,
+							"enable": 1,
+							"icon": 1,
+							"name": "测试",
+							"ctime": 1527128198,
+							"id": 1,
+							"type": 1,
+							"account": "16607975932",
+							"push": 1
 						}],
 						newScenes: null,
 						loadingImg: "-1", // 加载动画
@@ -397,7 +233,7 @@
 				computed: {
 					linkages: function() {
 						return this.scenes.filter(function(o, i) {
-							return o.basicinfo.type === 6;
+							return o.type === 6;
 						});
 					},
 				},
@@ -409,15 +245,16 @@
 						plus.nativeUI.showWaiting();
 						dal.scene.list(function(err, data) {
 							plus.nativeUI.closeWaiting();
-							console.log(JSON.stringify(err)+","+JSON.stringify(data));
+							console.log(JSON.stringify(err) + "," + JSON.stringify(data));
 							if(err) {
 								return mui.toast(err.message);
 							}
-//							this.scenes = data;
+							this.scenes = data;
 						}.bind(this));
-
 					},
-
+					deleteScene: function(id,callback){
+						dal.scene.delete(id,callback)
+					},
 					onNewTap: function() {
 						mui.openWindow('edit_scenes.html', 'edit_scenes');
 					},
@@ -429,13 +266,15 @@
 						this.isLoading = true;
 						this.loading = i;
 						that = this;
-						this.scenes[i].basicinfo.icon = this.loadingImg;
+						this.scenes[i].icon = this.loadingImg;
 						// 需要执行的操作
 
 						setTimeout(function() {
-							that.scenes[i].basicinfo.icon = that.completeImg;
+							that.scenes[i].icon = that.completeImg;
+							that.scenes[i].icon = that.completeImg;
+							that.scenes[i].icon = that.completeImg;
 							setTimeout(function() {
-								that.scenes[i].basicinfo.icon = icon;
+								that.scenes[i].icon = icon;
 								that.isLoading = false;
 								that.loading = -1;
 							}, 600);
@@ -450,16 +289,26 @@
 						this.mask = false;
 						mui.openWindow('edit_scenes.html', 'edit_scenes', {
 							extras: {
-								linkageid: this.scenes[this.index].linkageid,
+								seceneId: this.scenes[this.index].id,
 							}
 						});
 					},
 					onDelTap: function() {
-						this.mask = false;
-						this.scenes.splice(this.index, 1);
+						var index = this.index;
+						var sceneId = this.scenes[index].id;
+						var _this = this;
+						this.deleteScene(sceneId,function(err,data){
+							if(!err){
+								_this.mask = false;
+								_this.scenes.splice(index, 1);
+							}else{
+								mui.toast(err.message);
+							}
+						})
+						
 					},
 					onDevConn: function() {
-						
+
 					},
 					onLinkageTap: function() {
 						mui.openWindow('index_linkage.html', 'index_linkage', {
