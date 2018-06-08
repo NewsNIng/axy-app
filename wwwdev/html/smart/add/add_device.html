@@ -397,7 +397,10 @@
 									plus: true
 								});
 							}
-							ob.next(ACC.data);
+
+							if(ACC.data && ACC.data.length > 0) {
+								ob.next(ACC.data);
+							}
 						});
 
 						//   监听zenus传入的配件列表更新事件
@@ -412,45 +415,47 @@
 						var orginAccList$ = Rx.Observable.create(function(ob) {
 							dal.devaccessory.allacc(function(err, data) {
 								if(err) {
-									return
+									return;
 								}
 								ob.next(data);
 							});
 						});
 
-						// 结果流
-						var resultAccList$ = Rx.Observable.merge(localAccList$, zenusAccListener$, orginAccList$);
+						var otherAccList$ = Rx.Observable.merge(localAccList$, zenusAccListener$);
 
 						// 开始  come on !
 						plus.nativeUI.showWaiting("检查红外模块");
-						
-						
-						
-						// TODO fix
-						// 拿到配件列表
-						resultAccList$
-							// 取第一个拿到的列表
-							.first()
-							.mergeMapTo(function(arr){
-								return Rx.Observable.from(arr);
-							})
-							// 是否没有红外模块
-							.filter(function(item) {
-								console.log(item);
-								return item.type === 0x18;
-							})
-							.isEmpty()
-							.subscribe(function(empty) {
 
-								if(empty) {
-									return;
-								}
-								// 原生接管红外对码
-							}, function() {
+						// 获取zenus拉取的最新数据
+						otherAccList$
+							// 2s的节流处理，保证获取最新
+							.debounceTime(2e3)
+							// == 暂时去除网络差原因 or 配件列表过长 导致的时间差
 
-							}, function() {
-								plus.nativeUI.closeWaiting();
-							});
+							// 计算是否有红外模块
+							.mergeMap(function(arr) {
+								return Rx.Observable.create(function(ob) {
+									var rs = arr.some(function(item) {
+										return item.type === 0x18;
+									});
+									if(rs) {
+										ob.next();
+									} else {
+										ob.error();
+									}
+
+								});
+							})
+							.subscribe(
+								function(has) {
+									plus.nativeUI.closeWaiting();
+									console.log(has);
+									// 原生接管
+								},
+								function(err) {
+									plus.nativeUI.closeWaiting();
+									mui.alert("请先添加红外模块");
+								});
 
 					},
 

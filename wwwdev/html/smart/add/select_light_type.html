@@ -245,6 +245,9 @@
 						mui.back();
 					},
 					onNext: function() {
+						if(this.index < 0){
+							return mui.toast("请选择档位");
+						}
 						app.page.setResult({
 							type: this.index+1
 						}).close();
