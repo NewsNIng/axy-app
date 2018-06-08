@@ -420,8 +420,10 @@
 					getAlarmplan: function() {
 						plus.nativeUI.showWaiting();
 						dal.devparam.recordplan(this.devid, this.type, function(err, rs) {
-
 							plus.nativeUI.closeWaiting();
+							if(err){
+								return mui.toast(err.message);
+							}
 							this.plans = rs || [];
 							this.isGet = true;
 							this.$nextTick(function() {

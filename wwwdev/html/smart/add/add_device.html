@@ -224,6 +224,12 @@
 									name: "AX-403B",
 									type: 3,
 								},
+								{
+									img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
+									name: "AX-801",
+									type: 4,
+								},
+								
 							]
 						},
 						ctrl_fit: {
@@ -342,17 +348,24 @@
 						app.auth.verify(app.auth.MASTER, u).then(function() {
 							//						alert(JSON.stringify(o));
 							if(o.type === 0) {
+								// 声波添加
 								that._voiceDevLine();
 							} else if(o.type === 1) {
+								// 内网添加
 								that._hostNetLine(o);
 							} else if(o.type === 2) {
+								// 扫码添加
 								that._scanCodeLine({
 									isDev: true,
 									isSmart: false,
 									name: o.name
 								});
 							} else if(o.type === 3) {
+								// 蓝牙添加
 								that._bluetoothLine();
+							}else if(o.type === 4){
+								// ap热点添加
+								that._apDevLine();
 							}
 						}).catch(function(e) {
 							mui.toast(e.message);
@@ -519,7 +532,16 @@
 								});
 							}
 						}, o);
-					}
+					},
+					// AP热点添加设备
+					_apDevLine: function(){
+						var url = "ap_connect_ai_1.html";
+						mui.openWindow(url, 'ap_1');
+						//app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
+							//var url = "blue_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
+							//mui.openWindow(url, 'blue1');
+						//});
+					},
 				}
 			});
 		</script>

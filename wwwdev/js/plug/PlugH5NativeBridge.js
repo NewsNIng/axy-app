@@ -462,4 +462,17 @@
 	pgn.GetNoReadAlarmListAsyn = function(username,pageSize,sf,ff){
 		return pg.asyncExec(N,'GetNoReadAlarmListAsyn',[username,pageSize],sf,ff)
 	}
+	
+	
+	// ================================AI设备=========================================
+	
+	// 配置AI设备WIFI信息
+	pgn.UpdateAIDeviceConfigAsync = function(ssid, pwd, devid, setid, sf, ff){
+		return pg.asyncExec(N,'UpdateAIDeviceConfigAsync',[ssid, pwd, devid, setid],sf,ff)
+	}
+	
+	// 检查内网列表AI设备是否连接上
+	pgn.checkAIDeviceIsConnAsync = function(sf, ff){
+		return pg.asyncExec(N,'checkAIDeviceIsConnAsync',[],sf,ff)
+	}
 }(window));
