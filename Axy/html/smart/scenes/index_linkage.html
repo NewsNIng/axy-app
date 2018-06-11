@@ -151,7 +151,7 @@
 			.mainLinkage>div {
 				height: 100%;
 				position: relative;
-				flex: 1;
+				width: 50%;
 			}
 			
 			.mainLinkage>div:first-child:after {
@@ -299,6 +299,19 @@
 			.com-dev>.cancel {
 				margin-bottom: 0 !important;
 			}
+			
+			.mui-switch {
+				overflow: hidden;
+			}
+			
+			.mui-switch .mui-switch-handle:before {
+				position: absolute;
+				content: '';
+				left: -20px;
+				right: -20px;
+				top: 0;
+				bottom: 0;
+			}
 		</style>
 	</head>
 
@@ -322,7 +335,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="mui-content">
+			<div class="mui-content" v-if="linkageList.length>0">
 				<div class="mui-input-row app-font-size-28">
 					<label>全部开启</label>
 					<div @tap="onAllSwitchToggle()" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': isAllOpen}">
@@ -333,25 +346,25 @@
 
 					<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
 					<div class="mainLinkage">
-						<div>
+						<div v-if="o.conditionlist[0]">
 							<img class="relation" src="../../../image/smart/scenes/icon_Relation@3x.png" />
 							<div class="dev_icon">
-								<img v-acticon:trigger="o" />
+								<img :src="getIconByConditionId(o.conditionlist[0].type)" />
 							</div>
-							<span class="dev_name app-font-size-28 app-color-333333 mui-ellipsis" v-text="o.trigger[0].name.split('|')[0]"></span>
-							<span class="dev_text app-font-size-24" v-text="o.trigger[0].name.split('|')[1]"></span>
+							<span class="dev_name app-font-size-28 app-color-333333 mui-ellipsis">{{o.conditionlist[0].name.split('|')[0]}}</span>
+							<span class="dev_text app-font-size-24">{{o.conditionlist[0].name.split('|')[1]}}</span>
 						</div>
-						<div>
-							<div @tap="onSwitchToggle(o)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': o.basicinfo.state}">
+						<div v-if="o.actionlist[0]">
+							<div @tap="onSwitchToggle(o)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': o.basiceinfo.state}">
 								<div class="mui-switch-handle"></div>
 							</div>
 							<img @tap="onSettingTap(i)" class="setting_icon" src="../../../image/smart/scenes/dev_linkage_icons/btn_Setup@3x.png" />
 							<div class="dev_icon">
-								<img v-acticon:linkaction="o" />
+								<img :src="getIconByActionId(o.actionlist[0].type)" />
 							</div>
 							<div class="action_list">
-								<div class="action_item" v-for="o1 in o.linkaction">
-									<span class="app-font-size-28 mui-ellipsis" v-text="o1.name.split('|')[0]"></span><span class="app-font-size-28" v-text="o1.name.split('|')[1]">2</span>
+								<div class="action_item" v-for="o1 in o.actionlist">
+									<span class="app-font-size-28 mui-ellipsis" v-if="o1.name">{{o1.name.split('|')[0]}}</span><span class="app-font-size-28" v-if="o1.name">{{o1.name.split('|')[1]}}</span>
 								</div>
 							</div>
 						</div>
@@ -374,32 +387,14 @@
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/dal/scene.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-act.js"></script>
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
 		<script type="text/javascript">
 			mui.init();
-
-			function v_action_img(el, o) {
-				mui.plusReady(function() {
-					var pageUrl = '../../../image/smart/scenes/dev_linkage_icons/' + o[0].iconflage + '-' + o[0].icontype + '.png';
-					plus.io.resolveLocalFileSystemURL(pageUrl, function() {
-						el.src = pageUrl;
-					}, function(err) {
-						el.src = "morendizhi.png";
-					});
-				});
-			}
-
-			Vue.directive('acticon', {
-				inserted: function(el, binding) {
-					v_action_img(el, binding.value[binding.arg]);
-				},
-				update: function(el, binding) {
-					v_action_img(el, binding.value[binding.arg]);
-				},
-			});
 
 			new Vue({
 				el: '#box',
@@ -411,210 +406,46 @@
 
 						conditionList: [], // 条件列表
 						actionList: [], // 动作列表
-						linkages: [{
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 10,
-								"linkageid": 111,
-								"name": "测试联动",
-								"push": "1",
-								"state": "1",
-								"type": 6
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}],
-							"trigger": [{
-								"condition": 8,
-								"enable": 1,
-								"feature": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400006|撤防",
-								"smartid": "AX-403A-2016061400006",
-								"triggerid": "AX-403A-2016061400006"
-							}]
-						}],
-						linkageList: [{
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 10,
-								"linkageid": 111,
-								"name": "测试联动",
-								"push": "1",
-								"state": "1",
-								"type": 6
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 2,
-								"icontype": 25,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}],
-							"trigger": [{
-								"condition": 8,
-								"enable": 1,
-								"feature": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400006|撤防",
-								"smartid": "AX-403A-2016061400006",
-								"triggerid": "AX-403A-2016061400006"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 10,
-								"linkageid": 111,
-								"name": "测试联动",
-								"push": "1",
-								"state": "1",
-								"type": 6
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 2,
-								"icontype": 25,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}],
-							"trigger": [{
-								"condition": 8,
-								"enable": 1,
-								"feature": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400006|撤防",
-								"smartid": "AX-403A-2016061400006",
-								"triggerid": "AX-403A-2016061400006"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 10,
-								"linkageid": 111,
-								"name": "测试联动",
-								"push": "1",
-								"state": "1",
-								"type": 6
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 2,
-								"icontype": 25,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}],
-							"trigger": [{
-								"condition": 8,
-								"enable": 1,
-								"feature": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400006|撤防",
-								"smartid": "AX-403A-2016061400006",
-								"triggerid": "AX-403A-2016061400006"
-							}]
-						}, ],
+						linkageList: [],
 					};
 				},
 				computed: {
 					isAllOpen: function() {
 						return this.linkageList.every(function(item) {
-							return !!item.basicinfo.state;
+							return !!item.basiceinfo.state;
 						});
 					},
 				},
 				mounted: function() {
-					mui(".mui-switch").switch();
+					this.getList();
+				},
+				watch: {
+
 				},
 				plusReady: function() {
-					this.linkageList = this.$view.linkages;
 					console.log(JSON.stringify(this.linkageList));
 				},
 				methods: {
 					//
+					getList: function() {
+						var type = 6;
+						var _this = this;
+						plus.nativeUI.showWaiting();
+						return dal.scene.getListByType(type, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message)
+							}
+							_this.linkageList = data;
+						})
+					},
 					onSwitchToggle: function(o) {
-						o.basicinfo.state = !o.basicinfo.state ? 1 : 0;
+						o.basiceinfo.state = !o.basiceinfo.state ? true : false;
 					},
 					onAllSwitchToggle: function() {
-						// this.isAllOpen = !this.isAllOpen;
 						var want = !this.isAllOpen;
 						this.linkageList.forEach(function(item) {
-							item.basicinfo.state = want ? 1 : 0;
+							item.basiceinfo.state = want ? true : false;
 						});
 					},
 					onSettingTap: function(i) {
@@ -622,70 +453,48 @@
 						this.index = i;
 					},
 					onEditTap: function() {
+						var _this = this;
 						this.mask = false;
-						mui.openWindow('create_linkage.html', 'create_linkage', {
-							extras: {
-								o: this.linkageList[this.index],
-							}
-						});
+						var sceneId = this.linkageList[this.index].basiceinfo.id
+						app.page.openForResultBy('create_linkage.html', 'create_linkage', function(data) {
+							_this.linkageList.splice(_this.index,1,data)
+						}, {
+							sceneId: sceneId
+						})
 					},
 					onDelTap: function() {
-						this.mask = false;
-						this.linkageList.splice(this.index, 1);
+						var index = this.index;
+						var sceneId = this.linkageList[this.index].basiceinfo.id;
+						var _this = this;
+						dal.scene.delete(sceneId, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							_this.mask = false;
+							_this.linkageList.splice(index, 1);
+							mui.toast('删除成功')
+							app.page.setResult({
+								type: 'delete',
+								sceneInfo: sceneId
+							})
+						})
 					},
 					onNewTap: function() {
 						app.page.openForResultBy('create_linkage.html', 'create_linkage', function(data) {
-							this.linkageList.push({
-								"basicinfo": {
-									"delay": " 0",
-									"icon": 10,
-									"linkageid": 111,
-									"name": "测试联动",
-									"push": "1",
-									"state": "1",
-									"type": 6
-								},
-								"linkaction": [{
-									"action": 4,
-									"enable": 1,
-									"feature": 0,
-									"flage": 0,
-									"iconflage": 2,
-									"icontype": 25,
-									"index": 0,
-									"linkageid": 111,
-									"name": " AX-403A-2016061400005|撤防",
-									"smartid": "AX-403A-2016061400005",
-									"triggerid": "AX-403A-2016061400005"
-								}, {
-									"action": 4,
-									"enable": 1,
-									"feature": 0,
-									"flage": 0,
-									"iconflage": 1,
-									"icontype": 32,
-									"index": 0,
-									"linkageid": 111,
-									"name": " AX-403A-2016061400005|撤防",
-									"smartid": "AX-403A-2016061400005",
-									"triggerid": "AX-403A-2016061400005"
-								}],
-								"trigger": [{
-									"condition": 8,
-									"enable": 1,
-									"feature": 0,
-									"iconflage": 1,
-									"icontype": 32,
-									"index": 0,
-									"linkageid": 111,
-									"name": " AX-403A-2016061400006|撤防",
-									"smartid": "AX-403A-2016061400006",
-									"triggerid": "AX-403A-2016061400006"
-								}]
-							});
+							alert(JSON.stringify(data))
+							this.linkageList.push(data);
+							app.page.setResult({
+								type: 'add',
+								sceneInfo: data
+							}); //通知首页
 						}.bind(this));
 					},
-
+					getIconByActionId: function(actionid) {
+						return app.act.getIconByActionId(actionid)
+					},
+					getIconByConditionId: function(conditionId) {
+						return app.act.getIconByConditionId(conditionId)
+					},
 				}
 			});
 		</script>

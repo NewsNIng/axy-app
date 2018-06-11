@@ -7,11 +7,14 @@
 	scene.list = function(callback) {
 		return ra("get", "/scene/list", {}, callback);
 	};
-	
+	//根据场景类型获取场景列表详细
+	scene.getListByType = function(type, callback){
+		return ra('get', '/scene/list_detail',{type: type}, callback)
+	}
 	// 获取场景详情
-	scene.getInfo = function(seceneId, callback) {
+	scene.getInfo = function(sceneId, callback) {
 		return ra("get", "/scene/get", {
-			seceneId: seceneId,
+			sceneId: sceneId,
 		}, callback);
 	};
 	
@@ -19,8 +22,8 @@
 		return ra("post", "/scene/add", sceneInfo, callback);
 	}
 	
-	scene.updata = function(sceneInfo, callback){
-		return ra("post", "/scene/updata", sceneInfo, callback);
+	scene.update = function(sceneInfo, callback){
+		return ra("post", "/scene/update", sceneInfo, callback);
 	}
 	
 	scene.delete = function(sceneId, callback){
@@ -29,6 +32,15 @@
 		}, callback)
 	}
 	
+	//根据动作获取设备或者配件或者灯控
+	scene.getDevListByAction = function(actionType, callback){
+		return ra('get', '/scene/action/objlist', {actiontype: actionType}, callback)
+	}
+	
+	//根据条件获取设备或者配件或者灯控
+	scene.getDevListByCondition = function(conditionType, callback){
+		return ra('get', '/scene/condition/objlist', {conditionType: conditionType}, callback)
+	}
 	_.scene = scene;
 
 }(window.dal, window.requestAdapter));

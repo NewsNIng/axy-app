@@ -9,6 +9,9 @@
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 		<style type="text/css">
 			html {
 				background-color: #F4F8FB;
@@ -226,7 +229,14 @@
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>场景名称</span>
-							<span class="mui-badge" v-text="sceneInfo.basiceinfo.name"></span>
+							<span class="mui-badge">{{sceneInfo.basiceinfo.name}}</span>
+						</a>
+					</li>
+
+					<li class="mui-table-view-cell" @tap="onTypeTap()">
+						<a class="mui-navigate-right">
+							<span>场景类型</span>
+							<span class="mui-badge">{{_parseType(sceneInfo.basiceinfo.type)}}</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onScenesIconTap()">
@@ -247,25 +257,17 @@
 				<div class="prompt app-font-size-28">执行任务</div>
 
 				<transition-group name="list" tag="div">
-
-					<!--<template v-for="o,i in sceneInfo.actionlist" :key="o.index" v-if="sceneInfo.actionlist.length > 0">-->
-
-					<!--<div v-if="false"></div>-->
-
-					<div v-for="o,i in sceneInfo.actionlist" :key="o.index" v-if="sceneInfo.actionlist.length > 0" class="trigger_comply app-font-size-28 mui-table-view-cell">
+					<div v-for="o,i in sceneInfo.actionlist" :key="o.id || o.index" class="trigger_comply app-font-size-28 mui-table-view-cell">
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
 						</div>
 						<div class="mui-slider-handle">
-							<img class="item_icon" :src="devIcon" />
-							<div class="title app-font-size-28" >{{o.name}}</div>
+							<img class="item_icon" :src="getIconByActionId(o.type)" />
+							<div class="title app-font-size-28">{{o.name}}</div>
 						</div>
 					</div>
-					<!--</template>-->
 				</transition-group>
-				<!--<div style="height: 1px; background-color: #E5E6E7;"></div>-->
 				<div class="add_conditions app-font-size-28" @tap="onActionTap()">
-
 					<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
 					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
 					<div class="title app-font-size-28">添加执行任务</div>
@@ -291,7 +293,9 @@
 
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
-
+		<script type="text/javascript" src="../../../js/app/app-act.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -303,127 +307,170 @@
 						isNewSence: false,
 						conditionList: [], // 条件列表
 						scenesIcon: "10",
-						//						isCustom: true,
 						linkageId: null,
 						saveAlbe: false,
 						isEdit: false,
 						model_index: -1,
-						//						devIcon: '../../../image/smart/scenes/select_dev_icons/btn_Videocamera@3x.png',
-						devIcon: '../../../image/smart/scenes/execute.png',
 						sceneInfo: {
 							"basiceinfo": {
-								"icon": 2,
-								"linkageid": 115,
-								"name": "回家模式test111",
-								"state": 1,
+								"extend": null,
 								"delay": 0,
-								"type": 6,
+								"enable": 1,
+								"icon": 10,
+								"name": "",
+								"ctime": '',
+								"id": null,
+								"type": null,
 								"push": 1
 							},
-							"actionlist": [{
-								"index": 0,
-								"triggerid": "255",
-								"flage": 0,
-								"linkageid": 115,
-								"name": "test",
-								"enable": 1,
-								"smartid": "AX-403A-2016061400005",
-								"feature": 1
-							}]
+							"actionlist": []
 						},
 					};
 				},
 				mounted: function() {
+					var _this = this;
 					this.$refs.switch1.addEventListener("toggle", function(event) {
-						this.sceneInfo.basiceinfo.push = event.detail.isActive ? 1 : 0;
-						this.changeSave();
-					}.bind(this));
+						console.log(JSON.stringify(event.detail.isActive))
+						console.log(333333)
+						_this.sceneInfo.basiceinfo.push = event.detail.isActive ? 1 : 0;
+						_this.changeSave();
+					});
+					var picker = new mui.PopPicker({
+						layout: 1
+					});
+					var pickerData = app.act.getSenceTypePicker();
+					picker.setData(pickerData)
+					this.typePicker = picker;
 				},
 				plusReady: function() {
 					this.name = this.$view.name || '场景开关';
-					this.seceneId = this.$view.seceneId;
+					this.sceneId = this.$view.sceneId;
 					this.model_index = this.$view.model_index;
 					this.isEdit = !!this.linkageId || (this.model_index >= 0);
 					this.saveAlbe = !this.isEdit;
 					if(this.model_index >= 0) {
 						this._getAllInfo();
-					} else if(this.seceneId) {
-						this._getInfo(this.seceneId);
+					} else if(this.sceneId) {
+						this._getInfo(this.sceneId);
 					}
-					this.isNewSence = this.$view.seceneId === undefined
+					this.isNewSence = this.$view.sceneId === undefined
 				},
 				methods: {
 					// 保存按钮
 					onSaveTap: function() {
 						// 发送请求保存新场景
+						var sceneInfo = this.sceneInfo;
+						var name = sceneInfo.basiceinfo.name;
+						var actionList = sceneInfo.actionlist;
+						var _this = this;
+						if(!name) {
+							return mui.toast('名称不能为空')
+						}
+						if(actionList.length < 1) {
+							return mui.toast('请选择执行任务')
+						}
 						plus.nativeUI.showWaiting();
-						if(this.isEdit) {
-							dal.scene.updata(this.sceneInfo, function(err, data) {
+						if(!this.isNewSence) { //编辑接口
+							dal.scene.update(_this.sceneInfo, function(err, data) {
+								alert(JSON.stringify(_this.sceneInfo))
 								plus.nativeUI.closeWaiting();
 								console.log(err + "," + data);
 								if(err) {
 									return mui.toast(err.message);
 								}
 								mui.toast("保存成功！");
-								mui.back();
+								app.page.setResult().close();
 							});
 						} else {
-							dal.scene.add(this.sceneInfo, function(err, data) {
+							dal.scene.add(_this.sceneInfo, function(err, data) {
 								plus.nativeUI.closeWaiting();
 								console.log(err + "," + data);
 								if(err) {
 									return mui.toast(err.message);
 								}
 								mui.toast("新增成功！");
-								mui.back();
+								app.page.setResult().close();
 							});
 						}
 					},
 
+					getIconByActionId: function(actionid) {
+						return app.act.getIconByActionId(actionid)
+					},
 					// 执行动作添加
 					onActionTap: function() {
+						var _this = this;
 						app.page.openForResultBy('perform_actions.html', 'perform_actions', function(data) {
-							this.sceneInfo.actionlist.push({
-								"index": data.dev.randomId,
-								"triggerid": "255",
-								"flage": 0,
-								"linkageid": 115,
-								"name": data.dev.text + '|' + data.dev.name,
-								"enable": 1,
-								"smartid": data.dev.name,
-								"feature": 1
+							var devInfo = data.selectInfo;
+							var name = devInfo.map(function(item) {
+								return(item.text || item.value)
+							}).filter((function(item) {
+								return !!item;
+							})).join('|') + '|' + data.name;
+							console.log(JSON.stringify(devInfo))
+							var devId = devInfo.filter(function(item) {
+								return item.type == 'devlist'
 							});
-							this.changeSave();
-						}.bind(this), {
+							devId = devId.length ? devId[0].value : '';
+							var accId = devInfo.filter(function(item) {
+								return item.type == 'acclist'
+							});
+							accId = accId.length ? accId[0].value : '';
+							var pos = devInfo.filter(function(item) {
+								return item.type == 'lightPos'
+							});
+							pos = pos.length ? pos[0].value : '';
+							var extend = {};
+							if(pos) {
+								extend.pos = pos;
+							}
+							if(data.alarmOn !== undefined) {
+								extend.alarmOn = data.alarmOn
+							}
+							_this.sceneInfo.actionlist.push({
+								"index": data.randomId,
+								"name": name,
+								"type": data.type,
+								"devId": devId,
+								"accId": accId,
+								"extend": extend,
+								"enable": 1
+							});
+							_this.changeSave();
+						}, {
 							isScenes: true
 						});
 
 					},
 
 					onDelete: function(i, e) {
-						this.sceneInfo.actionlist.splice(i, 1);
 						this.changeSave();
+						var action = this.sceneInfo.actionlist[i];
+						if(action.id === undefined){//表示数据库没有储存，可直接删除
+							this.sceneInfo.actionlist.splice(i, 1);
+						}else{
+							this.$set(action,'status',0)
+						}
 					},
 
 					onScenesIconTap: function() {
-						if(this.sceneInfo.basiceinfo.type < 5) {
-							return;
-						}
+						var _this = this;
+						//						if(this.sceneInfo.basiceinfo.type < 5) {
+						//							return;
+						//						}
 						app.page.openForResultBy('select_scenes_icon.html', 'select_scenes_icon', function(data) {
-							this.sceneInfo.basiceinfo.icon = data.scenesIcon;
-							this.changeSave();
-						}.bind(this));
+							_this.sceneInfo.basiceinfo.icon = data.scenesIcon;
+							_this.changeSave();
+						});
 					},
 					onNameTap: function() {
 						var that = this;
-						if(that.sceneInfo.basiceinfo.type < 5) {
-							return;
-						}
+						//						if(that.sceneInfo.basiceinfo.type < 5) {
+						//							return;
+						//						}
 						app.page.getInput(function(data) {
-							//							plus.nativeUI.showWaiting();
-							//							alert(that.sceneInfo.basiceinfo.name + "," + data.content);
 							that.sceneInfo.basiceinfo.name = data.content;
-							this.changeSave();
+							that.changeSave();
 						}, {
 							title: "场景名称",
 							content: that.sceneInfo.basiceinfo.name,
@@ -433,7 +480,12 @@
 							mLengthMsg: "最长不超过15个字符！",
 						});
 					},
-
+					onTypeTap: function() {
+						var _this = this;
+						this.typePicker.show(function(select) {
+							_this.sceneInfo.basiceinfo.type = select[0].value;
+						})
+					},
 					_getInfo: function(linkageId) {
 						plus.nativeUI.showWaiting();
 						dal.scene.getInfo(linkageId, function(err, data) {
@@ -441,7 +493,7 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-//							this.sceneInfo = data;
+							this.sceneInfo = data;
 						}.bind(this));
 					},
 
@@ -470,7 +522,9 @@
 					changeSave: function() {
 						this.saveAlbe = true;
 					},
-
+					_parseType: function(type) {
+						return app.act.parseType(type)
+					}
 				}
 			});
 		</script>

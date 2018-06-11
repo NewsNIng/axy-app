@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
 		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.dtpicker.css" />
 		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 		<style type="text/css">
 			html,
@@ -309,9 +310,9 @@
 				</div>
 				<div class="com-dev app-font-size-28" v-show="index !== 0 && index < 4">
 					<ul class="mui-table-view app-font-size-30 scroll">
-						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in data[index]">
+						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in selectList">
 							<a class="">
-								<span>{{o.name}}</span>
+								<span>{{o.text}}</span>
 							</a>
 						</li>
 
@@ -324,11 +325,11 @@
 						</li>
 					</ul>
 				</div>
-				<div class="com-dev app-font-size-28" v-show="index !== 0 && index >= 4">
+				<div class="com-dev app-font-size-28" v-show="index >= 4">
 					<ul class="mui-table-view app-font-size-30 scroll">
-						<li class="mui-table-view-cell" v-for="o,i in data[index]" @tap="onSecondaryTap(o)">
+						<li class="mui-table-view-cell" v-for="o,i in selectList" @tap="onSecondaryTap(o)">
 							<a class="">
-								<span>{{o.name}}1</span>
+								<span>{{o.text}}</span>
 							</a>
 						</li>
 
@@ -343,10 +344,10 @@
 				</div>
 			</div>
 			<div class="mui-content">
-				<div v-for="o,i in conditions" class="conditions_item" @tap="onSelectDevTap(i, o.img)">
+				<div v-for="o,i in conditions" class="conditions_item" @tap="onSelectDevTap(i, o)">
 					<!--<div class="condition_title app-font-size-28" v-text="o.title"></div>-->
 					<!--<div class="conditions_item app-font-size-28" v-for="o1,i in o.list" @tap="onSelectDevTap(i,o1.img)">-->
-					<img class="conditions_icon" :src="o.img" />
+					<img class="conditions_icon" :src="getIconByConditionId(o.conditiontype)" />
 					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
 					<div class="title app-font-size-28">{{o.name}}</div>
 					<!--</div>-->
@@ -371,8 +372,11 @@
 
 			<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 			<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+			<script type="text/javascript" src="../../../js/lib/mui.dtpicker.js"></script>
 			<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
 			<script type="text/javascript" src="../../../js/data/value_0-1000.js"></script>
+			<script type="text/javascript" src="../../../js/app/app-act.js"></script>
+			<script type="text/javascript" src="../../../js/dal/scene.js"></script>
 
 			<script type="text/javascript">
 				mui.init();
@@ -387,137 +391,42 @@
 							mask: false, // 遮罩控制
 							index: -1, // 弹窗索引
 							numValue: 0, // 指定值
-							conditions: [{
-								img: "../../../image/smart/scenes/condition.png",
-								name: "定时启动"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "红外感应"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "门磁打开"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "门磁闭合"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "温度超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "温度低于指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "湿度超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "湿度低于指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "PM2.5超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "PM2.5低于指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "甲醛浓度超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "甲醛浓度低于指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "一氧化碳浓度超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "一氧化碳浓度低于指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "燃气浓度超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "燃气浓度低于指定值"
-							}],
-
-							selectImg: "",
-
+							conditions: app.act.getConditions(),
 							mask: false, // 遮罩控制
-							data: [
-								[], // 定时启动
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 红外感应
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 门磁打开
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 门磁闭合、
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 温度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 温度低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 湿度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 湿度低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // PM2.5超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // PM2.5低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 甲醛浓度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 甲醛浓度低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 一氧化碳浓度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 一氧化碳浓度低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 燃气浓度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 燃气浓度低于指定值
-							],
+							conditionsMapList: [],
+							conditionsMapObj: {
+								"devlist": [{
+										"devid": "AX-00000",
+										"devname": "devicename1"
+									},
+									{
+										"devid": "AX-00001",
+										"devname": "devicename2"
+									}
+								],
+								"acclist": [{
+										"accID": "12345678",
+										"accName": "accName0",
+										"extend": {
+											"lightPos": [1, 2, 3]
+										}
+									},
+									{
+										"accID": "12345679",
+										"accName": "accName1"
+									}
+								],
+								"irc": [{
+										"irID": "adfaf132a1564adf1321a3d2f",
+										"ircName": "ircName0"
+									},
+									{
+										"irID": "adfaf132a1564adf1321a3d2f",
+										"ircName": "ircName0"
+									}
+								]
+							},
+							selectList: [],
 							devDelay: -1,
 							devDelayText: "",
 						};
@@ -543,32 +452,54 @@
 						}
 					},
 					mounted: function() {
-
-						this.pick = new mui.PopPicker({
-							layer: 2,
-							more: true
-						});
-						this.pick.setData(pick_data);
+						this.dtpicker = new mui.DtPicker({
+							"type": "time",
+						})
 					},
 					plusReady: function() {},
 					methods: {
-						onSelectDevTap: function(i, img) {
-							//						if(i === 0) {
-							//							
-							//						};
-							this.index = i;
-							this.mask = true;
-							this.selectImg = img;
+						onSelectDevTap: function(i, o) {
+							var _this = this;
+							_this.index = i;
+							if(i > 0) {
+								if(!this.conditionsMapList[i]) {
+									dal.scene.getDevListByCondition(o.conditiontype, function(err, data) {
+										if(err) {
+											return mui.toast(err.message);
+										}
+										_this.conditionsMapList[i] = data;
+										_this.setSelectList();
+										if(_this.selectList.length == 0){//如果没有数据不给选择
+											return mui.toast('暂无可选值')
+										}
+										_this.mask = true;
+										_this.conditionType = o.conditiontype
+									})
+								} else {
+									_this.mask = true;
+									_this.conditionType = o.conditiontype
+								}
+							} else {
+								_this.mask = true;
+								_this.conditionType = o.conditiontype
+							}
 						},
 						onCancelTap: function() {
 							this.mask = false;
 						},
 						onSelectedTap: function(o) {
 							this.mask = false;
-							app.page.setResult({
-								title: o.name,
-								img: this.selectImg,
-							}).close();
+							var result = {
+								name: o.name || o.text || o.value,
+								conditionType: this.conditionType,
+							}
+							o.value !== undefined && (result.accID = o.value) //配件id
+							o.time !== undefined && (result.time = o.time);
+							o.recycle !== undefined && (result.recycle = o.recycle);
+							o.temperature !== undefined && (result.temperature = o.temperature);
+							o.humidity !== undefined && (result.humidity = o.humidity);
+							o.concentration !== undefined && (result.concentration = o.concentration);
+							app.page.setResult(result).close();
 						},
 						_number2string: function(i) {
 							return ["一", "二", "三", "四", "五", "六", "日"][i];
@@ -603,56 +534,96 @@
 						},
 						onPickTap: function(i) {
 							var that = this;
-							this.pick = new mui.PopPicker({
-								layer: 2,
-								more: true
-							});
-							this.pick.setData(pick_data);
-							this.pick.pickers[0].setSelectedValue(that.clockTime.split(':')[0]);
-							this.pick.pickers[1].setSelectedValue(that.clockTime.split(':')[1] === undefined ? '0' : that.clockTime.split(':')[1]);
-
-							var calc = function(i) {
-								if(i < 10) {
-									return "0" + i;
-								}
-								return i;
-							}
-
-							this.pick.show(function(items) {
-								var h = items[0].value,
-									m = items[1].value;
-
-								that.clockTime = calc(h) + ":" + calc(m);
-
-							}, function(items) {
-
+							this.dtpicker.show(function(selectItems) {
+								that.clockTime = selectItems.value;
 							});
 						},
 						onTimeTap: function() {
+							var recycle = this.weeks.map(function(item) {
+								return item ? 1 : 0;
+							})
+							var timeArr = (this.clockTime + '').split(':');
+							var time = timeArr[0] * 3600 + timeArr[1] * 60;
 							var name = this.clockTime + "(" + this.weeks.reduce(function(prev, cur, index) {
 								return prev + (cur ? '周' + this._number2string(index) + ' ' : '');
 							}.bind(this), '').slice(0, -1) + ")";
 							this.onSelectedTap({
-								name: name
+								name: name,
+								recycle: recycle,
+								time: time
 							});
 						},
 						onSecondaryTap: function(o, i) {
 							var id = o.name;
-
-							var that = this;
-							this.pick = new mui.PopPicker({
+							var devID = o.value; //设备id
+							var _this = this;
+							var conditionType = _this.conditionType;
+							_this.pick = new mui.PopPicker({
 								layer: 1
 							});
-							this.pick.setData(thousandValue);
-							this.pick.pickers[0].setSelectedIndex(this.numValue);
-
-							this.pick.show(function(items) {
-								this.numValue = items[0].value;
-								var name = ''+id + '(' + (!(this.index % 2) ? ('>') : ('<=')) + this.numValue + ')';
-								this.onSelectedTap({
-									name: name
-								});
-							}.bind(this));
+							_this.pick.setData(thousandValue);
+							_this.pick.pickers[0].setSelectedIndex(this.numValue);
+							
+							_this.pick.show(function(items) {
+								_this.numValue = items[0].value;
+								var name = '' + id + '(' + (!(this.index % 2) ? ('>') : ('<=')) + this.numValue + ')';
+								var obj = {
+									name: name,
+									devID: devID
+								};
+								if(conditionType == 0x400 || conditionType == 0x401){
+									obj.temperature =  _this.numValue
+								}else if(conditionType == 0x500 || conditionType == 0x501){
+									obj.humidity =  _this.numValue
+								}else{
+									obj.concentration =  _this.numValue
+								}
+								_this.onSelectedTap(obj);
+							});
+						},
+						setSelectList: function() {
+							var returnList = [];
+							var _this = this;
+							var conditionsMapObj = this.conditionsMapList[this.index] || this.conditionsMapObj;
+							_this.selectListHeigt = 1;
+							for(var i in conditionsMapObj) {
+								var item = conditionsMapObj[i];
+								if(item && item.length > 0) {
+									item.forEach(function(devObj, index) {
+										var type = i;
+										if(type == 'devlist') {
+											returnList.push({
+												value: devObj['devid'],
+												text: devObj['devname'],
+												type: 'devlist',
+												typeName: 'devtype',
+												typeNumber: devObj['devtype'],
+											})
+										} else if(type == 'acclist') {
+											var temp = {
+												value: devObj['accID'],
+												text: devObj['accName'],
+												type: 'acclist',
+												typeName: 'acctype',
+												typeNumber: devObj['acctype'],
+											}
+											returnList.push(temp)
+										} else if(type == 'irclist') {
+											returnList.push({
+												value: devObj['irID'],
+												text: devObj['ircName'],
+												type: 'irclist',
+												typeName: 'irctype',
+												typeNumber: devObj['irctype'],
+											})
+										}
+									})
+								}
+							}
+							this.selectList = returnList;
+						},
+						getIconByConditionId: function(conditionId) {
+							return app.act.getIconByConditionId(conditionId)
 						}
 					},
 				});
@@ -660,4 +631,3 @@
 	</body>
 
 </html>
-"use strict" var fs = require("fs"); var data = "[["; for(var i = 0; i<=1000; i++){ data+=(i+ ','); } data+=']]' ; fs.writeFile( "value_0-1000.js",data,function(err){ if(err){ console.log(err); }else{ console.log( "file writes sucess!!") } })
