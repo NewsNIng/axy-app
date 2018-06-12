@@ -160,6 +160,15 @@
 			return ''
 		}
 	}
+	act['getConditionNameById'] = function(conditionId){
+		try {
+			return conditions.filter(function(item) {
+				return item.conditiontype == conditionId
+			})[0].name
+		} catch(e) {
+			return ''
+		}
+	}
 	
 	act['lightPos'] = function(arg) {
 		if(arg && arg.length > 0) {

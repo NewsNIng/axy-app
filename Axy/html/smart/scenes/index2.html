@@ -222,7 +222,7 @@
 				computed: {
 					linkages: function() {
 						return this.scenes.filter(function(o, i) {
-							return o.type === 6;
+							return o.type == 6;
 						});
 					},
 				},
@@ -325,8 +325,7 @@
 									_this.scenes.splice(index, 1);
 								}
 							}else if(type == 'add'){
-								alert(typeof(sceneInfo.baseInfo.type))
-								_this.scenes.push(sceneInfo)
+								_this.scenes.push(sceneInfo.basiceinfo)
 							}
 						})
 					}

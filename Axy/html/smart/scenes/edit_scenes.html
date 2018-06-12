@@ -257,7 +257,10 @@
 				<div class="prompt app-font-size-28">执行任务</div>
 
 				<transition-group name="list" tag="div">
-					<div v-for="o,i in sceneInfo.actionlist" :key="o.id || o.index" class="trigger_comply app-font-size-28 mui-table-view-cell">
+					<div v-for="o,i in sceneInfo.actionlist" 
+						:key="o.id || o.index" 
+						class="trigger_comply app-font-size-28 mui-table-view-cell"
+						v-show="o.state == 1">
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
 						</div>
@@ -321,7 +324,8 @@
 								"ctime": '',
 								"id": null,
 								"type": null,
-								"push": 1
+								"push": 1,
+								"state": 1,	
 							},
 							"actionlist": []
 						},
@@ -330,8 +334,6 @@
 				mounted: function() {
 					var _this = this;
 					this.$refs.switch1.addEventListener("toggle", function(event) {
-						console.log(JSON.stringify(event.detail.isActive))
-						console.log(333333)
 						_this.sceneInfo.basiceinfo.push = event.detail.isActive ? 1 : 0;
 						_this.changeSave();
 					});
@@ -366,13 +368,16 @@
 						if(!name) {
 							return mui.toast('名称不能为空')
 						}
-						if(actionList.length < 1) {
+						//判断当前是否有动作
+						var showActionlist = actionList.filter(function(item){
+							return item.state === 1;
+						})
+						if(showActionlist.length < 1 ) {
 							return mui.toast('请选择执行任务')
 						}
 						plus.nativeUI.showWaiting();
 						if(!this.isNewSence) { //编辑接口
 							dal.scene.update(_this.sceneInfo, function(err, data) {
-								alert(JSON.stringify(_this.sceneInfo))
 								plus.nativeUI.closeWaiting();
 								console.log(err + "," + data);
 								if(err) {
@@ -434,7 +439,8 @@
 								"devId": devId,
 								"accId": accId,
 								"extend": extend,
-								"enable": 1
+								"enable": 1,
+								"state": 1, //为了列表响应式
 							});
 							_this.changeSave();
 						}, {
@@ -445,11 +451,12 @@
 
 					onDelete: function(i, e) {
 						this.changeSave();
+						mui.swipeoutClose(e.target.parentNode.parentNode);
 						var action = this.sceneInfo.actionlist[i];
 						if(action.id === undefined){//表示数据库没有储存，可直接删除
 							this.sceneInfo.actionlist.splice(i, 1);
 						}else{
-							this.$set(action,'status',0)
+							this.$set(action,'state',0)
 						}
 					},
 

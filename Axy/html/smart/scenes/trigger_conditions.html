@@ -21,7 +21,7 @@
 			}
 			
 			.mui-content {
-				margin-bottom: 1.6rem;
+				/*margin-bottom: 1.6rem;*/
 			}
 			
 			.conditions_item {
@@ -463,7 +463,9 @@
 							_this.index = i;
 							if(i > 0) {
 								if(!this.conditionsMapList[i]) {
+									plus.nativeUI.showWaiting();
 									dal.scene.getDevListByCondition(o.conditiontype, function(err, data) {
+										plus.nativeUI.closeWaiting();
 										if(err) {
 											return mui.toast(err.message);
 										}
@@ -476,6 +478,10 @@
 										_this.conditionType = o.conditiontype
 									})
 								} else {
+									_this.setSelectList();
+									if(_this.selectList.length == 0){//如果没有数据不给选择
+										return mui.toast('暂无可选值')
+									}
 									_this.mask = true;
 									_this.conditionType = o.conditiontype
 								}
@@ -493,7 +499,17 @@
 								name: o.name || o.text || o.value,
 								conditionType: this.conditionType,
 							}
-							o.value !== undefined && (result.accID = o.value) //配件id
+							if(o.value !== undefined){
+								var typeId;
+								if(o.type == 'devlist'){
+									typeId = 'devId'
+								}else{
+									typeId = 'accId'
+								}
+								result[typeId] = o.value;
+							}
+							o.devId !== undefined && (result.devId = o.devId) //设备id
+							o.accId !== undefined && (result.accId = o.accId) //配件id
 							o.time !== undefined && (result.time = o.time);
 							o.recycle !== undefined && (result.recycle = o.recycle);
 							o.temperature !== undefined && (result.temperature = o.temperature);
@@ -554,10 +570,10 @@
 							});
 						},
 						onSecondaryTap: function(o, i) {
-							var id = o.name;
-							var devID = o.value; //设备id
+							var id = o.text || o.value;
 							var _this = this;
 							var conditionType = _this.conditionType;
+							var conditionName = app.act.getConditionNameById(conditionType).slice(0,-3)
 							_this.pick = new mui.PopPicker({
 								layer: 1
 							});
@@ -566,11 +582,16 @@
 							
 							_this.pick.show(function(items) {
 								_this.numValue = items[0].value;
-								var name = '' + id + '(' + (!(this.index % 2) ? ('>') : ('<=')) + this.numValue + ')';
+								var name = '' + id + '(' + conditionName + _this.numValue + ')';
 								var obj = {
 									name: name,
-									devID: devID
 								};
+								if(o.type == 'acclist'){
+									obj.accId = o.value
+								}
+								if(o.type == 'devlist'){
+									obj.devId = o.value
+								}
 								if(conditionType == 0x400 || conditionType == 0x401){
 									obj.temperature =  _this.numValue
 								}else if(conditionType == 0x500 || conditionType == 0x501){
@@ -584,7 +605,7 @@
 						setSelectList: function() {
 							var returnList = [];
 							var _this = this;
-							var conditionsMapObj = this.conditionsMapList[this.index] || this.conditionsMapObj;
+							var conditionsMapObj = this.conditionsMapList[this.index];
 							_this.selectListHeigt = 1;
 							for(var i in conditionsMapObj) {
 								var item = conditionsMapObj[i];

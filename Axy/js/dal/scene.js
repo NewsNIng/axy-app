@@ -39,7 +39,12 @@
 	
 	//根据条件获取设备或者配件或者灯控
 	scene.getDevListByCondition = function(conditionType, callback){
-		return ra('get', '/scene/condition/objlist', {conditionType: conditionType}, callback)
+		return ra('get', '/scene/condition/SupportSpeObj', {conditiontype: conditionType}, callback)
+	}
+	
+	//修改场景启用状态
+	scene.updateSceneEnable = function(ids, enable, callback){
+		return ra('post', '/scene/updateSceneEnable', {ids: ids, enable: enable}, callback)
 	}
 	_.scene = scene;
 

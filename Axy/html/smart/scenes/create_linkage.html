@@ -295,7 +295,7 @@
 				</div>
 				<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
 				<div class="mui-input-row app-font-size-28">
-					<label>发送消息</label>
+					<label>消息推送</label>
 					<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': linkageInfo.basiceinfo.push == 1}" ref="switch1">
 						<div class="mui-switch-handle"></div>
 					</div>
@@ -319,7 +319,7 @@
 					<div class="trigger_comply app-font-size-28 mui-table-view-cell" 
 						v-for="o,i in linkageInfo.actionlist" 
 						:key="o.id || o.index"
-						v-if="o.status !== 0">
+						v-if="o.state !== 0">
 						<div class="mui-slider-right mui-disabled">
 							<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
 						</div>
@@ -371,11 +371,11 @@
 							"basiceinfo": {
 								"delay": 0,
 								"name": "",
-								"push": "1",
-								"state": "1",
+								"push": 1,
+								"state": 1,
 								"type": 6,
 								"enable": 1,
-								"push": 0
+								"push": 1
 							},
 							"actionlist": [],
 							"conditionlist": []
@@ -385,7 +385,6 @@
 				mounted: function() {
 					this.$refs.switch1.addEventListener("toggle", function(event) {
 						this.linkageInfo.basiceinfo.push = (event.detail.isActive ? 1 : 0);
-						
 					}.bind(this));
 				},
 				plusReady: function() {
@@ -400,15 +399,21 @@
 						app.page.openForResultBy('trigger_conditions.html', 'trigger_conditions', function(data) {
 							var name = data.name;
 							var type = data.conditionType;
+							var devId = data.devId;
+							var accId = data.accId;
 							delete data.name;
 							delete data.conditionType;
+							delete data.devId;
+							delete data.accId;
 							var condition = {
 								name: name,
 								type: type,
-								params: data
+								params: data,
+								state: 1,
 							}
+							devId != undefined && (condition.devId = devId);
+							accId != undefined && (condition.accId = accId);
 							this.linkageInfo.conditionlist = [condition];
-							alert(JSON.stringify(condition))
 						}.bind(this));
 					},
 
@@ -449,7 +454,8 @@
 								"devId": devId,
 								"accId": accId,
 								"extend": extend,
-								"enable": 1
+								"enable": 1,
+								"state": 1, //为了列表响应式
 							});
 						}, {
 							isScenes: true //表示隐藏声光响铃
@@ -461,16 +467,20 @@
 						if(action.id === undefined){//表示数据库没有储存，可直接删除
 							this.linkageInfo.actionlist.splice(i, 1);
 						}else{
-							this.$set(action,'status',0)
+							this.$set(action,'state',0)
 						}
 					},
 					// 保存按钮
 					onSaveTap: function() {
 						var _this = this;
-						if(this.linkageInfo.actionlist.length < 1) {
+						if(this.linkageInfo.conditionlist.length < 1) {
 							return mui.toast('请添加条件')
 						}
-						if(this.linkageInfo.conditionlist.length < 1) {
+						//判断当前是否有动作
+						var showActionlist = this.linkageInfo.actionlist.filter(function(item){
+							return item.state === 1;
+						})
+						if(showActionlist.length < 1 ) {
 							return mui.toast('请添加动作')
 						}
 						if(this.isEdit) {
@@ -478,6 +488,7 @@
 								if(err) {
 									return mui.toast(err.message)
 								}
+								alert(JSON.stringify(_this.linkageInfo))
 								app.page.setResult(_this.linkageInfo).close();
 							})
 						}else{
@@ -485,6 +496,7 @@
 								if(err){
 									return mui.toast(err.message)
 								}
+								alert(JSON.stringify(data))
 								app.page.setResult(data).close();
 							})
 						}

@@ -245,6 +245,7 @@
 			
 			.action_list>.action_item:nth-child(n+4)>span {
 				color: white;
+				display: none;
 			}
 			
 			.mainLinkage .mui-switch {
@@ -354,16 +355,16 @@
 							<span class="dev_name app-font-size-28 app-color-333333 mui-ellipsis">{{o.conditionlist[0].name.split('|')[0]}}</span>
 							<span class="dev_text app-font-size-24">{{o.conditionlist[0].name.split('|')[1]}}</span>
 						</div>
-						<div v-if="o.actionlist[0]">
-							<div @tap="onSwitchToggle(o)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': o.basiceinfo.state}">
+						<div>
+							<div @tap="onSwitchToggle(o)" class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': o.basiceinfo.enable}">
 								<div class="mui-switch-handle"></div>
 							</div>
 							<img @tap="onSettingTap(i)" class="setting_icon" src="../../../image/smart/scenes/dev_linkage_icons/btn_Setup@3x.png" />
 							<div class="dev_icon">
-								<img :src="getIconByActionId(o.actionlist[0].type)" />
+								<img :src="getIconByActionId(o.actionlist[0].type)"  v-if="o.actionlist[0]" />
 							</div>
 							<div class="action_list">
-								<div class="action_item" v-for="o1 in o.actionlist">
+								<div class="action_item" v-for="o1 in o.actionlist" v-if="o1.state === 1">
 									<span class="app-font-size-28 mui-ellipsis" v-if="o1.name">{{o1.name.split('|')[0]}}</span><span class="app-font-size-28" v-if="o1.name">{{o1.name.split('|')[1]}}</span>
 								</div>
 							</div>
@@ -412,18 +413,18 @@
 				computed: {
 					isAllOpen: function() {
 						return this.linkageList.every(function(item) {
-							return !!item.basiceinfo.state;
+							return !!item.basiceinfo.enable;
 						});
 					},
 				},
 				mounted: function() {
-					this.getList();
+					
 				},
 				watch: {
 
 				},
 				plusReady: function() {
-					console.log(JSON.stringify(this.linkageList));
+					this.getList();
 				},
 				methods: {
 					//
@@ -440,13 +441,30 @@
 						})
 					},
 					onSwitchToggle: function(o) {
-						o.basiceinfo.state = !o.basiceinfo.state ? true : false;
+						var ids = [o.basiceinfo.id];
+						var enable = o.basiceinfo.enable ? 0 : 1;
+						dal.scene.updateSceneEnable(ids, enable, function(err,data){
+							if(!err){
+								mui.toast('修改成功')
+								o.basiceinfo.enable = !o.basiceinfo.enable ? 1 : 0;
+							}
+						})
 					},
 					onAllSwitchToggle: function() {
+						var _this = this;
 						var want = !this.isAllOpen;
-						this.linkageList.forEach(function(item) {
-							item.basiceinfo.state = want ? true : false;
-						});
+						var ids = this.linkageList.map(function(item){
+							return item.basiceinfo.id;
+						})
+						var enable = want ? 1 : 0;
+						dal.scene.updateSceneEnable(ids, enable, function(err,data){
+							if(!err){
+								mui.toast('修改成功')
+								_this.linkageList.forEach(function(item) {
+									item.basiceinfo.enable = enable;
+								});
+							}
+						})
 					},
 					onSettingTap: function(i) {
 						this.mask = true;
@@ -481,7 +499,6 @@
 					},
 					onNewTap: function() {
 						app.page.openForResultBy('create_linkage.html', 'create_linkage', function(data) {
-							alert(JSON.stringify(data))
 							this.linkageList.push(data);
 							app.page.setResult({
 								type: 'add',
