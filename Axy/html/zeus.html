@@ -30,7 +30,7 @@
 			/**
 			 * H5Native 控制中心 
 			 */
-			var PUSH_ID, DEVICE,
+			var PUSH_ID, DEVICE, ACC,
 			//DEVICE_AUTH, 
 			USER_INFO, P, _B;
 
@@ -57,6 +57,10 @@
 				});
 				// 设备列表 缓存
 				DEVICE = new ni.Cache('dev_list', "", {
+					plus: true
+				});
+				// 配件列表缓存
+				ACC = new ni.Cache('acc_list', "", {
 					plus: true
 				});
 				// 用户信息备份
@@ -280,7 +284,7 @@
 					});
 
 				// 向服务器发送请求缓存处理配件请求
-				// SyncZoneRequest();
+				SyncZoneRequest();
 
 			};
 			
@@ -371,7 +375,7 @@
 			};
 			
 			// 保存设备的权限信息
-			var SaveDevListAuth = function(data){
+			/*var SaveDevListAuth = function(data){
 				var i = 0, l = data.length;
 				var authDir = {}, temp;
 				while(i < l){
@@ -380,23 +384,33 @@
 					i++;
 				}
 				DEVICE_AUTH.data = authDir;
-			};
+			};*/
 
 			// 设备推送开关同步
 			var SyncHronous = function(account, pushData) {
 				PUSH_ID.data = pushData.clientId;
 				var type = mui.os.ios ?  67 : (pushData.type||36); 
-				dal.push.synchronous(account, id, type, function(err, data) {
+				dal.push.synchronous(account, pushData.clientId, type, function(err, data) {
 					/*if(err) {
 						return mui.toast(err.message);
 					}
-					mui.toast(id + '同步成功');*/
+					mui.toast(pushData.clientId + '同步成功');*/
 				});
 			};
 
 			// 发送同步配件请求
 			var SyncZoneRequest = function() {
-				dal.devaccessory.allacc(function() {});
+				dal.devaccessory.allacc(function(err, data) {
+					if(err){return}
+					// 缓存配件列表
+					ACC.data = data;
+					// 通知其他页面 (会不会数据太长导致解析失败？)
+					new ni.Broadcast().emit("acc_update", {
+						data: data,
+					},{
+						views: ["add/add_device.html"] 
+					});
+				});
 			}
 
 			// 更新本地用户信息

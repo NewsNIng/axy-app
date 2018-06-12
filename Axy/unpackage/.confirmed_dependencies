@@ -298,7 +298,8 @@
 			"html/smart/add/blue_connect_camera1.html",
 			"html/smart/add/blue_select_dev_id.html",
 			"html/smart/add/blue_connect_camera2.html",
-			"html/smart/add/blue_connect_camera3.html"
+			"html/smart/add/blue_connect_camera3.html",
+			"html/smart/add/ap_connect_ai_1.html"
 		],
 		"resources": []
 	},
@@ -728,6 +729,23 @@
 		"refer": [
 			"html/smart/scenes/trigger_conditions.html",
 			"html/smart/scenes/perform_actions.html"
+		]
+	},
+	"html/smart/add/ap_connect_ai_1.html": {
+		"refer": [
+			"html/smart/add/ap_connect_ai_2.html"
+		]
+	},
+	"html/smart/add/ap_connect_ai_2.html": {
+		"refer": [
+			"html/smart/add/ap_connect_ai_1.html",
+			"html/smart/add/ap_connect_ai_3.html"
+		]
+	},
+	"html/smart/add/ap_connect_ai_3.html": {
+		"refer": [
+			"html/smart/add/ap_connect_ai_2.html",
+			"html/smart/add/connect_wifi.html"
 		]
 	}
 }

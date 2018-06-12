@@ -323,8 +323,8 @@
 		devaccessoryinfo.newDevid = newDevid;
 		devaccessoryinfo.devtype = devtype;
 		devaccessoryinfo.id = devaccessoryinfo.aid;
-		devaccessory.chnID = chnID;
-		devaccessory.chnid = chnID;
+		devaccessoryinfo.chnID = chnID;
+		devaccessoryinfo.chnid = chnID;
 		return ra("post", "/devaccessory/bindcam", devaccessoryinfo, callback);
 	}
 
