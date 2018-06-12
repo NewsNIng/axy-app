@@ -997,7 +997,10 @@
 						return app.dev.canPlay(o.type);
 					},
 					to16: function(n) {
-						return n.toString(16).toUpperCase();
+						n = parseInt(n);
+						n = n.toString(16).toUpperCase();
+						var str = '00000000' + n;
+						return str.slice(n.length);
 					},
 				}
 			})

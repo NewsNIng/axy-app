@@ -195,9 +195,16 @@
 				</a>-->
 			</header>
 			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
-				<div class="com-dev app-font-size-28">
+				<div class="com-dev app-font-size-28" v-if="index>-1">
+					<ul class="mui-table-view app-font-size-30">
+						<li class="mui-table-view-cell">
+							<a class="">
+								<span>{{actions[index].tip}}</span>
+							</a>
+						</li>
+					</ul>
 					<ul class="mui-table-view app-font-size-30 scroll">
-						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in data[index]">
+						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in actions[index].devList">
 							<a class="">
 								<span>{{o.name}}</span>
 							</a>
@@ -241,167 +248,170 @@
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-act.js"></script>
+		<script type="text/javascript" src="../../../js/dal/scene.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
-
-			new Vue({
+			var vm = new Vue({
 				el: '#box',
 				data: function() {
 					return {
-						pick: null,
+						picker: null,
 						mask: false, // 遮罩控制
 						index: -1, // 弹框索引
 						actionText: '', //
-						scenes: [{
-							name: '回家模式',
-						}, {
-							name: '离家模式',
-						}, {
-							name: '回店模式',
-						}, {
-							name: '离店模式',
-						}, {
-							name: '离家模式',
-						}, {
-							name: '回店模式',
-						}, {
-							name: '离店模式',
-						}, {
-							name: '离家模式',
-						}, {
-							name: '回店模式',
-						}, {
-							name: '离店模式',
-						}],
-						actions: [{
-							img: "../../../image/smart/scenes/execute.png",
-							name: "布防"
-						}, {
-							img: "../../../image/smart/scenes/execute.png",
-							name: "撤防"
-						}, {
-							img: "../../../image/smart/scenes/execute.png",
-							name: "声光铃响"
-						}, {
-							img: "../../../image/smart/scenes/execute.png",
-							name: "触发指定场景"
-						}, {
-							img: "../../../image/smart/scenes/execute.png",
-							name: "开灯"
-						}, {
-							img: "../../../image/smart/scenes/execute.png",
-							name: "关灯"
-						}, {
-							img: "../../../image/smart/scenes/execute.png",
-							name: "开窗帘"
-						}, {
-							img: "../../../image/smart/scenes/execute.png",
-							name: "关窗帘"
-						}, {
-							img: "../../../image/smart/scenes/execute.png",
-							name: "开插座"
-						}, {
-							img: "../../../image/smart/scenes/execute.png",
-							name: "关插座"
-						}],
-						data: [
-							[{
-								name: '12345678'
-							}, {
-								name: '12345679'
-							}], // 布防
-							[{
-								name: '12345678'
-							}, {
-								name: '12345679'
-							}], // 撤防
-							[{
-								name: '12345678'
-							}, {
-								name: '12345679'
-							}], // 声光铃响
-							[{
-								name: '回家模式',
-							}, {
-								name: '离家模式',
-							}, {
-								name: '回店模式',
-							}, {
-								name: '离店模式',
-							}], // 触发指定场景
-							[{
-								name: '12345678'
-							}, {
-								name: '12345679'
-							}], // 开灯
-							[{
-								name: '12345678'
-							}, {
-								name: '12345679'
-							}], // 关灯
-							[{
-								name: '12345678'
-							}, {
-								name: '12345679'
-							}], // 开窗帘
-							[{
-								name: '12345678'
-							}, {
-								name: '12345679'
-							}], // 关窗帘
-							[{
-								name: '12345678'
-							}, {
-								name: '12345679'
-							}], // 开插座
-							[{
-								name: '12345678'
-							}, {
-								name: '12345679'
-							}], // 关插座
-						],
+						actions: app.act.getActions(),
+						actionsMapList: [],
+						actionsMapObj: {
+							"devlist": [{
+									"devid": "AX-00000",
+									"devname": "devicename1"
+								},
+								{
+									"devid": "AX-00001",
+									"devname": "devicename2"
+								}
+							],
+							"acclist": [{
+									"accID": "12345678",
+									"accName": "accName0",
+									"extend": {
+										"lightPos": [1, 2, 3]
+									}
+								},
+								{
+									"accID": "12345679",
+									"accName": "accName1"
+								}
+							],
+							"irc": [{
+									"irID": "adfaf132a1564adf1321a3d2f",
+									"ircName": "ircName0"
+								},
+								{
+									"irID": "adfaf132a1564adf1321a3d2f",
+									"ircName": "ircName0"
+								}
+							]
+						},
+						selectList: [],
+						selectListHeigt: 1, //深度
+						parseFuncName: "",
 					};
 				},
-
+				watch: {
+					selectList: {
+						deep: true,
+						handler: function(newVal) {
+							var _this = this;
+							if(newVal.length == 0){
+								return mui.toast('暂无可选值')
+							}
+							var options = _this.selectListHeigt > 1 ? {
+								layer: 2,
+							} : {layer: 1};
+							var picker = new mui.PopPicker(options);
+							picker.setData(newVal)
+							picker.show(function(SelectedItem) {
+								var currentAction = _this.actions[_this.index];
+								var returnObj = {
+									name: currentAction.name,
+									icon: currentAction.img,
+									randomId: Math.random().toString().split(".")[1],
+									type: currentAction.actionId,
+									selectInfo: SelectedItem,
+								}
+								if(currentAction.actionId == 0x100){
+									returnObj.alarmOn = currentAction.alarmOn
+								}
+								picker.dispose();
+								app.page.setResult(returnObj).close();
+							}, function() {})
+						}
+					}
+				},
 				mounted: function() {
 
 				},
 				plusReady: function() {
-					var isScenes = this.$view.isScenes;
-					if(isScenes){
-						this.actions.splice(3,1);
-						this.data.splice(3,1);
+					var isScenes = this.$view.isScenes; //表示隐藏声光响铃
+					if(isScenes) {
+						this.actions.splice(2, 1);
 					}
 				},
 				methods: {
 					onCancelTap: function() {
 						this.mask = false;
 					},
-					onSelectedTap: function(o) {
-						this.mask = false;
-						if(true) {
-							app.page.setResult({
-								dev: {
-									name: o.name,
-									icon: '../../../image/smart/scenes/execute.png',
-									text: this.actionText,
-									randomId: Math.random().toString().split(".")[1]
-								}
-							}).close();
+					setSelectList: function() {
+						var returnList = [];
+						var _this = this;
+						var actionsMapObj = this.actionsMapList[this.index];
+						_this.selectListHeigt = 1;
+						for(var i in actionsMapObj) {
+							var item = actionsMapObj[i];
+							if(item && item.length > 0) {
+								item.forEach(function(devObj, index) {
+									var type = i;
+									if(type == 'devlist') {
+										returnList.push({
+											value: devObj['devid'],
+											text: devObj['devname'],
+											type: 'devlist',
+											typeName: 'devtype',
+											typeNumber: devObj['devtype'],
+										})
+									} else if(type == 'acclist') {
+										var temp = {
+											value: devObj['accID'],
+											text: devObj['accName'],
+											type: 'acclist',
+											typeName: 'acctype',
+											typeNumber: devObj['acctype'],
+										}
+										if(devObj.extend) {
+											var parseFunc = app.act[_this.parseFuncName];
+											if(typeof parseFunc != 'function') return;
+											temp.children = parseFunc(devObj.extend[_this.parseFuncName]);
+											_this.selectListHeigt = 2;
+										}
+										returnList.push(temp)
+									} else if(type == 'irclist') {
+										returnList.push({
+											value: devObj['irID'],
+											text: devObj['ircName'],
+											type: 'irclist',
+											typeName: 'irctype',
+											typeNumber: devObj['irctype'],
+										})
+									}
+								})
+							}
 						}
+						this.selectList = returnList;
 					},
 					onScenesTap: function(i, img) {
 						this.mask = true;
 					},
 					onSelectDevTap: function(i, img, name) {
-						//						if(i === 0) {
-						//							
-						//						};
+						var actionType = this.actions[i].actionId;
+						var _this = this;
 						this.index = i;
-						this.actionText = name;
-						this.mask = true;
-						this.selectImg = img;
+						this.parseFuncName = this.actions[this.index] && this.actions[this.index].parseFunc;
+						if(!this.actionsMapList[i]) {
+							plus.nativeUI.showWaiting();
+							dal.scene.getDevListByAction(actionType, function(err, data) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									return mui.toast(err.message);
+								}
+								_this.actionsMapList[i] = data;
+								_this.setSelectList();
+							})
+						} else {
+							this.setSelectList();
+						}
 					},
 				}
 			});
