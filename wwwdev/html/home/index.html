@@ -478,7 +478,7 @@
 
 				</div>
 			</div>
-			<div class="card" style="margin-bottom: 0.266666rem;" v-if="false">
+			<div class="card" style="margin-bottom: 0.266666rem;">
 				<div class="card_head">
 					<span class="app-font-size-30">附近的店</span>
 					<div @tap="onNearbyMore()" class="app-font-size-24 mui-pull-right">
@@ -491,23 +491,6 @@
 				<div class="shop_image">
 					<template v-for="o,i in nearShops">
 						<div @tap="onNearItemTap(o)" class="shop_a" :style="'background-image: url('+ _getImg(o.image1,o.image2,o.image3) +');'"></div>
-					</template>
-
-				</div>
-			</div>
-			<div class="card" style="margin-bottom: 0.266666rem;">
-				<div class="card_head">
-					<span class="app-font-size-30">推荐设备</span>
-					<div @tap="onGoodsMore()" class="app-font-size-24 mui-pull-right">
-
-						<span class="app-font-size-24">查看更多</span>
-						<img src="../../image/home/see_more.png" />
-
-					</div>
-				</div>
-				<div class="shop_image">
-					<template v-for="o in goodsList">
-						<div @tap="onGoodsTap(o)" class="shop_a" :style="'background-image: url('+ o.goodsimg +');'"></div>
 					</template>
 
 				</div>
@@ -538,9 +521,7 @@
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../js/app/app-dev.js"></script>
-		<script type="text/javascript" src="../../js/app/app-mall.js"></script>
 		<!--<script type="text/javascript" src="../../js/app/app-auth.js"></script>-->
-		<script type="text/javascript" src="../../js/app/app-statis.js"></script>
 
 		<!--<script type="text/javascript" src="../../js/plug/test.js" ></script>-->
 		<script type="text/javascript" src="../../js/lib/md5.min.js"></script>
@@ -646,7 +627,7 @@
 						city: '深圳',
 
 						isInitNativeDevList: false,
-						goodsList: [],
+
 					};
 				},
 
@@ -685,13 +666,6 @@
 						}
 					});
 
-					this.$hideLoginSuccess = Rx.Observable.create(function(ob) {
-						_B.on("hide_login_success", function() {
-							// 自动登录成功
-							ob.next();
-						});
-					});
-
 					//					mui.init({
 					//						pullRefresh: {
 					//							container: ".mui-scroll-wrapper",
@@ -704,7 +678,7 @@
 					//							}
 					//						}
 					//					});
-					this.getGoodsRecommandList(); //获取推荐设备商品
+
 				},
 				plusReady: function() {
 					var that = this;
@@ -733,7 +707,7 @@
 						// 延迟666ms
 						.delay(666);
 
-					this.$hideLoginSuccess.merge($onLogin).subscribe(function() {
+					this.$isLogin.merge($onLogin).subscribe(function() {
 						// 获取第一个设备
 						that.getDeviceOne();
 					});
@@ -847,7 +821,7 @@
 					// 点击消息按钮
 					onMessageTap: function() {
 						app.user.get(function(u) {
-							u && mui.openWindow('../person/message/index.html', "message_center");
+							u && mui.openWindow('../person/message/index.html');
 						});
 
 					},
@@ -988,9 +962,6 @@
 									that.$refs.devimgel.style.backgroundImage = "url(" + path + ")";
 								})
 							});
-
-							// [事件]观看视频
-							app.statis.emit("watch_video");
 						});
 
 					},
@@ -1074,7 +1045,6 @@
 					},
 					// 附近的店
 					getNearShops: function() {
-						return;
 						dal.store.list(this.longitude, this.latitude, this.city, function(err, data) {
 							if(err) {
 								return;
@@ -1091,21 +1061,7 @@
 							}
 						});
 					},
-					//设备推荐
-					getGoodsRecommandList: function() {
-						dal.home.getGoodsRecommandList(function(err, res) {
-							if(!err) {
-								this.goodsList = res
-							}
-						}.bind(this))
-					},
-					onGoodsMore: function() {
-						app.mall.openHome()
-					},
-					onGoodsTap: function(o) {
-						var goodscode = o.goodscode;
-						app.mall.openDetail(goodscode)
-					},
+
 					// 设备设置点击
 					onDeviceSetTap: function() {
 						var id = this.dev.devid;
@@ -1174,7 +1130,7 @@
 					// 查看猜你喜欢更多
 					onStoreMore: function() {
 						_B.emit('tabar', {
-							mindex: 3,
+							mindex: 2,
 							nindex: 1
 						}, {
 							views: ["main"],
@@ -1185,7 +1141,7 @@
 					onNearbyMore: function() {
 						// TODO 主页名称
 						_B.emit('tabar', {
-							mindex: 3,
+							mindex: 2,
 							nindex: 0
 						}, {
 							views: ["main"],

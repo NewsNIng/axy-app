@@ -13,7 +13,7 @@
 			html,
 			body,
 			.mui-content {
-				background-color: #FFFFFF;
+				background-color:#FFFFFF;
 			}
 			
 			.room:before {
@@ -57,37 +57,37 @@
 				height: 1.573333rem;
 				border-radius: 50%;
 			}
+			
 			/*空记录*/
 			
-			.nullbox .bg {
+			.nullbox .bg{
 				height: 7.973333rem;
-				background-color: #F4F8FB;
+				background-color:  #F4F8FB;
 				text-align: center;
 				position: relative;
 			}
-			
-			.nullbox .bg img {
-				width: 2.8rem;
+			.nullbox .bg img{
+				width: 2.8rem; 
 				position: absolute;
 				top: 50%;
 				left: 50%;
-				transform: translate3d(-50%, -50%, 0);
-				-webkit-transform: translate3d(-50%, -50%, 0);
+				transform: translate3d(-50%,-50%,0); 
+				-webkit-transform: translate3d(-50%,-50%,0); 
 			}
 			
-			.nullbox .tip {
+			.nullbox .tip{
 				background-color: #FFFFFF;
 				padding: 2.2rem 1.173333rem 1.68rem 1.173333rem;
 			}
-			
-			.nullbox button {
+			.nullbox button{
 				margin-left: 0.813333rem;
 				width: 8.373333rem;
 				height: 1.173333rem;
 			}
 			/*end空记录*/
 			
-			.del {
+			
+			.del{
 				display: none;
 			}
 		</style>
@@ -105,7 +105,7 @@
 			<template v-if="list.length===0">
 				<div class="nullbox">
 					<div class="bg">
-						<img src="../../../image/person/devshare/icon_Connect@3x.png" />
+						<img src="../../../image/person/devshare/icon_Connect@3x.png"/>
 					</div>
 					<div class="tip app-font-size-28 app-color-333333">
 						你可以与家人朋友共享你的设备，让他们用自己的帐号观看摄像机画面或使用更多功能。
@@ -115,57 +115,51 @@
 			</template>
 			<!--共享设备列表-->
 			<template v-else>
-
+				
+				
+				
 				<div class="room app-font-size-28" v-for="o,i in list" :data-time='"\""+(_fixDevName(o.name) || o.id)+"\"正共享给好友"'>
 					<div class="app-font-size-28 mui-table-view-cell" v-for="oo,ii in o.list">
-						<div class="mui-slider-right mui-disabled" @tap="onDelTap(oo, ii, $event)" >
+						<div class="mui-slider-right mui-disabled" @tap="onDelTap(oo, ii, $event)">
 							<a class="mui-btn mui-btn-red">删除</a>
 						</div>
-						<div class="mui-slider-handle" @tap="onUserTap(oo)" @longtap="onDelTap(oo, ii, $event)">
-							<img :data-src="oo.headimgurl" class="img-lazy-load img-lazy-forever" data-type="avatar" />
+						<div class="mui-slider-handle" @tap="onUserTap(oo)">
+							<img :data-src="oo.headimgurl" class="img-lazy-load img-lazy-forever" data-type="avatar"  /> 
 							<span v-text="oo.nickname || oo.account"></span>
 						</div>
 					</div>
 				</div>
 
+				
 			</template>
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 		<script src="../../../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../../js/lib/vue-ni.js" ></script>
-		<script type="text/javascript" src="../../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js" ></script>
+		<script type="text/javascript" src="../../../js/dal/device.js" ></script>
 
-		<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>
-		<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>
-
-		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/lib/md5.min.js" ></script>
+		<script type="text/javascript" src="../../../js/common/imagelazyload.js" ></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 
 		<script type="text/javascript">
-			mui.init({
-				gestureConfig: {
-
-					longtap: true, //默认为false
-
-				}
-			});
+			mui.init();
 
 			new Vue({
 				el: ".mui-content",
 				data: function() {
 					return {
-						wantDevid: "",
 						list_: []
 					};
 				},
-
+				
 				computed: {
-					list: function() {
-						var dir = {},
-							arr = [];
-						this.list_.forEach(function(item) {
-							if(!dir[item.devid]) {
+					list: function(){
+						var dir = {}, arr = [];
+						this.list_.forEach(function(item){
+							if(!dir[item.devid]){
 								dir[item.devid] = {
 									id: item.devid,
 									name: item.location,
@@ -174,53 +168,45 @@
 							}
 							dir[item.devid].list.push(item);
 						});
-						for(var i in dir) {
+						for(var i in dir){
 							arr.push(dir[i]);
 						}
-
+						
 						return arr;
 					}
 				},
-
-				plusReady: function() {
-					this.wantDevid = this.$view.devid;
-					//console.log(this.wantDevid);
+				
+				mounted: function(){
 					this.getList();
 				},
-
+				
 				methods: {
-					onShareTap: function() {
+					onShareTap: function(){
 						// 跳转到主机列表(我的设备)
 						mui.openWindow('../../smart/devices/dev_my_list.html', 'dev_my_list');
 					},
-
+					
 					// 获取列表
-					getList: function() {
-						var method = dal.device.shareList.bind(this);
-						if(this.wantDevid){
-							method = dal.device.shareListByDevid.bind(this, this.wantDevid);
-						}
-						
-						method(function(err, data) {
-							if(err) {
+					getList: function(){
+						dal.device.shareList(function(err, data){
+							if(err){
 								return mui.toast(err.message);
 							}
 							console.log(JSON.stringify(data));
 							data && data.length && (this.list_ = data);
-							this.$nextTick(function() {
-								imagelazyload();
+							this.$nextTick(function(){
+								imagelazyload();  
 							});
-						}.bind(this)); 
+						}.bind(this));
 					},
 					
-
 					// 用户点击
-					onUserTap: function(o) {
+					onUserTap: function(o){
 						console.log(JSON.stringify(o));
 					},
 					// 删除点击
-					onDelTap: function(o, i, e) {
-						mui.confirm("删除后，该亲友将无权限访问设备。确定要继续吗？", "", ["继续删除", "再等等"], function(ee) {
+					onDelTap: function(o, i, e){
+						mui.confirm("确定要删除对该用户的分享吗？", "", ["删除", "取消"], function(ee) {
 							if(ee.index === 0) {
 								plus.nativeUI.showWaiting();
 								dal.device.delShare(o.id, function(err, rs) {
@@ -235,7 +221,7 @@
 							}
 						});
 					},
-					_fixDevName: function(name) {
+					_fixDevName: function(name){
 						return app.dev.fixName(name);
 					},
 				}

@@ -82,6 +82,7 @@
 
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
+
 		<script type="text/javascript">
 			mui.init({
 				//处理窗口关闭前的业务
@@ -235,7 +236,8 @@
 														return;
 													}
 													console.log('before' + data1.action.toString(2));
-													data2.type && (data1.action = (data1.action & 0xffe7) | (data2.type << 3));
+													var value = data2.type & 0x03;
+													data1.action = (data1.action & 0xffe7) | (value << 3);
 													console.log('after' + data1.action.toString(2));
 													observer.next({
 														acc: data1,

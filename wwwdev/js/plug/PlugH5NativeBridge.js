@@ -21,13 +21,13 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-		// return;
+	 	//return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
-		// return;
+		//return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
@@ -461,5 +461,18 @@
 	//查询未读告警消息
 	pgn.GetNoReadAlarmListAsyn = function(username,pageSize,sf,ff){
 		return pg.asyncExec(N,'GetNoReadAlarmListAsyn',[username,pageSize],sf,ff)
+	}
+	
+	
+	// ================================AI设备=========================================
+	
+	// 配置AI设备WIFI信息
+	pgn.UpdateAIDeviceConfigAsync = function(ssid, pwd, devid, setid, sf, ff){
+		return pg.asyncExec(N,'UpdateAIDeviceConfigAsync',[ssid, pwd, devid, setid],sf,ff)
+	}
+	
+	// 检查内网列表AI设备是否连接上
+	pgn.checkAIDeviceIsConnAsync = function(sf, ff){
+		return pg.asyncExec(N,'checkAIDeviceIsConnAsync',[],sf,ff)
 	}
 }(window));

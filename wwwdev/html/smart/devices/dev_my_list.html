@@ -576,6 +576,8 @@
 
 			var DEVD;
 			//, DEVICE_AUTH;
+			
+			var ACC;
 
 			var wayPick;
 
@@ -603,13 +605,13 @@
 							var o = {
 								// 布防
 								"8": function() {
-									dev.workmode = app.dev.getArmBit(); // 0x01 << 30
+									dev.workmode = app.dev.getArmBit() | dev.workmode; // 0x01 << 30
 									// [事件]布防
 									app.statis.emit("arm");
 								},
 								// 撤防
 								"4": function() {
-									dev.workmode = 0;
+									dev.workmode = app.dev.getArmBit() ^ dev.workmode;
 									// [事件]撤防
 									app.statis.emit("disarm");
 								},
@@ -722,6 +724,10 @@
 					}, this._down.bind(this));
 
 					DEVD = new ni.Cache('dev_list', [], {
+						plus: true
+					});
+					
+					ACC = new ni.Cache('acc_list', "", {
 						plus: true
 					});
 
@@ -845,7 +851,8 @@
 									return mui.toast(err.message);
 								}
 								this.devaccessroyList = data;
-
+								// 缓存配件信息到本地
+								this._saveACCData(data);
 							}.bind(this));
 						}
 
@@ -1208,7 +1215,9 @@
 							}
 							console.log(JSON.stringify(data));
 							this.devaccessroyList = data;
-
+							
+							// 缓存配件信息到本地
+							this._saveACCData(data);
 						}.bind(this));
 					},
 
@@ -1229,6 +1238,11 @@
 
 					_isArm: function(mode) {
 						return app.dev.isArm(mode);
+					},
+					
+					// 保存配件信息至本地
+					_saveACCData: function(data){
+						ACC.data = data;
 					},
 				}
 			});

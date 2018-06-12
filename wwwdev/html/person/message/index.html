@@ -97,11 +97,11 @@
 			<h1 class="mui-title">消息中心</h1>
 		</header>
 		<div class="mui-content">
-			<div class="app-touch" style="margin-top: 0.266666rem;" data-href="warning.html" data-tag="alarmMsgNative">
+			<div class="app-touch" style="margin-top: 0.266666rem;" data-href="warning.html" data-tag="alarmMsg">
 				<img src="../../../image/person/message/btn_Alarmnews@3x.png" />
 				<div class="name">
 					<div class="app-font-size-30 app-color-333333">告警消息</div>
-					<div class="app-font-size-26 app-color-9f9fa0" v-text="(_fixName(alarmMsgNative.location) || alarmMsgNative.devid) + ' ' + (alarmMsgNative.accessoryName || '')">...</div>
+					<div class="app-font-size-26 app-color-9f9fa0" v-text="(_fixName(alarmMsg.location) || alarmMsg.devid) + ' ' + (alarmMsg.areaname || '')">...</div>
 					<!--<span class="app-badge app-font-size-20">99+</span>-->
 				</div>
 			</div>
@@ -132,10 +132,7 @@
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js" ></script>
 		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
-		<script type="text/javascript" src="../../../js/lib/vue-ni.js" ></script>
-		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
-		<script type="text/javascript" src="../../../js/lib/Rx.min.js" ></script>
-		
+
 		<script type="text/javascript">
 			mui.init();
 			mui.ready(function() {
@@ -147,7 +144,7 @@
 
 				});
 			});
-			
+
 			var vm = new Vue({
 				el: ".mui-content",
 				data: function() {
@@ -158,17 +155,6 @@
 							"areaname": "",
 							"location": "暂无告警",
 							"devid": ""
-						},
-						"alarmMsgNative": {
-							"ID": 0,
-							"devid": '',
-							"channel": 0,
-							"ntime": 0,
-							"accessoryID": 0,
-							"accessoryName": '',
-							"ftype": 0,
-							"read": false,
-							"location": '暂无告警',
 						},
 						"sysMsg": {
 							"summary": "",
@@ -185,58 +171,20 @@
 							"time": "",
 							"title": "暂无消息",
 							"status": 1
-						},
-						user: app.user.get(),
+						}
 					};
 				},
 				mounted: function() {
 					this.getCenterMessage();
 				},
-				plusReady: function(){
-					var that = this;
-					var Listen$ = Rx.Observable.create(function(ob){
-						new ni.Broadcast().on('update_warn_message',function(){
-							ob.next();
-						})
-					});
-					var initAlarmMessage$ = Rx.Observable.create(function(ob){
-						ob.next();
-					});
-					Listen$
-					.merge(initAlarmMessage$)
-					.subscribe(function(){
-						that.getMessageList();
-					})
-				},
 				methods: {
 					getCenterMessage: function() {
 						dal.message.center(function(err, data) {
 							if(err || !data){return}
-//							data.alarmMsg && (this.alarmMsg = data.alarmMsg);
+							data.alarmMsg && (this.alarmMsg = data.alarmMsg);
 							data.sysMsg && (this.sysMsg = data.sysMsg);
 							data.activityMsg && (this.activityMsg = data.activityMsg); 
 						}.bind(this));
-					},
-					getMessageList: function(){
-						var that = this;
-						var account = this.user.account;
-						var stime = new Date(0);
-						var endtime = Date.now();
-						stime = parseInt(stime.getTime() / 1000);
-						endtime = parseInt(endtime / 1000);
-						plug.H5NativeBridge.GetAlarmListAsyn('',stime,endtime,account,1,1,function(res){
-							res = JSON.parse(res);
-							if(res.code != 0) return;
-							var data = res.data;
-							if(!data || data.length === 0) {
-								return;
-							}
-							data = data.map(function(item,i) {
-								item.id = item.ID; //接口调整
-								return item;
-							});
-							that.alarmMsgNative = data[0];
-						})
 					},
 					_fixName: function(s){
 						return app.dev.fixName(s);

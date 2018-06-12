@@ -246,7 +246,7 @@
 							<span>自动布防计划</span>
 						</a>
 					</li>
-					<li v-if="isGPRS" class="mui-table-view-cell" @tap="onRecordTap()">
+					<li v-if="!isGPRS" class="mui-table-view-cell" @tap="onRecordTap()">
 						<a class="mui-navigate-right">
 							<span>自动录像计划</span>
 						</a>

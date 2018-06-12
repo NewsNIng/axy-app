@@ -34,7 +34,7 @@
 				transition-duration: 100ms;
 				box-shadow: 0px 0px 5px #EFEFEF;
 				text-align: center;
-				/*				line-height: 1;*/
+				line-height: 1;
 				color: #333333;
 				position: relative;
 				/*font-weight: bold;*/
@@ -96,7 +96,7 @@
 				min-height: 10%;
 				z-index: 99;
 				/*				background-color: #FFFFFF;*/
-				background-color: #F4F8FB;
+				background-color: #FBFCFD
 			}
 			
 			.com-dev>ul {
@@ -165,19 +165,19 @@
 			</div>
 
 			<div class="mui-content">
-				<template v-for="o,i in scenes" v-if="o.basicinfo.type !== 6">
+				<template v-for="o,i in scenes">
 
-					<div class="app-font-size-30" @tap="onClickTap(o, i, o.basicinfo.icon)">
+					<div class="app-font-size-30" @tap="onClickTap(o, i, o.img)">
 						<span class="setting_icon" @tap.stop="onSetting(i)"><img src="../../../image/smart/scenes/btn_Setup@3x.png"/></span>
-						<img :src="'../../../image/smart/scenes/scenes_icons/'+o.basicinfo.icon+(isLoading&(i === loading)?'.gif':'.png')" />{{o.basicinfo.name}}</div>
+						<img :src="o.img" />{{o.title}}<br /><span class="devWork app-font-size-26">{{o.workCount?o.workCount+'台设备工作中':'未添加任何执行动作'}}</span></div>
 				</template>
 			</div>
-			<div class="foot" @tap="onLinkageTap()">
+			<div class="foot" @tap="onDevConn()">
 				<ul class="mui-table-view app-font-size-32">
 					<li class="mui-table-view-cell devConn">
 						<a class="mui-navigate-right">
 							<span>设备互联</span>
-							<span class="mui-badge" v-text="linkages.length"></span>
+							<span class="mui-badge" v-text="'3'"></span>
 						</a>
 					</li>
 				</ul>
@@ -194,7 +194,6 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../../js/dal/scene.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -212,232 +211,68 @@
 						mask: false, // 遮罩控制
 						index: -1, // 当前操作对象
 						scenes: [{
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 1,
-								"linkageid": 111,
-								"name": "回家模式",
-								"push": "1",
-								"state": "1",
-								"type": 1
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
+							title: "回家模式",
+							state: false,
+							//img: "../../../image/smart/scenes/loading.gif",
+							img: "../../../image/smart/scenes/btn_get home1@3x.png",
+							workCount: 9,
 						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 2,
-								"linkageid": 111,
-								"name": "离家模式",
-								"push": "1",
-								"state": "1",
-								"type": 2
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
+							title: "离家模式",
+							state: false,
+							img: "../../../image/smart/scenes/btn_Be away from home1@3x.png",
+							workCount: 9,
 						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 3,
-								"linkageid": 111,
-								"name": "回店模式",
-								"push": "1",
-								"state": "1",
-								"type": 3
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
+							title: "回店模式",
+							state: false,
+							img: "../../../image/smart/scenes/icon_Back to the shop1@3x.png",
+							workCount: 0,
 						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 4,
-								"linkageid": 111,
-								"name": "离店模式",
-								"push": "1",
-								"state": "1",
-								"type": 4
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}, {
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}]
-						}, {
-							"basicinfo": {
-								"delay": " 0",
-								"icon": 10,
-								"linkageid": 111,
-								"name": "测试联动",
-								"push": "1",
-								"state": "1",
-								"type": 6
-							},
-							"linkaction": [{
-								"action": 4,
-								"enable": 1,
-								"feature": 0,
-								"flage": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400005|撤防",
-								"smartid": "AX-403A-2016061400005",
-								"triggerid": "AX-403A-2016061400005"
-							}],
-							"trigger": [{
-								"condition": 8,
-								"enable": 1,
-								"feature": 0,
-								"iconflage": 1,
-								"icontype": 32,
-								"index": 0,
-								"linkageid": 111,
-								"name": " AX-403A-2016061400006|撤防",
-								"smartid": "AX-403A-2016061400006",
-								"triggerid": "AX-403A-2016061400006"
-							}]
+							title: "离店模式",
+							state: false,
+							img: "../../../image/smart/scenes/btn_Departure1@3x.png",
+							workCount: 0,
 						}],
-						newScenes: null,
-						loadingImg: "-1", // 加载动画
-						completeImg: "-2", // 完成标志
+						loadingImg: "../../../image/smart/scenes/loading.gif", // 加载动画
+						completeImg: "../../../image/smart/scenes/icon_Clickeffect@3x.png", // 完成标志
 						isLoading: false, // 是否加载中
-						loading: -1, // 加载中的模式
 					};
 				},
-				computed: {
-					linkages: function() {
-						return this.scenes.filter(function(o, i) {
-							return o.basicinfo.type === 6;
+				plusReady: function() {},
+				methods: {
+					onNewTap: function() {
+						// 设定场景名称
+						app.page.getInput(function(data) {
+							//							data = data.content.trim();
+							//							if(!data || data.length === 0 || data.length > 12) {
+							//								return mui.toast('场景名称不能为空或者大于12个字符');
+							//							}
+							mui.openWindow('edit_scenes.html', 'edit_scenes', {
+								extras: {
+									name: data
+								}
+							});
+						}, {
+							title: "场景名称",
+							tips: "请输入名称...",
+							maxLength: 12,
+							mLengthMsg: "场景名称不能大于12个字符"
 						});
 					},
-				},
-				plusReady: function() {
-					this.getList();
-				},
-				methods: {
-					getList: function() {
-						plus.nativeUI.showWaiting();
-						dal.scene.list(function(err, data) {
-							plus.nativeUI.closeWaiting();
-							console.log(JSON.stringify(err)+","+JSON.stringify(data));
-							if(err) {
-								return mui.toast(err.message);
-							}
-//							this.scenes = data;
-						}.bind(this));
 
-					},
-
-					onNewTap: function() {
-						mui.openWindow('edit_scenes.html', 'edit_scenes');
-					},
-
-					onClickTap: function(o, i, icon) {
+					onClickTap: function(o, i, img) {
 						if(this.isLoading) {
 							return;
 						}
 						this.isLoading = true;
-						this.loading = i;
-						that = this;
-						this.scenes[i].basicinfo.icon = this.loadingImg;
+						that = this,
+							this.scenes[i].img = this.loadingImg;
 						// 需要执行的操作
 
 						setTimeout(function() {
-							that.scenes[i].basicinfo.icon = that.completeImg;
+							that.scenes[i].img = that.completeImg;
 							setTimeout(function() {
-								that.scenes[i].basicinfo.icon = icon;
+								that.scenes[i].img = img;
 								that.isLoading = false;
-								that.loading = -1;
 							}, 600);
 						}, 1800);
 					},
@@ -447,26 +282,15 @@
 						this.index = i;
 					},
 					onEditTap: function() {
+						mui.openWindow('edit_scenes.html', 'edit_scenes');
 						this.mask = false;
-						mui.openWindow('edit_scenes.html', 'edit_scenes', {
-							extras: {
-								linkageid: this.scenes[this.index].linkageid,
-							}
-						});
 					},
 					onDelTap: function() {
-						this.mask = false;
 						this.scenes.splice(this.index, 1);
+						this.mask = false;
 					},
 					onDevConn: function() {
 						
-					},
-					onLinkageTap: function() {
-						mui.openWindow('index_linkage.html', 'index_linkage', {
-							extras: {
-								linkages: this.linkages,
-							}
-						});
 					}
 				}
 			});
