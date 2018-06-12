@@ -112,21 +112,6 @@
 					</template>
 
 				</ul>
-
-				<div class="title" v-text="infrared_fit.title"></div>
-				<ul class="mui-table-view mui-grid-view mui-grid-9">
-
-					<template v-for="o,i in infrared_fit.devs">
-						<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-4" @tap="onItemTap4(o)">
-							<a>
-								<img :src="o.img" />
-								<div class="mui-media-body app-font-size-26">{{o.name}}</div>
-							</a>
-						</li>
-					</template>
-
-				</ul>
-
 			</div>
 			<div class="foot app-font-size-34" @tap="onFamilyTap()">连接家人的摄像机</div>
 		</div>
@@ -146,17 +131,11 @@
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
-		<script type="text/javascript" src="../../../js/dal/base.js"></script>
-		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
-
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
-		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 		<script type="text/javascript">
 			mui.init();
-
-			var ACC;
 
 			/**
 			 * type 0 声波
@@ -174,62 +153,56 @@
 
 							title: "智能主机",
 							devs: [{
-									img: "../../../image/smart/devices/dev_icon/AX-360@3x.png",
-									name: "AX-360",
-									type: 0
-								}, {
-									img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
-									name: "AX-203",
-									type: 1
-								}, {
-									img: "../../../image/smart/devices/dev_icon/AX-203A-D@3x.png",
-									name: "AX-203A/D",
-									type: 1
-								}, {
-									img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
-									name: "AX-403A",
-									type: 1
-								}, {
-									img: "../../../image/smart/devices/dev_icon/AX-503-HD@3x.png",
-									name: "AX-503/HD",
-									type: 1
-								}, {
-									img: "../../../image/smart/devices/dev_icon/AX-603@3x.png",
-									name: "AX-603",
-									type: 1
-								}, {
-									img: "../../../image/smart/devices/dev_icon/dlaqzj@3x.png",
-									name: "电力安全主机",
-									type: 2
-								}, {
-									img: "../../../image/smart/devices/dev_icon/WG-100@3x.png",
-									name: "WG-100",
-									type: 1
-								}, {
-									img: "../../../image/smart/devices/dev_icon/AX-904@3x.png",
-									name: "AX-904",
-									type: 2
-								}, {
-									img: "../../../image/smart/devices/dev_icon/VH104D-N-MG@3x.png",
-									name: "VH-104GN",
-									type: 1,
-									noWifi: true
-								},
-								{
-									img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
-									name: "AX-203B",
-									type: 3
-								}, {
-									img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
-									name: "AX-403B",
-									type: 3,
-								},
-								{
-									img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
-									name: "AX-801",
-									type: 4,
-								},
-								
+								img: "../../../image/smart/devices/dev_icon/AX-360@3x.png",
+								name: "AX-360",
+								type: 0
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
+								name: "AX-203",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-203A-D@3x.png",
+								name: "AX-203A/D",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
+								name: "AX-403A",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-503-HD@3x.png",
+								name: "AX-503/HD",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-603@3x.png",
+								name: "AX-603",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/dlaqzj@3x.png",
+								name: "电力安全主机",
+								type: 2
+							}, {
+								img: "../../../image/smart/devices/dev_icon/WG-100@3x.png",
+								name: "WG-100",
+								type: 1
+							}, {
+								img: "../../../image/smart/devices/dev_icon/AX-904@3x.png",
+								name: "AX-904",
+								type: 2
+							}, {
+								img: "../../../image/smart/devices/dev_icon/VH104D-N-MG@3x.png",
+								name: "VH-104GN",
+								type: 1,
+								noWifi: true
+							},
+//							{
+//								img: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
+//								name: "AX-203B",
+//								type: 3
+//							}, {
+//								img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
+//								name: "AX-403B",
+//								type: 3,
+//							},
 							]
 						},
 						ctrl_fit: {
@@ -299,24 +272,6 @@
 
 							devCache: null
 						},
-
-						infrared_fit: {
-							title: "万能遥控",
-							devs: [{
-								img: "../../../image/smart/devices/dev_icon/dsq@3x.png",
-								name: "电视器",
-							}, {
-								img: "../../../image/smart/devices/dev_icon/kt@3x.png",
-								name: "空调",
-							}, {
-								img: "../../../image/smart/devices/dev_icon/dfs@3x.png",
-								name: "电风扇",
-							}, {
-								img: "../../../image/smart/devices/dev_icon/jdh@3x.png",
-								name: "机顶盒",
-							}, ],
-						},
-
 					};
 				},
 				mounted: function() {
@@ -348,24 +303,17 @@
 						app.auth.verify(app.auth.MASTER, u).then(function() {
 							//						alert(JSON.stringify(o));
 							if(o.type === 0) {
-								// 声波添加
 								that._voiceDevLine();
 							} else if(o.type === 1) {
-								// 内网添加
 								that._hostNetLine(o);
 							} else if(o.type === 2) {
-								// 扫码添加
 								that._scanCodeLine({
 									isDev: true,
 									isSmart: false,
 									name: o.name
 								});
-							} else if(o.type === 3) {
-								// 蓝牙添加
+							}else if(o.type === 3){
 								that._bluetoothLine();
-							}else if(o.type === 4){
-								// ap热点添加
-								that._apDevLine();
 							}
 						}).catch(function(e) {
 							mui.toast(e.message);
@@ -396,84 +344,9 @@
 							name: o.name
 						});
 					},
-
-					// 万能遥控 红外设备
-					onItemTap4: function(o) {
-
-						var that = this;
-						// 检查配件列表中是否有 红外模块 
-
-						//   获取本地保存的配件列表信息
-						var localAccList$ = Rx.Observable.create(function(ob) {
-							if(!ACC) {
-								ACC = new that.$Cache("acc_list", [], {
-									plus: true
-								});
-							}
-
-							if(ACC.data && ACC.data.length > 0) {
-								ob.next(ACC.data);
-							}
-						});
-
-						//   监听zenus传入的配件列表更新事件
-						var zenusAccListener$ = Rx.Observable.create(function(ob) {
-							// 每次调用只监听一次
-							new that.$Broadcast().once("acc_update", function(data) {
-								ob.next(data.data);
-							});
-						});
-
-						//   获取服务器的配件列表信息
-						var orginAccList$ = Rx.Observable.create(function(ob) {
-							dal.devaccessory.allacc(function(err, data) {
-								if(err) {
-									return;
-								}
-								ob.next(data);
-							});
-						});
-
-						var otherAccList$ = Rx.Observable.merge(localAccList$, zenusAccListener$);
-
-						// 开始  come on !
-						plus.nativeUI.showWaiting("检查红外模块");
-
-						// 获取zenus拉取的最新数据
-						otherAccList$
-							// 2s的节流处理，保证获取最新
-							.debounceTime(2e3)
-							// == 暂时去除网络差原因 or 配件列表过长 导致的时间差
-
-							// 计算是否有红外模块
-							.mergeMap(function(arr) {
-								return Rx.Observable.create(function(ob) {
-									var rs = arr.some(function(item) {
-										return item.type === 0x18;
-									});
-									if(rs) {
-										ob.next();
-									} else {
-										ob.error();
-									}
-
-								});
-							})
-							.subscribe(
-								function(has) {
-									plus.nativeUI.closeWaiting();
-									console.log(has);
-									// 原生接管
-								},
-								function(err) {
-									plus.nativeUI.closeWaiting();
-									mui.alert("请先添加红外模块");
-								});
-
-					},
-
+					
 					// 蓝牙连接设备
-					_bluetoothLine: function(o) {
+					_bluetoothLine: function(o){
 						// 第一步设置设备WIFI
 						app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
 							var url = "blue_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
@@ -532,16 +405,7 @@
 								});
 							}
 						}, o);
-					},
-					// AP热点添加设备
-					_apDevLine: function(){
-						var url = "ap_connect_ai_1.html";
-						mui.openWindow(url, 'ap_1');
-						//app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
-							//var url = "blue_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
-							//mui.openWindow(url, 'blue1');
-						//});
-					},
+					}
 				}
 			});
 		</script>

@@ -264,7 +264,6 @@
 
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
-		<script type="text/javascript" src="../../js/app/app-statis.js" ></script>
 		<script type="text/javascript">
 			mui.init()
 
@@ -395,10 +394,7 @@
 							if(err) {
 								return mui.toast(err.message);
 							}
-							
-							// [事件]注册
-							app.statis.emit("register");
-							
+
 							mui.toast("注册成功，请登录");
 							console.log(JSON.stringify(data));
 
@@ -410,8 +406,6 @@
 							});
 
 							that.$view.close();
-
-							
 
 						});
 

@@ -605,13 +605,13 @@
 							var o = {
 								// 布防
 								"8": function() {
-									dev.workmode = app.dev.getArmBit(); // 0x01 << 30
+									dev.workmode = app.dev.getArmBit() | dev.workmode; // 0x01 << 30
 									// [事件]布防
 									app.statis.emit("arm");
 								},
 								// 撤防
 								"4": function() {
-									dev.workmode = 0;
+									dev.workmode = app.dev.getArmBit() ^ dev.workmode;
 									// [事件]撤防
 									app.statis.emit("disarm");
 								},

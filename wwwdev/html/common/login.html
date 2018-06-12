@@ -263,7 +263,6 @@
 		<script type="text/javascript" src="../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../js/app/app-rules.js"></script>
-		<script type="text/javascript" src="../../js/app/app-statis.js" ></script>
 
 		<script type="text/javascript" src="../../js/lib/better-scroll.min.js"></script>
 
@@ -293,12 +292,6 @@
 					});
 				});
 			});
-
-			// 保存顶级域名
-			var $SaveDomain = function(data) {
-				window.localStorage.setItem('_domain_', data.domain);
-				return data;
-			};
 
 			var _oLoginDir = {
 				sinaweibo: "login_weibo",
@@ -371,7 +364,7 @@
 					},
 					// 历史记录选项点击
 					onHistoryTap: function(o) {
-						if(this.username !== o) {
+						if(this.username !== o){
 							this.password = "";
 						}
 						this.username = o;
@@ -519,6 +512,7 @@
 									ob.next(data);
 								} else {
 									// 跳转页面认证
+									// TODO
 									mui.toast("帐号已保护，您需要权限认证");
 									app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
 										if(rs.result) {
@@ -535,8 +529,6 @@
 							.map($getStateFn(true))
 							// 获取登录帐号的domain
 							.mergeMap($getTopDomain)
-							// 保存domin
-							.map($SaveDomain)
 							// 通过domain进行登录
 							.mergeMap($login)
 							// 修复用户数据
@@ -547,9 +539,9 @@
 							.mergeMap($loginLockCheck)
 							// 登录成功
 							.subscribe(function(data) {
-
+								
 								console.log(JSON.stringify(data));
-
+								
 								mui.toast("登录成功");
 
 								// 记录历史帐号
@@ -570,11 +562,6 @@
 								setTimeout(function() {
 									mui.back();
 								}, 250);
-								
-								// [事件]登录
-								app.statis.emit("login", {
-									loginType: "tel"
-								});
 
 							}, function(err) {
 								$getStateFn(false)();
@@ -672,6 +659,7 @@
 									ob.next(data);
 								} else {
 									// 跳转页面认证
+									// TODO
 									mui.toast("帐号已保护，您需要权限认证");
 									app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
 										if(rs.result) {
@@ -700,8 +688,6 @@
 							.map(authInfoAdapter)
 							.mergeMap($getAccountFn)
 							.mergeMap($getTopDomainFn)
-							// 保存domin
-							.map($SaveDomain)
 							.map($getWaitFn('正在登录...'))
 							.mergeMap($ologin)
 							.mergeMap($loginLockCheck)
@@ -728,11 +714,6 @@
 								setTimeout(function() {
 									mui.back();
 								}, 250);
-								
-								// [事件]登录
-								app.statis.emit("login", {
-									loginType: type
-								});
 
 							}, function(err) {
 								w && w.close();

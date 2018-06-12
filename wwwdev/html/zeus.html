@@ -7,7 +7,7 @@
 	</head>
 
 	<body>
-		<script src="html5plus://ready"></script>
+
 		<script type="text/javascript" src="../js/lib/mui.min.js"></script>
 		<script type="text/javascript" src="../js/lib/vue-ni.js"></script>
 
@@ -30,9 +30,7 @@
 			/**
 			 * H5Native 控制中心 
 			 */
-			var PUSH_ID, DEVICE, ACC,
-			//DEVICE_AUTH, 
-			USER_INFO, P, _B;
+			var PUSH_ID, DEVICE, USER_INFO,  P, _B;
 
 			var getPwd = function() {
 				return window.localStorage.getItem('_pwd_');
@@ -59,18 +57,10 @@
 				DEVICE = new ni.Cache('dev_list', "", {
 					plus: true
 				});
-				// 配件列表缓存
-				ACC = new ni.Cache('acc_list', "", {
-					plus: true
-				});
 				// 用户信息备份
 				USER_INFO = new ni.Cache('app_user_info', {}, {
 					plus: true
 				});
-				// 设备列表 权限 字典
-				//DEVICE_AUTH = new ni.Cache('dev_list_auth', {}, {
-				//	plus: true
-				//});
 				// 原生桥梁
 				P = plug.H5NativeBridge;
 				// 多页面通知
@@ -89,21 +79,18 @@
 
 					var ajaxResult = function(err, data) {
 						if(err) {
-							if(err.code === '0110') {
+							if(err.code === '0110'){
 								// 验证失败
-								ob.error();
-							} else if(logincount < 3) {
-								// 递归重试登录   指数化退避
-								logincount = logincount + 1;
+								ob.error();	
+							}else if(logincount < 5){
+								// 递归
+								logincount  = logincount + 1;
 								setTimeout(_loginFn.bind(null, ob, logincount), Math.pow(2, logincount) * 100);
 							}
 							return;
 						}
 						if(data.lockterminal === 0 || data.validation === 1) {
 							// 验证通过
-							_B.emit("hide_login_success", {}, {
-								views: ["home"]
-							});
 							ob.next(data);
 						} else {
 							ob.error();
@@ -132,14 +119,14 @@
 						// 自动第三方登录
 						dal.user.ologin(o, ajaxResult);
 					}
-				}
-				//				else {
-				// 未登录状态 
-				// // 监听一次登录事件
-				//_B.on('login_success', function(data) {
-				//	ob.next(data.userInfo);
-				//});
-				//				}
+				} 
+//				else {
+					// 未登录状态 
+					// // 监听一次登录事件
+					_B.on('login_success', function(data) {
+						ob.next(data.userInfo);
+					});
+//				}
 			});
 
 			// 获取顶级域名
@@ -160,6 +147,7 @@
 			};
 			// 保存顶级域名
 			var $SaveDomain = function(data) {
+				console.log(data.domain);
 				window.localStorage.setItem('_domain_', data.domain);
 				return data;
 			};
@@ -183,7 +171,9 @@
 			});
 
 			// 获取设备列表计时器
-			var $getDevListTimer = Rx.Observable.empty().startWith(1)
+			var $getDevListTimer = Rx.Observable.create(function(_) {
+					_.next();
+				})
 				.delay(3e3)
 				.merge(Rx.Observable.interval(30e3));
 
@@ -223,86 +213,67 @@
 					ob.next();
 				});
 			});
-
+			
 			var getDevListTimer$;
-
-			var ListenLoginSuccess$ = Rx.Observable.create(function(ob) {
-				_B.on('login_success', function(data) {
-					ob.next(data.userInfo);
-				});
-			});
-
-			var Success$fn = function(user) {
-				
-				user = FixUserData(user);
-				var account = user.account;
-
-				// -》更新 本地 用户 数据
-				UpdateUserInfo(user);
-
-				// -》获取 顶级 域名
-				Rx.Observable.of(account)
-					.mergeMap($getTopDomain)
-					// 保存domin
-					.map($SaveDomain)
-					// 初始化 原生 插件
-					.subscribe(InitNativeSystem);
-
-				// -》获取 推送 ID
-				Rx.Observable
-					// 频率 3s一次
-					.interval(3e3)
-					// 最多获取5次
-					.take(5)
-					// 获取id
-					.mergeMapTo($getPushId)
-					// 取第一次获取到的值
-					.first()
-					// 设备信息同步
-					.subscribe(SyncHronous.bind(null, account));
-
-				// 关闭之前的订阅
-				getDevListTimer$ && getDevListTimer$.unsubscribe();
-				// -》开启获取设备列表定时器
-				getDevListTimer$ = $getDevListTimer
-					// 或者收到通知
-					.merge($listenDevListUpdate)
-					// 过滤非登录
-					//.filter(function(){
-						//return app.user.get().account;
-					//})
-					// 获取ajax数据
-					.mergeMapTo($getDevListByAjax)
-					// 订阅
-					.subscribe(function(data) {
-						// 保存并向原生发送数据
-						InitNativeDevList(data);
-						// 向devlist发送更新信息
-						SendDevListPageMsg(data);
-						// 保存设备的权限信息
-						//SaveDevListAuth(data);
-					});
-
-				// 向服务器发送请求缓存处理配件请求
-				SyncZoneRequest();
-
-			};
 			
-			
-
 			// 页面准备完毕
 			$pready
 				// 页面初始化
 				.mergeMapTo($init)
 				// 自动登录
-				// 或者监听登录 TODO
-				.mergeMapTo($login).merge($pready.mergeMapTo(ListenLoginSuccess$))
+				.mergeMapTo($login)
 				// 执行
-				.subscribe(Success$fn,
+				.subscribe(function(user) {
+						user = FixUserData(user);
+						var account = user.account;
+
+						// -》更新 本地 用户 数据
+						UpdateUserInfo(user);
+
+						// -》获取 顶级 域名
+						Rx.Observable.of(account)
+							.mergeMap($getTopDomain)
+							// 保存domin
+							.map($SaveDomain)
+							// 初始化 原生 插件
+							.subscribe(InitNativeSystem);
+
+						// -》获取 推送 ID
+						Rx.Observable
+							// 频率 3s一次
+							.interval(3e3)
+							// 最多获取5次
+							.take(5)
+							// 获取id
+							.mergeMapTo($getPushId)
+							// 取第一次获取到的值
+							.first()
+							// 设备信息同步
+							.subscribe(SyncHronous.bind(null, account));
+						
+						// 关闭之前的订阅
+						getDevListTimer$ && getDevListTimer$.unsubscribe();
+						// -》开启获取设备列表定时器
+						getDevListTimer$ = $getDevListTimer
+							// 或者收到通知
+							.merge($listenDevListUpdate)
+							// 获取ajax数据
+							.mergeMapTo($getDevListByAjax)
+							// 订阅
+							.subscribe(function(data){
+								// 保存并向原生发送数据
+								InitNativeDevList(data);
+								// 向devlist发送更新信息
+								SendDevListPageMsg(data);
+							});
+
+						// 向服务器发送请求缓存处理配件请求
+						// SyncZoneRequest();
+
+					},
 					// 登录失败
 					AppLoginFail);
-					
-					
+
 			$pready
 				.mergeMapTo($listenUserUpdate)
 				.subscribe(UpdateUserInfo);
@@ -322,26 +293,14 @@
 				_B.on('token_error', function(data) {
 					// token 错误
 					// 并且已经登录
-					app.user.has() && ob.next(data);
+					app.user.has() && ob.next();
 				});
 			});
+
 			$pready
 				.mergeMapTo($litenTokenErr)
-				.subscribe(function(data) {
-					// 如果 是 token 过期
-					if(data.message === "TokenTimeOut") {
-						
-						// 重新登录
-						$login
-							// 执行
-							.subscribe(Success$fn,
-								// 登录失败
-								AppLoginFail);
-						return;
-
-					}
-
-					plus.nativeUI.toast("帐号登录状态已失效，请重新登录");
+				.subscribe(function() {
+					plus.nativeUI.toast("帐号保护已开启，您需要登录申请授权");
 					// 重启app
 					ReloadApp();
 					// 通知原生
@@ -364,53 +323,31 @@
 					views: ["home"]
 				});
 			};
-
+			
 			// 向devlist发送更新信息
-			var SendDevListPageMsg = function(data) {
+			var SendDevListPageMsg = function(data){
 				_B.emit('device_update_timer', {
 					devlist: data
 				}, {
 					views: ['dev_my_list']
 				});
 			};
-			
-			// 保存设备的权限信息
-			/*var SaveDevListAuth = function(data){
-				var i = 0, l = data.length;
-				var authDir = {}, temp;
-				while(i < l){
-					temp = data[i];
-					authDir[temp.devid] = temp.authorize || 0;
-					i++;
-				}
-				DEVICE_AUTH.data = authDir;
-			};*/
 
 			// 设备推送开关同步
 			var SyncHronous = function(account, pushData) {
 				PUSH_ID.data = pushData.clientId;
 				var type = mui.os.ios ?  67 : (pushData.type||36); 
-				dal.push.synchronous(account, id, type, function(err, data) {
+				dal.push.synchronous(account, pushData.clientId, type, function(err, data) {
 					/*if(err) {
 						return mui.toast(err.message);
 					}
-					mui.toast(id + '同步成功');*/
+					mui.toast(pushData.clientId + '同步成功');*/
 				});
 			};
 
 			// 发送同步配件请求
 			var SyncZoneRequest = function() {
-				dal.devaccessory.allacc(function(err, data) {
-					if(err){return}
-					// 缓存配件列表
-					ACC.data = data;
-					// 通知其他页面 (会不会数据太长导致解析失败？)
-					new ni.Broadcast().emit("acc_update", {
-						data: data,
-					},{
-						views: ["add/add_device.html"] 
-					});
-				});
+				dal.devaccessory.allacc(function() {});
 			}
 
 			// 更新本地用户信息
@@ -456,7 +393,7 @@
 				// 清除本地用户数据
 				app.user.logout();
 				USER_INFO.clear();
-
+				
 				window.localStorage.setItem('_pwd_', "");
 				window.localStorage.setItem('_domain_', "");
 
@@ -496,7 +433,7 @@
 						first.reload();
 						// 显示首页
 						first.show("slide-in-bottom", 250);
-
+						
 						//index.reload();
 						// 打开登录
 						app.user.get(function() {});

@@ -19,41 +19,15 @@
 				overflow-x: hidden;
 			}
 			
-			.mui-content {
-				margin-bottom: 1.6rem;
-			}
-			
 			.conditions_item {
-				height: 1.6rem;
+				height: 1.386666rem;
 				padding-left: 0.346666rem;
 				background-color: white;
-				position: relative;
 				/*border-bottom: 1px solid #E5E6E7;*/
-			}
-			
-			.conditions_item:after {
-				content: "";
-				position: absolute;
-				height: 1px;
-				left: 0.346666rem;
-				right: 0;
-				bottom: 0;
-				background-color: #E5E6E7;
-			}
-			
-			.conditions_item:last-child:after {
-				height: 0;
 			}
 			
 			.conditions_item:active {
 				background-color: #EFEFEF;
-			}
-			
-			.condition_title {
-				padding-left: 0.346666rem;
-				height: 1.066666rem;
-				line-height: 1.066666rem;
-				color: #555555;
 			}
 			
 			.conditions_icon,
@@ -99,26 +73,22 @@
 				/*min-height: 30%;*/
 				z-index: 99;
 				/*				background-color: #FFFFFF;*/
-				background-color: #F4F8FB;
+				background-color: #FBFCFD;
 				/*max-height: 50%;*/
 			}
 			
-			.com-dev:not(.time) .mui-table-view-cell {
+			.com-dev .mui-table-view-cell {
 				text-align: center;
 				height: 1.386666rem;
 				padding: 0;
 				line-height: 1.386666rem;
 			}
 			
-			.com-dev ul:last-child {
-				margin-top: 0.266666rem;
-			}
-			
-			.com-dev:not(.time) .mui-table-view-cell>a {
+			.mui-table-view-cell>a {
 				height: 100%;
 			}
 			
-			.com-dev:not(.time) .mui-table-view-cell>a:not(.mui-btn) {
+			.mui-table-view-cell>a:not(.mui-btn) {
 				margin: 0;
 			}
 			
@@ -129,45 +99,6 @@
 			.mui-table-view-cell:after {
 				right: 15px;
 				background-color: #E4E5E6;
-			}
-			
-			.mui-badge {
-				font-size: inherit;
-				color: #9F9FA0;
-				background-color: transparent !important;
-				padding: 0 !important;
-			}
-			
-			.com-dev.time>ul {
-				margin-top: 0 !important;
-			}
-			
-			.com-dev>ul>.mui-table-view-cell:after {
-				left: 0;
-				background-color: #F2F2F3;
-			}
-			
-			.no_padding {
-				padding: 0 !important;
-			}
-			
-			.com-dev>ul>li {
-				height: 1.2rem;
-			}
-			
-			.com-dev .mui-btn {
-				width: 1.733333rem;
-				height: 0.72rem;
-				line-height: 0.1rem !important;
-				padding: 0;
-				border: none;
-				background-color: #E5E6E7;
-				border-radius: 3px;
-			}
-			
-			.com-dev .mui-btn.active {
-				background-color: #06C1AE !important;
-				color: #FFFFFF !important;
 			}
 			
 			.cancel {
@@ -181,7 +112,9 @@
 			}
 			
 			.mui-table-view:before {
-				height: 0;
+				left: 15px;
+				right: 15px;
+				background-color: #E4E5E6;
 			}
 			
 			.mui-poppicker-header .mui-btn {
@@ -195,63 +128,6 @@
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
 			}
-			
-			.pop_title {
-				color: #333333;
-				text-align: center;
-			}
-			
-			.pop_title {
-				height: 1.173333rem;
-				line-height: 1.173333rem;
-				border-bottom: 1px solid #E5E6E7;
-				background-color: white;
-			}
-			
-			.cancel {
-				float: left;
-				padding-left: 0.346666rem;
-			}
-			
-			.ok {
-				float: right;
-				padding-right: 0.346666rem;
-			}
-			
-			.repeat1 {
-				padding: 0 15px;
-				height: 100%;
-			}
-			
-			.repeat1 .mui-btn {
-				top: 50%;
-				transform: translateY(-50%);
-				-webkit-transform: translateY(-50%);
-			}
-			
-			.repeat2 {
-				height: 100%;
-				padding: 0.266666rem 0 0 15px;
-			}
-			
-			.repeat2 .mui-btn {
-				margin: 0 0.11rem 0.213333rem 0;
-			}
-			
-			.li_repeat2 {
-				height: 2.186666rem !important;
-			}
-			/*.mui-table-view-cell:not(.clock_item):after {
-				position: absolute;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				height: 1px;
-				content: '';
-				-webkit-transform: scaleY(.5);
-				transform: scaleY(.5);
-				background-color: #c8c7cc;
-			}*/
 		</style>
 	</head>
 
@@ -261,53 +137,8 @@
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">添加触发条件</h1>
 			</header>
-			<!--<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
-				<slot></slot>
-				
-			</div>-->
 			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
-				<div class="com-dev time app-font-size-28" v-show="index === 0">
-					<div class="pop_title app-font-size-28">
-
-						<div class="cancel app-color-9f9fa0" @tap.self="onCancelTap()">取消</div>
-						<div class="ok app-color-main" @tap.self="onTimeTap()">确定</div>
-					</div>
-					<ul class="mui-table-view">
-						<!--<li class="mui-table-view-cell">
-							<a class="">
-								<span>重复</span>
-								<span class="mui-badge">
-									<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': isRepeat}" ref="pwd_protection">
-										<div class="mui-switch-handle"></div>
-									</div>
-								</span>
-							</a>
-						</li>-->
-						<li class="mui-table-view-cell no_padding">
-							<div class="repeat1">
-								<button type="button" class="mui-btn app-font-size-26" :class="everyDay && 'active'" @tap="onEveryDayTap()">每天</button>
-								<button type="button" class="mui-btn app-font-size-26" :class="sleepDay && 'active'" @tap="onSleepDayTap()">周末</button>
-								<button type="button" class="mui-btn app-font-size-26" :class="workDay && 'active'" @tap="onWorkDayTap()">工作日</button>
-							</div>
-
-						</li>
-						<li class="mui-table-view-cell li_repeat2 no_padding">
-							<div class="repeat2">
-								<template v-for="o,i in weeks">
-									<button @tap="onWeekTap(o, i)" type="button" class="mui-btn app-font-size-26" :class="o && 'active'">周{{_number2string(i)}}</button>
-								</template>
-
-							</div>
-						</li>
-						<li class="mui-table-view-cell" @tap="onPickTap(0)">
-							<a class="mui-navigate-right">
-								<span>设置时间</span>
-								<span class="mui-badge" v-text="clockTime"></span>
-							</a>
-						</li>
-					</ul>
-				</div>
-				<div class="com-dev app-font-size-28" v-show="index !== 0 && index < 4">
+				<div class="com-dev app-font-size-28">
 					<ul class="mui-table-view app-font-size-30 scroll">
 						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in data[index]">
 							<a class="">
@@ -317,24 +148,7 @@
 
 					</ul>
 					<ul class="mui-table-view app-font-size-30">
-						<li class="mui-table-view-cell" @tap="onCancelTap()">
-							<a class="">
-								<span>取消</span>
-							</a>
-						</li>
-					</ul>
-				</div>
-				<div class="com-dev app-font-size-28" v-show="index !== 0 && index >= 4">
-					<ul class="mui-table-view app-font-size-30 scroll">
-						<li class="mui-table-view-cell" v-for="o,i in data[index]" @tap="onSecondaryTap(o)">
-							<a class="">
-								<span>{{o.name}}1</span>
-							</a>
-						</li>
-
-					</ul>
-					<ul class="mui-table-view app-font-size-30">
-						<li class="mui-table-view-cell" @tap="onCancelTap()">
+						<li class="mui-table-view-cell cancel" @tap="onCancelTap()">
 							<a class="">
 								<span>取消</span>
 							</a>
@@ -343,321 +157,156 @@
 				</div>
 			</div>
 			<div class="mui-content">
-				<div v-for="o,i in conditions" class="conditions_item" @tap="onSelectDevTap(i, o.img)">
-					<!--<div class="condition_title app-font-size-28" v-text="o.title"></div>-->
-					<!--<div class="conditions_item app-font-size-28" v-for="o1,i in o.list" @tap="onSelectDevTap(i,o1.img)">-->
-					<img class="conditions_icon" :src="o.img" />
-					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-					<div class="title app-font-size-28">{{o.name}}</div>
-					<!--</div>-->
-					<!--<div v-if="i !== conditions.length - 1" style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>-->
-					</template>
-				</div>
+				<template v-for="o,i in conditions">
+					<div class="conditions_item app-font-size-28" @tap="onSelectDevTap(i,o.img)">
+						<img class="conditions_icon" :src="o.img" />
+						<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+						<div class="title app-font-size-28">{{o.name}}</div>
+					</div>
+					<div v-if="i !== conditions.length - 1" style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
+				</template>
 			</div>
-			<!--沉浸式动态处理-->
-			<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
 
-			<!--基础配置-->
-			<script type="text/javascript" src="../../../js/config.js"></script>
-			<!--基础库-->
-			<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
-			<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
-			<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
-			<!--请求相关-->
-			<script type="text/javascript" src="../../../js/dal/base.js"></script>
-			<!--App相关业务逻辑-->
-			<script type="text/javascript" src="../../../js/app/app.js"></script>
-			<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
-			<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
-			<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
-			<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
-			<script type="text/javascript" src="../../../js/data/value_0-1000.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
 
-			<script type="text/javascript">
-				mui.init();
+		<script type="text/javascript">
+			mui.init();
 
-				new Vue({
-					el: '#warpper',
-					data: function() {
-						return {
-							weeks: [true, true, true, true, true, true, true],
-							clockTime: "00:00",
-							durationTime: 0,
-							mask: false, // 遮罩控制
-							index: -1, // 弹窗索引
-							numValue: 0, // 指定值
-							conditions: [{
-								img: "../../../image/smart/scenes/condition.png",
-								name: "定时启动"
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+
+						conditions: [{
+							img: "../../../image/smart/scenes/icon_Lock@3x.png",
+							name: "智能门锁"
+						}, {
+							img: "../../../image/smart/scenes/icon_Timing start@3x.png",
+							name: "定时启动"
+						}, {
+							img: "../../../image/smart/scenes/icon_Environmental induction@3x.png",
+							name: "环境感应"
+						}, {
+							img: "../../../image/smart/scenes/icon_Human body induction@3x.png",
+							name: "人体感应"
+						}, {
+							img: "../../../image/smart/scenes/incon_Carbon monoxide@3x.png",
+							name: "一氧化碳感应"
+						}],
+
+						selectImg: "",
+
+						mask: false, // 遮罩控制
+						index: -1, //弹框种类
+						data: [
+							[{
+								name: "智能门锁1",
 							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "红外感应"
+								name: "智能门锁2",
 							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "门磁打开"
+								name: "智能门锁3",
 							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "门磁闭合"
+								name: "智能门锁4",
 							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "温度超出指定值"
+								name: "智能门锁5",
 							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "温度低于指定值"
+								name: "智能门锁6",
 							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "湿度超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "湿度低于指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "PM2.5超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "PM2.5低于指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "甲醛浓度超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "甲醛浓度低于指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "一氧化碳浓度超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "一氧化碳浓度低于指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "燃气浓度超出指定值"
-							}, {
-								img: "../../../image/smart/scenes/condition.png",
-								name: "燃气浓度低于指定值"
+								name: "智能门锁7",
 							}],
+							[],
+							[{
+								name: "环境感应1",
+							}, {
+								name: "环境感应2",
+							}, {
+								name: "环境感应3",
+							}],
+							[{
+								name: "人体感应1",
+							}],
+							[{
+								name: "一氧化碳感应1",
+							}, {
+								name: "一氧化碳感应2",
+							}, {
+								name: "一氧化碳感应3",
+							}, {
+								name: "一氧化碳感应4",
+							}, {
+								name: "一氧化碳感应5",
+							}]
+						],
+						devDelay: -1,
+						devDelayText: "",
+					};
+				},
+				mounted: function() {
 
-							selectImg: "",
-
-							mask: false, // 遮罩控制
-							data: [
-								[], // 定时启动
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 红外感应
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 门磁打开
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 门磁闭合、
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 温度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 温度低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 湿度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 湿度低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // PM2.5超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // PM2.5低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 甲醛浓度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 甲醛浓度低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 一氧化碳浓度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 一氧化碳浓度低于指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 燃气浓度超出指定值
-								[{
-									name: '12345678'
-								}, {
-									name: '12345679'
-								}], // 燃气浓度低于指定值
-							],
-							devDelay: -1,
-							devDelayText: "",
-						};
-					},
-					computed: {
-						workDay: function() {
-							return this.needDayIndexs === '01234';
-						},
-						sleepDay: function() {
-							return this.needDayIndexs === '56';
-						},
-						everyDay: function() {
-							return this.needDayIndexs === '0123456';
-						},
-
-						needDayIndexs: function() {
-							return this.weeks.reduce(function(str, item, index) {
-								if(item) {
-									str += index;
-								}
-								return str;
-							}, '');
-						}
-					},
-					mounted: function() {
-
-						this.pick = new mui.PopPicker({
-							layer: 2,
-							more: true
-						});
-						this.pick.setData(pick_data);
-					},
-					plusReady: function() {},
-					methods: {
-						onSelectDevTap: function(i, img) {
-							//						if(i === 0) {
-							//							
-							//						};
-							this.index = i;
-							this.mask = true;
-							this.selectImg = img;
-						},
-						onCancelTap: function() {
-							this.mask = false;
-						},
-						onSelectedTap: function(o) {
-							this.mask = false;
-							app.page.setResult({
-								title: o.name,
-								img: this.selectImg,
-							}).close();
-						},
-						_number2string: function(i) {
-							return ["一", "二", "三", "四", "五", "六", "日"][i];
-						},
-						onWeekTap: function(o, index) {
-							this.$set(this.weeks, index, !o);
-						},
-
-						onEveryDayTap: function() {
-							this.weeks = this.weeks.map(function() {
-								return !this.everyDay;
-							}.bind(this));
-						},
-						onWorkDayTap: function() {
-							if(this.workDay) {
-								this.weeks = this.weeks.map(function() {
-									return false;
-								});
-							} else {
-								this.weeks = [true, true, true, true, true, false, false];
-							}
-
-						},
-						onSleepDayTap: function() {
-							if(this.sleepDay) {
-								this.weeks = this.weeks.map(function() {
-									return false;
-								});
-							} else {
-								this.weeks = [false, false, false, false, false, true, true];
-							}
-						},
-						onPickTap: function(i) {
+					this.pick = new mui.PopPicker({
+						layer: 2,
+						more: true
+					});
+					this.pick.setData(pick_data);
+				},
+				plusReady: function() {},
+				methods: {
+					onSelectDevTap: function(i, img) {
+						if(i === 1) {
 							var that = this;
-							this.pick = new mui.PopPicker({
-								layer: 2,
-								more: true
-							});
-							this.pick.setData(pick_data);
-							this.pick.pickers[0].setSelectedValue(that.clockTime.split(':')[0]);
-							this.pick.pickers[1].setSelectedValue(that.clockTime.split(':')[1] === undefined ? '0' : that.clockTime.split(':')[1]);
 
-							var calc = function(i) {
-								if(i < 10) {
-									return "0" + i;
-								}
-								return i;
-							}
+							var fn = function(m, s) {
+								that.devDelay = m * 60 + s; // 单位 秒
+								that.devDelayText = m + '分' + s + '秒';
+								app.page.setResult({
+									title: "定时启动"+' ('+m + '分' + s + '秒)',
+									img: img,
+								}).close();
+							};
 
 							this.pick.show(function(items) {
-								var h = items[0].value,
-									m = items[1].value;
-
-								that.clockTime = calc(h) + ":" + calc(m);
-
+								fn(items[0].value, items[1].value);
 							}, function(items) {
-
+								//fn(items[0].value, items[1].value);
 							});
-						},
-						onTimeTap: function() {
-							var name = this.clockTime + "(" + this.weeks.reduce(function(prev, cur, index) {
-								return prev + (cur ? '周' + this._number2string(index) + ' ' : '');
-							}.bind(this), '').slice(0, -1) + ")";
-							this.onSelectedTap({
-								name: name
-							});
-						},
-						onSecondaryTap: function(o, i) {
-							var id = o.name;
-
-							var that = this;
-							this.pick = new mui.PopPicker({
-								layer: 1
-							});
-							this.pick.setData(thousandValue);
-							this.pick.pickers[0].setSelectedIndex(this.numValue);
-
-							this.pick.show(function(items) {
-								this.numValue = items[0].value;
-								var name = ''+id + '(' + (!(this.index % 2) ? ('>') : ('<=')) + this.numValue + ')';
-								this.onSelectedTap({
-									name: name
-								});
-							}.bind(this));
-						}
+							return;
+						};
+						this.index = i;
+						this.mask = true;
+						this.selectImg = img;
 					},
-				});
-			</script>
+					onCancelTap: function() {
+						this.mask = false;
+					},
+					onSelectedTap: function(o) {
+						this.mask = false;
+						app.page.setResult({
+							title: o.name,
+							img: this.selectImg,
+						}).close();
+					},
+				}
+			});
+		</script>
 	</body>
 
 </html>
-"use strict" var fs = require("fs"); var data = "[["; for(var i = 0; i<=1000; i++){ data+=(i+ ','); } data+=']]' ; fs.writeFile( "value_0-1000.js",data,function(err){ if(err){ console.log(err); }else{ console.log( "file writes sucess!!") } })
