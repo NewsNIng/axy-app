@@ -447,18 +447,18 @@
 					</div>
 					<div v-show="active === 1">
 						<ul class="mui-table-view a1-room app-font-size-32">
-							<li class="mui-table-view-cell mui-collapse" v-for="o, i in devaccessroyList2">
+							<li class="mui-table-view-cell mui-collapse" v-for="o, i in devaccessroyList2" :key="i">
 								<a class="mui-navigate-right" href="#">
 
 									<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[i]" v-if="iconList[i]" />
 									<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-else/>
 
 									<span class="app-font-size-30">{{_findAccName(i)}}</span>
-									<span class="mui-pull-right app-font-size-30">{{o.length}}</span>
+									<span class="mui-pull-right app-font-size-30">{{o.appArray.length}}</span>
 								</a>
 								<div class="mui-collapse-content">
 
-									<div class="flex a1-list" v-for="oo,ii in o" @tap="onZoneTap(oo, oo.appIndex)">
+									<div class="flex a1-list" v-for="oo,ii in o.appArray" @tap="onZoneTap(oo, o.appIndex)" :key="oo.aid">
 										<div class="flex" style="flex: 1; flex-direction: column;height: 2.026666rem;">
 											<div class="flex app-font-size-28" style="flex: 1; align-items: center; justify-content: flex-start;">
 												<span style="margin:0 0.2rem 0 0.346666rem;" class="app-color-9f9fa0">当前状态</span>
@@ -728,6 +728,9 @@
 						return this.netDivList[this.controlIndex];
 					},
 					devaccessroyList2: function() {
+						
+						
+						
 						var dir = {},
 							arr = this.devaccessroyList,
 							l = arr.length;
@@ -736,13 +739,17 @@
 
 						for(var i = 0; i < l; i++) {
 							if(!dir[arr[i].type]) {
-								dir[arr[i].type] = [];
+								dir[arr[i].type] = {
+									appIndex: i,
+									appArray: []
+								};
 							}
-							arr[i].appIndex = i;
-							dir[arr[i].type].push(arr[i]);
+							// arr[i].appIndex = i;
+							dir[arr[i].type].appArray.push(arr[i]);
 						}
+						
 
-						return dir;
+						return dir;  
 					},
 				},
 
@@ -1106,7 +1113,6 @@
 									that.devaccessroyList.splice(i, 1);
 								}
 							}
-
 							// TODO 修复数据结构问题
 							o.id = o.aid;
 							var info = {
@@ -1115,7 +1121,7 @@
 								devType: o.devtype,
 								statusCode: o.statecode
 							};
-
+							
 							app.page.openForResultBy(pageUrl, 'dev_' + o.type, function(data) {
 								actionDir[data.action](data.info);
 							}, {
@@ -1294,7 +1300,7 @@
 						dal.ir.list(function(err, data){
 							if(err){
 								return mui.toast(err.message);
-							}
+							} 
 							that.irList = data;
 						});
 					},
