@@ -3,7 +3,7 @@
 	var ir = {};
 
 	// 获取红外遥控列表
-	ir.get = function(callback){
+	ir.list = function(callback){
 		return ra('get', '/ir/list', {
 			
 		}, callback);

@@ -152,7 +152,7 @@
 
 				// 获取当前应用版本
 				plus.runtime.getProperty(plus.runtime.appid, function(info) {
-					var appVersion = version2number(info.version);
+					//var appVersion = version2number(info.version);
 					dal.system.update(plus.runtime.version, info.version, function(err, data) {
 						if(err) {
 							return mui.toast(err.message);
@@ -165,9 +165,9 @@
 							mui.toast("暂无更新");
 							return;
 						}
-						var newAppVersion = version2number(data.version);
+						//var newAppVersion = version2number(data.version);
 
-						if(newAppVersion > appVersion) {
+						//if(newAppVersion > appVersion) {
 							// 需要隐藏升级？
 							if(data.hide) {
 								rsmanager._install(data.path, function(succ) {}, true);
@@ -182,12 +182,12 @@
 								message: data.message, // 更新内容
 							});
 
-						} else {
-							if(mui.os.ios) {
-								return;
-							}
-							mui.toast("您已经是最新版本，无需更新");
-						}
+						//} else {
+							//if(mui.os.ios) {
+								//return;
+							//}
+							//mui.toast("您已经是最新版本，无需更新");
+						//}
 
 					});
 

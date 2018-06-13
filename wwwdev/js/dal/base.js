@@ -9,7 +9,7 @@ var dal = {
 	BASE_URL_TOP: "http://www.isee110.com/api",
 	BASE_SHARE_URL: "http://vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
 	//BASE_SHARE_URL: "http://192.168.1.103:8080/module/index.html",
-	BASE_URL_VERSION: "218",
+	BASE_URL_VERSION: "216",
 	
 };
 
@@ -45,8 +45,7 @@ function requestAdapter(type, url, params, callback) {
 	if(BASE_URL) {
 		delete params.BASE_URL;
 	} else {
-		// BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL_DEV;
-		BASE_URL = dal.BASE_URL_TEST;
+		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL_TEST;
 	}
 	var apiUrl = url;
 	url = BASE_URL + url;
@@ -64,7 +63,7 @@ function requestAdapter(type, url, params, callback) {
 			loginid: window.localStorage.getItem('_loginid_') || "",
 			imei: window.localStorage.getItem('_imei_') || "",
 			account: params.account,
-			//appversion: dal.BASE_URL_VERSION,
+//			appversion: dal.BASE_URL_VERSION,
 		},
 		data: params,
 		type: type,

@@ -6,9 +6,11 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<!--mui css-->
+		<script src="html5plus://ready"></script>
 		<script type="text/javascript" src="../js/common/flexible.js"></script>
 		<link rel="stylesheet" href="../css/lib/mui.min.css" />
 		<link rel="stylesheet" href="../css/app/app.css" />
+		
 		<style type="text/css">
 			nav {
 				box-shadow: 0px 0px 0px #ccc !important;
@@ -34,10 +36,12 @@
 				color: #929292 !important;
 			}
 			
-			/*.icon2 {
+			.icon2 {
 				opacity: 0;
-			}*/
+			}
 		</style>
+		
+		
 	</head>
 
 	<body>
@@ -75,6 +79,7 @@
 		<script type="text/javascript" src="../js/common/android-back.js"></script>
 
 		<script type="text/javascript" src="../js/app/app-mall.js"></script>
+		<script type="text/javascript" src="../js/app/app-statis.js" ></script>
 
 		<script>
 			// 4个子webview统一样式
@@ -99,17 +104,17 @@
 					extras: {},
 				},
 
-//				{
-//					url: '',
-//					id: 'mall',
-//					icon: 'mui-icon-phone',
-//					name: '商城',
-//					styles: {
-//						bottom: '0px',
-//						top: '0px'
-//					},
-//					extras: {},
-//				},
+				{
+					url: '',
+					id: 'mall',
+					icon: 'mui-icon-phone',
+					name: '商城',
+					styles: {
+						bottom: '0px',
+						top: '0px'
+					},
+					extras: {},
+				},
 
 				{
 					url: './nearby/index.html',
@@ -138,10 +143,9 @@
 						index: 0, // 默认下标
 					}
 				},
-				mounted: function() {
-
-				},
-				plusReady: function() {
+				created: function() {
+					
+					plus.nativeUI.closeWaiting();
 					
 					
 					_B = new ni.Broadcast();
@@ -167,46 +171,73 @@
 					this._listenTabar();
 
 					// 加载商城图标
-					//this._loadMallIcon();
+					this._loadMallIcon();
 					
 					// 监听商城触发的登录事件
-//					_B.on("AppBridge_openLoginPage", function(){
-//						app.user.get(function(u){
-//							u && _B.emit("login_success", {
-//								userInfo: u
-//							}, {
-//								views: ["mall"]
-//							});
-//						});
-//					});
+					_B.on("AppBridge_openLoginPage", function(){
+						app.user.get(function(u){
+							u && _B.emit("login_success", {
+								userInfo: u
+							}, {
+								views: ["mall"]
+							});
+						});
+					});
 
 				},
 				methods: {
 					// 加载商城图标
 					_loadMallIcon: function() {
-
-						var leftPos = Math.ceil((window.innerWidth - 58) / 2);
-
+						var that = this;
+						var $view = plus.webview.currentWebview();
+						
+						var leftPos = Math.ceil((plus.screen.resolutionWidth - 58) / 2);
+						
 						var view = new plus.nativeObj.View('mall_view', {
 							width: "58px",
 							height: "58px",
 							left: leftPos + "px",
 							bottom: "5px",
+							
 						});
  
-						view.drawBitmap('../image/main/mall2.png', {}, {}, "mall_icon");
-
 						view.addEventListener('click', function() {
-							this._openMall();
-						}.bind(this));
-
-						this.$view.append(view);
+							that._openMall();
+						});
+						
+						$view.append(view);
 						view.show();
+						setTimeout(function(){
+							view.drawBitmap('../image/main/mall2.png', {}, {}, "mall_icon");	
+						}, mui.os.ios? 500: 0);
+						
+						
+						
+						
+						return;
+						
+						Rx.Observable.create(function(ob){
+							$view.addEventListener("loaded", function(){
+								ob.next();
+							});
+						})
+						.merge(Rx.Observable.timer(1e3))
+						.first()
+						.delay(mui.os.ios ? 200: 10)
+						.subscribe(function(data){
+							
+							
+						});
 					},
 
 					// 打开商城
 					_openMall: function() {
 						app.mall.openHome();
+						
+						// [事件]进入商城
+						app.statis.emit("shop", {
+							from: "home"
+						});
 						
 //						if(app.mall.hasView()) {
 //							app.mall.getView().show('pop-in', 250);
@@ -228,13 +259,13 @@
 						}
 
 						// 如果点击的是商城
-//						if(index === 2) {
-//							return;
-//						}
+						if(index === 2) {
+							return;
+						}
 
 						Rx.Observable.create(function(ob) {
 								// 个人中心登录拦截
-								if(index === 3) {
+								if(index === 4) {
 									app.user.get(function(u) {
 										u && setTimeout(function() {
 											ob.next();
@@ -301,14 +332,19 @@
 			});
 
 			setTimeout(function() {
+				console.log("[===当前主页检查更新未开启，请检查===]");
+				console.log("[===当前主页检查更新未开启，请检查===]");
+				console.log("[===当前主页检查更新未开启，请检查===]");
+				return console.log("[===当前主页检查更新未开启，请检查===]");
+				
 				mui.plusReady(function() {
-					function version2number(version) {
-						return +(version.split('.').join(''));
-					}
+//					function version2number(version) {
+//						return +(version.split('.').join(''));
+//					}
 
 					// 获取当前应用版本
 					plus.runtime.getProperty(plus.runtime.appid, function(info) {
-						var appVersion = version2number(info.version);
+						//var appVersion = version2number(info.version);
 						dal.system.update(plus.runtime.version, info.version, function(err, data) {
 							if(err) {
 								return; // mui.toast(err.message);
@@ -317,9 +353,9 @@
 							if(!data) {
 								return;
 							}
-							var newAppVersion = version2number(data.version);
+							//var newAppVersion = version2number(data.version);
 
-							if(newAppVersion > appVersion) {
+							//if(newAppVersion > appVersion) {
 								// 需要隐藏升级？
 								if(data.hide) {
 									rsmanager._install(data.path, function(succ) {}, true);
@@ -348,9 +384,9 @@
 									title: data.title, // 更新提示框的标题内容 可以设置为app的版本号
 									message: data.message // 提示框显示内容，可以设置为app新版内容功能讲解  \n换行
 								});**/
-							} else {
+							//} else {
 								//console.log("无需更新"); 
-							}
+							//}
 
 						});
 

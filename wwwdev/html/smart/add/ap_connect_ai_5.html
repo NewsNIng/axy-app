@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>连接设备</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+				width: 100%;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.dev_icon {
+				width: 100%;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-size: 50%;
+				position: relative;
+			}
+			
+			.dev_text {
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				margin-bottom: 0.4rem;
+				text-align: center;
+				color: #333333;
+				/*font-weight: bold;*/
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.time {
+				background-color: #06C1AE;
+				padding: 0.106666rem 0.346666rem;
+				float: left;
+				margin-left: 50%;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				color: white;
+			}
+			
+			.imgbg {
+				width: 100%;
+				padding: 1.5rem;
+			}
+			
+			.imgbg>img {
+				width: 100%;
+			}
+			
+			.unavailable {
+				background: #7FD4CC;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">连接设备</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="imgbg">
+					<img :src="bgp" />
+				</div>
+				<div class="dev_icon app-font-size-30">
+					<div class="dev_text app-font-size-34">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
+				</div>
+				<div class="time app-font-size-24" v-text="t+'s'"></div>
+
+			</div>
+			<div class="foot app-font-size-34" :class="{unavailable:!isConnected}" @tap="onNext()">完成</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+
+		<!--请求相关-->
+		<!--<script type="text/javascript" src="../../../js/dal/base.js"></script>-->
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+		<script type="text/javascript" src="arr.js"></script>-->
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+		<script type="text/javascript">
+			var P = plug.H5NativeBridge;
+
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						needConnDevNameArr: ["AX-903", "WG-100", "AX-904", "VH-104MG", "VH-104DG", "VH-104GN", "AX-801"],
+
+						t: 100,
+						timer: -1,
+
+						devid: "",
+						
+						setid: "",
+
+						bgp: '../../../image/smart/devices/dev_icon/AX-360@3x.png',
+						type: -1,
+
+						isConnected: false,
+					};
+				},
+				mounted: function() {
+					// get prev url params
+					function GetQueryString(name) {
+						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if(r != null) return unescape(r[2]);
+						return null;
+					}
+					
+					this.setid = GetQueryString("setid");
+					
+					// start timer
+					this.startTimer();
+				},
+				computed: {
+					// 是否需要提示连接摄像头
+					needConn: function() {
+						var rs = this.needConnDevNameArr.indexOf(app.dev.findName(this.type));
+						if(rs >= 0) {
+							return true;
+						}
+						return false;
+					}
+				},
+				plusReady: function() {
+					this.addDeviceByAP();
+				},
+				methods: {
+					
+					// 通过AP热点添加的设备
+					addDeviceByAP: function _addap(){
+						var that = this;
+						var setid = that.setid;
+						plug.H5NativeBridge.checkAIDeviceIsConnAsync(function(data){
+							data = JSON.parse(data);
+							if(data.code == "0"){
+								var list = data.data;
+								for(i = 0, l = list.length; i < l; i++) {
+									item = list[i];
+									if(item.setid === setid) {
+										that.devid = item.devid;
+										// 进行添加
+										dal.device.add(that.devid, function(err, data) {
+											if(err) {
+												return that.over(err.message || "连接失败，请重试");
+											} 
+											return that.over("添加成功，请点击完成！", true);
+										});
+										return;
+									}
+								}
+								list = null;
+								item = null;
+							}
+							setTimeout(_addap.bind(that), 3000);
+						});
+					},
+					
+
+					
+
+					startTimer: function() {
+						var that = this;
+						(function _() {
+							that.t--;
+							if(that.t <= 0) {
+								that.over("连接失败，请重试");
+							}
+							that.timer = setTimeout(_, 1000);
+						}());
+					},
+					onNext: function() {
+						if(!this.isConnected) {
+							return;
+						}
+						
+						mui.openWindow('add_completed.html', 'add_completed', {
+							extras: {
+								needConn: this.needConn,
+								devid: this.devid,
+							}
+						});
+						return;
+					},
+					over: function(msg, close) {
+						if(this.timer >= 0) {
+							window.clearTimeout(this.timer);
+							this.timer = -1;
+						}
+						mui.toast(msg);
+						if(close) {
+							// 连接成功
+							this.isConnected = true;
+							return;
+							// return this.$view.close();***
+						}
+						this.$view.back();
+					},
+					
+					
+					
+				}
+			});
+		</script>
+	</body>
+
+</html>

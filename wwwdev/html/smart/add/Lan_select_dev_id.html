@@ -33,15 +33,25 @@
 				width: 0.426666rem;
 			}
 			
-			.foot {
+			.foot1,
+			.foot2 {
 				position: fixed;
-				width: 100%;
+				width: 50%;
 				height: 1.173333rem;
 				line-height: 1.173333rem;
 				color: white;
 				text-align: center;
 				bottom: 0;
-				background-color: #06c1ae;
+			}
+			
+			.foot1 {
+				background-color: #E5E6E7;
+				color: #06C1AE;
+			}
+			 
+			.foot2 {
+				right: 0;
+				background-color: #06C1AE;
 			}
 			
 			.title {
@@ -68,7 +78,7 @@
 				color: #2BB8AA;
 				width: 100%;
 				text-align: center;
-				height: ;
+				/*height: ;*/
 				/*background-color: gray*/
 			}
 			
@@ -111,7 +121,6 @@
 					选择需要添加的设备ID
 				</div>
 				<div class="wrapper" ref="wrapper">
-
 					<ul class="mui-table-view app-font-size-28">
 						<template v-for="o,i in devs">
 							<li class="mui-table-view-cell" @tap="onSelectTap(i)" :key="o.devid">
@@ -125,7 +134,9 @@
 				</div>
 			</div>
 			<div v-if="!noWifi" class="help app-font-size-34" @tap="setWifi()">配置WIFI</div>
-			<div class="foot app-font-size-34" @tap="onNext()" ref="btn">下一步</div>
+			
+			<div class="foot1 app-font-size-34" @tap="onBack()">上一步</div>
+			<div class="foot2 app-font-size-34" @tap="onNext()" ref="btn">下一步</div>
 		</div>
 		<!--沉浸式动态处理-->
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -155,7 +166,12 @@
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				//处理窗口关闭前的业务
+			    beforeback: function() {
+			    	plus.webview.currentWebview().close();
+			    },
+			});
 
 			var P = plug.H5NativeBridge;
 
@@ -226,6 +242,9 @@
 				methods: {
 					onSelectTap: function(i) {
 						this.devActive = i;
+					},
+					onBack: function() {
+						mui.back();
 					},
 					onNext: function() {
 						

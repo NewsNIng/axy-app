@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择开关类型</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #F4F8FB;
+			}
+			
+			.menu-warp {
+				height: 3.066666rem;
+			}
+			/*.select {
+				left: 0.346666rem;
+			}
+			
+			.select>img {
+				width: 0.426666rem;
+			}*/
+			
+			.foot1,
+			.foot2 {
+				position: fixed;
+				width: 50%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+			}
+			
+			.foot1 {
+				background-color: #E5E6E7;
+				color: #06C1AE;
+			}
+			
+			.foot2 {
+				right: 0;
+				background-color: #06c1ae;
+			}
+			
+			.title {
+				height: 0.96rem;
+				line-height: 0.96rem;
+				padding-left: 0.346666rem;
+				color: #9F9FA0;
+			}
+			/*.help {
+				position: fixed;
+				bottom: 60px;
+				left: 50%;
+				padding: 0.01rem 0;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				border-bottom: 1px solid #2BB8AA;
+				color: #2BB8AA;
+			}*/
+			
+			ul:not(.mui-pciker-list) {
+				margin-bottom: 2rem !important;
+			}
+			
+			.mui-table-view>.mui-table-view-cell {
+				color: #505050 !important;
+				height: 1.6rem;
+				line-height: 1.6rem;
+				padding: 0 15px !important;
+			}
+			
+			.mui-table-view-cell>img {
+				display: inline-block;
+				width: 0.746666rem;
+			}
+			
+			.mui-table-view-cell>input {
+				right: 15px !important;
+			}
+			
+			.mui-table-view-cell>span {
+				margin-left: 1.12rem;
+			}
+			
+			.vertical_center {
+				position: absolute;
+				top: 50% !important;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			/*.mui-table-view-cell,
+			.mui-table-view-cell>a {
+				height: 1.6rem !important;
+			}
+			
+			.mui-table-view-cell>a {
+				padding: 0.3rem !important;
+				padding-left: 1.04rem !important;
+				line-height: 0.6rem !important;
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7 !important;
+			}*/
+			
+			.mui-checkbox input[type=checkbox]:before,
+			.mui-radio input[type=radio]:before {
+				color: #2BB8AA;
+			}
+			
+			.mui-checkbox input[type=checkbox]:checked:before,
+			.mui-radio input[type=radio]:checked:before {
+				color: #2BB8AA;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">选择开关类型</h1>
+			</header>
+
+			<div class="mui-content">
+				<div class="title app-font-size-24">
+					请选择开关档位数
+				</div>
+				<ul class="mui-table-view app-font-size-28">
+					<li class="mui-table-view-cell mui-input-row mui-checkbox" @tap="onSelectTap(0)">
+						<img class="vertical_center" src="../../../image/smart/add/one@3x.png" />
+						<span>一档</span>
+						<input class="vertical_center" value="Item 4" type="checkbox" :checked="checkboxs[0]">
+					</li>
+					<li class="mui-table-view-cell mui-input-row mui-checkbox" @tap="onSelectTap(1)">
+						<img class="vertical_center" src="../../../image/smart/add/two@3x.png" />
+						<span>二档</span>
+						<input class="vertical_center" value="Item 4" type="checkbox" :checked="checkboxs[1]">
+					</li>
+					<li class="mui-table-view-cell mui-input-row mui-checkbox" @tap="onSelectTap(2)">
+						<img class="vertical_center" src="../../../image/smart/add/three@3x.png" />
+						<span>三档</span>
+						<input class="vertical_center" value="Item 4" type="checkbox" :checked="checkboxs[2]">
+					</li>
+				</ul>
+			</div>
+			<div class="foot1 app-font-size-34" @tap="onBack()">上一步</div>
+			<div class="foot2 app-font-size-34" @tap="onNext()">下一步</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
+
+		<script type="text/javascript">
+			mui.init({
+				//处理窗口关闭前的业务 
+				beforeback: function() {
+					app.page.setResult({}).close();
+					return false;
+				},
+			});
+
+			var wayPick;
+
+			var vm = new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+						checkboxs: [false,false,false],
+						index: -1,
+					};
+				},
+				computed: {
+					indexDev: function() {
+						return this.devs[this.devActive];
+					},
+					//					devs: function() {
+					//						var tempName;
+					//						return this.devs_.filter(function(item) {
+					//							if(item.online !== 1) {
+					//								return false;
+					//							}
+					//							tempName = app.dev.findName(item.type)
+					//							if(this.filter.indexOf(tempName) >= 0) {
+					//								return false;
+					//							}
+					//							return true;
+					//						}.bind(this));
+					//					}
+
+				},
+				mounted: function() {
+					wayPick = new mui.PopPicker({
+						layer: 1,
+						more: false,
+					});
+
+				},
+				plusReady: function() {
+
+				},
+				methods: {
+					onSelectTap: function(i) {
+						this.clearSelect();
+						this.index = i;
+						this.checkboxs[this.index] = true;
+					},
+					clearSelect: function() {
+						this.checkboxs = [false,false,false];
+					},
+					onBack: function() {
+						mui.back();
+					},
+					onNext: function() {
+						if(this.index < 0){
+							return mui.toast("请选择档位");
+						}
+						app.page.setResult({
+							type: this.index+1
+						}).close();
+					},
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

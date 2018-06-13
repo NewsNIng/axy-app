@@ -25,7 +25,7 @@
 			}
 			
 			.actions_item {
-				height: 1.386666rem;
+				height: 1.333333rem;
 				padding-left: 0.346666rem;
 				background-color: white;
 				/*border-bottom: 1px solid #E5E6E7;*/
@@ -68,12 +68,118 @@
 				font-size: 15px !important;
 			}
 			
+			.com-dev-mask {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 98;
+			}
+			
+			.com-dev {
+				position: fixed;
+				left: 0;
+				bottom: 0;
+				width: 100%;
+				/*min-height: 30%;*/
+				z-index: 99;
+				/*				background-color: #FFFFFF;*/
+				background-color: #F4F8FB;
+				/*max-height: 50%;*/
+			}
+			
+			.com-dev .mui-table-view-cell {
+				text-align: center;
+				height: 1.386666rem;
+				padding: 0;
+				line-height: 1.386666rem;
+			}
+			
+			.com-dev ul:last-child {
+				margin-top: 0.266666rem;
+			}
+			
+			.mui-table-view-cell>a {
+				height: 100%;
+			}
+			
+			.mui-table-view-cell>a:not(.mui-btn) {
+				margin: 0;
+			}
+			
+			.mui-table-view:after {
+				height: 0;
+			}
+			
+			.mui-table-view-cell:after {
+				right: 15px;
+				background-color: #E4E5E6;
+			}
+			
+			.mui-table-view:before {
+				height: 0;
+			}
+			
+			.scroll {
+				max-height: 6.826666rem !important;
+				overflow-x: hidden;
+				overflow-y: scroll;
+			}
+			
 			[data-dpr="2"] .mui-poppicker-header .mui-btn {
 				font-size: 30px !important;
 			}
 			
 			[data-dpr="3"] .mui-poppicker-header .mui-btn {
 				font-size: 45px !important;
+			}
+			
+			.actions_item {
+				height: 1.6rem;
+				padding-left: 0.346666rem;
+				background-color: white;
+				position: relative;
+				/*border-bottom: 1px solid #E5E6E7;*/
+			}
+			
+			.actions_item:after {
+				content: "";
+				position: absolute;
+				height: 1px;
+				left: 0.346666rem;
+				right: 0;
+				bottom: 0;
+				background-color: #E5E6E7;
+			}
+			
+			.actions_item:last-child:after {
+				height: 0;
+			}
+			
+			.actions_item:active {
+				background-color: #EFEFEF;
+			}
+			
+			.actions_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.actions_icon {
+				float: left;
+				width: 0.48rem;
+			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
 			}
 		</style>
 	</head>
@@ -83,39 +189,43 @@
 
 			<header class="mui-bar mui-bar-nav app-header">
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
-				<h1 class="mui-title">执行动作</h1>
-				<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
+				<h1 class="mui-title">选择动作</h1>
+				<!--<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
 					<img src="../../../image/smart/scenes/complete_icon.png" />
-				</a>
+				</a>-->
 			</header>
+			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
+				<div class="com-dev app-font-size-28" v-if="index>-1">
+					<ul class="mui-table-view app-font-size-30">
+						<li class="mui-table-view-cell">
+							<a class="">
+								<span>{{actions[index].tip}}</span>
+							</a>
+						</li>
+					</ul>
+					<ul class="mui-table-view app-font-size-30 scroll">
+						<li class="mui-table-view-cell" @tap="onSelectedTap(o)" v-for="o,i in actions[index].devList">
+							<a class="">
+								<span>{{o.name}}</span>
+							</a>
+						</li>
+					</ul>
+					<ul class="mui-table-view app-font-size-30">
+						<li class="mui-table-view-cell" @tap="onCancelTap()">
+							<a class="">
+								<span>取消</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
 			<div class="mui-content">
-				<div class="actions_item app-font-size-28" @tap="onSelectDev()">
-					<img class="actions_icon" :src="icon" />
-
-					<template v-if="devText">
-						<span class="mui-pull-right app-color-9f9fa0" style="line-height: 1.3896666rem;margin-right:0.346666rem;">{{devText}}</span>
+				<div v-for="o,i in actions" class="actions_item" @tap="onSelectDevTap(i, o.img, o.name)">
+					<img class="actions_icon" :src="o.img" />
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					<div class="title app-font-size-28">{{o.name}}</div>
 					</template>
-					<template v-else>
-						<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-					</template>
-
-					<div class="title app-font-size-28" v-text="name"></div>
-
 				</div>
-				<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
-				<div class="actions_item app-font-size-28">
-					<img class="actions_icon" src="../../../image/smart/scenes/icon_Timing start@3x.png" />
-
-					<template v-if="devDelay">
-						<span class="mui-pull-right app-color-9f9fa0" style="line-height: 1.3896666rem;margin-right:0.346666rem;">{{devDelayText}}</span>
-					</template>
-					<template v-else>
-						<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-					</template>
-
-					<div @tap="onPickTap()" class="title app-font-size-28">延迟设置</div>
-				</div>
-				<div style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>
 			</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -138,66 +248,170 @@
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-act.js"></script>
+		<script type="text/javascript" src="../../../js/dal/scene.js"></script>
 
 		<script type="text/javascript">
 			mui.init();
-
-			new Vue({
+			var vm = new Vue({
 				el: '#box',
 				data: function() {
 					return {
-						pick: null,
-						name: '选择设备',
-						icon: 　 '../../../image/smart/scenes/btn_Selection device@3x.png',
-						devText: '',
-						devDelay: 0,
-						devDelayText: '',
+						picker: null,
+						mask: false, // 遮罩控制
+						index: -1, // 弹框索引
+						actionText: '', //
+						actions: app.act.getActions(),
+						actionsMapList: [],
+						actionsMapObj: {
+							"devlist": [{
+									"devid": "AX-00000",
+									"devname": "devicename1"
+								},
+								{
+									"devid": "AX-00001",
+									"devname": "devicename2"
+								}
+							],
+							"acclist": [{
+									"accID": "12345678",
+									"accName": "accName0",
+									"extend": {
+										"lightPos": [1, 2, 3]
+									}
+								},
+								{
+									"accID": "12345679",
+									"accName": "accName1"
+								}
+							],
+							"irc": [{
+									"irID": "adfaf132a1564adf1321a3d2f",
+									"ircName": "ircName0"
+								},
+								{
+									"irID": "adfaf132a1564adf1321a3d2f",
+									"ircName": "ircName0"
+								}
+							]
+						},
+						selectList: [],
+						selectListHeigt: 1, //深度
+						parseFuncName: "",
 					};
 				},
-
-				mounted: function() {
-					this.pick = new mui.PopPicker({
-						layer: 2,
-						more: true
-					});
-					this.pick.setData(pick_data);
-				},
-				plusReady: function() {},
-				methods: {
-					onPickTap: function() {
-
-						var that = this;
-						var fn = function(m, s) {
-							that.devDelay = m * 60 + s; // 单位 秒
-							that.devDelayText = m + '分' + s + '秒';
-						};
-
-						this.pick.show(function(items) {
-							fn(items[0].value, items[1].value);
-						}, function(items) {
-							fn(items[0].value, items[1].value);
-						});
-					},
-					onSelectDev: function() {
-						app.page.openForResultBy('select_device.html', 'select_device', function(data) {
-							this.devText = data.text;
-							this.icon = data.dev.img;
-							this.name = data.dev.name;
-						}.bind(this));
-					},
-					onSaveTap: function() {
-						if(this.devText === "") {
-							mui.toast("请选择设备！");
-							return;
-						}
-						app.page.setResult({
-							dev: {
-								icon: this.icon,
-								name: this.name,
-								text: this.devText,
-								//value: this.value,
+				watch: {
+					selectList: {
+						deep: true,
+						handler: function(newVal) {
+							var _this = this;
+							if(newVal.length == 0){
+								return mui.toast('暂无可选值')
 							}
-						}).close();
+							var options = _this.selectListHeigt > 1 ? {
+								layer: 2,
+							} : {layer: 1};
+							var picker = new mui.PopPicker(options);
+							picker.setData(newVal)
+							picker.show(function(SelectedItem) {
+								var currentAction = _this.actions[_this.index];
+								var returnObj = {
+									name: currentAction.name,
+									icon: currentAction.img,
+									randomId: Math.random().toString().split(".")[1],
+									type: currentAction.actionId,
+									selectInfo: SelectedItem,
+								}
+								if(currentAction.actionId == 0x100){
+									returnObj.alarmOn = currentAction.alarmOn
+								}
+								picker.dispose();
+								app.page.setResult(returnObj).close();
+							}, function() {})
+						}
+					}
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {
+					var isScenes = this.$view.isScenes; //表示隐藏声光响铃
+					if(isScenes) {
+						this.actions.splice(2, 1);
+					}
+				},
+				methods: {
+					onCancelTap: function() {
+						this.mask = false;
+					},
+					setSelectList: function() {
+						var returnList = [];
+						var _this = this;
+						var actionsMapObj = this.actionsMapList[this.index];
+						_this.selectListHeigt = 1;
+						for(var i in actionsMapObj) {
+							var item = actionsMapObj[i];
+							if(item && item.length > 0) {
+								item.forEach(function(devObj, index) {
+									var type = i;
+									if(type == 'devlist') {
+										returnList.push({
+											value: devObj['devid'],
+											text: devObj['devname'],
+											type: 'devlist',
+											typeName: 'devtype',
+											typeNumber: devObj['devtype'],
+										})
+									} else if(type == 'acclist') {
+										var temp = {
+											value: devObj['accID'],
+											text: devObj['accName'],
+											type: 'acclist',
+											typeName: 'acctype',
+											typeNumber: devObj['acctype'],
+										}
+										if(devObj.extend) {
+											var parseFunc = app.act[_this.parseFuncName];
+											if(typeof parseFunc != 'function') return;
+											temp.children = parseFunc(devObj.extend[_this.parseFuncName]);
+											_this.selectListHeigt = 2;
+										}
+										returnList.push(temp)
+									} else if(type == 'irclist') {
+										returnList.push({
+											value: devObj['irID'],
+											text: devObj['ircName'],
+											type: 'irclist',
+											typeName: 'irctype',
+											typeNumber: devObj['irctype'],
+										})
+									}
+								})
+							}
+						}
+						this.selectList = returnList;
+					},
+					onScenesTap: function(i, img) {
+						this.mask = true;
+					},
+					onSelectDevTap: function(i, img, name) {
+						var actionType = this.actions[i].actionId;
+						var _this = this;
+						this.index = i;
+						this.parseFuncName = this.actions[this.index] && this.actions[this.index].parseFunc;
+						if(!this.actionsMapList[i]) {
+							plus.nativeUI.showWaiting();
+							dal.scene.getDevListByAction(actionType, function(err, data) {
+								plus.nativeUI.closeWaiting();
+								if(err) {
+									return mui.toast(err.message);
+								}
+								_this.actionsMapList[i] = data;
+								_this.setSelectList();
+							})
+						} else {
+							this.setSelectList();
+						}
 					},
 				}
 			});
