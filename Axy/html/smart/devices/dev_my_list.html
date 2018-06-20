@@ -447,18 +447,18 @@
 					</div>
 					<div v-show="active === 1">
 						<ul class="mui-table-view a1-room app-font-size-32">
-							<li class="mui-table-view-cell mui-collapse" v-for="o, i in devaccessroyList2">
+							<li class="mui-table-view-cell mui-collapse" v-for="o, i in devaccessroyList2" :key="i">
 								<a class="mui-navigate-right" href="#">
 
 									<img :src="'../../../image/smart/scenes/dev_icons/'+iconList[i]" v-if="iconList[i]" />
 									<img src="../../../image/smart/scenes/icon_Timing start@3x.png" v-else/>
 
 									<span class="app-font-size-30">{{_findAccName(i)}}</span>
-									<span class="mui-pull-right app-font-size-30">{{o.length}}</span>
+									<span class="mui-pull-right app-font-size-30">{{o.appArray.length}}</span>
 								</a>
 								<div class="mui-collapse-content">
 
-									<div class="flex a1-list" v-for="oo,ii in o" @tap="onZoneTap(oo, oo.appIndex)">
+									<div class="flex a1-list" v-for="oo,ii in o.appArray" @tap="onZoneTap(oo, o.appIndex)" :key="oo.aid">
 										<div class="flex" style="flex: 1; flex-direction: column;height: 2.026666rem;">
 											<div class="flex app-font-size-28" style="flex: 1; align-items: center; justify-content: flex-start;">
 												<span style="margin:0 0.2rem 0 0.346666rem;" class="app-color-9f9fa0">当前状态</span>
@@ -502,7 +502,51 @@
 							</li>
 
 						</ul>
+						
+						<ul class="mui-table-view a1-room app-font-size-32">
+							<li class="mui-table-view-cell mui-collapse">
+								<a class="mui-navigate-right" href="#">
 
+									<img src="../../../image/smart/scenes/dev_icons/btn_Remotecontrol@3x.png"/>
+
+									<span class="app-font-size-30">红外遥控</span>
+									<span class="mui-pull-right app-font-size-30">{{irList.length}}</span>
+								</a>
+								<div class="mui-collapse-content">
+
+									<div class="flex a1-list" v-for="oo,ii in irList" @tap="onIRTap(oo)">
+										<div class="flex" style="flex: 1; flex-direction: column;height: 2.026666rem;">
+											<div class="flex app-font-size-28" style="flex: 1; align-items: center; justify-content: flex-start;">
+												<span style="margin:0 0.2rem 0 0.346666rem;" class="app-color-9f9fa0">红外编码</span>
+												
+												<span class="app-color-333333">
+															{{oo.codeId}}
+														</span>
+												
+
+											</div>
+											<div class="flex flex-item-center app-font-size-32" style="flex: 1;">
+												<span  class="app-color-main">
+															{{oo.irModuleId}}
+														</span>
+												
+											</div>
+
+										</div>
+										<div class="flex flex-item-center mui-ellipsis" style="flex: 1; flex-direction: column;">
+											<div class="flex flex-item-center" style="flex: 1;">
+												<p class="mui-ellipsis app-font-size-32 app-color-333333">{{oo.name}}</p>
+											</div>
+											<div class="flex flex-item-center " style="flex: 1; ">
+												<p class="app-font-size-30 mui-ellipsis-2">{{oo.devId}}</p>
+											</div>
+
+										</div>
+									</div>
+
+								</div>
+							</li>
+						</ul>
 					</div>
 				</template>
 				<template v-else-if="isGeted">
@@ -529,6 +573,7 @@
 		<script type="text/javascript" src="../../../js/dal/device.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devparam.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
+		<script type="text/javascript" src="../../../js/dal/ir.js" ></script>
 
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
@@ -576,6 +621,8 @@
 
 			var DEVD;
 			//, DEVICE_AUTH;
+			
+			var ACC;
 
 			var wayPick;
 
@@ -603,13 +650,13 @@
 							var o = {
 								// 布防
 								"8": function() {
-									dev.workmode = app.dev.getArmBit(); // 0x01 << 30
+									dev.workmode = app.dev.getArmBit() | dev.workmode; // 0x01 << 30
 									// [事件]布防
 									app.statis.emit("arm");
 								},
 								// 撤防
 								"4": function() {
-									dev.workmode = 0;
+									dev.workmode = app.dev.getArmBit() ^ dev.workmode;
 									// [事件]撤防
 									app.statis.emit("disarm");
 								},
@@ -646,6 +693,9 @@
 
 						// 配件列表
 						devaccessroyList: [],
+						
+						// 红外遥控列表
+						irList: [],
 
 						iconList: {
 							"20": "btn_Warningsign@3x.png",
@@ -678,6 +728,9 @@
 						return this.netDivList[this.controlIndex];
 					},
 					devaccessroyList2: function() {
+						
+						
+						
 						var dir = {},
 							arr = this.devaccessroyList,
 							l = arr.length;
@@ -686,13 +739,17 @@
 
 						for(var i = 0; i < l; i++) {
 							if(!dir[arr[i].type]) {
-								dir[arr[i].type] = [];
+								dir[arr[i].type] = {
+									appIndex: i,
+									appArray: []
+								};
 							}
-							arr[i].appIndex = i;
-							dir[arr[i].type].push(arr[i]);
+							// arr[i].appIndex = i;
+							dir[arr[i].type].appArray.push(arr[i]);
 						}
+						
 
-						return dir;
+						return dir;  
 					},
 				},
 
@@ -722,6 +779,10 @@
 					}, this._down.bind(this));
 
 					DEVD = new ni.Cache('dev_list', [], {
+						plus: true
+					});
+					
+					ACC = new ni.Cache('acc_list', "", {
 						plus: true
 					});
 
@@ -789,14 +850,16 @@
 					_B.on('update', function(data) {
 						this.$set(this.netDivList, this.tapIndex, data.info);
 					}.bind(this));
-
-					Rx.Observable.create(function(ob) {
+					
+					var tab_active$ = Rx.Observable.create(function(ob) {
 						that.$watch("active", function(index) {
 							if(index === 1 && that.devaccessroyList.length === 0) {
 								ob.next(false);
 							}
 						})
-					}).merge(Rx.Observable.create(function(ob) {
+					});
+					
+					tab_active$.merge(Rx.Observable.create(function(ob) {
 						_B.on('zone_update', function() {
 							ob.next(true);
 						});
@@ -804,6 +867,22 @@
 						// 获取配件列表
 						that.getDevaccessroyData(hidewatting);
 					});
+					
+					
+					// 红外遥控信息监听 
+					var ir_update$ =  Rx.Observable.create(function(ob){
+						_B.on('ir_update', function(){
+							ob.next();
+						})
+					});
+					
+					Rx.Observable.empty().startWith(0).merge(ir_update$).subscribe(function(){
+						// 获取红外遥控列表
+						that.getIrListData();	
+					});
+					
+					
+					
 
 					mui.back = function() {
 						plus.webview.getWebviewById('add_completed') && plus.webview.getWebviewById('add_completed').close();
@@ -845,7 +924,8 @@
 									return mui.toast(err.message);
 								}
 								this.devaccessroyList = data;
-
+								// 缓存配件信息到本地
+								this._saveACCData(data);
 							}.bind(this));
 						}
 
@@ -923,7 +1003,7 @@
 
 									data = data.map(function(item) {
 										return {
-											text: item.name,
+											text: (item.name || item.uuid) + (item.online ? "" : "(离线)"),
 											value: item.no
 										}
 									});
@@ -1033,7 +1113,6 @@
 									that.devaccessroyList.splice(i, 1);
 								}
 							}
-
 							// TODO 修复数据结构问题
 							o.id = o.aid;
 							var info = {
@@ -1042,7 +1121,7 @@
 								devType: o.devtype,
 								statusCode: o.statecode
 							};
-
+							
 							app.page.openForResultBy(pageUrl, 'dev_' + o.type, function(data) {
 								actionDir[data.action](data.info);
 							}, {
@@ -1208,9 +1287,36 @@
 							}
 							console.log(JSON.stringify(data));
 							this.devaccessroyList = data;
-
+							
+							// 缓存配件信息到本地
+							this._saveACCData(data);
 						}.bind(this));
 					},
+					
+					
+					// 获取红外遥控列表
+					getIrListData: function(){
+						var that = this;
+						dal.ir.list(function(err, data){
+							if(err){
+								return mui.toast(err.message);
+							}
+							that.irList = data;
+						});
+					},
+					
+					// 红外遥控点击事件
+					onIRTap: function(o){
+						// 进入原生操控页面
+						P.EnterInfraredDeviceAsync(o, function(){
+							/**
+							 * 可能被删除或者更改了信息
+							 * 需要重新获取一次红外遥控信息
+							 */
+							_B.emitSelf("ir_update", {});
+						});
+					},
+					
 
 					onSwipe: function(e, o) {
 						console.log(JSON.stringify(e));
@@ -1229,6 +1335,11 @@
 
 					_isArm: function(mode) {
 						return app.dev.isArm(mode);
+					},
+					
+					// 保存配件信息至本地
+					_saveACCData: function(data){
+						ACC.data = data;
 					},
 				}
 			});

@@ -410,8 +410,8 @@
 
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/message.js"></script>
-		
-		<script type="text/javascript" src="../../../js/app/app-statis.js" ></script>
+
+		<script type="text/javascript" src="../../../js/app/app-statis.js"></script>
 
 		<script type="text/javascript">
 			mui.init({
@@ -593,8 +593,7 @@
 						}
 						return false;
 					}.bind(this)
-					
-					
+
 					// [事件]查看告警消息
 					app.statis.emit("alarm");
 				},
@@ -833,8 +832,6 @@
 							return;
 						}
 
-						console.log(JSON.stringify(o));
-
 						// TODO 需要获取到通道信息
 						var w1 = 0;
 						// 遍历获取 设备的 在线状态 so stupid
@@ -843,6 +840,10 @@
 						for(var i = 0, l = devData.length; i < l; i++) {
 							temp = devData[i];
 							if(temp.devid === o.devid && temp.online === 1) {
+								// 判断设备是否是GPRS模式
+								if(app.dev.isGPRS(o.workmode)) {
+									return mui.toast("设备处于GPRS模式");
+								}
 								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, temp.type === 0x1046 ? 1 : 0, this.fixName(o.location), function() {});
 								return;
 							}

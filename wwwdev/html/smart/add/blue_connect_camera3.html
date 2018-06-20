@@ -158,7 +158,6 @@
 						if(r != null) return unescape(r[2]);
 						return null;
 					}
-					this.cuid = GetQueryString("cuid");
 					this.pwd = GetQueryString("pwd");
 					this.cid = GetQueryString("cid");
 
@@ -166,9 +165,30 @@
 					this.startTimer();
 				},
 				plusReady: function() {
+					this.genCuid();
 					this.isConnectedWithDevice();
 				},
 				methods: {
+					
+					genCuid: function(){
+						var ID = new ni.Cache("blueuuid", "", {
+							plus: true
+						});
+						
+						if(!ID.data){
+							ID.data = (function(){
+							  function S4() {
+							    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+							  }
+							  return (S4()+S4()+S4()+S4()+S4()+S4()+S4()+S4());
+							})();
+						}
+						
+						this.cuid = ID.data;
+						
+					},
+					
+					
 					onPrev: function() {
 						mui.back();
 					},
@@ -187,12 +207,34 @@
 					// 设备连接状态（Optional）
 					isConnectedWithDevice: function() {
 						var that = this;
-						P.isConnectedWithDevice(this.cid, this.pwd, this.cuid, function(data) {
-							// 添加设备
-							that.addDevice();
-						}, function(err) {
-
-						});
+						
+						(function startCheck(){
+							P.isConnectedWithDevice(that.cid, that.pwd, that.cuid, function(data) {
+								var rs = data;
+								try{
+									// 解析json
+									data = JSON.parse(data);
+									data = data.code;
+								}catch(e){
+									data = rs;
+								}
+								
+								
+								// 如果错误 则 继续监测
+								if(data != "0"){
+									if(that.timer >= 0){
+										return setTimeout(startCheck, 2000);
+									}
+								}else{
+									// 添加设备
+									that.addDevice();	
+								}
+							}, function(err) {
+	
+							});
+						}());
+						
+						
 					},
 
 					// 通过设备ID进行添加 且 验证

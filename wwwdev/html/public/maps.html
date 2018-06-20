@@ -172,7 +172,7 @@
 							this.latitude = p.coord.latitude;
 							
 							//this.searchObj.poiSearchInbounds("");
-							this.searchObj.poiSearchNearBy(p.address, value, 25);
+							this.searchObj.poiSearchNearBy(p.address, value, 500);
 						}.bind(this), function(err) {
 							mui.toast(err.message);
 						});

@@ -34,7 +34,7 @@
 				transition-duration: 100ms;
 				box-shadow: 0px 0px 5px #EFEFEF;
 				text-align: center;
-				line-height: 1;
+				/*				line-height: 1;*/
 				color: #333333;
 				position: relative;
 				/*font-weight: bold;*/
@@ -96,7 +96,7 @@
 				min-height: 10%;
 				z-index: 99;
 				/*				background-color: #FFFFFF;*/
-				background-color: #FBFCFD
+				background-color: #F4F8FB;
 			}
 			
 			.com-dev>ul {
@@ -153,7 +153,7 @@
 
 			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
 				<slot></slot>
-				<div class="com-dev app-font-size-28" v-show="mask">
+				<div class="com-dev app-font-size-28">
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell" @tap="onEditTap()">编辑场景</li>
 						<li class="mui-table-view-cell" @tap="onDelTap()">删除场景</li>
@@ -165,19 +165,19 @@
 			</div>
 
 			<div class="mui-content">
-				<template v-for="o,i in scenes">
+				<template v-for="o,i in scenes" v-if="o.type !== 6">
 
-					<div class="app-font-size-30" @tap="onClickTap(o, i, o.img)">
+					<div class="app-font-size-30" @tap="onClickTap(o, i, o.icon)">
 						<span class="setting_icon" @tap.stop="onSetting(i)"><img src="../../../image/smart/scenes/btn_Setup@3x.png"/></span>
-						<img :src="o.img" />{{o.title}}<br /><span class="devWork app-font-size-26">{{o.workCount?o.workCount+'台设备工作中':'未添加任何执行动作'}}</span></div>
+						<img :src="'../../../image/smart/scenes/scenes_icons/'+o.icon+(isLoading && i === loading ?'.gif' : '.png')" />{{o.name}}</div>
 				</template>
 			</div>
-			<div class="foot" @tap="onDevConn()">
+			<div class="foot" @tap="onLinkageTap()">
 				<ul class="mui-table-view app-font-size-32">
 					<li class="mui-table-view-cell devConn">
 						<a class="mui-navigate-right">
 							<span>设备互联</span>
-							<span class="mui-badge" v-text="'3'"></span>
+							<span class="mui-badge" v-text="linkages.length"></span>
 						</a>
 					</li>
 				</ul>
@@ -194,6 +194,7 @@
 		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<script type="text/javascript" src="../../../js/dal/scene.js"></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -210,69 +211,64 @@
 						isEdit: false, // 是否正在编辑
 						mask: false, // 遮罩控制
 						index: -1, // 当前操作对象
-						scenes: [{
-							title: "回家模式",
-							state: false,
-							//img: "../../../image/smart/scenes/loading.gif",
-							img: "../../../image/smart/scenes/btn_get home1@3x.png",
-							workCount: 9,
-						}, {
-							title: "离家模式",
-							state: false,
-							img: "../../../image/smart/scenes/btn_Be away from home1@3x.png",
-							workCount: 9,
-						}, {
-							title: "回店模式",
-							state: false,
-							img: "../../../image/smart/scenes/icon_Back to the shop1@3x.png",
-							workCount: 0,
-						}, {
-							title: "离店模式",
-							state: false,
-							img: "../../../image/smart/scenes/btn_Departure1@3x.png",
-							workCount: 0,
-						}],
-						loadingImg: "../../../image/smart/scenes/loading.gif", // 加载动画
-						completeImg: "../../../image/smart/scenes/icon_Clickeffect@3x.png", // 完成标志
+						scenes: [],
+						newScenes: null,
+						loadingImg: "-1", // 加载动画
+						completeImg: "-2", // 完成标志
 						isLoading: false, // 是否加载中
+						loading: -1, // 加载中的模式
 					};
 				},
-				plusReady: function() {},
-				methods: {
-					onNewTap: function() {
-						// 设定场景名称
-						app.page.getInput(function(data) {
-							//							data = data.content.trim();
-							//							if(!data || data.length === 0 || data.length > 12) {
-							//								return mui.toast('场景名称不能为空或者大于12个字符');
-							//							}
-							mui.openWindow('edit_scenes.html', 'edit_scenes', {
-								extras: {
-									name: data
-								}
-							});
-						}, {
-							title: "场景名称",
-							tips: "请输入名称...",
-							maxLength: 12,
-							mLengthMsg: "场景名称不能大于12个字符"
+				computed: {
+					linkages: function() {
+						return this.scenes.filter(function(o, i) {
+							return o.type == 6;
 						});
 					},
+				},
+				plusReady: function() {
+					this.getList();
+				},
+				methods: {
+					getList: function() {
+						plus.nativeUI.showWaiting();
+						dal.scene.list(function(err, data) {
+							plus.nativeUI.closeWaiting();
+							console.log(JSON.stringify(err) + "," + JSON.stringify(data));
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.scenes = data;
+						}.bind(this));
+					},
+					deleteScene: function(id, callback) {
+						dal.scene.delete(id, callback)
+					},
+					onNewTap: function() {
+						var _this = this;
+						app.page.openForResultBy('edit_scenes.html', 'edit_scenes', function() {
+							_this.getList();
+						})
+					},
 
-					onClickTap: function(o, i, img) {
+					onClickTap: function(o, i, icon) {
 						if(this.isLoading) {
 							return;
 						}
 						this.isLoading = true;
-						that = this,
-							this.scenes[i].img = this.loadingImg;
+						this.loading = i;
+						that = this;
+						this.scenes[i].icon = this.loadingImg;
 						// 需要执行的操作
 
 						setTimeout(function() {
-							that.scenes[i].img = that.completeImg;
+							that.scenes[i].icon = that.completeImg;
+							that.scenes[i].icon = that.completeImg;
+							that.scenes[i].icon = that.completeImg;
 							setTimeout(function() {
-								that.scenes[i].img = img;
+								that.scenes[i].icon = icon;
 								that.isLoading = false;
+								that.loading = -1;
 							}, 600);
 						}, 1800);
 					},
@@ -282,15 +278,56 @@
 						this.index = i;
 					},
 					onEditTap: function() {
-						mui.openWindow('edit_scenes.html', 'edit_scenes');
 						this.mask = false;
+						var _this = this;
+						app.page.openForResultBy('edit_scenes.html', 'edit_scenes', function() {
+							_this.getList();
+						}, {
+							sceneId: _this.scenes[_this.index].id,
+						})
 					},
 					onDelTap: function() {
-						this.scenes.splice(this.index, 1);
-						this.mask = false;
+						var index = this.index;
+						var sceneId = this.scenes[index].id;
+						var _this = this;
+						this.deleteScene(sceneId, function(err, data) {
+							if(!err) {
+								_this.mask = false;
+								_this.scenes.splice(index, 1);
+								mui.toast('删除成功')
+								return;
+							}
+							mui.toast(err.message);
+						})
+
 					},
 					onDevConn: function() {
-						
+
+					},
+					onLinkageTap: function() {
+						var _this = this;
+						app.page.openForResultBy('index_linkage.html', 'index_linkage', function(data) {
+							var type = data.type;
+							var sceneInfo = data.sceneInfo;
+							var sceneId;
+							alert(JSON.stringify(data))
+							if(type == 'delete') {
+								sceneId = sceneInfo;//如果是delete，返回的就是id
+								var index, temp;
+								for(var i = 0, len = _this.scenes.length; i < len; i++) {
+									temp = _this.scenes[i];
+									if(temp.id == sceneId) {
+										index = i;
+										break;
+									}
+								}
+								if(index !== undefined) {
+									_this.scenes.splice(index, 1);
+								}
+							}else if(type == 'add'){
+								_this.scenes.push(sceneInfo.basiceinfo)
+							}
+						})
 					}
 				}
 			});

@@ -114,7 +114,7 @@
 			<div class="mui-content">
 				<div class="imgbg">
 					<img :src="bgp" />
-					<div class="text app-font-size-28 app-color-9f9fa0" v-text="isFitting?'配件':'设备'+'连接成功!'"></div>
+					<div class="text app-font-size-28 app-color-9f9fa0" v-text="(isFitting?'配件':'设备')+'添加成功!'"></div>
 				</div>
 				<button type="button" class="examine app-color-333333 mui-btn app-btn-main-ghost app-font-size-34" @tap="show()" v-text="isFitting?'查看配件':'查看设备'"></button>
 				<button type="button" v-if="needConn" class="btn_bind mui-btn app-btn-main app-font-size-34" @tap="bind()">去绑定摄像机</button>
@@ -189,6 +189,7 @@
 						"voice2",
 						"voice3",
 						"scan",
+						"ap_1"
 					].forEach(function(item){
 						tempw = plus.webview.getWebviewById(item);
 						tempw && tempw.close('none');

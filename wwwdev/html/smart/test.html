@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>原生测试</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../css/app/app.css" />
+		<script type="text/javascript" src="../../js/common/flexible.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav app-header">
+			<h1 class="mui-title">原生测试</h1>
+		</header>
+		<div class="mui-content app-font-size-26">
+			<div v-for='o,i in list'>
+				<!--{{JSON.stringify(o)}}-->
+			</div>
+
+			<button type="button" class="mui-btn app-btn-main" @tap="test1()">内网主机列表</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test2()">获取所有设备的运行状态</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test3()">获取所有设备的信息</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test4()">配件增</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test5()">配件删</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test6()">配件改</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test7()">获取原生推送id</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test8()">参数设置通道</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test9()">手机端虚拟遥控器</button><br />
+			<button type="button" class="mui-btn app-btn-main" disabled="disabled" @tap="test10()">重启设备</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test11()">开始声波配置WiFi</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test12()">中途停止声波</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test13()">检查声波配置是否成功</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test14()">智能配件查询通道</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test15()">智能配件控制通道</button><br />
+			<button type="button" class="mui-btn app-btn-main" @tap="test16()">获取所有智能配件的状态</button><br />
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../js/common/immersed.js"></script>
+		<script src="../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../js/lib/vue-ni.js"></script>
+
+		<script type="text/javascript" src="../../js/plug/PlugH5NativeBridge.js"></script>
+
+		<script type="text/javascript">
+			var P = plug.H5NativeBridge;
+
+			//			var GetAllDeviceInfoASync_Cache = new ni.Cache('GetAllDeviceInfoASync', [], {
+			//				plus: true
+			//			});
+
+			var num = 4;
+
+			mui.init();
+			new Vue({
+				el: ".mui-content",
+				data: function() {
+					return {
+						list: []
+					};
+				},
+				mounted: function() {
+
+				},
+				plusReady: function() {
+
+				},
+				methods: {
+					test1: function() {
+						try {
+							alert(1);
+							// 内网主机列表
+							var list = P.GetLanDevHostList();
+							this.list = JSON.parse(list);
+							alert(list);
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test2: function() {
+						try {
+							// 获取所有设备的运行状态
+							var list = P.GetAllDeviceRunStateSync();
+							alert(list);
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test3: function() {
+						try {
+							// 获取所有设备的信息
+							var list = P.GetAllDeviceInfoASync();
+							alert(list);
+							//							GetAllDeviceInfoASync_Cache.data = list;
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test4: function() {
+						try {
+							// 配件增(第三个参数：名称-->name-->test_123在文档中有冲突，需查明)
+							P.AddSmartDeviceAsyn("AX-403A-2016061400005", "81457856", "test_123", "0", "0", "128", function(data) {
+								alert(JSON.stringify(data));
+							});
+
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test5: function() {
+						try {
+							// 配件删
+							P.DelSmartDeviceAsyn("AX-403A-2016061400005", "81457856", function(data) {
+								alert(JSON.stringify(data));
+							});
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test6: function() {
+						try {
+							// 配件改
+							P.AddSmartDeviceAsyn("AX-403A-2016061400005", "81456856", "test_12" + (++num), true, "0", "0", "128", function(data) {
+								alert(JSON.stringify(data));
+							});
+
+							// 遍历 GetAllDeviceInfoASync_Cache.data
+							// 找到id
+							// 修改数据
+
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test7: function() {
+						try {
+							// 获取原生推送id
+							var list = P.GetPushInfoSyn();
+							alert(list);
+
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test8: function() {
+						try {
+							// 参数设置通道
+							var xmlstr = '<?xml version="1.0"encoding="utf-8"?><Message CID="10001"Verison="5.0.0"MsgType="MSG_SET_PARAM_V2_REQ"><DSW_BODY><Message><SYSTEM><PLANS><PLAN ACTION="2"START="00:00:00"END="23:59:00"RECYCLE="255"></PLAN></PLANS></SYSTEM></Message></DSW_BODY></Message>';
+							P.SetDeviceParamAsyn("AX-403A-2016061400005", xmlstr, function(data) {
+								alert(data);
+							});
+
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test9: function() {
+						try {
+							// 手机端虚拟遥控器
+							var xmlstr = '<?xml version="1.0"encoding="utf-8"?><Message CID="10001"Verison="5.0.0"MsgType="MSG_SET_PARAM_V2_REQ"><DSW_BODY><Message><SYSTEM><PLANS><PLAN ACTION="2"START="00:00:00"END="23:59:00"RECYCLE="255"></PLAN></PLANS></SYSTEM></Message></DSW_BODY></Message>';
+							P.VirtualityRemoteControlAsyn("AX-403A-2016061400005", 8, function(data) {
+								alert(data);
+							});
+
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test10: function() {
+						try {
+							// 重启设备
+							var xmlstr = '<?xml version="1.0"encoding="utf-8"?><Message CID="10001"Verison="5.0.0"MsgType="MSG_SET_PARAM_V2_REQ"><DSW_BODY><Message><SYSTEM><PLANS><PLAN ACTION="2"START="00:00:00"END="23:59:00"RECYCLE="255"></PLAN></PLANS></SYSTEM></Message></DSW_BODY></Message>';
+							P.RebootDeviceAsyn("AX-403A-2016061400005", function(data) {
+								alert(data);
+							});
+
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test11: function() {
+						try {
+							// 开始声波配置WiFi
+							var list = P.StartVoiceSetWifi("TP-LINK_1BE7", "huihai20172018", "s");
+							alert(list);
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test12: function() {
+						try {
+							// 中途停止声波
+							var list = P.StopVoiceSetWifi();
+							alert(list);
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test13: function() {
+						try {
+							// 检查声波配置是否成功
+							var list = P.CheckDevWifiConnect("s");
+							alert(list);
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test14: function() {
+						try {
+							//查询通道
+							alert(1);
+							P.SmartDeviceQueryChannelAsyn("VS-360-2017082400138", "150006FF", "KG_OPT", "<OPT VAL=\"QUERY\"></OPT>", function(data) {
+								alert(JSON.stringify(data));
+							});
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test15: function() {
+						try {
+							//控制通道
+							P.SmartDeviceControlChannelAsyn("VS-360-2017082400138", "150006FF", "KG_OPT", "<OPT VAL=\"CLOSE\" />", function(data) {
+								alert(JSON.stringify(data));
+							});
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+					test15: function() {
+						try {
+							//获取所有智能配件的状态
+							P.GetAllSmartDeviceState(function(data) {
+								alert(JSON.stringify(data));
+							});
+						} catch(err) {
+							alert('err' + err.message);
+						}
+					},
+
+				}
+			});
+		</script>
+	</body>
+
+</html>

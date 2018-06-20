@@ -475,4 +475,27 @@
 	pgn.checkAIDeviceIsConnAsync = function(sf, ff){
 		return pg.asyncExec(N,'checkAIDeviceIsConnAsync',[],sf,ff)
 	}
+	
+	
+	// ================================红外设备=========================================
+	
+	// 进入红外配件操作详情页
+	pgn.EnterInfraredDeviceAsync = function(o, sf, ff){
+		return pg.asyncExec(N,'EnterInfraredDeviceAsync',[
+			o.uuid,
+			o.type,
+			o.name,
+			o.irModuleId,
+			o.devId,
+			o.codeLibId,
+			o.codeId,
+			o.id
+		],sf,ff);
+	}
+	
+	// 红外模块添加
+	pgn.AddInfraredDeviceAsync = function(id, devid, devtype,irtype, sf, ff){
+		return pg.asyncExec(N, 'AddInfraredDeviceAsync', [id, devid, devtype, irtype], sf, ff);
+	}
+	
 }(window));

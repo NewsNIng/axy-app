@@ -21,7 +21,7 @@
 	}
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
-	 return;
+	 	return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
@@ -462,4 +462,40 @@
 	pgn.GetNoReadAlarmListAsyn = function(username,pageSize,sf,ff){
 		return pg.asyncExec(N,'GetNoReadAlarmListAsyn',[username,pageSize],sf,ff)
 	}
+	
+	
+	// ================================AI设备=========================================
+	
+	// 配置AI设备WIFI信息
+	pgn.UpdateAIDeviceConfigAsync = function(ssid, pwd, devid, setid, sf, ff){
+		return pg.asyncExec(N,'UpdateAIDeviceConfigAsync',[ssid, pwd, devid, setid],sf,ff)
+	}
+	
+	// 检查内网列表AI设备是否连接上
+	pgn.checkAIDeviceIsConnAsync = function(sf, ff){
+		return pg.asyncExec(N,'checkAIDeviceIsConnAsync',[],sf,ff)
+	}
+	
+	
+	// ================================红外设备=========================================
+	
+	// 进入红外配件操作详情页
+	pgn.EnterInfraredDeviceAsync = function(o, sf, ff){
+		return pg.asyncExec(N,'EnterInfraredDeviceAsync',[
+			o.uuid,
+			o.type,
+			o.name,
+			o.irModuleId,
+			o.devId,
+			o.codeLibId,
+			o.codeId,
+			o.id
+		],sf,ff);
+	}
+	
+	// 红外模块添加
+	pgn.AddInfraredDeviceAsync = function(id, devid, devtype,irtype, sf, ff){
+		return pg.asyncExec(N, 'AddInfraredDeviceAsync', [id, devid, devtype, irtype], sf, ff);
+	}
+	
 }(window));

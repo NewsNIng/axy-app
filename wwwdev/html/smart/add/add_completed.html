@@ -114,7 +114,7 @@
 			<div class="mui-content">
 				<div class="imgbg">
 					<img :src="bgp" />
-					<div class="text app-font-size-28 app-color-9f9fa0" v-text="isFitting?'配件':'设备'+'连接成功!'"></div>
+					<div class="text app-font-size-28 app-color-9f9fa0" v-text="(isFitting?'配件':'设备')+'连接成功!'"></div>
 				</div>
 				<button type="button" class="examine app-color-333333 mui-btn app-btn-main-ghost app-font-size-34" @tap="show()" v-text="isFitting?'查看配件':'查看设备'"></button>
 				<button type="button" v-if="needConn" class="btn_bind mui-btn app-btn-main app-font-size-34" @tap="bind()">去绑定摄像机</button>
@@ -137,7 +137,7 @@
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-dev.js"></script>
-
+		<script type="text/javascript" src="../../../js/app/app-acc.js" ></script>
 		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
 		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
 
@@ -146,6 +146,8 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+		
+		<script type="text/javascript" src="../../../js/app/app-statis.js" ></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -187,6 +189,7 @@
 						"voice2",
 						"voice3",
 						"scan",
+						"ap_1"
 					].forEach(function(item){
 						tempw = plus.webview.getWebviewById(item);
 						tempw && tempw.close('none');
@@ -194,6 +197,17 @@
 					
 					plus.nativeUI.closeWaiting();
 					
+					
+					
+					
+					// [事件]添加设备或配件 
+					var devName = "";
+					if(this.isFitting){
+						devName = app.acc.findName(this.info.data.acc.type);
+					}else{
+						devName = app.dev.findName(this.info.data.dev.type);
+					}
+					app.statis.emit("add", {name: devName});
 					
 				},
 				methods: {

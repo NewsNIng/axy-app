@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<link rel="stylesheet" href="../../../css/app/devices.css" />
+
+		<style type="text/css">
+			html,
+			body,
+			.mui-content {
+				background-color: #FFFFFF;
+				width: 100%;
+			}
+			
+			.foot {
+				position: fixed;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.dev_text {
+				width: 100%;
+				margin-bottom: 0.4rem;
+				text-align: center;
+				color: #333333;
+				/*font-weight: bold;*/
+			}
+			
+			.dev_text > div{
+				line-height: 0.8rem;
+			}
+			
+			.help {
+				position: fixed;
+				bottom: 60px;
+				left: 50%;
+				padding: 0.01rem 0;
+				transform: translateX(-50%);
+				-webkit-transform: translateX(-50%);
+				border-bottom: 1px solid #2BB8AA;
+				color: #2BB8AA;
+			}
+			
+			.red {
+				color: red;
+			}
+			
+			.imgbg {
+				width: 100%;
+				padding: 1.5rem;
+			}
+			
+			.imgbg>img {
+				width: 100%;
+			}
+			/*=== 密码设置 ===*/
+			
+			.mask {
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				z-index: 99;
+				background-color: rgba(0, 0, 0, 0.66);
+			}
+			
+			.message-box {
+				position: absolute;
+				overflow: hidden;
+				left: 50%;
+				top: 50%;
+				width: 80%;
+				background-color: #E4E5E6;
+				transform: translate3d(-50%, -50%, 0);
+				-webkit-transform: translate3d(-50%, -50%, 0);
+				z-index: 100;
+				border-radius: 10px;
+			}
+			
+			.message-box-body {
+				padding: 0.733333rem;
+			}
+			
+			.message-box-body .app-font-size-24 {
+				margin-bottom: 0.6rem;
+			}
+			
+			.message-box-body input {
+				border: 1px #adadad solid;
+				border-radius: 4px;
+				background-color: #E4E5E6;
+				width: 100%;
+				height: 0.906666rem;
+				line-height: 0.906666rem;
+				margin-bottom: 0;
+			}
+			
+			.message-box-footer {
+				background-color: #06C1AE;
+				height: 1.306666rem;
+				line-height: 1.306666rem;
+				text-align: center;
+				color: #FFFFFF;
+			}
+			/*=== 密码设置 End ===*/
+		</style>
+	</head>
+
+	<body>
+
+		<div id="warpper">
+
+			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">配置AP热点</h1>
+			</header>
+
+
+			<div class="mui-content">
+				<div class="imgbg">
+					<img src="../../../image/smart/devices/dev_icon/AX-203@3x.png" />
+				</div>
+				<div class="dev_icon app-font-size-30">
+
+					<div class="dev_text app-font-size-34">
+						<div>
+							长按设备<span class="app-color-main">M</span>键3秒进入设置模式
+						</div>
+						<!--<div>
+							手机<span class="app-color-main">WIFI设置</span>
+							输入设备的SSID名称和密码(见包装盒)
+						</div>-->
+						<div>
+							设备进入设置模式完成后点击“下一步”
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="foot app-font-size-34">
+				<div @tap="onPrev()" style="width: 50%; float: left;background-color: #F4F8FB;" class="app-color-9f9fa0">上一步</div>
+				<div @tap="onNext()" style="width: 50%;float: left;">下一步</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+
+
+
+		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
+
+		<script type="text/javascript">
+
+			mui.init();
+
+			new Vue({
+				el: '#warpper',
+				data: function() {
+					return {
+					};
+				},
+
+
+				mounted: function() {
+					
+				},
+
+				plusReady: function() {
+					
+				},
+
+				methods: {
+
+					onPrev: function() {
+						mui.back();
+					},
+					onNext: function() {
+						var url = "ap_connect_ai_3.html";
+						window.location.href = url;
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

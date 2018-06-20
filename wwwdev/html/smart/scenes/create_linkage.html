@@ -1,0 +1,526 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>智能场景</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
+		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../../css/app/app.css" />
+		<style type="text/css">
+			html {
+				background-color: #F4F8FB;
+			}
+			
+			body,
+			.mui-content {
+				background-color: white;
+				margin-bottom: 2rem;
+			}
+			
+			.mui-input-row>label {
+				padding: 0.426666rem 0.346666rem;
+			}
+			
+			.mui-input-row {
+				height: 1.2rem;
+			}
+			
+			.mui-switch {
+				margin: 0 !important;
+				right: 0.346666rem;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.prompt {
+				color: #9F9FA0;
+				padding-left: 0.346666rem;
+				height: 0.906666rem;
+				line-height: 0.906666rem;
+				background-color: #F4F8FB;
+			}
+			
+			.add_conditions {
+				height: 1.653333rem;
+				position: relative;
+			}
+			
+			.add_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+			}
+			
+			.add_icon {
+				float: left;
+				width: 0.613333rem;
+				left: 1.04rem;
+			}
+			
+			.more {
+				float: right;
+				height: 0.4rem;
+				right: 0.346666rem;
+			}
+			
+			.title {
+				padding-left: 2.24rem;
+				color: #9F9FA0;
+			}
+			
+			.app-switch-main {
+				height: 22px;
+				width: 39px;
+			}
+			
+			.mui-switch-handle {
+				height: 20px !important;
+				width: 20px !important;
+			}
+			
+			.mui-icon>img {
+				width: 0.526666rem;
+			}
+			
+			.mui-table-view-cell {
+				padding-left: 0;
+			}
+			
+			.trigger_comply {
+				height: 1.386666rem;
+				background-color: white;
+			}
+			
+			.mui-slider-handle {
+				height: 100%;
+			}
+			
+			.item_icon,
+			.more,
+			.title {
+				position: relative;
+				top: 50%;
+				transform: translateY(-50%) !important;
+				-webkit-transform: translateY(-50%) !important;
+			}
+			
+			.item_icon {
+				float: left;
+				width: 0.48rem;
+				left: 0.346666rem;
+			}
+			
+			.trigger_comply .title {
+				padding-left: 1.173333rem;
+				color: #333333;
+			}
+			
+			.foot {
+				position: fixed;
+				z-index: 99;
+				width: 100%;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+				color: white;
+				text-align: center;
+				bottom: 0;
+				background-color: #06c1ae;
+			}
+			
+			.mainLinkage {
+				width: 100%;
+				height: 5.266666rem;
+				display: flex;
+				display: -webkit-flex;
+			}
+			
+			.mainLinkage>img {
+				width: 100%;
+			}
+			
+			.mainLinkage>div {
+				height: 100%;
+				position: relative;
+				flex: 1;
+			}
+			
+			.mainLinkage>div:first-child:after {
+				content: "";
+				position: absolute;
+				width: 1px;
+				height: 100%;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				background-color: #E5E6E7;
+			}
+			
+			.relation {
+				position: absolute;
+				width: 0.933333rem;
+				right: 0;
+				top: 67%;
+				-webkit-transform: translate(50%, -50%);
+				transform: translate(50%, -50%);
+				background-color: white;
+				border: 0.186666rem solid white;
+				z-index: 2;
+			}
+			
+			.dev_icon {
+				height: 50%;
+				width: 100%;
+				/*background-color: #555555;*/
+				position: relative;
+			}
+			
+			.dev_icon>img {
+				position: absolute;
+				height: 56%;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				-webkit-transform: translate(-50%, -50%);
+			}
+			
+			.dev_name,
+			.dev_text {
+				display: block;
+				text-align: center;
+			}
+			
+			.dev_text {
+				margin-top: 0.133333rem;
+			}
+			
+			.dev_text,
+			.action_item>span:last-child {
+				color: #8D8D8D;
+			}
+			
+			.action_item {
+				display: -webkit-flex;
+				display: flex;
+				justify-content: space-around;
+				padding: 0 0.746666rem;
+				position: relative;
+			}
+			
+			.action_item>span:first-child {
+				display: inline-block;
+				width: 1.8rem;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				color: #333333;
+			}
+			
+			.action_list {
+				height: 49%;
+				overflow: hidden;
+			}
+			
+			.action_list>.action_item:nth-child(4):before {
+				content: "...";
+				color: #333333;
+				position: absolute;
+				text-align: center;
+				line-height: 8px;
+				left: 0;
+				right: 0;
+				/*background-color: #E5E6E7;*/
+			}
+			
+			.action_list>.action_item:nth-child(n+4)>span {
+				color: white;
+			}
+			
+			.list-item {
+				display: inline-block;
+			}
+			
+			.list-enter-active,
+			.list-leave-active {
+				transition: all 0.8s;
+			}
+			
+			.list-enter,
+			.list-leave-to
+			/* .list-leave-active for below version 2.1.8 */
+			
+			{
+				opacity: 0;
+				transform: translateX(-100%);
+			}
+			
+			.mui-table-view-cell:after {
+				background-color: #E5E6E7;
+			}
+			
+			.add_conditions:before {
+				position: absolute;
+				right: 0;
+				top: 0;
+				left: 0;
+				height: 1px;
+				content: '';
+				-webkit-transform: scaleY(.5);
+				transform: scaleY(.5);
+				background-color: #E5E6E7;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+
+			<header class="mui-bar mui-bar-nav app-header">
+				<a class="mui-action-back app-icon-back mui-pull-left"></a>
+				<h1 class="mui-title">{{isEdit ? '编辑联动' : '新建联动'}}</h1>
+				<a class="mui-icon mui-pull-right" @tap="onSaveTap()">
+					<img src="../../../image/smart/scenes/save_icon.png" />
+				</a>
+			</header>
+
+			<!--<div class="foot app-font-size-34" :class="{}" @tap="onActionTap()">添加动作</div>-->
+
+			<div class="mui-content">
+				<div class="mainLinkage">
+					<img src="../../../image/smart/scenes/add_linkage_schematic.gif" />
+				</div>
+				<div style="height: 0.266666rem; background-color: #F4F8FB;"></div>
+				<div class="mui-input-row app-font-size-28">
+					<label>消息推送</label>
+					<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': linkageInfo.basiceinfo.push == 1}" ref="switch1">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div>
+				<div class="prompt app-font-size-24">如果触发条件</div>
+				<div class="add_conditions app-font-size-28" @tap="onAddCondition()" v-if="linkageInfo.conditionlist.length === 0">
+					<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					<div class="title app-font-size-28">添加条件</div>
+				</div>
+				<div class="trigger_comply app-font-size-28" @tap="onAddCondition()" v-if="linkageInfo.conditionlist.length > 0">
+					<img class="item_icon" :src="getIconByConditionId(linkageInfo.conditionlist[0].type)" />
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					<div class="title app-font-size-28" v-text="linkageInfo.conditionlist[0].name"></div>
+				</div>
+				<div class="prompt app-font-size-24">就执行动作</div>
+
+				<!--<div style="height: 1px; background-color: #E5E6E7;" v-if="actionList.length === 0"></div>-->
+
+				<transition-group name="list" tag="div">
+					<div class="trigger_comply app-font-size-28 mui-table-view-cell" 
+						v-for="o,i in linkageInfo.actionlist" 
+						:key="o.id || o.index"
+						v-if="o.state !== 0">
+						<div class="mui-slider-right mui-disabled">
+							<a class="mui-btn mui-btn-red" @tap="onDelete(i, $event)">删除</a>
+						</div>
+						<div class="mui-slider-handle">
+							<img class="item_icon" :src="getIconByActionId(o.type)" />
+							<div class="title app-font-size-28">{{o.name}}</div>
+						</div>
+					</div>
+				</transition-group>
+				<div></div>
+				<div class="add_conditions app-font-size-28" @tap="onActionTap()">
+					<img class="add_icon" src="../../../image/smart/scenes/btn_Add to@3x.png" />
+					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
+					<div class="title app-font-size-28">添加执行动作</div>
+				</div>
+			</div>
+		</div>
+		<!--沉浸式动态处理-->
+		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
+
+		<!--基础配置-->
+		<script type="text/javascript" src="../../../js/config.js"></script>
+		<!--基础库-->
+		<script type="text/javascript" src="../../../js/lib/mui.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue.min.js"></script>
+		<script type="text/javascript" src="../../../js/lib/vue-ni.js"></script>
+		<!--请求相关-->
+		<script type="text/javascript" src="../../../js/dal/base.js"></script>
+		<!--App相关业务逻辑-->
+		<script type="text/javascript" src="../../../js/app/app.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
+		<script type="text/javascript" src="../../../js/app/app-act.js"></script>
+		<script type="text/javascript" src="../../../js/dal/scene.js"></script>
+
+		<!--<script type="text/javascript" src="../../../js/lib/md5.min.js"></script>-->
+		<!--<script type="text/javascript" src="../../../js/common/imagelazyload.js"></script>-->
+
+		<script type="text/javascript">
+			mui.init();
+
+			new Vue({
+				el: '#box',
+				data: function() {
+					return {
+						name: "场景开关", // 场景名称
+						isEdit: false,
+						isBackStore: false,
+						linkageInfo: {
+							"basiceinfo": {
+								"delay": 0,
+								"name": "",
+								"push": 1,
+								"state": 1,
+								"type": 6,
+								"enable": 1,
+								"push": 1
+							},
+							"actionlist": [],
+							"conditionlist": []
+						}
+					};
+				},
+				mounted: function() {
+					this.$refs.switch1.addEventListener("toggle", function(event) {
+						this.linkageInfo.basiceinfo.push = (event.detail.isActive ? 1 : 0);
+					}.bind(this));
+				},
+				plusReady: function() {
+					this.isEdit = this.$view.sceneId !== undefined;
+					if(this.isEdit) {
+						this._getInfo(this.$view.sceneId);
+					}
+				},
+				methods: {
+					// 触发条件添加
+					onAddCondition: function() {
+						app.page.openForResultBy('trigger_conditions.html', 'trigger_conditions', function(data) {
+							var name = data.name;
+							var type = data.conditionType;
+							var devId = data.devId;
+							var accId = data.accId;
+							delete data.name;
+							delete data.conditionType;
+							delete data.devId;
+							delete data.accId;
+							var condition = {
+								name: name,
+								type: type,
+								params: data,
+								state: 1,
+							}
+							devId != undefined && (condition.devId = devId);
+							accId != undefined && (condition.accId = accId);
+							this.linkageInfo.conditionlist = [condition];
+						}.bind(this));
+					},
+
+					// 执行动作添加
+					onActionTap: function() {
+						var _this = this;
+						app.page.openForResultBy('perform_actions.html', 'perform_actions', function(data) {
+							var devInfo = data.selectInfo;
+							var name = devInfo.map(function(item) {
+								return(item.text || item.value)
+							}).filter((function(item) {
+								return !!item;
+							})).join('|') + '|' + data.name;
+							console.log(JSON.stringify(devInfo))
+							var devId = devInfo.filter(function(item) {
+								return item.type == 'devlist'
+							});
+							devId = devId.length ? devId[0].value : '';
+							var accId = devInfo.filter(function(item) {
+								return item.type == 'acclist'
+							});
+							accId = accId.length ? accId[0].value : '';
+							var pos = devInfo.filter(function(item) {
+								return item.type == 'lightPos'
+							});
+							pos = pos.length ? pos[0].value : '';
+							var extend = {};
+							if(pos) {
+								extend.pos = pos;
+							}
+							if(data.alarmOn !== undefined) {
+								extend.alarmOn = data.alarmOn
+							}
+							_this.linkageInfo.actionlist.push({
+								"index": data.randomId,
+								"name": name,
+								"type": data.type,
+								"devId": devId,
+								"accId": accId,
+								"extend": extend,
+								"enable": 1,
+								"state": 1, //为了列表响应式
+							});
+						}, {
+							isScenes: true //表示隐藏声光响铃
+						});
+					},
+					onDelete: function(i, e) {
+						mui.swipeoutClose(e.target.parentNode.parentNode);
+						var action = this.linkageInfo.actionlist[i];
+						if(action.id === undefined){//表示数据库没有储存，可直接删除
+							this.linkageInfo.actionlist.splice(i, 1);
+						}else{
+							this.$set(action,'state',0)
+						}
+					},
+					// 保存按钮
+					onSaveTap: function() {
+						var _this = this;
+						if(this.linkageInfo.conditionlist.length < 1) {
+							return mui.toast('请添加条件')
+						}
+						//判断当前是否有动作
+						var showActionlist = this.linkageInfo.actionlist.filter(function(item){
+							return item.state === 1;
+						})
+						if(showActionlist.length < 1 ) {
+							return mui.toast('请添加动作')
+						}
+						if(this.isEdit) {
+							dal.scene.update(this.linkageInfo, function(err, data) {
+								if(err) {
+									return mui.toast(err.message)
+								}
+								alert(JSON.stringify(_this.linkageInfo))
+								app.page.setResult(_this.linkageInfo).close();
+							})
+						}else{
+							dal.scene.add(this.linkageInfo, function(err, data){
+								if(err){
+									return mui.toast(err.message)
+								}
+								alert(JSON.stringify(data))
+								app.page.setResult(data).close();
+							})
+						}
+
+					},
+					getIconByActionId: function(actionid) {
+						return app.act.getIconByActionId(actionid)
+					},
+					getIconByConditionId: function(conditionId) {
+						return app.act.getIconByConditionId(conditionId)
+					},
+					_getInfo: function(sceneId) {
+						plus.nativeUI.showWaiting();
+						dal.scene.getInfo(sceneId, function(err, data) {
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							this.linkageInfo = data;
+						}.bind(this));
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>
