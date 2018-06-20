@@ -10,7 +10,7 @@ var dal = {
 	BASE_SHARE_URL: "http://vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
 	//BASE_SHARE_URL: "http://192.168.1.103:8080/module/index.html",
 	BASE_URL_VERSION: "216",
-	
+
 };
 
 dal.isVihiDomain = function() {
@@ -45,7 +45,8 @@ function requestAdapter(type, url, params, callback) {
 	if(BASE_URL) {
 		delete params.BASE_URL;
 	} else {
-		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL_TEST;
+		//		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL_TEST;
+		BASE_URL = dal.BASE_URL_DEV;
 	}
 	var apiUrl = url;
 	url = BASE_URL + url;
@@ -63,7 +64,7 @@ function requestAdapter(type, url, params, callback) {
 			loginid: window.localStorage.getItem('_loginid_') || "",
 			imei: window.localStorage.getItem('_imei_') || "",
 			account: params.account,
-//			appversion: dal.BASE_URL_VERSION,
+			//			appversion: dal.BASE_URL_VERSION,
 		},
 		data: params,
 		type: type,
@@ -98,7 +99,7 @@ function requestAdapter(type, url, params, callback) {
 			callback(o.err, o.data);
 		},
 		error: function(xhr, type, err) {
-			console.log("[" + apiUrl + "]错误: [" + randomID + "] "+ xhr.status);
+			console.log("[" + apiUrl + "]错误: [" + randomID + "] " + xhr.status);
 			var errmsg = dal.errDir[type] || "其它错误";
 			//console.log("["+errmsg+"]" + url);
 			callback({

@@ -253,24 +253,29 @@
 
 					onClickTap: function(o, i, icon) {
 						if(this.isLoading) {
-							return;
+							return mui.toast('执行中，请稍后')
 						}
 						this.isLoading = true;
 						this.loading = i;
 						that = this;
 						this.scenes[i].icon = this.loadingImg;
 						// 需要执行的操作
-
-						setTimeout(function() {
-							that.scenes[i].icon = that.completeImg;
-							that.scenes[i].icon = that.completeImg;
-							that.scenes[i].icon = that.completeImg;
+						dal.scene.runScene(o.id, function(err, data) {
+							if(err) {
+								mui.toast(err.message)
+							}else{
+								mui.toast('执行成功')
+							}
 							setTimeout(function() {
-								that.scenes[i].icon = icon;
-								that.isLoading = false;
-								that.loading = -1;
-							}, 600);
-						}, 1800);
+								that.scenes[i].icon = that.completeImg;
+								setTimeout(function() {
+									that.scenes[i].icon = icon;
+									that.isLoading = false;
+									that.loading = -1;
+								}, 600);
+							}, 1800);
+						})
+
 					},
 					// 设置
 					onSetting: function(i) {
@@ -312,7 +317,7 @@
 							var sceneId;
 							alert(JSON.stringify(data))
 							if(type == 'delete') {
-								sceneId = sceneInfo;//如果是delete，返回的就是id
+								sceneId = sceneInfo; //如果是delete，返回的就是id
 								var index, temp;
 								for(var i = 0, len = _this.scenes.length; i < len; i++) {
 									temp = _this.scenes[i];
@@ -324,7 +329,7 @@
 								if(index !== undefined) {
 									_this.scenes.splice(index, 1);
 								}
-							}else if(type == 'add'){
+							} else if(type == 'add') {
 								_this.scenes.push(sceneInfo.basiceinfo)
 							}
 						})

@@ -446,7 +446,7 @@
 						dal.scene.updateSceneEnable(ids, enable, function(err,data){
 							if(!err){
 								mui.toast('修改成功')
-								o.basiceinfo.enable = !o.basiceinfo.enable ? 1 : 0;
+								o.basiceinfo.enable = enable;
 							}
 						})
 					},
