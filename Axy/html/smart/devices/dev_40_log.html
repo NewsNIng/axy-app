@@ -148,7 +148,7 @@
 										<img src="../../../image/smart/devices/electric/point.png" />
 									</div>
 									<div class="text app-font-size-28">
-										<span class="text_value"><span class="name">{{o.lockName}}</span> {{o.openType}}</span>
+										<span class="text_value"><span class="name">{{o.lockName}}</span> - {{_openTypeToString(o.openType)}}</span>
 										<br />
 										<span class="num app-font-size-24">编号：{{o.keyID}}</span>
 									</div>
@@ -192,6 +192,19 @@
 
 		<script type="text/javascript">
 			mui.init();
+			
+			
+			// 开锁状态对应文字说明
+			var OPEN_TYPE_ACT = {
+				LOCAL_OPEN: "本地开锁",
+				REMOTE_CLOSE: "远程关锁",
+				REMOTE_OPEN: "远程开锁",
+				LOCAL_OPEN_ERR: "磁力锁本地开锁失败",
+				LOCAL_CLOSE_ERR: "磁力锁本地关锁失败",
+				REMOTE_OPEN_ERR: "磁力锁远程开锁失败 ",
+				REMOTE_CLOSE_ERR: "磁力锁远程关锁失败",
+
+			}
 
 			new Vue({
 				el: '.mui-content',
@@ -203,9 +216,9 @@
 					};
 				},
 				plusReady: function() {
-					
+
 					this.did = this.$view.did;
-					
+
 					var that = this;
 
 					this.init();
@@ -246,19 +259,17 @@
 						});
 						ob.next();
 					});
-					
-					
-					
-					$listenPageNumber
-					.mergeMapTo(Rx.Observable.create(function(ob){
-						that.getLogList().then(function(data){
-							ob.next(data)
-						}).catch(function(err){
-							ob.error(err)
-						});
-					}))
 
-					//$getLogList.merge($listenPageNumber)
+					$listenPageNumber
+						.mergeMapTo(Rx.Observable.create(function(ob) {
+							that.getLogList().then(function(data) {
+								ob.next(data)
+							}).catch(function(err) {
+								ob.error(err)
+							});
+						}))
+
+						//$getLogList.merge($listenPageNumber)
 						.filter(function(data) {
 							that.scroll && (that.scroll.finishPullUp(), that.scroll.refresh());
 							return data && data.length;
@@ -289,7 +300,8 @@
 						});
 
 					},
-
+					
+					// 初始化
 					init: function() {
 						var wrapper = this.$refs.wrapper;
 						var wrapperHight = (document.documentElement.clientHeight || document.body.clientHeigth) -
@@ -316,6 +328,12 @@
 							}
 
 						}.bind(this));
+					},
+					
+					// 状态转换文字说明
+					_openTypeToString: function(type){
+						var s = OPEN_TYPE_ACT[type];
+						return s || type;
 					}
 				}
 			});

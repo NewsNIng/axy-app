@@ -7,9 +7,10 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<script type="text/javascript" src="../../../js/common/flexible.js"></script>
 		<link href="../../../css/lib/mui.min.css" rel="stylesheet" />
-		<!--<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
+		<link rel="stylesheet" href="../../../css/lib/mui.picker.css" />
 		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
-		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+		<!--<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
+		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 
@@ -149,13 +150,13 @@
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/devaccessory.js"></script>
 
-		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
-		<script type="text/javascript" src="arr.js"></script>-->
+
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
-		
-		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js" ></script>
-		
+
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+
 		<script type="text/javascript">
 			mui.init();
 
@@ -232,7 +233,7 @@
 									name: "AX-801",
 									type: 4,
 								},
-								
+
 							]
 						},
 						ctrl_fit: {
@@ -308,15 +309,19 @@
 							devs: [{
 								img: "../../../image/smart/devices/dev_icon/dsq@3x.png",
 								name: "电视器",
+								type: 2,
 							}, {
 								img: "../../../image/smart/devices/dev_icon/kt@3x.png",
 								name: "空调",
+								type: 1,
 							}, {
 								img: "../../../image/smart/devices/dev_icon/dfs@3x.png",
 								name: "电风扇",
+								type: 3,
 							}, {
 								img: "../../../image/smart/devices/dev_icon/jdh@3x.png",
 								name: "机顶盒",
+								type: 4,
 							}, ],
 						},
 
@@ -366,7 +371,7 @@
 							} else if(o.type === 3) {
 								// 蓝牙添加
 								that._bluetoothLine();
-							}else if(o.type === 4){
+							} else if(o.type === 4) {
 								// ap热点添加
 								that._apDevLine();
 							}
@@ -401,8 +406,8 @@
 					},
 
 					// 万能遥控 红外设备
-					onItemTap4: function(o) {
- 
+					onItemTap4: function(iritem) {
+
 						var that = this;
 						// 检查配件列表中是否有 红外模块 
 
@@ -447,7 +452,7 @@
 							// 2s的节流处理，保证获取最新
 							.debounceTime(2e3)
 							// == 暂时去除网络差原因 or 配件列表过长 导致的时间差
-							
+
 							// 计算是否有红外模块
 							.mergeMap(function(arr) {
 								return Rx.Observable.create(function(ob) {
@@ -462,30 +467,55 @@
 
 								});
 							})
-							// 选择一个红外模块
-							.map(function(rs){
-								// 暂时先去第一个做处理
-								return rs[0];
+							// 处理选择
+							.map(function(rs) {
+								return rs.map(function(item) {
+									return {
+										text: item.name + "-" + item.aid,
+										value: {
+											aid: item.aid,
+											devid: item.devid,
+											devtype: item.devtype
+										}
+									}
+								});
 							})
-							
+							// 选择一个红外模块
+							.mergeMap(function(arrdata) {
+								plus.nativeUI.closeWaiting();
+								return Rx.Observable.create(function(ob) {
+
+									var picker = new mui.PopPicker({
+										more: false
+									});
+
+									picker.setData(arrdata);
+									picker.show(function(selectItems) {
+										ob.next(selectItems[0].value);
+										picker.dispose();
+									});
+
+								});
+							})
+
 							.subscribe(
 								function(ir) {
-									plus.nativeUI.closeWaiting();
-									new ni.Broadcast().emit("ir_update", {}, {views: ["dev_list"]});
-									// console.log(JSON.stringify(ir));
+									
 									// 原生界面进入 红外添加
-									plug.H5NativeBridge.AddInfraredDeviceAsync(ir.aid, ir.devid, ir.devtype, function(){
+									plug.H5NativeBridge.AddInfraredDeviceAsync(ir.aid, ir.devid, ir.devtype, iritem.type, function() {
 										/**
 										 * 添加完成后 如果 dev_my_list 页面存在
 										 * 需要重新获取一次红外遥控信息
 										 */
-										new ni.Broadcast().emit("ir_update", {}, {views: ["dev_my_list"]});
+										new ni.Broadcast().emit("ir_update", {}, {
+											views: ["dev_my_list"]
+										});
 									});
-									
+
 								},
 								function(err) {
 									plus.nativeUI.closeWaiting();
-									mui.alert("请先添加红外模块");
+									mui.alert(err.message || "请先添加红外模块");
 								});
 
 					},
@@ -552,12 +582,12 @@
 						}, o);
 					},
 					// AP热点添加设备
-					_apDevLine: function(){
+					_apDevLine: function() {
 						var url = "ap_connect_ai_1.html";
 						mui.openWindow(url, 'ap_1');
 						//app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
-							//var url = "blue_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
-							//mui.openWindow(url, 'blue1');
+						//var url = "blue_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
+						//mui.openWindow(url, 'blue1');
 						//});
 					},
 				}

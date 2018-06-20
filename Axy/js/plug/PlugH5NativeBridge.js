@@ -489,12 +489,13 @@
 			o.devId,
 			o.codeLibId,
 			o.codeId,
+			o.id
 		],sf,ff);
 	}
 	
 	// 红外模块添加
-	pgn.AddInfraredDeviceAsync = function(id, devid, devtype, sf, ff){
-		return pg.asyncExec(N, 'AddInfraredDeviceAsync', [id, devid, devtype], sf, ff);
+	pgn.AddInfraredDeviceAsync = function(id, devid, devtype,irtype, sf, ff){
+		return pg.asyncExec(N, 'AddInfraredDeviceAsync', [id, devid, devtype, irtype], sf, ff);
 	}
 	
 }(window));

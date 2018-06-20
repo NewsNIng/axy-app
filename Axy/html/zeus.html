@@ -31,8 +31,8 @@
 			 * H5Native 控制中心 
 			 */
 			var PUSH_ID, DEVICE, ACC,
-			//DEVICE_AUTH, 
-			USER_INFO, P, _B;
+				//DEVICE_AUTH, 
+				USER_INFO, P, _B;
 
 			var getPwd = function() {
 				return window.localStorage.getItem('_pwd_');
@@ -89,9 +89,12 @@
 
 					var ajaxResult = function(err, data) {
 						if(err) {
-							if(err.code === '0110') {
+							if(
+								err.code === 0x00100C01 || // 密码错误 1051649 
+								err.code === 0x00100C02 // 权限认证失败 1051649
+							) {
 								// 验证失败
-								ob.error();
+								ob.error(err);
 							} else if(logincount < 3) {
 								// 递归重试登录   指数化退避
 								logincount = logincount + 1;
@@ -101,23 +104,10 @@
 						}
 						if(data.lockterminal === 0 || data.validation === 1) {
 							// 验证通过
-							_B.emit("hide_login_success", {}, {
-								views: ["home"]
-							});
+							NotifiHome(3);
 							ob.next(data);
 						} else {
-							ob.error();
-							return;
-							// 跳转页面认证
-							mui.toast("帐号已保护，您需要权限认证");
-							app.page.openAuthorized(data.account, data.bindmobile, function(rs) {
-								if(rs.result) {
-									ob.next(data);
-								} else {
-									// 验证失败
-									ob.error();
-								}
-							});
+							ob.error(Error("尝试自动登录失败"));
 						}
 					};
 
@@ -233,7 +223,7 @@
 			});
 
 			var Success$fn = function(user) {
-				
+
 				user = FixUserData(user);
 				var account = user.account;
 
@@ -269,7 +259,7 @@
 					.merge($listenDevListUpdate)
 					// 过滤非登录
 					//.filter(function(){
-						//return app.user.get().account;
+					//return app.user.get().account;
 					//})
 					// 获取ajax数据
 					.mergeMapTo($getDevListByAjax)
@@ -281,14 +271,46 @@
 						SendDevListPageMsg(data);
 						// 保存设备的权限信息
 						//SaveDevListAuth(data);
+						/*
+						 * 测试 AI 音响添加
+						dal.device.add("AX-802-test01", function(err, data) {
+							if(err) {
+								return mui.alert(err.message || "连接失败，请重试");
+							} 
+							return mui.alert("添加成功，请点击完成！", true);
+						});
+						*/
+
 					});
 
 				// 向服务器发送请求缓存处理配件请求
 				SyncZoneRequest();
 
 			};
-			
-			
+
+			// 通知home页 可以获取 设备列表了 
+			var NotifiHome = function _(n) {
+
+				if(n <= 0) {
+					return
+				}
+				var homew = plus.webview.getWebviewById("home");
+
+				var homeWLoaded$ = Rx.Observable.fromEvent(homew, "loaded");
+				var timeover3s$ = Rx.Observable.timer(3e3);
+
+				Rx.Observable.merge(
+						homeWLoaded$.delay(1e3),
+						timeover3s$
+					)
+					.first()
+					.subscribe(function() {
+						_B.emit("hide_login_success", {}, {
+							views: [homew]
+						});
+					});
+
+			}
 
 			// 页面准备完毕
 			$pready
@@ -301,8 +323,7 @@
 				.subscribe(Success$fn,
 					// 登录失败
 					AppLoginFail);
-					
-					
+
 			$pready
 				.mergeMapTo($listenUserUpdate)
 				.subscribe(UpdateUserInfo);
@@ -313,10 +334,13 @@
 				app.user.clear();
 				window.localStorage.setItem('_pwd_', '');
 				plus.storage.removeItem('dev_list');
+				plus.storage.removeItem('acc_list');
 
 				mui.toast("帐号存在异常，请重新登录");
 				//app.user.get(function() {}); 
 			}
+			
+			
 			// 监听 token 失效
 			var $litenTokenErr = Rx.Observable.create(function(ob) {
 				_B.on('token_error', function(data) {
@@ -325,28 +349,28 @@
 					app.user.has() && ob.next(data);
 				});
 			});
+			
+			
 			$pready
+				// 监听 dal 抛出 token 错误异常
 				.mergeMapTo($litenTokenErr)
-				.subscribe(function(data) {
-					// 如果 是 token 过期
-					if(data.message === "TokenTimeOut") {
-						
-						// 重新登录
-						$login
-							// 执行
-							.subscribe(Success$fn,
-								// 登录失败
-								AppLoginFail);
-						return;
-
+				// 尝试重新登录
+				.mergeMapTo($login)
+				// 订阅
+				.subscribe(
+					// 登录成功
+					Success$fn,
+					// 登录失败
+					function(err) {
+						//err.code === 0x00100C01 || // 密码错误 1051649 
+						//err.code === 0x00100C02    // 权限认证失败 1051649
+						plus.nativeUI.toast("帐号登录状态已失效，请重新登录");
+						// 重启app
+						ReloadApp();
+						// 通知原生
+						P.NotifyAccountInfoChange();
 					}
-
-					plus.nativeUI.toast("帐号登录状态已失效，请重新登录");
-					// 重启app
-					ReloadApp();
-					// 通知原生
-					P.NotifyAccountInfoChange();
-				});
+				);
 
 			// 向原生注册 控制中心 处理函数回调
 			var InitNativeSystem = function(o) {
@@ -373,7 +397,7 @@
 					views: ['dev_my_list']
 				});
 			};
-			
+
 			// 保存设备的权限信息
 			/*var SaveDevListAuth = function(data){
 				var i = 0, l = data.length;
@@ -389,7 +413,7 @@
 			// 设备推送开关同步
 			var SyncHronous = function(account, pushData) {
 				PUSH_ID.data = pushData.clientId;
-				var type = mui.os.ios ?  67 : (pushData.type||36); 
+				var type = mui.os.ios ? 67 : (pushData.type || 36);
 				dal.push.synchronous(account, pushData.clientId, type, function(err, data) {
 					/*if(err) {
 						return mui.toast(err.message);
@@ -401,14 +425,16 @@
 			// 发送同步配件请求
 			var SyncZoneRequest = function() {
 				dal.devaccessory.allacc(function(err, data) {
-					if(err){return}
+					if(err) {
+						return
+					}
 					// 缓存配件列表
 					ACC.data = data;
 					// 通知其他页面 (会不会数据太长导致解析失败？)
 					new ni.Broadcast().emit("acc_update", {
 						data: data,
-					},{
-						views: ["add/add_device.html"] 
+					}, {
+						views: ["add/add_device.html"]
 					});
 				});
 			}
