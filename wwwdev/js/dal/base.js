@@ -1,5 +1,5 @@
 var dal = {
-	BASE_URL_DEV: "http://192.168.1.200:8080/vihiapi",
+	BASE_URL_DEV: "http://192.168.1.42:8080/vihiManager/vihiapi",
 	BASE_URL_TEST: "http://47.106.92.195/vihiManager/vihiapi",
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
 	BASE_DOMAIN: "vh.anxin-net.com",
@@ -10,7 +10,7 @@ var dal = {
 	BASE_SHARE_URL: "http://vh.anxin-net.com/vihiManager/vihiapp/share/module/index.html",
 	//BASE_SHARE_URL: "http://192.168.1.103:8080/module/index.html",
 	BASE_URL_VERSION: "216",
-	
+
 };
 
 dal.isVihiDomain = function() {
@@ -21,7 +21,7 @@ dal.isVihiDomain = function() {
 dal.errDir = {
 	"timeout": "请求超时",
 	"error": "网络连接错误，请检查！",
-	"abort": "网络连接中断，请检查！",
+	"abort": "网络连接中断，请检查！", 
 	"parsererror": "解析错误",
 	"null": "请求为空"
 };
@@ -45,7 +45,8 @@ function requestAdapter(type, url, params, callback) {
 	if(BASE_URL) {
 		delete params.BASE_URL;
 	} else {
-		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL_TEST;
+		//		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL_TEST;
+		BASE_URL = dal.BASE_URL_TEST;
 	}
 	var apiUrl = url;
 	url = BASE_URL + url;
@@ -56,14 +57,14 @@ function requestAdapter(type, url, params, callback) {
 	console.log("[" + apiUrl + "]请求: [" + randomID + "][" + type + "] " + " AppUrl: [" + window.location.href.split("/www/")[1] + "]");
 	console.log("[" + apiUrl + "]时间: [" + new Date().getTime() + "] 地址: [" + url + "]");
 	console.log("[" + apiUrl + "]参数: [json]" + JSON.stringify(params));
-
+	
 	var options = {
 		headers: {
 			token: window.localStorage.getItem('_token_') || "",
 			loginid: window.localStorage.getItem('_loginid_') || "",
 			imei: window.localStorage.getItem('_imei_') || "",
 			account: params.account,
-//			appversion: dal.BASE_URL_VERSION,
+			appversion: dal.BASE_URL_VERSION,
 		},
 		data: params,
 		type: type,
@@ -98,7 +99,7 @@ function requestAdapter(type, url, params, callback) {
 			callback(o.err, o.data);
 		},
 		error: function(xhr, type, err) {
-			console.log("[" + apiUrl + "]错误: [" + randomID + "] "+ xhr.status);
+			console.log("[" + apiUrl + "]错误: [" + randomID + "] " + xhr.status);
 			var errmsg = dal.errDir[type] || "其它错误";
 			//console.log("["+errmsg+"]" + url);
 			callback({

@@ -46,6 +46,10 @@
 	scene.updateSceneEnable = function(ids, enable, callback){
 		return ra('post', '/scene/updateSceneEnable', {ids: ids, enable: enable}, callback)
 	}
+	//执行职能场景
+	scene.runScene = function(id, callback){
+		return ra('post', '/scene/run/' + id, {}, callback)
+	}
 	_.scene = scene;
 
 }(window.dal, window.requestAdapter));
