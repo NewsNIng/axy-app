@@ -71,12 +71,10 @@
 				0% {
 					transform: translate3d(-50%, -70%, 0) scale(1);
 					opacity: 0.75;
-					
 				}
 				100% {
-					transform:  translate3d(-50%, -70%, 0) scale(2);
+					transform: translate3d(-50%, -70%, 0) scale(2);
 					opacity: 0;
-					
 				}
 			}
 			
@@ -88,27 +86,19 @@
 			}
 			/*.send_sound_wave:active:after,*/
 			
-			
 			.send_sound_wave.active:after {
 				content: ' ';
 				position: absolute;
 				left: 50%;
 				top: 50%;
-				
 				transform: translate3d(-50%, -70%, 0);
-				
 				-webkit-transform: translate3d(-50%, -70%, 0);
-				
 				z-index: 0;
 				width: 1.6rem;
 				height: 1.6rem;
 				background-color: #2BB8AA;
-				
-				
-				
 				border-radius: 50%;
 				box-shadow: 0 0 10px rgba(0, 0, 0, .35) inset;
-				
 				-webkit-animation-name: 'ripple';
 				/*动画属性名，也就是我们前面keyframes定义的动画名*/
 				-webkit-animation-duration: 1s;
@@ -121,7 +111,6 @@
 				/*定义循环资料，infinite为无限次*/
 				-webkit-animation-direction: normal;
 				/*定义动画方式*/
-				
 				animation-name: 'ripple';
 				/*动画属性名，也就是我们前面keyframes定义的动画名*/
 				animation-duration: 1s;
@@ -172,7 +161,7 @@
 				transform: translate3d(50%, -50%, 0) scaleX(3);
 			}
 			
-			.ripple.active{
+			.ripple.active {
 				animation: ripple_ 4s infinite linear;
 			}
 		</style>
@@ -228,7 +217,7 @@
 
 			<script type="text/javascript">
 				mui.init();
-				
+
 				var P = plug.H5NativeBridge;
 
 				new Vue({
@@ -317,6 +306,10 @@
 							if(this.ing) {
 								mui.toast("开始通话");
 								P.WG100Call();
+								//[事件]语音喊话
+								app.statis.emit("voice_yelling", {
+									from: "WG-100"
+								});
 							} else {
 								mui.toast("通话结束");
 								P.WG100Listen();
@@ -331,10 +324,6 @@
 							plus.device.vibrate(50);
 							mui.toast("通话");
 							
-							//[事件]语音喊话
-							app.statis.emit("voice_yelling", {
-								from: "WG-100"
-							});
 						},
 
 						// 松手监听

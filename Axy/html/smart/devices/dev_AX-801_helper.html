@@ -110,20 +110,23 @@
 					
 				},
 				plusReady: function() {
-					this.devId = this.$view.devId;
+					this.devid = this.$view.devid;
+					this.type = this.$view.type;
 				},
 				methods: {
 					onBroadcastTap: function() {
 						mui.openWindow('dev_AX-801_broadcast.html','dev_AX-801_broadcast',{
 							extras: {
-								devId: this.devId,
+								devid: this.devid,
+								type: this.type,
 							}
 						});
 					},
 					onClockTap: function() {
 						mui.openWindow('dev_AX-801_alarm_clock.html','dev_AX-801_alarm_clock',{
 							extras: {
-								devId: this.devId,
+								devid: this.devid,
+								type: this.type,
 							}
 						});
 					}

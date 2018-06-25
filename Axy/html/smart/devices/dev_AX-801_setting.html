@@ -53,7 +53,7 @@
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge" v-text="devInfo.设备名称"></span>
+							<span class="mui-badge">{{devInfo.name}}</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onShowInfo()">
@@ -129,20 +129,7 @@
 				data: function() {
 					return {
 						devInfo: {
-							"音箱id": "",
-							"设备类型": "",
-							"温度": 20,
-							"PM2.5": 36,
-							"湿度": 74,
-							"位置信息": "深圳市·南山区",
-							"设备名称": "AX-4035652525",
-							"设备型号": "",
-							"连接的WIFI": "main123293",
-							"WIFI信号强度": "高",
-							"硬件版本": "4.0.1",
-							"软件版本": "",
-							"IP地址": "192.163.1.1",
-							"剩余电量": "20"
+							name: 'dd',
 						},
 					};
 				},
@@ -150,40 +137,38 @@
 
 				},
 				plusReady: function() {
-//					this.devInfo = this.$view.devInfo;
-
+					this.devInfo = this.$view.devInfo;
 //					plus.nativeUI.showWaiting();
 //					this.getBaseInfo()
 //						.mergeMap(this.gprsParam)
 //						.subscribe(plus.nativeUI.closeWaiting, function(err) {
 //							mui.toast(err.message);
 //						});
-
+					this.devid = this.$view.devid;
+					this.type = this.$view.type;
 				},
 				methods: {
 					// 设备名称
 					onNameTap: function(name) {
 						var that = this;
-
 						app.page.getInput(function(data) {
-//							data.content = data.content.trim().length === 0 ? that.devInfo.devid : data.content;
-//							dal.devparam.devname(that.devInfo.devid, that.devInfo.type, data.content, function(err, rs) {
-//								if(err) {
-//									return mui.toast(err.message);
-//								}
-//								that.devInfo.location = data.content;
-//								mui.toast('名称更新成功');
-//								// 通知上层
+							data.content = data.content.trim().length === 0 ? that.devInfo.devid : data.content;
+							dal.devparam.devname(that.devid, that.type, data.content, function(err, rs) {
+								if(err) {
+									return mui.toast(err.message);
+								}
+								that.devInfo.name = data.content;
+								mui.toast('名称更新成功');
+								// 通知上层
 //								_B.emit("update", {
 //									info: that.devInfo
 //								}, {
 //									views: ['dev_my_list', 'home']
 //								});
-//							});
+							});
 						}, {
 							title: "设备名称",
-							content: that.fixName("that.devInfo.设备名称"),
-							//							r: "devName",
+							content: that.fixName(that.devInfo.name),
 							maxLength: 30,
 							mLengthMsg: "最长不超过30个字符！",
 						});
@@ -191,15 +176,14 @@
 					},
 					// 重启设备
 					onReboot: function() {
-//						var dev = this.devInfo;
 						mui.confirm("确定要重启设备吗？", "", ["重启", "取消"], function(e) {
 							if(e.index === 0) {
-//								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
-//									if(err) {
-//										return mui.toast('重启设备失败');
-//									}
-//									return mui.toast('重启设备成功');
-//								});
+								dal.devparam.reboot(this.devid, this.type, function(err, rs) {
+									if(err) {
+										return mui.toast('重启设备失败');
+									}
+									return mui.toast('重启设备成功');
+								});
 							}
 						});
 					},
@@ -293,22 +277,24 @@
 					onShowInfo: function() {
 						mui.openWindow('dev_AX-801_info.html','dev_AX-801_info',{
 							extras: {
-								devInfo: this.devInfo,
+								devid: this.devid,
+								type: this.type
 							}
 						});
 					},
 					onLogTap: function() {
 						mui.openWindow('dev_AX-801_log.html','dev_AX-801_log',{
 							extras: {
-								devId: this.devInfo.音箱id,
+								devid: this.devid,
+								type: this.type
 							}
 						});
 					},
 					onArmingTap: function() {
 						mui.openWindow('dev_AX-801_arming.html','dev_AX-801_arming.html',{
 							extras: {
-								devId: this.devInfo.音箱id,
-								devType: this.devInfo.设备类型,
+								devid: this.devid,
+								type: this.type
 							}
 						});
 					}
