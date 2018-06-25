@@ -53,43 +53,43 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>设备型号</span>
-							<span class="mui-badge" v-text="devInfo.设备型号"></span>
+							<span class="mui-badge">{{formatDevType(devInfo.devtype)}}</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>连接的WIFI</span>
-							<span class="mui-badge" v-text="devInfo.连接的WIFI"></span>
+							<span class="mui-badge">{{devInfo.wifiMac}}</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>WIFI信号强度</span>
-							<span class="mui-badge" v-text="devInfo.WIFI信号强度"></span>
+							<span class="mui-badge">{{devInfo.wifiStrength}}</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>硬件版本</span>
-							<span class="mui-badge" v-text="devInfo.硬件版本"></span>
+							<span class="mui-badge">{{devInfo.hdVersion}}</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>软件版本</span>
-							<span class="mui-badge" v-text="devInfo.软件版本"></span>
+							<span class="mui-badge">{{devInfo.appVersion}}</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>IP地址</span>
-							<span class="mui-badge" v-text="devInfo.IP地址"></span>
+							<span class="mui-badge">{{devInfo.ip}}</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>剩余电量</span>
-							<span class="mui-badge" v-text="devInfo.剩余电量+'%'"></span>
+							<span class="mui-badge">{{devInfo.energy}}</span>
 						</a>
 					</li>
 				</ul>
@@ -121,7 +121,7 @@
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
-
+		<script src="../../../js/dal/ax_801.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -129,31 +129,39 @@
 				el: '#warpper',
 				data: function() {
 					return {
-						devInfo: {
-							"音箱id": "",
-							"温度": 20,
-							"PM2.5": 36,
-							"湿度": 74,
-							"位置信息": "深圳市·南山区",
-							"设备名称": "AX-4035652525",
-							"设备型号": "",
-							"连接的WIFI": "main123293",
-							"WIFI信号强度": "高",
-							"硬件版本": "4.0.1",
-							"软件版本": "",
-							"IP地址": "192.163.1.1",
-							"剩余电量": "20"
-						}
+						devInfo: {}
 					};
 				},
 				mounted: function() {
 
 				},
 				plusReady: function() {
-//					this.devInfo = this.$view.devinfo;
+					this.devid = this.$view.devid;
+					this.type = this.$view.type;
+					this.getBasicInfo();
 				},
 				methods: {
-
+					getBasicInfo: function() {
+						var _this = this;
+						dal.aiBox.basicInfo(this.devid, this.type, function(err, data) {
+							if(err) {
+//								return mui.toast(err.message)
+							}
+							_this.devInfo = data;
+							_this.devInfo = {
+								devtype: 0x1101,
+								wifiMac: '192.168.1.111',
+								wifiStrength: '20%',
+								hdVersion: '1.1',
+								appVersion: '2.0',
+								ip: '47.106.23.33',
+								energy: '40%'
+							}
+						})
+					},
+					formatDevType: function(typeNumber) {
+						return app.dev.findName(typeNumber)
+					}
 				}
 			});
 		</script>

@@ -36,6 +36,9 @@
 			ul {
 				top: 0.266666rem;
 			}
+			.mui-switch.mui-disabled {
+				opacity: 1 !important;
+			}
 		</style>
 	</head>
 
@@ -52,8 +55,8 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>天气播报</span>
-							<span class="mui-badge">
-								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ':true}" ref="switch1">
+							<span class="mui-badge" @click="changeStatus('weatherReport')">
+								<div class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ':weatherReport}">
 									<div class="mui-switch-handle"></div>
 								</div>
 							</span>
@@ -62,8 +65,8 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>整点播报</span>
-							<span class="mui-badge">
-								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ':true}" ref="switch1">
+							<span class="mui-badge" @click="changeStatus('timeReport')">
+								<div class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ':timeReport}" >
 									<div class="mui-switch-handle"></div>
 								</div>
 							</span>
@@ -72,8 +75,8 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>告警推送</span>
-							<span class="mui-badge">
-								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ':true}" ref="switch1">
+							<span class="mui-badge" @click="changeStatus('alarmPush')">
+								<div class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ':alarmPush}" >
 									<div class="mui-switch-handle"></div>
 								</div>
 							</span>
@@ -82,8 +85,8 @@
 					<li class="mui-table-view-cell">
 						<a class="">
 							<span>闹钟提醒</span>
-							<span class="mui-badge">
-								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ':true}" ref="switch1">
+							<span class="mui-badge" @click="changeStatus('alarmClockReminder')">
+								<div class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ':alarmClockReminder}" >
 									<div class="mui-switch-handle"></div>
 								</div>
 							</span>
@@ -115,10 +118,9 @@
 		<!--<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="arr.js"></script>-->
-		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
-
+		<script src="../../../js/dal/ax_801.js"></script>
 		<script type="text/javascript">
 			mui.init();
 
@@ -128,7 +130,11 @@
 				el: '#warpper',
 				data: function() {
 					return {
-
+						weatherReport: false,
+						alarmPush: false,
+						alarmClockReminder: false,
+						timeReport: false,
+						callReminder: false,//来电提醒
 					};
 				},
 				mounted: function() {
@@ -141,10 +147,45 @@
 					}.bind(this));
 				},
 				plusReady: function() {
-
+					this.devid = this.$view.devid;
+					this.type = this.$view.type;
+					this.getBasicInfo();
 				},
 				methods: {
-
+					getBasicInfo: function() {
+						dal.aiBox.basicInfo(this.devid, this.type, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							this.weatherReport = data.weatherReport;
+							this.alarmPush = data.alarmPush;
+							this.alarmClockReminder = data.alarmClockReminder;
+							this.timeReport = data.timeReport;
+							this.callReminder = data.callReminder;
+						})
+					},
+					changeStatus: function(type){
+						var current = this[type];
+						var obj = {
+							weatherReport: this.weatherReport,
+							alarmPush: this.alarmPush,
+							alarmClockReminder: this.alarmClockReminder,
+							timeReport: this.timeReport,
+							callReminder: this.callReminder,
+							devid: this.devid,
+							type: this.type
+						}
+						obj[type] = !current;
+						this.setBroadcastInfo(obj, function(err, data){
+							if(err){
+								return mui.toast(err.message)
+							}
+							this[type] = !current;
+						})
+					},
+					setBroadcastInfo: function(obj, callback){
+						return dal.aiBox.setBroadcastInfo(obj, callback)
+					}
 				}
 			});
 		</script>

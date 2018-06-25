@@ -1,5 +1,5 @@
-<!doctype html>
 <html>
+	<!doctype html>
 
 	<head>
 		<meta charset="UTF-8">
@@ -111,13 +111,13 @@
 
 			<div class="mui-content noImmersed">
 				<div class="menu-item temp">
-					<span class="value app-font-size-120">20</span><span class="unit app-font-size-40">°C</span><br /><span class="desc app-font-size-28">冷热适宜，感觉很舒适</span>
+					<span class="value app-font-size-120">{{devInfo.temperature}}</span><span class="unit app-font-size-40">°C</span><br /><span class="desc app-font-size-28">冷热适宜，感觉很舒适</span>
 					<span class="right-text app-font-size-26">深圳市·南山区</span>
 				</div>
 				<div class="menu-item air-quality">
 					<div class="vertical-center">
-						<span class="value app-font-size-64">36</span><span class="unit app-font-size-26">PM2.5</span>
-						<span class="desc app-font-size-26">良</span>
+						<span class="value app-font-size-64">{{devInfo.humidity}}</span><span class="unit app-font-size-26">PM2.5</span>
+						<span class="desc app-font-size-26">{{getGrade(devInfo.humidity)}}</span>
 					</div>
 					<span class="right-text app-font-size-26 vertical-center">深圳市·南山区</span>
 				</div>
@@ -150,10 +150,10 @@
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_ms_alarm.js"></script>
-
+		<script src="../../../js/dal/ax_801.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../js/app/app-AiBox.js"></script>
 		<script type="text/javascript" src="../../../js/components/devices/footer.js"></script>
 
-		<img src="" />
 		<script type="text/javascript">
 			//			mui.init({
 			//				beforeback: function() {
@@ -166,21 +166,28 @@
 				data: function() {
 					return {
 						// 设备信息
+						devid: '',
+						type: '',
 						devInfo: {
-							"音箱id": "",
-							"温度": 20,
-							"PM2.5": 36,
-							"湿度": 74,
-							"位置信息": "深圳市·南山区",
-							"设备名称": "AX-4035652525",
-							"设备型号": "",
-							"连接的WIFI": "main123293",
-							"WIFI信号强度": "高",
-							"硬件版本": "4.0.1",
-							"软件版本": "",
-							"IP地址": "192.163.1.1",
-							"剩余电量": "20",
-							"应用程序版本": "5.2.0"
+							"alarmclocks": null,//闹钟
+							"alarmPush": null,//告警推送
+							"pM25": null,
+							"callReminder": null,//来电提醒
+							"temperature": null,//温度 单位0.01度
+							"humidity": null,//湿度 单位0.01%
+							"id": null,
+							"timeReport": null,
+							"energy": null,
+							"wifiStrength": null,
+							"ledstate": false,
+							"ip": null,
+							"devtype": 0,
+							"centerPort": 0,
+							"imageUpside": false,
+							"name": null,
+							"centerServer": null,
+							"wifiMac": null,
+							"alarmClockReminder": null,
 						},
 
 					};
@@ -189,15 +196,41 @@
 					document.querySelector(".mui-content").style.paddingTop = 45 + 5 + window.immersed + 'px';
 				},
 				plusReady: function() {
-
+					this.devid = this.$view.devid || 'AX-801-test01';
+					this.type = this.$view.type || 'test';
+					this.getBasicInfo();
 				},
 				methods: {
+					getBasicInfo: function() {
+						dal.aiBox.basicInfo(this.devid, this.type, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							this.devInfo = data;
+						})
+					},
 					onLifeTap: function() {
-						mui.openWindow('dev_AX-801_helper.html', 'dev_AX-801_helper');
+						var _this = this;
+						mui.openWindow('dev_AX-801_helper.html', 'dev_AX-801_helper',{
+							extras: {
+								devid: _this.devid,
+								type: _this.type
+							}
+						});
 					},
 					onSettingTap: function() {
-						mui.openWindow('dev_AX-801_setting.html', 'dev_AX-801_setting');
+						var _this = this;
+						mui.openWindow('dev_AX-801_setting.html','dev_AX-801_setting',{
+							extras: {
+								devid: _this.devid,
+								type: _this.type,
+								devInfo: _this.devInfo,
+							}
+						})
 					},
+					getGrade: function(pmNumber) {
+						return app.aiBox.getGradeByNumber(pmNumber)
+					}
 				}
 			});
 		</script>

@@ -10,7 +10,7 @@
 	 * @param {Object} callback
 	 */
 	aiBox.basicInfo = function(devid, type, callback) {
-		return ra("post", "/devparam/basicinfo", {
+		return ra("get", "/devparam/basicinfo", {
 			devid: devid,
 			type: type,
 		}, callback);
@@ -23,7 +23,7 @@
 	 * @param {Object} callback
 	 */
 	aiBox.getAlarmClockList = function(devid, type, callback) {
-		return ra("post", "/devparam/getAlarmClockList", {
+		return ra("get", "/devparam/getAlarmClockList", {
 			devid: devid,
 			type: type
 		}, callback);
@@ -31,6 +31,7 @@
 	
 	/**
 	 * 新建闹钟
+	 * @param {Object} time, weekdays, enable, repeat, diaboloDuration, devid, type,
 	 * @param {Object} time
 	 * @param {Object} weekdays
 	 * @param {Object} enable
@@ -40,20 +41,13 @@
 	 * @param {Object} type
 	 * @param {Object} callback
 	 */
-	aiBox.addAlarmClock = function(time, weekdays, enable, repeat, diaboloDuration, devid, type, callback) {
-		return ra("post", "/devparam/addAlarmClock", {
-			time: time,
-			weekdays: weekdays,
-			enable: enable,
-			repeat: repeat,
-			diaboloDuration: diaboloDuration,
-			devid: devid,
-			type: type
-		});
+	aiBox.addAlarmClock = function(obj, callback) {
+		return ra("post", "/devparam/addAlarmClock", obj, callback);
 	}
 	
 	/**
 	 * 编辑闹钟
+	 * @param {Object} {id, time, weekdays, enable, repeat, diaboloDuration, devid, type} 对象
 	 * @param {Object} id
 	 * @param {Object} time
 	 * @param {Object} weekdays
@@ -64,26 +58,18 @@
 	 * @param {Object} type
 	 * @param {Object} callback
 	 */
-	aiBox.updateAlarmClock = function(id, time, weekdays, enable, repeat, diaboloDuration, devid, type, callback) {
-		return ra("post", "/devparam/updateAlarmClock", {
-			id: id,
-			time: time,
-			weekdays: weekdays,
-			enable: enable,
-			repeat: repeat,
-			diaboloDuration: diaboloDuration,
-			devid: devid,
-			type: type
-		});
+	aiBox.updateAlarmClock = function(obj, callback) {
+		return ra("post", "/devparam/updateAlarmClock", obj, callback);
 	}
 	
 	/**
 	 * 删除闹钟
-	 * @param {Object} id
-	 * @param {Object} devid
-	 * @param {Object} type
+	 * @param {Number} id 
+	 * @param {String} devid 设备id
+	 * @param {Number} type
+	 * @param {Function} callback 
 	 */
-	aiBox.delAlarmClock = function(id, devid, type) {
+	aiBox.delAlarmClock = function(id, devid, type, callback) {
 		return ra("post", "/devparam/delAlarmClock", {
 			id: id,
 			devid: devid,
@@ -102,16 +88,8 @@
 	 * @param {Object} callReminder
 	 * @param {Object} callback
 	 */
-	aiBox.setBroadcastInfo = function(devid, type, timeReport, alarmClockReminder, alarmPush, weatherReport, callReminder, callback) {
-		return ra("post", "/devparam/setBroadcastInfo", {
-			devid: devid,
-			type: type,
-			timeReport: timeReport,
-			alarmClockReminder: alarmClockReminder,
-			alarmPush: alarmPush,
-			weatherReport: weatherReport,
-			callReminder: callReminder
-		}, callback);
+	aiBox.setBroadcastInfo = function(obj, callback) {
+		return ra("post", "/devparam/setBroadcastInfo", obj, callback);
 	}
 
 	_.aiBox = aiBox;

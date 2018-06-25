@@ -68,7 +68,7 @@
 	 */
 	device.deleteshare = function(devid, callback) {
 		var account = window.localStorage.getItem("_account_");
-		return ra('post', '/device/delete/share/' + devid + '/user/' + account, function(data) {
+		return ra('post', '/device/delete/share/' + devid + '/user/' + account, {}, function(data) {
 			// [事件] 删除设备
 			app && app.statis && app.statis.emit("delete", {});
 			callback.apply(callback, arguments);

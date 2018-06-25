@@ -11,7 +11,6 @@
 		<link rel="stylesheet" href="../../../css/lib/mui.poppicker.css" />
 		<link rel="stylesheet" href="../../../css/app/app.poppicker.css" />-->
 
-		<link rel="stylesheet" href="../css/mui.min.css">
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<!--<link rel="stylesheet" href="../../../css/app/devices.css" />-->
 
@@ -137,7 +136,12 @@
 			.mui-popover {
 				width: 2.8rem;
 			}
-			
+			.mui-popover {
+				height: 200px;
+			}
+			.mui-content {
+				padding: 10px;
+			}
 			.mui-popover a {
 				margin: 0 !important;
 				text-align: center;
@@ -198,16 +202,24 @@
 				<div class="top app-font-size-28" @tap="console.log(JSON.stringify(document.getElementById('topPopover1').style.top))" ref=tabroom>
 					<!--<div @tap="test()">操作<img src="../../../image/smart/devices/others/down.png" /></div>-->
 					<a href="#topPopover1">
-						<div>操作<img src="../../../image/smart/devices/others/down.png" /></div>
+						<div>操作
+							<img src="../../../image/smart/devices/others/down.png" />
+						</div>
 					</a>
 					<a href="#topPopover2">
-						<div>终端<img src="../../../image/smart/devices/others/down.png" /></div>
+						<div>终端
+							<img src="../../../image/smart/devices/others/down.png" />
+						</div>
 					</a>
 					<a href="#topPopover3">
-						<div>账号<img src="../../../image/smart/devices/others/down.png" /></div>
+						<div>账号
+							<img src="../../../image/smart/devices/others/down.png" />
+						</div>
 					</a>
 					<a href="#topPopover4">
-						<div>日期<img src="../../../image/smart/devices/others/down.png" /></div>
+						<div>日期
+							<img src="../../../image/smart/devices/others/down.png" />
+						</div>
 					</a>
 				</div>
 
@@ -226,9 +238,13 @@
 								<div class="log_all">
 									<template v-for="o,i in logs">
 										<div class="log">
-											<div class="account">{{o.handlers ? o.handlers:"未知"}}<br /><span class="from app-font-size-28">来自：{{hdtypes[o.hdtypeid - 1]}}</span></div>
+											<div class="account">{{o.handlers ? o.handlers:"未知"}}
+												<br />
+												<span class="from app-font-size-28">来自：{{hdtypes[o.hdtypeid - 1]}}</span>
+											</div>
 											<div class="state app-font-size-32">{{o.eventid == '2'?'布防成功':o.eventid == '3'?'撤防成功':'重启成功'}}</div>
-											<div class="date app-font-size-28">{{o.attime.split(" ")[0]}}<br />{{o.attime.split(" ")[1]}}</div>
+											<div class="date app-font-size-28">{{o.attime.split(" ")[0]}}
+												<br />{{o.attime.split(" ")[1]}}</div>
 										</div>
 									</template>
 								</div>
@@ -242,79 +258,95 @@
 			<!--右上角弹出菜单-->
 			<div id="topPopover1" class="mui-popover app-font-size-28">
 				<div class="mui-popover-arrow"></div>
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="onSelectTap(0,'')">
-						<a href="#">全部</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(0,'1')">
-						<a href="#">重启</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(0,'2')">
-						<a href="#">布防</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(0,'3')">
-						<a href="#">撤防</a>
-					</li>
-				</ul>
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell" @tap="onSelectTap(0,'')">
+								<a href="#">全部</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(0,'1')">
+								<a href="#">重启</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(0,'2')">
+								<a href="#">布防</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(0,'3')">
+								<a href="#">撤防</a>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 			<div id="topPopover2" class="mui-popover app-font-size-28">
 				<div class="mui-popover-arrow"></div>
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="onSelectTap(1,'')">
-						<a href="#">全部</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(1,'1')">
-						<a href="#">网页</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(1,'2')">
-						<a href="#">遥控器</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(1,'3')">
-						<a href="#">APP</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(1,'4')">
-						<a href="#">PC播放器</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(1,'5')">
-						<a href="#">联防</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(1,'6')">
-						<a href="#">计划任务</a>
-					</li>
-				</ul>
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell" @tap="onSelectTap(1,'')">
+								<a href="#">全部</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(1,'1')">
+								<a href="#">网页</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(1,'2')">
+								<a href="#">遥控器</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(1,'3')">
+								<a href="#">APP</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(1,'4')">
+								<a href="#">PC播放器</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(1,'5')">
+								<a href="#">联防</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(1,'6')">
+								<a href="#">计划任务</a>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 			<div id="topPopover3" class="mui-popover app-font-size-28">
 				<div class="mui-popover-arrow"></div>
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="onSelectTap(2,'')">
-						<a href="#">全部</a>
-					</li>
-					<template v-for="o,i in accounts">
-						<li class="mui-table-view-cell" v-if="o.handlers" @tap="onSelectTap(2,o.handlers)">
-							<a href="#">{{o.handlers}}</a>
-						</li>
-					</template>
-				</ul>
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell" @tap="onSelectTap(2,'')">
+								<a href="#">全部</a>
+							</li>
+							<template v-for="o,i in accounts">
+								<li class="mui-table-view-cell" v-if="o.handlers" @tap="onSelectTap(2,o.handlers)">
+									<a href="#">{{o.handlers}}</a>
+								</li>
+							</template>
+						</ul>
+					</div>
+				</div>
 			</div>
 			<div id="topPopover4" class="mui-popover app-font-size-28">
 				<div class="mui-popover-arrow"></div>
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
-						<a href="#">全部</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
-						<a href="#">一周</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
-						<a href="#">一个月</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
-						<a href="#">三个月</a>
-					</li>
-					<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
-						<a href="#">一年</a>
-					</li>
-				</ul>
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
+								<a href="#">全部</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
+								<a href="#">一周</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
+								<a href="#">一个月</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
+								<a href="#">三个月</a>
+							</li>
+							<li class="mui-table-view-cell" @tap="onSelectTap(3,'')">
+								<a href="#">一年</a>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -340,12 +372,6 @@
 		<script type="text/javascript" src="arr.js"></script>-->
 		<script type="text/javascript">
 			mui.init();
-			mui('body').on('shown', '.mui-popover', function(e) {
-				//console.log('shown', e.detail.id);//detail为当前popover元素
-			});
-			mui('body').on('hidden', '.mui-popover', function(e) {
-				//console.log('hidden', e.detail.id);//detail为当前popover元素
-			});
 			new Vue({
 				el: '#warpper',
 				data: function() {
@@ -400,8 +426,14 @@
 					}.bind(this));
 				},
 				plusReady: function() {
-					document.getElementById("topPopover1").className += ' newPopover';
-					this.devId = this.$view.devId;
+					mui('.mui-scroll-wrapper').scroll();
+					mui('body').on('shown', '.mui-popover', function(e) {
+						//console.log('shown', e.detail.id);//detail为当前popover元素
+					});
+					mui('body').on('hidden', '.mui-popover', function(e) {
+						//console.log('hidden', e.detail.id);//detail为当前popover元素
+					});
+					this.devId = this.$view.devid;
 					this.searchResult();
 				},
 				methods: {
