@@ -237,7 +237,7 @@
 									}
 									data = data.map(function(item) {
 										return {
-											text: item.name || item.uuid,
+											text: (item.name || item.uuid) + (item.online ? "" : "(离线)"),
 											value: item.no
 										}
 									});

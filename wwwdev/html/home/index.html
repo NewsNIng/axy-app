@@ -733,7 +733,16 @@
 						// 延迟666ms
 						.delay(666);
 
-					this.$hideLoginSuccess.merge($onLogin).subscribe(function() {
+
+					Rx.Observable.merge(
+						// zenus 自动登录成功
+						this.$hideLoginSuccess,
+						// 其它页面通知登录成功
+						$onLogin,
+						// 当前是否登录
+						
+					)
+					.subscribe(function() {
 						// 获取第一个设备
 						that.getDeviceOne();
 					});
@@ -953,7 +962,7 @@
 
 									data = data.map(function(item) {
 										return {
-											text: item.name,
+											text: (item.name || item.uuid) + (item.online ? "" : "(离线)"),
 											value: item.no
 										}
 									});

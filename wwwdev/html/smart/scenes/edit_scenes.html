@@ -425,6 +425,10 @@
 								return item.type == 'lightPos'
 							});
 							pos = pos.length ? pos[0].value : '';
+							var sceneId = devInfo.filter(function(item){
+								return item.type == 'scenelist'
+							})
+							sceneId = sceneId.length ? sceneId[0].value : '';
 							var extend = {};
 							if(pos) {
 								extend.pos = pos;
@@ -438,6 +442,7 @@
 								"type": data.type,
 								"devId": devId,
 								"accId": accId,
+								"sceneId": sceneId,
 								"extend": extend,
 								"enable": 1,
 								"state": 1, //为了列表响应式

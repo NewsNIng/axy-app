@@ -230,6 +230,10 @@
 						<span class="mui-icon"><img src="../../../image/person/myself/share@3x.png"/></span>
 						<span>分享</span>
 					</li>
+					<li class="mui-table-view-cell" data-href="discover/discover_release.html" @tap="onDeleteTap()">
+						<span class="mui-icon"><img src="../../../image/person/myself/delete@3x.png"/></span>
+						<span>删除</span>
+					</li>
 				</ul>
 			</div>
 
@@ -425,11 +429,31 @@
 							}
 						});
 					},
+					
+					// 删除
+					onDeleteTap: function(){
+						var taht = this;
+						plus.nativeUI.showWaiting();
+						dal.store.delete(this.id, function(err, data){
+							plus.nativeUI.closeWaiting();
+							if(err) {
+								return mui.toast(err.message);
+							}
+							// 删除成功
+							mui.toast("删除成功");
+							
+							app.page.setResult({
+								type: 0, // 删除
+							}).close();
+						});
+					},
 
 					getInfo: function() {
 						dal.store.get(this.id, function(err, data) {
 							if(err) {
-								return mui.toast(err.message);
+								mui.toast(err.message);
+								mui.back();
+								return;
 							}
 							// 商家信息
 							this.data = data.store;
