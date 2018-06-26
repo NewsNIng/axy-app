@@ -471,16 +471,30 @@
 										}
 										_this.conditionsMapList[i] = data;
 										_this.setSelectList();
-										if(_this.selectList.length == 0){//如果没有数据不给选择
+										if(_this.selectList.length == 0) { //如果没有数据不给选择
 											return mui.toast('暂无可选值')
+										} else if(_this.selectList.length == 1) {
+											var firstSelectItem = _this.selectList[0];
+											if(i < 4) {
+												_this.onSelectedTap(firstSelectItem)
+											} else {
+												_this.onSecondaryTap(firstSelectItem)
+											}
 										}
 										_this.mask = true;
 										_this.conditionType = o.conditiontype
 									})
 								} else {
 									_this.setSelectList();
-									if(_this.selectList.length == 0){//如果没有数据不给选择
+									if(_this.selectList.length == 0) { //如果没有数据不给选择
 										return mui.toast('暂无可选值')
+									} else if(_this.selectList.length == 1) {
+										var firstSelectItem = _this.selectList[0];
+										if(i < 4) {
+											_this.onSelectedTap(firstSelectItem)
+										} else {
+											_this.onSecondaryTap(firstSelectItem)
+										}
 									}
 									_this.mask = true;
 									_this.conditionType = o.conditiontype
@@ -499,11 +513,11 @@
 								name: o.name || o.text || o.value,
 								conditionType: this.conditionType,
 							}
-							if(o.value !== undefined){
+							if(o.value !== undefined) {
 								var typeId;
-								if(o.type == 'devlist'){
+								if(o.type == 'devlist') {
 									typeId = 'devId'
-								}else{
+								} else {
 									typeId = 'accId'
 								}
 								result[typeId] = o.value;
@@ -573,31 +587,31 @@
 							var id = o.text || o.value;
 							var _this = this;
 							var conditionType = _this.conditionType;
-							var conditionName = app.act.getConditionNameById(conditionType).slice(0,-3)
+							var conditionName = app.act.getConditionNameById(conditionType).slice(0, -3)
 							_this.pick = new mui.PopPicker({
 								layer: 1
 							});
 							_this.pick.setData(thousandValue);
 							_this.pick.pickers[0].setSelectedIndex(this.numValue);
-							
+
 							_this.pick.show(function(items) {
 								_this.numValue = items[0].value;
 								var name = '' + id + '(' + conditionName + _this.numValue + ')';
 								var obj = {
 									name: name,
 								};
-								if(o.type == 'acclist'){
+								if(o.type == 'acclist') {
 									obj.accId = o.value
 								}
-								if(o.type == 'devlist'){
+								if(o.type == 'devlist') {
 									obj.devId = o.value
 								}
-								if(conditionType == 0x400 || conditionType == 0x401){
-									obj.temperature =  _this.numValue
-								}else if(conditionType == 0x500 || conditionType == 0x501){
-									obj.humidity =  _this.numValue
-								}else{
-									obj.concentration =  _this.numValue
+								if(conditionType == 0x400 || conditionType == 0x401) {
+									obj.temperature = _this.numValue
+								} else if(conditionType == 0x500 || conditionType == 0x501) {
+									obj.humidity = _this.numValue
+								} else {
+									obj.concentration = _this.numValue
 								}
 								_this.onSelectedTap(obj);
 							});
