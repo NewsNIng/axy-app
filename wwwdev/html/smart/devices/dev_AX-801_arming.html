@@ -392,10 +392,8 @@
 					this.pick.setData(pick_data);
 				},
 				plusReady: function() {
-					var info = this.$view.info;
-					this.devid = info.devid;
-					this.type = info.type;
-
+					this.devid = this.$view.devid;
+					this.type = this.$view.type;
 					this.getAlarmplan();
 				},
 				methods: {
@@ -409,6 +407,9 @@
 					getAlarmplan: function() {
 						plus.nativeUI.showWaiting();
 						dal.devparam.alarmplan(this.devid, this.type, function(err, rs) {
+							if(err){
+								return mui.toast(err.message)
+							}
 							plus.nativeUI.closeWaiting();
 							this.plans = rs || [];
 							this.isGet = true;
