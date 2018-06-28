@@ -156,7 +156,7 @@
 				<div class="com-dev app-font-size-28">
 					<ul class="mui-table-view">
 						<li class="mui-table-view-cell" @tap="onEditTap()">编辑场景</li>
-						<li class="mui-table-view-cell" @tap="onDelTap()">删除场景</li>
+						<li class="mui-table-view-cell" @tap="onDelTap()" v-show="showDelete">删除场景</li>
 					</ul>
 					<ul class="mui-table-view cancel">
 						<li class="mui-table-view-cell" @tap="mask = false">取消</li>
@@ -225,6 +225,18 @@
 							return o.type == 6;
 						});
 					},
+					sceneType: function(){
+						var currentScene = this.scenes[this.index];
+						if(currentScene){
+							return currentScene.type
+						}
+					},
+					showDelete: function(){
+						if(this.sceneType <= 4){
+							return false
+						}
+						return true
+					}
 				},
 				plusReady: function() {
 					this.getList();
