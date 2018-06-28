@@ -323,7 +323,9 @@
 					"js/common/android-back.js",
 					"js/common/flexible.js",
 					"image/main/mall.png",
-					"html/smart/devices/dev_error.html"
+					"html/smart/devices/dev_error.html",
+					"js/app/app-mall.js",
+					"js/app/app-statis.js"
 				],
 				"refer": [
 					"html/zeus.html",

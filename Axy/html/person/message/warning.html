@@ -844,7 +844,7 @@
 								if(app.dev.isGPRS(o.workmode)) {
 									return mui.toast("设备处于GPRS模式");
 								}
-								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, temp.type === 0x1046 ? 1 : 0, this.fixName(o.location), function() {});
+								plug.H5NativeBridge.StartDevicePlay(o.devid, w1, temp.type === 0x1046 ? 1 : 0, this.fixName(o.location), temp.online === 1, temp.cid, temp.p2pPasswd, function() {});
 								return;
 							}
 						}

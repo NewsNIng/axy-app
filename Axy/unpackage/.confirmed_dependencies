@@ -2,11 +2,28 @@
 	"index.html": {
 		"refer": [
 			"html/main.html"
+		],
+		"resources": [
+			"js/app/app-page.js"
 		]
 	},
 	"html/main.html": {
 		"resources": [
-			"html/home/index.html"
+			"html/home/index.html",
+			"js/app/app-mall.js",
+			"js/app/app-page.js",
+			"js/lib/Rx.min.js",
+			"js/common/android-back.js",
+			"js/lib/vue.min.js",
+			"js/lib/mui.min.js",
+			"js/common/flexible.js",
+			"js/dal/system.js",
+			"js/app/app-statis.js",
+			"js/app/app.js",
+			"js/dal/base.js",
+			"js/common/rsmanager.js",
+			"js/lib/vue-ni.js",
+			"html/person/index.html"
 		],
 		"refer": [
 			"html/home/index.html",
@@ -28,7 +45,52 @@
 	},
 	"html/person/index.html": {
 		"refer": [
-			"html/smart/devices/dev_my_list.html"
+			"html/smart/devices/dev_my_list.html",
+			"html/person/setting/index.html",
+			"html/person/collection/my_collection.html"
+		]
+	},
+	"html/home/index.html": {
+		"refer": [
+			"html/smart/add/add_device.html"
+		]
+	},
+	"html/smart/add/add_device.html": {
+		"refer": [
+			"html/smart/add/Lan_select_dev_id.html",
+			"html/smart/add/Lan_add_camera.html",
+			"html/smart/add/Lan_connect_dev.html",
+			"html/smart/add/Lan_connect_camera.html"
+		]
+	},
+	"html/smart/add/Lan_connect_camera.html": {
+		"refer": [
+			"html/smart/add/Lan_select_dev_id.html"
+		]
+	},
+	"html/person/setting/index.html": {
+		"refer": [
+			"html/common/login.html"
+		]
+	},
+	"html/smart/devices/dev_my_list.html": {
+		"refer": [
+			"html/smart/devices/camera_settings.html"
+		]
+	},
+	"html/smart/devices/camera_settings.html": {
+		"refer": [
+			"html/smart/devices/camera_settings_info.html",
+			"html/smart/devices/camera_settings_arming.html",
+			"html/smart/devices/camera_settings_record.html",
+			"html/public/alarmParam.html",
+			"html/smart/add/connect_wifi.html",
+			"html/smart/devices/camera_settings_log.html"
+		]
+	},
+	"html/zeus.html": {
+		"refer": [
+			"html/common/login.html"
 		]
 	}
 }

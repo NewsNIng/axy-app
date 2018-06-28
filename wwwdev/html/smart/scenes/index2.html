@@ -165,7 +165,7 @@
 			</div>
 
 			<div class="mui-content">
-				<template v-for="o,i in scenes" v-if="o.type !== 6">
+				<template v-for="o,i in scenes" v-if="o.type !== 6" :key="o.id">
 
 					<div class="app-font-size-30" @tap="onClickTap(o, i, o.icon)">
 						<span class="setting_icon" @tap.stop="onSetting(i)"><img src="../../../image/smart/scenes/btn_Setup@3x.png"/></span>

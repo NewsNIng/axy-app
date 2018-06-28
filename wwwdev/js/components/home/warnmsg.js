@@ -98,6 +98,9 @@ Vue && Vue.component('warn-msg', {
 
 		scroll: function() {
 			this.animate = true;
+			if(!this.$view || !this.$view.isVisible()){
+			    return;
+			}
 			setTimeout(function() {
 				this.items.push(this.items[0]);
 				this.items.shift();

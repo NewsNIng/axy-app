@@ -211,6 +211,7 @@
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -409,7 +410,10 @@
 							return mui.toast('绑定设备离线');
 						}
 						// 打开视频播放页面
-						plug.H5NativeBridge.StartDevicePlay(devid, 0, 0, devid, function() {});
+						// TODO 电管家 播放 4.0设备
+						// 获取设备的基础信息
+						// dal.devparam.basicInfo()
+						// plug.H5NativeBridge.StartDevicePlay(devid, 0, 0, devid, false, "cid", "pwd", function() {});
 					},
 
 					// 保存数据

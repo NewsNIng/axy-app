@@ -38,6 +38,19 @@
 			sendmode: SENDMODE,
 		}, callback);
 	};
+	
+	/**
+	 * 4.0蓝牙设备的添加
+	 */
+	device.add40Blue = function(devid, cid, p2pPasswd, callback){
+		return ra("post", "/device/add", {
+			devid: devid,
+			cid: cid,
+			p2pPasswd: p2pPasswd,
+			target: PUSH_ID.data || "",
+			sendmode: SENDMODE,
+		}, callback);
+	}
 
 	/**
 	 * 设备列表（分页）
