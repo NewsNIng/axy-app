@@ -233,7 +233,7 @@
 						</a>
 					</li>
 
-					<li class="mui-table-view-cell" @tap="onTypeTap()">
+					<li class="mui-table-view-cell" @tap="onTypeTap()" v-if="false">
 						<a class="mui-navigate-right">
 							<span>场景类型</span>
 							<span class="mui-badge">{{_parseType(sceneInfo.basiceinfo.type)}}</span>
@@ -323,7 +323,7 @@
 								"name": "",
 								"ctime": '',
 								"id": null,
-								"type": null,
+								"type": 5, //自定义类型
 								"push": 1,
 								"state": 1,	
 							},
@@ -493,6 +493,7 @@
 						});
 					},
 					onTypeTap: function() {
+						return;
 						var _this = this;
 						this.typePicker.show(function(select) {
 							_this.sceneInfo.basiceinfo.type = select[0].value;
