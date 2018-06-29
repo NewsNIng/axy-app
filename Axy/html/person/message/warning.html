@@ -139,7 +139,7 @@
 				position: absolute;
 				right: 0;
 				background-color: #f40;
-				height: 100%;
+				height: 99.99%;
 				top: 0;
 				width: 50px;
 				white-space: nowrap;
@@ -579,7 +579,6 @@
 					this.$watch('dateTime', this.getMessageList.bind(this, true));
 
 					this.getMessageList();
-
 					mui.back = function() {
 						if(this.videoplay) {
 							this.videoplay = false;
@@ -669,7 +668,7 @@
 							ele;
 						for(var i = 0, len = buttons.length; i < len; i++) {
 							ele = buttons[i];
-							if(!(currentele == ele)) {
+							if(true) {
 								ele.style.transform = 'translateX(' + (this.maxMoveX) + 'px)';
 								ele.style.WebkitTransform = 'translateX(' + (this.maxMoveX) + 'px)';
 							}
@@ -740,13 +739,22 @@
 					},
 					deleteAlarmSingle: function(id) {
 						var that = this;
+						plus.nativeUI.showWaiting('删除中')
 						this.DelAlarmListAsyn([id], function(res) {
+							plus.nativeUI.closeWaiting();
 							res = JSON.parse(res)
 							if(res.code == 0) {
+								mui.toast('删除成功')
 								that.list = that.list.filter(function(item) {
 									return item.id !== id;
 								})
-								that.scroll && that.scroll.refresh()
+								setTimeout(function(){
+									that.scroll && that.scroll.refresh()
+									that._resetSlide()
+								},300)
+							}else{
+								this.toast('删除失败')
+								this._resetSlide()
 							}
 						})
 					},
