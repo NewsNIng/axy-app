@@ -303,7 +303,9 @@
 					getInfo: function() {
 						dal.store.get(this.id, function(err, data) {
 							if(err) {
-								return mui.toast(err.message);
+								mui.toast(err.message);
+								mui.back();
+								return;
 							}
 							// 商家信息
 							this.data = data.store;

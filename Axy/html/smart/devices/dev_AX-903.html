@@ -211,6 +211,7 @@
 		<!--请求相关-->
 		<script type="text/javascript" src="../../../js/dal/base.js"></script>
 		<script type="text/javascript" src="../../../js/dal/device.js"></script>
+		<script type="text/javascript" src="../../../js/dal/devparam.js" ></script>
 		<!--App相关业务逻辑-->
 		<script type="text/javascript" src="../../../js/app/app.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-page.js"></script>
@@ -325,6 +326,12 @@
 						devInfo: {
 							devid: -1,
 							id: -1,
+							// 绑定的设备id
+							binding: "",
+						},
+						
+						bindDevInfo: {
+							
 						},
 						o: {
 							"state1": 0,
@@ -369,7 +376,8 @@
 							rs.alarm && (pv.a = rs.alarm);
 						}.bind(this));
 					},
-
+					
+					
 					// 动态计算状态显示颜色
 					getStateClass: function(index) {
 						if(!this.o.id){return ""} 
@@ -401,15 +409,22 @@
 
 					// 实时视频
 					btn_videoTap: function() {
+						
 						var devid = this.devInfo.binding;
 						if(!devid) {
 							return mui.toast('暂未绑定摄像机');
 						}
-						if(this.devInfo.online !== 1) {
-							return mui.toast('绑定设备离线');
-						}
-						// 打开视频播放页面
-						plug.H5NativeBridge.StartDevicePlay(devid, 0, 0, devid, function() {});
+						
+						// 获取绑定设备的基础信息
+						dal.device.electric.getDeviceInfo(devid, function(err, dev){
+							if(err){return mui.toast(err.message)}
+							if(dev.online !== 1) {
+								return mui.toast('绑定设备离线'); 
+							}
+							var w1 = 0;
+							var w2 = dev.type === 0x1046 ? 1 : 0;
+							plug.H5NativeBridge.StartDevicePlay(devid, w1, w2, devid, dev.online === 1, dev.cid, dev.p2pPasswd, function() {});
+						});
 					},
 
 					// 保存数据

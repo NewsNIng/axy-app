@@ -21,7 +21,7 @@ dal.isVihiDomain = function() {
 dal.errDir = {
 	"timeout": "请求超时",
 	"error": "网络连接错误，请检查！",
-	"abort": "网络连接中断，请检查！",
+	"abort": "网络连接中断，请检查！", 
 	"parsererror": "解析错误",
 	"null": "请求为空"
 };
@@ -45,8 +45,8 @@ function requestAdapter(type, url, params, callback) {
 	if(BASE_URL) {
 		delete params.BASE_URL;
 	} else {
-		//		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL;
-		BASE_URL = dal.BASE_URL_DEV;
+//		 BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL_TEST;
+		BASE_URL = dal.BASE_URL_TEST;
 	}
 	var apiUrl = url;
 	url = BASE_URL + url;
@@ -57,14 +57,14 @@ function requestAdapter(type, url, params, callback) {
 	console.log("[" + apiUrl + "]请求: [" + randomID + "][" + type + "] " + " AppUrl: [" + window.location.href.split("/www/")[1] + "]");
 	console.log("[" + apiUrl + "]时间: [" + new Date().getTime() + "] 地址: [" + url + "]");
 	console.log("[" + apiUrl + "]参数: [json]" + JSON.stringify(params));
-
+	
 	var options = {
 		headers: {
 			token: window.localStorage.getItem('_token_') || "",
 			loginid: window.localStorage.getItem('_loginid_') || "",
 			imei: window.localStorage.getItem('_imei_') || "",
 			account: params.account,
-			//			appversion: dal.BASE_URL_VERSION,
+			appversion: dal.BASE_URL_VERSION,
 		},
 		data: params,
 		type: type,

@@ -25,14 +25,14 @@
 
 	/**
 	 * 获取设备布防计划
-	 * @param {String} devid
+	 * @param {String} devid 
 	 * @param {String} type
 	 * @param {Function} callback
 	 */
 	devparam.alarmplan = function(devid, type, callback) {
 		return ra('get', '/devparam/alarmplan', {
 			devid: devid,
-			type: type,
+			type: type, 
 		}, callback);
 	};
 

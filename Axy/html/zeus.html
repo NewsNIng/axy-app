@@ -355,11 +355,12 @@
 				// 监听 dal 抛出 token 错误异常
 				.mergeMapTo($litenTokenErr)
 				// 尝试重新登录
-				.mergeMapTo($login)
+				// .mergeMapTo($login)
 				// 订阅
 				.subscribe(
 					// 登录成功
-					Success$fn,
+					// Success$fn,
+					// 直接重新登录
 					// 登录失败
 					function(err) {
 						//err.code === 0x00100C01 || // 密码错误 1051649 

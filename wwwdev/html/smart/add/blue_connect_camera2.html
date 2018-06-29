@@ -261,7 +261,7 @@
 								if(typeof rs === "number"){
 									return mui.toast("设备配置失败");
 								}
-								var url = "blue_connect_camera3.html?cid=" + rs.cid + "&pwd=" + that.pwd;
+								var url = "blue_connect_camera3.html?cid=" + rs.cid + "&pwd=" + that.pwd + "&devid=" + rs.devid;
 								that.$view.loadURL(url);
 							});
 

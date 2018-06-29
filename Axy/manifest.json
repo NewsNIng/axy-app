@@ -8,7 +8,7 @@
 	"name": "Axy",/*应用名称，程序桌面图标名称*/
 	"version": {
 		"name": "2.1.8",/*应用版本名称*/
-		"code": "20180521"
+		"code": "20180621"
 	},
 	"description": "",/*应用描述信息*/
 	"icons": {
@@ -323,7 +323,9 @@
 					"js/common/android-back.js",
 					"js/common/flexible.js",
 					"image/main/mall.png",
-					"html/smart/devices/dev_error.html"
+					"html/smart/devices/dev_error.html",
+					"js/app/app-mall.js",
+					"js/app/app-statis.js"
 				],
 				"refer": [
 					"html/zeus.html",

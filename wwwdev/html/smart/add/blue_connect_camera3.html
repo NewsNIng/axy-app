@@ -143,6 +143,7 @@
 						cuid: "",
 						pwd: "",
 						cid: "",
+						devid: "",
 
 						t: 100,
 						timer: -1,
@@ -160,6 +161,7 @@
 					}
 					this.pwd = GetQueryString("pwd");
 					this.cid = GetQueryString("cid");
+					this.devid = GetQueryString("devid");
 
 					// start timer
 					this.startTimer();
@@ -199,7 +201,7 @@
 						mui.openWindow('add_completed.html', 'add_completed', {
 							extras: {
 								needConn: false,
-								devid: this.cid,
+								devid: this.devid,
 							}
 						});
 					},
@@ -239,7 +241,7 @@
 
 					// 通过设备ID进行添加 且 验证
 					addDevice: function() {
-						dal.device.add(this.cid, function(err, data) {
+						dal.device.add40Blue(this.devid, this.cid, this.pwd, function(err, data) {
 							if(err) {
 								return this.over(err.message || "连接失败，请重试");
 							}
