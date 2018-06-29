@@ -932,6 +932,9 @@
 						});
 					},
 					getMessageList: function(override) {
+						if(!app.user.has()){
+							return;
+						}
 						plus.nativeUI.showWaiting("正在加载");
 						if(override) {
 							this.list = [];

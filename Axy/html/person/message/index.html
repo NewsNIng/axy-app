@@ -206,6 +206,9 @@
 					});
 					Listen$
 					.merge(initAlarmMessage$)
+					.filter(function(){
+						return app.user.has();
+					})
 					.subscribe(function(){
 						that.getMessageList();
 					})

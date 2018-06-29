@@ -40,7 +40,9 @@ Vue && Vue.component('warn-msg', {
 		
 
 		Listen$.merge(NotifyWarningMsg$.debounceTime(3e3))
-
+            .filter(function(){
+            	return app.user.has();
+            })
 			.mergeMap(that.getMessageList)
 
 			.subscribe(function(data) {
