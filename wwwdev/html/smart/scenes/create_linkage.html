@@ -408,7 +408,7 @@
 							var condition = {
 								name: name,
 								type: type,
-								params: data,
+								param: data,
 								state: 1,
 							}
 							devId != undefined && (condition.devId = devId);
@@ -496,6 +496,7 @@
 								app.page.setResult(_this.linkageInfo).close();
 							})
 						}else{
+							alert(JSON.stringify(this.linkageInfo))
 							dal.scene.add(this.linkageInfo, function(err, data){
 								if(err){
 									return mui.toast(err.message)

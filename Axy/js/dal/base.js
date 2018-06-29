@@ -45,7 +45,7 @@ function requestAdapter(type, url, params, callback) {
 	if(BASE_URL) {
 		delete params.BASE_URL;
 	} else {
-		//		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL_TEST;
+		//		BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL;
 		BASE_URL = dal.BASE_URL_DEV;
 	}
 	var apiUrl = url;

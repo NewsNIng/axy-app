@@ -848,7 +848,9 @@
 					}.bind(this));
 
 					_B.on('update', function(data) {
-						this.$set(this.netDivList, this.tapIndex, data.info);
+						var info = this.netDivList[this.tapIndex];
+						info = mui.extend(info, data.info, true);
+						this.$set(this.netDivList, this.tapIndex, info);
 					}.bind(this));
 					
 					var tab_active$ = Rx.Observable.create(function(ob) {

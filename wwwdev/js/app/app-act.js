@@ -69,70 +69,80 @@
 		tip: '请选择门锁',
 	}];
 	var conditions = [{
-		img: "../../../image/smart/scenes/condition.png",
-		name: "定时启动",
+		img: "../../../image/smart/scenes/condition_icons/btn_timing@3x.png",
+		name: "添加定时时间",
 		conditiontype: 0x100
 	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "红外感应",
+		img: "../../../image/smart/scenes/condition_icons/btn_Infrareddetection@3x.png",
+		name: "有人来了（PIR侦测）",
 		conditiontype: 0x200
 	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "门磁打开",
+		img: "../../../image/smart/scenes/condition_icons/btn_Doorlockopen@3x.png",
+		name: "如果智能门锁打开",
 		conditiontype: 0x300
 	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "门磁闭合",
+		img: "../../../image/smart/scenes/condition_icons/btn_Doorlockclosed@3x.png",
+		name: "如果智能门锁关闭",
 		conditiontype: 0x301
 	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "温度超出指定值",
+		img: "../../../image/smart/scenes/condition_icons/btn_indoortemperature@3x.png",
+		name: "室内温度大于",
 		conditiontype: 0x400
 	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "温度低于指定值",
+		img: "../../../image/smart/scenes/condition_icons/btn_indoortemperature1@3x.png",
+		name: "室内温度小于",
 		conditiontype: 0x401
 	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "湿度超出指定值",
+		img: "../../../image/smart/scenes/condition_icons/btn_humidity@3x.png",
+		name: "室内湿度大于",
 		conditiontype: 0x500
-	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "湿度低于指定值",
-		conditiontype: 0x501
-	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "PM2.5超出指定值",
+	}, 
+//	{
+//		img: "../../../image/smart/scenes/condition_icons/btn_humidity@3x.png",
+//		name: "室内湿度小于",
+//		conditiontype: 0x501
+//	},
+	{
+		img: "../../../image/smart/scenes/condition_icons/btn_PM2.5@3x.png",
+		name: "室内PM2.5大于",
 		conditiontype: 0x600
-	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "PM2.5低于指定值",
-		conditiontype: 0x601
-	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "甲醛浓度超出指定值",
+	}, 
+//	{
+//		img: "../../../image/smart/scenes/condition_icons/btn_PM2.5@3x.png",
+//		name: "PM2.5低于指定值",
+//		conditiontype: 0x601
+//	}, 
+	{
+		img: "../../../image/smart/scenes/condition_icons/btn_Formaldehydedetector@3x.png",
+		name: "甲醛浓度超标",
 		conditiontype: 0x700
-	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "甲醛浓度低于指定值",
-		conditiontype: 0x701
-	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "一氧化碳浓度超出指定值",
+	},
+//	{
+//		img: "../../../image/smart/scenes/condition_icons/btn_Formaldehydedetector@3x.png",
+//		name: "甲醛浓度小于",
+//		conditiontype: 0x701
+//	},
+	{
+		img: "../../../image/smart/scenes/condition_icons/btn_Carbonmonoxide@3x.png",
+		name: "一氧化碳浓度超标",
 		conditiontype: 0x800
-	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "一氧化碳浓度低于指定值",
-		conditiontype: 0x801
-	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "燃气浓度超出指定值",
+	},
+//	{
+//		img: "../../../image/smart/scenes/condition_icons/btn_Carbonmonoxide@3x.png",
+//		name: "一氧化碳浓度低于指定值",
+//		conditiontype: 0x801
+//	},
+	{
+		img: "../../../image/smart/scenes/condition_icons/btn_Gasdetector@3x.png",
+		name: "燃气浓度超标",
 		conditiontype: 0x900
-	}, {
-		img: "../../../image/smart/scenes/condition.png",
-		name: "燃气浓度低于指定值",
-		conditiontype: 0x901
-	}];
+	}, 
+//	{
+//		img: "../../../image/smart/scenes/condition_icons/btn_Gasdetector@3x.png",
+//		name: "燃气浓度低于指定值",
+//		conditiontype: 0x901
+//	}
+	];
 	
 	act['getActions'] = function() {
 		return JSON.parse(JSON.stringify(actions))

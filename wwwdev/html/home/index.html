@@ -604,7 +604,7 @@
 						imgList: advert_cache.data,
 						modelTypes: [{
 								name: "回家模式",
-								src: "../../image/home/gohome.png"
+								src: "../../image/home/gohome.png",
 							},
 							{
 								name: "离家模式",
@@ -738,7 +738,7 @@
 						// zenus 自动登录成功
 						this.$hideLoginSuccess,
 						// 其它页面通知登录成功
-						$onLogin,
+						$onLogin
 						// 当前是否登录
 						
 					)
@@ -882,8 +882,7 @@
 
 					// 当点击模式时
 					onModelTap: function(o, index) {
-						return mui.toast("该功能尚未开放...");
-						// console.log(JSON.stringify(o));
+//						return mui.toast("该功能尚未开放...");
 						app.user.get(function(u) {
 							u && mui.openWindow('../smart/scenes/index2.html');
 						});

@@ -241,6 +241,10 @@
 			[data-dpr="3"] .app-font-size-68 {
 				font-size: 102px !important;
 			}
+			
+			.mui-switch.mui-disabled {
+				opacity: 1 !important;
+			}
 		</style>
 	</head>
 
@@ -291,29 +295,29 @@
 						<li class="mui-table-view-cell" @tap="onPickTap(0)">
 							<a class="mui-navigate-right">
 								<span>设置时间</span>
-								<span class="mui-badge" v-text="clockTime"></span>
+								<span class="mui-badge">{{_formatTime(clockTime)}}</span>
 							</a>
 						</li>
 						<li class="mui-table-view-cell" @tap="onPickTap(1)">
 							<a class="mui-navigate-right">
 								<span>响铃时长</span>
-								<span class="mui-badge" v-text="durationTime+'秒'"></span>
+								<span class="mui-badge">{{durationTime}}秒</span>
 							</a>
 						</li>
-						<li class="mui-table-view-cell" @tap="onRingTap()">
+						<!--<li class="mui-table-view-cell" @tap="onRingTap()">
 							<a class="mui-navigate-right">
 								<span>铃声</span>
 								<span class="mui-badge" v-text="ringtones"></span>
 							</a>
-						</li>
+						</li>-->
 						<li class="mui-table-view-cell">
 							<a>
 								<span>稍后提醒</span>
-								<span class="mui-badge">
-								<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': true}" ref="switch1">
+								<span class="mui-badge" @click="changeClockRepeat">
+								<div class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ': repeat}">
 									<div class="mui-switch-handle"></div>
 								</div>
-							</span>
+								</span>
 							</a>
 						</li>
 
@@ -322,20 +326,20 @@
 			</div>
 
 			<div class="mui-content">
-				<div class="clock_item mui-table-view-cell" v-for="o,i in alarmClocks">
+				<div class="clock_item mui-table-view-cell" v-for="o,i in alarmClocks" :key="o.id">
 					<div class="mui-slider-right mui-disabled app-font-size-28">
-						<a class="mui-btn mui-btn-red edit">编辑</a>
-						<a class="mui-btn mui-btn-red del">删除</a>
+						<a class="mui-btn mui-btn-red edit" @click="handleEditClock(o,i,$event)">编辑</a>
+						<a class="mui-btn mui-btn-red del" @click="handleDelClock(o,i,$event)">删除</a>
 					</div>
 					<div class="mui-slider-handle item_value">
-						<span class="">
-							<div class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ':true}" ref="switch1">
+						<span class="" @click="changeClockEnable(o)">
+							<div class="mui-switch mui-switch-mini app-switch-main mui-disabled" :class="{'mui-active ':o.enable}">
 								<div class="mui-switch-handle"></div>
 							</div>
 						</span>
-						<span class="time app-font-size-68">06:46</span>
+						<span class="time app-font-size-68">{{_formatTime(o.time)}}</span>
 						<div class="day app-font-size-30">
-							<span class="day-item">每天</span>
+							<span class="day-item">{{_weeksToString(o.weekdays)}}</span>
 						</div>
 					</div>
 				</div>
@@ -368,6 +372,7 @@
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript" src="../../../js/app/app-auth.js"></script>
+		<script src="../../../js/dal/ax_801.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
 			mui.init();
@@ -379,15 +384,16 @@
 				data: function() {
 					return {
 						weeks: [true, true, true, true, true, true, true],
-						clockTime: "00:00",
-						durationTime: 0,
+						clockTime: 7200,
+						durationTime: 30,
+						repeat: true,
+						enable: true,
 						mask: false, // 遮罩控制
 						index: -1, //是否弹框
-						plans: [],
-						ringtones: '欢乐时光',
+						//						ringtones: '欢乐时光', //暂不支持
 						alarmClocks: [{
 								"id": 0,
-								"time": "9:00",
+								"time": 3601,
 								"diaboloDuration": 2,
 								"enable": true,
 								"weekdays": [
@@ -403,55 +409,7 @@
 							},
 							{
 								"id": 1,
-								"time": "9:00",
-								"diaboloDuration": 2,
-								"enable": true,
-								"weekdays": [
-									false,
-									true,
-									true,
-									true,
-									true,
-									true,
-									false
-								],
-								"repeat": true
-							},
-							{
-								"id": 2,
-								"time": "9:00",
-								"diaboloDuration": 2,
-								"enable": true,
-								"weekdays": [
-									false,
-									true,
-									true,
-									true,
-									true,
-									true,
-									false
-								],
-								"repeat": true
-							},
-							{
-								"id": 3,
-								"time": "9:00",
-								"diaboloDuration": 2,
-								"enable": true,
-								"weekdays": [
-									false,
-									true,
-									true,
-									true,
-									true,
-									true,
-									false
-								],
-								"repeat": true
-							},
-							{
-								"id": 4,
-								"time": "9:00",
+								"time": 7360,
 								"diaboloDuration": 2,
 								"enable": true,
 								"weekdays": [
@@ -502,16 +460,31 @@
 					this.pick.setData(pick_data);
 				},
 				plusReady: function() {
-
+					this.devid = this.$view.devid;
+					this.type = this.$view.type;
+					this.getAlarmClockList();
 				},
 				methods: {
+					getAlarmClockList: function(){
+						var devid = this.devid;
+						var type = this.type;
+						return dal.aiBox.getAlarmClockList(devid,type,function(err,data){
+							if(err){
+								return mui.toast(err.message)
+							}
+							this.alarmClocks = data;
+						})
+					},
 					onAddTap: function() {
 						//						if(this.plans.length >= 8) {
 						//							return mui.toast("计划最多为8个，请删除其它");
 						//						}
 						this.mask = true;
 						this.index = 1;
-						this.actionType = -1;
+						this.actionType = -1; //表示新增
+						this.durationTime = 30;
+						var date = new Date();
+						this.clockTime = date.getHours() * 3600 + date.getMinutes() * 60;
 					},
 					onWeekTap: function(o, index) {
 						this.$set(this.weeks, index, !o);
@@ -544,67 +517,109 @@
 					_number2string: function(i) {
 						return ["一", "二", "三", "四", "五", "六", "日"][i];
 					},
+					_weeksToString: function(arr) {
+						var temp = ["一", "二", "三", "四", "五", "六", "日"];
+						var isEveryday = arr.every(function(item) {
+							return !!item
+						})
+						if(isEveryday) return '每天'
+						var arrMapStr = arr.map(function(item, index) {
+							return item ? '1' : '0'
+						}).join('')
+						if(arrMapStr == '1111100') {
+							return '工作日'
+						} else if(arrMapStr == '0000011') {
+							return '周末'
+						} else {
+							return arr.map(function(item, index) {
+								if(item) {
+									return '周' + temp[index]
+								}
+							}).filter(function(item) {
+								return item
+							})
+						}
+					},
+					_formatTime: function(time) {
+						var hour = parseInt(time / 3600);
+						var min = parseInt(time % 3600 / 60);
+						hour = hour < 10 ? ('0' + hour) : hour;
+						min = min < 10 ? ('0' + min) : min;
+						if(isNaN(hour)) return '';
+						return hour + ':' + min;
+					},
 					// 取消
 					onCancel: function() {
 						this.mask = false;
 					},
 					// 保存操作
 					onSave: function() {
-
-						if(!this.endTime) {
-							return mui.toast("请填写完整的时间");
-						}
-
+						var _this = this;
 						this.mask = false;
-						var tpweeks = this.weeks.slice(0);
-						var o = {
-							"end": this.endTime + ":00",
-							"recycle": this._bool2two([true].concat(tpweeks.reverse())),
-							"start": this.startTime + 　":00"
-						};
+						var clockObj = {
+							"time": this.clockTime,
+							"diaboloDuration": this.durationTime,
+							"enable": this.enable,
+							"weekdays": this.weeks,
+							"repeat": this.repeat,
+							"devid": this.devid,
+							"type": this.type
+						}
 
 						if(this.actionType === -2) {
 							// 删除	
 
 						} else if(this.actionType === -1) {
 							// 新增
-							this.plans.push(o);
+							clockObj.enable = true;
+							this.addAlarmClock(clockObj, function(err, data){
+								if(err){
+									return mui.toast(err.message)
+								}
+								_this.alarmClocks.push(data)
+							})
 						} else {
 							// 修改
-							this.$set(this.plans, this.actionType, o);
+							clockObj.id = this.clockId;
+							this.updateAlarmClock(clockObj, function(err, data){
+								if(err){
+									return mui.toast(err.message)
+								}
+								var index = this.currentEditIndex;
+								_this.alarmClocks.splice(index,1,data);
+							})
 						}
 
-						this._save();
 
+					},
+					addAlarmClock: function(clockObj, callback){
+						return dal.aiBox.addAlarmClock(clockObj, callback)
 					},
 					onPickTap: function(i) {
 						var that = this;
-						if(!i) {
+						if(!i) { //设置时间
 							this.pick = new mui.PopPicker({
 								layer: 2,
 								more: true
 							});
 							this.pick.setData(pick_data);
-							this.pick.pickers[0].setSelectedValue(that.clockTime.split(':')[0]);
-							this.pick.pickers[1].setSelectedValue(that.clockTime.split(':')[1] === undefined ? '0' : that.clockTime.split(':')[1]);
-
-							var calc = function(i) {
-								if(i < 10) {
-									return "0" + i;
-								}
-								return i;
+							if(that.clockTime) {
+								var hour = that._formatTime(that.clockTime).split(':')[0];
+								var min = that._formatTime(that.clockTime).split(':')[1];
+								this.pick.pickers[0].setSelectedValue(hour);
+								this.pick.pickers[1].setSelectedValue(min);
 							}
 
 							this.pick.show(function(items) {
 								var h = items[0].value,
 									m = items[1].value;
 
-								that.clockTime = calc(h) + ":" + calc(m);
+								that.clockTime = h * 3600 + m * 60;
 
 							}, function(items) {
 
 							});
-						} else {
+						} else { //响铃时长
 							this.pick = new mui.PopPicker({
 								layer: 1,
 								more: true
@@ -623,17 +638,66 @@
 						}
 					},
 					onRingTap: function() {
-//						mui.openWindow('dev_AX_801_select_ring.html', 'dev_AX_801_select_ring', {
-//							extras: {
-//								ringtones: this.ringtones,
-//							}
-//						});
-						app.page.openForResultBy('dev_AX_801_select_ring.html','dev_AX_801_select_ring',function(data) {
+						app.page.openForResultBy('dev_AX_801_select_ring.html', 'dev_AX_801_select_ring', function(data) {
 							this.ringtones = data.ringtones;
-						}.bind(this),{
+						}.bind(this), {
 							ringtones: this.ringtones,
 						});
 					},
+					handleDelClock: function(o, i, e) {
+						var ele = e.target;
+						var _this = this;
+						mui.confirm('确认删除该条记录？', '提示', ['确认', '取消'], function(e) {
+							var isDelete = e.index == 0;
+							var clockId = o.id;
+							mui.swipeoutClose(ele.parentNode.parentNode);
+							if(isDelete) {
+								_this.deleteClock(clockId, function(err, data) {
+									if(err) {
+										return mui.toast(err.message)
+									}
+									_this.alarmClocks.splice(i, 1)
+								})
+							}
+						})
+					},
+					deleteClock: function(id, callback) {
+						var devid = this.devid;
+						var type = this.type;
+						dal.aiBox.delAlarmClock(id, devid, type, callback);
+					},
+					handleEditClock: function(o, i, e){
+						var ele = e.target;
+						var _this = this;
+						mui.swipeoutClose(ele.parentNode.parentNode);
+						this.mask = true;
+						this.index = 1;
+						this.actionType = 0; //表示编辑
+						this.durationTime = o.diaboloDuration;
+						this.clockTime = o.time;
+						this.repeat = o.repeat;
+						this.enable = o.enable;
+						this.weeks = o.weekdays;
+						this.clockId = o.id;
+						this.currentEditIndex = i;
+					},
+					changeClockEnable: function(o) {
+						var enable = o.enable;
+						var tempObj = JSON.parse(JSON.stringify(o));
+						tempObj.enable = !enable;
+						this.updateClock(o, function(err, data) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							o.enable = !enable;
+						})
+					},
+					updateClock: function(o, callback) {
+						dal.aiBox.updateAlarmClock(o, callback)
+					},
+					changeClockRepeat: function(){
+						this.repeat = !this.repeat;
+					}
 				}
 			});
 		</script>

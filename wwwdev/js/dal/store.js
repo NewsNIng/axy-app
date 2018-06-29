@@ -52,17 +52,6 @@
 			pageSize: pageSize
 		}, callback);
 	}
-	
-	/**
-	 * 删除店铺
-	 * @param {Number} info 店铺id
-	 * @param {Function} callback 回调
-	 */
-	store.delete = function(id, callback){
-		return ra("get", "/store/delStore", {
-				storeId: id
-		}, callback);
-	}
 
 	/**
 	 * 店铺详情

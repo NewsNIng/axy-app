@@ -13,8 +13,13 @@
             flex: 1;
             -webkit-flex: 1;
         }
-        .flip-list-move {
-            transition: transform 1s;
+        .list-enter-active, .list-leave-active {
+          transition: all 0.3s;
+        }
+        .flip-list-enter{
+            opacity: 0;
+            -webkit-transform: translate3d(0,1.2rem,0);
+                    transform: translate3d(0,1.2rem,0);
         }
         &-item {
             width: 100%;
