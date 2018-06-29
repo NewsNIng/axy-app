@@ -53,8 +53,8 @@
 			BASE_URL: _.BASE_URL_TOP
 		}, function(err, url) {
 			//上线去掉下面
-			url = dal.BASE_URL_TEST
-//			url = dal.BASE_URL_DEV
+//			url = dal.BASE_URL_TEST
+			url = dal.BASE_URL_DEV
 			callback(err, url);
 		});
 	}
