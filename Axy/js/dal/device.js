@@ -135,7 +135,14 @@
 			return ra('post', '/device/electric/clearbinding', {
 				devid: devid,
 			}, callback);
-		}
+		},
+		// 获取绑定设备信息详情
+		getDeviceInfo: function(devid, callback){
+			return ra("get", '/device/electric/getDeviceInfo', {
+				devid: devid
+			}, callback)
+		},
+
 	};
 
 	/**
