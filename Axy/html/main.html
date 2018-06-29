@@ -175,6 +175,7 @@
 					
 					// 监听商城触发的登录事件
 					_B.on("AppBridge_openLoginPage", function(){
+						alert(3)
 						app.user.get(function(u){
 							u && _B.emit("login_success", {
 								userInfo: u
@@ -182,6 +183,10 @@
 								views: ["mall"]
 							});
 						});
+					});
+					
+					_B.on("testmain", function(){
+						alert("testmain");
 					});
 
 				},
@@ -211,33 +216,22 @@
 							view.drawBitmap('../image/main/mall2.png', {}, {}, "mall_icon");	
 						}, mui.os.ios? 500: 0);
 						
-						
-						
-						
-						return;
-						
-						Rx.Observable.create(function(ob){
-							$view.addEventListener("loaded", function(){
-								ob.next();
-							});
-						})
-						.merge(Rx.Observable.timer(1e3))
-						.first()
-						.delay(mui.os.ios ? 200: 10)
-						.subscribe(function(data){
-							
-							
-						});
 					},
 
 					// 打开商城
 					_openMall: function() {
-						app.mall.openHome();
+						try {
+								app.mall.openHome();
+
+								// [事件]进入商城
+								app.statis.emit("shop", {
+									from: "home"
+								});
+						}catch(e) {//TODO handle the exception
+							alert(e.message);
+						}
 						
-						// [事件]进入商城
-						app.statis.emit("shop", {
-							from: "home"
-						});
+
 						
 //						if(app.mall.hasView()) {
 //							app.mall.getView().show('pop-in', 250);
