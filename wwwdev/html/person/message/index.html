@@ -141,7 +141,9 @@
 			mui.ready(function() {
 				mui(".mui-content").on('tap', '*[data-href]', function() {
 					var tag = this.dataset.tag;
-					if(vm[tag].id !== 0){
+					var attrId = 'id';
+					attrId = (tag == 'alarmMsgNative' ? 'ID' : attrId);
+					if(vm[tag][attrId] !== 0){
 						mui.openWindow(this.dataset.href);	
 					}
 

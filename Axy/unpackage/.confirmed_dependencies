@@ -40,20 +40,23 @@
 		],
 		"refer": [
 			"html/nearby/menu.html",
-			"html/nearby/pages/list.html"
+			"html/nearby/pages/list.html",
+			"html/nearby/pages/theme.html"
 		]
 	},
 	"html/person/index.html": {
 		"refer": [
 			"html/smart/devices/dev_my_list.html",
 			"html/person/setting/index.html",
-			"html/person/collection/my_collection.html"
+			"html/person/collection/my_collection.html",
+			"html/person/information.html"
 		]
 	},
 	"html/home/index.html": {
 		"refer": [
 			"html/smart/add/add_device.html",
-			"html/smart/devices/dev_my_list.html"
+			"html/smart/devices/dev_my_list.html",
+			"html/person/message/index.html"
 		],
 		"resources": [
 			"image/home/dev_camera.png",
@@ -66,7 +69,10 @@
 			"html/smart/add/Lan_select_dev_id.html",
 			"html/smart/add/Lan_add_camera.html",
 			"html/smart/add/Lan_connect_dev.html",
-			"html/smart/add/Lan_connect_camera.html"
+			"html/smart/add/Lan_connect_camera.html",
+			"html/smart/add/connect_wifi.html",
+			"html/smart/add/blue_connect_camera1.html",
+			"html/smart/add/blue_select_dev_id.html"
 		]
 	},
 	"html/smart/add/Lan_connect_camera.html": {
@@ -83,7 +89,9 @@
 		"refer": [
 			"html/smart/devices/camera_settings.html",
 			"html/smart/devices/dev_AX-903.html",
-			"html/smart/devices/dev_AX-903_setting.html"
+			"html/smart/devices/dev_AX-903_setting.html",
+			"html/smart/devices/dev_VH-104_setting.html",
+			"html/smart/add/add_device.html"
 		]
 	},
 	"html/smart/devices/camera_settings.html": {
@@ -109,6 +117,33 @@
 	"html/smart/devices/dev_AX-903_setting.html": {
 		"refer": [
 			"html/smart/devices/dev_AX-903_select_id.html"
+		]
+	},
+	"html/common/login.html": {
+		"resources": [
+			"js/lib/Rx.min.js",
+			"js/common/flexible.js",
+			"js/lib/mui.min.js",
+			"js/dal/system.js",
+			"js/app/app-rules.js",
+			"js/app/app-statis.js",
+			"js/lib/vue-ni.js",
+			"js/common/immersed.js",
+			"js/dal/user.js",
+			"js/app/app-page.js",
+			"image/smart/devices/others/down.png",
+			"js/lib/vue.min.js",
+			"js/app/app.js",
+			"js/dal/base.js",
+			"js/lib/better-scroll.min.js"
+		]
+	},
+	"html/smart/devices/dev_VH-104_setting.html": {
+		"refer": [
+			"html/smart/devices/camera_settings_arming.html",
+			"html/smart/devices/camera_settings_record.html",
+			"html/smart/devices/dev_VH-104_setting_info.html",
+			"html/smart/devices/camera_settings_log.html"
 		]
 	}
 }

@@ -128,10 +128,10 @@
 			pg.show('pop-in');
 		});
 		
-		//pg.addEventListener('close', function(){
-			//w[_tempSrc] = null;
+		pg.addEventListener('close', function(){
+			w[_tempSrc] = null;
 			//callback(null);
-		//});
+		});
 		
 	}
 	

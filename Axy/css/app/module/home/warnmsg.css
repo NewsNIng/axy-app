@@ -12,8 +12,14 @@
   flex: 1;
   -webkit-flex: 1;
 }
-.home-warnmsg .flip-list-move {
-  transition: transform 1s;
+.home-warnmsg .list-enter-active,
+.home-warnmsg .list-leave-active {
+  transition: all 0.3s;
+}
+.home-warnmsg .flip-list-enter {
+  opacity: 0;
+  -webkit-transform: translate3d(0, 1.2rem, 0);
+  transform: translate3d(0, 1.2rem, 0);
 }
 .home-warnmsg-item {
   width: 100%;
