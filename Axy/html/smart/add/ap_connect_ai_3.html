@@ -248,6 +248,9 @@
 							var NSURL = plus.ios.import("NSURL");
 							var setting = NSURL.URLWithString("prefs:root=WIFI");
 							var application = UIApplication.sharedApplication();
+							if(!application.canOpenURL(setting)){ //打开wifi设置
+								setting = NSURL.URLWithString("App-Prefs:root=WIFI");
+							}
 							application.openURL(setting);
 							plus.ios.deleteObject(setting);
 							plus.ios.deleteObject(application);

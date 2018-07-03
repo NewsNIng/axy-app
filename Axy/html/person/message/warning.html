@@ -745,12 +745,12 @@
 							res = JSON.parse(res)
 							if(res.code == 0) {
 								mui.toast('删除成功')
+								that._resetSlide()
 								that.list = that.list.filter(function(item) {
 									return item.id !== id;
 								})
 								setTimeout(function(){
 									that.scroll && that.scroll.refresh()
-									that._resetSlide()
 								},300)
 							}else{
 								this.toast('删除失败')
