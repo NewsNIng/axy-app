@@ -714,6 +714,7 @@
 						} else {
 							plus.nativeUI.showWaiting('删除中')
 							this.DelAlarmListAsyn(ids, function(res) {
+								plus.nativeUI.closeWaiting();
 								res = JSON.parse(res);
 								if(res.code == 0) {
 									mui.toast('删除成功')
