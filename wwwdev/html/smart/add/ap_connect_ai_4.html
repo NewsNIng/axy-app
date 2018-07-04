@@ -198,6 +198,9 @@
 
 				plusReady: function() {
 					this.GetPhoneWifiListAsyn();
+					document.addEventListener('resume',function(){
+						this.GetPhoneWifiListAsyn();
+					}.bind(this))
 				},
 
 				methods: {
