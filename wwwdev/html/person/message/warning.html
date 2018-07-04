@@ -579,6 +579,7 @@
 					this.$watch('dateTime', this.getMessageList.bind(this, true));
 
 					this.getMessageList();
+//					this.getMessageListByAjax();
 					mui.back = function() {
 						if(this.videoplay) {
 							this.videoplay = false;
@@ -599,6 +600,7 @@
 
 				methods: {
 					_touchstart: function(e) {
+						this.hideDeleteBtn = false;
 						this._resetSlide(e.currentTarget.querySelector('.button'));
 						var canDelete = e.currentTarget.querySelector('.menu').style.display == 'none' && !this.isEdit
 						this.canDelete = canDelete;
@@ -621,7 +623,7 @@
 						this.moveY = e.touches[0].clientY;
 						this.disX = this.startX - this.moveX;
 						this.disY = this.startY - this.moveY;
-
+						
 						if(isactive) {
 							hasDix = -this.maxMoveX
 							if(this.disX > this.maxMoveX + hasDix) {
@@ -635,8 +637,13 @@
 						}
 						ele.style.transition = 'all 0s';
 						ele.WebkitTransition = 'all 0s';
+						if(Math.abs(this.startY - this.moveY) > Math.abs(this.startX - this.moveX)) {
+							this.hideDeleteBtn = true;
+							return
+						}
 						ele.style.transform = 'translateX(' + (-this.disX + this.maxMoveX + hasDix) + 'px)';
 						ele.style.WebkitTransform = 'translateX(' + (-this.disX + this.maxMoveX + hasDix) + 'px)';
+
 					},
 					_touchend: function(e) {
 						if(!this.canDelete) {
@@ -646,7 +653,9 @@
 						if(this.moveX == 0) {
 							return
 						}
-
+						if(this.hideDeleteBtn) {
+							return
+						}
 						if(this.startX - this.moveX > this.maxMoveX / 3) {
 							this.disX = this.maxMoveX
 							ele.classList.add('active')
@@ -668,7 +677,7 @@
 							ele;
 						for(var i = 0, len = buttons.length; i < len; i++) {
 							ele = buttons[i];
-							if(true) {
+							if(currentele != ele || !currentele) {
 								ele.style.transform = 'translateX(' + (this.maxMoveX) + 'px)';
 								ele.style.WebkitTransform = 'translateX(' + (this.maxMoveX) + 'px)';
 							}
@@ -702,17 +711,17 @@
 						if(type == 1 || type == 2) {
 							this.UpdateAlarm(ids);
 						} else {
-							that.list = that.list.filter(function(item) {
-								return ids.indexOf(item.id) == -1;
-							})
-							that.scroll && that.scroll.refresh()
+							plus.nativeUI.showWaiting('删除中')
 							this.DelAlarmListAsyn(ids, function(res) {
 								res = JSON.parse(res);
 								if(res.code == 0) {
+									mui.toast('删除成功')
 									that.list = that.list.filter(function(item) {
 										return ids.indexOf(item.id) == -1;
 									})
 									that.scroll && that.scroll.refresh()
+								}else{
+									mui.toast('删除失败')
 								}
 							})
 						}
@@ -745,14 +754,14 @@
 							res = JSON.parse(res)
 							if(res.code == 0) {
 								mui.toast('删除成功')
+								that._resetSlide()
 								that.list = that.list.filter(function(item) {
 									return item.id !== id;
 								})
-								setTimeout(function(){
+								setTimeout(function() {
 									that.scroll && that.scroll.refresh()
-									that._resetSlide()
-								},300)
-							}else{
+								}, 300)
+							} else {
 								this.toast('删除失败')
 								this._resetSlide()
 							}
@@ -940,7 +949,7 @@
 						});
 					},
 					getMessageList: function(override) {
-						if(!app.user.has()){
+						if(!app.user.has()) {
 							return;
 						}
 						plus.nativeUI.showWaiting("正在加载");

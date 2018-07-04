@@ -129,7 +129,7 @@
 		});
 		
 		pg.addEventListener('close', function(){
-			w[_tempSrc] = null;
+//			w[_tempSrc] = null;
 			//callback(null);
 		});
 		
