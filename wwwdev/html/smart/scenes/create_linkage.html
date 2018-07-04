@@ -496,7 +496,7 @@
 								app.page.setResult(_this.linkageInfo).close();
 							})
 						}else{
-							alert(JSON.stringify(this.linkageInfo))
+							console.log(JSON.stringify(this.linkageInfo))
 							dal.scene.add(this.linkageInfo, function(err, data){
 								if(err){
 									return mui.toast(err.message)

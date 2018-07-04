@@ -106,7 +106,7 @@
 				<div class="set_pwd app-font-size-28">
 					<input type="number" v-model="pwd" placeholder="请输入门锁的4到8位密码，首位不能为0">
 				</div>
-				<div class="mui-input-row ">
+				<div class="mui-input-row " v-if="setRemarkPwd">
 					<label class="app-font-size-26 app-color-9f9fa0">是否记住密码</label>
 					<div @toggle="onToggle()" class="mui-switch mui-switch-mini app-switch-main" :class="{'mui-active ': remember}">
 						<div class="mui-switch-handle"></div>
@@ -139,7 +139,8 @@
 				data: function() {
 					return {
 						pwd: "",
-						remember: true
+						remember: true,
+						setRemarkPwd: true,
 					};
 				},
 
@@ -170,7 +171,7 @@
 				},
 
 				plusReady: function() {
-
+					this.setRemarkPwd = this.$view.setRemarkPwd; //隐藏记住密码
 				},
 
 				methods: {

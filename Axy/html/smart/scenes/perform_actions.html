@@ -327,8 +327,19 @@
 								if(currentAction.actionId == 0x100){
 									returnObj.alarmOn = currentAction.alarmOn
 								}
-								picker.dispose();
-								app.page.setResult(returnObj).close();
+								if(currentAction.actionId == 0x700){
+									app.page.openForResultBy('_www/html/smart/devices/dev_40_set_pwd.html','dev_40_set_pwd',function(data){
+										console.log(JSON.stringify(data))
+										returnObj.pwd = data.pwd;
+										picker.dispose();
+										app.page.setResult(returnObj).close();
+									},{
+										setRemarkPwd: false
+									})
+								}else{
+									picker.dispose();
+									app.page.setResult(returnObj).close();
+								}
 							}, function() {})
 						}
 					}
