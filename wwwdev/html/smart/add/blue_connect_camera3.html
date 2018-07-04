@@ -271,6 +271,7 @@
 						if(close) {
 							// 连接成功
 							this.isConnected = true;
+							this.$view.close();
 							return;
 							// return this.$view.close();***
 						}

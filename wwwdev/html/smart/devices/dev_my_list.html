@@ -656,7 +656,7 @@
 								},
 								// 撤防
 								"4": function() {
-									dev.workmode = app.dev.getArmBit() ^ dev.workmode;
+									dev.workmode = ~app.dev.getArmBit() & dev.workmode;
 									// [事件]撤防
 									app.statis.emit("disarm");
 								},

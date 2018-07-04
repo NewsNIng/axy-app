@@ -354,17 +354,43 @@
 			$pready
 				// 监听 dal 抛出 token 错误异常
 				.mergeMapTo($litenTokenErr)
-				// 尝试重新登录
-				// .mergeMapTo($login)
-				// 订阅
+				
+				// test
+				//.merge(
+				//	Rx.Observable.timer(2000).map(function(){
+				//		return {
+				//			code: "1051649"
+				//		}
+				//	})
+				//)
+				
+				.filter(function(){
+					return app.user.has();
+				})
+				
+				// 鉴别错误
+				.mergeMap(function(err){
+					return Rx.Observable.create(function(ob){
+						if(
+							err.code === "1051649" || // 密码错误 1051649
+							err.code === "1051649"    // 权限认证失败 1051649
+						){
+							ob.error(err);
+						}else{
+							ob.next();
+						}
+					});
+					
+				})
+				// 尝试后台自动重新登录
+				.mergeMapTo($login)
 				.subscribe(
-					// 登录成功
-					// Success$fn,
-					// 直接重新登录
-					// 登录失败
-					function(err) {
-						//err.code === 0x00100C01 || // 密码错误 1051649 
-						//err.code === 0x00100C02    // 权限认证失败 1051649
+					// 自动登录成功
+					function(){
+						
+					},
+					// 重新启动
+					function(err) {	
 						plus.nativeUI.toast("帐号登录状态已失效，请重新登录");
 						// 重启app
 						ReloadApp();
@@ -507,12 +533,9 @@
 				$pready
 					.mergeMap(function() {
 						// 拿取到本机pushid
-						var D = new ni.Cache("push_key", "", {
-							plus: true
-						});
 						return Rx.Observable.create(function(ob) {
 							// 清除pushid
-							dal.push.clearpush(D.data, account, function(err, data) {
+							dal.push.clearpush(PUSH_ID.data, account, function(err, data) {
 								ob.next();
 							});
 						});

@@ -219,7 +219,7 @@
 						})
 						.catch(function(err){
 							w.close();
-							//err.message
+							alert(JSON.stringify(err));
 							mui.toast("上传失败，请重试");
 						});
 
