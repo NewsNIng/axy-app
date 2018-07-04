@@ -313,6 +313,7 @@
 							} : {layer: 1};
 							var picker = new mui.PopPicker(options);
 							console.log(JSON.stringify(newVal))
+							console.log('heooooo')
 							picker.setData(newVal)
 							picker.show(function(SelectedItem) {
 								var currentAction = _this.actions[_this.index];
@@ -358,7 +359,7 @@
 									if(type == 'devlist') {
 										returnList.push({
 											value: devObj['devid'],
-											text: devObj['devname'],
+											text: devObj['devname'] || devObj['devid'],
 											type: 'devlist',
 											typeName: 'devtype',
 											typeNumber: devObj['devtype'],
@@ -366,7 +367,7 @@
 									} else if(type == 'acclist') {
 										var temp = {
 											value: devObj['accID'],
-											text: devObj['accName'],
+											text: devObj['accName'] || devObj['accID'],
 											type: 'acclist',
 											typeName: 'acctype',
 											typeNumber: devObj['acctype'],
@@ -381,7 +382,7 @@
 									} else if(type == 'irclist') {
 										returnList.push({
 											value: devObj['irID'],
-											text: devObj['ircName'],
+											text: devObj['ircName'] || devObj['irID'],
 											type: 'irclist',
 											typeName: 'irctype',
 											typeNumber: devObj['irctype'],

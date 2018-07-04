@@ -21,8 +21,8 @@
 
 	// 配置	
 	var config = {
-//		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
-		url: "http://192.168.1.132:8080/#/home?t=" + +new Date(),
+		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
+//		url: "http://192.168.1.132:8080/#/home?t=" + +new Date(),
 		id: "mall",
 		routerCmdName: "router",
 	};
@@ -81,7 +81,7 @@
 
 	// 创建商城
 	mall.create = function() {
-		return plus.webview.create(config.url, config.id, {
+		var mallView = plus.webview.create(config.url, config.id, {
 			popGesture: "hide",
 			top: "0px",
 			//top: (window.immersed || 0) + 'px',
@@ -90,6 +90,19 @@
 			//cachemode: "noCache",
 			
 		});
+		
+		mallView.addEventListener('titleUpdate',function(){
+			var url = mallView.getURL();
+//			var jsStr = `var head = document.querySelector('.header')
+//			head.style.paddingTop = ${window.immersed} + 'px';
+//			head.style.height = head.offsetHeight + ${window.immersed} + 'px';`
+			var jsStr = "var head = document.querySelector('.header')\n\t\t\thead.style.paddingTop = " + window.immersed + " + 'px';\n\t\t\thead.style.height = head.offsetHeight + " + window.immersed + " + 'px';";
+			if(url.indexOf('wap.lianlianpay.com') > -1){
+				mallView.evalJS(jsStr);
+			}
+		})
+		
+		return mallView;
 	};
 
 	// 获取商城webview

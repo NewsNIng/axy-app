@@ -22,8 +22,8 @@
 			timeout: 8000
 		}, function(up, status) {
 			if(up.state == 4 && status == 200) {
-				var data = JSON.parse(up.responseText);
-				if(data.code !== '0000') {
+				var data = JSON.parse(up.responseText); 
+				if(data.code != '0000' && data.code != '0') {
 					return callback({
 						message: data.message
 					}, null);

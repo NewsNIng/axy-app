@@ -991,7 +991,7 @@
 
 							var w1 = data.b;
 							var w2 = type === 0x1046 ? 1 : 0;
-							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), function() {
+							plug.H5NativeBridge.StartDevicePlay(o.devid, w1, w2, that._fixDevLocation(o.location), o.online === 1, o.cid, o.p2pPasswd, function() {
 								getScrrenHotBgFn(o.devid).then(function(path) {
 									that.$refs.devimgel.style.backgroundImage = "url(" + path + ")";
 								})
@@ -1185,7 +1185,7 @@
 							mindex: 3,
 							nindex: 1
 						}, {
-							views: ["main"],
+							views: ["main",plus.webview.getLaunchWebview()],
 						});
 					},
 
@@ -1196,7 +1196,7 @@
 							mindex: 3,
 							nindex: 0
 						}, {
-							views: ["main"],
+							views: ["main",plus.webview.getLaunchWebview()],
 						});
 					},
 					// 查看我的设备

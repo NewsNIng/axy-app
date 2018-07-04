@@ -370,7 +370,6 @@
 				
 				// 鉴别错误
 				.mergeMap(function(err){
-					alert(err.code);
 					return Rx.Observable.create(function(ob){
 						if(
 							err.code === "1051649" || // 密码错误 1051649
@@ -534,12 +533,9 @@
 				$pready
 					.mergeMap(function() {
 						// 拿取到本机pushid
-						var D = new ni.Cache("push_key", "", {
-							plus: true
-						});
 						return Rx.Observable.create(function(ob) {
 							// 清除pushid
-							dal.push.clearpush(D.data, account, function(err, data) {
+							dal.push.clearpush(PUSH_ID.data, account, function(err, data) {
 								ob.next();
 							});
 						});

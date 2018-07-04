@@ -418,7 +418,8 @@
 					"image/home/btn_Adddevice@3x.png",
 					"html/home/picture_3@3x.png",
 					"image/smart/devices/bg/903@3xweb.png",
-					"image/smart/devices/bg/camera@3x.png"
+					"image/smart/devices/bg/camera@3x.png",
+					"image/smart/devices/bg/104gn@3x.png"
 				],
 				"refer": [
 					"html/search/index.html",

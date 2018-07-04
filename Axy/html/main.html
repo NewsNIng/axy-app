@@ -183,7 +183,7 @@
 							});
 						});
 					});
-
+					
 				},
 				methods: {
 					// 加载商城图标
@@ -211,33 +211,17 @@
 							view.drawBitmap('../image/main/mall2.png', {}, {}, "mall_icon");	
 						}, mui.os.ios? 500: 0);
 						
-						
-						
-						
-						return;
-						
-						Rx.Observable.create(function(ob){
-							$view.addEventListener("loaded", function(){
-								ob.next();
-							});
-						})
-						.merge(Rx.Observable.timer(1e3))
-						.first()
-						.delay(mui.os.ios ? 200: 10)
-						.subscribe(function(data){
-							
-							
-						});
 					},
 
 					// 打开商城
 					_openMall: function() {
 						app.mall.openHome();
-						
 						// [事件]进入商城
 						app.statis.emit("shop", {
 							from: "home"
 						});
+						
+
 						
 //						if(app.mall.hasView()) {
 //							app.mall.getView().show('pop-in', 250);
@@ -332,11 +316,11 @@
 			});
 
 			setTimeout(function() {
-				console.log("[===当前主页检查更新未开启，请检查===]");
-				console.log("[===当前主页检查更新未开启，请检查===]");
-				console.log("[===当前主页检查更新未开启，请检查===]");
-				return console.log("[===当前主页检查更新未开启，请检查===]");
-				
+//				console.log("[===当前主页检查更新未开启，请检查===]");
+//				console.log("[===当前主页检查更新未开启，请检查===]");
+//				console.log("[===当前主页检查更新未开启，请检查===]");
+//				return console.log("[===当前主页检查更新未开启，请检查===]");
+//				
 				mui.plusReady(function() {
 //					function version2number(version) {
 //						return +(version.split('.').join(''));
