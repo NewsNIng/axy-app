@@ -533,12 +533,9 @@
 				$pready
 					.mergeMap(function() {
 						// 拿取到本机pushid
-						var D = new ni.Cache("push_key", "", {
-							plus: true
-						});
 						return Rx.Observable.create(function(ob) {
 							// 清除pushid
-							dal.push.clearpush(D.data, account, function(err, data) {
+							dal.push.clearpush(PUSH_ID.data, account, function(err, data) {
 								ob.next();
 							});
 						});

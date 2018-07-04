@@ -158,9 +158,9 @@
 						app.page.getMaps(function(data) {
 
 							new Promise(function(resolve, reject) {
-								// 提示用户是否使用该地址
-								mui.prompt("是否使用该地址？", data.address, '温馨提示', ["确认"], function(e) {
-									resolve(e.value || data.address);
+								// 提示用户是否使用该地址 data.address
+								mui.prompt("请输入详细地址", "", '温馨提示', ["确认"], function(e) {
+									resolve(data.address + e.value);
 								});
 							}).then(function(address) {
 								that.infoList[g][i].value = address;
