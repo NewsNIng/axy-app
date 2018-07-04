@@ -22,8 +22,8 @@
 			timeout: 8000
 		}, function(up, status) {
 			if(up.state == 4 && status == 200) {
-				var data = JSON.parse(up.responseText); 
-				if(data.code != '0000' && data.code != '0') {
+				var data = JSON.parse(up.responseText);
+				if(data.code !== '0000') {
 					return callback({
 						message: data.message
 					}, null);
@@ -52,6 +52,7 @@
 			account: account,
 			BASE_URL: _.BASE_URL_TOP
 		}, function(err, url) {
+			//上线去掉下面
 			url = dal.BASE_URL_TEST
 //			url = dal.BASE_URL_DEV
 			callback(err, url);

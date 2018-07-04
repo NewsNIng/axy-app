@@ -412,6 +412,8 @@
 							}).filter((function(item) {
 								return !!item;
 							})).join('|') + '|' + data.name;
+							console.log('9999999999999999')
+							console.log(JSON.stringify(data))
 							console.log(JSON.stringify(devInfo))
 							var devId = devInfo.filter(function(item) {
 								return item.type == 'devlist'
@@ -432,6 +434,9 @@
 							var extend = {};
 							if(pos) {
 								extend.pos = pos;
+							}
+							if(data.pwd !== undefined){
+								extend.pw = data.pwd
 							}
 							if(data.alarmOn !== undefined) {
 								extend.alarmOn = data.alarmOn
