@@ -52,14 +52,14 @@
 			account: account,
 			BASE_URL: _.BASE_URL_TOP
 		}, function(err, url) {
-			url = dal.BASE_URL_TEST
-//			url = dal.BASE_URL_DEV
+//			url = dal.BASE_URL_TEST
+			url = dal.BASE_URL_DEV
 			callback(err, url);
 		});
 	}
 
-	// 获取第三方登录所关联的账户
-	system.getAccount = function(type, openid, callback) {
+	// 获取第三方登录所关联的账户 
+	system.getAccount = function(type, openid, callback) { 
 		return ra('post', '/user/getAccount', {
 			type: type,
 			openid: openid,

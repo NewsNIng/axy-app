@@ -50,7 +50,9 @@
 			"html/person/setting/index.html",
 			"html/person/collection/my_collection.html",
 			"html/person/information.html",
-			"html/person/about.html"
+			"html/person/about.html",
+			"html/person/collection/my_mall.html",
+			"html/person/collection/my_attention.html"
 		]
 	},
 	"html/home/index.html": {

@@ -21,12 +21,12 @@
 
 	// 配置	
 	var config = {
-		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
-//		url: "http://192.168.1.132:8080/#/home?t=" + +new Date(),
+//		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
+		url: "http://192.168.1.128:8080/#/home?t=" + +new Date(),
 		id: "mall",
 		routerCmdName: "router",
 	};
-
+ 
 	// 命令
 	var routerCmd = {
 		// 主页
@@ -115,7 +115,7 @@
 		d = d || 250;
 		var v = mall.getView();
 		if(!v) {
-			mall.create();
+			v = mall.create();
 		}
 		fn && typeof fn === 'function' && v.addEventListener('show', function _f() {
 			fn();
@@ -135,14 +135,26 @@
 				// 创建
 				v = mall.create();
 				// 添加事件
-				v.addEventListener('loaded', re);
+				v.addEventListener('titleUpdate', function(){
+					re(false);
+				});
 			} else {
-				re();
+				re(true);
 			}
-		}).then(function() {
+		}).then(function(has) {
+			
+			return new Promise(function(re, rj){
+				if(has){
+					re();
+				}else{
+					_B.once("mall_plus_ready", function(){
+						re();
+					});
+				}
+			});
+		}).then(function(){
 			// 标识为 app 发送的命令
 			data.query.app = true;
-			console.log(JSON.stringify(data));
 			_B.emit(config.routerCmdName, data, {
 				views: [config.id]
 			});
