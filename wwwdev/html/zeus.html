@@ -32,7 +32,7 @@
 			 */
 			var PUSH_ID, DEVICE, ACC,
 				//DEVICE_AUTH, 
-				USER_INFO, P, _B;
+				USER_INFO, P, _B, SENDMODE;
 
 			var getPwd = function() {
 				return window.localStorage.getItem('_pwd_');
@@ -55,6 +55,10 @@
 				PUSH_ID = new ni.Cache('push_key', "", {
 					plus: true
 				});
+				// 推送类型
+				SENDMODE = new ni.Cache('send_mode',"",{
+					plus: true
+				})
 				// 设备列表 缓存
 				DEVICE = new ni.Cache('dev_list', "", {
 					plus: true
@@ -441,6 +445,7 @@
 			var SyncHronous = function(account, pushData) {
 				PUSH_ID.data = pushData.clientId;
 				var type = mui.os.ios ? 67 : (pushData.type || 36);
+				SENDMODE.data = type;
 				dal.push.synchronous(account, pushData.clientId, type, function(err, data) {
 					/*if(err) {
 						return mui.toast(err.message);

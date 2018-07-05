@@ -1,5 +1,5 @@
 var dal = {
-	BASE_URL_DEV: "http://192.168.1.213:8080/vihiManager/vihiapi",
+	BASE_URL_DEV: "http://192.168.1.200:8080/vihiapi",
 	BASE_URL_TEST: "http://47.106.92.195/vihiManager/vihiapi",
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
 	BASE_DOMAIN: "vh.anxin-net.com",
@@ -46,6 +46,7 @@ function requestAdapter(type, url, params, callback) {
 		delete params.BASE_URL;
 	} else {
 		 BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL;
+		 BASE_URL = dal.BASE_URL_DEV; //自动登录不会获取domain，上线注释掉
 	}
 	var apiUrl = url;
 	url = BASE_URL + url;

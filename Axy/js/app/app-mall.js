@@ -21,8 +21,8 @@
 
 	// 配置	
 	var config = {
-		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
-//		url: "http://192.168.1.128:8080/#/home?t=" + +new Date(),
+//		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
+		url: "http://192.168.1.132:8080/#/home?t=" + +new Date(),
 		id: "mall",
 		routerCmdName: "router",
 	};
@@ -77,6 +77,7 @@
 
 	var mall = {};
 
+
 	// 创建商城
 	mall.create = function() {
 		var mallView = plus.webview.create(config.url, config.id, {
@@ -87,7 +88,6 @@
 			background: "#06c1ae",
 			//cachemode: "noCache",
 			
-			
 		});
 		
 		mallView.addEventListener('titleUpdate',function(){
@@ -96,13 +96,10 @@
 //			head.style.paddingTop = ${window.immersed} + 'px';
 //			head.style.height = head.offsetHeight + ${window.immersed} + 'px';`
 			var jsStr = "var head = document.querySelector('.header')\n\t\t\thead.style.paddingTop = " + window.immersed + " + 'px';\n\t\t\thead.style.height = head.offsetHeight + " + window.immersed + " + 'px';";
-			if(url.indexOf('wap.lianlianpay.com') > -1){ 
+			if(url.indexOf('wap.lianlianpay.com') > -1){
 				mallView.evalJS(jsStr);
 			}
 		});
-		
-		
-		
 		return mallView;
 	};
 
@@ -153,7 +150,7 @@
 					});
 					setTimeout(function(){
 						re();
-					}, 1e3);
+					},1000)
 				}
 			});
 		}).then(function(){
