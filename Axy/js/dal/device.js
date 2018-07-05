@@ -5,14 +5,16 @@
 
 	var PUSH_ID = {};
 
-	var SENDMODE = "";
+	var SENDMODE = {};
 
 	function initPlus() {
 		IMEI = plus.device.uuid;
 		PUSH_ID = new ni.Cache('push_key', "", {
 			plus: true
 		});
-		SENDMODE = plus.os.name === 'iOS' ? 67 : 36
+		SENDMODE = new ni.Cache('send_mode',"",{
+			plus: true
+		})
 	}
 	
 	function plusReady(fn) {
@@ -35,7 +37,7 @@
 		return ra("post", "/device/add", {
 			devid: devid,
 			target: PUSH_ID.data || "",
-			sendmode: SENDMODE,
+			sendmode: SENDMODE.data || "",
 		}, callback);
 	};
 	

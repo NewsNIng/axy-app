@@ -77,7 +77,6 @@
 
 	var mall = {};
 
-	var mallView = null;
 
 	// 创建商城
 	mall.create = function() {
@@ -100,8 +99,7 @@
 			if(url.indexOf('wap.lianlianpay.com') > -1){
 				mallView.evalJS(jsStr);
 			}
-		})
-		
+		});
 		return mallView;
 	};
 
@@ -150,6 +148,9 @@
 					_B.once("mall_plus_ready", function(){
 						re();
 					});
+					setTimeout(function(){
+						re();
+					},1000)
 				}
 			});
 		}).then(function(){
