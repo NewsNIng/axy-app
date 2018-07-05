@@ -97,7 +97,7 @@
 
 			<div class="tips2 app-font-size-30">
 				上传店铺图片
-			</div>
+			</div> 
 
 			<div class="imgRoom app-font-size-26">
 				<template v-for="o,i in imgs">
@@ -105,7 +105,7 @@
 				</template>
 			</div>
 
-			<button type="button" @tap="onSuccessTap()" class="mui-btn app-btn-main" style="width: 9.293333rem; margin:0.506666rem 0.346666rem;height: 1.173333rem;font-size: 17px;">完成</button>
+			<button type="button" @tap="onSuccessTap()" class="mui-btn app-btn-main" :class="{'mui-disabled': nullLen === imgs.length}" style="width: 9.293333rem; margin:0.506666rem 0.346666rem;height: 1.173333rem;font-size: 17px;">完成</button>
 
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>
@@ -151,6 +151,12 @@
 
 					len: function() {
 						return this.imgs.length;
+					},
+					
+					nullLen: function(){
+						return this.imgs.filter(function(item){
+							return !item;
+						}).length;
 					}
 				},
 				plusReady: function() {

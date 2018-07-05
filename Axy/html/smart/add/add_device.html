@@ -229,7 +229,7 @@
 									type: 3,
 								},
 								{
-									img: "../../../image/smart/devices/dev_icon/AX-403A@3x.png",
+									img: "../../../image/smart/devices/dev_icon/AX-801@3x.png",
 									name: "AX-801",
 									type: 4,
 								},
@@ -370,7 +370,7 @@
 								});
 							} else if(o.type === 3) {
 								// 蓝牙添加
-								that._bluetoothLine();
+								that._bluetoothLine(o);
 							} else if(o.type === 4) {
 								// ap热点添加
 								that._apDevLine();
@@ -522,6 +522,8 @@
 
 					// 蓝牙连接设备
 					_bluetoothLine: function(o) {
+						// 保存当前设备img地址
+						window.localStorage.setItem('blue_add_camera_img', o.img);
 						// 第一步设置设备WIFI
 						app.page.openForResultBy('connect_wifi.html', 'wifiset', function(data) {
 							var url = "blue_connect_camera1.html?wifiname=" + data.name + "&wifipwd=" + data.pwd;
