@@ -105,7 +105,7 @@
 				</template>
 			</div>
 
-			<button type="button" @tap="onSuccessTap()" class="mui-btn app-btn-main" style="width: 9.293333rem; margin:0.506666rem 0.346666rem;height: 1.173333rem;font-size: 17px;">完成</button>
+			<button type="button" @tap="onSuccessTap()" class="mui-btn app-btn-main" :class="{'mui-disabled': nullLen === imgs.length}" style="width: 9.293333rem; margin:0.506666rem 0.346666rem;height: 1.173333rem;font-size: 17px;">完成</button>
 
 		</div>
 		<script type="text/javascript" src="../../../js/common/immersed.js"></script>

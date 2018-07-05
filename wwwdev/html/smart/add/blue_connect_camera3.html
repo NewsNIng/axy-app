@@ -96,7 +96,7 @@
 
 			<div class="mui-content">
 				<div class="imgbg">
-					<img src="../../../image/smart/devices/dev_icon/AX-203@3x.png4.png" />
+					<img :src="bgp" />
 				</div>
 				<div class="dev_icon app-font-size-30">
 					<div class="dev_text app-font-size-34">正在连接您的摄像机，请不要退出<br />连接成功后，点击完成。</div>
@@ -149,10 +149,12 @@
 						timer: -1,
 
 						isConnected: false,
+						
+						bgp: "../../../image/smart/devices/dev_icon/AX-203@3x.png4.png",
 					};
 				},
 				mounted: function() {
-
+					this.bgp = window.localStorage.getItem('blue_add_camera_img') + '4.png';
 					function GetQueryString(name) {
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 						var r = window.location.search.substr(1).match(reg);

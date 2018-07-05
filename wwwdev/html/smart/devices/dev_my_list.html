@@ -108,6 +108,9 @@
 			.imgdiv.VH-104GN {
 				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
 			}
+			.imgdiv.AX-801{
+				
+			}
 			/*.imgdiv.AX-203 {
 				background-image: url(../../../image/smart/devices/bg/104gn@3x.png);
 			}
@@ -503,7 +506,7 @@
 
 						</ul>
 						
-						<ul class="mui-table-view a1-room app-font-size-32">
+						<ul class="mui-table-view a1-room app-font-size-32" v-if="irList.length > 0">
 							<li class="mui-table-view-cell mui-collapse">
 								<a class="mui-navigate-right" href="#">
 
@@ -968,7 +971,12 @@
 									pageid = "dev_AX-904";
 									break;
 								}
-
+							case "AX-801":
+								{
+									url = "dev_AX-801.html";
+									pageid = "dev_AX-801"
+									break;
+								}
 							default:
 								{
 									url = "";

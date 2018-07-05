@@ -46,7 +46,7 @@ function requestAdapter(type, url, params, callback) {
 		delete params.BASE_URL;
 	} else {
 		 BASE_URL = window.localStorage.getItem('_domain_') || dal.BASE_URL;
-		 BASE_URL = dal.BASE_URL_DEV; //自动登录不会获取domain，上线注释掉
+		 // BASE_URL = dal.BASE_URL_DEV; //自动登录不会获取domain，上线注释掉
 	}
 	var apiUrl = url;
 	url = BASE_URL + url;

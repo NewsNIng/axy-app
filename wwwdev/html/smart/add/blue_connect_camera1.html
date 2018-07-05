@@ -104,7 +104,7 @@
 
 			<div class="mui-content">
 				<div class="imgbg">
-					<img src="../../../image/smart/devices/dev_icon/360_2.png"/>
+					<img :src="bgp"/>
 				</div>
 				<div class="dev_icon app-font-size-30">
 					<div class="dev_text app-font-size-34">用顶针轻插<span class="red">SET</span>孔，听到“嘀”的一声后<br />点击“下一步”</div>
@@ -148,9 +148,12 @@
 					return {
 						wifiname: "",
 						wifipwd: "",
+						bgp: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
 					};
 				},
 				mounted: function() {
+					this.bgp = window.localStorage.getItem('blue_add_camera_img') + '1.png';
+					
 					// get prev url params
 					function GetQueryString(name) {
 						var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
