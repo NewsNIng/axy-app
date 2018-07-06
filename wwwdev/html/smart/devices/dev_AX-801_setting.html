@@ -53,7 +53,7 @@
 					<li class="mui-table-view-cell" @tap="onNameTap()">
 						<a class="mui-navigate-right">
 							<span>设备名称</span>
-							<span class="mui-badge">{{devInfo.name}}</span>
+							<span class="mui-badge">{{devInfo.name || devInfo.location || devInfo.devid || devInfo.id}}</span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onShowInfo()">

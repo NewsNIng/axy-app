@@ -145,7 +145,8 @@
   "html/smart/index.html": {
     "refer": [
       "html/smart/scenes/index2.html",
-      "html/smart/devices/dev_my_list.html"
+      "html/smart/devices/dev_my_list.html",
+      "html/common/login.html"
     ]
   },
   "html/smart/add/ap_connect_ai_1.html": {
@@ -183,6 +184,11 @@
   "html/smart/add/blue_select_dev_id.html": {
     "refer": [
       "html/smart/add/blue_connect_camera1.html"
+    ]
+  },
+  "html/common/login.html": {
+    "refer": [
+      "html/common/register.html"
     ]
   }
 }

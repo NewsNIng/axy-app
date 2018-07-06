@@ -145,18 +145,9 @@
 						var _this = this;
 						dal.aiBox.basicInfo(this.devid, this.type, function(err, data) {
 							if(err) {
-//								return mui.toast(err.message)
+								return mui.toast(err.message)
 							}
 							_this.devInfo = data;
-							_this.devInfo = {
-								devtype: 0x1101,
-								wifiMac: '192.168.1.111',
-								wifiStrength: '20%',
-								hdVersion: '1.1',
-								appVersion: '2.0',
-								ip: '47.106.23.33',
-								energy: '40%'
-							}
 						})
 					},
 					formatDevType: function(typeNumber) {

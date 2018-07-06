@@ -557,11 +557,15 @@
 						var _this = this;
 						this.mask = false;
 						var clockObj = {
-							"time": this.clockTime,
-							"diaboloDuration": this.durationTime,
-							"enable": this.enable,
-							"weekdays": this.weeks,
-							"repeat": this.repeat,
+							list: [
+								{
+									"time": this.clockTime,
+									"diaboloDuration": this.durationTime,
+									"enable": this.enable,
+									"weekdays": this.weeks,
+									"repeat": this.repeat,
+								}
+							],
 							"devid": this.devid,
 							"type": this.type
 						}
@@ -571,7 +575,7 @@
 
 						} else if(this.actionType === -1) {
 							// 新增
-							clockObj.enable = true;
+							clockObj.list[0].enable = true;
 							this.addAlarmClock(clockObj, function(err, data){
 								if(err){
 									return mui.toast(err.message)

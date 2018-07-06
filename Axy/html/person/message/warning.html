@@ -1016,6 +1016,14 @@
 
 					canPlay: function(o) {
 						//console.log(JSON.stringify(o))
+						var devData = D.data;
+						var tmep;
+						for(var i = 0, l = devData.length; i < l; i++) {
+							temp = devData[i];
+							if(temp.devid === o.devid) {
+								o.type = temp.type;
+							}
+						}
 						return app.dev.canPlay(o.type);
 					},
 					to16: function(n) {

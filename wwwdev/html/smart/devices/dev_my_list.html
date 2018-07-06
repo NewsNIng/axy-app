@@ -85,7 +85,6 @@
 			
 			.imgdiv {
 				height: 4.666666rem;
-				width: 9.306666rem;
 				background-image: url(../../../image/smart/devices/bg/camera@3x.png);
 				background-size: cover;
 				/*background-position: center;*/
@@ -1182,7 +1181,12 @@
 									pageid = "dev_VH-104_setting";
 									break;
 								}
-
+							case "AX-801":
+								{
+									url = 'dev_AX-801_setting.html';
+									pageid = "dev_AX-801_setting";
+									break;
+								}
 							default:
 								{
 									url = "camera_settings.html";
@@ -1191,10 +1195,11 @@
 								}
 
 						}
-
 						url && mui.openWindow(url, pageid, {
 							extras: {
-								devInfo: o
+								devInfo: o,
+								devid: o.devid,
+								type: o.type
 							}
 						});
 					},

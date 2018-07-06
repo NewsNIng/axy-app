@@ -138,13 +138,13 @@
 					};
 				},
 				mounted: function() {
-					this.$refs.switch1.addEventListener("toggle", function(event) {
-						var that = this;
-						// 发送更改请求
-						plus.nativeUI.showWaiting();
-						
-						
-					}.bind(this));
+//					this.$refs.switch1.addEventListener("toggle", function(event) {
+//						var that = this;
+//						// 发送更改请求
+//						plus.nativeUI.showWaiting();
+//						
+//						
+//					}.bind(this));
 				},
 				plusReady: function() {
 					this.devid = this.$view.devid;
@@ -166,6 +166,7 @@
 					},
 					changeStatus: function(type){
 						var current = this[type];
+						var _this = this;
 						var obj = {
 							weatherReport: this.weatherReport,
 							alarmPush: this.alarmPush,
@@ -180,7 +181,8 @@
 							if(err){
 								return mui.toast(err.message)
 							}
-							this[type] = !current;
+							mui.toast('修改成功')
+							_this[type] = !current;
 						})
 					},
 					setBroadcastInfo: function(obj, callback){
