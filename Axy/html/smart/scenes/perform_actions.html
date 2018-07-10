@@ -249,6 +249,7 @@
 		<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>
 		<script type="text/javascript" src="../../../js/data/time_hm.js"></script>
 		<script type="text/javascript" src="../../../js/app/app-act.js"></script>
+		<script src="../../../js/app/app-dev.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" src="../../../js/dal/scene.js"></script>
 
 		<script type="text/javascript">
@@ -306,7 +307,7 @@
 						handler: function(newVal) {
 							var _this = this;
 							if(newVal.length == 0){
-								return mui.toast('暂无可选值')
+								return mui.toast('暂无设备或配件')
 							}
 							var options = _this.selectListHeigt > 1 ? {
 								layer: 2,
@@ -370,7 +371,7 @@
 									if(type == 'devlist') {
 										returnList.push({
 											value: devObj['devid'],
-											text: devObj['devname'] || devObj['devid'],
+											text: app.dev.fixName(devObj['devname']) || devObj['devid'],
 											type: 'devlist',
 											typeName: 'devtype',
 											typeNumber: devObj['devtype'],

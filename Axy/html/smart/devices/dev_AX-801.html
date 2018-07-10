@@ -160,7 +160,7 @@
 			//					plus.navigator.setStatusBarStyle('light');
 			//				}
 			//			});
-
+			var _B;
 			new Vue({
 				el: '#warpper',
 				data: function() {
@@ -196,9 +196,13 @@
 					document.querySelector(".mui-content").style.paddingTop = 45 + 5 + window.immersed + 'px';
 				},
 				plusReady: function() {
+					_B = new ni.Broadcast();
 					this.devid = this.$view.devInfo.devid;
 					this.type = this.$view.devInfo.type;
 					this.getBasicInfo();
+					_B.on('update',function(){
+						this.getBasicInfo();
+					}.bind(this))
 				},
 				methods: {
 					getBasicInfo: function() {

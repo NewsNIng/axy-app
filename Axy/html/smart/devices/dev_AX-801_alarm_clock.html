@@ -245,6 +245,26 @@
 			.mui-switch.mui-disabled {
 				opacity: 1 !important;
 			}
+			.nolog {
+				text-align: center;
+			}
+			
+			.nolog>.nolog_divimg {
+				background-image: url(../../../image/other/icon_Nolog@3x.png);
+				background-size: cover;
+				background-position: center;
+				width: 4rem;
+				height: 3.12rem;
+				margin: 2.986666rem auto 1.413333rem auto;
+			}
+			
+			.nolog .app-btn-main {
+				padding: 0;
+				width: 8.373333rem;
+				margin: 1.226666rem auto;
+				height: 1.173333rem;
+				line-height: 1.173333rem;
+			}
 		</style>
 	</head>
 
@@ -343,6 +363,15 @@
 						</div>
 					</div>
 				</div>
+				<template v-if="alarmClocks.length == 0">
+					<div class="nolog">
+						<div class="nolog_divimg"></div>
+						<div class="app-font-size-30 app-color-9f9fa0">
+							闹钟为空， 赶紧添加闹钟吧~
+						</div>
+						<button type="button" class="mui-btn app-btn-main app-font-size-34" @tap="onAddTap()">添加闹钟</button>
+					</div>
+				</template>
 			</div>
 
 		</div>
@@ -391,38 +420,39 @@
 						mask: false, // 遮罩控制
 						index: -1, //是否弹框
 						//						ringtones: '欢乐时光', //暂不支持
-						alarmClocks: [{
-								"id": 0,
-								"time": 3601,
-								"diaboloDuration": 2,
-								"enable": true,
-								"weekdays": [
-									false,
-									true,
-									true,
-									true,
-									true,
-									true,
-									false
-								],
-								"repeat": true
-							},
-							{
-								"id": 1,
-								"time": 7360,
-								"diaboloDuration": 2,
-								"enable": true,
-								"weekdays": [
-									false,
-									true,
-									true,
-									true,
-									true,
-									true,
-									false
-								],
-								"repeat": true
-							}
+						alarmClocks: [
+//							{
+//								"id": 0,
+//								"time": 3601,
+//								"diaboloDuration": 2,
+//								"enable": true,
+//								"weekdays": [
+//									false,
+//									true,
+//									true,
+//									true,
+//									true,
+//									true,
+//									false
+//								],
+//								"repeat": true
+//							},
+//							{
+//								"id": 1,
+//								"time": 7360,
+//								"diaboloDuration": 2,
+//								"enable": true,
+//								"weekdays": [
+//									false,
+//									true,
+//									true,
+//									true,
+//									true,
+//									true,
+//									false
+//								],
+//								"repeat": true
+//							}
 						],
 					};
 				},
@@ -473,7 +503,7 @@
 								return mui.toast(err.message)
 							}
 							this.alarmClocks = data;
-						})
+						}.bind(this))
 					},
 					onAddTap: function() {
 						//						if(this.plans.length >= 8) {

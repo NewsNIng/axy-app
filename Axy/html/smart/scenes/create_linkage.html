@@ -414,7 +414,10 @@
 							devId != undefined && (condition.devId = devId);
 							accId != undefined && (condition.accId = accId);
 							this.linkageInfo.conditionlist = [condition];
-						}.bind(this));
+						}.bind(this),{
+							conditionlist: this.linkageInfo.conditionlist[0]
+						});
+						//把当前的条件传递给下一个页面
 					},
 
 					// 执行动作添加
@@ -451,13 +454,15 @@
 							if(data.alarmOn !== undefined) {
 								extend.alarmOn = data.alarmOn
 							}
+							if(sceneId){
+								extend.sceneID = sceneId;
+							}
 							_this.linkageInfo.actionlist.push({
 								"index": data.randomId,
 								"name": name,
 								"type": data.type,
 								"devId": devId,
 								"accId": accId,
-								"sceneId": sceneId,
 								"extend": extend,
 								"enable": 1,
 								"state": 1, //为了列表响应式

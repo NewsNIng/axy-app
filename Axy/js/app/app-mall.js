@@ -22,8 +22,8 @@
 	// 配置	
 	var config = {
 //		url: "http://47.106.92.195/shop/#/home?t=" + +new Date(),
-//		url: "http://192.168.1.135:8080/#/home?t=" + +new Date(),
-		url: "http://vh.anxin-net.com/shop/#/home?t=" + +new Date(),
+		url: "http://192.168.1.135:8080/#/home?t=" + +new Date(),
+//		url: "http://vh.anxin-net.com/shop/#/home?t=" + +new Date(),
 		id: "mall",
 		routerCmdName: "router",
 	};
