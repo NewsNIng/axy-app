@@ -186,74 +186,70 @@
 									return mui.toast('重启设备成功');
 								});
 							}
-						});
+						}.bind(this));
 					},
 
 					// 删除设备
 					onDel: function() {
+						var dev = this.devInfo;
+						var methodName = 'delete';
+						var that = this;
+						if(dev.relation === 2) {
+							methodName += 'share';
+						}
 //
-//						var dev = this.devInfo;
-//						var methodName = 'delete';
-//						var that = this;
-//						if(dev.relation === 2) {
-//							methodName += 'share';
-//						}
-//
-//						// 弹窗确认
-//						var $alert = Rx.Observable.create(function(ob) {
-//							mui.confirm("确定要删除设备吗？\n删除前设备将会重启", "", ["删除", "取消"], function(e) {
-//								if(e.index === 0) {
-//									ob.next(dev);
-//								} else {
-//									ob.error(new Error("您取消了删除"));
-//								}
-//							});
-//						});
-//						// 重启设备
-//						var $rebootFn = function(dev) {
-//							return Rx.Observable.create(function(ob) {
-//								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
-//									/*if(err) {
-//										return ob.error(err);
-//									}*/
-//									dev.methodName = methodName;
-//									ob.next(dev);
-//								});
-//							})
-//						}
-//
-//						// 删除设备
-//						var $deleteFn = function(dev) {
-//							return Rx.Observable.create(function(ob) {
-//								dal.device[dev.methodName](dev.devid, function(err, rs) {
-//									if(err) {
-//										return ob.error(err);
-//									}
-//									ob.next(dev);
-//								});
-//							})
-//						}
-//
-//						// 是否主账号
-//						var $isMaster = Rx.Observable.fromPromise(app.auth.verify(app.auth.MASTER, app.user.get()));
-//
-//						$isMaster.mergeMapTo($alert)
-//							.mergeMap($rebootFn)
-//							.mergeMap($deleteFn)
-//							.subscribe(function(dev) {
-//								mui.toast("设备删除成功");
-//								plus.nativeUI.closeWaiting();
-//								_B.emit("delete", {}, {
-//									views: [that.$view.opener()]
-//								});
-//								_B.emit("device_update", {}, {
-//									views: ["home"]
-//								});
-//								that.$view.close();
-//							}, function(err) {
-//								plus.nativeUI.closeWaiting();
-//								mui.toast(err.message);
-//							});
+						// 弹窗确认
+						var $alert = Rx.Observable.create(function(ob) {
+							mui.confirm("确定要删除设备吗？\n删除前设备将会重启", "", ["删除", "取消"], function(e) {
+								if(e.index === 0) {
+									ob.next(dev);
+								} else {
+									ob.error(new Error("您取消了删除"));
+								}
+							});
+						});
+						// 重启设备
+						var $rebootFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.devparam.reboot(dev.devid, dev.type, function(err, rs) {
+									/*if(err) {
+										return ob.error(err);
+									}*/
+									dev.methodName = methodName;
+									ob.next(dev);
+								});
+							})
+						}
+						// 删除设备
+						var $deleteFn = function(dev) {
+							return Rx.Observable.create(function(ob) {
+								dal.device[dev.methodName](dev.devid, function(err, rs) {
+									if(err) {
+										return ob.error(err);
+									}
+									ob.next(dev);
+								});
+							})
+						}
+						// 是否主账号
+						var $isMaster = Rx.Observable.fromPromise(app.auth.verify(app.auth.MASTER, app.user.get()));
+						$isMaster.mergeMapTo($alert)
+							.mergeMap($rebootFn)
+							.mergeMap($deleteFn)
+							.subscribe(function(dev) {
+								mui.toast("设备删除成功");
+								plus.nativeUI.closeWaiting();
+								_B.emit("delete", {}, {
+									views: [that.$view.opener()]
+								});
+								_B.emit("device_update", {}, {
+									views: ["home"]
+								});
+								that.$view.close();
+							}, function(err) {
+								plus.nativeUI.closeWaiting();
+								mui.toast(err.message);
+							});
 
 					},
 
@@ -264,14 +260,14 @@
 
 					// 告警时间跳转
 					onAlarmParam: function() {
-						var that = this;
+						var _this = this;
 
 						app.page.getAlarmParam(function(data) {
 							//data.intervalTime
 							//data.continuedTime
 						}, {
-							type: "",
-							devid: "",
+							type: _this.type,
+							devid: _this.devid,
 						});
 					},
 					// 基本信息

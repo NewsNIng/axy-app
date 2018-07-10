@@ -412,9 +412,6 @@
 							}).filter((function(item) {
 								return !!item;
 							})).join('|') + '|' + data.name;
-							console.log('9999999999999999')
-							console.log(JSON.stringify(data))
-							console.log(JSON.stringify(devInfo))
 							var devId = devInfo.filter(function(item) {
 								return item.type == 'devlist'
 							});
@@ -441,13 +438,15 @@
 							if(data.alarmOn !== undefined) {
 								extend.alarmOn = data.alarmOn
 							}
+							if(sceneId){
+								extend.sceneID = sceneId;
+							}
 							_this.sceneInfo.actionlist.push({
 								"index": data.randomId,
 								"name": name,
 								"type": data.type,
 								"devId": devId,
 								"accId": accId,
-								"sceneId": sceneId,
 								"extend": extend,
 								"enable": 1,
 								"state": 1, //为了列表响应式

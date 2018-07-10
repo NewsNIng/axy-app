@@ -469,7 +469,11 @@
 					},
 					methods: {
 						timeNumToStr: function(time){
-							return parseInt(time / 3600 ) + ':' + parseInt(time % 3600 / 60);
+							var hour = parseInt(time / 3600 );
+							var minus = parseInt(time % 3600 / 60)
+							hour = hour < 10 ? ('0' + hour) : hour;
+							minus = minus < 10 ? ('0' + minus) : minus;
+							return hour + ':' + minus;
 						},
 						onSelectDevTap: function(i, o) {
 							var _this = this;

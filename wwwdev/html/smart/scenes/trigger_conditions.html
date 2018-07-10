@@ -253,6 +253,9 @@
 				transform: scaleY(.5);
 				background-color: #c8c7cc;
 			}*/
+			[v-cloak]{
+				display: none !important;
+			}
 		</style>
 	</head>
 
@@ -266,7 +269,7 @@
 				<slot></slot>
 				
 			</div>-->
-			<div class="com-dev-mask" v-show="mask" @tap.self="mask = false">
+			<div class="com-dev-mask" v-if="mask" @tap.self="mask = false" v-cloak>
 				<div class="com-dev time app-font-size-28" v-show="index === 0">
 					<div class="pop_title app-font-size-28">
 
@@ -343,13 +346,13 @@
 					</ul>
 				</div>
 			</div>
-			<div class="mui-content">
+			<div class="mui-content" v-cloak>
 				<div v-for="o,i in conditions" class="conditions_item" @tap="onSelectDevTap(i, o)">
 					<!--<div class="condition_title app-font-size-28" v-text="o.title"></div>-->
 					<!--<div class="conditions_item app-font-size-28" v-for="o1,i in o.list" @tap="onSelectDevTap(i,o1.img)">-->
 					<img class="conditions_icon" :src="getIconByConditionId(o.conditiontype)" />
 					<img class="more" src="../../../image/smart/scenes/btn_More@3x.png" />
-					<div class="title app-font-size-28">{{o.name}}</div>
+					<div class="title app-font-size-28" v-text="o.name"></div>
 					<!--</div>-->
 					<!--<div v-if="i !== conditions.length - 1" style="float: left; margin-left: 0.346666rem; height: 1px; width: 100%; background-color: #E5E6E7;"></div>-->
 					</template>
@@ -377,10 +380,10 @@
 			<script type="text/javascript" src="../../../js/data/value_0-1000.js"></script>
 			<script type="text/javascript" src="../../../js/app/app-act.js"></script>
 			<script type="text/javascript" src="../../../js/dal/scene.js"></script>
+			<script src="../../../js/app/app-dev.js" type="text/javascript" charset="utf-8"></script>
 
 			<script type="text/javascript">
 				mui.init();
-
 				new Vue({
 					el: '#warpper',
 					data: function() {
@@ -456,8 +459,22 @@
 							"type": "time",
 						})
 					},
-					plusReady: function() {},
+					plusReady: function() {
+						var currentCondition = this.$view.conditionlist || {};
+						var type = currentCondition.type || currentCondition.conditionType;
+						if(type == 0x100){//表示的是时间
+							this.weeks = currentCondition.param.recycle;
+							this.clockTime = this.timeNumToStr(currentCondition.param.time);
+						}
+					},
 					methods: {
+						timeNumToStr: function(time){
+							var hour = parseInt(time / 3600 );
+							var minus = parseInt(time % 3600 / 60)
+							hour = hour < 10 ? ('0' + hour) : hour;
+							minus = minus < 10 ? ('0' + minus) : minus;
+							return hour + ':' + minus;
+						},
 						onSelectDevTap: function(i, o) {
 							var _this = this;
 							_this.index = i;
@@ -471,8 +488,9 @@
 										}
 										_this.conditionsMapList[i] = data;
 										_this.setSelectList();
+										_this.conditionType = o.conditiontype
 										if(_this.selectList.length == 0) { //如果没有数据不给选择
-											return mui.toast('暂无可选值')
+											return mui.toast('暂无设备或配件')
 										} else if(_this.selectList.length == 1) {
 											var firstSelectItem = _this.selectList[0];
 											if(i < 4) {
@@ -482,12 +500,11 @@
 											}
 										}
 										_this.mask = true;
-										_this.conditionType = o.conditiontype
 									})
 								} else {
 									_this.setSelectList();
 									if(_this.selectList.length == 0) { //如果没有数据不给选择
-										return mui.toast('暂无可选值')
+										return mui.toast('暂无设备或配件')
 									} else if(_this.selectList.length == 1) {
 										var firstSelectItem = _this.selectList[0];
 										if(i < 4) {
@@ -564,6 +581,7 @@
 						},
 						onPickTap: function(i) {
 							var that = this;
+							this.dtpicker.value = this.clockTime;
 							this.dtpicker.show(function(selectItems) {
 								that.clockTime = selectItems.value;
 							});
@@ -629,7 +647,7 @@
 										if(type == 'devlist') {
 											returnList.push({
 												value: devObj['devid'],
-												text: devObj['devname'],
+												text: app.dev.fixName(devObj['devname']) || devObj['devid'],
 												type: 'devlist',
 												typeName: 'devtype',
 												typeNumber: devObj['devtype'],

@@ -163,7 +163,7 @@
 										<span class="nickname app-font-size-26" v-text="item.nickname"></span>
 									</div>
 									<div @tap.stop="onLikeTap(item)">
-										<img class="icon" :src='"../../../image/nearby/discover/" + (item.like?"":"no") + "like.png"' />
+										<img class="icon" :src='"../../../image/nearby/discover/" + (item.firstLike?"":"no") + "like.png"' />
 										<span class="app-font-size-28" v-text="item.likecount || 0"></span>
 									</div>
 								</div>
@@ -242,11 +242,13 @@
 								//已经点过赞了
 								return;
 							}
-							item.likecount++;
 							dal.article.like(item.id, function(err, data) {
 								err && mui.toast(err.message);
+								if(!err){
+									item.like = true;
+									item.likecount++;
+								}
 							});
-							item.like = true;
 						});
 
 					},

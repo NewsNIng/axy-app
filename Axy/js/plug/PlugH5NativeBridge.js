@@ -22,14 +22,14 @@
 
 	pg.asyncExec = function(_BARCODE, _METHODNAME, _ARGARR, _SFN, _FFN) {
 		//plus.nativeUI.toast(_METHODNAME);// console.log(_METHODNAME);
-	 	 return;
+//	 	 return;
 		_ARGARR.unshift(pg.getCallBackId(_SFN, _FFN));
 		return B.exec(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
 	pg.syncExec = function(_BARCODE, _METHODNAME, _ARGARR) {
 		//plus.nativeUI.toast(_METHODNAME);
-		 return;
+//		 return;
 		return B.execSync(_BARCODE, _METHODNAME, _ARGARR);
 	}
 
