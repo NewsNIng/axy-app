@@ -94,8 +94,8 @@
 					var ajaxResult = function(err, data) {
 						if(err) {
 							if(
-								err.code === 0x00100C01 || // 密码错误 1051649 
-								err.code === 0x00100C02 // 权限认证失败 1051649
+								err.code == 0x00100C01 || // 密码错误 1051649 
+								err.code == 0x00100C02 // 权限认证失败 1051650
 							) {
 								// 验证失败
 								ob.error(err);
@@ -377,7 +377,7 @@
 					return Rx.Observable.create(function(ob){
 						if(
 							err.code === "1051649" || // 密码错误 1051649
-							err.code === "1051649"    // 权限认证失败 1051649
+							err.code === "1051650"    // 权限认证失败 1051649
 						){
 							ob.error(err);
 						}else{

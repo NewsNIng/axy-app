@@ -83,8 +83,10 @@
 	 * @param {Number} aid 说说id
 	 * @param {Function} callback
 	 */
-	article.like = function(aid, callback){
-		return ra('post', '/article/like/' + aid, {}, callback);
+	article.like = function(aid,firstLike, callback){
+		return ra('post', '/article/like/' + aid, {
+			firstLike: firstLike
+		}, callback);
 	};
 	/**
 	 * 删除说说

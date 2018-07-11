@@ -238,15 +238,12 @@
 					onLikeTap: function(item) {
 						app.user.get(function(u) {
 							if(!u){return}
-							if(item.like) {
-								//已经点过赞了
-								return;
-							}
-							dal.article.like(item.id, function(err, data) {
+							var firstLike = item.firstLike;
+							dal.article.like(item.id, firstLike,function(err, data) {
 								err && mui.toast(err.message);
 								if(!err){
-									item.like = true;
-									item.likecount++;
+									item.firstLike = firstLike ? 0 : 1;
+									item.likecount = item.firstLike ? (++item.likecount) : (--item.likecount);
 								}
 							});
 						});

@@ -421,6 +421,8 @@
 
 							if(ACC.data && ACC.data.length > 0) {
 								ob.next(ACC.data);
+							}else{
+								ob.error();
 							}
 						});
 
@@ -455,6 +457,7 @@
 
 							// 计算是否有红外模块
 							.mergeMap(function(arr) {
+								plus.nativeUI.closeWaiting();
 								return Rx.Observable.create(function(ob) {
 									var rs = arr.filter(function(item) {
 										return item.type === 0x18;
@@ -482,7 +485,6 @@
 							})
 							// 选择一个红外模块
 							.mergeMap(function(arrdata) {
-								plus.nativeUI.closeWaiting();
 								return Rx.Observable.create(function(ob) {
 
 									var picker = new mui.PopPicker({
@@ -515,7 +517,7 @@
 								},
 								function(err) {
 									plus.nativeUI.closeWaiting();
-									mui.alert(err.message || "请先添加红外模块");
+									mui.alert((err && err.message) || "请先添加红外模块");
 								});
 
 					},

@@ -299,7 +299,7 @@
 
 			// 保存顶级域名
 			var $SaveDomain = function(data) {
-				window.localStorage.setItem('_domain_', data.domain);
+				data.domain && window.localStorage.setItem('_domain_', data.domain);
 				return data;
 			};
 
@@ -507,6 +507,10 @@
 							return Rx.Observable.create(function(ob) {
 								dal.user.login(o.account, o.pwd, function(err, data) {
 									if(err) {
+										//账号已开启保护
+										if(err.code == 1051650){
+											return ob.next(data)
+										}
 										return ob.error(err);
 									}
 									ob.next(data);
@@ -517,6 +521,7 @@
 						// 登录权限验证
 						var $loginLockCheck = function(data) {
 							return Rx.Observable.create(function(ob) {
+								//lockterminal表示是否开启终端认真0未开启，validation是否认真成功
 								if(data.lockterminal === 0 || data.validation === 1) {
 									// 验证通过
 									ob.next(data);
@@ -626,7 +631,9 @@
 							return Rx.Observable.create(function(ob) {
 								dal.system.getAccount(info.type, info.openid, function(err, data) {
 									if(err) {
-										return ob.error(err);
+										return ob.next({
+											auth: info,
+										})
 									}
 									ob.next({
 										account: data,
@@ -641,6 +648,8 @@
 							var account = o.account;
 							return Rx.Observable.create(function(ob) {
 								if(!account) {
+									//没有账号的情况下使用BASE_URL
+									o.domain = dal.BASE_URL;
 									return ob.next(o);
 								}
 								dal.system.getTopMain(account, function(err, data) {
@@ -663,7 +672,7 @@
 										return ob.error(err);
 									}
 									ob.next(data);
-								}, o.domain);
+								},o.domain);
 							});
 						}
 
