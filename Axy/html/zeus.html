@@ -102,6 +102,7 @@
 							} else if(logincount < 3) {
 								// 递归重试登录   指数化退避
 								logincount = logincount + 1;
+								console.log(logincount + 'logincout--------')
 								setTimeout(_loginFn.bind(null, ob, logincount), Math.pow(2, logincount) * 100);
 							}
 							return;
@@ -350,6 +351,7 @@
 				_B.on('token_error', function(data) {
 					// token 错误
 					// 并且已经登录
+					console.log('token_error------'+JSON.stringify(data))
 					app.user.has() && ob.next(data);
 				});
 			});
@@ -376,8 +378,8 @@
 				.mergeMap(function(err){
 					return Rx.Observable.create(function(ob){
 						if(
-							err.code === "1051649" || // 密码错误 1051649
-							err.code === "1051650"    // 权限认证失败 1051649
+							err.code == "1051649" || // 密码错误 1051649
+							err.code == "1051650"    // 权限认证失败 1051649
 						){
 							ob.error(err);
 						}else{
@@ -390,8 +392,10 @@
 				.mergeMapTo($login)
 				.subscribe(
 					// 自动登录成功
-					function(){
-						
+					function(user){
+						user = FixUserData(user);
+						// -》更新 本地 用户 数据
+						UpdateUserInfo(user);
 					},
 					// 重新启动
 					function(err) {	

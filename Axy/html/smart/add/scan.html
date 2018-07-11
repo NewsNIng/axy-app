@@ -169,6 +169,7 @@
 						var that = this;
 						// 如果当前不是配件添加，是主机添加
 						if(this.isDev) {
+							alert(isDev)
 							var w = plus.nativeUI.showWaiting();
 							dal.device.add(id, function(err, data) {
 								w && (w.close(), w = null);

@@ -569,19 +569,27 @@
 							if(!data.data) {
 								return;
 							}
+							alert(data.data.result)
 							if(data.data.result) {
 								//获取配件信息
-
+								
 								// 跳转
-								mui.openWindow('add_completed.html', 'add_completed', {
-									extras: {
-										needConn: false,
-										//配件id
-										//										devid: this.devid,
-										isFitting: true,
-										info: data,
-									}
-								});
+//								mui.openWindow('add_completed.html', 'add_completed', {
+//									extras: {
+//										needConn: false,
+//										//配件id
+//										//										devid: this.devid,
+//										isFitting: true,
+//										info: data,
+//									}
+//								});
+								app.page.openForResultBy('add_completed.html','add_completed',function(){},{
+									needConn: false,
+									//配件id
+									//										devid: this.devid,
+									isFitting: true,
+									info: data,
+								})
 							}
 						}, o);
 					},
