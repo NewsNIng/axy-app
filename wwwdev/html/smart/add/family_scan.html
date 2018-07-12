@@ -67,6 +67,7 @@
 				<div class="tips app-font-size-28">
 					此二维码仅可以使用一次，有效期30分钟。
 					<br /> 如二维码失效，请让家人重新生成。
+					<br /> 如未能打开摄像头，请查看应用权限。
 				</div>
 			</div>
 
@@ -167,7 +168,6 @@
 					closeScan: function() {
 						this.scan && (this.scan.close(), this.scan = null, this.t = -1);
 					}
-
 				}
 			});
 		</script>

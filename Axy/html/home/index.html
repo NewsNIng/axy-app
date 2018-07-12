@@ -923,7 +923,12 @@
 									pageid = "dev_AX-904";
 									break;
 								}
-
+							case "AX-801":
+								{
+									url = "../smart/devices/dev_AX-801.html";
+									pageid = "dev_AX-801"
+									break;
+								}
 							default:
 								{
 									url = "";
@@ -1148,7 +1153,12 @@
 									pageid = "dev_VH-104_setting";
 									break;
 								}
-
+							case "AX-801":
+								{
+									url = '../smart/devices/dev_AX-801_setting.html';
+									pageid = "dev_AX-801_setting";
+									break;
+								}
 							default:
 								{
 									url = "../smart/devices/camera_settings.html";
@@ -1161,7 +1171,9 @@
 						url && app.page.openForResultBy(url, pageid, function() {
 
 						}, {
-							devInfo: this.dev
+							devInfo: this.dev,
+							devid: this.devid,
+							type: this.dev.type
 						});
 
 					},
@@ -1169,7 +1181,7 @@
 					onShareTap: function() {
 						mui.openWindow("../person/devshare/share.html", 'dev_share', {
 							extras: {
-								devInfo: this.dev
+								devInfo: this.dev,
 							}
 						});
 					},

@@ -77,7 +77,8 @@
       "html/smart/add/ap_connect_ai_1.html",
       "html/smart/add/connect_wifi.html",
       "html/smart/add/blue_connect_camera1.html",
-      "html/smart/add/blue_select_dev_id.html"
+      "html/smart/add/blue_select_dev_id.html",
+      "html/smart/add/family_menu.html"
     ],
     "resources": []
   },
@@ -217,6 +218,11 @@
     "refer": [
       "html/nearby/discover/discover_details.html",
       "html/common/login.html"
+    ]
+  },
+  "html/smart/add/family_menu.html": {
+    "refer": [
+      "html/smart/add/family_scan.html"
     ]
   }
 }

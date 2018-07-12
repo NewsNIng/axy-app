@@ -173,8 +173,6 @@
 					this.isFitting = this.$view.isFitting;
 					this.updateDeviceList();
 					this.info = this.$view.info;
-					
-					mui.toast(this.isFitting)
 
 					//					plus.webview.getWebviewById('add/add_device.html') && plus.webview.getWebviewById('add/add_device.html').close('none');
 					//					plus.webview.getWebviewById('Lan_add_camera') && plus.webview.getWebviewById('Lan_add_camera').close('none');
@@ -184,7 +182,7 @@
 
 					var tempw;
 					([
-						"add/add_device.html",
+//						"add/add_device.html", bug
 						"Lan_add_camera",
 						"voice1",
 						"voice2",
@@ -201,6 +199,7 @@
 						
 					].forEach(function(item) {
 						tempw = plus.webview.getWebviewById(item);
+						 tempw && alert(tempw.id)
 						tempw && tempw.close('none');
 					}));
 
@@ -271,16 +270,18 @@
 									devType: o.devtype,
 									statusCode: o.statecode
 								};
-
-								app.page.openForResultBy(pageUrl, 'dev_' + o.type, function(data) {
-									//actionDir[data.action](data.info);
-								}, {
+								//用openForResultBy监听不到titleupdate事件
+//								app.page.openForResultBy('../devices/dev_' + o.type + '.html', 'dev_' + o.type, function(data) {
+//									//actionDir[data.action](data.info);
+//								}, {
+//									info: info
+//								});
+								var cw = plus.webview.currentWebview();
+								plus.webview.create('../devices/dev_' + o.type + '.html', 'dev_' + o.type, {}, {
 									info: info
+								}).show('pop-in', 220, function() {
+									cw.close('none');
 								});
-
-								setTimeout(function() {
-									that.$view.close("none");
-								}, 1000)
 							});
 
 						} else {
