@@ -143,6 +143,14 @@
 						index: 0, // 默认下标
 					}
 				},
+				plusReady(){
+					// plus ready !
+					// 这时候才能调用 plus 相关 API
+					this.group = new this.$WebviewGroupLow(plus.webview.currentWebview().id, {
+						items: this.items,
+						onChange: this.onChange.bind(this)
+					});
+				},
 				created: function() {
 					
 					plus.nativeUI.closeWaiting();
@@ -157,12 +165,7 @@
 						zeus = plus.webview.create('zeus.html', 'zeus');
 					}
 
-					// plus ready !
-					// 这时候才能调用 plus 相关 API
-					this.group = new this.$WebviewGroupLow(plus.webview.currentWebview().id, {
-						items: this.items,
-						onChange: this.onChange.bind(this)
-					});
+					
 					//仅支持竖屏显示
 					plus.screen.lockOrientation("portrait-primary");
 					plus.navigator.setStatusBarStyle('UIStatusBarStyleBlackOpaque');
@@ -264,7 +267,7 @@
 								// 更新index下标
 								this.index = index;
 								// 控制webview切换
-								this.group.switchTab(o.id);
+								this.group && this.group.switchTab(o.id);
 								// 吐司
 								//mui.toast(o.name);
 							}.bind(this));

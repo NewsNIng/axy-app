@@ -60,7 +60,8 @@
       "html/smart/devices/dev_my_list.html",
       "html/common/login.html",
       "html/smart/scenes/index2.html",
-      "html/public/browser.html"
+      "html/public/browser.html",
+      "html/smart/devices/camera_settings.html"
     ],
     "resources": [
       "image/home/dev_camera.png",
@@ -78,7 +79,8 @@
       "html/smart/add/connect_wifi.html",
       "html/smart/add/blue_connect_camera1.html",
       "html/smart/add/blue_select_dev_id.html",
-      "html/smart/add/family_menu.html"
+      "html/smart/add/family_menu.html",
+      "html/smart/add/scan.html"
     ],
     "resources": []
   },
@@ -134,7 +136,11 @@
   },
   "html/smart/devices/dev_AX-903_setting.html": {
     "refer": [
-      "html/smart/devices/dev_AX-903_select_id.html"
+      "html/smart/devices/dev_AX-903_select_id.html",
+      "html/smart/devices/dev_AX-903_alarmlog.html",
+      "html/public/input.html",
+      "html/smart/devices/dev_AX-903_datasave.html",
+      "html/smart/devices/dev_AX-903_bind.html"
     ],
     "resources": []
   },
@@ -210,7 +216,8 @@
   },
   "html/common/login.html": {
     "refer": [
-      "html/common/register.html"
+      "html/common/register.html",
+      "html/common/authorized.html"
     ],
     "resources": []
   },
@@ -218,11 +225,18 @@
     "refer": [
       "html/nearby/discover/discover_details.html",
       "html/common/login.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/family_menu.html": {
     "refer": [
       "html/smart/add/family_scan.html"
+    ],
+    "resources": []
+  },
+  "html/smart/add/scan.html": {
+    "refer": [
+      "html/smart/add/scan_code.html"
     ]
   }
 }
