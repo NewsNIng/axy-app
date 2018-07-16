@@ -566,13 +566,14 @@
 					_scanCodeLine: function(o) {
 						app.page.openForResultBy('scan.html', 'scan', function(data) {
 							// 获取扫码结果
+							
 							if(!data.data) {
 								return;
 							}
 							if(data.data.result) {
 								//获取配件信息
 								
-								// 跳转
+								// 跳转,下面两种被关闭后不能往回跳转
 //								mui.openWindow('add_completed.html', 'add_completed', {
 //									extras: {
 //										needConn: false,
@@ -582,13 +583,21 @@
 //										info: data,
 //									}
 //								});
-								app.page.openForResultBy('add_completed.html','add_completed',function(){},{
+//								app.page.openForResultBy('add_completed.html','add_completed',function(){},{
+//									needConn: false,
+//									//配件id
+//									//										devid: this.devid,
+//									isFitting: true,
+//									info: data,
+//								})
+								plus.webview.create('add_completed.html','add_completed', {}, {
 									needConn: false,
 									//配件id
 									//										devid: this.devid,
 									isFitting: true,
 									info: data,
-								})
+								}).show('pop-in', 220, function() {
+								});
 							}
 						}, o);
 					},

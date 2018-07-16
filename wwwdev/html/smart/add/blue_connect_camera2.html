@@ -242,7 +242,7 @@
 
 						// 页面最大延迟
 						var timeout$ = Rx.Observable.create(function(ob) {
-							setTimeout(ob.next.bind(ob), 10000);
+							setTimeout(ob.next.bind(ob,{code: -1, message: '请重试'}), 10000);
 						});
 						
 						// 设备WiFi配置
@@ -263,6 +263,9 @@
 								plus.nativeUI.closeWaiting();
 								if(typeof rs === "number"){
 									return mui.toast("设备配置失败");
+								}
+								if(rs.code == -1){
+									return mui.toast(rs.message)
 								}
 								var url = "blue_connect_camera3.html?cid=" + rs.cid + "&pwd=" + that.pwd + "&devid=" + rs.devid;
 								that.$view.loadURL(url);

@@ -182,7 +182,7 @@
 
 					var tempw;
 					([
-//						"add/add_device.html", bug
+						"add/add_device.html",
 						"Lan_add_camera",
 						"voice1",
 						"voice2",
@@ -199,7 +199,6 @@
 						
 					].forEach(function(item) {
 						tempw = plus.webview.getWebviewById(item);
-						 tempw && alert(tempw.id)
 						tempw && tempw.close('none');
 					}));
 

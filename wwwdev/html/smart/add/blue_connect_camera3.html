@@ -106,7 +106,7 @@
 			</div>
 			<div class="foot app-font-size-34">
 				<div @tap="onPrev()" style="width: 50%; float: left;background-color: #F4F8FB;" class="app-color-9f9fa0">上一步</div>
-				<div @tap="onNext()" style="width: 50%;float: left;" :class="{unavailable:!isConnected}">下一步</div>
+				<div @tap="onNext()" style="width: 50%;float: left;" :class="{unavailable:!isConnected}">完成</div>
 			</div>
 		</div>
 		<!--沉浸式动态处理-->
@@ -200,7 +200,7 @@
 						if(!this.isConnected) {
 							return;
 						}
-						mui.openWindow('add_completed.html', 'add_completed', {
+						mui.openWindow('add_completed.html', 'add_completed',{
 							extras: {
 								needConn: false,
 								devid: this.devid,
@@ -273,7 +273,7 @@
 						if(close) {
 							// 连接成功
 							this.isConnected = true;
-							this.$view.close();
+//							this.$view.close();
 							return;
 							// return this.$view.close();***
 						}

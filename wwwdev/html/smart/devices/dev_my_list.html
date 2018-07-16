@@ -460,7 +460,7 @@
 								</a>
 								<div class="mui-collapse-content">
 
-									<div class="flex a1-list" v-for="oo,ii in o.appArray" @tap="onZoneTap(oo, o.appIndex)" :key="oo.aid">
+									<div class="flex a1-list" v-for="oo,ii in o.appArray" @tap="onZoneTap(oo, oo.appIndex)" :key="oo.aid">
 										<div class="flex" style="flex: 1; flex-direction: column;height: 2.026666rem;">
 											<div class="flex app-font-size-28" style="flex: 1; align-items: center; justify-content: flex-start;">
 												<span style="margin:0 0.2rem 0 0.346666rem;" class="app-color-9f9fa0">当前状态</span>
@@ -746,7 +746,7 @@
 									appArray: []
 								};
 							}
-							// arr[i].appIndex = i;
+							 arr[i].appIndex = i;
 							dir[arr[i].type].appArray.push(arr[i]);
 						}
 						
