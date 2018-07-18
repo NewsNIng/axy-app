@@ -96,6 +96,10 @@
 			.mui-table-view-cell:after {
 				background-color: #E5E6E7 !important;
 			}
+			.loading-icon{
+				color: #fff;
+				margin-top: 10px;
+			}
 		</style>
 	</head>
 
@@ -105,6 +109,7 @@
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">选择设备蓝牙ID</h1>
+				<span class="mui-pull-right loading-icon mui-spinner mui-spinner-white"></span>
 			</header>
 
 			<div class="mui-content">
@@ -158,10 +163,16 @@
 		<script type="text/javascript" src="../../../js/lib/Rx.min.js"></script>
 
 		<script type="text/javascript">
-			mui.init();
-
 			var P = plug.H5NativeBridge;
 
+			mui.init({
+				beforeback: function(){
+					P.stopScan4GenDevice();
+					return true;
+				}
+			});
+
+			
 			new Vue({
 				el: '#warpper',
 				data: function() {
@@ -216,6 +227,9 @@
 				},
 				plusReady: function() {
 					this.getBlueDevList();
+					this.$view.addEventListener('popGesture',function(){
+						this.stopBlueScan();
+					}.bind(this))
 				},
 				methods: {
 					

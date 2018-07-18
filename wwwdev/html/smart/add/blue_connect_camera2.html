@@ -239,9 +239,11 @@
 								rs = JSON.parse(rs);
 								if(rs && rs.code === 0) {
 									ob.next(rs);
+								}else{
+									ob.error(rs)
 								}
 							}, function(err) {
-								ob.error();
+								ob.error(err);
 							});
 						});
 
@@ -257,6 +259,9 @@
 								}
 								var url = "blue_connect_camera3.html?cid=" + rs.cid + "&pwd=" + that.pwd + "&devid=" + rs.devid;
 								that.$view.loadURL(url);
+							},function(rs){
+								plus.nativeUI.closeWaiting();
+								mui.toast("设备配置失败");
 							});
 
 					},
