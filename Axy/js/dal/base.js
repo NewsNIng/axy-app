@@ -80,6 +80,7 @@ function requestAdapter(type, url, params, callback) {
 				// token 验证失败 通知 zeus
 				var zeus = plus.webview.getWebviewById("zeus");
 				if(!zeus) {
+					console.log(JSON.stringify(plus.webview.all()))
 					console.log("ZEUS WINDOW NOFIND");
 					return
 				}

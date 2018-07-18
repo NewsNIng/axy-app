@@ -50,7 +50,8 @@
       "html/smart/devices/dev_my_list.html",
       "html/person/setting/index.html",
       "html/person/collection/my_collection.html",
-      "html/person/collection/my_mall.html"
+      "html/person/collection/my_mall.html",
+      "html/common/login.html"
     ],
     "resources": []
   },
@@ -61,7 +62,8 @@
       "html/common/login.html",
       "html/smart/scenes/index2.html",
       "html/public/browser.html",
-      "html/smart/devices/camera_settings.html"
+      "html/smart/devices/camera_settings.html",
+      "html/search/index.html"
     ],
     "resources": [
       "image/home/dev_camera.png",
@@ -108,7 +110,12 @@
       "html/smart/devices/dev_35.html",
       "html/smart/devices/dev_145.html",
       "html/smart/add/add_device.html",
-      "html/smart/devices/dev_WG-100.html"
+      "html/smart/devices/dev_WG-100.html",
+      "html/smart/devices/dev_16711680.html",
+      "html/smart/devices/dev_0.html",
+      "html/smart/devices/dev_20.html",
+      "html/smart/devices/dev_65.html",
+      "html/smart/devices/dev_48.html"
     ],
     "resources": []
   },
@@ -239,16 +246,19 @@
     "refer": [
       "html/smart/add/scan_code.html",
       "html/smart/add/scan_bind_dev.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/Lan_select_dev_id.html": {
     "refer": [
       "html/smart/add/connect_wifi.html"
-    ]
+    ],
+    "resources": []
   },
   "html/smart/add/add_completed.html": {
     "refer": [
       "html/smart/devices/dev_35.html"
-    ]
+    ],
+    "resources": []
   }
 }

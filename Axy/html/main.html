@@ -143,19 +143,19 @@
 						index: 0, // 默认下标
 					}
 				},
-				plusReady(){
+				created(){
+					
+				},
+				plusReady: function() {
+					
+					plus.nativeUI.closeWaiting();
+					
 					// plus ready !
 					// 这时候才能调用 plus 相关 API
 					this.group = new this.$WebviewGroupLow(plus.webview.currentWebview().id, {
 						items: this.items,
 						onChange: this.onChange.bind(this)
 					});
-				},
-				created: function() {
-					
-					plus.nativeUI.closeWaiting();
-					
-					
 					_B = new ni.Broadcast();
 
 					zeus = plus.webview.getWebviewById('zeus');

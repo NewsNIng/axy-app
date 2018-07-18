@@ -61,6 +61,7 @@ function addMethod(obj, name, fn) {
 			window.localStorage.setItem('_account_', o.account);
 			window.localStorage.setItem('_token_', o.token);
 			window.localStorage.setItem('_loginid_', o.loginid);
+			console.log('保存成功---'+JSON.stringify(o))
 		},
 		// 是否存有本地用户信息
 		has: function() {

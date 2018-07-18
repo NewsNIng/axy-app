@@ -223,6 +223,8 @@
 
 			var ListenLoginSuccess$ = Rx.Observable.create(function(ob) {
 				_B.on('login_success', function(data) {
+					console.log('login_success_zeus-------------------------------------')
+					console.log(JSON.stringify(data))
 					ob.next(data.userInfo);
 				});
 			});

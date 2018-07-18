@@ -567,10 +567,7 @@
 
 								window.localStorage.setItem('_pwd_', that.password);
 								window.localStorage.setItem('login_type', 'pwd');
-								// 通知全部
-								new that.$Broadcast().emit("login_success", {
-									userInfo: data
-								});
+								
 								plus.navigator.setStatusBarStyle('light');
 								// 通知上层
 								app.page.setResult(data);
@@ -582,6 +579,10 @@
 								// [事件]登录
 								app.statis.emit("login", {
 									loginType: "tel"
+								});
+								// 通知全部
+								new that.$Broadcast().emit("login_success", {
+									userInfo: data
 								});
 
 							}, function(err) {

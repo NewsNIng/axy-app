@@ -222,24 +222,12 @@
 						mui.back();
 					},
 					onNext: function() {
-						this.mask = true;
+						this.onSubmit();
 					},
 
 					// 确定密码
 					onSubmit: function() {
-
 						var that = this;
-
-						if(this.pwd.length < 4) {
-							return mui.toast("密码至少设置为4位");
-						}
-
-						if(this.pwd !== this.pwd2) {
-							return mui.toast("两次输入的密码不一样");
-						}
-
-						this.mask = false;
-
 						// 页面最大延迟
 						var timeout$ = Rx.Observable.create(function(ob) {
 							setTimeout(ob.next.bind(ob,{code: -1, message: '请重试'}), 10000);

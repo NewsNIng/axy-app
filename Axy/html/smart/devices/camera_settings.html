@@ -466,7 +466,7 @@
 								if(err) {
 									return mui.toast(err.message);
 								}
-								that.devInfo.location = data.content;
+								that.$set(that.devInfo,'location',data.content)
 								mui.toast('名称更新成功');
 								// 通知上层
 								_B.emit("update", {
@@ -558,7 +558,9 @@
 								console.log(JSON.stringify(rs));
 								if(!err) {
 									that.upside = !rs.upside;
+									return;
 								}
+								mui.toast(err.message)
 							});
 						} else {
 							plus.nativeUI.showWaiting();

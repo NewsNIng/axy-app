@@ -518,6 +518,11 @@
 								this.actionType === -1 && this.plans.pop();
 								return mui.toast('操作失败');
 							}
+							if(this.actionType === -1){
+								this.$nextTick(function() {
+									mui('.mui-switch')['switch']();
+								});
+							}
 							mui.toast("更新成功");
 						}.bind(this));
 					},
