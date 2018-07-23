@@ -414,6 +414,7 @@
 							devId != undefined && (condition.devId = devId);
 							accId != undefined && (condition.accId = accId);
 							this.linkageInfo.conditionlist = [condition];
+							console.log(JSON.stringify(condition))
 						}.bind(this),{
 							conditionlist: this.linkageInfo.conditionlist[0]
 						});
