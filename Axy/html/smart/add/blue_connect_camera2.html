@@ -192,11 +192,13 @@
 						bgp: "../../../image/smart/devices/dev_icon/AX-203@3x.png",
 					};
 				},
-
-				watch: {
-					pwd: '_pwdcheck',
-					pwd2: '_pwdcheck',
+				created: function(){
+					this.setRandomPwd();
 				},
+//				watch: {
+//					pwd: '_pwdcheck',
+//					pwd2: '_pwdcheck',
+//				},
 
 				mounted: function() {
 					this.bgp = window.localStorage.getItem('blue_add_camera_img') + '2.png';
@@ -224,7 +226,13 @@
 					onNext: function() {
 						this.onSubmit();
 					},
-
+					setRandomPwd: function(){
+						var pwd = '';
+						while(pwd.length < 8){
+							pwd += Math.floor(Math.random() * 10)
+						}
+						this.pwd = pwd;
+					},
 					// 确定密码
 					onSubmit: function() {
 						var that = this;

@@ -400,12 +400,12 @@
 						for(var i in dir) {
 							arr.push({
 								day: i,
-								list: dir[i],
+								list: dir[i], 
 							});
 						}
-						arr = arr.sort(function(a, b){
-//							return (new Date(a.day).getTime() - new Date(b.day).getTime())
-							return Date.parse(a.day) - Date.parse(b.day);
+						arr = arr.sort(function(a, b) {
+							//							return (new Date(a.day).getTime() - new Date(b.day).getTime())
+							return Date.parse(b.day) - Date.parse(a.day);
 						})
 						return arr;
 					},
@@ -497,7 +497,13 @@
 					// [事件]查看相册
 					app.statis.emit("picture");
 				},
-
+				watch: {
+					"editing": function(newVal){
+						this.$nextTick(function(){
+							this.scroll.refresh();
+						}.bind(this))
+					}
+				},
 				methods: {
 					// 获取已选择的项
 					_getSelectItems: function() {
@@ -533,6 +539,9 @@
 									return mui.toast('删除失败')
 								}
 								that._clearSelectItems();
+								that.$nextTick(function(){
+									that.scroll.refresh();
+								})
 								mui.toast("删除成功");
 							}
 						});
@@ -566,7 +575,7 @@
 					onItemTap: function(o, i, e) {
 						if(!this.editing) {
 							// 如果是视频的话就去播放
-							if(o.fileType === 2){
+							if(o.fileType === 2) {
 								this.onVideoTap(o);
 							}
 							return;
@@ -654,15 +663,19 @@
 					// 获取本地 录像/图片列表
 					getRecord: function() {
 						var rs = P.GetLocalRecordInfoSync(this.devId, this.dateTime ? this.dateTime.toFormatString('yyyy-MM-dd') : "");
-						rs = JSON.parse(rs);
-						
-						this.record_ = rs.data.record.map(function(item) {
-							item.isSelect = false;
-							return item;
-						});
-						this.$nextTick(function() {
-							mui.previewImage();
-						});
+						try {
+							rs = JSON.parse(rs);
+							this.record_ = rs.data.record.map(function(item) {
+								item.isSelect = false;
+								return item;
+							});
+							this.$nextTick(function() {
+								mui.previewImage();
+							});
+						} catch(e) {
+							console.log(e)
+						}
+
 					},
 
 					// 视频被点击时
