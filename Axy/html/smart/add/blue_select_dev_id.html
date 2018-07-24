@@ -97,8 +97,9 @@
 				background-color: #E5E6E7 !important;
 			}
 			.loading-icon{
-				color: #fff;
-				margin-top: 10px;
+				color: #ccc;
+				vertical-align: middle;
+				margin-right: 10px;
 			}
 		</style>
 	</head>
@@ -109,12 +110,12 @@
 			<header class="mui-bar mui-bar-nav app-header" data-top='0' data-offset='150' data-duration='16'>
 				<a class="mui-action-back app-icon-back mui-pull-left"></a>
 				<h1 class="mui-title">选择设备蓝牙ID</h1>
-				<span class="mui-pull-right loading-icon mui-spinner mui-spinner-white"></span>
 			</header>
 
 			<div class="mui-content">
 				<div class="title app-font-size-24" ref="tabroom">
-					选择要连接的蓝牙，搜索中...
+					
+					<span class=" loading-icon mui-spinner"></span>选择要连接的蓝牙，搜索中...
 				</div>
 				<div class="wrapper" ref="wrapper">
 
