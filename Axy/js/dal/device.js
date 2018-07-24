@@ -145,7 +145,16 @@
 				devid: devid
 			}, callback)
 		},
-
+		/**
+	 * 获取告警消息详情4.0版本，根据时间查询，
+	 */
+		getAlarmByTime: function(areaid,bindingId,atime,callback){
+			return ra('get', '/alarm/electric/info',{
+				areaid: areaid,
+				bindingId: bindingId,
+				atime: atime
+			},callback)
+		}
 	};
 
 	/**

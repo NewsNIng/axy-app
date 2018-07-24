@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href="../../../css/lib/mui.dtpicker.css" />
 		<link rel="stylesheet" href="../../../css/app/module/poppicker.css" />
 
+		<link rel="stylesheet" href="../../../css/lib/mui.zoom.css" />
 		<link rel="stylesheet" href="../../../css/app/app.css" />
 		<link rel="stylesheet" href="../../../css/app/devices.css" />
 		<style type="text/css">
@@ -118,7 +119,7 @@
 			#alarm_popover {
 				position: fixed;
 				width: 8.133333rem;
-				height: 11.2rem;
+				/*height: 11.2rem;*/
 				left: 50%;
 				top: 50%;
 				transform: translate3d(-50%, -50%, 0);
@@ -159,7 +160,7 @@
 				position: relative;
 			}
 			
-			#alarm_popover ul.alarm_popover_list>li:nth-child(1),#alarm_popover ul.alarm_popover_list>li:nth-child(2) {
+			#alarm_popover ul.alarm_popover_list>li:nth-child(1),#alarm_popover ul.alarm_popover_list>li:nth-child(2){
 				background-color: #f4f4f4;
 			}
 			
@@ -176,7 +177,6 @@
 				border-color: #FF3B30 !important;
 			}
 			
-			
 			#alarm_popover .alarm-border>div {
 				border-color: #FF3B30 !important;
 			}
@@ -185,14 +185,9 @@
 				border-color: orange !important;
 			}
 			
-			
 			#alarm_popover .alarm-border-orange>div {
 				border-color: orange !important;
 			}
-			
-			
-			
-			
 			
 			#alarm_popover .alarm_popover_close {
 				background-image: url(../../../image/smart/devices/lock/guanbi@2x@3x.png);
@@ -205,42 +200,122 @@
 				background-repeat: no-repeat;
 				background-position: center;
 			}
+			
+			.menu {
+				border-top: 1px #E4E5E6 solid;
+				margin-top: 0.2rem;
+				display: flex;
+				display: -webkit-flex;
+				justify-content: space-between;
+				padding: 0.346666rem 0;
+			}
+			
+			.menu>div {
+				text-align: center;
+				flex: 1;
+			}
+			
+			.menu img {
+				width: 0.906666rem;
+			}
+			
+			.video-root {
+				position: fixed;
+				left: 0;
+				top: 0;
+				z-index: 66666;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.75);
+			}
+			
+			.video-root .video-room {
+				position: fixed;
+				left: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+				width: 10rem;
+				height: 5.625rem;
+			}
+			
+			.video-root .video-room video {
+				width: 100%;
+				height: 100%;
+			}
+			.mui-preview-image.mui-fullscreen{
+				z-index: 9999;
+			}
 		</style>
 	</head>
 
 	<body>
+		<div id="dialog_wrapper_w">
+			<div v-cloak="">
+				<div id="alarm_popover" class="mui-popover app-font-size-28">
+					<div @tap.self="onClose()" class="alarm_popover_close"></div>
+					<ul class="alarm_popover_info">
+						<li>
+							<span class="app-color-9f9fa0">报警时间：</span>
+							<span class="app-color-333333" v-text="time"></span>
+						</li>
+						<li>
+							<span class="app-color-9f9fa0">主机名称：</span>
+							<span class="app-color-333333" v-text="location || devid"></span>
+						</li>
+						<li>
+							<span class="app-color-9f9fa0">主机编号：</span>
+							<span class="app-color-333333" v-text="devid"></span>
+						</li>
+					</ul>
 
-		<div id="alarm_popover" class="mui-popover app-font-size-28">
-			<div @tap.self="onClose()" class="alarm_popover_close"></div>
-			<ul class="alarm_popover_info">
-				<li>
-					<span class="app-color-9f9fa0">报警时间：</span>
-					<span class="app-color-333333" v-text="time"></span>
-				</li>
-				<li>
-					<span class="app-color-9f9fa0">主机名称：</span>
-					<span class="app-color-333333" v-text="location || devid"></span>
-				</li>
-				<li>
-					<span class="app-color-9f9fa0">主机编号：</span>
-					<span class="app-color-333333" v-text="devid"></span>
-				</li>
-			</ul>
+					<span class="app-color-ff3b30 app-font-size-24" v-text="alarmName"></span>
 
-			<span class="app-color-ff3b30 app-font-size-24" v-text="alarmName"></span>
+					<ul class="alarm_popover_list">
+						<template v-for="o,i in stateList">
+							<li :class="_getColor(alarmValue['state' + (o.index-1)])">
+								<div>
+									<div class="app-color-9f9fa0 app-font-size-24">{{getName(o.index)}}</div>
+									<span class="app-font-size-36">{{stateValue['state' + (o.index-1)] / 10 + o.company}}</span>
+									<span class="app-font-size-22">{{_getStateByCode(alarmValue['state' + (o.index-1)])}}</span>
+								</div>
+							</li>
+						</template>
 
-			<ul class="alarm_popover_list">
-				<template v-for="o,i in stateList">
-					<li :class="_getColor(alarmValue['state' + (o.index-1)])">
-						<div>
-							<div class="app-color-9f9fa0 app-font-size-24">{{getName(o.index)}}</div>
-							<span class="app-font-size-36" >{{stateValue['state' + (o.index-1)] / 10 + o.company}}</span>
-							<span class="app-font-size-22">{{_getStateByCode(alarmValue['state' + (o.index-1)])}}</span>
+					</ul>
+					<div class="menu">
+						<div @tap.stop="onVideoTap(alarmInfo)">
+							<img :src="'../../../image/person/message/alarm'+ (alarmInfo.video ? '' : '_1') +'@3x.png'" />
+							<div class="app-font-size-28" :class="alarmInfo.video ? 'app-color-main': 'app-color-9f9fa0'">告警录像</div>
 						</div>
-					</li>
-				</template>
-				
-			</ul>
+
+						<div @tap.stop="onImageTap(alarmInfo)">
+							<img :src="'../../../image/person/message/screenshots'+ (alarmInfo.image ? '' : '_1') +'@3x.png'" />
+							<div class="app-font-size-28" :class="alarmInfo.image ? 'app-color-main': 'app-color-9f9fa0'">抓拍截图</div>
+							<template v-if="alarmInfo.image">
+								<div ref="preimgs" :data-preview-src="alarmInfo.image.fname" data-preview-group="1"></div>
+							</template>
+							<template v-else>
+								<div ref="preimgs"></div>
+							</template>
+
+						</div>
+
+						<div @tap.stop="btn_videoTap()">
+							<template>
+								<img src="../../../image/person/message/video@3x.png" />
+								<div class="app-font-size-28 app-color-main">实时视频</div>
+							</template>
+						</div>
+					</div>
+
+				</div>
+				<div class="video-root" v-if="videoplay" @tap.self="videoplay=false">
+					<div class="video-room">
+						<video :src="videosrc" controls autoplay playsinline webkit-playsinline></video>
+					</div>
+				</div>
+			</div>
 
 		</div>
 
@@ -263,7 +338,7 @@
 
 							<div class="date app-font-size-24" v-text="o.day"></div>
 							<div class="items">
-								<div class="item" v-for="oo,i in o.list" @tap="onLogItemTap(o.day + ' ' +oo.time, oo)">
+								<div class="item" v-for="oo,i in o.list" @tap.stop="onLogItemTap(o.day + ' ' +oo.time, oo)">
 									<div class="img">
 										<img src="../../../image/smart/devices/electric/point.png" />
 									</div>
@@ -307,9 +382,25 @@
 		<script type="text/javascript" src="../../../js/lib/mui.picker.js"></script>
 		<!--<script type="text/javascript" src="../../../js/lib/mui.poppicker.js"></script>-->
 		<script type="text/javascript" src="../../../js/lib/mui.dtpicker.js"></script>
+		<script type="text/javascript" src="../../../js/plug/PlugH5NativeBridge.js"></script>
+		<script type="text/javascript" src="../../../js/dal/message.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.zoom.js"></script>
+		<script type="text/javascript" src="../../../js/lib/mui.previewimage.js"></script>
 
 		<script type="text/javascript">
-			mui.init();
+			mui.init({
+				beforeback: function() {
+					if(stateVm.pimg && stateVm.pimg.isShown()) {
+						stateVm.pimg.close();
+						return false;
+					} else if(stateVm.videoplay) {
+						stateVm.videoplay = false;
+						return false;
+					} else {
+						return true;
+					}
+				}
+			});
 
 			var dtPick;
 			var _stateList = [{
@@ -358,9 +449,12 @@
 			var alarmDir = [
 				"未知", "A相温度", "B相温度", "C相温度", "环境温度", "A相电流", "B相电流", "C相电流", "漏电流", "三相电不平衡", "开关量1", "开关量2"
 			];
-
+			var TYPEDIR = {
+				16: "image",
+				34: "video"
+			};
 			var stateVm = new Vue({
-				el: "#alarm_popover",
+				el: "#dialog_wrapper_w",
 				data: function() {
 					return {
 						time: "",
@@ -368,6 +462,9 @@
 						devid: "",
 						alarmIndex: 0,
 						stateList: _stateList,
+						alarmInfo: {},
+						videoplay: false,
+						videosrc: '',
 						stateValue: {
 							"intime": null,
 							"state1": 0,
@@ -403,6 +500,7 @@
 					var info = this.$view.devInfo;
 					this.location = info.location;
 					this.devid = info.devid;
+					this.bindingId = this.$view.devInfo.binding;
 				},
 				methods: {
 					onClose: function() {
@@ -413,7 +511,7 @@
 						var len = this.stateList.length;
 
 						for(var i = 0; i < len; i++) {
-							if(this.stateList[i].index  === index) {
+							if(this.stateList[i].index === index) {
 								name = this.stateList[i].name;
 								break;
 							}
@@ -421,13 +519,58 @@
 
 						return name;
 					},
-					_getColor: function(v){
-						return ["","alarm-border-orange","alarm-border"][v]
+					_getColor: function(v) {
+						return ["", "alarm-border-orange", "alarm-border"][v]
 					},
-					_getStateByCode: function(i){
-						return ["正常","预警","报警"][i] || "";
+					_getStateByCode: function(i) {
+						return ["正常", "预警", "报警"][i] || "";
 					},
- 
+					btn_videoTap: function() {
+						var devid = this.$view.devInfo.binding;
+						if(!devid) {
+							return mui.toast('暂未绑定摄像机');
+						}
+
+						// 获取绑定设备的基础信息
+						dal.device.electric.getDeviceInfo(devid, function(err, dev) {
+							if(err) {
+								return mui.toast(err.message)
+							}
+							if(dev.online !== 1) {
+								return mui.toast('绑定设备离线');
+							}
+							var w1 = 0;
+							var w2 = dev.type === 0x1046 ? 1 : 0;
+							plug.H5NativeBridge.StartDevicePlay(devid, w1, w2, devid, dev.online === 1, dev.cid, dev.p2pPasswd, function() {});
+						});
+					},
+					// 点击观看录像
+					onVideoTap: function(o, i) {
+						if(!o.video) {
+							return;
+						}
+						var url = o.video.fname;
+						url = url.replace(/\\/g, "/");
+						if(mui.os.ios) {
+							this.videosrc = url;
+							this.videoplay = true;
+						} else {
+							this.Intent = this.Intent || plus.android.importClass("android.content.Intent");
+							this.Uri = this.Uri || plus.android.importClass("android.net.Uri");
+							this.main = this.main || plus.android.runtimeMainActivity();
+							var intent = new this.Intent(this.Intent.ACTION_VIEW);
+							var uri = this.Uri.parse(url);
+							intent.setDataAndType(uri, "video/*");
+							this.main.startActivity(intent);
+						}
+					},
+					// 点击查看截图
+					onImageTap: function(o) {
+						if(!o.image){
+							return;
+						}
+						this.pimg && this.pimg.open(this.$refs.preimgs);
+					},
 				}
 
 			});
@@ -440,6 +583,7 @@
 
 						did: -1,
 						n: 1,
+						bindingId: -1,
 
 					};
 				},
@@ -511,6 +655,7 @@
 
 				plusReady: function() {
 					this.did = this.$view._id;
+					this.bindingId = this.$view.devInfo.binding;
 					this.getData();
 				},
 				methods: {
@@ -522,11 +667,43 @@
 						stateVm.alarmValue = obj.value.alarmValue;
 
 						mui('#alarm_popover').popover('show');
+						// 获取录像和截图    getAlarmByLocal之前用的，现在用getAlarmByTime更具时间查询
+						time = time.replace(/-/g,'/');
+						time = new Date(time).getTime() / 1000;
+						dal.device.electric.getAlarmByTime(stateVm.devid, this.bindingId, time, function(err, data) {
+							if(err) {
+								return mui.toast(err.message);
+							}
+							data = data || [];
+							//测试
+//							data = [
+//						        {
+//						            "id": 10974569,
+//						            "aid": 323124,
+//						            "fname": "http://47.106.92.195/path1\\201807\\20\\0400008_0_5b5192f1_1f.3gp",
+//						            "TYPE": 34,
+//						            "size": 2152999
+//						        },
+//						        {
+//						            "id": 10974559,
+//						            "aid": 323124,
+//						            "fname": "http://47.106.92.195/path1\\201807\\20\\0400008_0_5b5192f1_1e.jpg",
+//						            "TYPE": 16,
+//						            "size": 139288
+//						        }
+//						    ];
+							data = data.reduce(function(o, item) {
+								o[TYPEDIR[item.TYPE]] = item;
+								return o;
+							}, {});
+
+							stateVm.alarmInfo = data;
+						}.bind(this));
 					},
 					// 获取数据
 					getData: function() {
 						plus.nativeUI.showWaiting("正在获取...");
-						dal.device.electric.alarmlist(this.did, this.n, function(err, data) {
+						dal.device.electric.alarmlist(this.did, this.bindingId, this.n, function(err, data) {
 							plus.nativeUI.closeWaiting();
 							if(err) {
 								return mui.toast(err.message);
@@ -535,6 +712,7 @@
 							this.logs_.push.apply(this.logs_, data);
 							this.$nextTick(function() {
 								this.scroll && (this.scroll.finishPullUp(), this.scroll.refresh());
+								stateVm.pimg = mui.previewImage();
 							}.bind(this));
 						}.bind(this), 20);
 					},
@@ -542,8 +720,7 @@
 
 						return alarmDir[trigvar] + " 发生警告";
 					},
-					
-					
+
 					// 时间选择
 					onDateTap: function() {
 						var that = this;
@@ -583,6 +760,8 @@
 						});
 
 					},
+					// 实时视频
+
 				}
 			});
 		</script>

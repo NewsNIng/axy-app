@@ -384,6 +384,8 @@
 
 			<script type="text/javascript">
 				mui.init();
+				var offsetSecondTime = new Date().getTimezoneOffset()* 60;
+				var allDaySecondTIme = 24 * 60 * 60;
 				new Vue({
 					el: '#warpper',
 					data: function() {
@@ -463,8 +465,9 @@
 						var currentCondition = this.$view.conditionlist || {};
 						var type = currentCondition.type || currentCondition.conditionType;
 						if(type == 0x100){//表示的是时间
-							this.weeks = currentCondition.param.recycle;
-							this.clockTime = this.timeNumToStr(currentCondition.param.time);
+							this.weeks = this._toLocaleRecycle(currentCondition.param.time,currentCondition.param.recycle);
+							this.clockTime = this.timeNumToStr(this._toLocaleTime(currentCondition.param.time));
+							this.dtpicker.value = this.clockTime;
 						}
 					},
 					methods: {
@@ -595,11 +598,50 @@
 							var name = this.clockTime + "(" + this.weeks.reduce(function(prev, cur, index) {
 								return prev + (cur ? '周' + this._number2string(index) + ' ' : '');
 							}.bind(this), '').slice(0, -1) + ")";
+							//更新设置时间计算周期
+							recycle = this._toWorldRecycle(time,recycle);
+							//转化成格林时间
+							time = this._toWorldTime(time);
+							
 							this.onSelectedTap({
 								name: name,
 								recycle: recycle,
 								time: time
 							});
+						},
+						_toWorldTime: function(timeStr){
+							timeStr = (timeStr + offsetSecondTime + allDaySecondTIme ) % allDaySecondTIme;
+							return timeStr;
+						},
+						_toLocaleTime: function(timeStr){
+							timeStr = (timeStr - offsetSecondTime + allDaySecondTIme ) % allDaySecondTIme;
+							return timeStr;
+						},
+						_toWorldRecycle: function(time,recycle){
+							time = time + offsetSecondTime;
+							if(time >= 0 && time <= allDaySecondTIme){
+								return recycle;
+							}else if(time < 0){
+								var first = recycle.shift();
+								recycle.push(first);
+							}else{
+								var last = recycle.pop();
+								recycle.unshift(last);
+							}
+							return recycle;
+						},
+						_toLocaleRecycle: function(time,recycle){
+							time = time - offsetSecondTime;
+							if(time >= 0 && time <= allDaySecondTIme){
+								return recycle;
+							}else if(time > allDaySecondTIme){
+								var last = recycle.pop();
+								recycle.unshift(last);
+							}else{
+								var first = recycle.shift();
+								recycle.push(first);
+							}
+							return recycle;
 						},
 						onSecondaryTap: function(o, i) {
 							var id = o.text || o.value;

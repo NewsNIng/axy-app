@@ -500,6 +500,7 @@
 					var info = this.$view.devInfo;
 					this.location = info.location;
 					this.devid = info.devid;
+					this.bindingId = this.$view.devInfo.binding;
 				},
 				methods: {
 					onClose: function() {
@@ -666,8 +667,10 @@
 						stateVm.alarmValue = obj.value.alarmValue;
 
 						mui('#alarm_popover').popover('show');
-						// 获取录像和截图
-						dal.message.getAlarmByLocal(obj.value.aid, function(err, data) {
+						// 获取录像和截图    getAlarmByLocal之前用的，现在用getAlarmByTime更具时间查询
+						time = time.replace(/-/g,'/');
+						time = new Date(time).getTime() / 1000;
+						dal.device.electric.getAlarmByTime(stateVm.devid, this.bindingId, time, function(err, data) {
 							if(err) {
 								return mui.toast(err.message);
 							}
@@ -695,7 +698,7 @@
 							}, {});
 
 							stateVm.alarmInfo = data;
-						});
+						}.bind(this));
 					},
 					// 获取数据
 					getData: function() {

@@ -117,12 +117,13 @@
 		state: function(_id, callback) {
 			return ra('get', '/device/electric/state/' + _id, {}, callback);
 		},
-		// 告警日志
-		alarmlist: function(_id, pageNumber, callback, pageSize) {
+		// 告警日志 bindingId=>网络摄像机id
+		alarmlist: function(_id, bindingId, pageNumber, callback, pageSize) {
 			return ra('get', '/alarm/electric/list', {
 				did: _id,
 				pageNumber: pageNumber,
-				pageSize: pageSize || 10
+				pageSize: pageSize || 10,
+				bindingId: bindingId
 			}, callback);
 		},
 		// 绑定摄像头主机
@@ -144,7 +145,16 @@
 				devid: devid
 			}, callback)
 		},
-
+		/**
+	 * 获取告警消息详情4.0版本，根据时间查询，
+	 */
+		getAlarmByTime: function(areaid,bindingId,atime,callback){
+			return ra('get', '/alarm/electric/info',{
+				areaid: areaid,
+				bindingId: bindingId,
+				atime: atime
+			},callback)
+		}
 	};
 
 	/**
