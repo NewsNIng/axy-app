@@ -1,5 +1,5 @@
 var dal = {
-	BASE_URL_DEV: "http://192.168.1.213:8080/vihiManager/vihiapi",
+	BASE_URL_DEV: "http://192.168.1.42:8080/vihiManager/vihiapi",
 	BASE_URL_TEST: "http://47.106.92.195/vihiManager/vihiapi",
 	BASE_URL: "http://vh.anxin-net.com/vihiManager/vihiapi",
 	BASE_DOMAIN: "vh.anxin-net.com",
@@ -54,9 +54,9 @@ function requestAdapter(type, url, params, callback) {
 	params.account = params.account || window.localStorage.getItem('_account_') || "";
 
 	var randomID = (Math.random() * 10000).toFixed(0);
-	console.log("[" + apiUrl + "]请求: [" + randomID + "][" + type + "] " + " AppUrl: [" + window.location.href.split("/www/")[1] + "]");
-	console.log("[" + apiUrl + "]时间: [" + new Date().getTime() + "] 地址: [" + url + "]");
-	console.log("[" + apiUrl + "]参数: [json]" + JSON.stringify(params));
+	console.log("[" + apiUrl + "]"+type+"请求: [" + randomID + "][" + type + "] " + " AppUrl: [" + window.location.href.split("/www/")[1] + "]");
+	console.log("[" + apiUrl + "]"+type+"时间: [" + new Date().getTime() + "] 地址: [" + url + "]");
+	console.log("[" + apiUrl + "]"+type+"参数: [json]" + JSON.stringify(params));
 	
 	var options = {
 		headers: {
@@ -69,6 +69,7 @@ function requestAdapter(type, url, params, callback) {
 		data: params,
 		type: type,
 		timeout: 60000,
+		crossDomain:true,
 		success: function(data) {
 			var o = {};
 			console.log("[" + apiUrl + "]返回: [" + randomID + "] 时间: [" + new Date().getTime() + "]" + JSON.stringify(data));
@@ -100,13 +101,18 @@ function requestAdapter(type, url, params, callback) {
 			callback(o.err, o.data);
 		},
 		error: function(xhr, type, err) {
+			console.log(JSON.stringify(err))
 			console.log("[" + apiUrl + "]错误: [" + randomID + "] " + xhr.status);
 			var errmsg = dal.errDir[type] || "其它错误";
-			//console.log("["+errmsg+"]" + url);
+			console.log("["+errmsg+"]" + url);
+			if(xhr.status == 307){
+				var httpsUrl = xhr.getResponseHeader('Location');
+				mui.ajax(httpsUrl,options);
+				return;
+			}
 			callback({
 				code: xhr.status,
 				message: errmsg
-
 			}, null);
 		}
 	};
