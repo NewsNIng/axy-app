@@ -291,6 +291,7 @@
 					<li v-if="!is104GN" class="mui-table-view-cell" @tap="onWifiSetTap()">
 						<a class="mui-navigate-right">
 							<span>WIFI配置</span>
+							<span class="mui-badge" v-text="wifiInfo.ssid"></span>
 						</a>
 					</li>
 					<li class="mui-table-view-cell" @tap="onAlarmParam()">
@@ -372,6 +373,7 @@
 						},
 						wifiInfo: {
 							securitytype: 0,
+							ssid: ''
 						}
 
 					};
@@ -415,9 +417,13 @@
 					].indexOf(devtypename) >= 0){
 						this._getOpenled();
 					}
-					
-					if(this.is360){
-						this.getwifi();
+					if(this.is360 || 'AX-403B'.indexOf(devtypename) >= 0){
+						this.getwifi().subscribe(function(){
+							
+						},function(err){
+							console.log(err.message)
+							mui.toast(err.message)
+						});
 					}
 				},
 				methods: {
@@ -578,14 +584,12 @@
 					
 					// 获取WIFI配置信息
 					getwifi: function() {
-
 						var that = this;
 						return Rx.Observable.create(function(ob) {
 							dal.devparam.getwifi(that.devInfo.devid, that.devInfo.type, function(err, rs) {
 								if(err) {
 									return ob.error(err);
 								}
-								
 								that.wifiInfo = rs;
 								ob.next();
 							});
